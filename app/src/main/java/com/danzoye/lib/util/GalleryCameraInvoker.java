@@ -29,7 +29,7 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
-import com.oxoneindonesia.android.oxone.BuildConfig;
+import com.nyelam.android.BuildConfig;
 import com.soundcloud.android.crop.Crop;
 
 import org.apache.commons.io.IOUtils;

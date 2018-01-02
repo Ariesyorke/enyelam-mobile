@@ -4,8 +4,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
-import com.oxoneindonesia.android.oxone.dev.OXLog;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
@@ -401,21 +399,20 @@ public class DHTTPConnectionHelper {
     }
 
     private static void debugHeaders(URLConnection conn) {
-        Map reqProp = conn.getRequestProperties();
-        Iterator var2 = reqProp.keySet().iterator();
-
-        while(var2.hasNext()) {
-            String key = (String)var2.next();
-            OXLog.d("Headers[" + key + "] = ");
-            List values = (List)reqProp.get(key);
-            Iterator var5 = values.iterator();
-
-            while(var5.hasNext()) {
-                String value = (String)var5.next();
-                OXLog.d("---" + value);
-            }
-        }
-
+//        Map reqProp = conn.getRequestProperties();
+//        Iterator var2 = reqProp.keySet().iterator();
+//
+//        while(var2.hasNext()) {
+//            String key = (String)var2.next();
+//            OXLog.d("Headers[" + key + "] = ");
+//            List values = (List)reqProp.get(key);
+//            Iterator var5 = values.iterator();
+//
+//            while(var5.hasNext()) {
+//                String value = (String)var5.next();
+//                OXLog.d("---" + value);
+//            }
+//        }
     }
 
     private static String defineRequestType(DBaseRequest request) {
@@ -649,7 +646,6 @@ public class DHTTPConnectionHelper {
                 obj = new JSONObject(jsonSetting);
             } catch (JSONException var12) {
                 var12.printStackTrace();
-                OXLog.e(var12);
             }
 
             if(obj != null) {
@@ -658,7 +654,6 @@ public class DHTTPConnectionHelper {
                         this.basicAuthorizationUsername = obj.getString("basic auth uname");
                     } catch (JSONException var11) {
                         var11.printStackTrace();
-                        OXLog.e(var11);
                     }
                 }
 
@@ -667,7 +662,6 @@ public class DHTTPConnectionHelper {
                         this.basicAuthorizationPassword = obj.getString("basic auth password");
                     } catch (JSONException var10) {
                         var10.printStackTrace();
-                        OXLog.e(var10);
                     }
                 }
 
@@ -676,7 +670,6 @@ public class DHTTPConnectionHelper {
                         this.userAgent = obj.getString("user agent");
                     } catch (JSONException var9) {
                         var9.printStackTrace();
-                        OXLog.e(var9);
                     }
                 }
 
@@ -692,7 +685,6 @@ public class DHTTPConnectionHelper {
                         }
                     } catch (JSONException var13) {
                         var13.printStackTrace();
-                        OXLog.e(var13);
                     }
                 }
 
@@ -701,7 +693,6 @@ public class DHTTPConnectionHelper {
                         this.connectTimeout = obj.getInt("conn timeout");
                     } catch (JSONException var8) {
                         var8.printStackTrace();
-                        OXLog.e(var8);
                     }
                 }
 
@@ -710,7 +701,6 @@ public class DHTTPConnectionHelper {
                         this.readTimeout = obj.getInt("read timeout");
                     } catch (JSONException var7) {
                         var7.printStackTrace();
-                        OXLog.e(var7);
                     }
                 }
 
@@ -728,7 +718,6 @@ public class DHTTPConnectionHelper {
                 }
             } catch (JSONException var11) {
                 var11.printStackTrace();
-                OXLog.e(var11);
             }
 
             try {
@@ -739,7 +728,6 @@ public class DHTTPConnectionHelper {
                 }
             } catch (JSONException var10) {
                 var10.printStackTrace();
-                OXLog.e(var10);
             }
 
             try {
@@ -750,7 +738,6 @@ public class DHTTPConnectionHelper {
                 }
             } catch (JSONException var9) {
                 var9.printStackTrace();
-                OXLog.e(var9);
             }
 
             try {
@@ -772,7 +759,6 @@ public class DHTTPConnectionHelper {
                 }
             } catch (JSONException var12) {
                 var12.printStackTrace();
-                OXLog.e(var12);
             }
 
             try {
@@ -783,7 +769,6 @@ public class DHTTPConnectionHelper {
                 }
             } catch (JSONException var8) {
                 var8.printStackTrace();
-                OXLog.e(var8);
             }
 
             try {
@@ -794,14 +779,12 @@ public class DHTTPConnectionHelper {
                 }
             } catch (JSONException var7) {
                 var7.printStackTrace();
-                OXLog.e(var7);
             }
 
             try {
                 return obj.toString(3);
             } catch (JSONException var6) {
                 var6.printStackTrace();
-                OXLog.e(var6);
                 return (new JSONObject()).toString();
             }
         }
