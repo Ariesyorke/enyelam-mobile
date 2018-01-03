@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#1675CF</color>
+    <color name="colorPrimaryDark">#1675CF</color>
+    <color name="colorGradationLeft">#25A2DB</color>
+    <color name="colorGradationRight">#1B76BB</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="ny_grey1">#EEEEEE</color>
+    <color name="ny_grey2">#A9A9A9</color>
+    <color name="ny_blue1">#005673</color>
+    <color name="ny_blue2">#00ACE3</color>
+
 </resources>

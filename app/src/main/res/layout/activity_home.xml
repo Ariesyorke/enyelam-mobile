@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.nyelam.android.home.HomeActivity"
+    android:background="@color/colorWhite">
+
+    <android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout"
+        tools:openDrawer="end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                android:background="@drawable/ny_gradient_right_left">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/colorWhite"
+                        android:background="@android:color/transparent"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:text="@string/app_name"/>
+
+                    <ImageView
+                        android:id="@+id/menu_item_imageView"
+                        android:src="@drawable/ic_action_menu_item"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <View
+                android:id="@+id/view"
+                android:layout_below="@+id/toolbar"
+                android:background="#DFE3E4"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+
+            <View
+                android:id="@+id/view_tab_manager"
+                android:layout_above="@+id/tab_manager"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context="com.kuratif.android.MainActivity"
+                android:background="@android:color/white">
+
+                <com.nyelam.android.view.NYCustomViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+
+                <View
+                    android:layout_above="@+id/tab_manager"
+                    android:background="#cedae9"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"/>
+
+                <LinearLayout
+                    android:id="@+id/tab_manager"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/ny_grey2"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true">
+
+                    <com.nyelam.android.view.NYHomepageTabItemView
+                        android:id="@+id/home_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabChecked="true"
+                        app:tabItemPosition="home"
+                        app:tabItemText="Home"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_b"/>
+
+                    <com.nyelam.android.view.NYHomepageTabItemView
+                        android:id="@+id/socialmedia_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="search"
+                        app:tabItemText="Search"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+
+                    <com.nyelam.android.view.NYHomepageTabItemView
+                        android:id="@+id/transaction_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="history"
+                        app:tabItemText="Chat"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+
+                    <com.nyelam.android.view.NYHomepageTabItemView
+                        android:id="@+id/my_account_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="profile"
+                        app:tabItemText="Profile"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+        <!--<include layout="@layout/fragment_menu_drawer"/>-->
+
+        <fragment
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:name="com.nyelam.android.view.NYMenuDrawerFragment"
+            tools:layout="@layout/fragment_menu_drawer" />
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+</FrameLayout>
