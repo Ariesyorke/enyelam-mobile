@@ -1,0 +1,147 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ny_gradient_right_left"
+    android:orientation="vertical"
+    tools:context="com.nyelam.android.auth.LoginFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_nyelam"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="@dimen/padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="Welcome to Nyelam!"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/ny_rectangle_gradation_blue"
+                android:layout_margin="@dimen/padding_double"
+                android:paddingLeft="@dimen/padding_double"
+                android:paddingRight="@dimen/padding_double"
+                android:paddingTop="@dimen/padding_double"
+                android:paddingBottom="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <LinearLayout
+                    android:background="@drawable/ny_rectangle_transparant_white_border"
+                    android:padding="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/email_editText"
+                        android:hint="@string/email"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/ny_grey2"
+                        android:background="@drawable/ny_rectangle_white"
+                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingRight="@dimen/padding"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:background="@drawable/ny_rectangle_transparant_white_border"
+                    android:padding="@dimen/padding"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/password_editText"
+                        android:hint="@string/password"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/ny_grey2"
+                        android:background="@drawable/ny_rectangle_white"
+                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingRight="@dimen/padding"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/forgot_password_textView"
+                    android:text="@string/forgot_password"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorWhite"
+                    android:padding="@dimen/padding"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/login_textView"
+                android:text="@string/login"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:background="@drawable/ny_rectangle_blue_dark"
+                android:gravity="center"
+                android:padding="@dimen/padding"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_triple"
+                android:layout_marginRight="@dimen/padding_triple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:text="@string/or"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite"
+                android:padding="@dimen/padding_double"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/register_textView"
+                android:text="@string/register"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:background="@drawable/ny_rectangle_blue_dark"
+                android:gravity="center"
+                android:padding="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_triple"
+                android:layout_marginRight="@dimen/padding_triple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

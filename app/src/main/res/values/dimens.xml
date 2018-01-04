@@ -5,4 +5,5 @@
     <dimen name="padding">10dp</dimen>
     <dimen name="padding_half">5dp</dimen>
     <dimen name="padding_double">20dp</dimen>
+    <dimen name="padding_triple">30dp</dimen>
 </resources>

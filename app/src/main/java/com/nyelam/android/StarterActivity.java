@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.home.HomeActivity;
 
 public class StarterActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class StarterActivity extends AppCompatActivity {
                 new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(StarterActivity.this, HomeActivity.class));
+                        startActivity(new Intent(StarterActivity.this, AuthActivity.class));
                         finish();
                     }
                 }, SPLASH_TIME);
