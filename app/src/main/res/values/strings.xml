@@ -10,6 +10,13 @@
     <string name="login">Login</string>
     <string name="or">OR</string>
     <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="email_address">E-mail address</string>
+    <string name="phone_number_ex">Phone number (eg. +905...)</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="select_gender">Select Gender</string>
+    <!--<string name=""></string>-->
+
 
     <!--MENU-->
     <string name="account">Account</string>
