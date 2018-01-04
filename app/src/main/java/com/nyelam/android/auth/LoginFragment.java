@@ -18,7 +18,12 @@ import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYLoginRequest;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 public class LoginFragment extends Fragment {
 
@@ -59,6 +64,10 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+
         initView(view);
         initControl();
     }
@@ -75,7 +84,9 @@ public class LoginFragment extends Fragment {
                 } else if (TextUtils.isEmpty(password)){
                     Toast.makeText(getActivity(), "Password can't be empty", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    progressDialog.show();
+                    NYLoginRequest req = new NYLoginRequest(getContext(), email, password);
+                    spcMgr.execute(req, onLoginRequest());
                 }
 
             }
@@ -96,6 +107,31 @@ public class LoginFragment extends Fragment {
             }
         });
     }
+
+    private RequestListener<AuthReturn> onLoginRequest() {
+        return new RequestListener<AuthReturn>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                NYHelper.handleAPIException(getActivity(), spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(AuthReturn authReturn) {
+                /*if(progressDialog != null && progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }*/
+
+                NYHelper.saveUserData(getActivity(), authReturn);
+                //mListener.isLoginSuccess(true);
+            }
+        };
+    }
+
 
     private void initView(View v) {
         emailEditText = (EditText) v.findViewById(R.id.email_editText);
@@ -121,6 +157,20 @@ public class LoginFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        spcMgr.start(getActivity());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (spcMgr.isStarted()){
+            spcMgr.shouldStop();
+        }
     }
 
     public interface OnFragmentInteractionListener {

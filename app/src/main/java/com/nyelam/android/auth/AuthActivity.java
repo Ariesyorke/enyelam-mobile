@@ -10,6 +10,8 @@ public class AuthActivity extends BasicActivity implements
     LoginFragment.OnFragmentInteractionListener,
     RegisterFragment.OnFragmentInteractionListener {
 
+    public static final String REQ_INVALID_TOKEN = "invalid_token";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

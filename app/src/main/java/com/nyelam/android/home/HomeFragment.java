@@ -57,8 +57,20 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         //void onFragmentInteraction(Uri uri);
     }
+
+
 }
