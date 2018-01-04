@@ -1,0 +1,389 @@
+package com.nyelam.android.data;
+
+import org.apache.http.util.TextUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by Aprilian Nur Wakhid Daini on 1/4/2018.
+ */
+
+public class User implements Parseable {
+
+    private static String KEY_USER_ID = "user id";
+    private static String KEY_FULLNAME = "fullname";
+    private static String KEY_FIRSTNAME = "firstname";
+    private static String KEY_LASTNAME = "lastname";
+    private static String KEY_PHONE = "phone";
+    private static String KEY_BIRTHDATE = "birthdate";
+    private static String KEY_EMAIL = "email";
+    private static String KEY_PICTURE = "picture";
+    private static String KEY_GENDER = "gender";
+    private static String KEY_IS_VERIFIED = "is_verified";
+    private static String KEY_REFERRAL_CODE = "referral_code";
+    private static String KEY_SOCIAL_MEDIA = "social_media";
+    private static String KEY_ADDESS = "address";
+    private static String KEY_FILE_PATH = "file_path";
+
+    private String userId, fullname, firstname, lastname, phone, email, picture, gender, refferalCode, address;
+    private boolean isVerified;
+    private Date birthdate;
+    private File imageFile;
+    private List<SocialMedia> socialMedia;
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getRefferalCode() {
+        return refferalCode;
+    }
+
+    public void setRefferalCode(String refferalCode) {
+        this.refferalCode = refferalCode;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public List<SocialMedia> getSocialMedia() {
+        return socialMedia;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setSocialMedia(List<SocialMedia> socialMedia) {
+        this.socialMedia = socialMedia;
+    }
+
+    public File getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(File imageFile) {
+        this.imageFile = imageFile;
+    }
+
+    @Override
+    public void parse (JSONObject obj) {
+
+        if (obj == null) return;
+
+        try {
+            if (!obj.isNull(KEY_USER_ID)) {
+                setUserId(obj.getString(KEY_USER_ID));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_FULLNAME)) {
+                setFullname(obj.getString(KEY_FULLNAME));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_FIRSTNAME)) {
+                setFirstname(obj.getString(KEY_FIRSTNAME));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+
+        try {
+            if (!obj.isNull(KEY_LASTNAME)) {
+                setLastname(obj.getString(KEY_LASTNAME));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+
+        try {
+            if (!obj.isNull(KEY_PHONE)) {
+                setPhone(obj.getString(KEY_PHONE));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_EMAIL)) {
+                setEmail(obj.getString(KEY_EMAIL));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_PICTURE)) {
+                setPicture(obj.getString(KEY_PICTURE));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_GENDER)) {
+                setGender(obj.getString(KEY_GENDER));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_REFERRAL_CODE)) {
+                setRefferalCode(obj.getString(KEY_REFERRAL_CODE));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+
+
+        try {
+            if (!obj.isNull(KEY_IS_VERIFIED)) {
+                setVerified(obj.getBoolean(KEY_IS_VERIFIED));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_BIRTHDATE)) {
+                long timestamp = obj.optLong(KEY_BIRTHDATE) * 1000;
+                setBirthdate(new Date(timestamp));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            if(!obj.isNull(KEY_ADDESS)){
+                setAddress(obj.getString(KEY_ADDESS));
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        try {
+            if(!obj.isNull(KEY_SOCIAL_MEDIA)) {
+                socialMedia = new ArrayList<>();
+                JSONArray array = obj.getJSONArray(KEY_SOCIAL_MEDIA);
+                for(int i = 0; i < array.length(); i++) {
+                    JSONObject o = array.getJSONObject(i);
+                    SocialMedia socMed = new SocialMedia();
+                    socMed.parse(o);
+                    socialMedia.add(socMed);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(!obj.isNull(KEY_FILE_PATH)) {
+                String filePath = obj.getString(KEY_FILE_PATH);
+                imageFile = new File(filePath);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public String toString() {
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getUserId())) {
+                obj.put(KEY_USER_ID, getUserId());
+            } else  {
+                obj.put(KEY_USER_ID, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getFullname())) {
+                obj.put(KEY_FULLNAME, getFullname());
+            } else  {
+                obj.put(KEY_FULLNAME, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getFirstname())) {
+                obj.put(KEY_FIRSTNAME, getFirstname());
+            } else  {
+                obj.put(KEY_FIRSTNAME, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getLastname())) {
+                obj.put(KEY_LASTNAME,getLastname() );
+            } else  {
+                obj.put(KEY_LASTNAME, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getPhone())) {
+                obj.put(KEY_PHONE, getPhone());
+            } else  {
+                obj.put(KEY_PHONE, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getEmail())) {
+                obj.put(KEY_EMAIL, getEmail());
+            } else  {
+                obj.put(KEY_EMAIL, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getPicture())) {
+                obj.put(KEY_PICTURE, getPicture() );
+            } else  {
+                obj.put(KEY_PICTURE, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getGender())) {
+                obj.put(KEY_GENDER, getGender());
+            } else  {
+                obj.put(KEY_GENDER, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getRefferalCode())) {
+                obj.put(KEY_REFERRAL_CODE, getRefferalCode() );
+            } else  {
+                obj.put(KEY_REFERRAL_CODE, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            obj.put(KEY_IS_VERIFIED, isVerified());
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (getBirthdate() != null) {
+                long timestamp = getBirthdate().getTime() / 1000;
+                obj.put(KEY_BIRTHDATE, timestamp);
+            } else  {
+                obj.put(KEY_BIRTHDATE, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getAddress())) {
+                obj.put(KEY_ADDESS, getAddress() );
+            } else  {
+                obj.put(KEY_ADDESS, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();
+        }
+        try {
+            if (getSocialMedia() != null && !getSocialMedia().isEmpty()) {
+                JSONArray array = new JSONArray();
+                for (SocialMedia a : getSocialMedia()) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_SOCIAL_MEDIA, array);
+            } else  {
+                obj.put(KEY_SOCIAL_MEDIA, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if(getImageFile() != null) {
+                obj.put(KEY_FILE_PATH, getImageFile().getAbsolutePath());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            return obj.toString(3);
+        } catch (JSONException e) {e.printStackTrace();
+        }
+        return super.toString();
+    }
+}

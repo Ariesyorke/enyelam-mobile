@@ -20,7 +20,6 @@ import org.greenrobot.greendao.internal.DaoConfig;
 public class DaoSession extends AbstractDaoSession {
 
 
-
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);

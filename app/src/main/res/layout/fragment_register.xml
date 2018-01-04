@@ -180,10 +180,6 @@
                         android:singleLine="true"
                         android:maxLines="1"
                         android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

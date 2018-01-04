@@ -10,6 +10,10 @@
         android:textColor="@color/colorBlack"
         android:singleLine="true"
         android:maxLines="1"
+        android:paddingLeft="@dimen/padding_double"
+        android:paddingRight="@dimen/padding"
+        android:paddingTop="@dimen/padding"
+        android:paddingBottom="@dimen/padding"
         android:background="@drawable/ny_rectangle_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

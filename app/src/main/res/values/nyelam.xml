@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="api_ver">1</integer>
+
+    <string name="host_url">http://nyelam-adam.dantech.id/</string>
+    <string name="api_path_login">api/user/login</string>
+
+</resources>

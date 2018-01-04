@@ -1,5 +1,6 @@
 package com.nyelam.android.auth;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,9 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.octo.android.robospice.SpiceManager;
 
 public class LoginFragment extends Fragment {
 
+    private static int RC_SIGN_IN = 201;
+
+    private ProgressDialog progressDialog;
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private TextView loginTextView, registerTextView, forgotPasswordTextView;
     private EditText emailEditText, passwordEditText;
