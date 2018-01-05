@@ -100,6 +100,8 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(), "Confirm password is wrong", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(gender)){
                     Toast.makeText(getActivity(), "Gender can't be empty", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(gender)|| gender.equals("Select Gender")){
+                    Toast.makeText(getActivity(), "Please, select your gender", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog.show();
                     NYRegisterRequest req = new NYRegisterRequest(getActivity(), username, email, phoneNumber, password, confirmPassword, gender,  null, null, null, null);
@@ -135,17 +137,19 @@ public class RegisterFragment extends Fragment {
         return new RequestListener<AuthReturn>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                if (progressDialog != null && progressDialog.isShowing())progressDialog.cancel();
+                if (progressDialog != null && progressDialog.isShowing())progressDialog.dismiss();
                 if (spiceException != null) {
                     NYHelper.handleAPIException(getActivity(), spiceException, null);
                 } else {
                     NYHelper.handleErrorMessage(getActivity(), getActivity().getResources().getString(R.string.warn_no_connection));
                 }
             }
-
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
-                if (progressDialog != null && progressDialog.isShowing())progressDialog.cancel();
+                if(progressDialog != null && progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
+
                 NYHelper.saveUserData(getActivity(), authReturn);
                 mListener.isLoginSuccess(true);
             }
@@ -178,8 +182,8 @@ public class RegisterFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStop() {
+        super.onStop();
         if (spcMgr.isStarted()){
             spcMgr.shouldStop();
         }

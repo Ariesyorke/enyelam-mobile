@@ -3,9 +3,11 @@ package com.nyelam.android.http;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.danzoye.lib.util.StringHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.dev.NYLog;
 
 import org.json.JSONObject;
 
@@ -19,7 +21,7 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
     private static final String POST_EMAIL = "email";
     private static final String POST_PHONE = "phone";
     private static final String POST_PASSWORD = "password";
-    private static final String POST_CONFIRM_PASSWORD = "password";
+    private static final String POST_CONFIRM_PASSWORD = "confirm_password";
     private static final String POST_GENDER = "gender";
     private static final String POST_SOCMED_TYPE = "socmed_type";
     private static final String POST_SOCMED_ID = "socmed_id";
@@ -53,7 +55,7 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
             addQuery(POST_CONFIRM_PASSWORD, StringHelper.md5(confirmPassword.getBytes()));
         }
 
-        if(!TextUtils.isEmpty(gender)) {
+        if(!TextUtils.isEmpty(gender) && !gender.equals("Select Gender")) {
             addQuery(POST_GENDER, gender.toLowerCase());
         }
 
@@ -74,8 +76,15 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
     }
 
     @Override
+    public String getHTTPType() {
+        return DHTTPConnectionHelper.HTTP_POST;
+    }
+
+    @Override
     protected AuthReturn onProcessSuccessData(JSONObject obj) throws Exception {
-        return null;
+        AuthReturn temp = new AuthReturn();
+        temp.parse(obj);
+        return temp;
     }
 
 }
