@@ -20,6 +20,15 @@
     <string name="hot_offer">Hot Offer</string>
     <string name="most_popular_dive_spot">Most Popular Dive Spot</string>
     <string name="see_all">See All</string>
+
+    <string name="dive_spot">Dive Spot</string>
+    <string name="certificate">Certificate</string>
+    <string name="dive_center">Dive Center</string>
+    <string name="date">Date</string>
+    <string name="diver">Diver</string>
+    <string name="search">Search</string>
+
+
     <!--<string name=""></string>-->
     <integer name="timeline_place_item_image_ratio_width">5</integer>
     <integer name="timeline_place_item_image_ratio_height">3</integer>

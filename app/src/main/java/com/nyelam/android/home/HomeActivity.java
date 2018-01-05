@@ -33,7 +33,8 @@ import java.util.Map;
 
 public class HomeActivity extends BasicActivity implements HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener,
-    MyAccountFragment.OnFragmentInteractionListener{
+    MyAccountFragment.OnFragmentInteractionListener,
+    NYMenuDrawerFragment.OnFragmentInteractionListener{
 
     private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"), new Frags(4,"more"));
     private List<Frags> fragses = new ArrayList<>();

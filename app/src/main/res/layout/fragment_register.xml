@@ -208,6 +208,7 @@
                 android:padding="@dimen/padding"
                 android:layout_marginLeft="@dimen/padding_triple"
                 android:layout_marginRight="@dimen/padding_triple"
+                android:layout_marginBottom="@dimen/padding_double"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

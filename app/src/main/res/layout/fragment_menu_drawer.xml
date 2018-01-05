@@ -49,36 +49,34 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
                 android:orientation="vertical"
-                android:padding="@dimen/padding_double">
+                android:paddingTop="@dimen/padding"
+                android:paddingLeft="@dimen/padding_double"
+                android:paddingRight="@dimen/padding_double">
 
                 <TextView
-                    android:id="@+id/name_profile_textView"
-                    android:textSize="36sp"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorWhite"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Agronomic" />
-
-                <TextView
-                    android:id="@+id/action_see_profile_textView"
+                    android:text="Menu"
+                    android:textSize="18sp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_half"
-                    android:text="Fresh and Healthy"
-                    android:layout_marginBottom="@dimen/padding_double"
-                    android:textColor="@color/colorWhite" />
+                    android:layout_marginBottom="@dimen/padding" />
+
+                <View
+                    android:background="@color/ny_grey1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"/>
 
             </LinearLayout>
 
 
             <LinearLayout
+                android:paddingLeft="@dimen/padding_double"
+                android:paddingStart="@dimen/padding_double"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/padding_double"
-                android:paddingStart="@dimen/padding_double">
+                android:orientation="vertical">
 
 
 
@@ -95,7 +93,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:textColor="@color/colorBlack"
-                        android:letterSpacing="0.3"
+                        android:letterSpacing="0.2"
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -118,7 +116,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:textColor="@color/colorBlack"
-                        android:letterSpacing="0.3"
+                        android:letterSpacing="0.2"
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -141,7 +139,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:textColor="@color/colorBlack"
-                        android:letterSpacing="0.3"
+                        android:letterSpacing="0.2"
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -164,7 +162,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:textColor="@color/colorBlack"
-                        android:letterSpacing="0.3"
+                        android:letterSpacing="0.2"
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -189,7 +187,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:textColor="@color/colorBlack"
-                        android:letterSpacing="0.3"
+                        android:letterSpacing="0.2"
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -213,7 +211,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:textColor="@color/colorBlack"
-                        android:letterSpacing="0.3"
+                        android:letterSpacing="0.2"
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

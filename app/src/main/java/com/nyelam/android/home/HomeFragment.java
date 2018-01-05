@@ -1,6 +1,7 @@
 package com.nyelam.android.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,10 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.view.NYBannerViewPager;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ public class HomeFragment extends Fragment {
     private NYBannerViewPager bannerViewPager;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
+    private LinearLayout doDiveLinearLayout;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -57,6 +61,17 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initBanner();
+        initControl();
+    }
+
+    private void initControl() {
+        doDiveLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DoDiveActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initBanner() {
@@ -84,6 +99,7 @@ public class HomeFragment extends Fragment {
     private void initView(View view) {
         bannerViewPager = (NYBannerViewPager) view.findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) view.findViewById(R.id.circle_indicator);
+        doDiveLinearLayout = (LinearLayout) view.findViewById(R.id.do_dive_linearLayout);
     }
 
 

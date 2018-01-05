@@ -57,9 +57,9 @@
             <View
                 android:id="@+id/view"
                 android:layout_below="@+id/toolbar"
-                android:background="#DFE3E4"
+                android:background="@color/colorGradationSoftLeft"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"/>
+                android:layout_height="1dp"/>
 
             <View
                 android:id="@+id/view_tab_manager"
