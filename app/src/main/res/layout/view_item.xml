@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:background="@color/colorWhite"
+    android:layout_marginRight="@dimen/padding"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:src="@drawable/example_pic"
+        android:scaleType="centerCrop"
+        android:layout_width="150dp"
+        android:layout_height="80dp" />
+
+    <TextView
+        android:text="Event Deep Dive"
+        android:textColor="@color/ny_blue2"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_margin="@dimen/padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="Sumatera Barat"
+        android:textColor="@color/ny_grey2"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/padding"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="Rp 1.800.000"
+            android:textColor="@color/ny_orange"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:layout_margin="@dimen/padding_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="/ person"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:layout_margin="@dimen/padding_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:text="Book"
+        android:textColor="@color/colorWhite"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:background="@drawable/ny_book"
+        android:padding="8dp"
+        android:layout_margin="@dimen/padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

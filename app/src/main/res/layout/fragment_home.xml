@@ -1,40 +1,293 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorWhite"
+    android:orientation="vertical"
     tools:context="com.nyelam.android.home.HomeFragment">
 
-    <RelativeLayout
-        android:id="@+id/banner_relativeLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
-        <ProgressBar
-            android:id="@+id/banner_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminate="true"
-            android:indeterminateTintMode="src_atop"
-            android:indeterminateTint="@color/ny_blue2"/>
-        <com.nyelam.android.view.NYBannerViewPager
-            android:id="@+id/promotion_view_pager"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        </com.nyelam.android.view.NYBannerViewPager>
-        <me.relex.circleindicator.CircleIndicator
-            android:id="@+id/circle_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBottom="@+id/promotion_view_pager"
-            android:layout_marginBottom="@dimen/padding"
-            app:ci_drawable="@drawable/ny_circle_white"
-            app:ci_orientation="horizontal">
-        </me.relex.circleindicator.CircleIndicator>
-    </RelativeLayout>
 
 
-</RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/banner_relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true">
+                <ProgressBar
+                    android:id="@+id/banner_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    android:indeterminateTintMode="src_atop"
+                    android:indeterminateTint="@color/ny_blue2"/>
+                <com.nyelam.android.view.NYBannerViewPager
+                    android:id="@+id/promotion_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </com.nyelam.android.view.NYBannerViewPager>
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/circle_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignBottom="@+id/promotion_view_pager"
+                    app:ci_drawable="@drawable/ny_circle_white"
+                    app:ci_orientation="horizontal">
+                </me.relex.circleindicator.CircleIndicator>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:background="@color/ny_grey3"
+                android:paddingTop="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:background="@drawable/ny_menu_gradation_blue"
+                    android:layout_margin="@dimen/padding"
+                    android:padding="@dimen/padding_half"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:background="@drawable/ny_circle_white"
+                        android:gravity="center"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp">
+                        <ImageView
+                            android:background="@drawable/ny_circle_green_blue"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:text="@string/do_dive"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:background="@drawable/ny_menu_gradation_blue"
+                    android:layout_margin="@dimen/padding"
+                    android:padding="@dimen/padding_half"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:background="@drawable/ny_circle_white"
+                        android:gravity="center"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp">
+                        <ImageView
+                            android:background="@drawable/ny_circle_green_blue"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
+                    </LinearLayout>
+                    <TextView
+                        android:text="@string/do_course"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:background="@drawable/ny_menu_gradation_blue"
+                    android:layout_margin="@dimen/padding"
+                    android:padding="@dimen/padding_half"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:background="@drawable/ny_circle_white"
+                        android:gravity="center"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp">
+                        <ImageView
+                            android:background="@drawable/ny_circle_green_blue"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
+                    </LinearLayout>
+                    <TextView
+                        android:text="@string/do_shop"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+
+
+
+            <RelativeLayout
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/events"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:lineSpacingExtra="1dp"
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/see_all"
+                    android:textSize="13sp"
+                    android:textColor="@color/ny_blue2"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:lineSpacingExtra="1dp"
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <HorizontalScrollView
+                android:scrollbars="none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:background="@color/ny_grey3"
+                    android:padding="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include layout="@layout/view_item"/>
+                    <include layout="@layout/view_item"/>
+                    <include layout="@layout/view_item"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+
+
+
+
+            <RelativeLayout
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/hot_offer"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:lineSpacingExtra="1dp"
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/see_all"
+                    android:textSize="13sp"
+                    android:textColor="@color/ny_blue2"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:lineSpacingExtra="1dp"
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <HorizontalScrollView
+                android:scrollbars="none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:background="@color/ny_grey3"
+                    android:padding="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include layout="@layout/view_item"/>
+                    <include layout="@layout/view_item"/>
+                    <include layout="@layout/view_item"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+
+
+
+
+
+            <RelativeLayout
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/most_popular_dive_spot"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:lineSpacingExtra="1dp"
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/see_all"
+                    android:textSize="13sp"
+                    android:textColor="@color/ny_blue2"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:lineSpacingExtra="1dp"
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <HorizontalScrollView
+                android:scrollbars="none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:background="@color/ny_grey3"
+                    android:padding="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/view_item_spot"/>
+                    <include layout="@layout/view_item_spot"/>
+                    <include layout="@layout/view_item_spot"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

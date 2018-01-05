@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#1675CF</color>
     <color name="colorGradationLeft">#25A2DB</color>
     <color name="colorGradationRight">#1B76BB</color>
+    <color name="colorGradationMenuLeft">#239BD6</color>
+    <color name="colorGradationMenuRight">#1B76BB</color>
     <color name="colorGradationSoftLeft">#66BDE5</color>
     <color name="colorGradationSoftRight">#60A0D0</color>
     <color name="colorAccent">#FF4081</color>
@@ -12,8 +14,11 @@
 
     <color name="ny_grey1">#EEEEEE</color>
     <color name="ny_grey2">#A9A9A9</color>
+    <color name="ny_grey3">#ECECEC</color>
     <color name="ny_blue1">#005673</color>
     <color name="ny_blue2">#00ACE3</color>
     <color name="ny_blue4">#0B335A</color>
+    <color name="ny_green_blue">#024A5E</color>
+    <color name="ny_orange">#FF9812</color>
 
 </resources>

@@ -7,9 +7,9 @@
     <declare-styleable name="NYHomepageTabItemView">
         <attr name="tabItemPosition" format="enum">
             <enum name="home" value="0"/>
-            <enum name="search" value="1"/>
-            <enum name="history" value="2"/>
-            <enum name="profile" value="3"/>
+            <enum name="socmed" value="1"/>
+            <enum name="transaction" value="2"/>
+            <enum name="my_account" value="3"/>
         </attr>
 
         <attr name="tabItemText" format="reference|string"/>

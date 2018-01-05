@@ -16,6 +16,10 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="select_gender">Select Gender</string>
     <string name="loading">Please wait...</string>
+    <string name="events">Events</string>
+    <string name="hot_offer">Hot Offer</string>
+    <string name="most_popular_dive_spot">Most Popular Dive Spot</string>
+    <string name="see_all">See All</string>
     <!--<string name=""></string>-->
     <integer name="timeline_place_item_image_ratio_width">5</integer>
     <integer name="timeline_place_item_image_ratio_height">3</integer>
@@ -25,6 +29,9 @@
 
 
     <!--MENU-->
+    <string name="do_dive">Do Dive</string>
+    <string name="do_course">Do Course</string>
+    <string name="do_shop">Do Shop</string>
     <string name="account">Account</string>
     <string name="setting">Setting</string>
     <string name="dive_guidance">Dive Guidance</string>
@@ -35,10 +42,9 @@
 
     <string-array name="menu_tab">
         <item>Home</item>
-        <item>Search</item>
-        <item>History</item>
-        <item>Notification</item>
-        <item>Profile</item>
+        <item>Socmed</item>
+        <item>Transaction</item>
+        <item>My Account</item>
     </string-array>
 
 

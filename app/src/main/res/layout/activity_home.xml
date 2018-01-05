@@ -114,7 +114,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:tabItemPosition="search"
+                        app:tabItemPosition="socmed"
                         app:tabItemText="Search"
                         app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
 
@@ -123,8 +123,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:tabItemPosition="history"
-                        app:tabItemText="Chat"
+                        app:tabItemPosition="transaction"
+                        app:tabItemText="Transaction"
                         app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
 
                     <com.nyelam.android.view.NYHomepageTabItemView
@@ -132,7 +132,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:tabItemPosition="profile"
+                        app:tabItemPosition="my_account"
                         app:tabItemText="Profile"
                         app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
 
