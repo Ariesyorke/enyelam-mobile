@@ -17,6 +17,8 @@
     <string name="select_gender">Select Gender</string>
     <string name="loading">Please wait...</string>
     <!--<string name=""></string>-->
+    <integer name="timeline_place_item_image_ratio_width">5</integer>
+    <integer name="timeline_place_item_image_ratio_height">3</integer>
 
     <!--WARN-->
     <string name="warn_no_connection">Unable connect to server. Please check your internet connection and try again.</string>

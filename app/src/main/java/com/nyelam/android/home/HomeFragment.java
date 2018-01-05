@@ -3,16 +3,28 @@ package com.nyelam.android.home;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.Banner;
+import com.nyelam.android.data.BannerList;
+import com.nyelam.android.view.NYBannerViewPager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import me.relex.circleindicator.CircleIndicator;
 
 public class HomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private NYBannerViewPager bannerViewPager;
+    private BannerViewPagerAdapter bannerViewPagerAdapter;
+    private CircleIndicator circleIndicator;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -39,6 +51,41 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView(view);
+        initBanner();
+    }
+
+    private void initBanner() {
+        bannerViewPagerAdapter = new BannerViewPagerAdapter(getChildFragmentManager());
+        bannerViewPager.setAdapter(bannerViewPagerAdapter);
+        circleIndicator.setViewPager(bannerViewPager);
+
+        //craete TEMP data banner
+        BannerList bannerList = new BannerList();
+        List<Banner> banners = new ArrayList<>();
+        banners.add(new Banner("1", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-a.jpg", "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("2", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-b.jpg", "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("3", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-x1.jpg", "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("4", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-x2.jpg", "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("5", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-x3.jpg", "captio", "http://www.nyelam.com"));
+        bannerList.setList(banners);
+        //input data data
+        bannerViewPagerAdapter.setBannerList(bannerList);
+        bannerViewPagerAdapter.notifyDataSetChanged();
+        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+        circleIndicator.setViewPager(bannerViewPager);
+
+    }
+
+    private void initView(View view) {
+        bannerViewPager = (NYBannerViewPager) view.findViewById(R.id.promotion_view_pager);
+        circleIndicator = (CircleIndicator) view.findViewById(R.id.circle_indicator);
+    }
+
 
     @Override
     public void onAttach(Context context) {

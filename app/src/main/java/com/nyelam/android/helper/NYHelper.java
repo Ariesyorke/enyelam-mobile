@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.data.AuthReturn;
@@ -145,6 +148,18 @@ public class NYHelper {
                 .setCancelable(true)
                 .create()
                 .show();
+    }
+
+    public  static DisplayImageOptions getOption (){
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .resetViewBeforeLoading(false)  // default
+                .delayBeforeLoading(1000)
+                .cacheInMemory(true) // default
+                .cacheOnDisk(true) // default
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
+                .bitmapConfig(Bitmap.Config.ARGB_8888) // default
+                .build();
+        return options;
     }
 
 }
