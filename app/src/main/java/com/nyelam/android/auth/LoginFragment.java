@@ -122,12 +122,12 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
-                /*if(progressDialog != null && progressDialog.isShowing()){
+                if(progressDialog != null && progressDialog.isShowing()){
                     progressDialog.dismiss();
-                }*/
+                }
 
                 NYHelper.saveUserData(getActivity(), authReturn);
-                //mListener.isLoginSuccess(true);
+                mListener.isLoginSuccess(true);
             }
         };
     }
@@ -174,7 +174,6 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        //void onFragmentInteraction(Uri uri);
+        void isLoginSuccess(boolean b);
     }
 }

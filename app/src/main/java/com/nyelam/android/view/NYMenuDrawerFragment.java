@@ -1,8 +1,10 @@
 package com.nyelam.android.view;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.auth.AuthActivity;
+import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.storage.LoginStorage;
 
 /**
  * Created by Aprilian Nur on 12/6/2017.
@@ -76,6 +81,14 @@ public class NYMenuDrawerFragment extends Fragment {
             public void onClick(View v)
             {
                 //mListener.onIntentVideos();
+                Activity activity = getActivity();
+                LoginStorage storage = new LoginStorage(activity);
+                storage.clear();
+                Intent intent = new Intent(activity, AuthActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.nyelam.android.auth;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,18 +12,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYRegisterRequest;
+import com.nyelam.android.storage.LoginStorage;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterFragment extends Fragment {
 
+
     private OnFragmentInteractionListener mListener;
+    private ProgressDialog progressDialog;
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private EditText usernameEditText, emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
     private Spinner genderSpinner;
     private TextView registerTextView;
@@ -69,7 +82,7 @@ public class RegisterFragment extends Fragment {
                 String phoneNumber = phoneNumberEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirmPassword = confirmPasswordEditText.getText().toString();
-                String gender = genderSpinner.getSelectedItem().toString();
+                String gender = (String) genderSpinner.getSelectedItem();
 
                 if (TextUtils.isEmpty(username)){
                     Toast.makeText(getActivity(), "Username can't be empty", Toast.LENGTH_SHORT).show();
@@ -79,6 +92,8 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(), "Phone number can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(password)){
                     Toast.makeText(getActivity(), "Password can't be empty", Toast.LENGTH_SHORT).show();
+                } else if (password.length() < 6){
+                    Toast.makeText(getActivity(), "Password length must be 6 characters or more", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(confirmPassword)){
                     Toast.makeText(getActivity(), "Confirm password can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (!password.equals(confirmPassword)){
@@ -86,8 +101,9 @@ public class RegisterFragment extends Fragment {
                 } else if (TextUtils.isEmpty(gender)){
                     Toast.makeText(getActivity(), "Gender can't be empty", Toast.LENGTH_SHORT).show();
                 } else {
-
-
+                    progressDialog.show();
+                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), username, email, phoneNumber, password, confirmPassword, gender,  null, null, null, null);
+                    spcMgr.execute(req, onRegisterRequest());
                 }
             }
         });
@@ -108,7 +124,35 @@ public class RegisterFragment extends Fragment {
         stringList.add("Female");
         ArrayAdapter<String> myAdapter = new GenderAdapter(getActivity(), R.layout.spinner_gender, stringList);
         genderSpinner.setAdapter(myAdapter);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
     }
+
+
+    private RequestListener<AuthReturn> onRegisterRequest() {
+        return new RequestListener<AuthReturn>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null && progressDialog.isShowing())progressDialog.cancel();
+                if (spiceException != null) {
+                    NYHelper.handleAPIException(getActivity(), spiceException, null);
+                } else {
+                    NYHelper.handleErrorMessage(getActivity(), getActivity().getResources().getString(R.string.warn_no_connection));
+                }
+            }
+
+            @Override
+            public void onRequestSuccess(AuthReturn authReturn) {
+                if (progressDialog != null && progressDialog.isShowing())progressDialog.cancel();
+                NYHelper.saveUserData(getActivity(), authReturn);
+                mListener.isLoginSuccess(true);
+            }
+        };
+    }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -127,8 +171,23 @@ public class RegisterFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        spcMgr.start(getActivity());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (spcMgr.isStarted()){
+            spcMgr.shouldStop();
+        }
+    }
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        //void onFragmentInteraction(Uri uri);
+        void isLoginSuccess(boolean login);
     }
 }

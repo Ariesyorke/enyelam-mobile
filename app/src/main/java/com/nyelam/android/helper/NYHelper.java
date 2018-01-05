@@ -133,4 +133,18 @@ public class NYHelper {
                 .show();
     }
 
+    public static final void handleErrorMessage(Context context, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setCancelable(true)
+                .create()
+                .show();
+    }
+
 }
