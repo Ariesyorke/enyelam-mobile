@@ -21,6 +21,8 @@ import com.nyelam.android.storage.LoginStorage;
 
 public class NYHelper {
 
+    public static final String ASC = "asc";
+
     public static String getDevice() {
         StringBuffer b = new StringBuffer();
         b.append(Build.MANUFACTURER).append("/");

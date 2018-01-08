@@ -104,7 +104,7 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please, select your gender", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog.show();
-                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), username, email, phoneNumber, password, confirmPassword, gender,  null, null, null, null);
+                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), username, email, phoneNumber, null, password, confirmPassword, gender,  null, null, null, null);
                     spcMgr.execute(req, onRegisterRequest());
                 }
             }

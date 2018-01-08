@@ -40,7 +40,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".dodive.DoDiveActivity"></activity>
+        <activity android:name=".dodive.DoDiveActivity" />
+        <activity android:name=".dodive.SearchDiveSpotActivity"></activity>
     </application>
 
 </manifest>

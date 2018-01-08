@@ -21,12 +21,15 @@
     <string name="most_popular_dive_spot">Most Popular Dive Spot</string>
     <string name="see_all">See All</string>
 
+    <string name="enter_a_dive_spot">Enter a dive spot name</string>
     <string name="dive_spot">Dive Spot</string>
     <string name="certificate">Certificate</string>
     <string name="dive_center">Dive Center</string>
     <string name="date">Date</string>
     <string name="diver">Diver</string>
     <string name="search">Search</string>
+    <string name="recent_searches">Recent searches</string>
+    <string name="search_results">Search results</string>
 
 
     <!--<string name=""></string>-->

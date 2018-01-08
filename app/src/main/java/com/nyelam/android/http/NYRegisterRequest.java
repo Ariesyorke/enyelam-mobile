@@ -27,8 +27,16 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
     private static final String POST_SOCMED_ID = "socmed_id";
     private static final String POST_SOCMED_ACCESS_TOKEN = "socmed_access_token";
     private static final String POST_PICTURE = "picture";
+    private static final String POST_COUNTRY_CODE_ID = "country_code_id";
 
-    public NYRegisterRequest(Context context, String username, String email, String phoneNumber, String password, String confirmPassword, String gender,
+    public NYRegisterRequest(Context context,
+                             String username,
+                             String email,
+                             String phoneNumber,
+                             String countryCodeId,
+                             String password,
+                             String confirmPassword,
+                             String gender,
                              String socmedType,
                              String socmedId,
                              String socmedAccessToken,
@@ -45,6 +53,10 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
 
         if(!TextUtils.isEmpty(phoneNumber)) {
             addQuery(POST_PHONE, phoneNumber);
+        }
+
+        if(!TextUtils.isEmpty(countryCodeId)) {
+            addQuery(POST_COUNTRY_CODE_ID, countryCodeId);
         }
 
         if(!TextUtils.isEmpty(password)) {

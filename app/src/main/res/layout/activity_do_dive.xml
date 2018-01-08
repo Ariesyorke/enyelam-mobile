@@ -76,8 +76,8 @@
                     android:padding="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/dive_spot_editText"
+                    <TextView
+                        android:id="@+id/dive_spot_textView"
                         android:hint="@string/dive_spot"
                         android:textSize="14sp"
                         android:textColor="@color/colorBlack"
@@ -131,7 +131,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:background="@drawable/ny_rectangle_transparant_white_border"
                     android:padding="@dimen/padding"
                     android:layout_marginTop="@dimen/padding_double"
@@ -153,7 +153,7 @@
                         android:paddingBottom="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                </LinearLayout>
+                </LinearLayout>-->
 
                 <LinearLayout
                     android:background="@drawable/ny_rectangle_transparant_white_border"
@@ -162,7 +162,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
-                        android:layout_weight="5"
+                        android:layout_weight="6"
                         android:layout_width="0dp"
                         android:orientation="vertical"
                         android:layout_height="match_parent">
@@ -196,7 +196,7 @@
                             android:layout_height="match_parent" />
                     </LinearLayout>
                     <LinearLayout
-                        android:layout_weight="3"
+                        android:layout_weight="5"
                         android:layout_width="0dp"
                         android:layout_marginLeft="@dimen/padding"
                         android:orientation="vertical"
@@ -222,31 +222,45 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <LinearLayout
+                                android:id="@+id/minus_linearLayout"
                                 android:background="@drawable/ny_circle_dark_blue"
                                 android:layout_marginLeft="@dimen/padding_half"
-                                android:layout_gravity="center_vertical"
+                                android:layout_gravity="center"
+                                android:gravity="center"
                                 android:layout_width="28dp"
                                 android:layout_height="28dp">
+                                <ImageView
+                                    android:src="@drawable/ic_minus"
+                                    android:layout_gravity="center"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp" />
                             </LinearLayout>
                             <TextView
-                                android:text="1"
+                                android:id="@+id/diver_textView"
+                                android:text="0"
                                 android:textSize="16sp"
                                 android:textColor="@color/ny_grey4"
                                 android:singleLine="true"
                                 android:maxLines="1"
-                                android:paddingLeft="@dimen/padding_double"
-                                android:paddingRight="@dimen/padding"
                                 android:paddingTop="@dimen/padding"
                                 android:paddingBottom="@dimen/padding"
+                                android:gravity="center"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content" />
                             <LinearLayout
+                                android:id="@+id/plus_linearLayout"
                                 android:background="@drawable/ny_circle_dark_blue"
                                 android:layout_marginRight="@dimen/padding_half"
-                                android:layout_gravity="center_vertical"
+                                android:layout_gravity="center"
+                                android:gravity="center"
                                 android:layout_width="28dp"
                                 android:layout_height="28dp">
+                                <ImageView
+                                    android:src="@drawable/ic_plus"
+                                    android:layout_gravity="center"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp" />
                             </LinearLayout>
                         </LinearLayout>
 

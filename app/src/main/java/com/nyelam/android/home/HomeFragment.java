@@ -93,7 +93,6 @@ public class HomeFragment extends Fragment {
         bannerViewPagerAdapter.notifyDataSetChanged();
         bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
         circleIndicator.setViewPager(bannerViewPager);
-
     }
 
     private void initView(View view) {

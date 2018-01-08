@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nyelam.android.dodive.DoDiveActivity">
+
+    <LinearLayout
+        android:background="@drawable/ny_gradient_right_left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/search_editText"
+                android:hint="@string/enter_a_dive_spot"
+                android:textSize="14sp"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/ny_grey2"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:background="@drawable/ny_rectangle_white"
+                android:padding="@dimen/padding"
+                android:layout_margin="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_below="@+id/toolbar"
+            android:background="@color/colorGradationSoftLeft"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/search_textView"
+                android:text="@string/recent_searches"
+                android:textColor="@color/ny_black1"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:gravity="left|start"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_marginBottom="@dimen/padding"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@color/ny_grey2"
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
