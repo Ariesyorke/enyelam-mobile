@@ -182,6 +182,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <TextView
+                            android:id="@+id/datetime_textView"
                             android:text="01/05/2018"
                             android:textSize="13sp"
                             android:textColor="@color/ny_grey4"
