@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.view.NYBannerViewPager;
 
@@ -29,6 +30,7 @@ public class HomeFragment extends Fragment {
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
     private LinearLayout doDiveLinearLayout;
+    private View viewBooking;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -72,6 +74,14 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        viewBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initBanner() {
@@ -99,6 +109,7 @@ public class HomeFragment extends Fragment {
         bannerViewPager = (NYBannerViewPager) view.findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) view.findViewById(R.id.circle_indicator);
         doDiveLinearLayout = (LinearLayout) view.findViewById(R.id.do_dive_linearLayout);
+        viewBooking = (View) view.findViewById(R.id.view_booking);
     }
 
 

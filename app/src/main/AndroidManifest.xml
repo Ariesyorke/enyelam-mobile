@@ -41,7 +41,8 @@
             android:exported="true" />
 
         <activity android:name=".dodive.DoDiveActivity" />
-        <activity android:name=".dodive.SearchDiveSpotActivity"></activity>
+        <activity android:name=".dodive.SearchDiveSpotActivity" />
+        <activity android:name=".detail.DetailServiceActivity"></activity>
     </application>
 
 </manifest>

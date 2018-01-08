@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:padding="@dimen/padding_double"
+    android:background="@color/colorWhite"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_marginLeft="@dimen/padding"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/name_textView"
+            android:text="Nusa Dua Indah"
+            android:textSize="18sp"
+            android:textColor="@color/ny_black1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/total_textView"
+            android:text="3"
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/service_textView"
+            android:layout_below="@+id/name_textView"
+            android:text="Service"
+            android:textSize="15sp"
+            android:textColor="@color/ny_grey4"
+            android:layout_marginTop="@dimen/padding_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/label_textView"
+            android:layout_below="@+id/total_textView"
+            android:text="dive spots"
+            android:textSize="15sp"
+            android:textColor="@color/ny_grey4"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/padding_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</LinearLayout>

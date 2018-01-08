@@ -72,6 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.3dp"/>
 
+            <include layout="@layout/view_item_search"/>
+            <include layout="@layout/view_item_search"/>
+
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

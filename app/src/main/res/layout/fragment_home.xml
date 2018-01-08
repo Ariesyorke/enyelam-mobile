@@ -181,7 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <include layout="@layout/view_item"/>
+                    <include android:id="@+id/view_booking" layout="@layout/view_item"/>
                     <include layout="@layout/view_item"/>
                     <include layout="@layout/view_item"/>
                 </LinearLayout>
