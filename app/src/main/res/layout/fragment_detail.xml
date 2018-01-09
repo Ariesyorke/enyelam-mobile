@@ -1,13 +1,136 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
     tools:context="com.nyelam.android.detail.DetailServiceFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</FrameLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/label_price"
+                        android:text="Price : "
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/price_textView"
+                        android:layout_toRightOf="@+id/label_price"
+                        android:text="Rp 1.950.000"
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/label_date"
+                        android:layout_below="@+id/label_price"
+                        android:text="Date : "
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/date_textView"
+                        android:layout_toRightOf="@+id/label_date"
+                        android:layout_below="@+id/label_price"
+                        android:text="23 Nov 2017 - 24 Nov 2017"
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/label_min_person"
+                        android:layout_below="@+id/label_date"
+                        android:text="Max Person : "
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/min_person_textView"
+                        android:layout_toRightOf="@+id/label_min_person"
+                        android:layout_below="@+id/label_date"
+                        android:text="4"
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/label_max_person"
+                        android:layout_below="@+id/label_min_person"
+                        android:text="Min Person : "
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/max_person_textView"
+                        android:layout_toRightOf="@+id/label_max_person"
+                        android:layout_below="@+id/label_min_person"
+                        android:text="8"
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+            <View
+                android:background="@color/ny_grey3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="About Nusa Dua"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:text="Bali is world renowned for their abundance of tropical marine life. Bali underwater panoramas is amazing (awesome ) with beautiful coral, Many fishes in difference of color and size, shark, manta rays and mola mola. Bali dive site is unique from gentle reef, steep slope, wall and wreck. All of our dive site available by carefully selected based on through study and survey by the expert."
+                    android:textColor="@color/ny_grey5"
+                    android:textSize="14sp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
