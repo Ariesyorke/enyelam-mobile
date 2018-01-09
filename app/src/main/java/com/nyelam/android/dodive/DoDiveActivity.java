@@ -1,28 +1,32 @@
 package com.nyelam.android.dodive;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.SearchResult;
+import com.nyelam.android.helper.NYHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 
 public class DoDiveActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    private TextView diveSpotTextView, diverTextView;
-    private TextView datetimeTextView;
+    private SearchResult searchResult;
+    private TextView keywordTextView, diverTextView, certificateTextView, datetimeTextView;
+    private Switch certificateSwitch;
     private LinearLayout plusLinearLayout, minusLinearLayout;
     private DatePickerDialog datePickerDialog;
 
@@ -30,16 +34,42 @@ public class DoDiveActivity extends AppCompatActivity implements DatePickerDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_dive);
-        initToolbar();
         initView();
+        initExtra();
+        initToolbar();
         initControl();
     }
 
+    private void initExtra() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            try {
+                JSONObject obj = new JSONObject(extras.getString(NYHelper.SEARCH_RESULT));
+                //Toast.makeText(this, obj.getString("name"), Toast.LENGTH_SHORT).show();
+                if (obj.has("name"))keywordTextView.setText(obj.getString("name"));
+
+                if (obj.has("license") && obj.getBoolean("license")){
+                    certificateSwitch.setChecked(true);
+                    certificateSwitch.setClickable(false);
+                    //certificateSwitch.setEnabled(false);
+                } else {
+                    certificateSwitch.setChecked(false);
+                    certificateSwitch.setClickable(true);
+                }
+                //searchResult.parse(obj);
+                //if (searchResult != null) keywordTextView.setText(searchResult.getName());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            // and get whatever type user account id is
+        }
+    }
+
     private void initControl() {
-        diveSpotTextView.setOnClickListener(new View.OnClickListener() {
+        keywordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoDiveActivity.this, SearchDiveSpotActivity.class);
+                Intent intent = new Intent(DoDiveActivity.this, DoDiveSearchActivity.class);
                 startActivity(intent);
             }
         });
@@ -69,11 +99,13 @@ public class DoDiveActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     private void initView() {
-        diveSpotTextView = (TextView) findViewById(R.id.dive_spot_textView);
+        keywordTextView = (TextView) findViewById(R.id.keyword_textView);
         diverTextView = (TextView) findViewById(R.id.diver_textView);
         minusLinearLayout = (LinearLayout) findViewById(R.id.minus_linearLayout);
         plusLinearLayout = (LinearLayout) findViewById(R.id.plus_linearLayout);
         datetimeTextView = (TextView) findViewById(R.id.datetime_textView);
+        certificateTextView = (TextView) findViewById(R.id.certificate_textView);
+        certificateSwitch = (Switch) findViewById(R.id.certificate_switch);
     }
 
     private void initToolbar() {

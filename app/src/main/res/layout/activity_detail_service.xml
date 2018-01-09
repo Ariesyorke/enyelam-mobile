@@ -44,17 +44,6 @@
                     app:ci_orientation="horizontal">
                 </me.relex.circleindicator.CircleIndicator>
 
-                <TextView
-                    android:text="*5"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorWhite"
-                    android:background="@drawable/ny_circle_green_blue"
-                    android:padding="@dimen/padding_double"
-                    android:layout_marginRight="@dimen/padding_half"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </RelativeLayout>
 
 
@@ -62,18 +51,41 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="48dp"
                 app:layout_collapseMode="pin">
 
-                <TextView
-                    android:id="@+id/name_textView"
-                    android:text="Nusa Dua Indah"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorWhite"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/name_textView"
+                        android:text="Nusa Dua Indah"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="*4.5/5"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/ny_rectangle_gradation_blue"
+                        android:paddingLeft="@dimen/padding"
+                        android:paddingRight="@dimen/padding"
+                        android:paddingTop="@dimen/padding_half"
+                        android:paddingBottom="@dimen/padding_half"
+                        android:layout_marginRight="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
 
             </android.support.v7.widget.Toolbar>
 
@@ -83,9 +95,11 @@
                 android:id="@+id/tab_manager"
                 android:layout_gravity="bottom"
                 app:tabMode="scrollable"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/ny_grey2"
+                android:paddingTop="@dimen/padding"
+                android:background="@color/colorWhite"
                 android:orientation="horizontal"
                 android:layout_alignParentBottom="true">
 
@@ -96,7 +110,7 @@
                     android:layout_weight="1"
                     app:tabChecked="true"
                     app:tabItemPosition="home"
-                    app:tabItemText="Home"
+                    app:tabItemText="Detail"
                     app:tabSrcIcon="@drawable/ic_navigation_home_b"/>
 
                 <com.nyelam.android.view.NYHomepageDetailTabItemView
@@ -105,7 +119,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     app:tabItemPosition="socmed"
-                    app:tabItemText="Search"
+                    app:tabItemText="Dive Spots"
                     app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
 
                 <com.nyelam.android.view.NYHomepageDetailTabItemView
@@ -114,7 +128,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     app:tabItemPosition="transaction"
-                    app:tabItemText="Transaction"
+                    app:tabItemText="Dive Center"
                     app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
 
                 <com.nyelam.android.view.NYHomepageDetailTabItemView
@@ -123,10 +137,17 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     app:tabItemPosition="my_account"
-                    app:tabItemText="Profile"
+                    app:tabItemText="Reviews"
                     app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
 
             </LinearLayout>
+
+
+            <!--<View
+                android:layout_gravity="bottom"
+                android:background="@color/ny_grey3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>-->
 
 
         </android.support.design.widget.CollapsingToolbarLayout>

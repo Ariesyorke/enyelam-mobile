@@ -1,5 +1,6 @@
 package com.nyelam.android.detail;
 
+import android.app.DatePickerDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,9 +10,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,11 +25,16 @@ import com.nyelam.android.view.NYHomepageDetailTabItemView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DetailServiceActivity extends AppCompatActivity implements DetailServiceFragment.OnFragmentInteractionListener {
+public class DetailServiceActivity extends AppCompatActivity implements
+        DetailServiceFragment.OnFragmentInteractionListener,
+        DetailServiceDiveSpotsFragment.OnFragmentInteractionListener,
+        DetailServiceDiveCenterFragment.OnFragmentInteractionListener,
+        DetailServiceReviewFragment.OnFragmentInteractionListener{
 
     private List<DetailServiceActivity.Frags> tags = Arrays.asList(new DetailServiceActivity.Frags(0,"home"), new DetailServiceActivity.Frags(1,"timeline"), new DetailServiceActivity.Frags(2,"interest"), new DetailServiceActivity.Frags(3,"tags"), new DetailServiceActivity.Frags(4,"more"));
     private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
@@ -48,6 +56,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DetailSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_service);
         initView();
+        initToolbar();
         initTab();
     }
 
@@ -58,6 +67,13 @@ public class DetailServiceActivity extends AppCompatActivity implements DetailSe
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         //viewTabManager = (View) findViewById(R.id.view_tab_manager);
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
+    }
+
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -93,13 +109,13 @@ public class DetailServiceActivity extends AppCompatActivity implements DetailSe
                 DetailServiceFragment fragment = DetailServiceFragment.newInstance();
                 return fragment;
             } else if (position == 1) {
-                DetailServiceFragment fragment = DetailServiceFragment.newInstance();
+                DetailServiceDiveSpotsFragment fragment = DetailServiceDiveSpotsFragment.newInstance().newInstance();
                 return fragment;
             }  else if (position == 2) {
-                DetailServiceFragment fragment = DetailServiceFragment.newInstance();
+                DetailServiceDiveCenterFragment fragment = DetailServiceDiveCenterFragment.newInstance().newInstance();
                 return fragment;
             } else {
-                DetailServiceFragment fragment = DetailServiceFragment.newInstance();
+                DetailServiceReviewFragment fragment = DetailServiceReviewFragment.newInstance().newInstance();
                 return fragment;
             }
         }
@@ -303,6 +319,19 @@ public class DetailServiceActivity extends AppCompatActivity implements DetailSe
         }
 
     }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 

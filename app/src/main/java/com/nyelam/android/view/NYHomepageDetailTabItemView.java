@@ -30,6 +30,11 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
     private int tabItemPosition = -1;
     private TextView textView;
     private ImageView imageView;
+    private View lineView;
+    private int normalColor;
+    private int normalColorWhite;
+    private int checkedColor;
+
 
     public NYHomepageDetailTabItemView(Context context) {
         super(context);
@@ -65,17 +70,22 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
 
         if (tabItemPosition == 0 ){
             imageView.setImageResource(R.drawable.tab_home);
-            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.ny_grey2));
         } else if (tabItemPosition == 1 ){
             imageView.setImageResource(R.drawable.tab_home);
-            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.ny_grey2));
         } else if (tabItemPosition == 2 ){
             imageView.setImageResource(R.drawable.tab_home);
-            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.ny_grey2));
         } else {
             imageView.setImageResource(R.drawable.tab_home);
-            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.ny_grey2));
         }
+
+        if (!checked) {
+            textView.setTextColor(normalColor);
+            lineView.setBackgroundColor(normalColorWhite);
+        } else {
+            textView.setTextColor(checkedColor);
+            lineView.setBackgroundColor(checkedColor);
+        }
+
 
     }
 
@@ -97,9 +107,6 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
         if (isChecked()) {
             mergeDrawableStates(drawableState, CheckedStateSet);
-            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.ny_green_blue));
-        } else {
-            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.ny_grey2));
         }
         return drawableState;
     }
@@ -124,9 +131,15 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
 
         textView = (TextView) findViewById(R.id.text);
         imageView = (ImageView) findViewById(R.id.image);
+        lineView = (View) findViewById(R.id.line_view);
 
         textView.setVisibility(VISIBLE);
         imageView.setVisibility(GONE);
+        lineView.setVisibility(VISIBLE);
+
+        normalColor = ContextCompat.getColor(context, R.color.ny_grey2);
+        normalColorWhite = ContextCompat.getColor(context, R.color.colorWhite);
+        checkedColor = ContextCompat.getColor(context, R.color.ny_green_blue);
 
         setClickable(true);
         setBackgroundResource(R.drawable.homepage_tab_item_selector);
@@ -141,7 +154,7 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
                     defStyleAttrs, 0);
             try {
                 tabItemPosition = a.getInt(R.styleable.NYHomepageTabItemView_tabItemPosition, -1);
-                text = a.getString(R.styleable.NYHomepageTabItemView_tabChecked);
+                text = a.getString(R.styleable.NYHomepageTabItemView_tabItemText);
                 icon = a.getDrawable(R.styleable.NYHomepageTabItemView_tabSrcIcon);
                 checked = a.getBoolean(R.styleable.NYHomepageTabItemView_tabChecked, false);
 
@@ -160,5 +173,8 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
             if (checkedTabItemPos > -1)
                 detailServiceActivity.movePagerToTabItemPosition(checkedTabItemPos);
         }
+
+        textView.setText(text);
+
     }
 }

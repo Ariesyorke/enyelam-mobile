@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:duplicateParentState="true"
@@ -27,8 +27,17 @@
             android:singleLine="true"
             android:maxLines="1"
             android:text="Label"
-            android:textColor="@color/ny_grey1"
-            android:textSize="10sp"/>
+            android:textColor="@color/ny_grey2"
+            android:textSize="14sp"/>
+
+        <View
+            android:id="@+id/line_view"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"/>
+
 
     </LinearLayout>
 </merge>

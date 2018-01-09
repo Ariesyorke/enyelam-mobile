@@ -6,7 +6,9 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/icon_imageView"
         android:src="@mipmap/ic_launcher"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <RelativeLayout
@@ -22,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/total_textView"
+            android:id="@+id/rating_textView"
             android:text="3"
             android:textSize="18sp"
             android:textColor="@color/colorPrimary"
@@ -30,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/service_textView"
+            android:id="@+id/type_textView"
             android:layout_below="@+id/name_textView"
             android:text="Service"
             android:textSize="15sp"
@@ -40,8 +42,8 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/label_textView"
-            android:layout_below="@+id/total_textView"
-            android:text="dive spots"
+            android:layout_below="@+id/rating_textView"
+            android:text=""
             android:textSize="15sp"
             android:textColor="@color/ny_grey4"
             android:layout_alignParentRight="true"

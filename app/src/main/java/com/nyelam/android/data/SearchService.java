@@ -1,0 +1,159 @@
+package com.nyelam.android.data;
+
+import org.apache.http.util.TextUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * Created by Aprilian Nur Wakhid Daini on 1/9/2018.
+ */
+
+public class SearchService extends SearchResult {
+
+    private static String KEY_DIVE_SPOT = "dive_spot";
+    private static String KEY_DIVE_SERVICE = "dive_service";
+    private static String KEY_LICENSE = "license";
+
+    private String diveSpot;
+    private String diveService;
+    private boolean license;
+
+    public String getDiveSpot() {
+        return diveSpot;
+    }
+
+    public void setDiveSpot(String diveSpot) {
+        this.diveSpot = diveSpot;
+    }
+
+    public String getDiveService() {
+        return diveService;
+    }
+
+    public void setDiveService(String diveService) {
+        this.diveService = diveService;
+    }
+
+    public boolean isLicense() {
+        return license;
+    }
+
+    public void setLicense(boolean license) {
+        this.license = license;
+    }
+
+    @Override
+    public void parse(JSONObject obj) {
+        if (obj == null) return;
+
+        try {
+            if (!obj.isNull(KEY_ID)) {
+                setId(obj.getString(KEY_ID));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_NAME)) {
+                setName(obj.getString(KEY_NAME));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_RATING)) {
+                setRating(obj.getString(KEY_RATING));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_TYPE)) {
+                setType(obj.getInt(KEY_TYPE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_DIVE_SPOT)) {
+                setDiveSpot(obj.getString(KEY_DIVE_SPOT));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_DIVE_SERVICE)) {
+                setDiveService(obj.getString(KEY_DIVE_SERVICE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_LICENSE)) {
+                setLicense(obj.getBoolean(KEY_LICENSE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+    }
+
+    @Override
+    public String toString() {
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getId())) {
+                obj.put(KEY_ID, getId());
+            } else {
+                obj.put(KEY_ID, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getName())) {
+                obj.put(KEY_NAME, getName());
+            } else {
+                obj.put(KEY_NAME, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getRating())) {
+                obj.put(KEY_RATING, getRating());
+            } else {
+                obj.put(KEY_RATING, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (getType() != null) {
+                obj.put(KEY_TYPE, getType());
+            } else {
+                obj.put(KEY_TYPE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getDiveService())) {
+                obj.put(KEY_DIVE_SERVICE, getDiveService());
+            } else {
+                obj.put(KEY_DIVE_SERVICE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getDiveSpot())) {
+                obj.put(KEY_DIVE_SPOT, getDiveSpot());
+            } else {
+                obj.put(KEY_DIVE_SPOT, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+
+        try {
+            obj.put(KEY_LICENSE, isLicense());
+        } catch (JSONException e){e.printStackTrace();}
+
+
+        try {
+            return obj.toString(3);
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return super.toString();
+    }
+
+
+}

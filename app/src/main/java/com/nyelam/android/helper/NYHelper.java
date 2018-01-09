@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -22,6 +23,7 @@ import com.nyelam.android.storage.LoginStorage;
 public class NYHelper {
 
     public static final String ASC = "asc";
+    public static final String SEARCH_RESULT = "search_result";
 
     public static String getDevice() {
         StringBuffer b = new StringBuffer();
@@ -162,6 +164,15 @@ public class NYHelper {
                 .bitmapConfig(Bitmap.Config.ARGB_8888) // default
                 .build();
         return options;
+    }
+
+    public static String trim(final String s) {
+        final StringBuilder sb = new StringBuilder(s);
+        while (sb.length() > 0 && Character.isWhitespace(sb.charAt(0)))
+            sb.deleteCharAt(0); // delete from the beginning
+        while (sb.length() > 0 && Character.isWhitespace(sb.charAt(sb.length() - 1)))
+            sb.deleteCharAt(sb.length() - 1); // delete from the end
+        return sb.toString();
     }
 
 }

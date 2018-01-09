@@ -47,5 +47,4 @@ public class NYLoginRequest extends NYBasicRequest<AuthReturn> {
         return temp;
     }
 
-
 }

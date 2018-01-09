@@ -107,7 +107,7 @@
                         app:tabChecked="true"
                         app:tabItemPosition="home"
                         app:tabItemText="Home"
-                        app:tabSrcIcon="@drawable/ic_navigation_home_b"/>
+                        app:tabSrcIcon="@drawable/ic_home_active"/>
 
                     <com.nyelam.android.view.NYHomepageTabItemView
                         android:id="@+id/socialmedia_tab"
@@ -116,7 +116,7 @@
                         android:layout_weight="1"
                         app:tabItemPosition="socmed"
                         app:tabItemText="Search"
-                        app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+                        app:tabSrcIcon="@drawable/ic_social_normal"/>
 
                     <com.nyelam.android.view.NYHomepageTabItemView
                         android:id="@+id/transaction_tab"
@@ -125,7 +125,7 @@
                         android:layout_weight="1"
                         app:tabItemPosition="transaction"
                         app:tabItemText="Transaction"
-                        app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+                        app:tabSrcIcon="@drawable/ic_cart_normal"/>
 
                     <com.nyelam.android.view.NYHomepageTabItemView
                         android:id="@+id/my_account_tab"
@@ -134,7 +134,7 @@
                         android:layout_weight="1"
                         app:tabItemPosition="my_account"
                         app:tabItemText="Profile"
-                        app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+                        app:tabSrcIcon="@drawable/ic_user_normal"/>
 
                 </LinearLayout>
 
