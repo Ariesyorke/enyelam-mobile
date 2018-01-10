@@ -14,118 +14,341 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="@dimen/padding"
+            <android.support.v7.widget.CardView
+                android:layout_margin="@dimen/padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
+                    android:padding="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/label_price"
-                        android:text="Price : "
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/price_textView"
-                        android:layout_toRightOf="@+id/label_price"
+                        android:id="@+id/price_strikethrough_textView"
                         android:text="Rp 1.950.000"
                         android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+
                     <TextView
-                        android:id="@+id/label_date"
-                        android:layout_below="@+id/label_price"
-                        android:text="Date : "
+                        android:layout_below="@+id/price_strikethrough_textView"
+                        android:text="Rp 1.950.000"
                         android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
                         android:layout_marginTop="@dimen/padding"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/date_textView"
-                        android:layout_toRightOf="@+id/label_date"
-                        android:layout_below="@+id/label_price"
-                        android:text="23 Nov 2017 - 24 Nov 2017"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/padding"
+
+                    <LinearLayout
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/label_min_person"
-                        android:layout_below="@+id/label_date"
-                        android:text="Max Person : "
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/min_person_textView"
-                        android:layout_toRightOf="@+id/label_min_person"
-                        android:layout_below="@+id/label_date"
-                        android:text="4"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/label_max_person"
-                        android:layout_below="@+id/label_min_person"
-                        android:text="Min Person : "
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/max_person_textView"
-                        android:layout_toRightOf="@+id/label_max_person"
-                        android:layout_below="@+id/label_min_person"
-                        android:text="8"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/license_imageView"
+                            android:layout_gravity="center"
+                            android:background="@drawable/ny_circle_dark_blue"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_marginTop="@dimen/padding_half"
+                            android:layout_below="@+id/license_imageView"
+                            android:text="No Need License"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="12sp"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
                 </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
 
-            </LinearLayout>
 
 
-            <View
-                android:background="@color/ny_grey3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="@dimen/padding"
+            <android.support.v7.widget.CardView
+                android:layout_margin="@dimen/padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:text="About Nusa Dua"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="16sp"
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:text="Bali is world renowned for their abundance of tropical marine life. Bali underwater panoramas is amazing (awesome ) with beautiful coral, Many fishes in difference of color and size, shark, manta rays and mola mola. Bali dive site is unique from gentle reef, steep slope, wall and wreck. All of our dive site available by carefully selected based on through study and survey by the expert."
-                    android:textColor="@color/ny_grey5"
-                    android:textSize="14sp"
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/label_price"
+                            android:text="Price : "
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/price_textView"
+                            android:layout_toRightOf="@+id/label_price"
+                            android:text="Rp 1.950.000"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/label_date"
+                            android:layout_below="@+id/label_price"
+                            android:text="Date : "
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/date_textView"
+                            android:layout_toRightOf="@+id/label_date"
+                            android:layout_below="@+id/label_price"
+                            android:text="23 Nov 2017 - 24 Nov 2017"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/label_min_person"
+                            android:layout_below="@+id/label_date"
+                            android:text="Max Person : "
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/min_person_textView"
+                            android:layout_toRightOf="@+id/label_min_person"
+                            android:layout_below="@+id/label_date"
+                            android:text="4"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/label_max_person"
+                            android:layout_below="@+id/label_min_person"
+                            android:text="Min Person : "
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/max_person_textView"
+                            android:layout_toRightOf="@+id/label_max_person"
+                            android:layout_below="@+id/label_min_person"
+                            android:text="8"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RelativeLayout
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_marginRight="@dimen/padding"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/label_dive_guide"
+                                android:text="Dive Guide : "
+                                android:textColor="@color/ny_black1"
+                                android:textSize="14sp"
+                                android:layout_marginTop="@dimen/padding"
+                                android:layout_marginBottom="@dimen/padding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <ImageView
+                                android:src="@drawable/ny_circle_blue"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp" />
+                            <View
+                                android:layout_alignParentBottom="true"
+                                android:background="@color/ny_grey3"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/label_equipment"
+                                android:text="Equipment : "
+                                android:textColor="@color/ny_black1"
+                                android:textSize="14sp"
+                                android:layout_marginTop="@dimen/padding"
+                                android:layout_marginBottom="@dimen/padding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <ImageView
+                                android:src="@drawable/ny_circle_blue"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp" />
+                            <View
+                                android:layout_alignParentBottom="true"
+                                android:background="@color/ny_grey3"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RelativeLayout
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_marginRight="@dimen/padding"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/label_food"
+                                android:text="Food : "
+                                android:textColor="@color/ny_black1"
+                                android:textSize="14sp"
+                                android:layout_marginTop="@dimen/padding"
+                                android:layout_marginBottom="@dimen/padding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <ImageView
+                                android:src="@drawable/ny_circle_blue"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp" />
+                            <View
+                                android:layout_alignParentBottom="true"
+                                android:background="@color/ny_grey3"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/label_transportation"
+                                android:text="Transportation : "
+                                android:textColor="@color/ny_black1"
+                                android:textSize="14sp"
+                                android:layout_marginTop="@dimen/padding"
+                                android:layout_marginBottom="@dimen/padding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <ImageView
+                                android:src="@drawable/ny_circle_blue"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp" />
+                            <View
+                                android:layout_alignParentBottom="true"
+                                android:background="@color/ny_grey3"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RelativeLayout
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_marginRight="@dimen/padding"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/label_towel"
+                                android:text="Towel : "
+                                android:textColor="@color/ny_black1"
+                                android:textSize="14sp"
+                                android:layout_marginTop="@dimen/padding"
+                                android:layout_marginBottom="@dimen/padding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <ImageView
+                                android:src="@drawable/ny_circle_blue"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp" />
+                            <View
+                                android:layout_alignParentBottom="true"
+                                android:background="@color/ny_grey3"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+
+
+
+
+
+                    <View
+                        android:visibility="gone"
+                        android:background="@color/ny_grey3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="About Nusa Dua"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="16sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:text="Bali is world renowned for their abundance of tropical marine life. Bali underwater panoramas is amazing (awesome ) with beautiful coral, Many fishes in difference of color and size, shark, manta rays and mola mola. Bali dive site is unique from gentle reef, steep slope, wall and wreck. All of our dive site available by carefully selected based on through study and survey by the expert."
+                            android:textColor="@color/ny_grey5"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+
 
 
 
