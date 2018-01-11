@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class Service implements Parseable {
+public class DiveService implements Parseable {
 
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";

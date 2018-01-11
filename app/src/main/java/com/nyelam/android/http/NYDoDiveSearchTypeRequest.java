@@ -17,12 +17,12 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/9/2018.
  */
 
-public class NYDoDiveSearchRequest extends NYBasicRequest<SearchResultList> {
+public class NYDoDiveSearchTypeRequest extends NYBasicRequest<SearchResultList> {
 
     private static final String KEY_SEARCH_RESULTS = "search_results";
     private static final String POST_KEYWORD = "keyword";
 
-    public NYDoDiveSearchRequest(Context context, String keyword) {
+    public NYDoDiveSearchTypeRequest(Context context, String keyword) {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_master_dodive_search));
 
         if(!TextUtils.isEmpty(keyword)) {

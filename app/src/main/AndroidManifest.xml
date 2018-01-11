@@ -43,7 +43,8 @@
 
         <activity android:name=".dodive.DoDiveActivity" />
         <activity android:name=".dodive.DoDiveSearchActivity" />
-        <activity android:name=".detail.DetailServiceActivity"></activity>
+        <activity android:name=".detail.DetailServiceActivity" />
+        <activity android:name=".dodive.DoDiveSearchResultActivity"></activity>
     </application>
 
 </manifest>

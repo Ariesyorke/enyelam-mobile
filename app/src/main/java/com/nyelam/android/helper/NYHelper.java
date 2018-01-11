@@ -28,6 +28,11 @@ public class NYHelper {
 
     public static final String ASC = "asc";
     public static final String SEARCH_RESULT = "search_result";
+    public static final String ID_DIVER = "id_diver";
+    public static final String DIVER = "diver";
+    public static final String DATE = "date";
+    public static final String TYPE = "type";
+    public static final String CERTIFICATE = "certificate";
 
     public static String getDevice() {
         StringBuffer b = new StringBuffer();

@@ -10,22 +10,14 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchResultList;
-import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYDoDiveSearchRequest;
+import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 public class DoDiveSearchActivity extends AppCompatActivity {
 
@@ -76,7 +68,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                 if (keyword != null && !TextUtils.isEmpty(keyword)){
                     noResultTextView.setVisibility(View.GONE);
                     labelTextView.setText(getResources().getString(R.string.search_results));
-                    NYDoDiveSearchRequest req = new NYDoDiveSearchRequest(DoDiveSearchActivity.this, keyword);
+                    NYDoDiveSearchTypeRequest req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
                     spcMgr.execute(req, onSearchKeywordRequest());
                 } else {
                     doDiveSearchAdapter.clear();
