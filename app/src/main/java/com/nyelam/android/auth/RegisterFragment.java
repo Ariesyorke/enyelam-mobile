@@ -17,9 +17,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.CountryCode;
+import com.nyelam.android.data.dao.DaoSession;
+import com.nyelam.android.data.dao.NYCountryCode;
+import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYRegisterRequest;
 import com.nyelam.android.storage.LoginStorage;
@@ -33,9 +39,11 @@ import java.util.List;
 public class RegisterFragment extends Fragment {
 
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private ProgressDialog progressDialog;
-    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    private Spinner countryCodeSpinner;
+    private CountryCodeAdapter countryCodeAdapter;
     private EditText usernameEditText, emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
     private Spinner genderSpinner;
     private TextView registerTextView;
@@ -83,11 +91,16 @@ public class RegisterFragment extends Fragment {
                 String password = passwordEditText.getText().toString();
                 String confirmPassword = confirmPasswordEditText.getText().toString();
                 String gender = (String) genderSpinner.getSelectedItem();
+                CountryCode countryCode = (CountryCode) countryCodeSpinner.getSelectedItem();
+                //CountryCode countryCode = (CountryCode) countryCodeAdapter.getItem(countryCodeSpinner.getSelectedItemPosition()) ;
+                String countryCodeId = countryCode.getCountryCode();
 
                 if (TextUtils.isEmpty(username)){
                     Toast.makeText(getActivity(), "Username can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(email)){
                     Toast.makeText(getActivity(), "Email address can't be empty", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(countryCodeId)){
+                    Toast.makeText(getActivity(), "Country code can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(phoneNumber)){
                     Toast.makeText(getActivity(), "Phone number can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(password)){
@@ -104,7 +117,7 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please, select your gender", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog.show();
-                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), username, email, phoneNumber, null, password, confirmPassword, gender,  null, null, null, null);
+                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), username, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  null, null, null, null);
                     spcMgr.execute(req, onRegisterRequest());
                 }
             }
@@ -130,6 +143,20 @@ public class RegisterFragment extends Fragment {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(false);
+
+        countryCodeAdapter = new CountryCodeAdapter(getActivity());
+
+        DaoSession session = ((NYApplication) getActivity().getApplicationContext()).getDaoSession();
+        List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
+        List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
+        if (countryCodes != null && countryCodes.size() > 0){
+            NYLog.e("tes isi DAO Country Code : "+countryCodes.toString());
+            countryCodeAdapter.addCountryCodes(countryCodes);
+        }
+
+
+        countryCodeSpinner = (Spinner)v.findViewById(R.id.country_code_spinner);
+        countryCodeSpinner.setAdapter(countryCodeAdapter);
     }
 
 

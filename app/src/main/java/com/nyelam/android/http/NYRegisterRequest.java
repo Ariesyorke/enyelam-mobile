@@ -27,7 +27,7 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
     private static final String POST_SOCMED_ID = "socmed_id";
     private static final String POST_SOCMED_ACCESS_TOKEN = "socmed_access_token";
     private static final String POST_PICTURE = "picture";
-    private static final String POST_COUNTRY_CODE_ID = "country_code_id";
+    private static final String POST_COUNTRY_CODE_ID = "country_id";
 
     public NYRegisterRequest(Context context,
                              String username,

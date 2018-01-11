@@ -13,8 +13,12 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.DAODataBridge;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.LoginStorage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/4/2018.
@@ -37,6 +41,25 @@ public class NYHelper {
         storage.nyelamToken = authReturn.getToken();
         storage.user = authReturn.getUser();
         return storage.save();
+    }
+
+    public static final <RESULT extends DAODataBridge<RAW>, RAW> List<RESULT> generateList(List<RAW> raws, Class<RESULT> resultClass) {
+        if (raws != null && !raws.isEmpty()) {
+            List<RESULT> results = new ArrayList<>();
+            for (RAW raw : raws) {
+                try {
+                    RESULT result = resultClass.newInstance();
+                    result.copyFrom(raw);
+                    results.add(result);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            return results;
+        }
+        return null;
     }
 
     public static final void handleAPIException(final Context context, Exception e, DialogInterface.OnClickListener listener) {
