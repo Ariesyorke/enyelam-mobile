@@ -3,16 +3,27 @@ package com.nyelam.android.detail;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveSpot;
+import com.nyelam.android.dodive.DoDiveSearchAdapter;
+
+import java.util.List;
 
 public class DetailServiceDiveSpotsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
+    private DiveSpotInDetailAdapter adapter;
 
     public DetailServiceDiveSpotsFragment() {
         // Required empty public constructor
@@ -38,6 +49,30 @@ public class DetailServiceDiveSpotsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail_service_dive_spots, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView(view);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new DiveSpotInDetailAdapter(getActivity());
+        recyclerView.setAdapter(adapter);
+        //setDiveSpot();
+    }
+
+    private void initView(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+    }
+
+    public void setDiveSpot(DiveService service){
+        if (service != null){
+            adapter.clear();
+            adapter.addResults(service.getDiveSpots());
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.nyelam.android.helper;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import com.nyelam.android.storage.LoginStorage;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -33,6 +35,8 @@ public class NYHelper {
     public static final String SEARCH_RESULT = "search_result";
     public static final String KEYWORD = "keyword";
     public static final String ID_DIVER = "id_diver";
+    public static final String ID_SERVICE = "id_service";
+    public static final String SERVICE = "id_service";
     public static final String DIVER = "diver";
     public static final String DATE = "date";
     public static final String TYPE = "type";
@@ -41,6 +45,15 @@ public class NYHelper {
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));
+    }
+
+    public static String setMillisToDate(long millis) {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(millis*1000);
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        return (String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
     }
 
     public static String priceFormatter(double price) {

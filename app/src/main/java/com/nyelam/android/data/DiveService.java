@@ -1,5 +1,6 @@
 package com.nyelam.android.data;
 
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import org.json.JSONArray;

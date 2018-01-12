@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,30 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.Banner;
+import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.SearchService;
+import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.dodive.DoDiveSearchResultActivity;
+import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.home.BannerViewPagerAdapter;
+import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
+import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
+import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +51,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.relex.circleindicator.CircleIndicator;
+
 public class DetailServiceActivity extends AppCompatActivity implements
         DetailServiceFragment.OnFragmentInteractionListener,
         DetailServiceDiveSpotsFragment.OnFragmentInteractionListener,
@@ -37,18 +60,24 @@ public class DetailServiceActivity extends AppCompatActivity implements
         DetailServiceReviewFragment.OnFragmentInteractionListener{
 
     private List<DetailServiceActivity.Frags> tags = Arrays.asList(new DetailServiceActivity.Frags(0,"home"), new DetailServiceActivity.Frags(1,"timeline"), new DetailServiceActivity.Frags(2,"interest"), new DetailServiceActivity.Frags(3,"tags"), new DetailServiceActivity.Frags(4,"more"));
-    private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
+    //private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    private NYBannerViewPager bannerViewPager;
+    private CircleIndicator circleIndicator;
+    private BannerViewPagerAdapter bannerViewPagerAdapter;
+    private NYFragmentPagerAdapter fragmentAdapter;
+    private Fragment fragment;
     private ImageView menuItemImageView;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    public View loadingView;
     private LinearLayout tabManager;
     private NYCustomViewPager viewPager;
-    private int checkedId = -1;
     private boolean mProtectFromCheckedChange = false;
     private boolean mProtectFromPagerChange = false;
-    private String [] tabMenu;
+    private String serviceId;
+    protected DiveService diveService;
+    private TextView nameTextView, ratingTextView;
     //private View viewTabManager;
 
     @Override
@@ -57,7 +86,81 @@ public class DetailServiceActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_detail_service);
         initView();
         initToolbar();
+        initExtra();
         initTab();
+        initRequest();
+    }
+
+    private void initExtra() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            /*if(!extras.getString(NYHelper.ID_SERVICE).equals(null)){
+                serviceId = extras.getString(NYHelper.ID_SERVICE);
+            }*/
+
+            if(!extras.getString(NYHelper.SERVICE).equals(null)){
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(extras.getString(NYHelper.SERVICE));
+                    diveService = new DiveService();
+                    diveService.parse(obj);
+                    if (diveService != null && NYHelper.isStringNotEmpty(diveService.getName())) nameTextView.setText(diveService.getName());
+                    if (diveService != null && diveService.getRating() > 0) ratingTextView.setText("*"+String.valueOf(diveService.getRating()));
+                    initBanner();
+                    //Toast.makeText(this, diveService.toString(), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    private void initRequest() {
+        if (diveService != null && !TextUtils.isEmpty(diveService.getId())){
+            NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, diveService.getId());
+            spcMgr.execute(req, onGetDetailServiceRequest());
+        }
+    }
+
+    private RequestListener<DiveService> onGetDetailServiceRequest() {
+        return new RequestListener<DiveService>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }*/
+                NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(DiveService results) {
+
+                if (diveService == null) diveService = new DiveService();
+                diveService = results;
+
+                fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
+                if (fragment != null && fragment instanceof DetailServiceFragment){
+
+                    ((DetailServiceFragment) fragment).setContent(diveService);
+
+                } else if (fragment != null && fragment instanceof DetailServiceFragment){
+
+                    ((DetailServiceFragment) fragment).setContent(diveService);
+
+                } else if (fragment != null && fragment instanceof DetailServiceFragment){
+
+                    ((DetailServiceFragment) fragment).setContent(diveService);
+
+                } else if (fragment != null && fragment instanceof DetailServiceFragment){
+                    //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+            }
+        };
     }
 
     private void initView() {
@@ -67,6 +170,28 @@ public class DetailServiceActivity extends AppCompatActivity implements
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         //viewTabManager = (View) findViewById(R.id.view_tab_manager);
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
+        bannerViewPager = (NYBannerViewPager) findViewById(R.id.promotion_view_pager);
+        circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
+        nameTextView = (TextView) findViewById(R.id.name_textView);
+        ratingTextView = (TextView) findViewById(R.id.rating_textView);
+
+        fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(fragmentAdapter);
+    }
+
+    private void initBanner() {
+        BannerList bannerList = new BannerList();
+        List<Banner> banners = new ArrayList<>();
+        if (diveService != null && diveService.getFeaturedImage() != null && !TextUtils.isEmpty(diveService.getFeaturedImage()))banners.add(new Banner("1", diveService.getFeaturedImage(), "captio", null));
+        bannerList.setList(banners);
+        //input data data
+        bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
+        bannerViewPager.setAdapter(bannerViewPagerAdapter);
+        circleIndicator.setViewPager(bannerViewPager);
+        bannerViewPagerAdapter.setBannerList(bannerList);
+        bannerViewPagerAdapter.notifyDataSetChanged();
+        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+        circleIndicator.setViewPager(bannerViewPager);
     }
 
 
@@ -77,7 +202,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
 
-    public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
+    public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
         private static final int FRAGMENT_COUNT = 4;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
@@ -94,10 +219,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
         }
 
         public Fragment getFragment(int position) {
+
             String tag = fragmentTags.get(position);
             if (tag == null) {
                 return null;
             }
+
             Bundle b = new Bundle();
             fragmentManager.putFragment(b, tag, fragmentManager.findFragmentByTag(tag));
             return fragmentManager.findFragmentByTag(tag);
@@ -169,67 +296,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
         return checkedTabItemPosition;
     }
 
-    private void setCheckedId(int id) {
-        checkedId = id;
-    }
-
     private void setCheckedStateForTab(int id, boolean checked) {
         View checkedView = tabManager.findViewById(id);
         if (checkedView != null && checkedView instanceof Checkable) {
             ((Checkable) checkedView).setChecked(checked);
         }
     }
-
-    public int getLastKey() {
-        int lastKey = 0;
-        for (DetailServiceActivity.Frags entry : fragses) {
-            lastKey = entry.getPosition();
-        }
-        return lastKey;
-    }
-
-    public void addFragmentPosition(int pos) {
-        if (fragses.contains(tags.get(pos))) {
-            fragses.remove(tags.get(pos));
-            fragses.add(tags.get(pos));
-            /*for (String entry : datas) {
-                if (entry.equals(String.valueOf(pos))) {
-                    datas.remove(entry);
-                }
-            }    */
-        } else {
-            fragses.add(tags.get(pos));
-        }
-
-    }
-
-    public void removeLastFragment(int pos){
-        DetailServiceActivity.Frags oldName = tags.get(pos);
-        for ( int i = fragses.size() - 1;  i >= 0; i--){
-            if(oldName.equals(fragses.get(i)))
-            {
-                fragses.remove(i);
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        if (getLastKey() == 0){
-            finish();
-        } else if (fragses.size() > 1) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                super.onBackPressed();
-            } else {
-                removeLastFragment(getLastKey());
-                viewPager.setCurrentItem(getLastKey());
-            }
-        } else {
-            finish();
-        }
-    }
-
 
     public class Frags {
 
@@ -265,24 +337,42 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
 
     private void initTab() {
-        tabMenu = getResources().getStringArray(R.array.menu_tab);
+        //tabMenu = getResources().getStringArray(R.array.menu_tab);
         //viewTabManager.setAlpha(0.5f);
         //NavDrawer
         setSupportActionBar(toolbar);
 
-
-        viewPager.setOffscreenPageLimit(5);
-        viewPager.setAdapter(new NYFragmentPagerAdapter(getSupportFragmentManager()));
+        viewPager.setOffscreenPageLimit(4);
+        //viewPager.setAdapter(new NYFragmentPagerAdapter(getSupportFragmentManager()));
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrollStateChanged(int state) {
                 //KTLog.e("CEK 1");
                 //Toast.makeText(MainActivity.this, "test 1", Toast.LENGTH_SHORT).show();
+                fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
+                if (fragment != null && fragment instanceof DetailServiceFragment){
+
+                    ((DetailServiceFragment) fragment).setContent(diveService);
+
+                } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
+
+                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(diveService);
+
+                } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
+
+                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(diveService);
+
+                } else if (fragment != null && fragment instanceof DetailServiceFragment){
+                    //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                //Toast.makeText(DetailServiceActivity.this, "1", Toast.LENGTH_SHORT).show();
+
                 //KTLog.e("CEK 2");
                 //Always
                 //allFragments.contains(KTFragmentPagerAdapter.class.);
@@ -295,7 +385,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onPageSelected(int position) {
                 //KTLog.e("CEK 3");
-                fragses.add(tags.get(position));
 
                 if (mProtectFromPagerChange) {
                     return;
@@ -303,11 +392,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
                 NYHomepageDetailTabItemView view = (NYHomepageDetailTabItemView) tabManager.getChildAt(position);
                 onCheckedChanged(view, true);
-                Fragment fragment = ((NYFragmentPagerAdapter) viewPager.getAdapter()).getFragment(position);
+                fragment = ((NYFragmentPagerAdapter) viewPager.getAdapter()).getFragment(position);
                 if (position == 0 && fragment != null) {
                     fragment.onResume();
                 }
 
+                Toast.makeText(DetailServiceActivity.this, "1", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -331,6 +421,20 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        spcMgr.start(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
+
 
 
 

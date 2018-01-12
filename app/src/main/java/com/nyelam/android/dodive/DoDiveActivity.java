@@ -2,6 +2,7 @@ package com.nyelam.android.dodive;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +17,10 @@ import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.SearchResult;
+import com.nyelam.android.data.SearchService;
+import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONException;
@@ -36,6 +40,7 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
     private LinearLayout plusLinearLayout, minusLinearLayout;
     private DatePickerDialog datePickerDialog;
     private String keyword, diverId, type, date;
+    private SearchService searchService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,10 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
         if (extras != null) {
             try {
                 JSONObject obj = new JSONObject(extras.getString(NYHelper.SEARCH_RESULT));
+                searchService = new SearchService();
+                searchService.parse(obj);
+
+                // TODO: sekarang pakai class object
                 if (obj.has("name")){
                     keyword = obj.getString("name");
                     keywordTextView.setText(obj.getString("name"));
@@ -66,6 +75,7 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
                     certificateSwitch.setChecked(false);
                     certificateSwitch.setClickable(true);
                 }
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -109,15 +119,34 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
         searchTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(type)){
-                    String diver = diverTextView.getText().toString();
-                    String certificate = "0";
-                    if (certificateSwitch.isChecked()){
-                        certificate = "1";
-                    } else {
-                        certificate = "0";
-                    }
 
+                String diver = diverTextView.getText().toString();
+                String certificate = "0";
+                if (certificateSwitch.isChecked()){
+                    certificate = "1";
+                } else {
+                    certificate = "0";
+                }
+
+                if (!TextUtils.isEmpty(type) && type.equals("2")){
+
+                    Intent intent = new Intent(DoDiveActivity.this, DetailServiceActivity.class);
+                    intent.putExtra(NYHelper.DATE, date);
+
+                    // TODO: parse from SearchService to DiveService
+                    DiveService diveService = new DiveService();
+                    if (searchService.getId() != null)diveService.setId(searchService.getId());
+                    if (searchService.getName() != null)diveService.setName(searchService.getName());
+                    if (searchService.getRating() != null)diveService.setRating(Integer.valueOf(searchService.getRating()));
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    /*intent.putExtra(NYHelper.KEYWORD, keyword);
+                    intent.putExtra(NYHelper.ID_DIVER, diverId);
+                    intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                    intent.putExtra(NYHelper.DIVER, diver);
+                    intent.putExtra(NYHelper.TYPE, type);*/
+                    startActivity(intent);
+
+                } else if (!TextUtils.isEmpty(type)){
                     Intent intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);
                     intent.putExtra(NYHelper.KEYWORD, keyword);
                     intent.putExtra(NYHelper.ID_DIVER, diverId);

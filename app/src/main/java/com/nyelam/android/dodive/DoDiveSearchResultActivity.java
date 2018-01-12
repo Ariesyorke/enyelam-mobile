@@ -111,9 +111,9 @@ public class DoDiveSearchResultActivity extends BasicActivity {
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                /*doDiveSearchAdapter.clear();
-                doDiveSearchAdapter.notifyDataSetChanged();
-                noResultTextView.setVisibility(View.VISIBLE);*/
+                serviceAdapter.clear();
+                serviceAdapter.notifyDataSetChanged();
+                noResultTextView.setVisibility(View.VISIBLE);
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
             }
 

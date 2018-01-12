@@ -3,6 +3,7 @@ package com.nyelam.android.dodive;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -162,7 +163,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, DetailServiceActivity.class);
-            //intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
+            intent.putExtra(NYHelper.SERVICE, diveService.toString());
             context.startActivity(intent);
         }
     }
