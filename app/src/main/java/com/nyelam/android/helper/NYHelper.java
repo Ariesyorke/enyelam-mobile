@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -17,6 +19,7 @@ import com.nyelam.android.data.DAODataBridge;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.LoginStorage;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +31,22 @@ public class NYHelper {
 
     public static final String ASC = "asc";
     public static final String SEARCH_RESULT = "search_result";
+    public static final String KEYWORD = "keyword";
     public static final String ID_DIVER = "id_diver";
     public static final String DIVER = "diver";
     public static final String DATE = "date";
     public static final String TYPE = "type";
     public static final String CERTIFICATE = "certificate";
+
+
+    public static boolean isStringNotEmpty(String string) {
+        return (string != null && !TextUtils.isEmpty(string));
+    }
+
+    public static String priceFormatter(double price) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return "Rp "+String.valueOf(formatter.format(price));
+    }
 
     public static String getDevice() {
         StringBuffer b = new StringBuffer();

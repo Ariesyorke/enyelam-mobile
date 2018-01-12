@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -13,6 +14,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.helper.NYHelper;
@@ -25,14 +27,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DoDiveActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class DoDiveActivity extends BasicActivity implements DatePickerDialog.OnDateSetListener {
 
     private SearchResult searchResult;
-    private TextView keywordTextView, diverTextView, certificateTextView, datetimeTextView, searchTextView;
+    private TextView diverTextView, certificateTextView, datetimeTextView, searchTextView;
+    private com.nyelam.android.view.NYEditTextWarning keywordTextView;
     private Switch certificateSwitch;
     private LinearLayout plusLinearLayout, minusLinearLayout;
     private DatePickerDialog datePickerDialog;
-    private String diverId, type, date;
+    private String keyword, diverId, type, date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +52,10 @@ public class DoDiveActivity extends AppCompatActivity implements DatePickerDialo
         if (extras != null) {
             try {
                 JSONObject obj = new JSONObject(extras.getString(NYHelper.SEARCH_RESULT));
-                //Toast.makeText(this, obj.getString("name"), Toast.LENGTH_SHORT).show();
-                if (obj.has("name"))keywordTextView.setText(obj.getString("name"));
+                if (obj.has("name")){
+                    keyword = obj.getString("name");
+                    keywordTextView.setText(obj.getString("name"));
+                }
                 if (obj.has("type"))type = obj.getString("type");
                 if (obj.has("id"))diverId = obj.getString("id");
 
@@ -104,28 +109,32 @@ public class DoDiveActivity extends AppCompatActivity implements DatePickerDialo
         searchTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!TextUtils.isEmpty(type)){
+                    String diver = diverTextView.getText().toString();
+                    String certificate = "0";
+                    if (certificateSwitch.isChecked()){
+                        certificate = "1";
+                    } else {
+                        certificate = "0";
+                    }
 
-                String diver = diverTextView.getText().toString();
-                String certificate = "0";
-                if (certificateSwitch.isChecked()){
-                    certificate = "1";
+                    Intent intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);
+                    intent.putExtra(NYHelper.KEYWORD, keyword);
+                    intent.putExtra(NYHelper.ID_DIVER, diverId);
+                    intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                    intent.putExtra(NYHelper.DATE, date);
+                    intent.putExtra(NYHelper.DIVER, diver);
+                    intent.putExtra(NYHelper.TYPE, type);
+                    startActivity(intent);
                 } else {
-                    certificate = "0";
+                    keywordTextView.isEmpty();
                 }
-
-                Intent intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);
-                intent.putExtra(NYHelper.ID_DIVER, diverId);
-                intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                intent.putExtra(NYHelper.DATE, date);
-                intent.putExtra(NYHelper.DIVER, diver);
-                intent.putExtra(NYHelper.TYPE, type);
-                startActivity(intent);
             }
         });
     }
 
     private void initView() {
-        keywordTextView = (TextView) findViewById(R.id.keyword_textView);
+        keywordTextView = (com.nyelam.android.view.NYEditTextWarning) findViewById(R.id.keyword_textView);
         diverTextView = (TextView) findViewById(R.id.diver_textView);
         minusLinearLayout = (LinearLayout) findViewById(R.id.minus_linearLayout);
         plusLinearLayout = (LinearLayout) findViewById(R.id.plus_linearLayout);
@@ -146,22 +155,20 @@ public class DoDiveActivity extends AppCompatActivity implements DatePickerDialo
         int day = c.get(Calendar.DAY_OF_MONTH);
         datePickerDialog = new DatePickerDialog(
                 this, this, year, month, day);
+        date = String.valueOf(c.getTimeInMillis()/1000);
+        datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         datetimeTextView.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date dates = null;
-        try {
-            dates = (Date)formatter.parse(datetimeTextView.toString());
-            long mills = dates.getTime();
-            date = String.valueOf(mills);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, view.getDayOfMonth());
+        cal.set(Calendar.MONTH, view.getMonth());
+        cal.set(Calendar.YEAR, view.getYear());
 
+        date = String.valueOf(cal.getTimeInMillis()/1000);
     }
 
 

@@ -76,7 +76,7 @@
                     android:padding="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <TextView
+                    <com.nyelam.android.view.NYEditTextWarning
                         android:id="@+id/keyword_textView"
                         android:hint="@string/keyword"
                         android:textSize="14sp"

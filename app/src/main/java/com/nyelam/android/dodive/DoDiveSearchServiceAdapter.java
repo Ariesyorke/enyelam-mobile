@@ -2,6 +2,7 @@ package com.nyelam.android.dodive;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,18 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.DiveServiceList;
-import com.nyelam.android.data.SearchDiveCenter;
-import com.nyelam.android.data.SearchResult;
-import com.nyelam.android.data.SearchService;
-import com.nyelam.android.data.SearchSpot;
 import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.nyelam.android.view.StrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_search, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_service, parent, false);
         return new DoDiveSearchServiceAdapter.PromoViewHolder(v);
     }
 
@@ -53,8 +51,6 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             vh.setModel(searchResults.get(position));
         }
     }
-
-
 
     @Override
     public int getItemViewType(int position) {
@@ -90,40 +86,75 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private ImageView iconImageView;
-        private TextView nameTextView;
-        private TextView typeTextView;
-        private TextView ratingTextView;
-        private TextView labelTextView;
+        private ImageView serviceImageView;
+        private TextView serviceNameTextView;
+        private TextView diveCenterNameTextView;
+        private StrikethroughTextView priceStrikethroughTextView;
+        private TextView priceTextView;
+        private TextView totalDiveTextView;
         private View itemView;
-        private DiveService searchResult;
+        private DiveService diveService;
 
         public PromoViewHolder(View itemView) {
             super(itemView);
 
-            iconImageView = (ImageView) itemView.findViewById(R.id.icon_imageView);
-            nameTextView = (TextView) itemView.findViewById(R.id.name_textView);
-            typeTextView = (TextView) itemView.findViewById(R.id.type_textView);
-            ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
-            labelTextView = (TextView) itemView.findViewById(R.id.label_textView);
+            serviceImageView = (ImageView) itemView.findViewById(R.id.service_imageView);
+            serviceNameTextView = (TextView) itemView.findViewById(R.id.service_name_textView);
+            diveCenterNameTextView = (TextView) itemView.findViewById(R.id.dive_center_name_textView);
+            priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
+            priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
+            totalDiveTextView = (TextView) itemView.findViewById(R.id.total_dive_textView);
+
             this.itemView = itemView;
         }
 
-        public void setModel(DiveService searchResult) {
-            this.searchResult = searchResult;
+        public void setModel(DiveService diveService) {
+            this.diveService = diveService;
 
-            if (searchResult.getName() != null && !TextUtils.isEmpty(searchResult.getName())) nameTextView.setText(searchResult.getName());
-            //if (searchResult.getRating() != null && !TextUtils.isEmpty(searchResult.getRating())) ratingTextView.setText("*"+searchResult.getRating()+"/5");
+            if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
+            if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
+            totalDiveTextView.setText(String.valueOf(diveService.getTotalDives()));
 
-            iconImageView.setImageResource(R.drawable.ic_search_dive_spot);
-            SearchSpot spot = new SearchSpot();
-            try {
-                JSONObject obj = new JSONObject(searchResult.toString());
-                spot.parse(obj);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (diveService.getSpecialPrice() < diveService.getNormalPrice() && diveService.getSpecialPrice() > 0){
+                priceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
+                priceStrikethroughTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
+                priceStrikethroughTextView.setVisibility(View.VISIBLE);
+            } else {
+                priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
+                priceStrikethroughTextView.setVisibility(View.GONE);
             }
-            typeTextView.setText("Spot ("+spot.getCount()+")");
+
+            //SET IMAGE
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+            if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
+                ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        serviceImageView.setImageBitmap(loadedImage);
+                        //activity.getCache().put(imageUri, loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                    }
+                });
+
+                ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+
+            } else {
+                serviceImageView.setImageResource(R.mipmap.ic_launcher);
+            }
 
             itemView.setOnClickListener(this);
         }
@@ -131,7 +162,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, DetailServiceActivity.class);
-            intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
+            //intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
             context.startActivity(intent);
         }
     }

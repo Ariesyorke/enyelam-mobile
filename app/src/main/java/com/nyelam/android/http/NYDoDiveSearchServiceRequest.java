@@ -48,11 +48,11 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
             addQuery(POST_DIVER, diver);
         }
 
-        addQuery(POST_DATE, "1515660257");
+        //addQuery(POST_DATE, "1515660257");
 
-        /*if(!TextUtils.isEmpty(date)) {
+        if(!TextUtils.isEmpty(date)) {
             addQuery(POST_DATE, date);
-        }*/
+        }
 
     }
 

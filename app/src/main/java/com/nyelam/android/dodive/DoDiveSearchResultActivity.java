@@ -16,8 +16,11 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchResultList;
+import com.nyelam.android.data.SearchService;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.octo.android.robospice.SpiceManager;
@@ -33,10 +36,8 @@ public class DoDiveSearchResultActivity extends BasicActivity {
     private DoDiveSearchServiceAdapter serviceAdapter;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
-    private EditText searchEditText;
-    private TextView labelTextView;
-    private TextView noResultTextView;
-    private String diverId, diver, certificate, date, type;
+    private TextView titleTextView, labelTextView, noResultTextView;
+    private String keyword, diverId, diver, certificate, date, type;
     private int page = 1;
 
     @Override
@@ -49,6 +50,7 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         initRequest();
         //initToolbar();
         //initControl();
+        initToolbar(true);
     }
 
     private void initRequest() {
@@ -70,11 +72,15 @@ public class DoDiveSearchResultActivity extends BasicActivity {
     private void initExtra() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            diverId = extras.getString(NYHelper.ID_DIVER);
-            diver = extras.getString(NYHelper.DIVER);
-            certificate = extras.getString(NYHelper.CERTIFICATE);
-            date = extras.getString(NYHelper.DATE);
-            type = extras.getString(NYHelper.TYPE);
+            if(!extras.getString(NYHelper.KEYWORD).equals(null)){
+                keyword = extras.getString(NYHelper.KEYWORD);
+                titleTextView.setText(keyword);
+            }
+            if(!extras.getString(NYHelper.ID_DIVER).equals(null)) diverId = extras.getString(NYHelper.ID_DIVER);
+            if(!extras.getString(NYHelper.DIVER).equals(null)) diver = extras.getString(NYHelper.DIVER);
+            if(!extras.getString(NYHelper.CERTIFICATE).equals(null)) certificate = extras.getString(NYHelper.CERTIFICATE);
+            if(!extras.getString(NYHelper.DATE).equals(null)) date = extras.getString(NYHelper.DATE);
+            if(!extras.getString(NYHelper.TYPE).equals(null)) type = extras.getString(NYHelper.TYPE);
         }
     }
 
@@ -82,14 +88,18 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+        recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
+
         serviceAdapter = new DoDiveSearchServiceAdapter(this);
         recyclerView.setAdapter(serviceAdapter);
     }
 
     private void initView() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        searchEditText = (EditText) findViewById(R.id.search_editText);
         labelTextView = (TextView) findViewById(R.id.label_textView);
+        titleTextView = (TextView) findViewById(R.id.title_textView);
         noResultTextView = (TextView) findViewById(R.id.no_result_textView);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
     }

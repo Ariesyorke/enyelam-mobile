@@ -8,38 +8,38 @@
     android:background="@color/colorWhite"
     tools:context="com.nyelam.android.dodive.DoDiveActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:background="@drawable/ny_gradient_right_left"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="horizontal"
-            android:padding="@dimen/padding"
-            android:background="@drawable/ny_rectangle_white"
+            android:paddingTop="@dimen/padding"
+            android:paddingBottom="@dimen/padding"
             android:gravity="center_vertical"
-            android:layout_margin="@dimen/padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-                android:src="@drawable/ic_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:id="@+id/search_editText"
-                android:hint="@string/enter_a_dive_spot"
-                android:textSize="14sp"
-                android:textColor="@color/colorBlack"
-                android:textColorHint="@color/ny_grey4"
-                android:background="@android:color/transparent"
+            <TextView
+                android:id="@+id/title_textView"
+                android:text="Title"
+                android:textSize="16sp"
+                android:textColor="@color/colorWhite"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_marginLeft="@dimen/padding_double"
-                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:src="@drawable/ic_sort"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <TextView
         android:id="@+id/label_textView"
@@ -64,7 +64,7 @@
         android:layout_height="0.3dp"/>
 
     <ScrollView
-        android:background="@color/colorWhite"
+        android:background="#f6f6f7"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -90,8 +90,8 @@
             </android.support.v7.widget.RecyclerView>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/no_result_textView"
-
                 android:text="@string/warn_no_results_found"
                 android:textSize="18sp"
                 android:textColor="@color/ny_black1"

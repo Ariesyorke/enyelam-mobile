@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    card_view:cardElevation="4dp"
+    card_view:cardMaxElevation="4dp"
+    app:cardCornerRadius="3dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -9,10 +14,11 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/service_imageView"
             android:src="@drawable/example_pic"
             android:scaleType="centerCrop"
-            android:layout_width="150dp"
-            android:layout_height="150dp" />
+            android:layout_width="130dp"
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:padding="@dimen/padding"
@@ -20,22 +26,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/name_textView"
+                android:id="@+id/service_name_textView"
                 android:text="Nusa Dua Indah"
                 android:textSize="18sp"
                 android:textColor="@color/ny_black1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/type_textView"
-                android:layout_below="@+id/name_textView"
+                android:id="@+id/dive_center_name_textView"
+                android:layout_below="@+id/service_name_textView"
                 android:text="Dive Center"
                 android:textSize="15sp"
                 android:textColor="@color/ny_grey4"
                 android:layout_marginTop="@dimen/padding_half"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <TextView
+            <com.nyelam.android.view.StrikethroughTextView
+                android:id="@+id/price_strikethrough_textView"
                 android:text="Rp 125.000"
                 android:textSize="14sp"
                 android:textColor="@color/ny_black1"
@@ -48,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/price_textView"
                     android:text="Rp 100.000"
                     android:textSize="18sp"
                     android:textColor="@color/ny_blue2"
@@ -60,13 +68,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-            <TextView
-                android:text="TOTAL DIVES : 4"
-                android:textSize="14dp"
-                android:textColor="@color/ny_black1"
-                android:layout_marginTop="@dimen/padding_half"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/padding_half"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="TOTAL DIVES : "
+                    android:textSize="14dp"
+                    android:textColor="@color/ny_black1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/total_dive_textView"
+                    android:text="4"
+                    android:textSize="14dp"
+                    android:textColor="@color/ny_black1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
