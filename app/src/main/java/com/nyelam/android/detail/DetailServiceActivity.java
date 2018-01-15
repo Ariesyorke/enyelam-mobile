@@ -1,6 +1,6 @@
 package com.nyelam.android.detail;
 
-import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,25 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.booking.BookingServiceActivity;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.DiveServiceList;
-import com.nyelam.android.data.SearchService;
-import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.dodive.DoDiveSearchResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
-import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
@@ -46,7 +40,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +70,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     private boolean mProtectFromPagerChange = false;
     private String serviceId;
     protected DiveService diveService;
-    private TextView nameTextView, ratingTextView;
+    private TextView nameTextView, ratingTextView, bookingTextView;
     //private View viewTabManager;
 
     @Override
@@ -89,6 +82,18 @@ public class DetailServiceActivity extends AppCompatActivity implements
         initExtra();
         initTab();
         initRequest();
+        initControl();
+    }
+
+    private void initControl() {
+        bookingTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
+                intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initExtra() {
@@ -105,7 +110,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     diveService = new DiveService();
                     diveService.parse(obj);
                     if (diveService != null && NYHelper.isStringNotEmpty(diveService.getName())) nameTextView.setText(diveService.getName());
-                    if (diveService != null && diveService.getRating() > 0) ratingTextView.setText("*"+String.valueOf(diveService.getRating()));
+                    if (diveService != null && diveService.getRating() > 0){
+                        ratingTextView.setText("*"+String.valueOf(diveService.getRating()));
+                    } else {
+                        ratingTextView.setText("-");
+                    }
                     initBanner();
                     //Toast.makeText(this, diveService.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -174,6 +183,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
         nameTextView = (TextView) findViewById(R.id.name_textView);
         ratingTextView = (TextView) findViewById(R.id.rating_textView);
+        bookingTextView = (TextView) findViewById(R.id.booking_textView);
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentAdapter);
@@ -396,8 +406,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 if (position == 0 && fragment != null) {
                     fragment.onResume();
                 }
-
-                Toast.makeText(DetailServiceActivity.this, "1", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -434,9 +442,5 @@ public class DetailServiceActivity extends AppCompatActivity implements
         super.onStart();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
-
-
-
-
 
 }

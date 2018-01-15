@@ -58,7 +58,7 @@
                     android:id="@+id/price_textView"
                     android:text="Rp 100.000"
                     android:textSize="18sp"
-                    android:textColor="@color/ny_blue2"
+                    android:textColor="@color/ny_orange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView

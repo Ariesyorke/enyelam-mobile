@@ -96,7 +96,7 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
             @Override
             public void onClick(View v) {
                 int count = Integer.valueOf(diverTextView.getText().toString());
-                if (count-1 >= 0){
+                if (count-1 >= 1){
                     diverTextView.setText(String.valueOf((count-1)));
                 }
             }

@@ -44,7 +44,8 @@
         <activity android:name=".dodive.DoDiveActivity" />
         <activity android:name=".dodive.DoDiveSearchActivity" />
         <activity android:name=".detail.DetailServiceActivity" />
-        <activity android:name=".dodive.DoDiveSearchResultActivity"></activity>
+        <activity android:name=".dodive.DoDiveSearchResultActivity" />
+        <activity android:name=".booking.BookingServiceActivity"></activity>
     </application>
 
 </manifest>

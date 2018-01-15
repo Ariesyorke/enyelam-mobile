@@ -238,7 +238,7 @@
                             </LinearLayout>
                             <TextView
                                 android:id="@+id/diver_textView"
-                                android:text="0"
+                                android:text="1"
                                 android:textSize="16sp"
                                 android:textColor="@color/ny_grey4"
                                 android:singleLine="true"

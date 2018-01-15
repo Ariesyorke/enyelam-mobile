@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.Facilities;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.StrikethroughTextView;
 
@@ -20,6 +22,7 @@ public class DetailServiceFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private TextView priceTextView, dateTextView, maxPersonTextView, minPersonTextView, descriptionTextView, licenseTextView;
+    private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView;
     private StrikethroughTextView priceStrikeThroughTextView;
 
     public DetailServiceFragment() {
@@ -63,12 +66,16 @@ public class DetailServiceFragment extends Fragment {
         minPersonTextView = (TextView) v.findViewById(R.id.min_person_textView);
         descriptionTextView = (TextView) v.findViewById(R.id.description_textView);
         licenseTextView = (TextView) v.findViewById(R.id.license_textView);
-    }
 
+        icDiveGuideImageView = (ImageView) v.findViewById(R.id.icon_dive_guide_imageView);
+        icEquipmentImageView = (ImageView) v.findViewById(R.id.icon_equipment_imageView);
+        icFoodImageView = (ImageView) v.findViewById(R.id.icon_food_imageView);
+        icTransportationImageView = (ImageView) v.findViewById(R.id.icon_transportation_imageView);
+        icTowelImageView = (ImageView) v.findViewById(R.id.icon_towel_imageView);
+    }
 
     public void setContent(DiveService service){
 
-        //Toast.makeText(getActivity(), service.toString(), Toast.LENGTH_SHORT).show();
        if (service != null){
             if (service.getSchedule() != null)dateTextView.setText(NYHelper.setMillisToDate(service.getSchedule().getStartDate())+" - "+NYHelper.setMillisToDate(service.getSchedule().getEndDate()));
             if (service.getSpecialPrice() < service.getNormalPrice() && service.getSpecialPrice() > 0){
@@ -81,9 +88,18 @@ public class DetailServiceFragment extends Fragment {
             }
             minPersonTextView.setText(String.valueOf(service.getMinPerson()));
             minPersonTextView.setText(String.valueOf(service.getMinPerson()));
-           if (service.getFacilities().isLicense()){
-                licenseTextView.setText("License needed");
+
+           Facilities fac = service.getFacilities();
+           if (fac != null){
+               if (fac.isLicense())licenseTextView.setText("License needed");
+               NYHelper.setFacilities(fac.isDiveGuide(), icDiveGuideImageView);
+               NYHelper.setFacilities(fac.isDiveEquipment(), icEquipmentImageView);
+               NYHelper.setFacilities(fac.isFood(), icFoodImageView);
+               NYHelper.setFacilities(fac.isTransportation(), icTransportationImageView);
+               NYHelper.setFacilities(fac.isTowel(), icTowelImageView);
            }
+
+
         }
     }
 

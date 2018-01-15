@@ -7,8 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -23,7 +25,9 @@ import com.nyelam.android.storage.LoginStorage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/4/2018.
@@ -53,7 +57,11 @@ public class NYHelper {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        return (String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
+
+        //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+
+        return (String.valueOf(day) + " " + monthString + " " + String.valueOf(year));
     }
 
     public static String priceFormatter(double price) {
@@ -230,4 +238,11 @@ public class NYHelper {
         return sb.toString();
     }
 
+    public static void setFacilities(boolean isTrue, ImageView icImageView) {
+        if (isTrue){
+            icImageView.setImageResource(R.drawable.ic_available);
+        } else {
+            icImageView.setImageResource(R.drawable.ic_not_available);
+        }
+    }
 }

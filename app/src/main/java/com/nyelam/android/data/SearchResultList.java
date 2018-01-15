@@ -26,7 +26,7 @@ public class SearchResultList extends NYAbstractList<SearchResult> {
             if (type == 1) {
                 result = new SearchSpot();
                 result.parse(o);
-            } else if (type == 2){
+            } else if (type == 2 || type == 4 || type == 5 || type == 6){
                 result = new SearchService();
                 result.parse(o);
             } else if (type == 3){

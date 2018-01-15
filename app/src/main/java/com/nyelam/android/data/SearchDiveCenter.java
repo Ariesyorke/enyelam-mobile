@@ -11,10 +11,8 @@ import org.json.JSONObject;
 public class SearchDiveCenter extends SearchResult {
 
     private static String KEY_PROVINCE = "province";
-    private static String KEY_COUNT = "count";
 
     private String province;
-    private String count;
 
     public String getProvince() {
         return province;
@@ -23,15 +21,6 @@ public class SearchDiveCenter extends SearchResult {
     public void setProvince(String province) {
         this.province = province;
     }
-
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
-    }
-
 
     @Override
     public void parse(JSONObject obj) {
@@ -69,7 +58,7 @@ public class SearchDiveCenter extends SearchResult {
 
         try {
             if (!obj.isNull(KEY_COUNT)) {
-                setCount(obj.getString(KEY_COUNT));
+                setCount(obj.getInt(KEY_COUNT));
             }
         } catch (JSONException e) {e.printStackTrace();}
     }
@@ -121,7 +110,7 @@ public class SearchDiveCenter extends SearchResult {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!TextUtils.isEmpty(getCount())) {
+            if (getCount() != null) {
                 obj.put(KEY_COUNT, getCount());
             } else {
                 obj.put(KEY_COUNT, JSONObject.NULL);
@@ -131,7 +120,6 @@ public class SearchDiveCenter extends SearchResult {
         try {
             return obj.toString(3);
         } catch (JSONException e) {e.printStackTrace();}
-
 
         return super.toString();
     }

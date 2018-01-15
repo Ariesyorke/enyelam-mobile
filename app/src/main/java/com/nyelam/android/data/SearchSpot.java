@@ -10,18 +10,6 @@ import org.json.JSONObject;
 
 public class SearchSpot extends SearchResult {
 
-    private static String KEY_COUNT = "count";
-
-    private String count;
-
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
-    }
-
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -52,7 +40,7 @@ public class SearchSpot extends SearchResult {
 
         try {
             if (!obj.isNull(KEY_COUNT)) {
-                setCount(obj.getString(KEY_COUNT));
+                setCount(obj.getInt(KEY_COUNT));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -96,7 +84,7 @@ public class SearchSpot extends SearchResult {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!TextUtils.isEmpty(getCount())) {
+            if (getCount() != null) {
                 obj.put(KEY_COUNT, getCount());
             } else {
                 obj.put(KEY_COUNT, JSONObject.NULL);

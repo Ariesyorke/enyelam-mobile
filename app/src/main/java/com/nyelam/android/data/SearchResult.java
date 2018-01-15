@@ -14,11 +14,13 @@ public abstract class SearchResult implements Parseable {
     protected static String KEY_NAME = "name";
     protected static String KEY_RATING = "rating";
     protected static String KEY_TYPE = "type";
+    protected static String KEY_COUNT = "count";
 
     protected String id;
     protected String name;
     protected String rating;
     protected Integer type;
+    protected Integer count;
 
     public SearchResult(){}
 
@@ -54,6 +56,13 @@ public abstract class SearchResult implements Parseable {
         this.type = type;
     }
 
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
     @Override
     public void parse(JSONObject obj) {
@@ -83,6 +92,11 @@ public abstract class SearchResult implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+        try {
+            if (!obj.isNull(KEY_COUNT)) {
+                setCount(obj.getInt(KEY_COUNT));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     @Override
@@ -119,6 +133,14 @@ public abstract class SearchResult implements Parseable {
                 obj.put(KEY_TYPE, getType());
             } else {
                 obj.put(KEY_TYPE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (getCount() != null) {
+                obj.put(KEY_COUNT, getCount());
+            } else {
+                obj.put(KEY_COUNT, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 

@@ -35,7 +35,7 @@ public class DiveService implements Parseable {
     private String id;
     private String name;
     private int rating;
-    private Category category;
+    private List<Category> categories;
     private String featuredImage;
     private List<DiveSpot> diveSpots;
     private int days;
@@ -73,13 +73,7 @@ public class DiveService implements Parseable {
         this.rating = rating;
     }
 
-    public Category getCategory() {
-        return category;
-    }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 
     public String getFeaturedImage() {
         return featuredImage;
@@ -268,10 +262,25 @@ public class DiveService implements Parseable {
 
         if(!obj.isNull(KEY_CATEGORY)) {
             try {
-                JSONObject o = obj.getJSONObject(KEY_CATEGORY);
-                if(o != null && o.length() > 0) {
-                    category = new Category();
-                    category.parse(o);
+                if(obj.get(KEY_CATEGORY) instanceof JSONArray) {
+                    JSONArray array = obj.getJSONArray(KEY_CATEGORY);
+                    if (array != null && array.length() > 0) {
+                        categories = new ArrayList<>();
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject o = array.getJSONObject(i);
+                            Category a = new Category();
+                            a.parse(o);
+                            categories.add(a);
+                        }
+                    }
+                }  else if (obj.get(KEY_CATEGORY) instanceof JSONObject) {
+                    JSONObject o = obj.getJSONObject(KEY_CATEGORY);
+                    if(o != null && o.length() > 0) {
+                        categories = new ArrayList<>();
+                        Category d = new Category();
+                        d.parse(o);
+                        categories.add(d);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -325,6 +334,7 @@ public class DiveService implements Parseable {
 
     @Override
     public String toString() {
+
         JSONObject obj = new JSONObject();
 
         try {
@@ -412,14 +422,17 @@ public class DiveService implements Parseable {
             e.printStackTrace();
         }
 
-        try{
-            if(getCategory()!=null){
-                obj.put(KEY_CATEGORY, getCategory());
-            } else {
-                obj.put(KEY_CATEGORY, JSONObject.NULL);
+        if(categories != null && !categories.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(Category c : categories) {
+                    JSONObject o = new JSONObject(c.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_CATEGORY, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }catch (JSONException e){
-            e.printStackTrace();
         }
 
         try{
@@ -444,7 +457,6 @@ public class DiveService implements Parseable {
                 e.printStackTrace();
             }
         }
-
 
         try {
             return obj.toString(3);

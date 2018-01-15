@@ -227,6 +227,7 @@ public class User implements Parseable {
         } catch (Exception e){
             e.printStackTrace();
         }
+
         try{
             if(!obj.isNull(KEY_ADDESS)){
                 setAddress(obj.getString(KEY_ADDESS));

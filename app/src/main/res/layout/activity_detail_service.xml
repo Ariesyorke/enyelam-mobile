@@ -159,6 +159,75 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ny_grey1"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        app:layout_behavior="com.nyelam.android.view.NYQuickReturnFooterBehavior"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@color/colorWhite"
+            android:padding="@dimen/padding"
+            android:elevation="3dp"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/booking_textView"
+                android:text="Booking"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:background="@drawable/ny_book"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
+                android:paddingLeft="@dimen/padding_triple"
+                android:paddingRight="@dimen/padding_triple" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
+    <!--<LinearLayout
+        android:background="@color/ny_grey3"
+        android:padding="@dimen/padding"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.nyelam.android.view.NYQuickReturnFooterBehavior">
+
+        <TextView
+            android:text="Booking"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ny_rectangle_orange"
+            android:paddingTop="@dimen/padding"
+            android:paddingBottom="@dimen/padding"
+            android:paddingLeft="@dimen/padding_triple"
+            android:paddingRight="@dimen/padding_triple" />
+
+    </LinearLayout>-->
+
 </android.support.design.widget.CoordinatorLayout>
 
 
