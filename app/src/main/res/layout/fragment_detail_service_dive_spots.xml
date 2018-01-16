@@ -3,7 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ny_grey3"
+    android:orientation="vertical"
     tools:context="com.nyelam.android.detail.DetailServiceDiveSpotsFragment">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/padding_triple"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/no_result_textView"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/padding_triple"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:text="@string/warn_no_reviews_found" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -11,5 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
+
+
 
 </LinearLayout>

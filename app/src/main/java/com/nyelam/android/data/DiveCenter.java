@@ -20,11 +20,12 @@ public class DiveCenter implements Parseable {
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
     private static String KEY_PHONE = "phone";
-    private static String KEY_IMAGES = "images";
+    private static String KEY_IMAGES = "picture";
     private static String KEY_CONTACT_NAME = "contact_name";
     private static String KEY_CONTACT_PHONE = "contact_phone";
     private static String KEY_CONTACT_EMAIL = "contact_email";
     private static String KEY_LOCATION = "location";
+    private static String KEY_RATING = "rating";
     private static String KEY_STATUS_ACTIVE = "status_active";
 
     private String id;
@@ -35,6 +36,7 @@ public class DiveCenter implements Parseable {
     private String contactPhone;
     private String contactEmail;
     private Location location;
+    private int rating;
     private int statusActive;
 
 
@@ -102,6 +104,14 @@ public class DiveCenter implements Parseable {
         this.location = location;
     }
 
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     public int getStatusActive() {
         return statusActive;
     }
@@ -132,7 +142,7 @@ public class DiveCenter implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        if(!obj.isNull(KEY_IMAGES)) {
+        /*if(!obj.isNull(KEY_IMAGES)) {
             try {
                 JSONArray array = obj.getJSONArray(KEY_IMAGES);
                 if(array != null && array.length() > 0) {
@@ -140,6 +150,31 @@ public class DiveCenter implements Parseable {
                     for(int i = 0; i <array.length(); i++) {
                         String image = array.getString(i);
                         images.add(image);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }*/
+
+        if(!obj.isNull(KEY_IMAGES)) {
+            try {
+                if(obj.get(KEY_IMAGES) instanceof JSONArray) {
+                    JSONArray array = obj.getJSONArray(KEY_IMAGES);
+                    if (array != null && array.length() > 0) {
+                        images = new ArrayList<>();
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject o = array.getJSONObject(i);
+                            String a = o.getString(KEY_IMAGES);
+                            images.add(a);
+                        }
+                    }
+                }  else if (obj.get(KEY_IMAGES) instanceof JSONObject) {
+                    JSONObject o = obj.getJSONObject(KEY_IMAGES);
+                    if(o != null && o.length() > 0) {
+                        images = new ArrayList<>();
+                        String d = o.getString(KEY_IMAGES);
+                        images.add(d);
                     }
                 }
             } catch (JSONException e) {
@@ -176,6 +211,12 @@ public class DiveCenter implements Parseable {
                 e.printStackTrace();
             }
         }
+
+        try {
+            if (!obj.isNull(KEY_RATING)) {
+                setRating(obj.getInt(KEY_RATING));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!obj.isNull(KEY_STATUS_ACTIVE)) {
@@ -261,14 +302,17 @@ public class DiveCenter implements Parseable {
             }
         }
 
+        try {
+            obj.put(KEY_RATING, rating);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
             obj.put(KEY_STATUS_ACTIVE, statusActive);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
 
         try {
             return obj.toString(3);

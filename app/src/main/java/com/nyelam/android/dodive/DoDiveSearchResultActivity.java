@@ -122,11 +122,17 @@ public class DoDiveSearchResultActivity extends BasicActivity {
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                noResultTextView.setVisibility(View.GONE);
-                serviceAdapter.clear();
-                serviceAdapter.addResults(results.getList());
-                serviceAdapter.notifyDataSetChanged();
 
+                if (results != null){
+                    noResultTextView.setVisibility(View.GONE);
+                    serviceAdapter.clear();
+                    serviceAdapter.addResults(results.getList());
+                    serviceAdapter.notifyDataSetChanged();
+                } else {
+                    serviceAdapter.clear();
+                    serviceAdapter.notifyDataSetChanged();
+                    noResultTextView.setVisibility(View.VISIBLE);
+                }
 
             }
         };

@@ -7,27 +7,289 @@
     android:orientation="vertical"
     tools:context="com.nyelam.android.booking.BookingServiceActivity">
 
-    <android.support.v7.widget.Toolbar
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/colorGradationLeft"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/colorWhite"
+                    android:background="@android:color/transparent"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Isi Biodata"/>
+
+                <!--<ImageView
+                    android:id="@+id/menu_item_imageView"
+                    android:src="@drawable/ic_action_menu_item"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />-->
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
 
         <RelativeLayout
+            android:padding="@dimen/padding"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:text="Isi Data"
+            <LinearLayout
+                android:id="@+id/book_layout"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="1"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorGradationLeft"
+                    android:gravity="center"
+                    android:background="@drawable/ny_circle_white"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+                <TextView
+                    android:text="Pesan"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_toRightOf="@+id/book_layout"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <View
+                    android:background="#89f5f5f5"
+                    android:layout_marginRight="@dimen/padding"
+                    android:layout_width="16dp"
+                    android:layout_height="1dp" />
+                <TextView
+                    android:text="2"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorGradationLeft"
+                    android:gravity="center"
+                    android:background="@drawable/ny_circle_blue_transparant"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+                <TextView
+                    android:text="Bayar"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#89f5f5f5"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </RelativeLayout>
 
-    </android.support.v7.widget.Toolbar>
+    </LinearLayout>
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#1286ec"
+                android:gravity="center"
+                android:padding="@dimen/padding"
+                android:text="Review pesanan &amp;  isi data wisatawan"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ny_grey3"
+                android:padding="@dimen/padding"
+                android:text="Pesanan Anda"
+                android:textColor="@color/ny_black1"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:padding="@dimen/padding">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sel, 16 Jan 2018"
+                    android:textColor="@color/ny_black1"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Bali Liveboard"
+                    android:textColor="@color/ny_black1" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ny_grey3"
+                android:padding="@dimen/padding"
+                android:text="Data Pemesan"
+                android:textColor="@color/ny_black1"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:padding="@dimen/padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/contact_name_textView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Aprilian Nur"
+                        android:textColor="@color/ny_black1"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ubah"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Phone Number"
+                        android:textColor="@color/ny_grey4"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/contact_phone_number_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+628662626222"
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/email"
+                        android:textColor="@color/ny_grey4"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/contact_email_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="aprilian@gmail.com"
+                        android:textColor="@color/ny_black1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
 
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ny_grey3"
+                android:padding="@dimen/padding"
+                android:text="Detail Participant"
+                android:textColor="@color/ny_black1"
+                android:textStyle="bold" />
 
+            <LinearLayout
+                android:id="@+id/participant_container_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/padding"/>
+
+
+            <LinearLayout
+                android:background="@drawable/ny_rectangle_blue"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingLeft="100dp"
+                android:paddingRight="100dp"
+                android:layout_marginTop="@dimen/padding_double"
+                android:layout_marginBottom="@dimen/padding_double"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="Next"
+                    android:textSize="14sp"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

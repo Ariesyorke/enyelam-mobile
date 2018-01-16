@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
@@ -22,6 +24,8 @@ import java.util.List;
 public class DetailServiceDiveSpotsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private ProgressBar progressBar;
+    private TextView noResultTextView;
     private RecyclerView recyclerView;
     private DiveSpotInDetailAdapter adapter;
 
@@ -65,13 +69,19 @@ public class DetailServiceDiveSpotsFragment extends Fragment {
 
     private void initView(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        noResultTextView = (TextView) view.findViewById(R.id.no_result_textView);
     }
 
     public void setDiveSpot(DiveService service){
-        if (service != null){
+        progressBar.setVisibility(View.GONE);
+        if (service != null && service.getDiveSpots() != null && service.getDiveSpots().size() > 0){
             adapter.clear();
             adapter.addResults(service.getDiveSpots());
             adapter.notifyDataSetChanged();
+            noResultTextView.setVisibility(View.GONE);
+        } else {
+            noResultTextView.setVisibility(View.VISIBLE);
         }
     }
 

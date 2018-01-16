@@ -69,7 +69,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     private boolean mProtectFromCheckedChange = false;
     private boolean mProtectFromPagerChange = false;
     private String serviceId;
-    protected DiveService diveService;
+    protected DiveService diveService, newDiveService;
     private TextView nameTextView, ratingTextView, bookingTextView;
     //private View viewTabManager;
 
@@ -146,27 +146,24 @@ public class DetailServiceActivity extends AppCompatActivity implements
             public void onRequestSuccess(DiveService results) {
 
                 if (diveService == null) diveService = new DiveService();
-                diveService = results;
+                newDiveService = results;
 
                 fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
                 if (fragment != null && fragment instanceof DetailServiceFragment){
 
-                    ((DetailServiceFragment) fragment).setContent(diveService);
+                    ((DetailServiceFragment) fragment).setContent(newDiveService);
 
-                } else if (fragment != null && fragment instanceof DetailServiceFragment){
+                } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
 
-                    ((DetailServiceFragment) fragment).setContent(diveService);
+                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
 
-                } else if (fragment != null && fragment instanceof DetailServiceFragment){
+                } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
 
-                    ((DetailServiceFragment) fragment).setContent(diveService);
+                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
 
-                } else if (fragment != null && fragment instanceof DetailServiceFragment){
+                } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
                     //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
                 }
-
-
-
 
             }
         };
@@ -203,7 +200,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
         bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
         circleIndicator.setViewPager(bannerViewPager);
     }
-
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -363,15 +359,15 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
                 if (fragment != null && fragment instanceof DetailServiceFragment){
 
-                    ((DetailServiceFragment) fragment).setContent(diveService);
+                    ((DetailServiceFragment) fragment).setContent(newDiveService);
 
                 } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
 
-                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(diveService);
+                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
 
                 } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
 
-                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(diveService);
+                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
 
                 } else if (fragment != null && fragment instanceof DetailServiceFragment){
                     //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();

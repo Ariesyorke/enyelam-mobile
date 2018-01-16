@@ -128,7 +128,7 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
                     certificate = "0";
                 }
 
-                if (!TextUtils.isEmpty(type) && type.equals("2")){
+                /*if (!TextUtils.isEmpty(type) && type.equals("2")){
 
                     Intent intent = new Intent(DoDiveActivity.this, DetailServiceActivity.class);
                     intent.putExtra(NYHelper.DATE, date);
@@ -139,14 +139,16 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
                     if (searchService.getName() != null)diveService.setName(searchService.getName());
                     if (searchService.getRating() != null)diveService.setRating(Integer.valueOf(searchService.getRating()));
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
-                    /*intent.putExtra(NYHelper.KEYWORD, keyword);
+                    *//*intent.putExtra(NYHelper.KEYWORD, keyword);
                     intent.putExtra(NYHelper.ID_DIVER, diverId);
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVER, diver);
-                    intent.putExtra(NYHelper.TYPE, type);*/
+                    intent.putExtra(NYHelper.TYPE, type);*//*
                     startActivity(intent);
 
-                } else if (!TextUtils.isEmpty(type)){
+                } else */
+
+                if (!TextUtils.isEmpty(type)){
                     Intent intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);
                     intent.putExtra(NYHelper.KEYWORD, keyword);
                     intent.putExtra(NYHelper.ID_DIVER, diverId);

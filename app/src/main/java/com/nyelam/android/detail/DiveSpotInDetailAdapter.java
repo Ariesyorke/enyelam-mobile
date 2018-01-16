@@ -111,7 +111,11 @@ public class DiveSpotInDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.diveSpot = diveSpot;
 
             if (diveSpot.getName() != null && !TextUtils.isEmpty(diveSpot.getName())) nameTextView.setText(diveSpot.getName());
-            if (diveSpot.getDescription() != null && !TextUtils.isEmpty(diveSpot.getDescription())) descriptionTextView.setText(diveSpot.getName());
+            if (diveSpot.getShortDescription() != null && !TextUtils.isEmpty(diveSpot.getShortDescription())){
+                descriptionTextView.setText(diveSpot.getShortDescription());
+            } else {
+                descriptionTextView.setVisibility(View.GONE);
+            }
             if (diveSpot.getLocation() != null) locationTextView.setText(diveSpot.getLocation().getCity().getName()+", "+diveSpot.getLocation().getProvince().getName()+", "+diveSpot.getLocation().getCountry());
             ratingTextView.setText("*"+diveSpot.getRating());
 

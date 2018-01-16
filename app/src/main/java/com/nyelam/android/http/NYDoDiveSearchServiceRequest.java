@@ -9,6 +9,7 @@ import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.SearchResultList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -63,9 +64,13 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
 
     @Override
     protected DiveServiceList onProcessSuccessData(JSONObject obj) throws Exception {
-        DiveServiceList serviceList = new DiveServiceList();
-        serviceList.parse(obj.getJSONArray(KEY_DIVE_SERVICE));
-        if (serviceList != null && serviceList.getList() != null && serviceList.getList().size() > 0) return serviceList;
+
+        if(obj.get(KEY_DIVE_SERVICE) instanceof JSONArray) {
+            DiveServiceList serviceList = new DiveServiceList();
+            serviceList.parse(obj.getJSONArray(KEY_DIVE_SERVICE));
+            if (serviceList != null && serviceList.getList() != null && serviceList.getList().size() > 0) return serviceList;
+        }
+
         return null;
     }
 

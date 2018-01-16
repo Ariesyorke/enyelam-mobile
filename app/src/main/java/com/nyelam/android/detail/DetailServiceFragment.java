@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,8 @@ import com.nyelam.android.view.StrikethroughTextView;
 public class DetailServiceFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private LinearLayout mainLinearLayout;
+    private ProgressBar progressBar;
     private TextView priceTextView, dateTextView, maxPersonTextView, minPersonTextView, descriptionTextView, licenseTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView;
     private StrikethroughTextView priceStrikeThroughTextView;
@@ -59,6 +63,8 @@ public class DetailServiceFragment extends Fragment {
     }
 
     private void initView(View v) {
+        mainLinearLayout = (LinearLayout) v.findViewById(R.id.main_linearLayout);
+        progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         priceStrikeThroughTextView = (StrikethroughTextView) v.findViewById(R.id.price_strikethrough_textView);
         priceTextView = (TextView) v.findViewById(R.id.price_textView);
         dateTextView = (TextView) v.findViewById(R.id.date_textView);
@@ -99,8 +105,13 @@ public class DetailServiceFragment extends Fragment {
                NYHelper.setFacilities(fac.isTowel(), icTowelImageView);
            }
 
+           progressBar.setVisibility(View.GONE);
+           mainLinearLayout.setVisibility(View.VISIBLE);
 
-        }
+        } else {
+           progressBar.setVisibility(View.GONE);
+           mainLinearLayout.setVisibility(View.GONE);
+       }
     }
 
 

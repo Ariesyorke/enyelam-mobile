@@ -5,10 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
@@ -19,6 +22,8 @@ import com.nyelam.android.helper.NYHelper;
 public class DetailServiceDiveCenterFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private CardView mainCardView;
+    private ProgressBar progressBar;
     private TextView nameTextView, ratingTextView;
     private ImageView circleImageView;
 
@@ -56,6 +61,8 @@ public class DetailServiceDiveCenterFragment extends Fragment {
     }
 
     private void initView(View v) {
+        mainCardView = (CardView) v.findViewById(R.id.main_cardView);
+        progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         nameTextView = (TextView) v.findViewById(R.id.name_textView);
         ratingTextView = (TextView) v.findViewById(R.id.rating_textView);
         //circleImageView = (ImageView) v.findViewById(R.id.picture_imageView);
@@ -64,16 +71,17 @@ public class DetailServiceDiveCenterFragment extends Fragment {
     public void setDiveCenter(DiveService service){
         if (service != null && service.getDiveCenter() != null){
             if (NYHelper.isStringNotEmpty(service.getDiveCenter().getName()))nameTextView.setText(service.getDiveCenter().getName());
+            if (service.getDiveCenter().getRating() > 0){
+                ratingTextView.setText("*"+String.valueOf(service.getDiveCenter().getRating()));
+            } else{
+                ratingTextView.setText("no rating");
+            }
+
+            progressBar.setVisibility(View.GONE);
+            mainCardView.setVisibility(View.VISIBLE);
         }
     }
 
-
-    public void setView(DiveCenter diveCenter){
-        if (diveCenter != null){
-            if (NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
-            //if (NYHelper.isStringNotEmpty(diveCenter.Name())) nameTextView.setText(diveCenter.getName());
-        }
-    }
 
     @Override
     public void onAttach(Context context) {

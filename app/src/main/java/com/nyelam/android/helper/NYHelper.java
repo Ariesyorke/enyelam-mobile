@@ -5,11 +5,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.DAODataBridge;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.LoginStorage;
 
@@ -45,6 +48,10 @@ public class NYHelper {
     public static final String DATE = "date";
     public static final String TYPE = "type";
     public static final String CERTIFICATE = "certificate";
+    public static final String CONTACT = "contact";
+    public static final String PARTICIPANT = "participant";
+    public static final String CART_TOKEN = "cart_token";
+    public static final String POSITION = "position";
 
 
     public static boolean isStringNotEmpty(String string) {
@@ -103,10 +110,18 @@ public class NYHelper {
     }
 
     public static final void handleAPIException(final Context context, Exception e, DialogInterface.OnClickListener listener) {
+
+        //NYLog.e("ERROR APA : "+e.getCause().getMessage());
+
         String message = context.getResources().getString(R.string.warn_no_connection);
         if (e.getCause() != null) {
-            message = e.getCause().getMessage();
+            if (e.getCause().getMessage().contains("Internal Server Error")){
+                message = context.getString(R.string.warn_server_error);
+            } else {
+                message = e.getCause().getMessage();
+            }
         }
+
 
         /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message)
@@ -245,4 +260,16 @@ public class NYHelper {
             icImageView.setImageResource(R.drawable.ic_not_available);
         }
     }
+
+    public static int integerToDP (Context myContext, Integer myInteger) {
+        Resources r = myContext.getResources();
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                myInteger,
+                r.getDisplayMetrics()
+        );
+
+        return px;
+    }
+
 }
