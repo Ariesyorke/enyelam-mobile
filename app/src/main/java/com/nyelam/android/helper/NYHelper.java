@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/4/2018.
@@ -52,6 +53,7 @@ public class NYHelper {
     public static final String PARTICIPANT = "participant";
     public static final String CART_TOKEN = "cart_token";
     public static final String POSITION = "position";
+    public static final String IS_NOT_NEW = "is_not_new";
 
 
     public static boolean isStringNotEmpty(String string) {
@@ -270,6 +272,16 @@ public class NYHelper {
         );
 
         return px;
+    }
+
+    public static boolean isValidEmaillId(String email){
+
+        return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
 }

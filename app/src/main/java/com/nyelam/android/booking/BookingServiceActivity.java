@@ -14,20 +14,29 @@ import android.widget.Toast;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveSpot;
+import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.LoginStorage;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookingServiceActivity extends BasicActivity {
 
+    private LinearLayout particpantContainerLinearLayout, nextLinearLayout;
+    private TextView serviceNameTextView, scheduleTextView, locationTextView, priceTextView;
+    private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
 
-    private LinearLayout particpantContainerLinearLayout;
-    private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView;
-
-    int diver = 3;
+    private DiveService diveService;
+    private int diver = 3;
     private List<Participant> participantList = new ArrayList<>();
     private Contact contact;
     private String cartToken;
@@ -40,29 +49,153 @@ public class BookingServiceActivity extends BasicActivity {
         initView();
         initData();
         initParticipantLayout();
+        initControl();
+    }
+
+    private void initControl() {
+        changeContactTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BookingServiceActivity.this, BookingServiceContactActivity.class);
+                intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
+                intent.putExtra(NYHelper.CONTACT, contact.toString());
+                startActivity(intent);
+            }
+        });
+
+        nextLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void initData() {
-        for (int i = 0; i < diver; i++){
-            participantList.add(i, new Participant());
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+
+            //NYLog.e("CEK INI 2 :"+extras.get(NYHelper.SERVICE));
+
+            if (extras.get(NYHelper.SERVICE) != null){
+
+                diveService = new DiveService();
+
+                try {
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.SERVICE));
+                    diveService.parse(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                if (diveService != null){
+                    if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
+
+                    if (diveService.getSpecialPrice() < diveService.getNormalPrice()){
+                        priceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
+                    } else {
+                        priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
+                    }
+
+                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getLocation().getCountry())) {
+                        Location loc = new Location();
+                        loc = diveService.getDiveCenter().getLocation();
+                        locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
+                    }
+
+                    if (diveService.getSchedule() != null){
+                        long start = diveService.getSchedule().getStartDate();
+                        long end = diveService.getSchedule().getEndDate();
+                        scheduleTextView.setText(NYHelper.setMillisToDate(start)+" - "+NYHelper.setMillisToDate(end));
+                    }
+                }
+
+            }
+
+
+            if (extras.get(NYHelper.PARTICIPANT) == null){
+                for (int i = 0; i < diver; i++){
+                    participantList.add(i, new Participant());
+                }
+            } else {
+
+                JSONArray array = null;
+                try {
+                    array = new JSONArray(extras.getString(NYHelper.PARTICIPANT));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (array != null && array.length() > 0) {
+                    participantList = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = null;
+                        try {
+                            o = array.getJSONObject(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Participant p = new Participant();
+                        p.parse(o);
+                        participantList.add(p);
+                    }
+                } else {
+                    for (int i = 0; i < diver; i++){
+                        participantList.add(i, new Participant());
+                    }
+                }
+
+            }
+
+            if (extras.get(NYHelper.CONTACT) != null){
+
+                try {
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.CONTACT));
+                    contact = new Contact();
+                    contact.parse(obj);
+
+                    if (NYHelper.isStringNotEmpty(contact.getName()))contactNameTextView.setText(contact.getName());
+                    if (NYHelper.isStringNotEmpty(contact.getPhoneNumber()))contactPhoneNumberTextView.setText(contact.getPhoneNumber());
+                    if (NYHelper.isStringNotEmpty(contact.getEmail()))contactEmailTextView.setText(contact.getEmail());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                LoginStorage storage = new LoginStorage(this);
+                if (storage.isUserLogin() && storage.user != null){
+                    contact = new Contact();
+                    contact.setName(storage.user.getFullname());
+                    contact.setPhoneNumber(storage.user.getPhone());
+                    contact.setEmail(storage.user.getEmail());
+                    if (NYHelper.isStringNotEmpty(storage.user.getFullname()))contactNameTextView.setText(storage.user.getFullname());
+                    if (NYHelper.isStringNotEmpty(storage.user.getPhone()))contactPhoneNumberTextView.setText(storage.user.getPhone());
+                    if (NYHelper.isStringNotEmpty(storage.user.getEmail()))contactEmailTextView.setText(storage.user.getEmail());
+                }
+            }
+
         }
-        LoginStorage storage = new LoginStorage(this);
-        if (storage.isUserLogin() && storage.user != null){
-            contact = new Contact();
-            contact.setName(storage.user.getFullname());
-            contact.setPhoneNumber(storage.user.getPhone());
-            contact.setEmail(storage.user.getEmail());
-            if (NYHelper.isStringNotEmpty(storage.user.getFullname()))contactNameTextView.setText(storage.user.getFullname());
-            if (NYHelper.isStringNotEmpty(storage.user.getPhone()))contactPhoneNumberTextView.setText(storage.user.getPhone());
-            if (NYHelper.isStringNotEmpty(storage.user.getEmail()))contactEmailTextView.setText(storage.user.getEmail());
-        }
+
     }
 
     private void initView() {
+
+        serviceNameTextView = (TextView) findViewById(R.id.service_name_textView);
+        scheduleTextView = (TextView) findViewById(R.id.schedule_textView);
+        locationTextView = (TextView) findViewById(R.id.location_textView);
+        priceTextView = (TextView) findViewById(R.id.price_textView);
+
         particpantContainerLinearLayout = (LinearLayout) findViewById(R.id.participant_container_linearLayout);
         contactNameTextView = (TextView) findViewById(R.id.contact_name_textView);
         contactPhoneNumberTextView = (TextView) findViewById(R.id.contact_phone_number_textView);
         contactEmailTextView = (TextView) findViewById(R.id.contact_email_textView);
+        changeContactTextView = (TextView) findViewById(R.id.change_contact_textView);
+        nextLinearLayout = (LinearLayout) findViewById(R.id.next_linearLayout);
+
     }
 
     private void initParticipantLayout() {
@@ -97,11 +230,15 @@ public class BookingServiceActivity extends BasicActivity {
             changeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    Toast.makeText(BookingServiceActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceParticipantActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     intent.putExtra(NYHelper.CART_TOKEN, cartToken);
-                    intent.putExtra(NYHelper.PARTICIPANT, participant.toString());
+                    intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, contact.toString());
-                    intent.putExtra(NYHelper.POSITION, String.valueOf(position));
+                    intent.putExtra(NYHelper.POSITION, position);
                     startActivity(intent);
                 }
             });
@@ -111,9 +248,12 @@ public class BookingServiceActivity extends BasicActivity {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(BookingServiceActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(BookingServiceActivity.this, String.valueOf(participantList.size()), Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceParticipantActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     intent.putExtra(NYHelper.CART_TOKEN, cartToken);
-                    intent.putExtra(NYHelper.PARTICIPANT, participant.toString());
+                    intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, contact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
                     startActivity(intent);

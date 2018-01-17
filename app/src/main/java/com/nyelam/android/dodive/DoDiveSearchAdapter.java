@@ -160,6 +160,27 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     labelTextView.setText(diveCenter.getProvince());
 
+                } else {
+                    iconImageView.setImageResource(R.drawable.ic_dive_place);
+                    nameTextView.setText(searchResult.getName());
+                    ratingTextView.setVisibility(View.GONE);
+                    labelTextView.setVisibility(View.GONE);
+
+                    String place = "";
+                    if (searchResult.getType() == 4){
+                        place = context.getString(R.string.country);
+                    } else if (searchResult.getType() == 5){
+                        place = context.getString(R.string.province);
+                    } else if (searchResult.getType() == 6){
+                        place = context.getString(R.string.city);
+                    }
+
+                    if (searchResult.getCount() != null){
+                        typeTextView.setText(place+" ("+String.valueOf(searchResult.getCount())+")");
+                    } else {
+                        typeTextView.setText(place);
+                    }
+
                 }
             }
 

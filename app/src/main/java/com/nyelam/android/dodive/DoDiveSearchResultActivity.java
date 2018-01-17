@@ -55,18 +55,25 @@ public class DoDiveSearchResultActivity extends BasicActivity {
 
     private void initRequest() {
         progressBar.setVisibility(View.VISIBLE);
+
+        String url = "";
         if (type.equals("1")){
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(DoDiveSearchResultActivity.this,
-                    getResources().getString(R.string.api_path_dodive_search_by_spot),
-                    String.valueOf(page), diverId, type, certificate, diver, date);
-            spcMgr.execute(req, onSearchServiceRequest());
+            url = getResources().getString(R.string.api_path_dodive_search_by_spot);
+        } else if (type.equals("2")){
+            url = getResources().getString(R.string.api_path_dodive_search_by_spot);
+        } else if (type.equals("3")){
+            url = getResources().getString(R.string.api_path_dodive_search_by_dive_center);
+        } else if (type.equals("4")){
+            url = getResources().getString(R.string.api_path_dodive_search_by_country);
+        } else if (type.equals("5")){
+            url = getResources().getString(R.string.api_path_dodive_search_by_province);
         } else {
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(DoDiveSearchResultActivity.this,
-                    getResources().getString(R.string.api_path_dodive_search_by_dive_center),
-                    String.valueOf(page), diverId, type, certificate, diver, date);
-            spcMgr.execute(req, onSearchServiceRequest());
+            url = getResources().getString(R.string.api_path_dodive_search_by_city);
         }
 
+        NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(DoDiveSearchResultActivity.this,
+                url, String.valueOf(page), diverId, type, certificate, diver, date);
+        spcMgr.execute(req, onSearchServiceRequest());
     }
 
     private void initExtra() {

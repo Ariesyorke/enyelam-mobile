@@ -11,7 +11,9 @@
     <string name="or">OR</string>
     <string name="register">Register</string>
     <string name="username">Username</string>
-    <string name="email_address">E-mail address</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_address">E-mail Address</string>
+    <string name="phone_number">Phone Number</string>
     <string name="phone_number_ex">Phone number (eg. +905...)</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="select_gender">Select Gender</string>
@@ -20,6 +22,10 @@
     <string name="hot_offer">Hot Offer</string>
     <string name="most_popular_dive_spot">Most Popular Dive Spot</string>
     <string name="see_all">See All</string>
+    <string name="country">Country</string>
+    <string name="province">Province</string>
+    <string name="city">City</string>
+    <string name="save">Save</string>
 
     <string name="enter_a_dive_spot">Enter a dive spot name</string>
     <string name="keyword">Keyword</string>
@@ -34,6 +40,11 @@
     <string name="warn_server_error">Internal Server Error</string>
     <string name="warn_no_results_found">No results found.</string>
     <string name="warn_no_reviews_found">No reviews found.</string>
+
+    <string name="warn_field_name_cannot_be_empty">Field Name cannot be empty</string>
+    <string name="warn_email_not_valid">Please, input valid email address</string>
+    <string name="warn_field_email_cannot_be_empty">Field Email cannot be empty</string>
+    <string name="warn_field_phone_cannot_be_empty">Field Phone Number cannot be empty</string>
 
 
     <!--<string name=""></string>-->

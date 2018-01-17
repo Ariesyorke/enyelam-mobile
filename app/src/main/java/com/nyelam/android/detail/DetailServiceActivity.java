@@ -25,6 +25,7 @@ import com.nyelam.android.booking.BookingServiceActivity;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
@@ -89,8 +90,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
         bookingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //NYLog.e("CEK INI 1 :"+newDiveService.toString());
+
                 Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
-                intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
                 startActivity(intent);
             }
         });

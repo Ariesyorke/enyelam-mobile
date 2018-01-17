@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Participant;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONArray;
@@ -22,6 +23,7 @@ import java.util.List;
 
 public class BookingServiceParticipantActivity extends AppCompatActivity {
 
+    private Bundle bundle;
     private TextView savetextView;
     private TextInputEditText nameInputEditText;
     private ImageView closeImageView;
@@ -34,21 +36,22 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_service_participant);
-        initExtra();
         initView();
+        initExtra();
         initControl();
     }
 
     private void initExtra() {
 
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
         if (bundle != null) {
             position = bundle.getInt(NYHelper.POSITION);
+            participants = new ArrayList<>();
 
+            NYLog.e("TES Participant : "+bundle.getString(NYHelper.PARTICIPANT));
             try {
                 JSONArray array = new JSONArray(bundle.getString(NYHelper.PARTICIPANT));
                 if (array != null && array.length() > 0) {
-                    participants = new ArrayList<>();
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject o = array.getJSONObject(i);
                         Participant a = new Participant();
@@ -59,6 +62,15 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
+            position = bundle.getInt(NYHelper.POSITION);
+
+            if (participants != null && participants.size() > 0){
+                Participant p = participants.get(position);
+                if (p != null && NYHelper.isStringNotEmpty(p.getName())) nameInputEditText.setText(p.getName());
+            }
+
         }
     }
 
@@ -66,9 +78,23 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
         savetextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookingServiceParticipantActivity.this, BookingServiceActivity.class);
-                intent.putExtra(NYHelper.SERVICE, "");
-                startActivity(intent);
+
+                String name = nameInputEditText.getText().toString();
+                if (!NYHelper.isStringNotEmpty(name)){
+                    nameInputEditText.setError(getString(R.string.warn_field_name_cannot_be_empty));
+                } else {
+                    Participant p = new Participant();
+                    p.setName(name);
+
+                    participants.set(position, p);
+                    bundle.putString(NYHelper.PARTICIPANT, participants.toString());
+                    bundle.putBoolean(NYHelper.IS_NOT_NEW, true);
+
+                    Intent intent = new Intent(BookingServiceParticipantActivity.this, BookingServiceActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 

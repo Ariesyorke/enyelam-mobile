@@ -45,6 +45,7 @@
         </android.support.v7.widget.Toolbar>
 
         <RelativeLayout
+            android:visibility="gone"
             android:padding="@dimen/padding"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -145,6 +146,7 @@
                 android:padding="@dimen/padding">
 
                 <TextView
+                    android:id="@+id/schedule_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sel, 16 Jan 2018"
@@ -152,11 +154,28 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/service_name_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding"
-                    android:text="Bali Liveboard"
+                    android:text="Service Name"
                     android:textColor="@color/ny_black1" />
+
+                <TextView
+                    android:id="@+id/location_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Bali, Indonesia"
+                    android:textColor="@color/ny_grey4" />
+
+                <TextView
+                    android:id="@+id/price_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Rp 1.800.000"
+                    android:textColor="@color/ny_orange" />
 
             </LinearLayout>
 
@@ -191,6 +210,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/change_contact_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ubah"
@@ -266,6 +286,7 @@
 
 
             <LinearLayout
+                android:id="@+id/next_linearLayout"
                 android:background="@drawable/ny_rectangle_blue"
                 android:gravity="center"
                 android:layout_gravity="center"
