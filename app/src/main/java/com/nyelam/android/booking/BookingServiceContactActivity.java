@@ -49,6 +49,8 @@ public class BookingServiceContactActivity extends AppCompatActivity {
                 } else if (!NYHelper.isValidEmaillId(email)){
                     emailEditText.setError(getString(R.string.warn_email_not_valid));
                 } else {
+
+                    name = NYHelper.capitalizeString(name);
                     contact.setName(name);
                     contact.setPhoneNumber(phone);
                     contact.setEmail(email);
@@ -58,6 +60,7 @@ public class BookingServiceContactActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(BookingServiceContactActivity.this, BookingServiceActivity.class);
                     intent.putExtras(extras);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 }

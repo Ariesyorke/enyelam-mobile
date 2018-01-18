@@ -40,12 +40,15 @@
     <string name="warn_server_error">Internal Server Error</string>
     <string name="warn_no_results_found">No results found.</string>
     <string name="warn_no_reviews_found">No reviews found.</string>
-
     <string name="warn_field_name_cannot_be_empty">Field Name cannot be empty</string>
     <string name="warn_email_not_valid">Please, input valid email address</string>
     <string name="warn_field_email_cannot_be_empty">Field Email cannot be empty</string>
     <string name="warn_field_phone_cannot_be_empty">Field Phone Number cannot be empty</string>
 
+
+    <!--Booking-->
+    <string name="upcoming">Upcoming</string>
+    <string name="past">Past</string>
 
     <!--<string name=""></string>-->
     <integer name="timeline_place_item_image_ratio_width">5</integer>

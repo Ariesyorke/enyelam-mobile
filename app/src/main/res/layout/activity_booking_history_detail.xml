@@ -31,7 +31,7 @@
                     android:background="@android:color/transparent"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:text="Isi Biodata"/>
+                    android:text="Detail Booking"/>
 
                 <!--<ImageView
                     android:id="@+id/menu_item_imageView"
@@ -126,17 +126,31 @@
                 android:background="#1286ec"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:text="Review pesanan &amp;  isi data wisatawan"
+                android:text="#1828281"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:background="@color/ny_grey3"
-                android:padding="@dimen/padding"
-                android:text="Pesanan Anda"
-                android:textColor="@color/ny_black1"
-                android:textStyle="bold" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding"
+                    android:text="Pesanan Anda"
+                    android:textColor="@color/ny_black1"
+                    android:textStyle="bold" />
+                <TextView
+                    android:padding="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Not paid yet"
+                    android:textSize="14sp"
+                    android:textColor="#ea2614" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -186,7 +200,6 @@
                     android:textSize="14sp"
                     android:textColor="@color/ny_grey4" />
 
-
             </LinearLayout>
 
             <TextView
@@ -219,15 +232,6 @@
                         android:textColor="@color/ny_black1"
                         android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/change_contact_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ubah"
-                        android:textAllCaps="true"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -295,29 +299,181 @@
                 android:padding="@dimen/padding"/>
 
 
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ny_grey3"
+                android:padding="@dimen/padding"
+                android:text="Payment"
+                android:textColor="@color/ny_black1"
+                android:textStyle="bold" />
+
             <LinearLayout
-                android:id="@+id/next_linearLayout"
-                android:background="@drawable/ny_rectangle_blue"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:paddingLeft="100dp"
-                android:paddingRight="100dp"
-                android:layout_marginTop="@dimen/padding_double"
-                android:layout_marginBottom="@dimen/padding_double"
-                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:text="Next"
-                    android:textSize="14sp"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorWhite"
+                    android:text="Transfer To\nBANK BCA"
+                    android:textSize="18sp"
+                    android:textColor="@color/ny_black1"
+                    android:gravity="center"
+                    android:padding="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+
+
+                <TableLayout
+                    android:id="@+id/tabla_cuerpo"
+                    android:paddingLeft="@dimen/padding_double"
+                    android:paddingRight="@dimen/padding_double"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TableRow
+                        android:id="@+id/tableRow3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:text="Cabang"
+                            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                        <TextView
+                            android:layout_weight="2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:text="Citra Grand Bekasi"
+                            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/tableRow4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:text="Account Numb"
+                            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_weight="2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:text="711-50-76761"
+                            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:text="Account Name"
+                            android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+                        <TextView
+                            android:layout_weight="2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:text="ISNOKE INDO KARYA, PT"
+                            android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+                    </TableRow>
+                </TableLayout>
+
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:background="@drawable/ny_rectangle_transparant_white_border"
+                    android:padding="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Choose File"
+                        android:textColor="@color/ny_black1"
+                        android:background="@drawable/ny_rectangle_white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="buktitransfer.jpg"
+                        android:textColor="@color/ny_black1"
+                        android:background="@drawable/ny_rectangle_white"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/send_linearLayout"
+                    android:background="@drawable/ny_rectangle_blue"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:padding="@dimen/padding"
+                    android:paddingLeft="100dp"
+                    android:paddingRight="100dp"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_marginBottom="@dimen/padding_double"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Send"
+                        android:textSize="14sp"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorWhite"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
             </LinearLayout>
+
+
+
 
         </LinearLayout>
     </ScrollView>

@@ -48,7 +48,8 @@
         <activity android:name=".booking.BookingServiceActivity" />
         <activity android:name=".booking.BookingServiceParticipantActivity" />
         <activity android:name=".booking.BookingServiceContactActivity" />
-        <activity android:name=".booking.BookingServiceSummaryActivity"></activity>
+        <activity android:name=".booking.BookingServiceSummaryActivity" />
+        <activity android:name=".bookinghistory.BookingHistoryDetailActivity"></activity>
     </application>
 
 </manifest>

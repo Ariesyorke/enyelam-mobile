@@ -68,7 +68,12 @@ public class BookingServiceActivity extends BasicActivity {
         nextLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(BookingServiceActivity.this, BookingServiceSummaryActivity.class);
+                intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
+                intent.putExtra(NYHelper.CONTACT, contact.toString());
+                startActivity(intent);
             }
         });
     }

@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
+import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageTabItemView;
 import com.nyelam.android.view.NYMenuDrawerFragment;
@@ -32,9 +34,11 @@ import java.util.List;
 import java.util.Map;
 
 public class HomeActivity extends BasicActivity implements HomeFragment.OnFragmentInteractionListener,
-    TransactionFragment.OnFragmentInteractionListener,
-    MyAccountFragment.OnFragmentInteractionListener,
-    NYMenuDrawerFragment.OnFragmentInteractionListener{
+        TransactionFragment.OnFragmentInteractionListener,
+        MyAccountFragment.OnFragmentInteractionListener,
+        NYMenuDrawerFragment.OnFragmentInteractionListener,
+        BookingHistoryInprogressFragment.OnFragmentInteractionListener,
+        BookingHistoryCompletedFragment.OnFragmentInteractionListener{
 
     private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"), new Frags(4,"more"));
     private List<Frags> fragses = new ArrayList<>();
@@ -80,6 +84,8 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         viewTabManager = (View) findViewById(R.id.view_tab_manager);
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
     }
+
+
 
     public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
         private static final int FRAGMENT_COUNT = 4;
@@ -276,7 +282,8 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         setSupportActionBar(toolbar);
 
 
-        viewPager.setOffscreenPageLimit(5);
+        viewPager.setPagingEnabled(false);
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(new NYFragmentPagerAdapter(getSupportFragmentManager()));
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -327,6 +334,11 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     public void openMenuDrawer(){
         drawerLayout.openDrawer(Gravity.END);
+    }
+
+    @Override
+    public void onHome() {
+
     }
 
 }

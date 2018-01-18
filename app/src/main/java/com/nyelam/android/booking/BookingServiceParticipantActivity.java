@@ -83,6 +83,9 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
                 if (!NYHelper.isStringNotEmpty(name)){
                     nameInputEditText.setError(getString(R.string.warn_field_name_cannot_be_empty));
                 } else {
+
+                    name = NYHelper.capitalizeString(name);
+
                     Participant p = new Participant();
                     p.setName(name);
 
@@ -92,6 +95,7 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(BookingServiceParticipantActivity.this, BookingServiceActivity.class);
                     intent.putExtras(bundle);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 }
