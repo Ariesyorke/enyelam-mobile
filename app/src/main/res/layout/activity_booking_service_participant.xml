@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:text="Nama lengkap (sesuai KTP/SMA/Paspor)"
+                    android:text="Nama lengkap (sesuai KTP/SIM/Paspor)"
                     android:textColor="@color/ny_orange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

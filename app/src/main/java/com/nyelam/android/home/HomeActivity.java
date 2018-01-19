@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HomeActivity extends BasicActivity implements HomeFragment.OnFragmentInteractionListener,
+        SocmedFragment.OnFragmentInteractionListener,
         TransactionFragment.OnFragmentInteractionListener,
         MyAccountFragment.OnFragmentInteractionListener,
         NYMenuDrawerFragment.OnFragmentInteractionListener,
@@ -119,7 +120,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 HomeFragment fragment = HomeFragment.newInstance();
                 return fragment;
             } else if (position == 1) {
-                HomeFragment fragment = HomeFragment.newInstance();
+                SocmedFragment fragment = SocmedFragment.newInstance();
                 return fragment;
             }  else if (position == 2) {
                 TransactionFragment fragment = TransactionFragment.newInstance();

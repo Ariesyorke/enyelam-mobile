@@ -522,7 +522,8 @@ public class DiveSpot implements Parseable {
 
         try{
             if(getLocation()!=null){
-                obj.put(KEY_LOCATION, getLocation());
+                JSONObject objLoc = new JSONObject(getLocation().toString());
+                obj.put(KEY_LOCATION, objLoc);
             } else {
                 obj.put(KEY_LOCATION, JSONObject.NULL);
             }

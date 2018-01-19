@@ -1,5 +1,6 @@
 package com.nyelam.android.detail;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,21 +19,28 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.booking.BookingServiceActivity;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
+import com.nyelam.android.http.NYDoDiveServiceCartRequest;
+import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -71,7 +79,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
     private boolean mProtectFromPagerChange = false;
     private String serviceId;
     protected DiveService diveService, newDiveService;
+    //protected DiveSpot diveSpot;
+    protected String diveSpotId;
+    protected int diver;
+    protected String schedule;
     private TextView nameTextView, ratingTextView, bookingTextView;
+    private ProgressDialog progressDialog;
     //private View viewTabManager;
 
     @Override
@@ -91,21 +104,57 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
+
+                LoginStorage storage = new LoginStorage(getApplicationContext());
+
+                if (storage.isUserLogin()){
+
+                    progressDialog.show();
+
+                    if (!NYHelper.isStringNotEmpty(diveSpotId))diveSpotId = newDiveService.getDiveSpots().get(0).getId();
+
+                    NYDoDiveServiceCartRequest req = null;
+                    try {
+                        req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diveSpotId, String.valueOf(diver), "1", schedule);
+                        spcMgr.execute(req, onCreateCartServiceRequest());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
+                    startActivity(intent);
+                }
+
                 //NYLog.e("CEK INI 1 :"+newDiveService.toString());
 
-                Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
-                intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
-                startActivity(intent);
+
             }
         });
     }
 
     private void initExtra() {
-        Bundle extras = getIntent().getExtras();
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
         if (extras != null) {
             /*if(!extras.getString(NYHelper.ID_SERVICE).equals(null)){
                 serviceId = extras.getString(NYHelper.ID_SERVICE);
             }*/
+
+            if(!extras.get(NYHelper.DIVER).equals(null)){
+                diver = Integer.valueOf(extras.getString(NYHelper.DIVER));
+            }
+
+            if(!extras.getString(NYHelper.SCHEDULE).equals(null)){
+                schedule = extras.getString(NYHelper.SCHEDULE);
+            }
+
+            if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && !extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
+                diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
+                //Toast.makeText(this, "dive spot ID : "+diveSpotId, Toast.LENGTH_SHORT).show();
+            }
 
             if(!extras.getString(NYHelper.SERVICE).equals(null)){
                 JSONObject obj = null;
@@ -173,6 +222,39 @@ public class DetailServiceActivity extends AppCompatActivity implements
         };
     }
 
+
+
+    private RequestListener<CartReturn> onCreateCartServiceRequest() {
+        return new RequestListener<CartReturn>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(CartReturn cartReturn) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+
+
+                NYLog.e("CEK INI LAGI : "+newDiveService.toString());
+                Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
+                intent.putExtra(NYHelper.CART_TOKEN, cartReturn.getCartToken());
+                intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
+                intent.putExtra(NYHelper.DIVER, diver);
+                startActivity(intent);
+
+
+
+
+            }
+        };
+    }
+
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabManager = (LinearLayout) findViewById(R.id.tab_manager);
@@ -188,6 +270,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentAdapter);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.loading));
     }
 
     private void initBanner() {
@@ -429,7 +515,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onResume() {

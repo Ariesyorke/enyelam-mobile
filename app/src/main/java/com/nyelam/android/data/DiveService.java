@@ -18,7 +18,7 @@ public class DiveService implements Parseable {
 
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
-    private static String KEY_RATING = "“rating”";
+    private static String KEY_RATING = "rating";
     private static String KEY_CATEGORY = "category";
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_DIVE_SPOTS = "dive_spot";
@@ -404,7 +404,8 @@ public class DiveService implements Parseable {
 
         try{
             if(getSchedule()!=null){
-                obj.put(KEY_SCHEDULE, getSchedule());
+                JSONObject objSchedule = new JSONObject(getSchedule().toString());
+                obj.put(KEY_SCHEDULE, objSchedule);
             } else {
                 obj.put(KEY_SCHEDULE, JSONObject.NULL);
             }
@@ -414,7 +415,8 @@ public class DiveService implements Parseable {
 
         try{
             if(getFacilities()!=null){
-                obj.put(KEY_FACILITIES, getFacilities());
+                JSONObject objFac = new JSONObject(getFacilities().toString());
+                obj.put(KEY_FACILITIES, objFac);
             } else {
                 obj.put(KEY_FACILITIES, JSONObject.NULL);
             }
@@ -437,7 +439,8 @@ public class DiveService implements Parseable {
 
         try{
             if(getDiveCenter()!=null){
-                obj.put(KEY_DIVE_CENTER, getDiveCenter());
+                JSONObject objDev = new JSONObject(getDiveCenter().toString());
+                obj.put(KEY_DIVE_CENTER, objDev);
             } else {
                 obj.put(KEY_DIVE_CENTER, JSONObject.NULL);
             }

@@ -15,7 +15,9 @@
     <string name="api_path_dodive_detail_service">api/service/detail</string>
     <string name="api_path_dodive_book_service_cart">api/order/bookservicecart</string>
     <string name="api_path_dodive_book_service_voucher_cart"></string>
-    <string name="api_path_dodive_book_service_order"></string>
+    <string name="api_path_dodive_book_service_order">api/order/submit</string>
+    <string name="api_path_dodive_booking_history"></string>
+    <string name="api_path_dodive_booking_detail"></string>
 
 
 

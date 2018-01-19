@@ -1,5 +1,6 @@
 package com.nyelam.android.dodive;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,11 +32,11 @@ import java.util.List;
 
 public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
+    private Activity activity;
     private List<DiveService> searchResults;
 
-    public DoDiveSearchServiceAdapter(Context context) {
-        this.context = context;
+    public DoDiveSearchServiceAdapter(Activity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -126,7 +127,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             //SET IMAGE
-            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
             if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
                 ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
                     @Override
@@ -162,9 +163,16 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(context, DetailServiceActivity.class);
+            Intent intent = new Intent(activity, DetailServiceActivity.class);
             intent.putExtra(NYHelper.SERVICE, diveService.toString());
-            context.startActivity(intent);
+            intent.putExtra(NYHelper.DIVER, ((DoDiveSearchResultActivity)activity).diver);
+            intent.putExtra(NYHelper.SCHEDULE, ((DoDiveSearchResultActivity)activity).date);
+
+            if (((DoDiveSearchResultActivity)activity).type.equals("1")){
+                intent.putExtra(NYHelper.DIVE_SPOT_ID, ((DoDiveSearchResultActivity)activity).diverId);
+            }
+
+            activity.startActivity(intent);
         }
     }
 

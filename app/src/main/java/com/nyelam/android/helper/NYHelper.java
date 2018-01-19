@@ -46,6 +46,8 @@ public class NYHelper {
     public static final String ID_SERVICE = "id_service";
     public static final String SERVICE = "id_service";
     public static final String DIVER = "diver";
+    public static final String SCHEDULE = "schedule";
+    public static final String DIVE_SPOT = "dive_spot";
     public static final String DATE = "date";
     public static final String TYPE = "type";
     public static final String CERTIFICATE = "certificate";
@@ -54,6 +56,7 @@ public class NYHelper {
     public static final String CART_TOKEN = "cart_token";
     public static final String POSITION = "position";
     public static final String IS_NOT_NEW = "is_not_new";
+    public static final String DIVE_SPOT_ID = "dive_spot_id";
 
 
     public static boolean isStringNotEmpty(String string) {
@@ -71,6 +74,19 @@ public class NYHelper {
         String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
         return (String.valueOf(day) + " " + monthString + " " + String.valueOf(year));
+    }
+
+    public static String setMillisToDateMonth(long millis) {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(millis*1000);
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+
+        return (monthString + " " + String.valueOf(day) + ", " + String.valueOf(year));
     }
 
     public static String priceFormatter(double price) {

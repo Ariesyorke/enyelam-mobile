@@ -106,10 +106,12 @@ public class Location implements Parseable {
 
     @Override
     public String toString() {
+
         JSONObject obj = new JSONObject();
 
         try {
             if (!TextUtils.isEmpty(getCountry())) {
+                //JSONObject newObj = new JSONObject(getCountry().toString());
                 obj.put(KEY_COUNTRY, getCountry());
             } else {
                 obj.put(KEY_COUNTRY, JSONObject.NULL);
@@ -118,7 +120,8 @@ public class Location implements Parseable {
 
         try{
             if(getProvince()!=null){
-                obj.put(KEY_PROVINCE, getProvince());
+                JSONObject newObj = new JSONObject(getProvince().toString());
+                obj.put(KEY_PROVINCE, newObj);
             } else {
                 obj.put(KEY_PROVINCE, JSONObject.NULL);
             }
@@ -128,7 +131,8 @@ public class Location implements Parseable {
 
         try{
             if(getCity()!=null){
-                obj.put(KEY_CITY, getCity());
+                JSONObject newObj = new JSONObject(getCity().toString());
+                obj.put(KEY_CITY, newObj);
             } else {
                 obj.put(KEY_CITY, JSONObject.NULL);
             }
@@ -138,7 +142,8 @@ public class Location implements Parseable {
 
         try{
             if(getCoordinate()!=null){
-                obj.put(KEY_COORDINATE, getCoordinate());
+                JSONObject newObj = new JSONObject(getCoordinate().toString());
+                obj.put(KEY_COORDINATE, newObj);
             } else {
                 obj.put(KEY_COORDINATE, JSONObject.NULL);
             }

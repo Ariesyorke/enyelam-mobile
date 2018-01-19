@@ -15,16 +15,16 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class NYDoDiveServiceOrderRequest extends NYBasicRequest<Boolean> {
+public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<Boolean> {
 
     private static final String KEY_SUCCESS = "success";
 
     private static final String POST_CART_TOKEN = "cart_token";
     private static final String POST_CONTACT = "contact";
-    private static final String POST_PARTICIPANT = "participant";
+    private static final String POST_PARTICIPANT = "diver";
 
-    public NYDoDiveServiceOrderRequest(Context context, String cartToken, String contact, String participant) {
-        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_master_dodive_search));
+    public NYDoDiveServiceOrderRequest(Context context, String cartToken, String contact, String participant) throws Exception {
+        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_order));
 
         if(!TextUtils.isEmpty(cartToken)) {
             addQuery(POST_CART_TOKEN, cartToken);

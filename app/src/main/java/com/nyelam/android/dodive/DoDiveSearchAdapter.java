@@ -192,6 +192,11 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Intent intent = new Intent(context, DoDiveActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
+
+            if (searchResult.getType().equals("1")){
+                intent.putExtra(NYHelper.DIVE_SPOT, searchResult.toString());
+            }
+
             context.startActivity(intent);
         }
     }

@@ -33,11 +33,9 @@ public class DoDiveSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_dive_search);
         initView();
-        initVontrol();
+        initControl();
         initAdapter();
     }
-
-
 
     private void initAdapter() {
         LinearLayoutManager layoutManager
@@ -47,7 +45,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
         recyclerView.setAdapter(doDiveSearchAdapter);
     }
 
-    private void initVontrol() {
+    private void initControl() {
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -110,8 +108,6 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                 doDiveSearchAdapter.clear();
                 doDiveSearchAdapter.addResults(results.getList());
                 doDiveSearchAdapter.notifyDataSetChanged();
-
-
             }
         };
     }

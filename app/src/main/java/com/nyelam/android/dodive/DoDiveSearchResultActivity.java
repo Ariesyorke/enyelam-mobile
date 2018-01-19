@@ -37,7 +37,8 @@ public class DoDiveSearchResultActivity extends BasicActivity {
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private TextView titleTextView, labelTextView, noResultTextView;
-    private String keyword, diverId, diver, certificate, date, type;
+    protected String keyword, diverId, diver, certificate, date, type;
+    //protected String diveSpotId;
     private int page = 1;
 
     @Override
@@ -87,7 +88,14 @@ public class DoDiveSearchResultActivity extends BasicActivity {
             if(!extras.getString(NYHelper.DIVER).equals(null)) diver = extras.getString(NYHelper.DIVER);
             if(!extras.getString(NYHelper.CERTIFICATE).equals(null)) certificate = extras.getString(NYHelper.CERTIFICATE);
             if(!extras.getString(NYHelper.DATE).equals(null)) date = extras.getString(NYHelper.DATE);
-            if(!extras.getString(NYHelper.TYPE).equals(null)) type = extras.getString(NYHelper.TYPE);
+            if(!extras.getString(NYHelper.TYPE).equals(null)){
+                type = extras.getString(NYHelper.TYPE);
+            }
+
+            /*if(!extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
+                diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
+            }*/
+
         }
     }
 

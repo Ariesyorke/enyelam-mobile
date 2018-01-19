@@ -1,10 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment">
+    android:background="@color/colorWhite"
+    tools:context="com.nyelam.android.home.HomeActivity">
 
-    <include layout="@layout/view_item_booking"/>
+    <ScrollView
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:nestedScrollingEnabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/padding_double"
+                android:layout_width="35dp"
+                android:layout_height="35dp" />
+
+            <TextView
+                android:id="@+id/no_result_textView"
+                android:visibility="gone"
+                android:text="@string/warn_no_results_found"
+                android:textSize="18sp"
+                android:textColor="@color/ny_black1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/padding_double"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include android:id="@+id/item_view" layout="@layout/view_item_booking"/>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
+

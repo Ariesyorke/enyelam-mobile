@@ -1,6 +1,8 @@
 package com.nyelam.android.booking;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +16,22 @@ import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
+import com.nyelam.android.detail.DetailServiceActivity;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.http.NYDoDiveServiceCartRequest;
+import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.storage.LoginStorage;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +42,8 @@ import java.util.List;
 
 public class BookingServiceSummaryActivity extends BasicActivity {
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    private ProgressDialog progressDialog;
     private DiveService diveService;
     private int diver = 3;
     private List<Participant> participantList = new ArrayList<>();
@@ -57,17 +71,37 @@ public class BookingServiceSummaryActivity extends BasicActivity {
         orderLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
 
+                /*if (NYHelper.isStringNotEmpty(cartToken)){
+                    Toast.makeText(BookingServiceSummaryActivity.this, cartToken, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BookingServiceSummaryActivity.this, "cartToken null", Toast.LENGTH_SHORT).show();
+                }*/
+
+                NYDoDiveServiceOrderRequest req = null;
+                try {
+                    req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartToken, contact.toString(), participantList.toString());
+                    spcMgr.execute(req, onCreateOrderServiceRequest());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
     private void initData() {
 
-        Bundle extras = getIntent().getExtras();
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+
         if (extras != null) {
 
             //NYLog.e("CEK INI 2 :"+extras.get(NYHelper.SERVICE));
+
+            if (intent.hasExtra(NYHelper.CART_TOKEN)){
+                cartToken = extras.getString(NYHelper.CART_TOKEN);
+            }
 
             if (extras.get(NYHelper.SERVICE) != null){
 
@@ -184,6 +218,9 @@ public class BookingServiceSummaryActivity extends BasicActivity {
         contactEmailTextView = (TextView) findViewById(R.id.contact_email_textView);
         orderLinearLayout = (LinearLayout) findViewById(R.id.order_linearLayout);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.loading));
     }
 
     private void initParticipantLayout() {
@@ -226,8 +263,38 @@ public class BookingServiceSummaryActivity extends BasicActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
+
+    private RequestListener<Boolean> onCreateOrderServiceRequest() {
+        return new RequestListener<Boolean>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(Boolean result) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+
+
+                NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Your order was successful", false,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        });
+            }
+        };
+    }
+
 
 
     @Override
@@ -257,11 +324,6 @@ public class BookingServiceSummaryActivity extends BasicActivity {
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
     }
@@ -271,5 +333,16 @@ public class BookingServiceSummaryActivity extends BasicActivity {
         super.onStop();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        spcMgr.start(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
 
 }

@@ -31,7 +31,6 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
     private int position;
     private List<Participant> participants;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

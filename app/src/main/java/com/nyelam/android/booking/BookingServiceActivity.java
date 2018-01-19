@@ -36,7 +36,7 @@ public class BookingServiceActivity extends BasicActivity {
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
 
     private DiveService diveService;
-    private int diver = 3;
+    private int diver = 0;
     private List<Participant> participantList = new ArrayList<>();
     private Contact contact;
     private String cartToken;
@@ -68,22 +68,53 @@ public class BookingServiceActivity extends BasicActivity {
         nextLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookingServiceActivity.this, BookingServiceSummaryActivity.class);
-                intent.putExtra(NYHelper.SERVICE, diveService.toString());
-                intent.putExtra(NYHelper.CART_TOKEN, cartToken);
-                intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
-                intent.putExtra(NYHelper.CONTACT, contact.toString());
-                startActivity(intent);
+
+                boolean isFill = true;
+
+                if (contact != null){
+                    if (!NYHelper.isStringNotEmpty(contact.getName())){
+                        isFill = false;
+                    } else if (isFill && !NYHelper.isStringNotEmpty(contact.getPhoneNumber())){
+                        isFill = false;
+                    } else if (isFill && !NYHelper.isStringNotEmpty(contact.getEmail())){
+                        isFill = false;
+                    } else if (isFill){
+                        for (Participant p : participantList){
+                            if (p == null || !NYHelper.isStringNotEmpty(p.getName())){
+                                isFill = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (isFill){
+                    Intent intent = new Intent(BookingServiceActivity.this, BookingServiceSummaryActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
+                    intent.putExtra(NYHelper.CONTACT, contact.toString());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(BookingServiceActivity.this, "Fill empty field to order", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
 
     private void initData() {
 
-        Bundle extras = getIntent().getExtras();
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
         if (extras != null) {
 
             //NYLog.e("CEK INI 2 :"+extras.get(NYHelper.SERVICE));
+
+            if (intent.hasExtra(NYHelper.CART_TOKEN)){
+                cartToken = extras.getString(NYHelper.CART_TOKEN);
+            }
+
 
             if (extras.get(NYHelper.SERVICE) != null){
 
@@ -95,6 +126,7 @@ public class BookingServiceActivity extends BasicActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
 
 
                 if (diveService != null){
@@ -119,6 +151,10 @@ public class BookingServiceActivity extends BasicActivity {
                     }
                 }
 
+            }
+
+            if (intent.hasExtra(NYHelper.DIVER)){
+                diver = intent.getIntExtra(NYHelper.DIVER, 0);
             }
 
 
@@ -236,7 +272,7 @@ public class BookingServiceActivity extends BasicActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(BookingServiceActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(BookingServiceActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceParticipantActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
