@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    tools:context="com.nyelam.android.detail.DiveSpotPickerFragment">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:background="@color/colorGradationLeft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="Choose Dive Spot"
+                android:textColor="@color/colorWhite"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@+id/choose_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+    </ListView>
+    <Button
+        android:id="@+id/choose_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:background="@color/ny_orange"/>
+</RelativeLayout>

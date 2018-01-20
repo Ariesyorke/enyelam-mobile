@@ -43,9 +43,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
         List<CountryCode> products = NYHelper.generateList(rawProducts, CountryCode.class);
         if (products != null && products.size() > 0){
-            NYLog.e("tes isi DAO Cart : "+products.toString());
-//            countCartTextView.setText(String.valueOf(products.size()));
-//            countCartTextView.setVisibility(View.VISIBLE);
+
 
         } else {
             //countCartTextView.setVisibility(View.GONE);
@@ -56,7 +54,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                 new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(StarterActivity.this, AuthActivity.class));
+                        startActivity(new Intent(StarterActivity.this, HomeActivity.class));
                         finish();
                     }
                 }, SPLASH_TIME);
@@ -82,7 +80,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
             @Override
             public void onDataLoaded(List<CountryCode> items) {
-                Intent intent = new Intent(StarterActivity.this, AuthActivity.class);
+                Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 finish();
@@ -108,13 +106,9 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
     @Override
     public void onDataLoaded(List<CountryCode> items) {
-        NYApplication application = (NYApplication) getApplication();
-        //application.setGooLocation(items.get(0));
-        Intent intent = new Intent(this, AuthActivity.class);
-        //intent.putExtra(MainActivity.ARG_ADDRESS, items.get(0).toString());
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
-        //overridePendingTransition(R.anim.slide_in_bottom, android.R.anim.fade_out);
         finish();
     }
 

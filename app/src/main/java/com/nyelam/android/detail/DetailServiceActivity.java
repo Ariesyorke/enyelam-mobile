@@ -1,7 +1,9 @@
 package com.nyelam.android.detail;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +62,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         DetailServiceFragment.OnFragmentInteractionListener,
         DetailServiceDiveSpotsFragment.OnFragmentInteractionListener,
         DetailServiceDiveCenterFragment.OnFragmentInteractionListener,
-        DetailServiceReviewFragment.OnFragmentInteractionListener{
+        DetailServiceReviewFragment.OnFragmentInteractionListener,
+        DiveSpotPickerFragment.OnFragmentInteractionListener{
 
     private List<DetailServiceActivity.Frags> tags = Arrays.asList(new DetailServiceActivity.Frags(0,"home"), new DetailServiceActivity.Frags(1,"timeline"), new DetailServiceActivity.Frags(2,"interest"), new DetailServiceActivity.Frags(3,"tags"), new DetailServiceActivity.Frags(4,"more"));
     //private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
@@ -80,12 +84,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
     private String serviceId;
     protected DiveService diveService, newDiveService;
     //protected DiveSpot diveSpot;
-    protected String diveSpotId;
     protected int diver;
     protected String schedule;
     private TextView nameTextView, ratingTextView, bookingTextView;
     private ProgressDialog progressDialog;
     //private View viewTabManager;
+    private boolean triggerBook;
+    private String diveSpotId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +104,20 @@ public class DetailServiceActivity extends AppCompatActivity implements
         initControl();
     }
 
+    public DiveService getDiveService() {
+        return newDiveService;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NYHelper.LOGIN_REQ) {
+            if (resultCode == RESULT_OK) {
+                triggerBook = true;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void initControl() {
         bookingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,30 +127,29 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 LoginStorage storage = new LoginStorage(getApplicationContext());
 
                 if (storage.isUserLogin()){
-
-                    progressDialog.show();
-
-                    if (!NYHelper.isStringNotEmpty(diveSpotId))diveSpotId = newDiveService.getDiveSpots().get(0).getId();
-
-                    NYDoDiveServiceCartRequest req = null;
-                    try {
-                        req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diveSpotId, String.valueOf(diver), "1", schedule);
-                        spcMgr.execute(req, onCreateCartServiceRequest());
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if(!TextUtils.isEmpty(diveSpotId)) {
+                        doBook();
+                    } else {
+                        openDiveSpotPickerDialog();
                     }
 
                 } else {
                     Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
-                    intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
-                    startActivity(intent);
+                    startActivityForResult(intent, NYHelper.LOGIN_REQ);
                 }
-
-                //NYLog.e("CEK INI 1 :"+newDiveService.toString());
-
-
             }
         });
+    }
+
+    private void doBook() {
+        progressDialog.show();
+        NYDoDiveServiceCartRequest req = null;
+        try {
+            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diveSpotId, String.valueOf(diver), "1", schedule);
+            spcMgr.execute(req, onCreateCartServiceRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initExtra() {
@@ -139,9 +157,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            /*if(!extras.getString(NYHelper.ID_SERVICE).equals(null)){
-                serviceId = extras.getString(NYHelper.ID_SERVICE);
-            }*/
 
             if(!extras.get(NYHelper.DIVER).equals(null)){
                 diver = Integer.valueOf(extras.getString(NYHelper.DIVER));
@@ -153,7 +168,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
             if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && !extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
-                //Toast.makeText(this, "dive spot ID : "+diveSpotId, Toast.LENGTH_SHORT).show();
             }
 
             if(!extras.getString(NYHelper.SERVICE).equals(null)){
@@ -200,6 +214,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
                 if (diveService == null) diveService = new DiveService();
                 newDiveService = results;
+                List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
+                if(diveSpots != null && !diveSpots.isEmpty() && diveSpots.size() == 1) {
+                    diveSpotId = newDiveService.getDiveSpots().get(0).getId();
+                }
 
                 fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
                 if (fragment != null && fragment instanceof DetailServiceFragment){
@@ -240,8 +258,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     progressDialog.dismiss();
                 }
 
-
-                NYLog.e("CEK INI LAGI : "+newDiveService.toString());
                 Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
                 intent.putExtra(NYHelper.CART_TOKEN, cartReturn.getCartToken());
                 intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
@@ -295,6 +311,17 @@ public class DetailServiceActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onDiveSpotChoosen(String diveSpotId) {
+        this.diveSpotId = diveSpotId;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doBook();
+            }
+        },500);
     }
 
 
@@ -520,6 +547,14 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         spcMgr.start(this);
+        if(triggerBook) {
+            triggerBook = false;
+            if(!TextUtils.isEmpty(diveSpotId)) {
+                doBook();
+            } else {
+                openDiveSpotPickerDialog();
+            }
+        }
     }
 
     @Override
@@ -528,4 +563,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
+    public void openDiveSpotPickerDialog() {
+        List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
+        if (diveSpots == null || diveSpots.isEmpty()) {
+            NYHelper.handleErrorMessage(this, "Dive Spot is empty");
+            return;
+        }
+        DiveSpotPickerFragment fragment = DiveSpotPickerFragment.newInstance();
+        fragment.show(getSupportFragmentManager().beginTransaction(), fragment.getTag());
+    }
 }

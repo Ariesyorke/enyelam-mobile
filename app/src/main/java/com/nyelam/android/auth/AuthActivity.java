@@ -42,12 +42,13 @@ public class AuthActivity extends BasicActivity implements
     public void isLoginSuccess(boolean success) {
         if(progressDialog != null) progressDialog.dismiss();
         if (success) {
-            //setResult(Activity.RESULT_OK);
-            //startService(new Intent(this, GKFirebaseInstanceIdService.class));
-            Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            setResult(RESULT_OK);
             finish();
+//            //startService(new Intent(this, GKFirebaseInstanceIdService.class));
+//            Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
+//            finish();
         }
     }
 }

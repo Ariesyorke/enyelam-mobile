@@ -24,9 +24,6 @@ public class LoginStorage extends com.danzoye.lib.util.AbstractStorage {
     public String nyelamToken;
 
     public boolean isUserLogin() {
-        NYLog.d("check is user login?");
-        NYLog.d("user = " + user);
-        NYLog.d("gmt token = " + nyelamToken);
         return user != null && !TextUtils.isEmpty(user.getUserId()) &&
                 !TextUtils.isEmpty(nyelamToken);
     }
@@ -42,7 +39,6 @@ public class LoginStorage extends com.danzoye.lib.util.AbstractStorage {
 
     @Override
     protected void onParseData(JSONObject obj) throws JSONException {
-        NYLog.d(" on load login storage = " + obj.toString());
 
         if (!obj.isNull(KEY_USER)) {
             JSONObject cObj = obj.getJSONObject(KEY_USER);

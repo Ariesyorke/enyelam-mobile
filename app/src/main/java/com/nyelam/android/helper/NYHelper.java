@@ -48,6 +48,7 @@ public class NYHelper {
     public static final String DIVER = "diver";
     public static final String SCHEDULE = "schedule";
     public static final String DIVE_SPOT = "dive_spot";
+    public static final String DIVE_SPOTS = "dive_spots";
     public static final String DATE = "date";
     public static final String TYPE = "type";
     public static final String CERTIFICATE = "certificate";
@@ -57,7 +58,7 @@ public class NYHelper {
     public static final String POSITION = "position";
     public static final String IS_NOT_NEW = "is_not_new";
     public static final String DIVE_SPOT_ID = "dive_spot_id";
-
+    public static final int LOGIN_REQ = 101;
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));

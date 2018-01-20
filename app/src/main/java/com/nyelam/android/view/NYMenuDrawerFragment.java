@@ -80,11 +80,10 @@ public class NYMenuDrawerFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                //mListener.onIntentVideos();
                 Activity activity = getActivity();
                 LoginStorage storage = new LoginStorage(activity);
                 storage.clear();
-                Intent intent = new Intent(activity, AuthActivity.class);
+                Intent intent = new Intent(activity, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
