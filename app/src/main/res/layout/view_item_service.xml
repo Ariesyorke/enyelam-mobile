@@ -7,7 +7,8 @@
     card_view:cardElevation="4dp"
     card_view:cardMaxElevation="4dp"
     app:cardCornerRadius="3dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:ignore="NamespaceTypo">
 
     <LinearLayout
         android:orientation="horizontal" android:layout_width="match_parent"
