@@ -14,11 +14,11 @@ import com.nyelam.android.storage.LoginStorage;
 
 public class AuthActivity extends BasicActivity implements
     LoginFragment.OnFragmentInteractionListener,
-    RegisterFragment.OnFragmentInteractionListener {
+    RegisterFragment.OnFragmentInteractionListener,
+    ForgotPasswordFragment.OnFragmentInteractionListener{
 
     public static final String REQ_INVALID_TOKEN = "invalid_token";
     private ProgressDialog progressDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

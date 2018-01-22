@@ -2,14 +2,305 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.nyelam.android.home.SocmedFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_gravity="center"
-        android:gravity="center"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Sorry, page not available" />
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.v7.widget.CardView
+                android:layout_margin="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/example_pic"
+                        android:scaleType="centerCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp" />
+                    <ImageView
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="@dimen/padding"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp" />
+                    <ImageView
+                        android:src="@drawable/ic_camera"
+                        android:padding="@dimen/padding_half"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:text="Nyelam Pay"
+                android:textSize="14sp"
+                android:textColor="@color/ny_black1"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.CardView
+                android:background="@color/colorWhite"
+                android:layout_margin="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:id="@+id/edit_profile_relativeLayout"
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ic_edit_profile"
+                            android:src="@drawable/ny_circle_blue"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/ic_edit_profile"
+                            android:text="Edit Profile"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black1"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+                    </RelativeLayout>
+                    <View
+                        android:background="@color/ny_grey1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <RelativeLayout
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ic_logout"
+                            android:src="@drawable/ny_circle_blue"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/ic_logout"
+                            android:text="Log out"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black1"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+                    </RelativeLayout>
+                    <View
+                        android:background="@color/ny_grey1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+
+
+
+            <TextView
+                android:text="Nyelam Features"
+                android:textSize="14sp"
+                android:textColor="@color/ny_black1"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.CardView
+                android:background="@color/colorWhite"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginBottom="@dimen/padding_double"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ic_help"
+                            android:src="@drawable/ny_circle_blue"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/ic_help"
+                            android:text="Help Center"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black1"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+                    </RelativeLayout>
+                    <View
+                        android:background="@color/ny_grey1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <RelativeLayout
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ic_my_refund"
+                            android:src="@drawable/ny_circle_grey"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/ic_my_refund"
+                            android:text="My Refund"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_grey2"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+                    </RelativeLayout>
+                    <View
+                        android:background="@color/ny_grey1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <RelativeLayout
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ic_price"
+                            android:src="@drawable/ny_circle_grey"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/ic_price"
+                            android:text="Price Alerts"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_grey2"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+                    </RelativeLayout>
+                    <View
+                        android:background="@color/ny_grey1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <RelativeLayout
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ic_newsletter"
+                            android:src="@drawable/ny_circle_grey"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/ic_newsletter"
+                            android:text="Newsletter &amp; Promo Info"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_grey2"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+                    </RelativeLayout>
+                    <View
+                        android:background="@color/ny_grey1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <RelativeLayout
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ic_notification"
+                            android:src="@drawable/ny_circle_grey"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/ic_notification"
+                            android:text="Push Notification"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_grey2"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+                    </RelativeLayout>
+                    <View
+                        android:background="@color/ny_grey1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

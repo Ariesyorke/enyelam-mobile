@@ -103,7 +103,10 @@ public class LoginFragment extends Fragment {
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, ForgotPasswordFragment.newInstance());
+                transaction.addToBackStack(LoginFragment.class.getName());
+                transaction.commit();
             }
         });
     }

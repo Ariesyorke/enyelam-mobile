@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.storage.LoginStorage;
 
 
 /**
@@ -64,16 +65,12 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
 
         if (tabItemPosition == 0 ){
             imageView.setImageResource(R.drawable.tab_home);
-            //textView.setTextColor(ContextCompat.getColor(getContext(), R.color.navigation_text_color));
         } else if (tabItemPosition == 1 ){
             imageView.setImageResource(R.drawable.tab_social);
-            //textView.setTextColor(ContextCompat.getColor(getContext(), R.color.navigation_text_color));
         } else if (tabItemPosition == 2 ){
             imageView.setImageResource(R.drawable.tab_cart);
-            //textView.setTextColor(ContextCompat.getColor(getContext(), R.color.navigation_text_color));
         } else {
             imageView.setImageResource(R.drawable.tab_user);
-            //textView.setTextColor(ContextCompat.getColor(getContext(), R.color.navigation_text_color));
         }
 
     }

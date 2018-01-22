@@ -1,5 +1,6 @@
 package com.nyelam.android.home;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,16 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
 import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
+import com.nyelam.android.detail.DetailServiceActivity;
+import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageTabItemView;
 import com.nyelam.android.view.NYMenuDrawerFragment;
@@ -48,7 +55,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     private Toolbar toolbar, statusToolbar;
     private NYMenuDrawerFragment menuDrawerFragment;
     private DrawerLayout drawerLayout;
-    public View loadingView;
+    private View loadingView;
     private LinearLayout tabManager;
     private NYCustomViewPager viewPager;
     private int checkedId = -1;
@@ -86,8 +93,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
     }
 
-
-
     public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
         private static final int FRAGMENT_COUNT = 4;
         private Map<Integer, String> fragmentTags;
@@ -116,6 +121,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
         @Override
         public Fragment getItem(int position) {
+
             if (position == 0) {
                 HomeFragment fragment = HomeFragment.newInstance();
                 return fragment;
@@ -147,13 +153,18 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
 
     public void movePagerToTabItemPosition(int tabItemPosition) {
-
-        mProtectFromPagerChange = true;
-        if (tabItemPosition > -1) {
-            viewPager.setCurrentItem(tabItemPosition, true);
-            title.setText(tabMenu[tabItemPosition]);
+        LoginStorage loginStorage = new LoginStorage(getApplicationContext());
+        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 | tabItemPosition == 3)){
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivity(intent);
+        } else {
+            mProtectFromPagerChange = true;
+            if (tabItemPosition > -1) {
+                viewPager.setCurrentItem(tabItemPosition, true);
+                title.setText(tabMenu[tabItemPosition]);
+            }
+            mProtectFromPagerChange = false;
         }
-        mProtectFromPagerChange = false;
     }
 
     public int onCheckedChanged(NYHomepageTabItemView view, boolean checked) {
@@ -169,6 +180,10 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             View child = tabManager.getChildAt(i);
             if (child instanceof NYHomepageTabItemView) {
                 if (child == view) {
+
+                    LoginStorage storage = new LoginStorage(this);
+                    if (!storage.isUserLogin() && (i==1||i==3)) checked=false;
+
                     setCheckedStateForTab(child.getId(), checked);
                     checkedTabItemPosition = ((NYHomepageTabItemView) child).getTabItemPosition();
                 } else {
@@ -186,6 +201,8 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     }
 
     private void setCheckedStateForTab(int id, boolean checked) {
+
+        // TODO: state drawable
         View checkedView = tabManager.findViewById(id);
         if (checkedView != null && checkedView instanceof Checkable) {
             ((Checkable) checkedView).setChecked(checked);
@@ -282,7 +299,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         //NavDrawer
         setSupportActionBar(toolbar);
 
-
         viewPager.setPagingEnabled(false);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(new NYFragmentPagerAdapter(getSupportFragmentManager()));
@@ -308,6 +324,9 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             @Override
             public void onPageSelected(int position) {
                 //KTLog.e("CEK 3");
+
+                //Toast.makeText(HomeActivity.this, "hallo", Toast.LENGTH_SHORT).show();
+
                 fragses.add(tags.get(position));
 
                 if (mProtectFromPagerChange) {
@@ -339,7 +358,23 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     @Override
     public void onHome() {
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setCheckedStateForTab(getLastKey(), true);
+        //setCheckedId(getLastKey());
     }
 
 }
