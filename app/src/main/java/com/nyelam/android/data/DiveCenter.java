@@ -2,8 +2,6 @@ package com.nyelam.android.data;
 
 import android.text.TextUtils;
 
-import com.nyelam.android.dev.NYLog;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,26 +17,23 @@ public class DiveCenter implements Parseable {
 
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
-    private static String KEY_PHONE = "phone";
+    private static String KEY_SUBTITLE = "subtitle";
+    private static String KEY_IMAGE_LOGO = "image_logo";
     private static String KEY_IMAGES = "picture";
-    private static String KEY_CONTACT_NAME = "contact_name";
-    private static String KEY_CONTACT_PHONE = "contact_phone";
-    private static String KEY_CONTACT_EMAIL = "contact_email";
-    private static String KEY_LOCATION = "location";
     private static String KEY_RATING = "rating";
-    private static String KEY_STATUS_ACTIVE = "status_active";
+    private static String KEY_CONTACT = "contact";
+    private static String KEY_MEMBERSHIP = "membership";
+    private static String KEY_STATUS = "status";
 
     private String id;
     private String name;
-    private String phone;
+    private String subtitle;
+    private String imageLogo;
     private List<String> images;
-    private String contactName;
-    private String contactPhone;
-    private String contactEmail;
-    private Location location;
     private int rating;
-    private int statusActive;
-
+    private Contact contact;
+    private Membership membership;
+    private int status;
 
     public String getId() {
         return id;
@@ -56,12 +51,20 @@ public class DiveCenter implements Parseable {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getSubtitle() {
+        return subtitle;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public String getImageLogo() {
+        return imageLogo;
+    }
+
+    public void setImageLogo(String imageLogo) {
+        this.imageLogo = imageLogo;
     }
 
     public List<String> getImages() {
@@ -72,38 +75,6 @@ public class DiveCenter implements Parseable {
         this.images = images;
     }
 
-    public String getContactName() {
-        return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
-    public String getContactPhone() {
-        return contactPhone;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public int getRating() {
         return rating;
     }
@@ -112,12 +83,28 @@ public class DiveCenter implements Parseable {
         this.rating = rating;
     }
 
-    public int getStatusActive() {
-        return statusActive;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setStatusActive(int statusActive) {
-        this.statusActive = statusActive;
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public Membership getMembership() {
+        return membership;
+    }
+
+    public void setMembership(Membership membership) {
+        this.membership = membership;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override
@@ -137,8 +124,14 @@ public class DiveCenter implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_PHONE)) {
-                setPhone(obj.getString(KEY_PHONE));
+            if (!obj.isNull(KEY_SUBTITLE)) {
+                setSubtitle(obj.getString(KEY_SUBTITLE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_IMAGE_LOGO)) {
+                setImageLogo(obj.getString(KEY_IMAGE_LOGO));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -182,30 +175,24 @@ public class DiveCenter implements Parseable {
             }
         }
 
-        try {
-            if (!obj.isNull(KEY_CONTACT_NAME)) {
-                setContactName(obj.getString(KEY_CONTACT_NAME));
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!obj.isNull(KEY_CONTACT_PHONE)) {
-                setContactPhone(obj.getString(KEY_CONTACT_PHONE));
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!obj.isNull(KEY_CONTACT_EMAIL)) {
-                setContactEmail(obj.getString(KEY_CONTACT_EMAIL));
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        if(!obj.isNull(KEY_LOCATION)) {
+        if(!obj.isNull(KEY_CONTACT)) {
             try {
-                JSONObject o = obj.getJSONObject(KEY_LOCATION);
+                JSONObject o = obj.getJSONObject(KEY_CONTACT);
                 if(o != null && o.length() > 0) {
-                    location = new Location();
-                    location.parse(o);
+                    contact = new Contact();
+                    contact.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(!obj.isNull(KEY_MEMBERSHIP)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_MEMBERSHIP);
+                if(o != null && o.length() > 0) {
+                    membership = new Membership();
+                    membership.parse(o);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -219,8 +206,8 @@ public class DiveCenter implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_STATUS_ACTIVE)) {
-                setStatusActive(obj.getInt(KEY_STATUS_ACTIVE));
+            if (!obj.isNull(KEY_STATUS)) {
+                setStatus(obj.getInt(KEY_STATUS));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -249,46 +236,20 @@ public class DiveCenter implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!TextUtils.isEmpty(getPhone())) {
-                obj.put(KEY_PHONE, getPhone());
+            if (!TextUtils.isEmpty(getSubtitle())) {
+                obj.put(KEY_SUBTITLE, getSubtitle());
             } else {
-                obj.put(KEY_PHONE, JSONObject.NULL);
+                obj.put(KEY_SUBTITLE, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!TextUtils.isEmpty(getContactName())) {
-                obj.put(KEY_CONTACT_NAME, getContactName());
+            if (!TextUtils.isEmpty(getImageLogo())) {
+                obj.put(KEY_IMAGE_LOGO, getImageLogo());
             } else {
-                obj.put(KEY_CONTACT_NAME, JSONObject.NULL);
+                obj.put(KEY_IMAGE_LOGO, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!TextUtils.isEmpty(getContactPhone())) {
-                obj.put(KEY_CONTACT_PHONE, getContactPhone());
-            } else {
-                obj.put(KEY_CONTACT_PHONE, JSONObject.NULL);
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!TextUtils.isEmpty(getContactEmail())) {
-                obj.put(KEY_CONTACT_EMAIL, getContactEmail());
-            } else {
-                obj.put(KEY_CONTACT_EMAIL, JSONObject.NULL);
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try{
-            if(getLocation()!=null){
-                obj.put(KEY_LOCATION, getLocation());
-            } else {
-                obj.put(KEY_LOCATION, JSONObject.NULL);
-            }
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
 
         if(images != null && !images.isEmpty()) {
             try {
@@ -302,6 +263,25 @@ public class DiveCenter implements Parseable {
             }
         }
 
+        try{
+            if(getContact()!=null){
+                obj.put(KEY_CONTACT, getContact());
+            } else {
+                obj.put(KEY_CONTACT, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getMembership()!=null){
+                obj.put(KEY_MEMBERSHIP, getMembership());
+            } else {
+                obj.put(KEY_MEMBERSHIP, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
         try {
             obj.put(KEY_RATING, rating);
         } catch (JSONException e) {
@@ -309,7 +289,7 @@ public class DiveCenter implements Parseable {
         }
 
         try {
-            obj.put(KEY_STATUS_ACTIVE, statusActive);
+            obj.put(KEY_STATUS, status);
         } catch (JSONException e) {
             e.printStackTrace();
         }

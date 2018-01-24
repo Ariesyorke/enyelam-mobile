@@ -107,7 +107,7 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        serviceAdapter = new DoDiveSearchServiceAdapter(this);
+        serviceAdapter = new DoDiveSearchServiceAdapter(this, diver, date);
         recyclerView.setAdapter(serviceAdapter);
     }
 

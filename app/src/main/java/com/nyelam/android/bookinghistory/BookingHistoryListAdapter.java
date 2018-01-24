@@ -125,51 +125,50 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
                 if (diveService != null){
                     if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
 
-                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getLocation().getCountry())) {
+                    // TODO: location from where ?
+                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getContact().getLocation().getCountry())) {
                         Location loc = new Location();
-                        loc = diveService.getDiveCenter().getLocation();
-                        //String locationString = "";
-                        //if (loc.getCity() != null && NYHelper.isStringNotEmpty(loc.getCity().getName())) locationString+="";
+                        loc = diveService.getDiveCenter().getContact().getLocation();
                         locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
+                    } else{
+                        locationTextView.setText("");
                     }
+                }
 
-                    //SET IMAGE
-                    ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
-                    if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                        ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
+                //SET IMAGE
+                ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+                if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
+                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                serviceImageView.setImageResource(R.mipmap.ic_launcher);
-                            }
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                        }
 
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                serviceImageView.setImageBitmap(loadedImage);
-                                //activity.getCache().put(imageUri, loadedImage);
-                            }
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            serviceImageView.setImageBitmap(loadedImage);
+                            //activity.getCache().put(imageUri, loadedImage);
+                        }
 
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-                                serviceImageView.setImageResource(R.mipmap.ic_launcher);
-                            }
-                        });
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+                            serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                        }
+                    });
 
-                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
 
-                    } else {
-                        serviceImageView.setImageResource(R.mipmap.ic_launcher);
-                    }
-
+                } else {
+                    serviceImageView.setImageResource(R.mipmap.ic_launcher);
                 }
 
             }
 
-            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -178,6 +177,8 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
             intent.putExtra(NYHelper.SERVICE, summary.toString());
             context.startActivity(intent);
         }
+
+        //itemView.setOnClickListener(this);
     }
 
 }

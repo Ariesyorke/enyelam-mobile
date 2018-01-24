@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
-import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONException;
@@ -17,7 +16,7 @@ import org.json.JSONObject;
 
 public class BookingServiceContactActivity extends AppCompatActivity {
 
-    private Contact contact;
+    private BookingContact bookingContact;
     private Bundle extras;
     private TextView saveTextView;
     private TextInputEditText nameEditText, phoneEditText, emailEditText;
@@ -51,11 +50,11 @@ public class BookingServiceContactActivity extends AppCompatActivity {
                 } else {
 
                     name = NYHelper.capitalizeString(name);
-                    contact.setName(name);
-                    contact.setPhoneNumber(phone);
-                    contact.setEmail(email);
+                    bookingContact.setName(name);
+                    bookingContact.setPhoneNumber(phone);
+                    bookingContact.setEmail(email);
 
-                    extras.putString(NYHelper.CONTACT, contact.toString());
+                    extras.putString(NYHelper.CONTACT, bookingContact.toString());
                     extras.putBoolean(NYHelper.IS_NOT_NEW, true);
 
                     Intent intent = new Intent(BookingServiceContactActivity.this, BookingServiceActivity.class);
@@ -82,13 +81,13 @@ public class BookingServiceContactActivity extends AppCompatActivity {
 
             try {
                 JSONObject obj = new JSONObject(extras.getString(NYHelper.CONTACT));
-                contact = new Contact();
-                contact.parse(obj);
+                bookingContact = new BookingContact();
+                bookingContact.parse(obj);
 
-                if (contact != null){
-                    if (NYHelper.isStringNotEmpty(contact.getName())) nameEditText.setText(contact.getName());
-                    if (NYHelper.isStringNotEmpty(contact.getPhoneNumber())) phoneEditText.setText(contact.getPhoneNumber());
-                    if (NYHelper.isStringNotEmpty(contact.getEmail())) emailEditText.setText(contact.getEmail());
+                if (bookingContact != null){
+                    if (NYHelper.isStringNotEmpty(bookingContact.getName())) nameEditText.setText(bookingContact.getName());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())) phoneEditText.setText(bookingContact.getPhoneNumber());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getEmail())) emailEditText.setText(bookingContact.getEmail());
                 }
 
             } catch (JSONException e) {

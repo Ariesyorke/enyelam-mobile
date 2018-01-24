@@ -24,7 +24,12 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.StrikethroughTextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
@@ -34,9 +39,13 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private Activity activity;
     private List<DiveService> searchResults;
+    private String diver;
+    private String date;
 
-    public DoDiveSearchServiceAdapter(Activity activity) {
+    public DoDiveSearchServiceAdapter(Activity activity, String diver,String date) {
         this.activity = activity;
+        this.diver = diver;
+        this.date = date;
     }
 
     @Override
@@ -79,7 +88,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         if (this.searchResults == null) {
             this.searchResults = new ArrayList<>();
         }
-        this.searchResults.addAll(searchResults);
+        removeTheDuplicates(searchResults);
     }
 
     public void clear() {
@@ -165,15 +174,40 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onClick(View v) {
             Intent intent = new Intent(activity, DetailServiceActivity.class);
             intent.putExtra(NYHelper.SERVICE, diveService.toString());
-            intent.putExtra(NYHelper.DIVER, ((DoDiveSearchResultActivity)activity).diver);
+            intent.putExtra(NYHelper.DIVER, diver);
+            intent.putExtra(NYHelper.SCHEDULE, date);
+
+            /*intent.putExtra(NYHelper.DIVER, ((DoDiveSearchResultActivity)activity).diver);
             intent.putExtra(NYHelper.SCHEDULE, ((DoDiveSearchResultActivity)activity).date);
 
             if (((DoDiveSearchResultActivity)activity).type.equals("1")){
                 intent.putExtra(NYHelper.DIVE_SPOT_ID, ((DoDiveSearchResultActivity)activity).diverId);
-            }
+            }*/
 
             activity.startActivity(intent);
         }
+    }
+
+
+    private void removeTheDuplicates(List<DiveService> newDiveServiceList) {
+
+        List<DiveService> temp = new ArrayList<>();
+
+        for (DiveService newDs : newDiveServiceList){
+            boolean isExist = false;
+            for (DiveService ds : searchResults){
+                if (ds.getId().equals(newDs.getId())){
+                    isExist = true;
+                    break;
+                }
+            }
+
+            if (!isExist) temp.add(newDs);
+            isExist = false;
+        }
+
+        searchResults.addAll(temp);
+
     }
 
 }

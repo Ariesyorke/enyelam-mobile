@@ -1,5 +1,6 @@
 package com.nyelam.android.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -13,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.detail.DetailServiceActivity;
+import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.home.HomeActivity;
 
 /**
@@ -25,7 +28,8 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
             android.R.attr.state_checked,
     };
 
-    private DetailServiceActivity detailServiceActivity;
+    //private DetailServiceActivity detailServiceActivity;
+    private Activity activity;
     private boolean checked;
     private int tabItemPosition = -1;
     private TextView textView;
@@ -62,10 +66,16 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
         this.checked = checked;
         refreshDrawableState();
 
-        if (detailServiceActivity != null) {
-            int checkedTabItemPos = detailServiceActivity.onCheckedChanged(this, this.checked);
-            if (checkedTabItemPos > -1)
-                detailServiceActivity.movePagerToTabItemPosition(checkedTabItemPos);
+        if (activity != null) {
+            if (activity instanceof DetailServiceActivity){
+                int checkedTabItemPos = ((DetailServiceActivity)activity).onCheckedChanged(this, this.checked);
+                if (checkedTabItemPos > -1)
+                    ((DetailServiceActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
+            } else if (activity instanceof DiveCenterDetailActivity){
+                int checkedTabItemPos = ((DiveCenterDetailActivity)activity).onCheckedChanged(this, this.checked);
+                if (checkedTabItemPos > -1)
+                    ((DiveCenterDetailActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
+            }
         }
 
         if (tabItemPosition == 0 ){
@@ -122,8 +132,8 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
         return tabItemPosition;
     }
 
-    public void setDetailServiceActivity(DetailServiceActivity detailServiceActivity) {
-        this.detailServiceActivity = detailServiceActivity;
+    public void setDetailServiceActivity(Activity activity) {
+        this.activity = activity;
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttrs) {
@@ -163,15 +173,18 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
             }
         }
 
-
         textView.setText(text);
         imageView.setImageDrawable(icon);
         refreshDrawableState();
 
-        if (detailServiceActivity != null) {
-            int checkedTabItemPos = detailServiceActivity.onCheckedChanged(this, this.checked);
+        if (activity != null && activity instanceof DetailServiceActivity) {
+            int checkedTabItemPos = ((DetailServiceActivity)activity).onCheckedChanged(this, this.checked);
             if (checkedTabItemPos > -1)
-                detailServiceActivity.movePagerToTabItemPosition(checkedTabItemPos);
+                ((DetailServiceActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
+        } else if (activity != null && activity instanceof DiveCenterDetailActivity) {
+            int checkedTabItemPos = ((DiveCenterDetailActivity)activity).onCheckedChanged(this, this.checked);
+            if (checkedTabItemPos > -1)
+                ((DiveCenterDetailActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
         }
 
         textView.setText(text);

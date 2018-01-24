@@ -1,7 +1,6 @@
-package com.nyelam.android.detail;
+package com.nyelam.android.divecenter;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -20,9 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
@@ -31,19 +28,20 @@ import com.nyelam.android.booking.BookingServiceActivity;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.CartReturn;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.detail.DetailServiceDiveCenterFragment;
+import com.nyelam.android.detail.DetailServiceDiveSpotsFragment;
+import com.nyelam.android.detail.DetailServiceFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
+import com.nyelam.android.http.NYDiveCenterDetailRequest;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
-import com.nyelam.android.http.NYDoDiveServiceCartRequest;
-import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -58,14 +56,12 @@ import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator;
 
-public class DetailServiceActivity extends AppCompatActivity implements
-        DetailServiceFragment.OnFragmentInteractionListener,
-        DetailServiceDiveSpotsFragment.OnFragmentInteractionListener,
-        DetailServiceDiveCenterFragment.OnFragmentInteractionListener,
-        DetailServiceReviewFragment.OnFragmentInteractionListener,
-        DiveSpotPickerFragment.OnFragmentInteractionListener{
+public class DiveCenterDetailActivity extends AppCompatActivity implements
+        DiveCenterDetailFragment.OnFragmentInteractionListener,
+        DiveCenterMapFragment.OnFragmentInteractionListener,
+        DiveCenterListServiceFragment.OnFragmentInteractionListener {
 
-    private List<DetailServiceActivity.Frags> tags = Arrays.asList(new DetailServiceActivity.Frags(0,"home"), new DetailServiceActivity.Frags(1,"timeline"), new DetailServiceActivity.Frags(2,"interest"), new DetailServiceActivity.Frags(3,"tags"), new DetailServiceActivity.Frags(4,"more"));
+    private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"));
     //private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -83,21 +79,18 @@ public class DetailServiceActivity extends AppCompatActivity implements
     private boolean mProtectFromPagerChange = false;
     private String serviceId;
     protected DiveService diveService, newDiveService;
-    //protected DiveSpot diveSpot;
+    protected DiveCenter diveCenter;
     protected int diver;
     protected String schedule;
     private TextView nameTextView, ratingTextView, bookingTextView;
     private ProgressDialog progressDialog;
-    //private View viewTabManager;
     private boolean triggerBook;
-
-    // TODO: diveSpotID and Type is not used in Cart 
     private String diveSpotId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_service);
+        setContentView(R.layout.activity_dive_center_detail);
         initView();
         initToolbar();
         initExtra();
@@ -121,33 +114,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     private void initControl() {
-        bookingTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-                LoginStorage storage = new LoginStorage(getApplicationContext());
-
-                if (storage.isUserLogin()){
-                    doBook();
-                } else {
-                    Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
-                    startActivityForResult(intent, NYHelper.LOGIN_REQ);
-                }
-            }
-        });
     }
 
-    private void doBook() {
-        progressDialog.show();
-        NYDoDiveServiceCartRequest req = null;
-        try {
-            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), String.valueOf(diver), schedule);
-            spcMgr.execute(req, onCreateCartServiceRequest());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void initExtra() {
 
@@ -190,80 +159,50 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     private void initRequest() {
-        if (diveService != null && !TextUtils.isEmpty(diveService.getId())){
-            NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, diveService.getId());
-            spcMgr.execute(req, onGetDetailServiceRequest());
+        if (diveCenter == null)diveCenter = new DiveCenter();
+        diveCenter.setId("1");
+        if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())){
+            NYDiveCenterDetailRequest req = new NYDiveCenterDetailRequest(this.getClass(), DiveCenterDetailActivity.this, diveCenter.getId());
+            spcMgr.execute(req, onGetDetailDiveCenterRequest());
         }
     }
 
-    private RequestListener<DiveService> onGetDetailServiceRequest() {
-        return new RequestListener<DiveService>() {
+    private RequestListener<DiveCenter> onGetDetailDiveCenterRequest() {
+        return new RequestListener<DiveCenter>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 /*if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }*/
-                NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, null);
+                NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
             }
 
             @Override
-            public void onRequestSuccess(DiveService results) {
-
+            public void onRequestSuccess(DiveCenter results) {
                 if (diveService == null) diveService = new DiveService();
-                newDiveService = results;
-                List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
-                
-                if(diveSpots != null && !diveSpots.isEmpty() && diveSpots.size() == 1) {
-                    diveSpotId = newDiveService.getDiveSpots().get(0).getId();
+                diveCenter = results;
+
+                if (diveCenter != null){
+
+                    if (NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
+                    if (diveCenter.getRating() > 0) ratingTextView.setText(String.valueOf("*"+diveCenter.getRating()));
+
+                    fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
+                    if (fragment != null && fragment instanceof DiveCenterListServiceFragment){
+
+                        ((DiveCenterListServiceFragment) fragment).setContent(diveCenter);
+
+                    } else if (fragment != null && fragment instanceof DiveCenterDetailFragment){
+
+                        ((DiveCenterDetailFragment) fragment).setContent(diveCenter);
+
+                    } else if (fragment != null && fragment instanceof DiveCenterMapFragment){
+
+                        ((DiveCenterMapFragment) fragment).setContent(diveCenter);
+
+                    }
+
                 }
-
-                fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
-                if (fragment != null && fragment instanceof DetailServiceFragment){
-
-                    ((DetailServiceFragment) fragment).setContent(newDiveService);
-
-                } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
-
-                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
-
-                } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
-
-                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
-
-                } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
-                    //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        };
-    }
-
-
-
-    private RequestListener<CartReturn> onCreateCartServiceRequest() {
-        return new RequestListener<CartReturn>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                if (progressDialog != null) {
-                    progressDialog.dismiss();
-                }
-                NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, null);
-            }
-
-            @Override
-            public void onRequestSuccess(CartReturn cartReturn) {
-                if (progressDialog != null) {
-                    progressDialog.dismiss();
-                }
-
-                Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
-                intent.putExtra(NYHelper.CART_TOKEN, cartReturn.getCartToken());
-                intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
-                intent.putExtra(NYHelper.DIVER, diver);
-                startActivity(intent);
-
-
-
 
             }
         };
@@ -311,20 +250,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    public void onDiveSpotChoosen(String diveSpotId) {
-        this.diveSpotId = diveSpotId;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doBook();
-            }
-        },500);
-    }
-
-
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 4;
+        private static final int FRAGMENT_COUNT = 3;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 
@@ -354,16 +281,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                DetailServiceFragment fragment = DetailServiceFragment.newInstance();
+                DiveCenterListServiceFragment fragment = DiveCenterListServiceFragment.newInstance();
                 return fragment;
             } else if (position == 1) {
-                DetailServiceDiveSpotsFragment fragment = DetailServiceDiveSpotsFragment.newInstance();
-                return fragment;
-            }  else if (position == 2) {
-                DetailServiceDiveCenterFragment fragment = DetailServiceDiveCenterFragment.newInstance();
+                DiveCenterDetailFragment fragment = DiveCenterDetailFragment.newInstance();
                 return fragment;
             } else {
-                DetailServiceReviewFragment fragment = DetailServiceReviewFragment.newInstance();
+                DiveCenterMapFragment fragment = DiveCenterMapFragment.newInstance();
                 return fragment;
             }
         }
@@ -463,7 +387,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         //NavDrawer
         setSupportActionBar(toolbar);
 
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(3);
         //viewPager.setAdapter(new NYFragmentPagerAdapter(getSupportFragmentManager()));
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -472,20 +396,18 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 //KTLog.e("CEK 1");
                 //Toast.makeText(MainActivity.this, "test 1", Toast.LENGTH_SHORT).show();
                 fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
-                if (fragment != null && fragment instanceof DetailServiceFragment){
+                if (fragment != null && fragment instanceof DiveCenterListServiceFragment){
 
-                    ((DetailServiceFragment) fragment).setContent(newDiveService);
+                    ((DiveCenterListServiceFragment) fragment).setContent(diveCenter);
 
-                } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
+                } else if (fragment != null && fragment instanceof DiveCenterDetailFragment){
 
-                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
+                    ((DiveCenterDetailFragment) fragment).setContent(diveCenter);
 
-                } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
+                } else if (fragment != null && fragment instanceof DiveCenterMapFragment){
 
-                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
+                    ((DiveCenterMapFragment) fragment).setContent(diveCenter);
 
-                } else if (fragment != null && fragment instanceof DetailServiceFragment){
-                    //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -541,32 +463,18 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        spcMgr.start(this);
-        /*if(triggerBook) {
-            triggerBook = false;
-            if(!TextUtils.isEmpty(diveSpotId)) {
-                doBook();
-            } else {
-                openDiveSpotPickerDialog();
-            }
-        }*/
+    protected void onStart() {
+        super.onStart();
+        spcMgr.start(getApplicationContext());
+
+        setCheckedStateForTab(0, true);
+        movePagerToTabItemPosition(0);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onStop() {
+        super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
-    public void openDiveSpotPickerDialog() {
-        List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
-        if (diveSpots == null || diveSpots.isEmpty()) {
-            NYHelper.handleErrorMessage(this, "Dive Spot is empty");
-            return;
-        }
-        DiveSpotPickerFragment fragment = DiveSpotPickerFragment.newInstance();
-        fragment.show(getSupportFragmentManager().beginTransaction(), fragment.getTag());
-    }
 }

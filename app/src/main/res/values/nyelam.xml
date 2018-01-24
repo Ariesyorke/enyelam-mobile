@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="api_ver">1</integer>
+    <string name="google_public_api_key">AIzaSyDVv3hzB0qfY3oW0NXJtQMtx4SYw3re9_k</string>
+
 
     <string name="host_url">http://nyelam-adam.dantech.id/</string>
     <string name="api_path_login">api/user/login</string>
@@ -19,9 +21,7 @@
     <string name="api_path_dodive_book_service_order">api/order/submit</string>
     <string name="api_path_dodive_booking_history"></string>
     <string name="api_path_dodive_booking_detail"></string>
-
-
-
+    <string name="api_path_dodive_dive_center_detail">api/divecenter/detail</string>
 
 
 </resources>

@@ -13,12 +13,10 @@ import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
-import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
-import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.LoginStorage;
 
@@ -38,7 +36,7 @@ public class BookingServiceActivity extends BasicActivity {
     private DiveService diveService;
     private int diver = 0;
     private List<Participant> participantList = new ArrayList<>();
-    private Contact contact;
+    private BookingContact bookingContact;
     private String cartToken;
 
     @Override
@@ -60,7 +58,7 @@ public class BookingServiceActivity extends BasicActivity {
                 intent.putExtra(NYHelper.SERVICE, diveService.toString());
                 intent.putExtra(NYHelper.CART_TOKEN, cartToken);
                 intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
-                intent.putExtra(NYHelper.CONTACT, contact.toString());
+                intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                 startActivity(intent);
             }
         });
@@ -71,12 +69,12 @@ public class BookingServiceActivity extends BasicActivity {
 
                 boolean isFill = true;
 
-                if (contact != null){
-                    if (!NYHelper.isStringNotEmpty(contact.getName())){
+                if (bookingContact != null){
+                    if (!NYHelper.isStringNotEmpty(bookingContact.getName())){
                         isFill = false;
-                    } else if (isFill && !NYHelper.isStringNotEmpty(contact.getPhoneNumber())){
+                    } else if (isFill && !NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())){
                         isFill = false;
-                    } else if (isFill && !NYHelper.isStringNotEmpty(contact.getEmail())){
+                    } else if (isFill && !NYHelper.isStringNotEmpty(bookingContact.getEmail())){
                         isFill = false;
                     } else if (isFill){
                         for (Participant p : participantList){
@@ -93,7 +91,7 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     intent.putExtra(NYHelper.CART_TOKEN, cartToken);
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
-                    intent.putExtra(NYHelper.CONTACT, contact.toString());
+                    intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     startActivity(intent);
                 } else {
                     Toast.makeText(BookingServiceActivity.this, "Fill empty field to order", Toast.LENGTH_SHORT).show();
@@ -138,10 +136,13 @@ public class BookingServiceActivity extends BasicActivity {
                         priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
                     }
 
-                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getLocation().getCountry())) {
+                    // TODO: location from where ?
+                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getContact().getLocation().getCountry())) {
                         Location loc = new Location();
-                        loc = diveService.getDiveCenter().getLocation();
+                        loc = diveService.getDiveCenter().getContact().getLocation();
                         locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
+                    } else{
+                        locationTextView.setText("");
                     }
 
                     if (diveService.getSchedule() != null){
@@ -196,12 +197,12 @@ public class BookingServiceActivity extends BasicActivity {
 
                 try {
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.CONTACT));
-                    contact = new Contact();
-                    contact.parse(obj);
+                    bookingContact = new BookingContact();
+                    bookingContact.parse(obj);
 
-                    if (NYHelper.isStringNotEmpty(contact.getName()))contactNameTextView.setText(contact.getName());
-                    if (NYHelper.isStringNotEmpty(contact.getPhoneNumber()))contactPhoneNumberTextView.setText(contact.getPhoneNumber());
-                    if (NYHelper.isStringNotEmpty(contact.getEmail()))contactEmailTextView.setText(contact.getEmail());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getName()))contactNameTextView.setText(bookingContact.getName());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber()))contactPhoneNumberTextView.setText(bookingContact.getPhoneNumber());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -209,10 +210,10 @@ public class BookingServiceActivity extends BasicActivity {
             } else {
                 LoginStorage storage = new LoginStorage(this);
                 if (storage.isUserLogin() && storage.user != null){
-                    contact = new Contact();
-                    contact.setName(storage.user.getFullname());
-                    contact.setPhoneNumber(storage.user.getPhone());
-                    contact.setEmail(storage.user.getEmail());
+                    bookingContact = new BookingContact();
+                    bookingContact.setName(storage.user.getFullname());
+                    bookingContact.setPhoneNumber(storage.user.getPhone());
+                    bookingContact.setEmail(storage.user.getEmail());
                     if (NYHelper.isStringNotEmpty(storage.user.getFullname()))contactNameTextView.setText(storage.user.getFullname());
                     if (NYHelper.isStringNotEmpty(storage.user.getPhone()))contactPhoneNumberTextView.setText(storage.user.getPhone());
                     if (NYHelper.isStringNotEmpty(storage.user.getEmail()))contactEmailTextView.setText(storage.user.getEmail());
@@ -278,7 +279,7 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     intent.putExtra(NYHelper.CART_TOKEN, cartToken);
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
-                    intent.putExtra(NYHelper.CONTACT, contact.toString());
+                    intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
                     startActivity(intent);
                 }
@@ -295,7 +296,7 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     intent.putExtra(NYHelper.CART_TOKEN, cartToken);
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
-                    intent.putExtra(NYHelper.CONTACT, contact.toString());
+                    intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
                     startActivity(intent);
                 }

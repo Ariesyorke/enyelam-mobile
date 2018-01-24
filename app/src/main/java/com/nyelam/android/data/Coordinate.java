@@ -11,8 +11,8 @@ import org.json.JSONObject;
 
 public class Coordinate implements Parseable {
 
-    private static String KEY_LAT = "lon";
-    private static String KEY_LON = "lat";
+    private static String KEY_LAT = "lat";
+    private static String KEY_LON = "lon";
 
     private double lat;
     private double lon;

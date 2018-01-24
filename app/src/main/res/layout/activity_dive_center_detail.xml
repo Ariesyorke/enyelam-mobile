@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:descendantFocusability="beforeDescendants"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:titleEnabled="false"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <RelativeLayout
+                android:id="@+id/banner_relativeLayout"
+                android:layout_marginBottom="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true">
+                <ProgressBar
+                    android:id="@+id/banner_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    android:indeterminateTintMode="src_atop"
+                    android:indeterminateTint="@color/ny_blue2"/>
+                <com.nyelam.android.view.NYBannerViewPager
+                    android:id="@+id/promotion_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </com.nyelam.android.view.NYBannerViewPager>
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/circle_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignBottom="@+id/promotion_view_pager"
+                    app:ci_drawable="@drawable/ny_circle_white"
+                    app:ci_orientation="horizontal">
+                </me.relex.circleindicator.CircleIndicator>
+
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="48dp"
+                app:layout_collapseMode="pin">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/name_textView"
+                        android:text="Dive Center"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/rating_textView"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/ny_rectangle_gradation_blue"
+                        android:paddingLeft="@dimen/padding"
+                        android:paddingRight="@dimen/padding"
+                        android:paddingTop="@dimen/padding_half"
+                        android:paddingBottom="@dimen/padding_half"
+                        android:layout_marginRight="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.Toolbar>
+
+            <LinearLayout
+                android:id="@+id/tab_manager"
+                android:layout_gravity="bottom"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingTop="@dimen/padding"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true">
+
+                <com.nyelam.android.view.NYHomepageDetailTabItemView
+                    android:id="@+id/services_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:tabChecked="true"
+                    app:tabItemPosition="home"
+                    app:tabItemText="Services"
+                    app:tabSrcIcon="@drawable/ic_navigation_home_b"/>
+
+                <com.nyelam.android.view.NYHomepageDetailTabItemView
+                    android:id="@+id/detail_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:tabItemPosition="socmed"
+                    app:tabItemText="Details"
+                    app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+
+                <com.nyelam.android.view.NYHomepageDetailTabItemView
+                    android:id="@+id/map_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:tabItemPosition="transaction"
+                    app:tabItemText="Map"
+                    app:tabSrcIcon="@drawable/ic_navigation_home_a"/>
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <com.nyelam.android.view.NYCustomViewPager
+        android:id="@+id/view_pager"
+        android:descendantFocusability="blocksDescendants"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+

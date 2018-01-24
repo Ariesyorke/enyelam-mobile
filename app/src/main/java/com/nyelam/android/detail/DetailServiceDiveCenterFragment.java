@@ -1,6 +1,7 @@
 package com.nyelam.android.detail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 
 public class DetailServiceDiveCenterFragment extends Fragment {
@@ -57,7 +59,21 @@ public class DetailServiceDiveCenterFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        initControl();
         //setDiveCenter();
+    }
+
+    private void initControl() {
+        mainCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DiveCenterDetailActivity.class);
+                intent.putExtra(NYHelper.DIVER, String.valueOf(((DetailServiceActivity)getActivity()).diver));
+                intent.putExtra(NYHelper.SCHEDULE, ((DetailServiceActivity)getActivity()).schedule);
+                intent.putExtra(NYHelper.SERVICE, ((DetailServiceActivity)getActivity()).diveService.toString());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView(View v) {

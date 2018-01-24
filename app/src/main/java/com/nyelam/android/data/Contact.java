@@ -6,25 +6,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
+ * Created by Aprilian Nur Wakhid Daini on 1/24/2018.
  */
 
 public class Contact implements Parseable {
 
-    private static String KEY_NAME = "name";
+    private static String KEY_EMAIL_ADDRESS = "email_address";
     private static String KEY_PHONE_NUMBER = "phone_number";
-    private static String KEY_EMAIL = "email";
+    private static String KEY_COUNTRY_CODE = "country_code";
+    private static String KEY_LOCATION = "location";
 
-    private String name;
+    private String emailAddress;
     private String phoneNumber;
-    private String email;
+    private String countryCode;
+    private Location location;
 
-    public String getName() {
-        return name;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getPhoneNumber() {
@@ -35,12 +37,20 @@ public class Contact implements Parseable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCountryCode() {
+        return countryCode;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override
@@ -49,8 +59,8 @@ public class Contact implements Parseable {
         if (obj == null) return;
 
         try {
-            if (!obj.isNull(KEY_NAME)) {
-                setName(obj.getString(KEY_NAME));
+            if (!obj.isNull(KEY_EMAIL_ADDRESS)) {
+                setEmailAddress(obj.getString(KEY_EMAIL_ADDRESS));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -61,11 +71,18 @@ public class Contact implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_EMAIL)) {
-                setEmail(obj.getString(KEY_EMAIL));
+            if (!obj.isNull(KEY_COUNTRY_CODE)) {
+                setCountryCode(obj.getString(KEY_COUNTRY_CODE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+        try {
+            if (!obj.isNull(KEY_LOCATION)) {
+                Location location = new Location();
+                location.parse(obj.getJSONObject(KEY_LOCATION));
+                setLocation(location);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     @Override
@@ -74,12 +91,13 @@ public class Contact implements Parseable {
         JSONObject obj = new JSONObject();
 
         try {
-            if (!TextUtils.isEmpty(getName())) {
-                obj.put(KEY_NAME, getName());
+            if (!TextUtils.isEmpty(getEmailAddress())) {
+                obj.put(KEY_EMAIL_ADDRESS, getEmailAddress());
             } else {
-                obj.put(KEY_NAME, JSONObject.NULL);
+                obj.put(KEY_EMAIL_ADDRESS, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
+
 
         try {
             if (!TextUtils.isEmpty(getPhoneNumber())) {
@@ -90,12 +108,22 @@ public class Contact implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!TextUtils.isEmpty(getEmail())) {
-                obj.put(KEY_EMAIL, getEmail());
+            if (!TextUtils.isEmpty(getCountryCode())) {
+                obj.put(KEY_COUNTRY_CODE, getCountryCode());
             } else {
-                obj.put(KEY_EMAIL, JSONObject.NULL);
+                obj.put(KEY_COUNTRY_CODE, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+        try{
+            if(getLocation()!=null){
+                obj.put(KEY_LOCATION, getLocation());
+            } else {
+                obj.put(KEY_LOCATION, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
 
         try {
             return obj.toString(3);
