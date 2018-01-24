@@ -48,7 +48,6 @@ public class DiveService implements Parseable {
     private double specialPrice;
     private DiveCenter diveCenter;
 
-
     public String getId() {
         return id;
     }
@@ -72,8 +71,6 @@ public class DiveService implements Parseable {
     public void setRating(int rating) {
         this.rating = rating;
     }
-
-
 
     public String getFeaturedImage() {
         return featuredImage;

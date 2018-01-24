@@ -13,6 +13,4 @@ public class DiveSpotDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dive_spot_detail);
     }
 
-
-
 }

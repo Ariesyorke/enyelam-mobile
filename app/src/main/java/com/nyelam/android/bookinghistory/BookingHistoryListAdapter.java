@@ -137,7 +137,8 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
 
                 //SET IMAGE
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
-                if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
+
+                if (diveService != null && NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
                     ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
                         @Override
                         public void onLoadingStarted(String imageUri, View view) {
@@ -169,6 +170,8 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
 
             }
 
+            itemView.setOnClickListener(this);
+
         }
 
         @Override
@@ -178,7 +181,7 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
             context.startActivity(intent);
         }
 
-        //itemView.setOnClickListener(this);
+
     }
 
 }

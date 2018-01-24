@@ -38,17 +38,29 @@ public class Summary implements Parseable {
 
         if (obj == null) return;
 
-        try {
-            if (!obj.isNull(KEY_ORDER)) {
-                order.parse(obj.getJSONObject(KEY_ORDER));
+        if(!obj.isNull(KEY_ORDER)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_ORDER);
+                if(o != null) {
+                    order = new Order();
+                    order.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        }
 
-        try {
-            if (!obj.isNull(KEY_SERVICE)) {
-                diveService.parse(obj.getJSONObject(KEY_SERVICE));
+        if(!obj.isNull(KEY_SERVICE)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_SERVICE);
+                if(o != null && o.length() > 0) {
+                    diveService = new DiveService();
+                    diveService.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        }
 
     }
 

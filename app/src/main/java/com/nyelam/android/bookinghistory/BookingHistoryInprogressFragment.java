@@ -94,19 +94,22 @@ public class BookingHistoryInprogressFragment extends Fragment {
         bookingListAdapter = new BookingHistoryListAdapter(getActivity());
         recyclerView.setAdapter(bookingListAdapter);
 
-        /*progressBar.setVisibility(View.VISIBLE);
-        NYDoDiveBookingHistoryRequest req = new NYDoDiveBookingHistoryRequest(getActivity(), "1", "1");
-        spcMgr.execute(req, onSearchKeywordRequest());*/
+        progressBar.setVisibility(View.VISIBLE);
+        NYDoDiveBookingHistoryRequest req = null;
+        try {
+            req = new NYDoDiveBookingHistoryRequest(getActivity(), "1", "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onSearchKeywordRequest());
     }
 
     private RequestListener<SummaryList> onSearchKeywordRequest() {
         return new RequestListener<SummaryList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                /*if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }*/
-                progressBar.setVisibility(View.GONE);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+
                 bookingListAdapter.clear();
                 bookingListAdapter.notifyDataSetChanged();
                 noResultTextView.setVisibility(View.VISIBLE);
@@ -115,10 +118,8 @@ public class BookingHistoryInprogressFragment extends Fragment {
 
             @Override
             public void onRequestSuccess(SummaryList summaryList) {
-                /*if(progressDialog != null && progressDialog.isShowing()){
-                    progressDialog.dismiss();
-                }*/
-                progressBar.setVisibility(View.GONE);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+
                 noResultTextView.setVisibility(View.GONE);
                 bookingListAdapter.clear();
                 bookingListAdapter.addResults(summaryList.getList());

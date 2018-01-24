@@ -27,9 +27,9 @@ public class Order implements Parseable {
     private String status;
     private long schedule;
     private Cart cart;
-    private long total;
-    private String currency;
-    private DiveSpot diveSpot;
+    //private long total;
+    //private String currency;
+    //private DiveSpot diveSpot;
 
     public String getOrderId() {
         return orderId;
@@ -63,7 +63,7 @@ public class Order implements Parseable {
         this.cart = cart;
     }
 
-    public long getTotal() {
+    /*public long getTotal() {
         return total;
     }
 
@@ -85,7 +85,7 @@ public class Order implements Parseable {
 
     public void setDiveSpot(DiveSpot diveSpot) {
         this.diveSpot = diveSpot;
-    }
+    }*/
 
     @Override
     public void parse(JSONObject obj) {
@@ -111,13 +111,25 @@ public class Order implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        try {
+        if(!obj.isNull(KEY_CART)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_CART);
+                if(o != null) {
+                    cart = new Cart();
+                    cart.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /*try {
             if (!obj.isNull(KEY_CART)) {
                 cart.parse(obj.getJSONObject(KEY_CART));
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        } catch (JSONException e) {e.printStackTrace();}*/
 
-        try {
+        /*try {
             if (!obj.isNull(KEY_TOTAL)) {
                 setTotal(obj.getLong(KEY_TOTAL));
             }
@@ -133,7 +145,7 @@ public class Order implements Parseable {
             if (!obj.isNull(KEY_DIVE_SPOT)) {
                 diveSpot.parse(obj.getJSONObject(KEY_DIVE_SPOT));
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        } catch (JSONException e) {e.printStackTrace();}*/
 
     }
 
@@ -172,7 +184,7 @@ public class Order implements Parseable {
             e.printStackTrace();
         }
 
-        try {
+        /*try {
             obj.put(KEY_TOTAL, getTotal());
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -192,7 +204,7 @@ public class Order implements Parseable {
             }
         }catch (JSONException e){
             e.printStackTrace();
-        }
+        }*/
 
         try {
             return obj.toString(3);
