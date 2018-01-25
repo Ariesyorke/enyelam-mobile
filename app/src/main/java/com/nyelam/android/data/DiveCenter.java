@@ -25,6 +25,16 @@ public class DiveCenter implements Parseable {
     private static String KEY_MEMBERSHIP = "membership";
     private static String KEY_STATUS = "status";
 
+
+
+    private static String KEY_FEATURED_IMAGE = "featured_image";
+    private static String KEY_CATEGORIES = "categories";
+    private static String KEY_START_FROM_PRICE = "start_from_price";
+    private static String KEY_START_FROM_SPECIAL_PRICE = "start_from_special_price";
+    private static String KEY_START_FROM_TOTAL_DIVES = "start_from_total_dives";
+    private static String KEY_START_FROM_DAYS = "start_from_days";
+    private static String KEY_LOCATION = "locations";
+
     private String id;
     private String name;
     private String subtitle;
@@ -34,6 +44,15 @@ public class DiveCenter implements Parseable {
     private Contact contact;
     private Membership membership;
     private int status;
+
+
+    private List<Category> categories;
+    private String featuredImage;
+    private String startFromPrice;
+    private String startFromSpecialPrice;
+    private String startFromTotalDives;
+    private String startFromDays;
+
 
     public String getId() {
         return id;
@@ -107,6 +126,54 @@ public class DiveCenter implements Parseable {
         this.status = status;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public String getFeaturedImage() {
+        return featuredImage;
+    }
+
+    public void setFeaturedImage(String featuredImage) {
+        this.featuredImage = featuredImage;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getStartFromPrice() {
+        return startFromPrice;
+    }
+
+    public void setStartFromPrice(String startFromPrice) {
+        this.startFromPrice = startFromPrice;
+    }
+
+    public String getStartFromSpecialPrice() {
+        return startFromSpecialPrice;
+    }
+
+    public void setStartFromSpecialPrice(String startFromSpecialPrice) {
+        this.startFromSpecialPrice = startFromSpecialPrice;
+    }
+
+    public String getStartFromTotalDives() {
+        return startFromTotalDives;
+    }
+
+    public void setStartFromTotalDives(String startFromTotalDives) {
+        this.startFromTotalDives = startFromTotalDives;
+    }
+
+    public String getStartFromDays() {
+        return startFromDays;
+    }
+
+    public void setStartFromDays(String startFromDays) {
+        this.startFromDays = startFromDays;
+    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -175,6 +242,7 @@ public class DiveCenter implements Parseable {
             }
         }
 
+
         if(!obj.isNull(KEY_CONTACT)) {
             try {
                 JSONObject o = obj.getJSONObject(KEY_CONTACT);
@@ -186,6 +254,23 @@ public class DiveCenter implements Parseable {
                 e.printStackTrace();
             }
         }
+
+
+        if (obj.has(KEY_LOCATION)){
+            try {
+                JSONObject o = obj.getJSONObject(KEY_LOCATION);
+                if(o != null) {
+                    Location location = new Location();
+                    location.parse(o);
+                    contact = new Contact();
+                    contact.setLocation(location);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
 
         if(!obj.isNull(KEY_MEMBERSHIP)) {
             try {
@@ -211,6 +296,57 @@ public class DiveCenter implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+
+        // TODO: revisi
+
+        if(!obj.isNull(KEY_CATEGORIES)) {
+            try {
+                if(obj.get(KEY_CATEGORIES) instanceof JSONArray) {
+                    JSONArray array = obj.getJSONArray(KEY_CATEGORIES);
+                    if (array != null && array.length() > 0) {
+                        categories = new ArrayList<>();
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject o = array.getJSONObject(i);
+                            Category a = new Category();
+                            a.parse(o);
+                            categories.add(a);
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            if (!obj.isNull(KEY_FEATURED_IMAGE)) {
+                setFeaturedImage(obj.getString(KEY_FEATURED_IMAGE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_START_FROM_PRICE)) {
+                setStartFromPrice(obj.getString(KEY_START_FROM_PRICE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_START_FROM_SPECIAL_PRICE)) {
+                setStartFromSpecialPrice(obj.getString(KEY_START_FROM_SPECIAL_PRICE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_START_FROM_TOTAL_DIVES)) {
+                setStartFromTotalDives(obj.getString(KEY_START_FROM_TOTAL_DIVES));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_START_FROM_DAYS)) {
+                setStartFromDays(obj.getString(KEY_START_FROM_DAYS));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
     }
 
@@ -293,6 +429,61 @@ public class DiveCenter implements Parseable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+        // TODO: revisi
+        if(categories != null && !categories.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(Category c : categories) {
+                    JSONObject o = new JSONObject(c.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_CATEGORIES, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            if (!TextUtils.isEmpty(getFeaturedImage())) {
+                obj.put(KEY_FEATURED_IMAGE, getFeaturedImage());
+            } else {
+                obj.put(KEY_FEATURED_IMAGE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getStartFromPrice())) {
+                obj.put(KEY_START_FROM_PRICE, getStartFromPrice());
+            } else {
+                obj.put(KEY_START_FROM_PRICE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getStartFromSpecialPrice())) {
+                obj.put(KEY_START_FROM_SPECIAL_PRICE, getStartFromSpecialPrice());
+            } else {
+                obj.put(KEY_START_FROM_SPECIAL_PRICE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getStartFromTotalDives())) {
+                obj.put(KEY_START_FROM_TOTAL_DIVES, getStartFromTotalDives());
+            } else {
+                obj.put(KEY_START_FROM_TOTAL_DIVES, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getStartFromDays())) {
+                obj.put(KEY_START_FROM_DAYS, getStartFromDays());
+            } else {
+                obj.put(KEY_START_FROM_DAYS, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
         try {
             return obj.toString(3);

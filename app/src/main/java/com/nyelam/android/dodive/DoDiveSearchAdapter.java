@@ -134,7 +134,7 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }  else if (searchResult.getType() == 2){
 
                     iconImageView.setImageResource(R.drawable.ic_search_dive_service);
-                    typeTextView.setText("Service");
+                    typeTextView.setText("Service Category");
 
                     SearchService service = new SearchService();
                     try {
@@ -161,6 +161,7 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     labelTextView.setText(diveCenter.getProvince());
 
                 } else {
+
                     iconImageView.setImageResource(R.drawable.ic_dive_place);
                     nameTextView.setText(searchResult.getName());
                     ratingTextView.setVisibility(View.GONE);

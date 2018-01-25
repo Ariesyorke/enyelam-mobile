@@ -1,8 +1,6 @@
 package com.nyelam.android.divecenter;
 
-import android.bluetooth.le.AdvertiseData;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +10,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,16 +18,10 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
-import com.nyelam.android.detail.DetailServiceDiveCenterFragment;
-import com.nyelam.android.detail.DetailServiceDiveSpotsFragment;
 import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.dodive.DoDiveSearchServiceAdapter;
-import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
-import com.nyelam.android.http.NYDiveCenterDetailRequest;
 import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 

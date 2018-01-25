@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nyelam.android.divecenter.DiveCenterMapFragment">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/padding_triple"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/no_location_textView"
+        android:layout_marginTop="@dimen/padding_triple"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:text="@string/warn_no_location_found" />
+
+
+    <android.support.v7.widget.CardView
+        android:background="@color/colorWhite"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/map_linearLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/open_map_textView"
+                android:text="Tap on the map for fullscreen view."
+                android:textSize="13sp"
+                android:textColor="@color/ny_black1"
+                android:gravity="center"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>
