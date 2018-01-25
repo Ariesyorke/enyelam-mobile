@@ -209,29 +209,33 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onRequestSuccess(DiveService results) {
 
-                if (diveService == null) diveService = new DiveService();
-                newDiveService = results;
-                List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
-                
-                if(diveSpots != null && !diveSpots.isEmpty() && diveSpots.size() == 1) {
-                    diveSpotId = newDiveService.getDiveSpots().get(0).getId();
-                }
+                if (results != null){
+                    if (diveService == null) diveService = new DiveService();
+                    newDiveService = results;
+                    List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
 
-                fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
-                if (fragment != null && fragment instanceof DetailServiceFragment){
+                    if(diveSpots != null && !diveSpots.isEmpty() && diveSpots.size() == 1) {
+                        diveSpotId = newDiveService.getDiveSpots().get(0).getId();
+                    }
 
-                    ((DetailServiceFragment) fragment).setContent(newDiveService);
+                    fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
+                    if (fragment != null && fragment instanceof DetailServiceFragment){
 
-                } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
+                        ((DetailServiceFragment) fragment).setContent(newDiveService);
 
-                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
+                    } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
 
-                } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
+                        ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
 
-                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
+                    } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
 
-                } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
-                    //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+                        ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
+
+                    } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
+                        //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+
                 }
 
             }

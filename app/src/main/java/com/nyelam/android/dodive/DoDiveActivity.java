@@ -21,6 +21,7 @@ import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.detail.DetailServiceActivity;
+import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONException;
@@ -149,14 +150,22 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
                 } else */
 
                 if (!TextUtils.isEmpty(type)){
-                    Intent intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);
+
+                    Intent intent;
+                    if (type.equals("3")){
+                        intent = new Intent(DoDiveActivity.this, DiveCenterDetailActivity.class);
+                    } else {
+                        intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);
+                    }
+
                     intent.putExtra(NYHelper.KEYWORD, keyword);
                     intent.putExtra(NYHelper.ID_DIVER, diverId);
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                    intent.putExtra(NYHelper.DATE, date);
+                    intent.putExtra(NYHelper.SCHEDULE, date);
                     intent.putExtra(NYHelper.DIVER, diver);
                     intent.putExtra(NYHelper.TYPE, type);
                     startActivity(intent);
+
                 } else {
                     keywordTextView.isEmpty();
                 }

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,8 +34,10 @@ public class BookingHistoryInprogressFragment extends Fragment {
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private BookingHistoryListAdapter bookingListAdapter;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private TextView noResultTextView;
+    private int page = 1;
 
     public BookingHistoryInprogressFragment() {
         // Required empty public constructor
@@ -67,6 +70,8 @@ public class BookingHistoryInprogressFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initAdapter();
+        initControl();
+        onRequestHistory();
 
         View itemView = (View) view.findViewById(R.id.item_view);
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +86,19 @@ public class BookingHistoryInprogressFragment extends Fragment {
 
     }
 
+    private void initControl() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                onRequestHistory();
+            }
+        });
+    }
+
     private void initView(View view) {
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_swipeRefreshLayout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         noResultTextView = (TextView) view.findViewById(R.id.no_result_textView);
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
@@ -95,20 +112,25 @@ public class BookingHistoryInprogressFragment extends Fragment {
         recyclerView.setAdapter(bookingListAdapter);
 
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+
+    private void onRequestHistory(){
         NYDoDiveBookingHistoryRequest req = null;
         try {
             req = new NYDoDiveBookingHistoryRequest(getActivity(), "1", "1");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spcMgr.execute(req, onSearchKeywordRequest());
+        spcMgr.execute(req, onGetHistoryRequest());
     }
 
-    private RequestListener<SummaryList> onSearchKeywordRequest() {
+    private RequestListener<SummaryList> onGetHistoryRequest() {
         return new RequestListener<SummaryList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
 
                 bookingListAdapter.clear();
                 bookingListAdapter.notifyDataSetChanged();
@@ -119,6 +141,7 @@ public class BookingHistoryInprogressFragment extends Fragment {
             @Override
             public void onRequestSuccess(SummaryList summaryList) {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
 
                 noResultTextView.setVisibility(View.GONE);
                 bookingListAdapter.clear();

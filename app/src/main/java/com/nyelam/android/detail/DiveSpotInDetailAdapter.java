@@ -16,6 +16,7 @@ import com.nyelam.android.data.SearchDiveCenter;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.data.SearchSpot;
+import com.nyelam.android.divespot.DiveSpotDetailActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
 
@@ -124,10 +125,10 @@ public class DiveSpotInDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @Override
         public void onClick(View v) {
-            /*Intent intent = new Intent(context, DoDiveActivity.class);
+            Intent intent = new Intent(context, DiveSpotDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
-            context.startActivity(intent);*/
+            intent.putExtra(NYHelper.SEARCH_RESULT, diveSpot.getId());
+            context.startActivity(intent);
         }
     }
 

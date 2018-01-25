@@ -124,11 +124,11 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
-            if(!extras.get(NYHelper.DIVER).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVER) &&!extras.get(NYHelper.DIVER).equals(null)){
                 diver = Integer.valueOf(extras.getString(NYHelper.DIVER));
             }
 
-            if(!extras.getString(NYHelper.SCHEDULE).equals(null)){
+            if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
                 schedule = extras.getString(NYHelper.SCHEDULE);
             }
 
@@ -136,7 +136,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
             }
 
-            if(!extras.getString(NYHelper.SERVICE).equals(null)){
+            if(intent.hasExtra(NYHelper.SERVICE) && !extras.getString(NYHelper.SERVICE).equals(null)){
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(extras.getString(NYHelper.SERVICE));

@@ -11,6 +11,7 @@ import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchResultList;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -38,10 +39,15 @@ public class NYDoDiveSearchTypeRequest extends NYBasicRequest<SearchResultList> 
 
     @Override
     protected SearchResultList onProcessSuccessData(JSONObject obj) throws Exception {
-        SearchResultList searchResultList = new SearchResultList();
-        searchResultList.parse(obj.getJSONArray(KEY_SEARCH_RESULTS));
-        if (searchResultList != null && searchResultList.getList() != null && searchResultList.getList().size() > 0) return searchResultList;
-        return null;
+
+        if  (obj.get(KEY_SEARCH_RESULTS) != null && obj.get(KEY_SEARCH_RESULTS) instanceof JSONArray){
+            SearchResultList searchResultList = new SearchResultList();
+            searchResultList.parse(obj.getJSONArray(KEY_SEARCH_RESULTS));
+            //if (searchResultList != null && searchResultList.getList() != null && searchResultList.getList().size() > 0) return searchResultList;
+            return searchResultList;
+        } else {
+            return null;
+        }
     }
 
 

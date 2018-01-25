@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,12 +25,14 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 public class BookingHistoryCompletedFragment extends Fragment {
 
-    private BookingHistoryInprogressFragment.OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private BookingHistoryListAdapter bookingListAdapter;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private TextView noResultTextView;
+    private int page = 1;
 
     public BookingHistoryCompletedFragment() {
         // Required empty public constructor
@@ -62,6 +65,8 @@ public class BookingHistoryCompletedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initAdapter();
+        initControl();
+        onRequestHistory();
 
         View itemView = (View) view.findViewById(R.id.item_view);
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +81,19 @@ public class BookingHistoryCompletedFragment extends Fragment {
 
     }
 
+    private void initControl() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                onRequestHistory();
+            }
+        });
+    }
+
     private void initView(View view) {
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_swipeRefreshLayout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         noResultTextView = (TextView) view.findViewById(R.id.no_result_textView);
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
@@ -88,20 +105,25 @@ public class BookingHistoryCompletedFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         bookingListAdapter = new BookingHistoryListAdapter(getActivity());
         recyclerView.setAdapter(bookingListAdapter);
-
-       /* progressBar.setVisibility(View.VISIBLE);
-        NYDoDiveBookingHistoryRequest req = new NYDoDiveBookingHistoryRequest(getActivity(), "1", "1");
-        spcMgr.execute(req, onSearchKeywordRequest());*/
     }
 
-    private RequestListener<SummaryList> onSearchKeywordRequest() {
+    private void onRequestHistory(){
+        NYDoDiveBookingHistoryRequest req = null;
+        try {
+            req = new NYDoDiveBookingHistoryRequest(getActivity(), "1", "2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onGetHistoryRequest());
+    }
+
+    private RequestListener<SummaryList> onGetHistoryRequest() {
         return new RequestListener<SummaryList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                /*if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }*/
-                progressBar.setVisibility(View.GONE);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+
                 bookingListAdapter.clear();
                 bookingListAdapter.notifyDataSetChanged();
                 noResultTextView.setVisibility(View.VISIBLE);
@@ -110,10 +132,9 @@ public class BookingHistoryCompletedFragment extends Fragment {
 
             @Override
             public void onRequestSuccess(SummaryList summaryList) {
-                /*if(progressDialog != null && progressDialog.isShowing()){
-                    progressDialog.dismiss();
-                }*/
-                progressBar.setVisibility(View.GONE);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+
                 noResultTextView.setVisibility(View.GONE);
                 bookingListAdapter.clear();
                 bookingListAdapter.addResults(summaryList.getList());
@@ -138,8 +159,8 @@ public class BookingHistoryCompletedFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof BookingHistoryInprogressFragment.OnFragmentInteractionListener) {
-            mListener = (BookingHistoryInprogressFragment.OnFragmentInteractionListener) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

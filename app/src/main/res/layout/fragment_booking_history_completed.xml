@@ -8,46 +8,50 @@
     android:background="@color/colorWhite"
     tools:context="com.nyelam.android.home.HomeActivity">
 
-    <ScrollView
-        android:background="@color/colorWhite"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_swipeRefreshLayout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <ScrollView
+            android:background="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:nestedScrollingEnabled="false"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/padding_double"
-                android:layout_width="35dp"
-                android:layout_height="35dp" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
 
-            <TextView
-                android:id="@+id/no_result_textView"
-                android:visibility="gone"
-                android:text="@string/warn_no_results_found"
-                android:textSize="18sp"
-                android:textColor="@color/ny_black1"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/padding_double"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp" />
 
-            <include android:visibility="gone" android:id="@+id/item_view" layout="@layout/view_item_booking"/>
+                <TextView
+                    android:id="@+id/no_result_textView"
+                    android:visibility="gone"
+                    android:text="@string/warn_no_results_found"
+                    android:textSize="18sp"
+                    android:textColor="@color/ny_black1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        </LinearLayout>
-    </ScrollView>
+                <include android:visibility="gone" android:id="@+id/item_view" layout="@layout/view_item_booking"/>
 
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>
 

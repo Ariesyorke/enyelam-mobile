@@ -36,10 +36,15 @@ public class NYDoDiveDetailServiceRequest extends NYBasicRequest<DiveService> {
 
     @Override
     protected DiveService onProcessSuccessData(JSONObject obj) throws Exception {
-        DiveService diveService = new DiveService();
-        diveService.parse(obj.getJSONObject(KEY_SERVICE));
-        return diveService;
-    }
 
+        if (obj.get(KEY_SERVICE) instanceof JSONObject && obj.getJSONObject(KEY_SERVICE) != null){
+            DiveService diveService = new DiveService();
+            diveService.parse(obj.getJSONObject(KEY_SERVICE));
+            return diveService;
+        } else {
+            return null;
+        }
+
+    }
 
 }

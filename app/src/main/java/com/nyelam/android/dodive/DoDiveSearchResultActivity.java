@@ -22,7 +22,6 @@ import com.nyelam.android.data.SearchService;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
-import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -87,7 +86,7 @@ public class DoDiveSearchResultActivity extends BasicActivity {
             if(!extras.getString(NYHelper.ID_DIVER).equals(null)) diverId = extras.getString(NYHelper.ID_DIVER);
             if(!extras.getString(NYHelper.DIVER).equals(null)) diver = extras.getString(NYHelper.DIVER);
             if(!extras.getString(NYHelper.CERTIFICATE).equals(null)) certificate = extras.getString(NYHelper.CERTIFICATE);
-            if(!extras.getString(NYHelper.DATE).equals(null)) date = extras.getString(NYHelper.DATE);
+            if(!extras.getString(NYHelper.SCHEDULE).equals(null)) date = extras.getString(NYHelper.SCHEDULE);
             if(!extras.getString(NYHelper.TYPE).equals(null)){
                 type = extras.getString(NYHelper.TYPE);
             }

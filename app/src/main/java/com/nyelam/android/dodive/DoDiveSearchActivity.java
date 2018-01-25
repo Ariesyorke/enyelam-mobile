@@ -104,10 +104,17 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                 /*if(progressDialog != null && progressDialog.isShowing()){
                     progressDialog.dismiss();
                 }*/
-                noResultTextView.setVisibility(View.GONE);
-                doDiveSearchAdapter.clear();
-                doDiveSearchAdapter.addResults(results.getList());
-                doDiveSearchAdapter.notifyDataSetChanged();
+                if (results != null){
+                    noResultTextView.setVisibility(View.GONE);
+                    doDiveSearchAdapter.clear();
+                    doDiveSearchAdapter.addResults(results.getList());
+                    doDiveSearchAdapter.notifyDataSetChanged();
+                } else {
+                    doDiveSearchAdapter.clear();
+                    doDiveSearchAdapter.notifyDataSetChanged();
+                    noResultTextView.setVisibility(View.VISIBLE);
+                }
+
             }
         };
     }
