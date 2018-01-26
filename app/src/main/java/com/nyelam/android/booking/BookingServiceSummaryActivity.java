@@ -113,7 +113,7 @@ public class BookingServiceSummaryActivity extends BasicActivity {
                     if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
 
                     if (diveService.getSpecialPrice() < diveService.getNormalPrice()){
-                        priceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
+                        priceTextView.setText(NYHelper.priceFormatter( diveService.getSpecialPrice()));
                     } else {
                         priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
                     }

@@ -26,8 +26,10 @@ import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.LoginStorage;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +48,7 @@ public class NYHelper {
     public static final String ID_SERVICE = "id_service";
     public static final String SERVICE = "id_service";
     public static final String DIVER = "diver";
+    public static final String DIVE_CENTER = "dive_center";
     public static final String SCHEDULE = "schedule";
     public static final String DIVE_SPOT = "dive_spot";
     public static final String DIVE_SPOTS = "dive_spots";
@@ -93,6 +96,19 @@ public class NYHelper {
     public static String priceFormatter(double price) {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return "Rp "+String.valueOf(formatter.format(price));
+    }
+
+    public static String priceFormatter(String currency, double price) {
+        if (isStringNotEmpty(currency) && currency.equals("USD")){
+
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            format.setCurrency(Currency.getInstance("USD"));
+            return "Rp "+format.format(price);
+        } else {
+            DecimalFormat formatter = new DecimalFormat("#,###");
+            return "Rp "+String.valueOf(formatter.format(price));
+        }
+
     }
 
     public static String getDevice() {

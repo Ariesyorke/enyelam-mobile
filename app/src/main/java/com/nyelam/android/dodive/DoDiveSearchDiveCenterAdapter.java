@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -95,6 +96,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
         private ImageView featuredImageView;
         private TextView diveCenterNameTextView;
         private TextView locationTextView;
+        private RatingBar ratingBar;
         //category
         //start
         private StrikethroughTextView priceStrikethroughTextView;
@@ -112,6 +114,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
             totalDiveTextView = (TextView) itemView.findViewById(R.id.total_dive_textView);
+            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
 
             this.itemView = itemView;
         }
@@ -120,6 +123,8 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             this.diveCenter = diveCenter;
 
             if (diveCenter != null){
+
+                ratingBar.setRating((int) diveCenter.getRating());
 
                 if (NYHelper.isStringNotEmpty(diveCenter.getName())) diveCenterNameTextView.setText(diveCenter.getName());
 
@@ -209,7 +214,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(activity, DiveCenterDetailActivity.class);
-            intent.putExtra(NYHelper.SERVICE, diveCenter.toString());
+            intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
             activity.startActivity(intent);

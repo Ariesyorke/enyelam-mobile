@@ -154,6 +154,8 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
                     Intent intent;
                     if (type.equals("3")){
                         intent = new Intent(DoDiveActivity.this, DiveCenterDetailActivity.class);
+                    } if (type.equals("4") || type.equals("5") || type.equals("6")){
+                        intent = new Intent(DoDiveActivity.this, DoDiveSearchResultDiveSpotActivity.class);
                     } else {
                         intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);
                     }

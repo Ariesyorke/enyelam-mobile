@@ -50,16 +50,16 @@ public class Summary implements Parseable {
             }
         }
 
-        if(!obj.isNull(KEY_SERVICE)) {
-            try {
+        try {
+            if(!obj.has(KEY_SERVICE) && obj.get(KEY_SERVICE) instanceof JSONObject && !obj.isNull(KEY_SERVICE)) {
                 JSONObject o = obj.getJSONObject(KEY_SERVICE);
                 if(o != null && o.length() > 0) {
                     diveService = new DiveService();
                     diveService.parse(o);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
     }

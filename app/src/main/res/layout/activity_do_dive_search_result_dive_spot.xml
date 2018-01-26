@@ -31,19 +31,13 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
-
-            <ImageView
-                android:src="@drawable/ic_sort"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
 
     <TextView
         android:id="@+id/label_textView"
-        android:text="Please choose Dive Center to continue"
+        android:text="Please choose Dive Spot to continue"
         android:textColor="@color/ny_black1"
         android:textSize="15sp"
         android:textStyle="bold"

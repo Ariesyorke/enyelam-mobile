@@ -26,7 +26,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_public_api_key" />
@@ -60,7 +59,8 @@
         <activity android:name=".bookinghistory.BookingHistoryDetailActivity" />
         <activity android:name=".profile.EditProfileActivity" />
         <activity android:name=".divecenter.DiveCenterDetailActivity" />
-        <activity android:name=".divespot.DiveSpotDetailActivity"></activity>
+        <activity android:name=".divespot.DiveSpotDetailActivity" />
+        <activity android:name=".dodive.DoDiveSearchResultDiveSpotActivity"></activity>
     </application>
 
 </manifest>

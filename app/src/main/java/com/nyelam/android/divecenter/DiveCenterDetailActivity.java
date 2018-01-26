@@ -78,7 +78,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private boolean mProtectFromCheckedChange = false;
     private boolean mProtectFromPagerChange = false;
     private String serviceId;
-    protected DiveService diveService, newDiveService;
+    //protected DiveService diveService, newDiveService;
     protected DiveCenter diveCenter;
     protected int diver;
     protected String schedule;
@@ -99,9 +99,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         initControl();
     }
 
-    public DiveService getDiveService() {
+    /*public DiveService getDiveService() {
         return newDiveService;
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -136,15 +136,15 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
             }
 
-            if(intent.hasExtra(NYHelper.SERVICE) && !extras.getString(NYHelper.SERVICE).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVE_CENTER) && !extras.getString(NYHelper.DIVE_CENTER).equals(null)){
                 JSONObject obj = null;
                 try {
-                    obj = new JSONObject(extras.getString(NYHelper.SERVICE));
-                    diveService = new DiveService();
-                    diveService.parse(obj);
-                    if (diveService != null && NYHelper.isStringNotEmpty(diveService.getName())) nameTextView.setText(diveService.getName());
-                    if (diveService != null && diveService.getRating() > 0){
-                        ratingTextView.setText("*"+String.valueOf(diveService.getRating()));
+                    obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
+                    diveCenter = new DiveCenter();
+                    diveCenter.parse(obj);
+                    if (diveCenter != null && NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
+                    if (diveCenter != null && diveCenter.getRating() > 0){
+                        ratingTextView.setText("*"+String.valueOf(diveCenter.getRating()));
                     } else {
                         ratingTextView.setText("-");
                     }
@@ -160,7 +160,6 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
     private void initRequest() {
         if (diveCenter == null)diveCenter = new DiveCenter();
-        diveCenter.setId("1");
         if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())){
             NYDiveCenterDetailRequest req = new NYDiveCenterDetailRequest(this.getClass(), DiveCenterDetailActivity.this, diveCenter.getId());
             spcMgr.execute(req, onGetDetailDiveCenterRequest());
@@ -179,7 +178,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
             @Override
             public void onRequestSuccess(DiveCenter results) {
-                if (diveService == null) diveService = new DiveService();
+                if (diveCenter == null) diveCenter = new DiveCenter();
                 diveCenter = results;
 
                 if (diveCenter != null){
@@ -232,7 +231,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private void initBanner() {
         BannerList bannerList = new BannerList();
         List<Banner> banners = new ArrayList<>();
-        if (diveService != null && diveService.getFeaturedImage() != null && !TextUtils.isEmpty(diveService.getFeaturedImage()))banners.add(new Banner("1", diveService.getFeaturedImage(), "captio", null));
+        if (diveCenter != null && diveCenter.getFeaturedImage() != null && !TextUtils.isEmpty(diveCenter.getFeaturedImage()))banners.add(new Banner("1", diveCenter.getFeaturedImage(), "captio", null));
         bannerList.setList(banners);
         //input data data
         bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());

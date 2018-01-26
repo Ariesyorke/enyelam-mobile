@@ -24,7 +24,7 @@
 
             <ImageView
                 android:id="@+id/service_imageView"
-                android:src="@drawable/example_pic"
+                android:src="@drawable/logo_nyelam"
                 android:scaleType="centerCrop"
                 android:layout_width="100dp"
                 android:minHeight="100dp"
@@ -58,8 +58,8 @@
             <ImageView
                 android:src="@drawable/ic_arrow"
                 android:layout_gravity="center"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="14dp"
+                android:layout_height="14dp" />
 
         </LinearLayout>
 

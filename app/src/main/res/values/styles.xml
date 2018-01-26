@@ -40,4 +40,8 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="StarRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_small_holo_light</item>
+    </style>
+
 </resources>

@@ -23,6 +23,8 @@
     <string name="api_path_dodive_search_dive_center_by_province">api/dodive/center/province</string>
     <string name="api_path_dodive_search_dive_center_by_city">api/dodive/center/city</string>
 
+    <string name="api_path_dodive_search_dive_spots_by_province">api/dodive/center/province</string>
+    <string name="api_path_dodive_search_dive_spots_by_city">api/dodive/center/city</string>
 
     <string name="api_path_dodive_detail_service">api/service/detail</string>
     <string name="api_path_dodive_book_service_cart">api/order/bookservicecart</string>
