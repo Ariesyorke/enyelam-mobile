@@ -19,13 +19,7 @@ import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
-import com.nyelam.android.data.Participant;
 import com.nyelam.android.helper.NYHelper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class DiveCenterDetailFragment extends Fragment {
 

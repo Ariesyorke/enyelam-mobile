@@ -32,7 +32,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/name_textView"
-                android:text="Nusa Dua Indah"
+                android:text="Dive Spot"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorWhite"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/location_textView"
-                android:text="Sanur, Bali"
+                android:text="Location"
                 android:textSize="18sp"
                 android:textColor="@color/colorWhite"
                 android:layout_gravity="center"

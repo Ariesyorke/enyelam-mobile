@@ -258,6 +258,7 @@ public class BookingServiceActivity extends BasicActivity {
             //myViewAddons.setId(0);
 
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
+            TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
             TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
             LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
@@ -267,6 +268,12 @@ public class BookingServiceActivity extends BasicActivity {
             } else {
                 nameTextView.setText("Participant "+String.valueOf(position+1));
                 fillLinearLayout.setVisibility(View.VISIBLE);
+            }
+
+            if (participant != null && NYHelper.isStringNotEmpty(participant.getEmail())) {
+                if (NYHelper.isStringNotEmpty(participant.getEmail())) emailTextView.setText(participant.getEmail());
+            } else {
+                emailTextView.setText("example@mail.com");
             }
 
             changeTextView.setOnClickListener(new View.OnClickListener() {

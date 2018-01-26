@@ -25,7 +25,7 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
 
     private Bundle bundle;
     private TextView savetextView;
-    private TextInputEditText nameInputEditText;
+    private TextInputEditText nameInputEditText, emailInputEditText;
     private ImageView closeImageView;
 
     private int position;
@@ -68,6 +68,7 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
             if (participants != null && participants.size() > 0){
                 Participant p = participants.get(position);
                 if (p != null && NYHelper.isStringNotEmpty(p.getName())) nameInputEditText.setText(p.getName());
+                if (p != null && NYHelper.isStringNotEmpty(p.getEmail())) emailInputEditText.setText(p.getEmail());
             }
 
         }
@@ -79,8 +80,12 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String name = nameInputEditText.getText().toString();
+                String email = emailInputEditText.getText().toString();
+
                 if (!NYHelper.isStringNotEmpty(name)){
                     nameInputEditText.setError(getString(R.string.warn_field_name_cannot_be_empty));
+                } else if (!NYHelper.isStringNotEmpty(email)){
+                    emailInputEditText.setError(getString(R.string.warn_field_email_cannot_be_empty));
                 } else {
 
                     name = NYHelper.capitalizeString(name);
@@ -112,6 +117,7 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
     private void initView() {
         savetextView = (TextView) findViewById(R.id.save_textView);
         nameInputEditText  = (TextInputEditText) findViewById(R.id.name_editText);
+        emailInputEditText  = (TextInputEditText) findViewById(R.id.email_editText);
         closeImageView = (ImageView) findViewById(R.id.close_imageView) ;
     }
 
