@@ -1,8 +1,11 @@
 package com.nyelam.android.home;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.StarterActivity;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
 import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
@@ -72,6 +76,18 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         initView();
         initTab();
         initControl();
+        initPermission();
+    }
+
+    private void initPermission() {
+        ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.SEND_SMS
+        }, 1);
     }
 
     private void initControl() {
@@ -154,7 +170,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     public void movePagerToTabItemPosition(int tabItemPosition) {
         LoginStorage loginStorage = new LoginStorage(getApplicationContext());
-        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 | tabItemPosition == 3)){
+        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2 || tabItemPosition == 3)){
             Intent intent = new Intent(this, AuthActivity.class);
             startActivity(intent);
         } else {
@@ -375,6 +391,32 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         super.onResume();
         setCheckedStateForTab(getLastKey(), true);
         //setCheckedId(getLastKey());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(HomeActivity.this, "Permission denied to maybe some feture not function normally", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
 }

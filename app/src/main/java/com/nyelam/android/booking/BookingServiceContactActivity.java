@@ -68,6 +68,7 @@ public class BookingServiceContactActivity extends AppCompatActivity {
         });
     }
 
+
     private void initView() {
         nameEditText = (TextInputEditText) findViewById(R.id.name_contact_editText);
         phoneEditText = (TextInputEditText) findViewById(R.id.phone_number_contact_editText);

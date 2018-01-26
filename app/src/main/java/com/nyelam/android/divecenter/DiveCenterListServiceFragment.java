@@ -1,5 +1,6 @@
 package com.nyelam.android.divecenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -81,7 +82,9 @@ public class DiveCenterListServiceFragment extends Fragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        adapter = new DoDiveSearchServiceAdapter(getActivity(), "5", "1515660600");
+        DiveCenterDetailActivity activity = (DiveCenterDetailActivity)getActivity();
+
+        adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.diver, activity.schedule, activity.certificate);
         recyclerView.setAdapter(adapter);
     }
 
@@ -105,8 +108,11 @@ public class DiveCenterListServiceFragment extends Fragment {
             diveCenter = ((DiveCenterDetailActivity)getActivity()).diveCenter;
         }*/
 
-        if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())){
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(getActivity(), getString(R.string.api_path_dodive_search_by_dive_center), String.valueOf(page), diveCenter.getId(), "3", "1", "5", "1515660600");
+        DiveCenterDetailActivity activity = (DiveCenterDetailActivity)getActivity();
+        if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())
+                && !TextUtils.isEmpty(activity.diver)
+                && !TextUtils.isEmpty(activity.certificate)){
+            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(getActivity(), String.valueOf(page), diveCenter.getId(), activity.certificate, activity.diver, activity.schedule);
             //NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(getActivity(), getString(R.string.api_path_dodive_search_by_dive_center), String.valueOf(page), diveCenter.getId(), "type", "certificate", "diver", "date");
             spcMgr.execute(req, onGetServiceByDiveCenterRequest());
         }
@@ -124,15 +130,18 @@ public class DiveCenterListServiceFragment extends Fragment {
             @Override
             public void onRequestSuccess(DiveServiceList results) {
 
-                NYLog.e("WHAT ? "+results.getList().toString());
+                //NYLog.e("WHAT ? "+results.getList().toString());
 
                 if (progressBar != null)progressBar.setVisibility(View.GONE);
-                noResultTextView.setVisibility(View.GONE);
+
                 if (serviceList == null) serviceList = new ArrayList<>();
                 if (results != null && results.getList().size() > 0){
                     serviceList = results.getList();
                     adapter.addResults(serviceList);
                     adapter.notifyDataSetChanged();
+                    noResultTextView.setVisibility(View.GONE);
+                } else {
+                    noResultTextView.setVisibility(View.VISIBLE);
                 }
 
             }

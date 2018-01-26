@@ -61,6 +61,7 @@ public class NYHelper {
     public static final String POSITION = "position";
     public static final String IS_NOT_NEW = "is_not_new";
     public static final String DIVE_SPOT_ID = "dive_spot_id";
+    public static final String CART_RETURN = "cart_return";
     public static final int LOGIN_REQ = 101;
 
     public static boolean isStringNotEmpty(String string) {

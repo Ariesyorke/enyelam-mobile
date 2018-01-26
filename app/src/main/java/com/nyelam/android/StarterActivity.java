@@ -1,11 +1,15 @@
 package com.nyelam.android;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.data.CountryCode;
@@ -37,7 +41,6 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     }
 
     private void startSplashTimer() {
-
 
         DaoSession session = ((NYApplication) getApplicationContext()).getDaoSession();
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
@@ -116,4 +119,6 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
 }

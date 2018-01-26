@@ -22,22 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
-import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.booking.BookingServiceActivity;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
-import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveCenter;
-import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.detail.DetailServiceDiveCenterFragment;
-import com.nyelam.android.detail.DetailServiceDiveSpotsFragment;
-import com.nyelam.android.detail.DetailServiceFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDiveCenterDetailRequest;
-import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
@@ -62,7 +53,6 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         DiveCenterListServiceFragment.OnFragmentInteractionListener {
 
     private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"));
-    //private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private NYBannerViewPager bannerViewPager;
@@ -80,7 +70,8 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private String serviceId;
     //protected DiveService diveService, newDiveService;
     protected DiveCenter diveCenter;
-    protected int diver;
+    protected String diver;
+    protected String certificate;
     protected String schedule;
     private TextView nameTextView, ratingTextView, bookingTextView;
     private ProgressDialog progressDialog;
@@ -125,11 +116,15 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         if (extras != null) {
 
             if(intent.hasExtra(NYHelper.DIVER) &&!extras.get(NYHelper.DIVER).equals(null)){
-                diver = Integer.valueOf(extras.getString(NYHelper.DIVER));
+                diver = extras.getString(NYHelper.DIVER);
             }
 
             if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
                 schedule = extras.getString(NYHelper.SCHEDULE);
+            }
+
+            if(intent.hasExtra(NYHelper.CERTIFICATE) && !extras.getString(NYHelper.CERTIFICATE).equals(null)){
+                certificate = extras.getString(NYHelper.CERTIFICATE);
             }
 
             if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && !extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){

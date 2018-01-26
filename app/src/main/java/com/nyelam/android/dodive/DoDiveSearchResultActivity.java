@@ -11,12 +11,9 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveCenterList;
-import com.nyelam.android.data.DiveServiceList;
-import com.nyelam.android.divecenter.DoDiveSearchServiceAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchDiveCenterRequest;
-import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -94,7 +91,7 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        diveCenterAdapter = new DoDiveSearchDiveCenterAdapter(this, diver, date);
+        diveCenterAdapter = new DoDiveSearchDiveCenterAdapter(this, diver, date, certificate);
         recyclerView.setAdapter(diveCenterAdapter);
     }
 

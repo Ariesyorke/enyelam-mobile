@@ -16,6 +16,7 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.BookingContact;
+import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
@@ -42,11 +43,13 @@ public class BookingServiceSummaryActivity extends BasicActivity {
     private int diver = 3;
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
-    private String cartToken;
+    //private String cartToken;
+    private CartReturn cartReturn;
 
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout;
-    private TextView serviceNameTextView, scheduleTextView, locationTextView, priceTextView;
+    private TextView serviceNameTextView, scheduleTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView;
+    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView;
 
 
     @Override
@@ -75,7 +78,7 @@ public class BookingServiceSummaryActivity extends BasicActivity {
 
                 NYDoDiveServiceOrderRequest req = null;
                 try {
-                    req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartToken, bookingContact.toString(), participantList.toString());
+                    req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toString(), participantList.toString());
                     spcMgr.execute(req, onCreateOrderServiceRequest());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -93,8 +96,18 @@ public class BookingServiceSummaryActivity extends BasicActivity {
 
             //NYLog.e("CEK INI 2 :"+extras.get(NYHelper.SERVICE));
 
-            if (intent.hasExtra(NYHelper.CART_TOKEN)){
+            /*if (intent.hasExtra(NYHelper.CART_TOKEN)){
                 cartToken = extras.getString(NYHelper.CART_TOKEN);
+            }*/
+
+            if (intent.hasExtra(NYHelper.CART_RETURN)){
+                try {
+                    cartReturn = new CartReturn();
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.CART_RETURN));
+                    cartReturn.parse(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (extras.get(NYHelper.SERVICE) != null){
@@ -109,14 +122,25 @@ public class BookingServiceSummaryActivity extends BasicActivity {
                 }
 
 
+                if (cartReturn != null && cartReturn.getCart() != null){
+                    subTotalPriceTextView.setText(NYHelper.priceFormatter(cartReturn.getCart().getCurrency(), cartReturn.getCart().getSubTotal()));
+                    totalPriceTextView.setText(NYHelper.priceFormatter(cartReturn.getCart().getCurrency(), cartReturn.getCart().getTotal()));
+                }
+
                 if (diveService != null){
                     if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
 
-                    if (diveService.getSpecialPrice() < diveService.getNormalPrice()){
+                    if (diveService.getSpecialPrice() < diveService.getNormalPrice() && diveService.getSpecialPrice() > 0){
+                        detailPriceTextView.setText(diver+" x @"+NYHelper.priceFormatter(diveService.getSpecialPrice()));
+                    } else {
+                        detailPriceTextView.setText(diver+" x @"+NYHelper.priceFormatter(diveService.getNormalPrice()));
+                    }
+
+                    /*if (diveService.getSpecialPrice() < diveService.getNormalPrice()){
                         priceTextView.setText(NYHelper.priceFormatter( diveService.getSpecialPrice()));
                     } else {
                         priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
-                    }
+                    }*/
 
                     // TODO: location from where ?
                     if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getContact().getLocation().getCountry())) {
@@ -207,7 +231,9 @@ public class BookingServiceSummaryActivity extends BasicActivity {
         serviceNameTextView = (TextView) findViewById(R.id.service_name_textView);
         scheduleTextView = (TextView) findViewById(R.id.schedule_textView);
         locationTextView = (TextView) findViewById(R.id.location_textView);
-        priceTextView = (TextView) findViewById(R.id.price_textView);
+        detailPriceTextView = (TextView) findViewById(R.id.detail_price_textView);
+        subTotalPriceTextView = (TextView) findViewById(R.id.sub_total_price_textView);
+        totalPriceTextView = (TextView) findViewById(R.id.price_textView);
 
         particpantContainerLinearLayout = (LinearLayout) findViewById(R.id.participant_container_linearLayout);
         contactNameTextView = (TextView) findViewById(R.id.contact_name_textView);

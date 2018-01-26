@@ -31,7 +31,7 @@
                     android:background="@android:color/transparent"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:text="Summary Order"/>
+                    android:text="Summary Booking"/>
 
                 <!--<ImageView
                     android:id="@+id/menu_item_imageView"
@@ -126,7 +126,7 @@
                 android:background="#1286ec"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:text="Check your order is write correctly"
+                android:text="Check your booking is write correctly"
                 android:textColor="@color/colorWhite" />
 
             <TextView
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/ny_grey3"
                 android:padding="@dimen/padding"
-                android:text="Pesanan Anda"
+                android:text="Your Booking"
                 android:textColor="@color/ny_black1"
                 android:textStyle="bold" />
 
@@ -149,7 +149,7 @@
                     android:id="@+id/schedule_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sel, 16 Jan 2018"
+                    android:text="Sel, 1 Jan 2000"
                     android:textColor="@color/ny_black1"
                     android:textStyle="bold" />
 
@@ -166,15 +166,6 @@
                         android:layout_marginTop="@dimen/padding"
                         android:text="Service Name"
                         android:textColor="@color/ny_black1" />
-                    <TextView
-                        android:id="@+id/price_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:textSize="14sp"
-                        android:text="Rp 1.800.000"
-                        android:textColor="@color/ny_orange" />
                 </LinearLayout>
 
                 <TextView
@@ -182,9 +173,106 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding"
-                    android:text="Bali, Indonesia"
+                    android:text="Location"
                     android:textSize="14sp"
                     android:textColor="@color/ny_grey4" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:visibility="gone"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="Participants "
+                        android:textSize="14sp"
+                        android:textColor="@color/ny_grey4" />
+                    <TextView
+                        android:id="@+id/detail_price_textView"
+                        android:gravity="right"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:textSize="14sp"
+                        android:text="0 x @ Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="Sub Total "
+                        android:textSize="14sp"
+                        android:textColor="@color/ny_grey4" />
+                    <TextView
+                        android:id="@+id/sub_total_price_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:textSize="14sp"
+                        android:text="Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="Voucher "
+                        android:textColor="@color/ny_grey4" />
+                    <TextView
+                        android:id="@+id/voucher_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:textSize="14sp"
+                        android:text="Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="Total Price "
+                        android:textColor="@color/ny_grey4" />
+                    <TextView
+                        android:id="@+id/total_price_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:textSize="14sp"
+                        android:text="Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
 
 
             </LinearLayout>

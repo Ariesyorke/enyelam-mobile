@@ -119,10 +119,11 @@ public class BookingHistoryInprogressFragment extends Fragment {
         NYDoDiveBookingHistoryRequest req = null;
         try {
             req = new NYDoDiveBookingHistoryRequest(getActivity(), "1", "1");
+            spcMgr.execute(req, onGetHistoryRequest());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spcMgr.execute(req, onGetHistoryRequest());
+
     }
 
     private RequestListener<SummaryList> onGetHistoryRequest() {

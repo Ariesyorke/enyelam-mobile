@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -33,11 +34,13 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
     private List<DiveService> searchResults;
     private String diver;
     private String date;
+    private String certificate;
 
-    public DoDiveSearchServiceAdapter(Activity activity, String diver,String date) {
+    public DoDiveSearchServiceAdapter(Activity activity, String diver,String date, String certificate) {
         this.activity = activity;
         this.diver = diver;
         this.date = date;
+        this.certificate = certificate;
     }
 
     @Override
@@ -95,6 +98,8 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         private StrikethroughTextView priceStrikethroughTextView;
         private TextView priceTextView;
         private TextView totalDiveTextView;
+        private TextView totalDiveSpotTextView;
+        private RatingBar ratingBar;
         private View itemView;
         private DiveService diveService;
 
@@ -107,6 +112,8 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
             totalDiveTextView = (TextView) itemView.findViewById(R.id.total_dive_textView);
+            totalDiveSpotTextView = (TextView) itemView.findViewById(R.id.total_dive_spot_textView);
+            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
 
             this.itemView = itemView;
         }
@@ -114,49 +121,60 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         public void setModel(DiveService diveService) {
             this.diveService = diveService;
 
-            if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
-            if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
-            totalDiveTextView.setText(String.valueOf(diveService.getTotalDives()));
+            if (diveService != null){
 
-            if (diveService.getSpecialPrice() < diveService.getNormalPrice() && diveService.getSpecialPrice() > 0){
-                priceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
-                priceStrikethroughTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
-                priceStrikethroughTextView.setVisibility(View.VISIBLE);
-            } else {
-                priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
-                priceStrikethroughTextView.setVisibility(View.GONE);
-            }
+                if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
+                if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
 
-            //SET IMAGE
-            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
-            if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) {
+                totalDiveTextView.setText("Total Dives : "+String.valueOf(diveService.getTotalDives()));
 
-                    }
+                if (diveService.getDiveSpots() != null){
+                    totalDiveSpotTextView.setText("Total Dive Spot : "+String.valueOf(diveService.getDiveSpots().size()));
+                }
 
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        serviceImageView.setImageResource(R.mipmap.ic_launcher);
-                    }
+                ratingBar.setRating(diveService.getRating());
 
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        serviceImageView.setImageBitmap(loadedImage);
-                        //activity.getCache().put(imageUri, loadedImage);
-                    }
+                if (diveService.getSpecialPrice() < diveService.getNormalPrice() && diveService.getSpecialPrice() > 0){
+                    priceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
+                    priceStrikethroughTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
+                    priceStrikethroughTextView.setVisibility(View.VISIBLE);
+                } else {
+                    priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
+                    priceStrikethroughTextView.setVisibility(View.GONE);
+                }
 
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                        serviceImageView.setImageResource(R.mipmap.ic_launcher);
-                    }
-                });
+                //SET IMAGE
+                ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
+                if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
+                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
 
-                ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+                        }
 
-            } else {
-                serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            serviceImageView.setImageBitmap(loadedImage);
+                            //activity.getCache().put(imageUri, loadedImage);
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+                            serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                        }
+                    });
+
+                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+
+                } else {
+                    serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                }
+
             }
 
             itemView.setOnClickListener(this);
@@ -164,10 +182,12 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View v) {
+
             Intent intent = new Intent(activity, DetailServiceActivity.class);
-            intent.putExtra(NYHelper.SERVICE, diveService.toString());
+            if (diveService != null ) intent.putExtra(NYHelper.SERVICE, diveService.toString());
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
+            intent.putExtra(NYHelper.CERTIFICATE, certificate);
 
             /*intent.putExtra(NYHelper.DIVER, ((DoDiveSearchResultActivity)activity).diver);
             intent.putExtra(NYHelper.SCHEDULE, ((DoDiveSearchResultActivity)activity).date);

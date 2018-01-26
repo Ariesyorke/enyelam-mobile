@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.data.BookingContact;
+import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
@@ -30,14 +31,16 @@ import java.util.List;
 public class BookingServiceActivity extends BasicActivity {
 
     private LinearLayout particpantContainerLinearLayout, nextLinearLayout;
-    private TextView serviceNameTextView, scheduleTextView, locationTextView, priceTextView;
+    private TextView serviceNameTextView, scheduleTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
+    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView;
 
     private DiveService diveService;
     private int diver = 0;
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
-    private String cartToken;
+    //private String cartToken;
+    private CartReturn cartReturn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,8 @@ public class BookingServiceActivity extends BasicActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BookingServiceActivity.this, BookingServiceContactActivity.class);
                 intent.putExtra(NYHelper.SERVICE, diveService.toString());
-                intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                 intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                 intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                 startActivity(intent);
@@ -89,7 +93,8 @@ public class BookingServiceActivity extends BasicActivity {
                 if (isFill){
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceSummaryActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
-                    intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     startActivity(intent);
@@ -109,10 +114,19 @@ public class BookingServiceActivity extends BasicActivity {
 
             //NYLog.e("CEK INI 2 :"+extras.get(NYHelper.SERVICE));
 
-            if (intent.hasExtra(NYHelper.CART_TOKEN)){
+            /*if (intent.hasExtra(NYHelper.CART_TOKEN)){
                 cartToken = extras.getString(NYHelper.CART_TOKEN);
-            }
+            }*/
 
+            if (intent.hasExtra(NYHelper.CART_RETURN)){
+                try {
+                    cartReturn = new CartReturn();
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.CART_RETURN));
+                    cartReturn.parse(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
             if (extras.get(NYHelper.SERVICE) != null){
 
@@ -126,15 +140,25 @@ public class BookingServiceActivity extends BasicActivity {
                 }
 
 
+                if (cartReturn != null && cartReturn.getCart() != null){
+                    subTotalPriceTextView.setText(NYHelper.priceFormatter(cartReturn.getCart().getCurrency(), cartReturn.getCart().getSubTotal()));
+                    totalPriceTextView.setText(NYHelper.priceFormatter(cartReturn.getCart().getCurrency(), cartReturn.getCart().getTotal()));
+                }
 
                 if (diveService != null){
                     if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
 
-                    if (diveService.getSpecialPrice() < diveService.getNormalPrice()){
-                        priceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
+                    if (diveService.getSpecialPrice() < diveService.getNormalPrice() && diveService.getSpecialPrice() > 0){
+                        detailPriceTextView.setText(diver+" x @"+NYHelper.priceFormatter(diveService.getSpecialPrice()));
                     } else {
-                        priceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
+                        detailPriceTextView.setText(diver+" x @"+NYHelper.priceFormatter(diveService.getNormalPrice()));
                     }
+
+                    /*if (diveService.getSpecialPrice() < diveService.getNormalPrice()){
+                        totalPriceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
+                    } else {
+                        totalPriceTextView.setText(NYHelper.priceFormatter(diveService.getNormalPrice()));
+                    }*/
 
                     // TODO: location from where ?
                     if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getContact().getLocation().getCountry())) {
@@ -229,7 +253,9 @@ public class BookingServiceActivity extends BasicActivity {
         serviceNameTextView = (TextView) findViewById(R.id.service_name_textView);
         scheduleTextView = (TextView) findViewById(R.id.schedule_textView);
         locationTextView = (TextView) findViewById(R.id.location_textView);
-        priceTextView = (TextView) findViewById(R.id.price_textView);
+        detailPriceTextView = (TextView) findViewById(R.id.detail_price_textView);
+        subTotalPriceTextView = (TextView) findViewById(R.id.sub_total_price_textView);
+        totalPriceTextView = (TextView) findViewById(R.id.total_price_textView);
 
         particpantContainerLinearLayout = (LinearLayout) findViewById(R.id.participant_container_linearLayout);
         contactNameTextView = (TextView) findViewById(R.id.contact_name_textView);
@@ -284,7 +310,8 @@ public class BookingServiceActivity extends BasicActivity {
 
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceParticipantActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
-                    intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
@@ -301,7 +328,8 @@ public class BookingServiceActivity extends BasicActivity {
 
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceParticipantActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
-                    intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);

@@ -21,6 +21,15 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.helper.NYHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class DiveCenterDetailFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -81,7 +90,7 @@ public class DiveCenterDetailFragment extends Fragment {
             containerLayout.removeAllViews();
 
             if (NYHelper.isStringNotEmpty(diveCenter.getSubtitle())) {
-                setDetails(containerLayout, "Subtitle", diveCenter.getSubtitle());
+                setDetails(containerLayout, "About", diveCenter.getSubtitle());
             }
 
             if (diveCenter.getContact() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getEmailAddress())) {
@@ -187,4 +196,5 @@ public class DiveCenterDetailFragment extends Fragment {
         // TODO: Update argument type and name
         //void onFragmentInteraction(Uri uri);
     }
+
 }

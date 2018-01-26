@@ -30,14 +30,19 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
     private static final String POST_PROVINCE_ID = "province_id";
     private static final String POST_CITY_ID = "city_id";
 
-    public NYDoDiveSearchServiceRequest(Context context, String apiPath, String page, String diverId, String type, String certificate, String diver, String date) {
-        super(AuthReturn.class, context, apiPath);
+    //public NYDoDiveSearchServiceRequest(Context context, String page, String diverId, String type, String certificate, String diver, String date) {
+    public NYDoDiveSearchServiceRequest(Context context, String page, String diverCenterId, String certificate, String diver, String date) {
+        super(AuthReturn.class, context, context.getString(R.string.api_path_dodive_service_list));
+
+        if(!TextUtils.isEmpty(diverCenterId)) {
+            addQuery(POST_DIVE_CENTER_ID, diverCenterId);
+        }
 
         if(!TextUtils.isEmpty(page)) {
             addQuery(POST_PAGE, page);
         }
 
-        if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(diverId)) {
+        /*if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(diverId)) {
             if(type.equals("1")) {
                 addQuery(POST_DIVE_SPOT_ID, diverId);
             } else if(type.equals("3")) {
@@ -49,7 +54,7 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
             } else if(type.equals("6")) {
                 addQuery(POST_CITY_ID, diverId);
             }
-        }
+        }*/
 
         if(!TextUtils.isEmpty(certificate)) {
             addQuery(POST_CERTIFICATE, certificate);

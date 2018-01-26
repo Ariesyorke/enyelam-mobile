@@ -84,8 +84,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
     private String serviceId;
     protected DiveService diveService, newDiveService;
     //protected DiveSpot diveSpot;
-    protected int diver;
+    protected String diver;
     protected String schedule;
+    protected String certificate;
     private TextView nameTextView, ratingTextView, bookingTextView;
     private ProgressDialog progressDialog;
     //private View viewTabManager;
@@ -125,7 +126,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
-
                 LoginStorage storage = new LoginStorage(getApplicationContext());
 
                 if (storage.isUserLogin()){
@@ -155,12 +155,16 @@ public class DetailServiceActivity extends AppCompatActivity implements
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
-            if(!extras.get(NYHelper.DIVER).equals(null)){
-                diver = Integer.valueOf(extras.getString(NYHelper.DIVER));
+            if(intent.hasExtra(NYHelper.DIVER) && !extras.getString(NYHelper.DIVER).equals(null)){
+                diver = extras.getString(NYHelper.DIVER);
             }
 
-            if(!extras.getString(NYHelper.SCHEDULE).equals(null)){
+            if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
                 schedule = extras.getString(NYHelper.SCHEDULE);
+            }
+
+            if(intent.hasExtra(NYHelper.CERTIFICATE) && !extras.getString(NYHelper.CERTIFICATE).equals(null)){
+                certificate = extras.getString(NYHelper.CERTIFICATE);
             }
 
             if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && !extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
@@ -204,12 +208,20 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     progressBar.setVisibility(View.GONE);
                 }*/
                 NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, null);
+
+                bookingTextView.setEnabled(false);
+                bookingTextView.setBackgroundResource(R.drawable.ny_book_disable);
+
             }
 
             @Override
             public void onRequestSuccess(DiveService results) {
 
                 if (results != null){
+
+                    bookingTextView.setEnabled(true);
+                    bookingTextView.setBackgroundResource(R.drawable.ny_book);
+
                     if (diveService == null) diveService = new DiveService();
                     newDiveService = results;
                     List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
@@ -261,13 +273,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 }
 
                 Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
-                intent.putExtra(NYHelper.CART_TOKEN, cartReturn.getCartToken());
+                //intent.putExtra(NYHelper.CART_TOKEN, cartReturn.getCartToken());
+                intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                 intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
                 intent.putExtra(NYHelper.DIVER, diver);
                 startActivity(intent);
-
-
-
 
             }
         };
