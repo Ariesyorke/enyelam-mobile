@@ -39,7 +39,7 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
             addQuery(POST_TYPE, type);
         }*/
 
-        addQuery(POST_TYPE, "3");
+        addQuery(POST_TYPE, "1");
 
         if(!TextUtils.isEmpty(schedule)) {
             addQuery(POST_SCHEDULE, schedule);

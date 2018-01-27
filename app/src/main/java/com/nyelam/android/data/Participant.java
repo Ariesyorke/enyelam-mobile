@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class Participant implements Parseable {
 
     private static String KEY_NAME = "name";
-    private static String KEY_EMAIL = "email";
+    private static String KEY_EMAIL = "email_address";
 
     private String name;
     private String email;
