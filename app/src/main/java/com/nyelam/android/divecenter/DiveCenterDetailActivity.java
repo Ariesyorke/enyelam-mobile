@@ -20,6 +20,7 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -77,6 +78,8 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private ProgressDialog progressDialog;
     private boolean triggerBook;
     private String diveSpotId;
+    protected String type;
+    protected String diverId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,8 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         initTab();
         initRequest();
         initControl();
+
+        //Toast.makeText(this, "Diver "+diver, Toast.LENGTH_SHORT).show();
     }
 
     /*public DiveService getDiveService() {
@@ -105,9 +110,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     }
 
     private void initControl() {
-
     }
-
 
     private void initExtra() {
 
@@ -117,6 +120,15 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
             if(intent.hasExtra(NYHelper.DIVER) &&!extras.get(NYHelper.DIVER).equals(null)){
                 diver = extras.getString(NYHelper.DIVER);
+            }
+
+            if(intent.hasExtra(NYHelper.ID_DIVER) &&!extras.get(NYHelper.ID_DIVER).equals(null)){
+                diverId = extras.getString(NYHelper.ID_DIVER);
+            }
+
+            if(intent.hasExtra(NYHelper.TYPE) &&!extras.get(NYHelper.TYPE).equals(null)){
+                type = extras.getString(NYHelper.TYPE);
+                //Toast.makeText(this, "Type : "+type, Toast.LENGTH_SHORT).show();
             }
 
             if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){

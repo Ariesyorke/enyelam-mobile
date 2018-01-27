@@ -30,9 +30,12 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
     private static final String POST_PROVINCE_ID = "province_id";
     private static final String POST_CITY_ID = "city_id";
 
+    private static final String POST_SPOT_ID = "dive_spot_id";
+    private static final String POST_CATEGORY_ID = "category_id";
+
     //public NYDoDiveSearchServiceRequest(Context context, String page, String diverId, String type, String certificate, String diver, String date) {
-    public NYDoDiveSearchServiceRequest(Context context, String page, String diverCenterId, String certificate, String diver, String date) {
-        super(AuthReturn.class, context, context.getString(R.string.api_path_dodive_service_list));
+    public NYDoDiveSearchServiceRequest(Context context, String apiPath, String page, String diverCenterId, String certificate, String diver, String date, String type, String diverId) {
+        super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(diverCenterId)) {
             addQuery(POST_DIVE_CENTER_ID, diverCenterId);
@@ -40,6 +43,12 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
 
         if(!TextUtils.isEmpty(page)) {
             addQuery(POST_PAGE, page);
+        }
+
+        if (!TextUtils.isEmpty(type) && type.equals("1")){
+            addQuery(POST_SPOT_ID, diverId);
+        } else if (!TextUtils.isEmpty(type) && type.equals("2")){
+            addQuery(POST_CATEGORY_ID, diverId);
         }
 
         /*if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(diverId)) {

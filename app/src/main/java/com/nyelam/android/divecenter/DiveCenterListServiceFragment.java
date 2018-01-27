@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,9 +21,12 @@ import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.divespot.DiveSpotDetailActivity;
+import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -82,9 +86,17 @@ public class DiveCenterListServiceFragment extends Fragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        DiveCenterDetailActivity activity = (DiveCenterDetailActivity)getActivity();
+        if (getActivity() instanceof  DiveCenterDetailActivity){
 
-        adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.diver, activity.schedule, activity.certificate);
+            DiveCenterDetailActivity activity = (DiveCenterDetailActivity)getActivity();
+            adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.diver, activity.schedule, activity.certificate);
+
+        } else if (getActivity() instanceof DiveSpotDetailActivity){
+
+            DiveSpotDetailActivity activity = (DiveSpotDetailActivity)getActivity();
+            adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.getDiver(), activity.getSchedule(), activity.getCerificate());
+        }
+
         recyclerView.setAdapter(adapter);
     }
 
@@ -112,7 +124,15 @@ public class DiveCenterListServiceFragment extends Fragment {
         if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())
                 && !TextUtils.isEmpty(activity.diver)
                 && !TextUtils.isEmpty(activity.certificate)){
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(getActivity(), String.valueOf(page), diveCenter.getId(), activity.certificate, activity.diver, activity.schedule);
+
+            String apiPath = getString(R.string.api_path_dodive_service_list);
+            if (NYHelper.isStringNotEmpty(activity.type) && activity.type.equals("1")){
+                apiPath = getString(R.string.api_path_dodive_service_list_by_divespot);
+            } else if (NYHelper.isStringNotEmpty(activity.type) && activity.type.equals("2")){
+                apiPath = getString(R.string.api_path_dodive_service_list_by_category);
+            }
+
+            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(getActivity(), apiPath, String.valueOf(page), diveCenter.getId(), activity.certificate, activity.diver, activity.schedule, activity.type, activity.diverId);
             //NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(getActivity(), getString(R.string.api_path_dodive_search_by_dive_center), String.valueOf(page), diveCenter.getId(), "type", "certificate", "diver", "date");
             spcMgr.execute(req, onGetServiceByDiveCenterRequest());
         }

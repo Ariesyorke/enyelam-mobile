@@ -33,12 +33,14 @@ public class DoDiveSearchDiveSpotAdapter extends RecyclerView.Adapter<RecyclerVi
     private String diver;
     private String date;
     private String certificate;
+    private String type;
 
-    public DoDiveSearchDiveSpotAdapter(Activity activity, String diver, String date, String certificate) {
+    public DoDiveSearchDiveSpotAdapter(Activity activity, String diver, String date, String certificate, String type) {
         this.activity = activity;
         this.diver = diver;
         this.date = date;
         this.certificate = certificate;
+        this.type = type;
     }
 
     @Override

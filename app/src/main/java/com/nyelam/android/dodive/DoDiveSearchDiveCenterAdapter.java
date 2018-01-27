@@ -38,12 +38,16 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
     private String diver;
     private String date;
     private String certificate;
+    private String type;
+    private String diverId;
 
-    public DoDiveSearchDiveCenterAdapter(Activity activity, String diver, String date, String certificate) {
+    public DoDiveSearchDiveCenterAdapter(Activity activity, String diver, String date, String certificate, String type, String diverId) {
         this.activity = activity;
         this.diver = diver;
         this.date = date;
         this.certificate = certificate;
+        this.type = type;
+        this.diverId = diverId;
     }
 
     @Override
@@ -218,8 +222,10 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             Intent intent = new Intent(activity, DiveCenterDetailActivity.class);
             intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
             intent.putExtra(NYHelper.DIVER, diver);
+            intent.putExtra(NYHelper.ID_DIVER, diverId);
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
             intent.putExtra(NYHelper.SCHEDULE, date);
+            intent.putExtra(NYHelper.TYPE, type);
             activity.startActivity(intent);
         }
     }

@@ -34,6 +34,7 @@ import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.divecenter.DiveCenterDetailFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
@@ -63,7 +64,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         DetailServiceDiveSpotsFragment.OnFragmentInteractionListener,
         DetailServiceDiveCenterFragment.OnFragmentInteractionListener,
         DetailServiceReviewFragment.OnFragmentInteractionListener,
-        DiveSpotPickerFragment.OnFragmentInteractionListener{
+        DiveSpotPickerFragment.OnFragmentInteractionListener,
+        DiveCenterDetailFragment.OnFragmentInteractionListener{
 
     private List<DetailServiceActivity.Frags> tags = Arrays.asList(new DetailServiceActivity.Frags(0,"home"), new DetailServiceActivity.Frags(1,"timeline"), new DetailServiceActivity.Frags(2,"interest"), new DetailServiceActivity.Frags(3,"tags"), new DetailServiceActivity.Frags(4,"more"));
     //private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
@@ -105,6 +107,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         initTab();
         initRequest();
         initControl();
+
+        //Toast.makeText(this, "Diver "+diver, Toast.LENGTH_SHORT).show();
     }
 
     public DiveService getDiveService() {
@@ -142,7 +146,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
         try {
-            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), String.valueOf(diver), schedule);
+            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule);
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,6 +272,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
             @Override
             public void onRequestSuccess(CartReturn cartReturn) {
+
+                //NYLog.e("CEK CART RETURN : "+cartReturn.toString());
+
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
@@ -277,6 +284,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                 intent.putExtra(NYHelper.SERVICE, newDiveService.toString());
                 intent.putExtra(NYHelper.DIVER, diver);
+                intent.putExtra(NYHelper.SCHEDULE, schedule);
+                intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 startActivity(intent);
 
             }

@@ -19,6 +19,7 @@ import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Facilities;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.StrikethroughTextView;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 
 public class DetailServiceFragment extends Fragment {
 
@@ -82,7 +83,16 @@ public class DetailServiceFragment extends Fragment {
 
     public void setContent(DiveService service){
 
+        DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
+
+        if (activity.certificate.equals("1")){
+            licenseTextView.setText("Need a License");
+        } else  {
+            licenseTextView.setText("No Need License");
+        }
+
        if (service != null){
+
             if (service.getSchedule() != null)dateTextView.setText(NYHelper.setMillisToDate(service.getSchedule().getStartDate())+" - "+NYHelper.setMillisToDate(service.getSchedule().getEndDate()));
             if (service.getSpecialPrice() < service.getNormalPrice() && service.getSpecialPrice() > 0){
                 priceTextView.setText(NYHelper.priceFormatter(service.getSpecialPrice()));

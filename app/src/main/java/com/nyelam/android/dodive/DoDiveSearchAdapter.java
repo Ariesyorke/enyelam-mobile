@@ -129,7 +129,7 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    typeTextView.setText("Spot ("+spot.getCount()+")");
+                    typeTextView.setText("Spot");
 
                 }  else if (searchResult.getType() == 2){
 

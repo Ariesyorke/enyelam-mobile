@@ -19,21 +19,19 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
-import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.divecenter.DiveCenterDetailFragment;
 import com.nyelam.android.divecenter.DiveCenterListServiceFragment;
 import com.nyelam.android.divecenter.DiveCenterMapFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
-import com.nyelam.android.http.NYDiveCenterDetailRequest;
 import com.nyelam.android.http.NYDiveSpotDetailRequest;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
@@ -54,7 +52,8 @@ import java.util.Map;
 import me.relex.circleindicator.CircleIndicator;
 
 public class DiveSpotDetailActivity extends AppCompatActivity implements
-        DiveSpotDetailFragment.OnFragmentInteractionListener {
+        DiveSpotDetailFragment.OnFragmentInteractionListener,
+        DiveSpotMapFragment.OnFragmentInteractionListener{
 
 
     private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"));
@@ -75,8 +74,9 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
     private boolean mProtectFromPagerChange = false;
     private String serviceId;
     protected DiveService diveService, newDiveService;
-    protected int diver;
+    protected String diver;
     protected String schedule;
+    protected String certificate;
     private TextView nameTextView, ratingTextView, bookingTextView;
     private ProgressDialog progressDialog;
     private boolean triggerBook;
@@ -94,6 +94,8 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
         initTab();
         initRequest();
         initControl();
+
+        Toast.makeText(this, "Diver "+diver, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -109,7 +111,11 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
         if (extras != null) {
 
             if(intent.hasExtra(NYHelper.DIVER) &&!extras.get(NYHelper.DIVER).equals(null)){
-                diver = Integer.valueOf(extras.getString(NYHelper.DIVER));
+                diver = extras.getString(NYHelper.DIVER);
+            }
+
+            if(intent.hasExtra(NYHelper.CERTIFICATE) &&!extras.get(NYHelper.CERTIFICATE).equals(null)){
+                certificate = extras.getString(NYHelper.CERTIFICATE);
             }
 
             if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
@@ -172,17 +178,13 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
                     if (diveSpot.getRating() > 0) ratingTextView.setText(String.valueOf("*"+diveSpot.getRating()));
 
                     fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
-                    if (fragment != null && fragment instanceof DiveCenterListServiceFragment){
+                    if (fragment != null && fragment instanceof DiveSpotDetailFragment){
 
-                        //((DiveCenterListServiceFragment) fragment).setContent(diveCenter);
+                        ((DiveSpotDetailFragment) fragment).setContent(diveSpot);
 
-                    } else if (fragment != null && fragment instanceof DiveCenterDetailFragment){
+                    } else if (fragment != null && fragment instanceof DiveSpotMapFragment){
 
-                        ///((DiveCenterDetailFragment) fragment).setContent(diveCenter);
-
-                    } else if (fragment != null && fragment instanceof DiveCenterMapFragment){
-
-                        //((DiveCenterMapFragment) fragment).setContent(diveCenter);
+                        ((DiveSpotMapFragment) fragment).setContent(diveSpot);
 
                     }
 
@@ -235,7 +237,7 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
     }
 
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 3;
+        private static final int FRAGMENT_COUNT = 2;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 
@@ -264,7 +266,7 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
+            /*if (position == 0) {
                 DiveCenterListServiceFragment fragment = DiveCenterListServiceFragment.newInstance();
                 return fragment;
             } else if (position == 1) {
@@ -272,6 +274,14 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
                 return fragment;
             } else {
                 DiveCenterMapFragment fragment = DiveCenterMapFragment.newInstance();
+                return fragment;
+            }*/
+
+            if (position == 0) {
+                DiveSpotDetailFragment fragment = DiveSpotDetailFragment.newInstance();
+                return fragment;
+            } else {
+                DiveSpotMapFragment fragment = DiveSpotMapFragment.newInstance();
                 return fragment;
             }
         }
@@ -338,7 +348,7 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
         //NavDrawer
         setSupportActionBar(toolbar);
 
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(2);
         //viewPager.setAdapter(new NYFragmentPagerAdapter(getSupportFragmentManager()));
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -347,17 +357,13 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
                 //KTLog.e("CEK 1");
                 //Toast.makeText(MainActivity.this, "test 1", Toast.LENGTH_SHORT).show();
                 fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
-                if (fragment != null && fragment instanceof DiveCenterListServiceFragment){
+                if (fragment != null && fragment instanceof DiveSpotDetailFragment){
 
-                    //((DiveCenterListServiceFragment) fragment).setContent(diveCenter);
+                    ((DiveSpotDetailFragment) fragment).setContent(diveSpot);
 
-                } else if (fragment != null && fragment instanceof DiveCenterDetailFragment){
+                } else if (fragment != null && fragment instanceof DiveSpotMapFragment){
 
-                    //((DiveCenterDetailFragment) fragment).setContent(diveCenter);
-
-                } else if (fragment != null && fragment instanceof DiveCenterMapFragment){
-
-                    //((DiveCenterMapFragment) fragment).setContent(diveCenter);
+                    ((DiveSpotMapFragment) fragment).setContent(diveSpot);
 
                 }
             }
@@ -386,7 +392,7 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
 
                 NYHomepageDetailTabItemView view = (NYHomepageDetailTabItemView) tabManager.getChildAt(position);
                 onCheckedChanged(view, true);
-                fragment = ((DiveCenterDetailActivity.NYFragmentPagerAdapter) viewPager.getAdapter()).getFragment(position);
+                fragment = ((NYFragmentPagerAdapter) viewPager.getAdapter()).getFragment(position);
                 if (position == 0 && fragment != null) {
                     fragment.onResume();
                 }
@@ -461,5 +467,8 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
         }
     }
 
+    public String getCerificate(){return certificate;}
+    public String getDiver(){return diver;}
+    public String getSchedule(){return schedule;}
 
 }

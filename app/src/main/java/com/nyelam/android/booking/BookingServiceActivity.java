@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.data.BookingContact;
+import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
@@ -37,6 +38,8 @@ public class BookingServiceActivity extends BasicActivity {
 
     private DiveService diveService;
     private int diver = 0;
+    private String schedule = "0";
+    private String certificate = "0";
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -63,6 +66,10 @@ public class BookingServiceActivity extends BasicActivity {
                 intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                 intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                 intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
+
+                intent.putExtra(NYHelper.SCHEDULE, schedule);
+                intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
+                intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 startActivity(intent);
             }
         });
@@ -97,6 +104,10 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
+
+                    intent.putExtra(NYHelper.SCHEDULE, schedule);
+                    intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
+                    intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     startActivity(intent);
                 } else {
                     Toast.makeText(BookingServiceActivity.this, "Fill empty field to order", Toast.LENGTH_SHORT).show();
@@ -118,17 +129,37 @@ public class BookingServiceActivity extends BasicActivity {
                 cartToken = extras.getString(NYHelper.CART_TOKEN);
             }*/
 
-            if (intent.hasExtra(NYHelper.CART_RETURN)){
+            if (intent.hasExtra(NYHelper.DIVER)){
+                diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
+            }
+
+            if (intent.hasExtra(NYHelper.SCHEDULE) && extras.get(NYHelper.SCHEDULE) != null){
+                schedule = intent.getStringExtra(NYHelper.SCHEDULE);
+            }
+
+            if (intent.hasExtra(NYHelper.CERTIFICATE) && extras.get(NYHelper.CERTIFICATE) != null){
+                certificate = intent.getStringExtra(NYHelper.CERTIFICATE);
+            }
+
+            if (intent.hasExtra(NYHelper.CART_RETURN) && extras.get(NYHelper.CART_RETURN) != null){
                 try {
                     cartReturn = new CartReturn();
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.CART_RETURN));
                     cartReturn.parse(obj);
+
+                    if (cartReturn != null && cartReturn.getCart() != null){
+                        Cart cart = cartReturn.getCart();
+                        if (cart != null){
+                            subTotalPriceTextView.setText(NYHelper.priceFormatter(cart.getSubTotal()));
+                            totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
-            if (extras.get(NYHelper.SERVICE) != null){
+            if (intent.hasExtra(NYHelper.SERVICE) && extras.get(NYHelper.SERVICE) != null){
 
                 diveService = new DiveService();
 
@@ -166,22 +197,20 @@ public class BookingServiceActivity extends BasicActivity {
                         loc = diveService.getDiveCenter().getContact().getLocation();
                         locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
                     } else{
-                        locationTextView.setText("");
+                        locationTextView.setVisibility(View.GONE);
                     }
 
-                    if (diveService.getSchedule() != null){
+                    // TODO: schedule
+                    /*if (diveService.getSchedule() != null){
                         long start = diveService.getSchedule().getStartDate();
                         long end = diveService.getSchedule().getEndDate();
                         scheduleTextView.setText(NYHelper.setMillisToDate(start)+" - "+NYHelper.setMillisToDate(end));
-                    }
+                    }*/
+
+                    if (NYHelper.isStringNotEmpty(schedule)) scheduleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule)));
                 }
 
             }
-
-            if (intent.hasExtra(NYHelper.DIVER)){
-                diver = intent.getIntExtra(NYHelper.DIVER, 0);
-            }
-
 
             if (extras.get(NYHelper.PARTICIPANT) == null){
                 for (int i = 0; i < diver; i++){
@@ -315,6 +344,10 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
+
+                    intent.putExtra(NYHelper.SCHEDULE, schedule);
+                    intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
+                    intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     startActivity(intent);
                 }
             });
@@ -333,6 +366,10 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
+
+                    intent.putExtra(NYHelper.SCHEDULE, schedule);
+                    intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
+                    intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     startActivity(intent);
                 }
             });

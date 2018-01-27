@@ -91,7 +91,7 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        diveCenterAdapter = new DoDiveSearchDiveCenterAdapter(this, diver, date, certificate);
+        diveCenterAdapter = new DoDiveSearchDiveCenterAdapter(this, diver, date, certificate, type, diverId);
         recyclerView.setAdapter(diveCenterAdapter);
     }
 
@@ -140,12 +140,18 @@ public class DoDiveSearchResultActivity extends BasicActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        spcMgr.start(this);
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
+        spcMgr.start(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 

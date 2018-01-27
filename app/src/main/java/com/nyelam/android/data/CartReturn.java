@@ -74,12 +74,17 @@ public class CartReturn implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        try {
-            if (!obj.isNull(KEY_CART)) {
-                Cart cart = new Cart();
-                cart.parse(obj.getJSONObject(KEY_CART));
+        if(!obj.isNull(KEY_CART)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_CART);
+                if(o != null && o.length() > 0) {
+                    cart = new Cart();
+                    cart.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        }
 
         try {
             if (!obj.isNull(KEY_ADDITIONAL)) {
@@ -119,7 +124,8 @@ public class CartReturn implements Parseable {
 
         try{
             if(getCart()!=null){
-                obj.put(KEY_CART, getCart());
+                JSONObject objSchedule = new JSONObject(getCart().toString());
+                obj.put(KEY_CART, objSchedule);
             } else {
                 obj.put(KEY_CART, JSONObject.NULL);
             }

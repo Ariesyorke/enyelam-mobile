@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
@@ -95,6 +96,7 @@ public class DiveSpotInDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         private TextView ratingTextView;
         private TextView descriptionTextView;
         private TextView locationTextView;
+        private RatingBar ratingBar;
         private View itemView;
         private DiveSpot diveSpot;
 
@@ -105,22 +107,27 @@ public class DiveSpotInDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             locationTextView = (TextView) itemView.findViewById(R.id.location_textView);
             ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
             descriptionTextView = (TextView) itemView.findViewById(R.id.description_textView);
+            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
             this.itemView = itemView;
         }
 
         public void setModel(DiveSpot diveSpot) {
             this.diveSpot = diveSpot;
 
-            if (diveSpot.getName() != null && !TextUtils.isEmpty(diveSpot.getName())) nameTextView.setText(diveSpot.getName());
-            if (diveSpot.getShortDescription() != null && !TextUtils.isEmpty(diveSpot.getShortDescription())){
-                descriptionTextView.setText(diveSpot.getShortDescription());
-            } else {
-                descriptionTextView.setVisibility(View.GONE);
-            }
-            if (diveSpot.getLocation() != null) locationTextView.setText(diveSpot.getLocation().getCity().getName()+", "+diveSpot.getLocation().getProvince().getName()+", "+diveSpot.getLocation().getCountry());
-            ratingTextView.setText("*"+diveSpot.getRating());
+            if (diveSpot != null){
+                if (diveSpot.getName() != null && !TextUtils.isEmpty(diveSpot.getName())) nameTextView.setText(diveSpot.getName());
+                if (diveSpot.getShortDescription() != null && !TextUtils.isEmpty(diveSpot.getShortDescription())){
+                    descriptionTextView.setText(diveSpot.getShortDescription());
+                } else {
+                    descriptionTextView.setVisibility(View.GONE);
+                }
+                if (diveSpot.getLocation() != null) locationTextView.setText(diveSpot.getLocation().getCity().getName()+", "+diveSpot.getLocation().getProvince().getName()+", "+diveSpot.getLocation().getCountry());
+                ratingTextView.setText("*"+diveSpot.getRating());
+                ratingBar.setRating(diveSpot.getRating());
 
-            itemView.setOnClickListener(this);
+                itemView.setOnClickListener(this);
+            }
+            
         }
 
         @Override

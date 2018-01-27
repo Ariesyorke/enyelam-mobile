@@ -17,10 +17,9 @@ import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
-import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
-import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 
@@ -76,6 +75,9 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
                     certificateSwitch.setChecked(false);
                     certificateSwitch.setClickable(true);
                 }
+
+
+                //Toast.makeText(this, "Type : "+type, Toast.LENGTH_SHORT).show();
 
 
             } catch (JSONException e) {
@@ -154,7 +156,10 @@ public class DoDiveActivity extends BasicActivity implements DatePickerDialog.On
                     Intent intent;
                     if (type.equals("3")){
                         intent = new Intent(DoDiveActivity.this, DiveCenterDetailActivity.class);
-                    } if (type.equals("4") || type.equals("5") || type.equals("6")){
+                        DiveCenter diveCenter = new DiveCenter();
+                        diveCenter.setId(diverId);
+                        intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    } else if (type.equals("4") || type.equals("5") || type.equals("6")){
                         intent = new Intent(DoDiveActivity.this, DoDiveSearchResultDiveSpotActivity.class);
                     } else {
                         intent = new Intent(DoDiveActivity.this, DoDiveSearchResultActivity.class);

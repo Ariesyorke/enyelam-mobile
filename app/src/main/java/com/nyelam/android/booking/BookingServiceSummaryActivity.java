@@ -16,6 +16,7 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.BookingContact;
+import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
@@ -40,7 +41,9 @@ public class BookingServiceSummaryActivity extends BasicActivity {
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private ProgressDialog progressDialog;
     private DiveService diveService;
-    private int diver = 3;
+    private int diver = 0;
+    private String schedule = "0";
+    private String certificate = "0";
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -100,11 +103,32 @@ public class BookingServiceSummaryActivity extends BasicActivity {
                 cartToken = extras.getString(NYHelper.CART_TOKEN);
             }*/
 
+            if (intent.hasExtra(NYHelper.DIVER)){
+                diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
+            }
+
+            if (intent.hasExtra(NYHelper.SCHEDULE) && extras.get(NYHelper.SCHEDULE) != null){
+                schedule = intent.getStringExtra(NYHelper.SCHEDULE);
+            }
+
+            if (intent.hasExtra(NYHelper.CERTIFICATE) && extras.get(NYHelper.CERTIFICATE) != null){
+                certificate = intent.getStringExtra(NYHelper.CERTIFICATE);
+            }
+
             if (intent.hasExtra(NYHelper.CART_RETURN)){
                 try {
                     cartReturn = new CartReturn();
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.CART_RETURN));
                     cartReturn.parse(obj);
+
+                    if (cartReturn != null && cartReturn.getCart() != null){
+                        Cart cart = cartReturn.getCart();
+                        if (cart != null){
+                            subTotalPriceTextView.setText(NYHelper.priceFormatter(cart.getSubTotal()));
+                            totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
+                        }
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -148,14 +172,18 @@ public class BookingServiceSummaryActivity extends BasicActivity {
                         loc = diveService.getDiveCenter().getContact().getLocation();
                         locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
                     } else{
-                        locationTextView.setText("");
+                        locationTextView.setVisibility(View.GONE);
                     }
 
-                    if (diveService.getSchedule() != null){
+                    // TODO: schedule
+                    /*if (diveService.getSchedule() != null){
                         long start = diveService.getSchedule().getStartDate();
                         long end = diveService.getSchedule().getEndDate();
                         scheduleTextView.setText(NYHelper.setMillisToDate(start)+" - "+NYHelper.setMillisToDate(end));
-                    }
+                    }*/
+
+                    if (NYHelper.isStringNotEmpty(schedule)) scheduleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule)));
+
                 }
 
             }
@@ -233,7 +261,7 @@ public class BookingServiceSummaryActivity extends BasicActivity {
         locationTextView = (TextView) findViewById(R.id.location_textView);
         detailPriceTextView = (TextView) findViewById(R.id.detail_price_textView);
         subTotalPriceTextView = (TextView) findViewById(R.id.sub_total_price_textView);
-        totalPriceTextView = (TextView) findViewById(R.id.price_textView);
+        totalPriceTextView = (TextView) findViewById(R.id.total_price_textView);
 
         particpantContainerLinearLayout = (LinearLayout) findViewById(R.id.participant_container_linearLayout);
         contactNameTextView = (TextView) findViewById(R.id.contact_name_textView);

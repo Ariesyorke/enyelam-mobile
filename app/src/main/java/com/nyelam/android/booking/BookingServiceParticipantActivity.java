@@ -86,12 +86,15 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
                     nameInputEditText.setError(getString(R.string.warn_field_name_cannot_be_empty));
                 } else if (!NYHelper.isStringNotEmpty(email)){
                     emailInputEditText.setError(getString(R.string.warn_field_email_cannot_be_empty));
+                } else if (!NYHelper.isValidEmaillId(email)){
+                    emailInputEditText.setError(getString(R.string.warn_email_not_valid));
                 } else {
 
                     name = NYHelper.capitalizeString(name);
 
                     Participant p = new Participant();
                     p.setName(name);
+                    p.setEmail(email);
 
                     participants.set(position, p);
                     bundle.putString(NYHelper.PARTICIPANT, participants.toString());

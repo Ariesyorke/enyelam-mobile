@@ -30,7 +30,6 @@ public class DiveSpotDetailFragment extends Fragment {
     private LinearLayout containerLayout, mainLinearLayout;
     private TextView subTitleTextView, emailTextView, phoneNumberTextView, cityTextView, provinceTextView, countryTextView;
 
-
     public DiveSpotDetailFragment() {
         // Required empty public constructor
     }
@@ -70,29 +69,24 @@ public class DiveSpotDetailFragment extends Fragment {
         if (diveSpot != null) {
             containerLayout.removeAllViews();
 
-            /*if (NYHelper.isStringNotEmpty(diveSpot.getSubtitle())) {
-                setDetails(containerLayout, "Subtitle", diveSpot.getSubtitle());
+            if (NYHelper.isStringNotEmpty(diveSpot.getCurrentStatus())) {
+                setDetails(containerLayout, "Current Status", diveSpot.getCurrentStatus());
             }
 
-            if (diveSpot.getContact() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getEmailAddress())) {
-                setDetails(containerLayout, "Email", diveCenter.getContact().getEmailAddress());
+            if (diveSpot.getLocation() != null && diveSpot.getLocation().getCity() != null  && NYHelper.isStringNotEmpty(diveSpot.getLocation().getCity().getName())) {
+                setDetails(containerLayout, "Location", diveSpot.getLocation().getCity().getName()+","+diveSpot.getLocation().getProvince().getName());
             }
 
-            if (diveSpot.getContact() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getPhoneNumber())) {
-                setDetails(containerLayout, "Phone Number", diveCenter.getContact().getPhoneNumber());
-            }
+            if (NYHelper.isStringNotEmpty(diveSpot.getGreatFor()))setDetails(containerLayout, "Great For", diveSpot.getGreatFor());
+            setDetails(containerLayout, "Depth", String.valueOf(diveSpot.getDepthMin())+" - "+String.valueOf(diveSpot.getDepthMax()));
+            setDetails(containerLayout, "Visibility", String.valueOf(diveSpot.getVisiblityMin())+" - "+String.valueOf(diveSpot.getVisibilityMax()));
+            setDetails(containerLayout, "Experience", String.valueOf(diveSpot.getExperienceMin())+" - "+String.valueOf(diveSpot.getExperienceMax()));
+            setDetails(containerLayout, "Recomended Stay", String.valueOf(diveSpot.getRecommendedStayMin())+" - "+String.valueOf(diveSpot.getRecommendedStayMax()));
+            setDetails(containerLayout, "Temperature", String.valueOf(diveSpot.getTemperatureMin())+" - "+String.valueOf(diveSpot.getTemperatureMax()));
 
-            if (diveSpot.getContact() != null && diveCenter.getContact().getLocation() != null && diveCenter.getContact().getLocation().getCity() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getLocation().getCity().getName())) {
-                setDetails(containerLayout, "City", diveCenter.getContact().getLocation().getCity().getName());
+            if (diveSpot.getDescription() != null && diveSpot.getLocation().getCity() != null  && NYHelper.isStringNotEmpty(diveSpot.getDescription())) {
+                setDetails(containerLayout, "Description", diveSpot.getDescription());
             }
-
-            if (diveSpot.getContact() != null && diveCenter.getContact().getLocation() != null && diveCenter.getContact().getLocation().getProvince() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getLocation().getProvince().getName())) {
-                setDetails(containerLayout, "Province", diveCenter.getContact().getLocation().getProvince().getName());
-            }
-
-            if (diveSpot.getContact() != null && diveCenter.getContact().getLocation() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getLocation().getCountry())) {
-                setDetails(containerLayout, "Country", diveCenter.getContact().getLocation().getCountry());
-            }*/
 
         }
 

@@ -1,5 +1,6 @@
 package com.nyelam.android.dodive;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,21 +57,26 @@ public class DoDiveSearchResultDiveSpotActivity extends BasicActivity {
     }
 
     private void initExtra() {
+        Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (!extras.getString(NYHelper.KEYWORD).equals(null)) {
+            if (intent.hasExtra(NYHelper.KEYWORD) && !extras.getString(NYHelper.KEYWORD).equals(null)) {
                 keyword = extras.getString(NYHelper.KEYWORD);
                 titleTextView.setText(keyword);
             }
-            if (!extras.getString(NYHelper.ID_DIVER).equals(null))
+            if (intent.hasExtra(NYHelper.ID_DIVER) && !extras.getString(NYHelper.ID_DIVER).equals(null)){
                 diverId = extras.getString(NYHelper.ID_DIVER);
-            if (!extras.getString(NYHelper.DIVER).equals(null))
+            }
+            if (intent.hasExtra(NYHelper.DIVER) && !extras.getString(NYHelper.DIVER).equals(null)){
                 diver = extras.getString(NYHelper.DIVER);
-            if (!extras.getString(NYHelper.CERTIFICATE).equals(null))
+            }
+            if (intent.hasExtra(NYHelper.CERTIFICATE) && !extras.getString(NYHelper.CERTIFICATE).equals(null)){
                 certificate = extras.getString(NYHelper.CERTIFICATE);
-            if (!extras.getString(NYHelper.SCHEDULE).equals(null))
+            }
+            if (intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
                 date = extras.getString(NYHelper.SCHEDULE);
-            if (!extras.getString(NYHelper.TYPE).equals(null)) {
+            }
+            if (intent.hasExtra(NYHelper.TYPE) && !extras.getString(NYHelper.TYPE).equals(null)) {
                 type = extras.getString(NYHelper.TYPE);
             }
 
@@ -89,7 +95,7 @@ public class DoDiveSearchResultDiveSpotActivity extends BasicActivity {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        diveSpotAdapter = new DoDiveSearchDiveSpotAdapter(this, diver, date, certificate);
+        diveSpotAdapter = new DoDiveSearchDiveSpotAdapter(this, diver, date, certificate, type);
         recyclerView.setAdapter(diveSpotAdapter);
     }
 
