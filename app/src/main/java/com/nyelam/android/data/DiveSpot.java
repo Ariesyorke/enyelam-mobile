@@ -53,8 +53,8 @@ public class DiveSpot implements Parseable {
     private String surfaceCondition;
     private int temperatureMin;
     private int temperatureMax;
-    private String experienceMin;
-    private String experienceMax;
+    private Experience experienceMin;
+    private Experience experienceMax;
     private int recommendedStayMin;
     private int recommendedStayMax;
     private Location location;
@@ -175,19 +175,19 @@ public class DiveSpot implements Parseable {
         this.temperatureMax = temperatureMax;
     }
 
-    public String getExperienceMin() {
+    public Experience getExperienceMin() {
         return experienceMin;
     }
 
-    public void setExperienceMin(String experienceMin) {
+    public void setExperienceMin(Experience experienceMin) {
         this.experienceMin = experienceMin;
     }
 
-    public String getExperienceMax() {
+    public Experience getExperienceMax() {
         return experienceMax;
     }
 
-    public void setExperienceMax(String experienceMax) {
+    public void setExperienceMax(Experience experienceMax) {
         this.experienceMax = experienceMax;
     }
 
@@ -328,17 +328,29 @@ public class DiveSpot implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        try {
-            if (!obj.isNull(KEY_EXPERIENCE_MIN)) {
-                setExperienceMin(obj.getString(KEY_EXPERIENCE_MIN));
+        if(!obj.isNull(KEY_EXPERIENCE_MIN)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_EXPERIENCE_MIN);
+                if(o != null && o.length() > 0) {
+                    experienceMin = new Experience();
+                    experienceMin.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        }
 
-        try {
-            if (!obj.isNull(KEY_EXPERIENCE_MAX)) {
-                setExperienceMax(obj.getString(KEY_EXPERIENCE_MAX));
+        if(!obj.isNull(KEY_EXPERIENCE_MAX)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_EXPERIENCE_MAX);
+                if(o != null && o.length() > 0) {
+                    experienceMax = new Experience();
+                    experienceMax.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        }
 
         try {
             if (!obj.isNull(KEY_RECOMENDED_STAY_MIN)) {
@@ -491,13 +503,28 @@ public class DiveSpot implements Parseable {
             obj.put(KEY_WATER_TEMPERATURE_MAX, getTemperatureMax());
         } catch (JSONException e) {e.printStackTrace();}
 
-        try {
-            if (!TextUtils.isEmpty(getExperienceMin())) {
-                obj.put(KEY_EXPERIENCE_MAX, getExperienceMax());
+
+        try{
+            if(getLocation()!=null){
+                JSONObject objExp = new JSONObject(getExperienceMin().toString());
+                obj.put(KEY_EXPERIENCE_MIN, objExp);
+            } else {
+                obj.put(KEY_EXPERIENCE_MIN, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getLocation()!=null){
+                JSONObject objExp = new JSONObject(getExperienceMax().toString());
+                obj.put(KEY_EXPERIENCE_MAX, objExp);
             } else {
                 obj.put(KEY_EXPERIENCE_MAX, JSONObject.NULL);
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
 
         try {
             obj.put(KEY_RECOMENDED_STAY_MIN, getRecommendedStayMin());

@@ -177,7 +177,8 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, BookingHistoryDetailActivity.class);
-            intent.putExtra(NYHelper.SERVICE, summary.toString());
+            if (summary != null) intent.putExtra(NYHelper.SERVICE, summary.toString());
+            if (summary != null && summary.getOrder() != null && NYHelper.isStringNotEmpty(summary.getOrder().getOrderId()))intent.putExtra(NYHelper.ID_ORDER, summary.getOrder().getOrderId());
             context.startActivity(intent);
         }
 

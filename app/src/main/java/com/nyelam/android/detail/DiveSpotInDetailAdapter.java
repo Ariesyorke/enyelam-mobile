@@ -35,9 +35,16 @@ public class DiveSpotInDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private Context context;
     private List<DiveSpot> diveSpots;
+    private String diver;
+    private String certificate;
+    private String schedule;
 
-    public DiveSpotInDetailAdapter(Context context) {
+
+    public DiveSpotInDetailAdapter(Context context, String diver, String certificate, String schedule) {
         this.context = context;
+        this.diver = diver;
+        this.certificate = certificate;
+        this.schedule = schedule;
     }
 
     @Override
@@ -134,7 +141,10 @@ public class DiveSpotInDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void onClick(View v) {
             Intent intent = new Intent(context, DiveSpotDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(NYHelper.SEARCH_RESULT, diveSpot.getId());
+            intent.putExtra(NYHelper.DIVE_SPOT_ID, diveSpot.getId());
+            intent.putExtra(NYHelper.DIVER, diver);
+            intent.putExtra(NYHelper.CERTIFICATE, certificate);
+            intent.putExtra(NYHelper.SCHEDULE, schedule);
             context.startActivity(intent);
         }
     }

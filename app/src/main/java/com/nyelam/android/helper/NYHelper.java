@@ -63,6 +63,7 @@ public class NYHelper {
     public static final String DIVE_SPOT_ID = "dive_spot_id";
     public static final String CART_RETURN = "cart_return";
     public static final int LOGIN_REQ = 101;
+    public static final String ID_ORDER = "id_order";
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));

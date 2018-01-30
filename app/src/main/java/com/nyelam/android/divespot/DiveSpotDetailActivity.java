@@ -55,7 +55,6 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
         DiveSpotDetailFragment.OnFragmentInteractionListener,
         DiveSpotMapFragment.OnFragmentInteractionListener{
 
-
     private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"));
     //private List<DetailServiceActivity.Frags> fragses = new ArrayList<>();
 
@@ -95,7 +94,7 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
         initRequest();
         initControl();
 
-        Toast.makeText(this, "Diver "+diver, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Diver "+diver, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -151,10 +150,8 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
     private void initRequest() {
         if (diveSpotId == null)diveSpot = new DiveSpot();
         //diveSpot.setId("1");
-        if (diveSpot != null && !TextUtils.isEmpty(diveSpot.getId())){
-            NYDiveSpotDetailRequest req = new NYDiveSpotDetailRequest(this.getClass(), DiveSpotDetailActivity.this, diveSpotId);
-            spcMgr.execute(req, onGetDetailDiveSpotRequest());
-        }
+        NYDiveSpotDetailRequest req = new NYDiveSpotDetailRequest(this.getClass(), DiveSpotDetailActivity.this, diveSpotId);
+        spcMgr.execute(req, onGetDetailDiveSpotRequest());
     }
 
     private RequestListener<DiveSpot> onGetDetailDiveSpotRequest() {
@@ -422,7 +419,7 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        spcMgr.start(getApplicationContext());
+        spcMgr.start(this);
 
         setCheckedStateForTab(0, true);
         movePagerToTabItemPosition(0);

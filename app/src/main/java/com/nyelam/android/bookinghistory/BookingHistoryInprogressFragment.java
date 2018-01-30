@@ -144,10 +144,15 @@ public class BookingHistoryInprogressFragment extends Fragment {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                 if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
 
-                noResultTextView.setVisibility(View.GONE);
-                bookingListAdapter.clear();
-                bookingListAdapter.addResults(summaryList.getList());
-                bookingListAdapter.notifyDataSetChanged();
+                if (summaryList != null && summaryList.getList() != null && summaryList.getList().size() > 0){
+                    noResultTextView.setVisibility(View.GONE);
+                    bookingListAdapter.clear();
+                    bookingListAdapter.addResults(summaryList.getList());
+                    bookingListAdapter.notifyDataSetChanged();
+                } else {
+                    noResultTextView.setVisibility(View.VISIBLE);
+                }
+
             }
         };
     }

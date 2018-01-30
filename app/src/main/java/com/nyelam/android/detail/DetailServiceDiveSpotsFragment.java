@@ -59,10 +59,13 @@ public class DetailServiceDiveSpotsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+
+        DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
+
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new DiveSpotInDetailAdapter(getActivity());
+        adapter = new DiveSpotInDetailAdapter(getActivity(), activity.diver, activity.certificate, activity.schedule);
         recyclerView.setAdapter(adapter);
         //setDiveSpot();
     }

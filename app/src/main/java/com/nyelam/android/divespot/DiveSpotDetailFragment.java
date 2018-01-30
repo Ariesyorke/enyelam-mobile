@@ -78,11 +78,11 @@ public class DiveSpotDetailFragment extends Fragment {
             }
 
             if (NYHelper.isStringNotEmpty(diveSpot.getGreatFor()))setDetails(containerLayout, "Great For", diveSpot.getGreatFor());
-            setDetails(containerLayout, "Depth", String.valueOf(diveSpot.getDepthMin())+" - "+String.valueOf(diveSpot.getDepthMax()));
-            setDetails(containerLayout, "Visibility", String.valueOf(diveSpot.getVisiblityMin())+" - "+String.valueOf(diveSpot.getVisibilityMax()));
-            setDetails(containerLayout, "Experience", String.valueOf(diveSpot.getExperienceMin())+" - "+String.valueOf(diveSpot.getExperienceMax()));
-            setDetails(containerLayout, "Recomended Stay", String.valueOf(diveSpot.getRecommendedStayMin())+" - "+String.valueOf(diveSpot.getRecommendedStayMax()));
-            setDetails(containerLayout, "Temperature", String.valueOf(diveSpot.getTemperatureMin())+" - "+String.valueOf(diveSpot.getTemperatureMax()));
+            setDetails(containerLayout, "Depth", String.valueOf(diveSpot.getDepthMin())+" - "+String.valueOf(diveSpot.getDepthMax())+" meter");
+            setDetails(containerLayout, "Visibility", String.valueOf(diveSpot.getVisiblityMin())+" - "+String.valueOf(diveSpot.getVisibilityMax())+" meter");
+            if (diveSpot.getExperienceMin() != null && diveSpot.getExperienceMax() != null &&   NYHelper.isStringNotEmpty(diveSpot.getExperienceMin().getName()) && NYHelper.isStringNotEmpty(diveSpot.getExperienceMax().getName()) )setDetails(containerLayout, "Experience", String.valueOf(diveSpot.getExperienceMin().getName())+" - "+String.valueOf(diveSpot.getExperienceMax().getName()));
+            setDetails(containerLayout, "Recomended Stay", String.valueOf(diveSpot.getRecommendedStayMin())+" - "+String.valueOf(diveSpot.getRecommendedStayMax())+" days");
+            setDetails(containerLayout, "Temperature", String.valueOf(diveSpot.getTemperatureMin())+" - "+String.valueOf(diveSpot.getTemperatureMax())+" Celcius");
 
             if (diveSpot.getDescription() != null && diveSpot.getLocation().getCity() != null  && NYHelper.isStringNotEmpty(diveSpot.getDescription())) {
                 setDetails(containerLayout, "Description", diveSpot.getDescription());

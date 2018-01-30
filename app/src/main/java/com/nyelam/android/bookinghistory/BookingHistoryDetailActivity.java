@@ -53,6 +53,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private String idOrder;
     private Summary summary;
 
     private File file;
@@ -84,6 +85,17 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         initToolbar();
         initView();
         initControl();
+        initExtra();
+    }
+
+    private void initExtra() {
+        Intent intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (intent.hasExtra(NYHelper.ID_ORDER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_ORDER))) {
+                idOrder = extras.getString(NYHelper.ID_ORDER);
+            }
+        }
     }
 
     private void initControl() {
@@ -259,7 +271,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             } else{
                 progressBar.setVisibility(View.VISIBLE);
             }
-            NYDiveBookingDetailRequest req = new NYDiveBookingDetailRequest(this, "71");
+            NYDiveBookingDetailRequest req = new NYDiveBookingDetailRequest(this, idOrder);
             spcMgr.execute(req, onGetDetailOrderRequest());
         } catch (Exception e) {
             hideLoadingBar();
