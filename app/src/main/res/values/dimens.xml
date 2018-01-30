@@ -8,4 +8,8 @@
     <dimen name="padding_triple">30dp</dimen>
 
     <dimen name="star_small_height">40px</dimen>
+
+    <dimen name="create_place_photo_thumb_width">70dp</dimen>
+    <dimen name="max_create_place_image_width">1024px</dimen>
+
 </resources>

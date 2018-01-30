@@ -19,6 +19,9 @@ public class Order implements Parseable {
     private static String KEY_STATUS = "status";
     private static String KEY_SCHEDULE = "schedule";
     private static String KEY_CART = "cart";
+    private static String KEY_DIVE_SERVICE = "service";
+    private static String KEY_PARTICIPANTS = "participants";
+
     private static String KEY_TOTAL = "total";
     private static String KEY_CURRENCY = "currency";
     private static String KEY_DIVE_SPOT = "dive_spot";
@@ -27,6 +30,8 @@ public class Order implements Parseable {
     private String status;
     private long schedule;
     private Cart cart;
+    private DiveService service;
+    private List<Participant> participants;
     //private long total;
     //private String currency;
     //private DiveSpot diveSpot;
@@ -61,6 +66,22 @@ public class Order implements Parseable {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public DiveService getService() {
+        return service;
+    }
+
+    public void setService(DiveService service) {
+        this.service = service;
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
     }
 
     /*public long getTotal() {
@@ -117,6 +138,37 @@ public class Order implements Parseable {
                 if(o != null) {
                     cart = new Cart();
                     cart.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(!obj.isNull(KEY_DIVE_SERVICE)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_DIVE_SERVICE);
+                if(o != null) {
+                    DiveService diveService = new DiveService();
+                    diveService.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(!obj.isNull(KEY_PARTICIPANTS)) {
+            try {
+                if(obj.get(KEY_PARTICIPANTS) instanceof JSONArray) {
+                    JSONArray array = obj.getJSONArray(KEY_PARTICIPANTS);
+                    if (array != null && array.length() > 0) {
+                        participants = new ArrayList<>();
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject o = array.getJSONObject(i);
+                            Participant p = new Participant();
+                            p.parse(o);
+                            participants.add(p);
+                        }
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -182,6 +234,19 @@ public class Order implements Parseable {
             }
         }catch (JSONException e){
             e.printStackTrace();
+        }
+
+        if(participants != null && !participants.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(Participant p : participants) {
+                    JSONObject o = new JSONObject(p.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_PARTICIPANTS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         /*try {

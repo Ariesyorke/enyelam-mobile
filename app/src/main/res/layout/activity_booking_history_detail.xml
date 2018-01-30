@@ -112,374 +112,464 @@
     </LinearLayout>
 
 
-    <ScrollView
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/padding_triple"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        android:layout_height="match_parent">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#1286ec"
-                android:gravity="center"
-                android:padding="@dimen/padding"
-                android:text="#1828281"
-                android:textColor="@color/colorWhite" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:background="@color/ny_grey3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/padding"
-                    android:text="Pesanan Anda"
-                    android:textColor="@color/ny_black1"
-                    android:textStyle="bold" />
-                <TextView
-                    android:padding="@dimen/padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Not paid yet"
-                    android:textSize="14sp"
-                    android:textColor="#ea2614" />
-            </LinearLayout>
-
-
-            <LinearLayout
+                android:id="@+id/main_linearLayout"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:orientation="vertical"
-                android:padding="@dimen/padding">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/schedule_textView"
+                    android:id="@+id/order_id_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sel, 16 Jan 2018"
-                    android:textColor="@color/ny_black1"
-                    android:textStyle="bold" />
+                    android:background="#1286ec"
+                    android:gravity="center"
+                    android:padding="@dimen/padding"
+                    android:text="#1828281"
+                    android:textColor="@color/colorWhite" />
 
                 <LinearLayout
                     android:orientation="horizontal"
+                    android:background="@color/ny_grey3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/service_name_textView"
                         android:layout_weight="1"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding"
+                        android:text="Your Order"
+                        android:textColor="@color/ny_black1"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/status_textView"
+                        android:padding="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textColor="#ea2614"
+                        android:textAllCaps="true"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding">
+
+                    <TextView
+                        android:id="@+id/schedule_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sel, 16 Jan 2018"
+                        android:textColor="@color/ny_black1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/service_name_textView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:layout_marginTop="@dimen/padding"
                         android:text="Service Name"
                         android:textColor="@color/ny_black1" />
+
                     <TextView
-                        android:id="@+id/price_textView"
-                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:id="@+id/location_textView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
+                        android:text="Bali, Indonesia"
                         android:textSize="14sp"
-                        android:text="Rp 1.800.000"
-                        android:textColor="@color/ny_orange" />
+                        android:textColor="@color/ny_grey4" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:text="Sub Total "
+                            android:textSize="14sp"
+                            android:textColor="@color/ny_grey4" />
+                        <TextView
+                            android:id="@+id/sub_total_price_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:textSize="14sp"
+                            android:text="Rp 0"
+                            android:textColor="@color/ny_orange" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:text="Voucher "
+                            android:textColor="@color/ny_grey4" />
+                        <TextView
+                            android:id="@+id/voucher_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:textSize="14sp"
+                            android:text="Rp 0"
+                            android:textColor="@color/ny_orange" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:text="Total Price "
+                            android:textColor="@color/ny_grey4" />
+                        <TextView
+                            android:id="@+id/total_price_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:textSize="14sp"
+                            android:text="Rp 0"
+                            android:textColor="@color/ny_orange" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/location_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Bali, Indonesia"
-                    android:textSize="14sp"
-                    android:textColor="@color/ny_grey4" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ny_grey3"
-                android:padding="@dimen/padding"
-                android:text="Data Pemesan"
-                android:textColor="@color/ny_black1"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:orientation="vertical"
-                android:padding="@dimen/padding">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/contact_name_textView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Aprilian Nur"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Phone Number"
-                        android:textColor="@color/ny_grey4"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/contact_phone_number_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+628662626222"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/email"
-                        android:textColor="@color/ny_grey4"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/contact_email_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="aprilian@gmail.com"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ny_grey3"
-                android:padding="@dimen/padding"
-                android:text="Detail Participant"
-                android:textColor="@color/ny_black1"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/participant_container_linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/padding"/>
-
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ny_grey3"
-                android:padding="@dimen/padding"
-                android:text="Payment"
-                android:textColor="@color/ny_black1"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:background="@color/colorWhite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:text="Transfer To\nBANK BCA"
-                    android:textSize="18sp"
+                    android:background="@color/ny_grey3"
+                    android:padding="@dimen/padding"
+                    android:text="Data Pemesan"
                     android:textColor="@color/ny_black1"
-                    android:gravity="center"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/contact_name_textView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Aprilian Nur"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Phone Number"
+                            android:textColor="@color/ny_grey4"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/contact_phone_number_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+628662626222"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/email"
+                            android:textColor="@color/ny_grey4"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/contact_email_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="aprilian@gmail.com"
+                            android:textColor="@color/ny_black1"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/ny_grey3"
                     android:padding="@dimen/padding"
+                    android:text="Detail Participant"
+                    android:textColor="@color/ny_black1"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/participant_container_linearLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding"/>
 
-
-
-
-                <TableLayout
-                    android:id="@+id/tabla_cuerpo"
-                    android:paddingLeft="@dimen/padding_double"
-                    android:paddingRight="@dimen/padding_double"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TableRow
-                        android:id="@+id/tableRow3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:gravity="center"
-                            android:textSize="14sp"
-                            android:text="Cabang"
-                            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                        <TextView
-                            android:layout_weight="2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:gravity="center"
-                            android:textSize="14sp"
-                            android:text="Citra Grand Bekasi"
-                            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/tableRow4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/textView1"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:gravity="center"
-                            android:textSize="14sp"
-                            android:text="Account Numb"
-                            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                        <TextView
-                            android:id="@+id/textView2"
-                            android:layout_weight="2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:gravity="center"
-                            android:textSize="14sp"
-                            android:text="711-50-76761"
-                            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:gravity="center"
-                            android:textSize="14sp"
-                            android:text="Account Name"
-                            android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
-
-                        <TextView
-                            android:layout_weight="2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:gravity="center"
-                            android:textSize="14sp"
-                            android:text="ISNOKE INDO KARYA, PT"
-                            android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
-
-                    </TableRow>
-                </TableLayout>
 
 
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:background="@drawable/ny_rectangle_white_border_black"
-                    android:padding="@dimen/padding"
-                    android:layout_margin="@dimen/padding_double"
+                    android:id="@+id/payment_linearLayout"
+                    android:visibility="gone"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <TextView
-                        android:text="Choose File"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/ny_grey3"
+                        android:padding="@dimen/padding"
+                        android:text="Payment"
                         android:textColor="@color/ny_black1"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding_double"
-                        android:background="@drawable/ny_rectangle_white_border_black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
 
-                    <TextView
-                        android:text="buktitransfer.jpg"
-                        android:textColor="@color/ny_black1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:background="@color/colorWhite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
+                        <TextView
+                            android:text="Transfer To\nBANK BCA"
+                            android:textSize="18sp"
+                            android:textColor="@color/ny_black1"
+                            android:gravity="center"
+                            android:padding="@dimen/padding"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+
+
+
+                        <TableLayout
+                            android:id="@+id/tabla_cuerpo"
+                            android:paddingLeft="@dimen/padding_double"
+                            android:paddingRight="@dimen/padding_double"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TableRow
+                                android:id="@+id/tableRow3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:gravity="center"
+                                    android:textSize="14sp"
+                                    android:text="Cabang"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:gravity="center"
+                                    android:textSize="14sp"
+                                    android:text="Citra Grand Bekasi"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/tableRow4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/textView1"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:gravity="center"
+                                    android:textSize="14sp"
+                                    android:text="Account Numb"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                                <TextView
+                                    android:id="@+id/textView2"
+                                    android:layout_weight="2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:gravity="center"
+                                    android:textSize="14sp"
+                                    android:text="711-50-76761"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:gravity="center"
+                                    android:textSize="14sp"
+                                    android:text="Account Name"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:gravity="center"
+                                    android:textSize="14sp"
+                                    android:text="ISNOKE INDO KARYA, PT"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+                            </TableRow>
+                        </TableLayout>
+
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:background="@drawable/ny_rectangle_white_border_black"
+                            android:padding="@dimen/padding"
+                            android:layout_margin="@dimen/padding_double"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/choose_file_textView"
+                                android:text="Choose File"
+                                android:textColor="@color/ny_black1"
+                                android:paddingLeft="@dimen/padding_double"
+                                android:paddingRight="@dimen/padding_double"
+                                android:background="@drawable/ny_rectangle_white_border_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/transfer_evidence_textView"
+                                android:text=""
+                                android:textColor="@color/ny_black1"
+                                android:singleLine="true"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:background="@drawable/ny_rectangle_white"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/send_linearLayout"
+                            android:background="@drawable/ny_rectangle_blue"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:paddingLeft="80dp"
+                            android:paddingRight="80dp"
+                            android:layout_marginTop="@dimen/padding_double"
+                            android:layout_marginBottom="@dimen/padding_double"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:text="Send"
+                                android:textSize="14sp"
+                                android:textAllCaps="true"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorWhite"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:padding="@dimen/padding_half"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/send_linearLayout"
-                    android:background="@drawable/ny_rectangle_blue"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:paddingLeft="80dp"
-                    android:paddingRight="80dp"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_marginBottom="@dimen/padding_double"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:text="Send"
-                        android:textSize="14sp"
-                        android:textAllCaps="true"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorWhite"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:padding="@dimen/padding_half"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+
+
+
 
             </LinearLayout>
-
-
-
-
-        </LinearLayout>
-    </ScrollView>
-
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

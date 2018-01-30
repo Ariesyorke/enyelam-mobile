@@ -19,6 +19,7 @@ public class DiveService implements Parseable {
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
     private static String KEY_RATING = "rating";
+    private static String KEY_RATING_COUNT = "rating_count";
     private static String KEY_CATEGORY = "category";
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_DIVE_SPOTS = "dive_spot";
@@ -35,6 +36,7 @@ public class DiveService implements Parseable {
     private String id;
     private String name;
     private int rating;
+    private int ratingCount;
     private List<Category> categories;
     private String featuredImage;
     private List<DiveSpot> diveSpots;
@@ -70,6 +72,22 @@ public class DiveService implements Parseable {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     public String getFeaturedImage() {
@@ -189,8 +207,8 @@ public class DiveService implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_RATING)) {
-                setRating(obj.getInt(KEY_RATING));
+            if (!obj.isNull(KEY_RATING_COUNT)) {
+                setRatingCount(obj.getInt(KEY_RATING_COUNT));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -236,8 +254,9 @@ public class DiveService implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_SCHEDULE);
                 if(o != null && o.length() > 0) {
-                    schedule = new Schedule();
+                    Schedule schedule = new Schedule();
                     schedule.parse(o);
+                    setSchedule(schedule);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -249,8 +268,9 @@ public class DiveService implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_FACILITIES);
                 if(o != null && o.length() > 0) {
-                    facilities = new Facilities();
+                    Facilities facilities = new Facilities();
                     facilities.parse(o);
+                    setFacilities(facilities);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -262,21 +282,23 @@ public class DiveService implements Parseable {
                 if(obj.get(KEY_CATEGORY) instanceof JSONArray) {
                     JSONArray array = obj.getJSONArray(KEY_CATEGORY);
                     if (array != null && array.length() > 0) {
-                        categories = new ArrayList<>();
+                        List<Category> categories = new ArrayList<>();
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject o = array.getJSONObject(i);
                             Category a = new Category();
                             a.parse(o);
                             categories.add(a);
                         }
+                        setCategories(categories);
                     }
                 }  else if (obj.get(KEY_CATEGORY) instanceof JSONObject) {
                     JSONObject o = obj.getJSONObject(KEY_CATEGORY);
                     if(o != null && o.length() > 0) {
-                        categories = new ArrayList<>();
+                        List<Category> categories = new ArrayList<>();
                         Category d = new Category();
                         d.parse(o);
                         categories.add(d);
+                        setCategories(categories);
                     }
                 }
             } catch (JSONException e) {
@@ -289,8 +311,9 @@ public class DiveService implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_DIVE_CENTER);
                 if(o != null && o.length() > 0) {
-                    diveCenter = new DiveCenter();
+                    DiveCenter diveCenter = new DiveCenter();
                     diveCenter.parse(o);
+                    setDiveCenter(diveCenter);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -314,10 +337,11 @@ public class DiveService implements Parseable {
                 }  else if (obj.get(KEY_DIVE_SPOTS) instanceof JSONObject) {
                     JSONObject o = obj.getJSONObject(KEY_DIVE_SPOTS);
                     if(o != null && o.length() > 0) {
-                        diveSpots = new ArrayList<>();
+                        List<DiveSpot> diveSpots = new ArrayList<>();
                         DiveSpot d = new DiveSpot();
                         d.parse(o);
                         diveSpots.add(d);
+                        setDiveSpots(diveSpots);
                     }
                 }
             } catch (JSONException e) {
@@ -359,42 +383,48 @@ public class DiveService implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            obj.put(KEY_RATING, rating);
+            obj.put(KEY_RATING, getRating());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            obj.put(KEY_DAYS, days);
+            obj.put(KEY_RATING_COUNT, getRatingCount());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            obj.put(KEY_TOTAL_DIVES, totalDives);
+            obj.put(KEY_DAYS, getDays());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            obj.put(KEY_MIN_PERSON, minPerson);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            obj.put(KEY_MAX_PERSON, maxPerson);
+            obj.put(KEY_TOTAL_DIVES, getTotalDives());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            obj.put(KEY_NORMAL_PRICE, normalPrice);
+            obj.put(KEY_MIN_PERSON, getMinPerson());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            obj.put(KEY_MAX_PERSON, getMaxPerson());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            obj.put(KEY_SPECIAL_PRICE, specialPrice);
+            obj.put(KEY_NORMAL_PRICE, getNormalPrice());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_SPECIAL_PRICE, getSpecialPrice());
         } catch (JSONException e) {
             e.printStackTrace();
         }
