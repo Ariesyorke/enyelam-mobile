@@ -19,22 +19,11 @@ public class Order implements Parseable {
     private static String KEY_STATUS = "status";
     private static String KEY_SCHEDULE = "schedule";
     private static String KEY_CART = "cart";
-    private static String KEY_DIVE_SERVICE = "service";
-    private static String KEY_PARTICIPANTS = "participants";
-
-    private static String KEY_TOTAL = "total";
-    private static String KEY_CURRENCY = "currency";
-    private static String KEY_DIVE_SPOT = "dive_spot";
 
     private String orderId;
     private String status;
     private long schedule;
     private Cart cart;
-    private DiveService service;
-    private List<Participant> participants;
-    //private long total;
-    //private String currency;
-    //private DiveSpot diveSpot;
 
     public String getOrderId() {
         return orderId;
@@ -68,45 +57,6 @@ public class Order implements Parseable {
         this.cart = cart;
     }
 
-    public DiveService getService() {
-        return service;
-    }
-
-    public void setService(DiveService service) {
-        this.service = service;
-    }
-
-    public List<Participant> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(List<Participant> participants) {
-        this.participants = participants;
-    }
-
-    /*public long getTotal() {
-        return total;
-    }
-
-    public void setTotal(long total) {
-        this.total = total;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public DiveSpot getDiveSpot() {
-        return diveSpot;
-    }
-
-    public void setDiveSpot(DiveSpot diveSpot) {
-        this.diveSpot = diveSpot;
-    }*/
 
     @Override
     public void parse(JSONObject obj) {
@@ -144,61 +94,6 @@ public class Order implements Parseable {
             }
         }
 
-        if(!obj.isNull(KEY_DIVE_SERVICE)) {
-            try {
-                JSONObject o = obj.getJSONObject(KEY_DIVE_SERVICE);
-                if(o != null) {
-                    DiveService diveService = new DiveService();
-                    diveService.parse(o);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(!obj.isNull(KEY_PARTICIPANTS)) {
-            try {
-                if(obj.get(KEY_PARTICIPANTS) instanceof JSONArray) {
-                    JSONArray array = obj.getJSONArray(KEY_PARTICIPANTS);
-                    if (array != null && array.length() > 0) {
-                        participants = new ArrayList<>();
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject o = array.getJSONObject(i);
-                            Participant p = new Participant();
-                            p.parse(o);
-                            participants.add(p);
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        /*try {
-            if (!obj.isNull(KEY_CART)) {
-                cart.parse(obj.getJSONObject(KEY_CART));
-            }
-        } catch (JSONException e) {e.printStackTrace();}*/
-
-        /*try {
-            if (!obj.isNull(KEY_TOTAL)) {
-                setTotal(obj.getLong(KEY_TOTAL));
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!obj.isNull(KEY_CURRENCY)) {
-                setCurrency(obj.getString(KEY_CURRENCY));
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!obj.isNull(KEY_DIVE_SPOT)) {
-                diveSpot.parse(obj.getJSONObject(KEY_DIVE_SPOT));
-            }
-        } catch (JSONException e) {e.printStackTrace();}*/
-
     }
 
     @Override
@@ -228,48 +123,14 @@ public class Order implements Parseable {
 
         try{
             if(getCart()!=null){
-                obj.put(KEY_CART, getCart());
+                JSONObject objCart = new JSONObject(getCart().toString());
+                obj.put(KEY_CART, objCart);
             } else {
                 obj.put(KEY_CART, JSONObject.NULL);
             }
         }catch (JSONException e){
             e.printStackTrace();
         }
-
-        if(participants != null && !participants.isEmpty()) {
-            try {
-                JSONArray array = new JSONArray();
-                for(Participant p : participants) {
-                    JSONObject o = new JSONObject(p.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_PARTICIPANTS, array);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        /*try {
-            obj.put(KEY_TOTAL, getTotal());
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!TextUtils.isEmpty(getCurrency())) {
-                obj.put(KEY_CURRENCY, getCurrency());
-            } else {
-                obj.put(KEY_CURRENCY, JSONObject.NULL);
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try{
-            if(getDiveSpot()!=null){
-                obj.put(KEY_DIVE_SPOT, getDiveSpot());
-            } else {
-                obj.put(KEY_DIVE_SPOT, JSONObject.NULL);
-            }
-        }catch (JSONException e){
-            e.printStackTrace();
-        }*/
 
         try {
             return obj.toString(3);

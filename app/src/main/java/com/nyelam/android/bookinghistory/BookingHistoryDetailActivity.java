@@ -86,6 +86,8 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         initView();
         initControl();
         initExtra();
+
+        Toast.makeText(this, idOrder, Toast.LENGTH_SHORT).show();
     }
 
     private void initExtra() {
@@ -319,8 +321,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                             }
                         }
 
-
-
                         if (NYHelper.isStringNotEmpty(order.getOrderId()))orderIdTextView.setText("#"+order.getOrderId());
                         scheduleTextView.setText(NYHelper.setMillisToDateMonth(order.getSchedule()));
 
@@ -332,10 +332,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                         }
 
 
-                        if (order.getParticipants() != null && order.getParticipants().size() > 0){
+                        if (summary.getParticipants() != null && summary.getParticipants().size() > 0){
                             participantContainerLinearLayout.removeAllViews();
                             int pos = 0;
-                            for (final Participant participant : order.getParticipants()) {
+                            for (final Participant participant : summary.getParticipants()) {
 
                                 final int position = pos;
 

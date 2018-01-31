@@ -505,7 +505,7 @@ public class DiveSpot implements Parseable {
 
 
         try{
-            if(getLocation()!=null){
+            if(getExperienceMin()!=null){
                 JSONObject objExp = new JSONObject(getExperienceMin().toString());
                 obj.put(KEY_EXPERIENCE_MIN, objExp);
             } else {
@@ -516,7 +516,7 @@ public class DiveSpot implements Parseable {
         }
 
         try{
-            if(getLocation()!=null){
+            if(getExperienceMax()!=null){
                 JSONObject objExp = new JSONObject(getExperienceMax().toString());
                 obj.put(KEY_EXPERIENCE_MAX, objExp);
             } else {

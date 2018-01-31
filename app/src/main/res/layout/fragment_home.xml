@@ -82,6 +82,7 @@
                         android:layout_height="match_parent" />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/do_course_linearLayout"
                     android:background="@drawable/ny_menu_gradation_blue"
                     android:layout_margin="@dimen/padding"
                     android:padding="@dimen/padding_half"
@@ -109,6 +110,7 @@
                         android:layout_height="match_parent" />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/do_shop_linearLayout"
                     android:background="@drawable/ny_menu_gradation_blue"
                     android:layout_margin="@dimen/padding"
                     android:padding="@dimen/padding_half"

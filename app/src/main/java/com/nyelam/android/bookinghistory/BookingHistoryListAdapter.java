@@ -20,6 +20,7 @@ import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.Summary;
 import com.nyelam.android.detail.DetailServiceActivity;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.StrikethroughTextView;
 
@@ -179,6 +180,8 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
             Intent intent = new Intent(context, BookingHistoryDetailActivity.class);
             if (summary != null) intent.putExtra(NYHelper.SERVICE, summary.toString());
             if (summary != null && summary.getOrder() != null && NYHelper.isStringNotEmpty(summary.getOrder().getOrderId()))intent.putExtra(NYHelper.ID_ORDER, summary.getOrder().getOrderId());
+
+            NYLog.e("CEK INI "+summary.toString());
             context.startActivity(intent);
         }
 

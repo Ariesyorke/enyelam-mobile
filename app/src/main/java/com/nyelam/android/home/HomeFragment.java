@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
+import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYBannerViewPager;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class HomeFragment extends Fragment {
     private NYBannerViewPager bannerViewPager;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
-    private LinearLayout doDiveLinearLayout;
+    private LinearLayout doDiveLinearLayout, doCourseLinearLayout, doShopLinearLayout;
     private View viewBooking;
 
     public HomeFragment() {
@@ -75,6 +77,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        doCourseLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getActivity(), "Cooming soon", Toast.LENGTH_SHORT).show();
+                NYHelper.handlePopupMessage(getActivity(), "Cooming soon", null);
+            }
+        });
+
+        doShopLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NYHelper.handlePopupMessage(getActivity(), "Cooming soon", null);
+            }
+        });
+
         viewBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +126,8 @@ public class HomeFragment extends Fragment {
         bannerViewPager = (NYBannerViewPager) view.findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) view.findViewById(R.id.circle_indicator);
         doDiveLinearLayout = (LinearLayout) view.findViewById(R.id.do_dive_linearLayout);
+        doCourseLinearLayout = (LinearLayout) view.findViewById(R.id.do_course_linearLayout);
+        doShopLinearLayout = (LinearLayout) view.findViewById(R.id.do_shop_linearLayout);
         viewBooking = (View) view.findViewById(R.id.view_booking);
     }
 
