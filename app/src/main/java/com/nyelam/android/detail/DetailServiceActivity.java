@@ -159,23 +159,23 @@ public class DetailServiceActivity extends AppCompatActivity implements
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
-            if(intent.hasExtra(NYHelper.DIVER) && !extras.getString(NYHelper.DIVER).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))){
                 diver = extras.getString(NYHelper.DIVER);
             }
 
-            if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
+            if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))){
                 schedule = extras.getString(NYHelper.SCHEDULE);
             }
 
-            if(intent.hasExtra(NYHelper.CERTIFICATE) && !extras.getString(NYHelper.CERTIFICATE).equals(null)){
+            if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))){
                 certificate = extras.getString(NYHelper.CERTIFICATE);
             }
 
-            if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && !extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVE_SPOT_ID))){
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
             }
 
-            if(!extras.getString(NYHelper.SERVICE).equals(null)){
+            if(intent.hasExtra(NYHelper.SERVICE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SERVICE))){
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(extras.getString(NYHelper.SERVICE));

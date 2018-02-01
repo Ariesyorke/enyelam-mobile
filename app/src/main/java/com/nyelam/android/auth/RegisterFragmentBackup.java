@@ -2,7 +2,6 @@ package com.nyelam.android.auth;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +26,6 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYRegisterRequest;
-import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -36,7 +33,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterFragment extends Fragment {
+public class RegisterFragmentBackup extends Fragment {
 
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -44,16 +41,17 @@ public class RegisterFragment extends Fragment {
     private ProgressDialog progressDialog;
     private Spinner countryCodeSpinner;
     private CountryCodeAdapter countryCodeAdapter;
-    private EditText emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
+    private EditText usernameEditText, emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
+    private Spinner genderSpinner;
     private TextView registerTextView;
 
-    public RegisterFragment() {
+    public RegisterFragmentBackup() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static RegisterFragment newInstance() {
-        RegisterFragment fragment = new RegisterFragment();
+    public static RegisterFragmentBackup newInstance() {
+        RegisterFragmentBackup fragment = new RegisterFragmentBackup();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -84,33 +82,38 @@ public class RegisterFragment extends Fragment {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String username = usernameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
                 String phoneNumber = phoneNumberEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirmPassword = confirmPasswordEditText.getText().toString();
+                String gender = (String) genderSpinner.getSelectedItem();
                 CountryCode countryCode = (CountryCode) countryCodeSpinner.getSelectedItem();
-                //CountryCode countryCode = (CountryCode) countryCodeAdapter.getItem(countryCodeSpinner.getSelectedItemPosition()) ;
                 String countryCodeId = countryCode.getCountryCode();
 
-                if (TextUtils.isEmpty(email)){
-                    Toast.makeText(getActivity(), getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
-                } else if (!NYHelper.isValidEmaillId(email)){
-                    Toast.makeText(getActivity(), getString(R.string.warn_email_not_valid), Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(username)){
+                    Toast.makeText(getActivity(), "Username can't be empty", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(email)){
+                    Toast.makeText(getActivity(), "Email address can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(countryCodeId)){
-                    Toast.makeText(getActivity(), getString(R.string.warn_email_not_valid), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Country code can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(phoneNumber)){
-                    Toast.makeText(getActivity(), getString(R.string.warn_field_phone_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Phone number can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(password)){
-                    Toast.makeText(getActivity(), getString(R.string.warn_field_password_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Password can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (password.length() < 6){
-                    Toast.makeText(getActivity(), getString(R.string.warn_field_password_length), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Password length must be 6 characters or more", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(confirmPassword)){
-                    Toast.makeText(getActivity(), getString(R.string.warn_field_confirm_password_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Confirm password can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (!password.equals(confirmPassword)){
-                    Toast.makeText(getActivity(), getString(R.string.warn_field_confirm_password_didnt_match), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Confirm password is wrong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(gender)){
+                    Toast.makeText(getActivity(), "Gender can't be empty", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(gender)|| gender.equals("Select Gender")){
+                    Toast.makeText(getActivity(), "Please, select your gender", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog.show();
-                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  null, null, null, null);
+                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  null, null, null, null);
                     spcMgr.execute(req, onRegisterRequest());
                 }
             }
@@ -118,11 +121,20 @@ public class RegisterFragment extends Fragment {
     }
 
     private void initView(View v) {
+        usernameEditText = (EditText) v.findViewById(R.id.username_editText);
         emailEditText = (EditText) v.findViewById(R.id.email_editText);
         phoneNumberEditText = (EditText) v.findViewById(R.id.phone_number_editText);
         passwordEditText = (EditText) v.findViewById(R.id.password_editText);
         confirmPasswordEditText = (EditText) v.findViewById(R.id.confirm_password_editText);
+        genderSpinner = (Spinner) v.findViewById(R.id.gender_spinner);
         registerTextView = (TextView) v.findViewById(R.id.register_textView);
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add(getString(R.string.select_gender));
+        stringList.add("Male");
+        stringList.add("Female");
+        ArrayAdapter<String> myAdapter = new GenderAdapter(getActivity(), R.layout.spinner_gender, stringList);
+        genderSpinner.setAdapter(myAdapter);
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getString(R.string.loading));

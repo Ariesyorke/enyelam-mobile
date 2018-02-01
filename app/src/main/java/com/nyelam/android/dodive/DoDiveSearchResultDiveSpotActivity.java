@@ -73,10 +73,10 @@ public class DoDiveSearchResultDiveSpotActivity extends BasicActivity {
             if (intent.hasExtra(NYHelper.CERTIFICATE) && !extras.getString(NYHelper.CERTIFICATE).equals(null)){
                 certificate = extras.getString(NYHelper.CERTIFICATE);
             }
-            if (intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
+            if (intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))){
                 date = extras.getString(NYHelper.SCHEDULE);
             }
-            if (intent.hasExtra(NYHelper.TYPE) && !extras.getString(NYHelper.TYPE).equals(null)) {
+            if (intent.hasExtra(NYHelper.TYPE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.TYPE))) {
                 type = extras.getString(NYHelper.TYPE);
             }
 

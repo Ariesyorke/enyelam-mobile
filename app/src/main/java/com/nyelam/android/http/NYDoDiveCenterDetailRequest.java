@@ -13,12 +13,12 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/23/2018.
  */
 
-public class NYDiveCenterDetailRequest extends NYBasicRequest<DiveCenter> {
+public class NYDoDiveCenterDetailRequest extends NYBasicRequest<DiveCenter> {
 
     private static String KEY_DIVE_CENTER = "dive_center";
     private static String POST_ID_DIVE_CENTER = "dive_center_id";
 
-    public NYDiveCenterDetailRequest(Class clazz, Context context, String idDiveCenter) {
+    public NYDoDiveCenterDetailRequest(Class clazz, Context context, String idDiveCenter) {
         super(clazz, context, context.getResources().getString(R.string.api_path_dodive_dive_center_detail));
 
         if (NYHelper.isStringNotEmpty(idDiveCenter)){

@@ -38,6 +38,7 @@
     <string name="api_path_dodive_booking_detail">api/order/detail</string>
     <string name="api_path_dodive_dive_center_detail">api/divecenter/detail</string>
     <string name="api_path_dodive_dive_spot_detail">api/divespot/detail</string>
+    <string name="api_path_dodive_confirm_payment">api/order/paymentProof</string>
 
 
 </resources>

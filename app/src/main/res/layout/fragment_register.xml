@@ -2,17 +2,123 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ny_gradient_right_left"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     tools:context="com.nyelam.android.auth.LoginFragment">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:background="@color/ny_blue5">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/colorWhite"
+                android:background="@android:color/transparent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="@string/app_name"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/padding_double"
+            android:paddingRight="@dimen/padding_double"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/email_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textSize="16sp"
+                    android:hint="Email"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:id="@+id/country_code_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="@dimen/padding"
+                        android:paddingRight="@dimen/padding"
+                        android:spinnerMode="dropdown"
+                        android:gravity="bottom"
+                        android:background="@drawable/ny_rectangle_white"
+                        android:layout_gravity="bottom">
+                    </Spinner>
+
+                    <EditText
+                        android:id="@+id/phone_number_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:textSize="16sp"
+                        android:hint="Phone Number"/>
+                    </LinearLayout>
+                </android.support.design.widget.TextInputLayout>
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/password_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="textPassword"
+                    android:hint="Password"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/confirm_password_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="textPassword"
+                    android:hint="Confirm Password"/>
+            </android.support.design.widget.TextInputLayout>
+
 
             <!--<ImageView
                 android:src="@drawable/ic_nyelam"
@@ -33,185 +139,25 @@
                 android:layout_height="wrap_content" />-->
 
 
+
             <LinearLayout
-                android:orientation="vertical"
-                android:background="@drawable/ny_rectangle_gradation_blue"
-                android:layout_margin="@dimen/padding_double"
-                android:paddingLeft="@dimen/padding_double"
-                android:paddingRight="@dimen/padding_double"
-                android:paddingTop="@dimen/padding_double"
-                android:paddingBottom="@dimen/padding"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/padding_double"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
-
-                <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/username_editText"
-                        android:hint="@string/username"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/email_editText"
-                        android:hint="@string/email_address"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <Spinner
-                        android:id="@+id/country_code_spinner"
-                        android:layout_weight="3"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:paddingLeft="@dimen/padding"
-                        android:paddingRight="@dimen/padding"
-                        android:spinnerMode="dropdown"
-                        android:gravity="center"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:layout_gravity="center">
-                    </Spinner>
-
-                    <EditText
-                        android:id="@+id/phone_number_editText"
-                        android:hint="@string/phone_number_ex"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
-                        android:inputType="phone"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_weight="7"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-
-
-                <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/password_editText"
-                        android:hint="@string/password"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
-                        android:inputType="textPassword"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/confirm_password_editText"
-                        android:hint="@string/confirm_password"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
-                        android:inputType="textPassword"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <Spinner
-                        android:id="@+id/gender_spinner"
-                        android:hint="@string/select_gender"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                <ImageView
+                    android:src="@drawable/ic_lock"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_marginRight="@dimen/padding"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp" />
 
                 <TextView
-                    android:id="@+id/forgot_password_textView"
-                    android:text="@string/forgot_password"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite"
-                    android:padding="@dimen/padding"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
+                    android:text="Your data will be protected and will not shared"
+                    android:textSize="13sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
@@ -221,11 +167,11 @@
                 android:text="@string/register"
                 android:textColor="@color/colorWhite"
                 android:textSize="15sp"
-                android:background="@drawable/ny_rectangle_blue_dark"
+                android:textStyle="bold"
+                android:background="@drawable/ny_rectangle_green"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:layout_marginLeft="@dimen/padding_triple"
-                android:layout_marginRight="@dimen/padding_triple"
+                android:layout_marginTop="@dimen/padding_double"
                 android:layout_marginBottom="@dimen/padding_double"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

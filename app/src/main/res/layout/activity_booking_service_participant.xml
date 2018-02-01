@@ -27,7 +27,7 @@
                 android:background="@android:color/transparent"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:text="Detail Wisatawan"/>
+                android:text="Participant Detail"/>
 
             <ImageView
                 android:id="@+id/close_imageView"
@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:text="Nama lengkap (sesuai KTP/SIM/Paspor)"
+                    android:text="Fullname must match ID Card"
                     android:textColor="@color/ny_orange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -69,7 +69,7 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/name_editText"
-                        android:hint="Nama Lengkap"
+                        android:hint="Full name"
                         android:textSize="14sp"
                         android:textColor="@color/ny_black1"
                         android:layout_width="match_parent"
@@ -101,8 +101,8 @@
 
             <TextView
                 android:id="@+id/save_textView"
-                android:text="Simpan"
-                android:textAllCaps="false"
+                android:text="Save"
+                android:textAllCaps="true"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="14sp"

@@ -1,11 +1,18 @@
 package com.nyelam.android.dodive;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
@@ -14,11 +21,12 @@ import com.nyelam.android.data.DiveCenterList;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchDiveCenterRequest;
+import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-public class DoDiveSearchResultActivity extends BasicActivity {
+public class DoDiveSearchResultActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoDiveSearchDiveCenterAdapter diveCenterAdapter;
@@ -26,8 +34,11 @@ public class DoDiveSearchResultActivity extends BasicActivity {
     private RecyclerView recyclerView;
     private TextView titleTextView, labelTextView, noResultTextView;
     protected String keyword, diverId, diver, certificate, date, type;
+    private FloatingActionButton sortFloatingButton;
     //protected String diveSpotId;
+    private ImageView searchImageView;
     private int page = 1;
+    private int sortingType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +49,25 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         initAdapter();
         initRequest();
         //initToolbar();
-        //initControl();
+        initControl();
         initToolbar(true);
+    }
+
+    private void initControl() {
+        sortFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NYCustomDialog().showSortingDialog(DoDiveSearchResultActivity.this, sortingType);
+            }
+        });
+
+        searchImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoDiveSearchResultActivity.this, DoDiveActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initRequest() {
@@ -57,22 +85,23 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         }
 
         NYDoDiveSearchDiveCenterRequest req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
-                url, String.valueOf(page), diverId, type, certificate, diver, date);
+                url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType));
         spcMgr.execute(req, onSearchServiceRequest());
     }
 
     private void initExtra() {
+        Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if(!extras.getString(NYHelper.KEYWORD).equals(null)){
                 keyword = extras.getString(NYHelper.KEYWORD);
                 titleTextView.setText(keyword);
             }
-            if(!extras.getString(NYHelper.ID_DIVER).equals(null)) diverId = extras.getString(NYHelper.ID_DIVER);
-            if(!extras.getString(NYHelper.DIVER).equals(null)) diver = extras.getString(NYHelper.DIVER);
-            if(!extras.getString(NYHelper.CERTIFICATE).equals(null)) certificate = extras.getString(NYHelper.CERTIFICATE);
-            if(!extras.getString(NYHelper.SCHEDULE).equals(null)) date = extras.getString(NYHelper.SCHEDULE);
-            if(!extras.getString(NYHelper.TYPE).equals(null)){
+            if(intent.hasExtra(NYHelper.ID_DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_DIVER))) diverId = extras.getString(NYHelper.ID_DIVER);
+            if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))) diver = extras.getString(NYHelper.DIVER);
+            if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))) certificate = extras.getString(NYHelper.CERTIFICATE);
+            if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))) date = extras.getString(NYHelper.SCHEDULE);
+            if(intent.hasExtra(NYHelper.TYPE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.TYPE))){
                 type = extras.getString(NYHelper.TYPE);
             }
 
@@ -101,6 +130,8 @@ public class DoDiveSearchResultActivity extends BasicActivity {
         titleTextView = (TextView) findViewById(R.id.title_textView);
         noResultTextView = (TextView) findViewById(R.id.no_result_textView);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        sortFloatingButton = (FloatingActionButton) findViewById(R.id.sort_floatingButton);
+        searchImageView = (ImageView) findViewById(R.id.search_imageView);
     }
 
     private RequestListener<DiveCenterList> onSearchServiceRequest() {
@@ -153,6 +184,11 @@ public class DoDiveSearchResultActivity extends BasicActivity {
     protected void onStop() {
         super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
+
+    @Override
+    public void onChooseListener(int position) {
+        sortingType = position;
     }
 
 }

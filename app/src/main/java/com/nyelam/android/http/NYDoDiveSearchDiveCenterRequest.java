@@ -30,8 +30,9 @@ public class NYDoDiveSearchDiveCenterRequest extends NYBasicRequest<DiveCenterLi
     //private static final String POST_COUNTRY_ID = "country_id";
     private static final String POST_PROVINCE_ID = "province_id";
     private static final String POST_CITY_ID = "city_id";
+    private static final String POST_SORT_BY = "sort_by";
 
-    public NYDoDiveSearchDiveCenterRequest(Context context, String apiPath, String page, String diverId, String type, String certificate, String diver, String date) {
+    public NYDoDiveSearchDiveCenterRequest(Context context, String apiPath, String page, String diverId, String type, String certificate, String diver, String date, String sortBy) {
         super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(page)) {
@@ -58,10 +59,12 @@ public class NYDoDiveSearchDiveCenterRequest extends NYBasicRequest<DiveCenterLi
             addQuery(POST_DIVER, diver);
         }
 
-        //addQuery(POST_DATE, "1515660257");
-
         if(!TextUtils.isEmpty(date)) {
             addQuery(POST_DATE, date);
+        }
+
+        if(!TextUtils.isEmpty(sortBy)) {
+            addQuery(POST_SORT_BY, sortBy);
         }
 
     }

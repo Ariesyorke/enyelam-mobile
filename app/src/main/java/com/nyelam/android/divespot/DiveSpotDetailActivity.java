@@ -19,7 +19,6 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -27,12 +26,9 @@ import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.divecenter.DiveCenterDetailFragment;
-import com.nyelam.android.divecenter.DiveCenterListServiceFragment;
-import com.nyelam.android.divecenter.DiveCenterMapFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
-import com.nyelam.android.http.NYDiveSpotDetailRequest;
+import com.nyelam.android.http.NYDoDiveSpotDetailRequest;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
@@ -109,23 +105,23 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
-            if(intent.hasExtra(NYHelper.DIVER) &&!extras.get(NYHelper.DIVER).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))){
                 diver = extras.getString(NYHelper.DIVER);
             }
 
-            if(intent.hasExtra(NYHelper.CERTIFICATE) &&!extras.get(NYHelper.CERTIFICATE).equals(null)){
+            if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))){
                 certificate = extras.getString(NYHelper.CERTIFICATE);
             }
 
-            if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
+            if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))){
                 schedule = extras.getString(NYHelper.SCHEDULE);
             }
 
-            if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && !extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVE_SPOT_ID))){
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
             }
 
-            if(intent.hasExtra(NYHelper.SERVICE) && !extras.getString(NYHelper.SERVICE).equals(null)){
+            if(intent.hasExtra(NYHelper.SERVICE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SERVICE))){
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(extras.getString(NYHelper.SERVICE));
@@ -150,7 +146,7 @@ public class DiveSpotDetailActivity extends AppCompatActivity implements
     private void initRequest() {
         if (diveSpotId == null)diveSpot = new DiveSpot();
         //diveSpot.setId("1");
-        NYDiveSpotDetailRequest req = new NYDiveSpotDetailRequest(this.getClass(), DiveSpotDetailActivity.this, diveSpotId);
+        NYDoDiveSpotDetailRequest req = new NYDoDiveSpotDetailRequest(this.getClass(), DiveSpotDetailActivity.this, diveSpotId);
         spcMgr.execute(req, onGetDetailDiveSpotRequest());
     }
 

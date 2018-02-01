@@ -1,6 +1,7 @@
 package com.nyelam.android.bookinghistory;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,13 +14,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.danzoye.lib.util.GalleryCameraInvoker;
-import com.danzoye.lib.util.ImageHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Cart;
@@ -27,12 +26,10 @@ import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.Participant;
 import com.nyelam.android.data.Summary;
-import com.nyelam.android.data.SummaryList;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYDiveBookingDetailRequest;
-import com.nyelam.android.http.NYDoDiveBookingHistoryRequest;
+import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
+import com.nyelam.android.http.NYDoDiveBookingDetailRequest;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -52,6 +49,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String idOrder;
     private Summary summary;
@@ -76,7 +74,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private TextView contactEmailTextView;
     private LinearLayout participantContainerLinearLayout;
     private LinearLayout paymentLinearLayout;
-    private LinearLayout sendLinearLayout;
+    private LinearLayout confirmLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,10 +115,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             }
         });
 
-        sendLinearLayout.setOnClickListener(new View.OnClickListener() {
+        confirmLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (file != null) confirmPayment();
             }
         });
     }
@@ -145,7 +143,11 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         chooseFileTextView = (TextView) findViewById(R.id.choose_file_textView);
         mainLinearLayout = (LinearLayout) findViewById(R.id.main_linearLayout);
         paymentLinearLayout = (LinearLayout) findViewById(R.id.payment_linearLayout);
-        sendLinearLayout = (LinearLayout) findViewById(R.id.send_linearLayout);
+        confirmLinearLayout = (LinearLayout) findViewById(R.id.confirm_linearLayout);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.loading));
     }
 
     protected void onChangePhoto() {
@@ -273,7 +275,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             } else{
                 progressBar.setVisibility(View.VISIBLE);
             }
-            NYDiveBookingDetailRequest req = new NYDiveBookingDetailRequest(this, idOrder);
+            NYDoDiveBookingDetailRequest req = new NYDoDiveBookingDetailRequest(this, idOrder);
             spcMgr.execute(req, onGetDetailOrderRequest());
         } catch (Exception e) {
             hideLoadingBar();
@@ -380,6 +382,41 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         };
     }
 
+
+
+
+
+
+    private void confirmPayment(){
+
+        try {
+            progressDialog.show();
+            NYDoDiveBookingConfirmPaymentRequest req = new NYDoDiveBookingConfirmPaymentRequest(this, idOrder, file);
+            spcMgr.execute(req, onConfirmPaymentRequest());
+        } catch (Exception e) {
+            hideLoadingBar();
+            e.printStackTrace();
+        }
+
+    }
+
+    private RequestListener<Boolean> onConfirmPaymentRequest() {
+        return new RequestListener<Boolean>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                hideLoadingBar();
+                NYHelper.handleAPIException(BookingHistoryDetailActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(Boolean success) {
+                NYHelper.handlePopupMessage(BookingHistoryDetailActivity.this, getString(R.string.confirmation_payment_success), null);
+            }
+        };
+    }
+
+
+
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -419,6 +456,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private void hideLoadingBar(){
         if (progressBar != null) progressBar.setVisibility(View.GONE);
         if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 
 

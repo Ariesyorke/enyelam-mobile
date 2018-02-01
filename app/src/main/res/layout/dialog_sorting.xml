@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_linearLayout"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="@dimen/padding_double"
+    android:background="@drawable/ny_rectangle_white"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:text="Sorting"
+        android:textColor="@color/ny_black1"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/radioGroup">
+
+
+        <RadioButton
+            android:layout_marginTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Latest"
+            android:id="@+id/rLatest"
+            android:checked="false"
+            />
+
+        <RadioButton
+            android:layout_marginTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price High to Low"
+            android:id="@+id/rPriceHighToLow"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_marginTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price Low to High"
+            android:id="@+id/rPriceLowToHigh"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_marginTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rating High to Low"
+            android:id="@+id/rRatingHighToLow"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_marginTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rating Low to High"
+            android:id="@+id/rRatingHighToHigh"
+            android:checked="false" />
+
+    </RadioGroup>
+
+
+
+</LinearLayout>

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +32,9 @@ public class HomeFragment extends Fragment {
     private NYBannerViewPager bannerViewPager;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
-    private LinearLayout doDiveLinearLayout, doCourseLinearLayout, doShopLinearLayout;
-    private View viewBooking;
+    private CardView doDiveCardView, doCourseCardView, doShopCardView, doTogetherCardView;
+    //private LinearLayout doDiveLinearLayout, doCourseLinearLayout, doShopLinearLayout;
+    //private View viewBooking;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,7 +71,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initControl() {
-        doDiveLinearLayout.setOnClickListener(new View.OnClickListener() {
+        doDiveCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DoDiveActivity.class);
@@ -77,7 +79,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        doCourseLinearLayout.setOnClickListener(new View.OnClickListener() {
+        doCourseCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getActivity(), "Cooming soon", Toast.LENGTH_SHORT).show();
@@ -85,21 +87,29 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        doShopLinearLayout.setOnClickListener(new View.OnClickListener() {
+        doShopCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NYHelper.handlePopupMessage(getActivity(), "Cooming soon", null);
             }
         });
 
-        viewBooking.setOnClickListener(new View.OnClickListener() {
+        doTogetherCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NYHelper.handlePopupMessage(getActivity(), "Cooming soon", null);
+            }
+        });
+
+        /*viewBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
+
 
     private void initBanner() {
         bannerViewPagerAdapter = new BannerViewPagerAdapter(getChildFragmentManager());
@@ -125,10 +135,11 @@ public class HomeFragment extends Fragment {
     private void initView(View view) {
         bannerViewPager = (NYBannerViewPager) view.findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) view.findViewById(R.id.circle_indicator);
-        doDiveLinearLayout = (LinearLayout) view.findViewById(R.id.do_dive_linearLayout);
-        doCourseLinearLayout = (LinearLayout) view.findViewById(R.id.do_course_linearLayout);
-        doShopLinearLayout = (LinearLayout) view.findViewById(R.id.do_shop_linearLayout);
-        viewBooking = (View) view.findViewById(R.id.view_booking);
+        doDiveCardView = (CardView) view.findViewById(R.id.do_dive_cardView);
+        doCourseCardView = (CardView) view.findViewById(R.id.do_course_cardView);
+        doShopCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
+        doTogetherCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
+        //viewBooking = (View) view.findViewById(R.id.view_booking);
     }
 
 

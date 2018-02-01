@@ -2,7 +2,6 @@ package com.nyelam.android.divecenter;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,7 +19,6 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -29,7 +27,7 @@ import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
-import com.nyelam.android.http.NYDiveCenterDetailRequest;
+import com.nyelam.android.http.NYDoDiveCenterDetailRequest;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
@@ -118,32 +116,31 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
-            if(intent.hasExtra(NYHelper.DIVER) &&!extras.get(NYHelper.DIVER).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))){
                 diver = extras.getString(NYHelper.DIVER);
             }
 
-            if(intent.hasExtra(NYHelper.ID_DIVER) &&!extras.get(NYHelper.ID_DIVER).equals(null)){
+            if(intent.hasExtra(NYHelper.ID_DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_DIVER))){
                 diverId = extras.getString(NYHelper.ID_DIVER);
             }
 
-            if(intent.hasExtra(NYHelper.TYPE) &&!extras.get(NYHelper.TYPE).equals(null)){
+            if(intent.hasExtra(NYHelper.TYPE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.TYPE))){
                 type = extras.getString(NYHelper.TYPE);
-                //Toast.makeText(this, "Type : "+type, Toast.LENGTH_SHORT).show();
             }
 
-            if(intent.hasExtra(NYHelper.SCHEDULE) && !extras.getString(NYHelper.SCHEDULE).equals(null)){
+            if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))){
                 schedule = extras.getString(NYHelper.SCHEDULE);
             }
 
-            if(intent.hasExtra(NYHelper.CERTIFICATE) && !extras.getString(NYHelper.CERTIFICATE).equals(null)){
+            if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))){
                 certificate = extras.getString(NYHelper.CERTIFICATE);
             }
 
-            if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && !extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVE_SPOT_ID))){
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
             }
 
-            if(intent.hasExtra(NYHelper.DIVE_CENTER) && !extras.getString(NYHelper.DIVE_CENTER).equals(null)){
+            if(intent.hasExtra(NYHelper.DIVE_CENTER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVE_CENTER))){
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
@@ -168,7 +165,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private void initRequest() {
         if (diveCenter == null)diveCenter = new DiveCenter();
         if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())){
-            NYDiveCenterDetailRequest req = new NYDiveCenterDetailRequest(this.getClass(), DiveCenterDetailActivity.this, diveCenter.getId());
+            NYDoDiveCenterDetailRequest req = new NYDoDiveCenterDetailRequest(this.getClass(), DiveCenterDetailActivity.this, diveCenter.getId());
             spcMgr.execute(req, onGetDetailDiveCenterRequest());
         }
     }

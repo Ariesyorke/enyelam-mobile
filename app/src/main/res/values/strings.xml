@@ -47,9 +47,17 @@
     <string name="warn_no_location_found">No location found.</string>
     <string name="forgot_password_message">Click OK to recover your password</string>
     <string name="warn_field_name_cannot_be_empty">Field Name cannot be empty</string>
+    <string name="warn_field_first_name_cannot_be_empty">Field First Name cannot be empty</string>
+    <string name="warn_field_username_cannot_be_empty">Field Username cannot be empty</string>
     <string name="warn_email_not_valid">Please, input valid email address</string>
     <string name="warn_field_email_cannot_be_empty">Field Email cannot be empty</string>
     <string name="warn_field_phone_cannot_be_empty">Field Phone Number cannot be empty</string>
+    <string name="warn_field_password_cannot_be_empty">Field Password cannot be empty</string>
+    <string name="warn_field_confirm_password_didnt_match">Password and confirm password didn\'t match</string>
+    <string name="warn_field_confirm_password_cannot_be_empty">Field Confirm Password cannot be empty</string>
+    <string name="warn_field_password_length">Password length must be 6 characters or more</string>
+
+    <string name="confirmation_payment_success">Your confirmation payment has been send, thanks.</string>
 
 
     <!--Booking-->
@@ -68,6 +76,7 @@
     <string name="do_dive">Do Dive</string>
     <string name="do_course">Do Course</string>
     <string name="do_shop">Do Shop</string>
+    <string name="do_together">Do Together</string>
     <string name="account">Account</string>
     <string name="setting">Setting</string>
     <string name="dive_guidance">Dive Guidance</string>

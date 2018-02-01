@@ -538,7 +538,7 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/send_linearLayout"
+                            android:id="@+id/confirm_linearLayout"
                             android:background="@drawable/ny_rectangle_blue"
                             android:gravity="center"
                             android:layout_gravity="center"
@@ -549,7 +549,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
                             <TextView
-                                android:text="Send"
+                                android:text="Confirm"
                                 android:textSize="14sp"
                                 android:textAllCaps="true"
                                 android:textStyle="bold"

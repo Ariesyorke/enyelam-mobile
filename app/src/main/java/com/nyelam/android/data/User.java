@@ -20,22 +20,28 @@ public class User implements Parseable {
     private static String KEY_FULLNAME = "fullname";
     private static String KEY_FIRSTNAME = "firstname";
     private static String KEY_LASTNAME = "lastname";
-    private static String KEY_PHONE = "phone";
+    private static String KEY_PHONE = "phone_number";
     private static String KEY_BIRTHDATE = "birthdate";
     private static String KEY_EMAIL = "email";
     private static String KEY_PICTURE = "picture";
     private static String KEY_GENDER = "gender";
     private static String KEY_IS_VERIFIED = "is_verified";
     private static String KEY_REFERRAL_CODE = "referral_code";
-    private static String KEY_SOCIAL_MEDIA = "social_media";
     private static String KEY_ADDESS = "address";
     private static String KEY_FILE_PATH = "file_path";
+
+    private static String KEY_USERNAME = "username";
+    private static String KEY_COVER = "cover";
+    private static String KEY_COUNTRY_CODE = "country_code";
+    private static String KEY_SOCIAL_MEDIA = "social_media";
 
     private String userId, fullname, firstname, lastname, phone, email, picture, gender, refferalCode, address;
     private boolean isVerified;
     private Date birthdate;
     private File imageFile;
     private List<SocialMedia> socialMedia;
+    private String username, cover;
+    private CountryCode countryCode;
 
 
     public String getUserId() {
@@ -150,6 +156,31 @@ public class User implements Parseable {
         this.imageFile = imageFile;
     }
 
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public CountryCode getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(CountryCode countryCode) {
+        this.countryCode = countryCode;
+    }
+
     @Override
     public void parse (JSONObject obj) {
 
@@ -196,6 +227,18 @@ public class User implements Parseable {
         try {
             if (!obj.isNull(KEY_PICTURE)) {
                 setPicture(obj.getString(KEY_PICTURE));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_COVER)) {
+                setCover(obj.getString(KEY_COVER));
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_USERNAME)) {
+                setUsername(obj.getString(KEY_USERNAME));
             }
         } catch (JSONException e){e.printStackTrace();}
 
@@ -259,6 +302,21 @@ public class User implements Parseable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+        try {
+            if(!obj.isNull(KEY_COUNTRY_CODE)) {
+                JSONObject o = obj.getJSONObject(KEY_COUNTRY_CODE);
+                if(o != null && o.length() > 0) {
+                    countryCode = new CountryCode();
+                    countryCode.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
@@ -304,6 +362,22 @@ public class User implements Parseable {
                 obj.put(KEY_PHONE, getPhone());
             } else  {
                 obj.put(KEY_PHONE, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getUsername())) {
+                obj.put(KEY_USERNAME, getUsername());
+            } else  {
+                obj.put(KEY_USERNAME, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getCover())) {
+                obj.put(KEY_COVER, getCover());
+            } else  {
+                obj.put(KEY_COVER, JSONObject.NULL);
             }
         } catch (JSONException e){e.printStackTrace();}
 
@@ -378,6 +452,17 @@ public class User implements Parseable {
                 obj.put(KEY_FILE_PATH, getImageFile().getAbsolutePath());
             }
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try{
+            if(getCountryCode()!=null){
+                JSONObject objCC = new JSONObject(getCountryCode().toString());
+                obj.put(KEY_COUNTRY_CODE, objCC);
+            } else {
+                obj.put(KEY_COUNTRY_CODE, JSONObject.NULL);
+            }
+        }catch (JSONException e){
             e.printStackTrace();
         }
 
