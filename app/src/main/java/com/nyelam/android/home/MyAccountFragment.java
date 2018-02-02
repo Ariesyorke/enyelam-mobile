@@ -1,9 +1,13 @@
 package com.nyelam.android.home;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,16 +15,53 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.danzoye.lib.util.GalleryCameraInvoker;
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
+import com.nyelam.android.http.NYUploadPhotoCoverRequest;
+import com.nyelam.android.http.NYUploadPhotoProfileRequest;
 import com.nyelam.android.profile.EditProfileActivity;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
-public class MyAccountFragment extends Fragment {
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MyAccountFragment extends Fragment implements
+        GalleryCameraInvoker.CallbackWithProcessing  {
+
+    private static final int REQ_CODE_CAMERA = 100;
+    private static final int REQ_CODE_GALLERY = 101;
+    private static final int REQ_CODE_CHILD = 102;
+
+    private GalleryCameraInvoker invoker;
+    private boolean isPickingPhoto;
+    private boolean isCover = false;
 
     private OnFragmentInteractionListener mListener;
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout;
+    private File photoProfile, photoCover;
+    private ImageView coverImageView, changeCoverImageView;
+    private CircleImageView photoProfileImageView;
+    private ProgressDialog progressDialog;
+
     public MyAccountFragment() {
         // Required empty public constructor
     }
@@ -91,11 +132,169 @@ public class MyAccountFragment extends Fragment {
 
             }
         });
+
+        changeCoverImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isCover = true;
+                onChangePhoto();
+            }
+        });
+
+
+        photoProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isCover = false;
+                onChangePhoto();
+            }
+        });
+
     }
 
     private void initView(View view) {
         editProfileRelativeLayout = (RelativeLayout) view.findViewById(R.id.edit_profile_relativeLayout);
         logoutRelativeLayout = (RelativeLayout) view.findViewById(R.id.logout_relativeLayout);
+
+        coverImageView = (ImageView) view.findViewById(R.id.cover_imageView);
+        changeCoverImageView = (ImageView) view.findViewById(R.id.change_cover_imageView);
+        photoProfileImageView = (CircleImageView) view.findViewById(R.id.photo_profile_circleImageView);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(true);
+    }
+
+
+
+
+    protected void onChangePhoto() {
+        invoker = new GalleryCameraInvoker() {
+
+            @Override
+            protected int maxImageWidth() {
+                return getResources().getDimensionPixelSize(R.dimen.max_create_place_image_width);
+            }
+
+            @Override
+            protected File onProcessingImageFromCamera(String path) {
+                File realFile = super.onProcessingImageFromCamera(path);
+
+                Bitmap bitmap = null;
+                int targetW = getResources().getDimensionPixelSize(R.dimen.create_place_photo_thumb_width);
+
+                // Get the dimensions of the bitmap
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                int photoW = bmOptions.outWidth;
+                int scaleFactor = photoW / targetW;
+
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+
+                bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+
+                // Log.d("danzoye", "thumb bitmap = " + bitmap);
+
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, imageStream);
+                bitmap.recycle();
+
+                String localPath = realFile.getPath();
+                String thumbPath = localPath.replace("JPEG", "THUMB");
+                File pictureFile = new File(thumbPath);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(imageStream.toByteArray());
+                    fos.close();
+
+                    return realFile;
+                } catch (FileNotFoundException e) {
+                    // Log.e("danzoye", "File not found: " + e.getMessage());
+                } catch (IOException e) {
+                    // Log.e("danzoye", "Error accessing file: " + e.getMessage());
+                } finally {
+                    System.gc();
+                }
+                return null;
+            }
+
+            @Override
+            protected File onProcessingImageFromGallery(InputStream inputStream) throws IOException {
+                File realFile = super.onProcessingImageFromGallery(inputStream);
+
+                int targetW = getResources().getDimensionPixelSize(R.dimen.create_place_photo_thumb_width);
+
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                int targetH = (photoH * targetW) / photoW;
+
+                // Determine how much to scale down the image
+                int scaleFactor = photoW / targetW;
+
+                // Decode the image file into a Bitmap sized to fill the
+                // View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+
+                Bitmap bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, imageStream);
+                bitmap.recycle();
+
+                String localPath = realFile.getPath();
+                String thumbPath = localPath.replace("JPEG", "THUMB");
+                File pictureFile = new File(thumbPath);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(imageStream.toByteArray());
+                    fos.close();
+
+                    return realFile;
+                } catch (FileNotFoundException e) {
+                    // Log.e("danzoye", "File not found: " + e.getMessage());
+                } catch (IOException e) {
+                    // Log.e("danzoye", "Error accessing file: " + e.getMessage());
+                } finally {
+                    System.gc();
+                }
+                return null;
+
+            }
+
+            @Override
+            protected void onShowOptionList(Context context) {
+                super.onShowOptionList(context);
+                isPickingPhoto = true;
+            }
+        };
+        invoker.invokeGalleryAndCamera(this, this, REQ_CODE_CAMERA, REQ_CODE_GALLERY, true);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (invoker != null) {
+            invoker.onActivityResult(requestCode, resultCode, data);
+            //plusImageView.setVisibility(View.GONE);
+            //logoImageView.setVisibility(View.GONE);
+            //Toast.makeText(this, "yess", Toast.LENGTH_SHORT).show();
+        }
+        if ((requestCode == REQ_CODE_CAMERA || requestCode == REQ_CODE_GALLERY) && resultCode == Activity.RESULT_CANCELED) {
+            isPickingPhoto = false;
+        }
+
     }
 
     @Override
@@ -115,8 +314,100 @@ public class MyAccountFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onBitmapResult(File file) {
+
+        NYLog.e("CEK IMAGE 1");
+
+        if (file != null){
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+            /*BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(),bmOptions);
+            bitmap = Bitmap.createScaledBitmap(bitmap,parent.getWidth(),parent.getHeight(),true);*/
+
+            if (isCover){
+                photoCover = file;
+                coverImageView.setImageBitmap(bitmap);
+                NYLog.e("CEK IMAGE 2");
+            } else {
+                photoProfile = file;
+                photoProfileImageView.setImageBitmap(bitmap);
+                NYLog.e("CEK IMAGE 3");
+            }
+
+            uploadPhoto(isCover);
+        }
+    }
+
+
+    @Override
+    public void onCancelGalleryCameraInvoker() {
+
+    }
+
+    @Override
+    public void onProcessing() {
+
+    }
+
+
+
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         //void onFragmentInteraction(Uri uri);
+    }
+
+    private void uploadPhoto(boolean isCover){
+        try {
+            progressDialog.show();
+            if (isCover) {
+                NYUploadPhotoCoverRequest req = new NYUploadPhotoCoverRequest(getActivity(), photoCover);
+                spcMgr.execute(req, onConfirmPaymentRequest());
+            } else {
+                NYUploadPhotoProfileRequest req = new NYUploadPhotoProfileRequest(getActivity(), photoProfile);
+                spcMgr.execute(req, onConfirmPaymentRequest());
+            }
+
+        } catch (Exception e) {
+            hideLoading();
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<Boolean> onConfirmPaymentRequest() {
+        return new RequestListener<Boolean>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                hideLoading();
+                NYHelper.handleAPIException(getActivity(), spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(Boolean success) {
+                hideLoading();
+                NYHelper.handlePopupMessage(getActivity(), getString(R.string.message_update_profile_success), null);
+            }
+        };
+    }
+
+
+    private void hideLoading(){
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        spcMgr.start(getActivity());
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 }

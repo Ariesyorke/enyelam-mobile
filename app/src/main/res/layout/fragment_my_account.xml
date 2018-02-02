@@ -22,17 +22,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
+                        android:id="@+id/cover_imageView"
                         android:src="@drawable/example_pic"
                         android:scaleType="centerCrop"
                         android:layout_width="match_parent"
                         android:layout_height="100dp" />
-                    <ImageView
-                        android:src="@mipmap/ic_launcher"
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/photo_profile_circleImageView"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
                         android:layout_centerVertical="true"
                         android:layout_margin="@dimen/padding"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp" />
+                        android:src="@mipmap/ic_launcher"
+                        app:civ_border_width="0dp"
+                        app:civ_border_color="#FF000000"/>
+
                     <ImageView
+                        android:id="@+id/change_cover_imageView"
                         android:src="@drawable/ic_camera"
                         android:padding="@dimen/padding_half"
                         android:layout_alignParentRight="true"

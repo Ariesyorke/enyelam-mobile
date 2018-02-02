@@ -49,6 +49,7 @@ dependencies {
     compile 'eu.davidea:flexible-adapter:5.0.0-rc4'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     compile 'me.relex:circleindicator:1.2.1@aar'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
     testCompile 'junit:junit:4.12'
 }

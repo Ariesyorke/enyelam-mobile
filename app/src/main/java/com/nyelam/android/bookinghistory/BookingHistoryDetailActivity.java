@@ -384,11 +384,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
 
 
-
-
-
     private void confirmPayment(){
-
         try {
             progressDialog.show();
             NYDoDiveBookingConfirmPaymentRequest req = new NYDoDiveBookingConfirmPaymentRequest(this, idOrder, file);
@@ -397,7 +393,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             hideLoadingBar();
             e.printStackTrace();
         }
-
     }
 
     private RequestListener<Boolean> onConfirmPaymentRequest() {
@@ -410,6 +405,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
             @Override
             public void onRequestSuccess(Boolean success) {
+                hideLoadingBar();
                 NYHelper.handlePopupMessage(BookingHistoryDetailActivity.this, getString(R.string.confirmation_payment_success), null);
             }
         };
