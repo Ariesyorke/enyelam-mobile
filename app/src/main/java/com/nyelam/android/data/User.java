@@ -16,7 +16,7 @@ import java.util.List;
 
 public class User implements Parseable {
 
-    private static String KEY_USER_ID = "user id";
+    private static String KEY_USER_ID = "user_id";
     private static String KEY_FULLNAME = "fullname";
     private static String KEY_FIRSTNAME = "firstname";
     private static String KEY_LASTNAME = "lastname";

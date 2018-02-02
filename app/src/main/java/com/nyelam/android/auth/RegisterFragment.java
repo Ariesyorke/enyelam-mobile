@@ -38,7 +38,6 @@ import java.util.List;
 
 public class RegisterFragment extends Fragment {
 
-
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private ProgressDialog progressDialog;

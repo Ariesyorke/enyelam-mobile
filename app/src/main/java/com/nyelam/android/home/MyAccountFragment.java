@@ -1,6 +1,8 @@
 package com.nyelam.android.home;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +20,7 @@ import com.nyelam.android.profile.EditProfileActivity;
 public class MyAccountFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private RelativeLayout editProfileRelativeLayout;
+    private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout;
     public MyAccountFragment() {
         // Required empty public constructor
     }
@@ -61,10 +63,39 @@ public class MyAccountFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        logoutRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getString(R.string.logout));
+                builder.setMessage(getString(R.string.warn_logout));
+                builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing but close the dialog
+                        NYHelper.logout(getActivity());
+                    }
+                });
+
+                builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+            }
+        });
     }
 
     private void initView(View view) {
         editProfileRelativeLayout = (RelativeLayout) view.findViewById(R.id.edit_profile_relativeLayout);
+        logoutRelativeLayout = (RelativeLayout) view.findViewById(R.id.logout_relativeLayout);
     }
 
     @Override

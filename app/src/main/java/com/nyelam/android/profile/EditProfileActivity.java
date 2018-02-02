@@ -7,13 +7,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.User;
+import com.nyelam.android.data.dao.DaoSession;
+import com.nyelam.android.data.dao.NYCountryCode;
+import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYLoginRequest;
 import com.nyelam.android.http.NYUpdateUserProfileRequest;
@@ -22,6 +29,8 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.util.List;
+
 public class EditProfileActivity extends AppCompatActivity {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -29,6 +38,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private EditText firstNameEditText, lastNameEditText, usernameEditText, emailEditText, phoneNumberEditText;
     private TextView updateTextView;
+    private Spinner countryCodeSpinner;
+    private CountryCodeAdapter countryCodeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,33 +51,54 @@ public class EditProfileActivity extends AppCompatActivity {
         initProfile();
     }
 
-
-
     private void initProfile() {
         LoginStorage storage = new LoginStorage(this);
         if (storage.isUserLogin()){
             User user = storage.user;
             if (user!= null){
 
-                String name = user.getFullname();
-                String lastName = "";
-                String firstName= "";
-                if(name.split("\\w+").length>1){
-                    lastName = name.substring(name.lastIndexOf(" ")+1);
-                    firstName = name.substring(0, name.lastIndexOf(' '));
-                } else{
-                    firstName = name;
+                String fullname = user.getFullname();
+
+                if (NYHelper.isStringNotEmpty(fullname)){
+                    String lastName = "";
+                    String firstName= "";
+                    if(fullname.split("\\w+").length>1){
+                        lastName = fullname.substring(fullname.lastIndexOf(" ")+1);
+                        firstName = fullname.substring(0, fullname.lastIndexOf(' '));
+                    } else{
+                        firstName = fullname;
+                    }
+
+                    if (NYHelper.isStringNotEmpty(firstName))firstNameEditText.setText(firstName);
+                    if (NYHelper.isStringNotEmpty(lastName))lastNameEditText.setText(lastName);
                 }
 
-               if (NYHelper.isStringNotEmpty(firstName))firstNameEditText.setText(firstName);
-               if (NYHelper.isStringNotEmpty(lastName))lastNameEditText.setText(lastName);
-               if (NYHelper.isStringNotEmpty(user.getPhone()))phoneNumberEditText.setText(user.getPhone());
-               if (NYHelper.isStringNotEmpty(user.getEmail()))emailEditText.setText(user.getEmail());
+                if (NYHelper.isStringNotEmpty(user.getPhone()))phoneNumberEditText.setText(user.getPhone());
+                if (NYHelper.isStringNotEmpty(user.getEmail()))emailEditText.setText(user.getEmail());
+
+                if (NYHelper.isStringNotEmpty(user.getUsername()))usernameEditText.setText(user.getUsername());
             }
+
+
+            countryCodeAdapter = new CountryCodeAdapter(this);
+
+            DaoSession session = ((NYApplication) getApplicationContext()).getDaoSession();
+            List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
+            List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
+            if (countryCodes != null && countryCodes.size() > 0){
+                NYLog.e("tes isi DAO Country Code : "+countryCodes.toString());
+                countryCodeAdapter.addCountryCodes(countryCodes);
+            }
+
+            countryCodeSpinner.setAdapter(countryCodeAdapter);
+
         }
     }
 
     private void initControl() {
+
+        emailEditText.setKeyListener(null);
+
         updateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,11 +108,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String phoneNumber = phoneNumberEditText.getText().toString();
 
+                CountryCode countryCode = (CountryCode) countryCodeSpinner.getSelectedItem();
+                String countryCodeId = countryCode.getCountryCode();
 
                 if (!NYHelper.isStringNotEmpty(firstName)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_first_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
-                } else  if (!NYHelper.isStringNotEmpty(lastName)){
-                    Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else  if (!NYHelper.isStringNotEmpty(username)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_username_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else  if (!NYHelper.isStringNotEmpty(email)){
@@ -90,7 +122,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 } else  if (!NYHelper.isStringNotEmpty(phoneNumber)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_phone_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else {
-                    updateProfile(firstName+" "+lastName, username, "62", phoneNumber);
+                    updateProfile(firstName+" "+lastName, username, countryCodeId, phoneNumber);
                 }
             }
         });
@@ -110,8 +142,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    private RequestListener<User> onUpdateProfileRequest() {
-        return new RequestListener<User>() {
+    private RequestListener<AuthReturn> onUpdateProfileRequest() {
+        return new RequestListener<AuthReturn>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
@@ -123,10 +155,14 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onRequestSuccess(User user) {
+            public void onRequestSuccess(AuthReturn authReturn) {
                 if(progressDialog != null && progressDialog.isShowing()){
                     progressDialog.dismiss();
                 }
+
+                NYHelper.handlePopupMessage(EditProfileActivity.this, getString(R.string.message_update_profile_success), null);
+
+                NYHelper.saveUserData(EditProfileActivity.this, authReturn);
 
             }
         };
@@ -140,6 +176,7 @@ public class EditProfileActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.email_editText);
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
         updateTextView = (TextView) findViewById(R.id.update_textView);
+        countryCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));

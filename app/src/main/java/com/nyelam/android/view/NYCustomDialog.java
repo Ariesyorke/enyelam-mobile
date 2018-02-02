@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveSearchResultActivity;
 
 /**
@@ -56,17 +57,11 @@ public class NYCustomDialog {
 
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                /*if(checkedId == R.id.rLatest) {
-                    Toast.makeText(activity, "choice: A",
-                            Toast.LENGTH_SHORT).show();
-                } else{
-                    Toast.makeText(activity, "choice: F",
-                            Toast.LENGTH_SHORT).show();
-                }*/
 
+                View radioButton = group.findViewById(checkedId);
+                int index = group.indexOfChild(radioButton);
 
-                listener.onChooseListener(checkedId);
+                listener.onChooseListener(index);
 
                 dialog.dismiss();
             }

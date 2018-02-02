@@ -1,5 +1,6 @@
 package com.nyelam.android.helper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +23,9 @@ import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.DAODataBridge;
+import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.LoginStorage;
 
@@ -126,6 +130,13 @@ public class NYHelper {
         storage.user = authReturn.getUser();
         return storage.save();
     }
+
+    public static boolean updateUserData(Context context, User user) {
+        LoginStorage storage = new LoginStorage(context);
+        storage.user = user;
+        return storage.save();
+    }
+
 
     public static final <RESULT extends DAODataBridge<RAW>, RAW> List<RESULT> generateList(List<RAW> raws, Class<RESULT> resultClass) {
         if (raws != null && !raws.isEmpty()) {
@@ -330,4 +341,13 @@ public class NYHelper {
         return  builder.toString();
     }
 
+    public static void logout(Activity activity) {
+        LoginStorage storage = new LoginStorage(activity);
+        storage.clear();
+        Intent intent = new Intent(activity, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+    }
 }

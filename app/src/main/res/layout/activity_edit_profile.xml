@@ -165,16 +165,35 @@
                             android:textColor="@color/ny_black1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                        <EditText
-                            android:id="@+id/phone_number_editText"
-                            android:hint="@string/phone_number"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:padding="@dimen/padding"
                             android:layout_marginTop="@dimen/padding_half"
                             android:background="@drawable/selector_edittext"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content">
+                            <Spinner
+                                android:id="@+id/country_code_spinner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:spinnerMode="dropdown"
+                                android:gravity="center"
+                                android:background="@drawable/ny_rectangle_white"
+                                android:layout_gravity="center">
+                            </Spinner>
+                            <EditText
+                                android:id="@+id/phone_number_editText"
+                                android:hint="@string/phone_number"
+                                android:textSize="14sp"
+                                android:textColor="@color/ny_black1"
+                                android:background="@android:color/transparent"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
 

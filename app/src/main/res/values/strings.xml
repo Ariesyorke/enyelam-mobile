@@ -56,6 +56,9 @@
     <string name="warn_field_confirm_password_didnt_match">Password and confirm password didn\'t match</string>
     <string name="warn_field_confirm_password_cannot_be_empty">Field Confirm Password cannot be empty</string>
     <string name="warn_field_password_length">Password length must be 6 characters or more</string>
+    <string name="warn_logout">Are you sure want to sign out ?</string>
+
+    <string name="message_update_profile_success">Your profile has been successfully updated</string>
 
     <string name="confirmation_payment_success">Your confirmation payment has been send, thanks.</string>
 
@@ -83,6 +86,8 @@
     <string name="message">Message</string>
     <string name="help">Help</string>
     <string name="logout">Logout</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 
     <string-array name="menu_tab">
