@@ -189,7 +189,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.TYPE, type);
                         startActivity(intent);
                     } else if (type.equals("4") || type.equals("5") || type.equals("6")){
-                        /*intent = new Intent(getActivity(), DoDiveSearchResultDiveSpotActivity.class);
+
+                        intent = new Intent(getActivity(), DoDiveSearchResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
                         intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
@@ -199,9 +200,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        startActivity(intent);*/
+                        startActivity(intent);
 
-                        Bundle args = new Bundle();
+                        /*Bundle args = new Bundle();
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
                         args.putString(NYHelper.DIVE_CENTER, diveCenter.toString());
@@ -218,7 +219,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.container,doDiveResultDiveSpotsFragment);
                         fragmentTransaction.addToBackStack(doDiveResultDiveSpotsFragment.getClass().getName());
-                        fragmentTransaction.commitAllowingStateLoss();
+                        fragmentTransaction.commitAllowingStateLoss();*/
 
                     } else {
                         intent = new Intent(getActivity(), DoDiveSearchResultActivity.class);
