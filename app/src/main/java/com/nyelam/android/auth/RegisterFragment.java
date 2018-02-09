@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -36,12 +37,12 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private ProgressDialog progressDialog;
-    private Spinner countryCodeSpinner;
+    protected Spinner countryCodeSpinner;
     private CountryCodeAdapter countryCodeAdapter;
     private EditText emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
     private TextView registerTextView;
@@ -132,14 +133,30 @@ public class RegisterFragment extends Fragment {
         DaoSession session = ((NYApplication) getActivity().getApplicationContext()).getDaoSession();
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
         List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
-        if (countryCodes != null && countryCodes.size() > 0){
-            NYLog.e("tes isi DAO Country Code : "+countryCodes.toString());
-            countryCodeAdapter.addCountryCodes(countryCodes);
-        }
-
 
         countryCodeSpinner = (Spinner)v.findViewById(R.id.country_code_spinner);
         countryCodeSpinner.setAdapter(countryCodeAdapter);
+        countryCodeSpinner.setOnItemSelectedListener(this);
+
+        if (countryCodes != null && countryCodes.size() > 0){
+            NYLog.e("tes isi DAO Country Code : "+countryCodes.toString());
+            countryCodeAdapter.addCountryCodes(countryCodes);
+            countryCodeAdapter.notifyDataSetChanged();
+
+            int pos = 0;
+            for (CountryCode countryCode : countryCodes){
+                if (countryCode != null && NYHelper.isStringNotEmpty(countryCode.getCountryName()) && countryCode.getCountryName().toLowerCase().equals("indonesia")){
+                    countryCodeSpinner.setSelection(pos);
+                    countryCodeAdapter.setSelectedPosition(pos);
+                    countryCodeAdapter.notifyDataSetChanged();
+                    break;
+                }
+                pos++;
+            }
+        }
+
+
+
     }
 
 
@@ -199,6 +216,16 @@ public class RegisterFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        countryCodeAdapter.setSelectedPosition(position);
+        countryCodeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

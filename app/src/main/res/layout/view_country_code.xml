@@ -6,8 +6,9 @@
         android:id="@+id/country_number_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
         android:textColor="@color/ny_black1"
-        android:textSize="16sp"/>
+        android:textSize="14sp"/>
+
 </LinearLayout>

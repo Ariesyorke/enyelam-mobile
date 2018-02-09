@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private Toolbar toolbar;
@@ -82,6 +83,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             countryCodeAdapter = new CountryCodeAdapter(this);
 
+
             DaoSession session = ((NYApplication) getApplicationContext()).getDaoSession();
             List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
             List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
@@ -91,6 +93,27 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             countryCodeSpinner.setAdapter(countryCodeAdapter);
+
+            NYLog.e("CEK INI APA ? = "+storage.user.getCountryCode().getId());
+
+            if (countryCodes != null && countryCodes.size() > 0){
+                NYLog.e("CEK INI APA ? 2");
+                int pos = 0;
+                for (CountryCode countryCode : countryCodes){
+                    if (countryCode != null && NYHelper.isStringNotEmpty(countryCode.getId()) &&
+                            storage != null && storage.user != null && storage.user.getCountryCode() != null && NYHelper.isStringNotEmpty(storage.user.getCountryCode().getId()) &&
+                            countryCode.getId().equals(storage.user.getCountryCode().getId())){
+                        countryCodeSpinner.setSelection(pos);
+                        countryCodeAdapter.setSelectedPosition(pos);
+                        countryCodeAdapter.notifyDataSetChanged();
+
+                        NYLog.e("CEK INI APA ? pos = "+pos);
+
+                        break;
+                    }
+                    pos++;
+                }
+            }
 
         }
     }
@@ -102,14 +125,14 @@ public class EditProfileActivity extends AppCompatActivity {
         updateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String firstName = firstNameEditText.getText().toString();
-                String lastName = lastNameEditText.getText().toString();
-                String username = usernameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
-                String phoneNumber = phoneNumberEditText.getText().toString();
+                String firstName = firstNameEditText.getText().toString().trim();
+                String lastName = lastNameEditText.getText().toString().trim();
+                String username = usernameEditText.getText().toString().trim();
+                String email = emailEditText.getText().toString().trim();
+                String phoneNumber = phoneNumberEditText.getText().toString().trim();
 
                 CountryCode countryCode = (CountryCode) countryCodeSpinner.getSelectedItem();
-                String countryCodeId = countryCode.getCountryCode();
+                String countryCodeId = countryCode.getId();
 
                 if (!NYHelper.isStringNotEmpty(firstName)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_first_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
@@ -177,6 +200,7 @@ public class EditProfileActivity extends AppCompatActivity {
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
         updateTextView = (TextView) findViewById(R.id.update_textView);
         countryCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
+        countryCodeSpinner.setOnItemSelectedListener(this);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
@@ -211,4 +235,16 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onStop();
         if (spcMgr.isStarted())spcMgr.shouldStop();;
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        countryCodeAdapter.setSelectedPosition(position);
+        countryCodeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
 }

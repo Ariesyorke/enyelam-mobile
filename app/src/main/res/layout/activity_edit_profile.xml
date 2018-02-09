@@ -166,7 +166,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
-
                         <LinearLayout
                             android:orientation="horizontal"
                             android:padding="@dimen/padding"
@@ -189,6 +188,7 @@
                                 android:textSize="14sp"
                                 android:textColor="@color/ny_black1"
                                 android:background="@android:color/transparent"
+                                android:layout_marginLeft="@dimen/padding"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content" />

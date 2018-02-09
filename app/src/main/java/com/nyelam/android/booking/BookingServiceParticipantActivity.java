@@ -79,8 +79,8 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String name = nameInputEditText.getText().toString();
-                String email = emailInputEditText.getText().toString();
+                String name = nameInputEditText.getText().toString().trim();
+                String email = emailInputEditText.getText().toString().trim();
 
                 if (!NYHelper.isStringNotEmpty(name)){
                     nameInputEditText.setError(getString(R.string.warn_field_name_cannot_be_empty));

@@ -5,10 +5,12 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.BookingContact;
+import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONException;

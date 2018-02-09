@@ -261,6 +261,7 @@ public class BookingServiceActivity extends BasicActivity {
                         contactNameTextView.setText(getString(R.string.full_name));
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
                     }
+
                     if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber()))contactPhoneNumberTextView.setText(bookingContact.getPhoneNumber());
                     if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
                 } catch (JSONException e) {
@@ -274,7 +275,14 @@ public class BookingServiceActivity extends BasicActivity {
                     bookingContact.setName(storage.user.getFullname());
                     bookingContact.setPhoneNumber(storage.user.getPhone());
                     bookingContact.setEmail(storage.user.getEmail());
-                    if (NYHelper.isStringNotEmpty(storage.user.getFullname()))contactNameTextView.setText(storage.user.getFullname());
+                    if (NYHelper.isStringNotEmpty(storage.user.getFullname())){
+                        contactNameTextView.setText(storage.user.getFullname());
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
+                    } else {
+                        contactNameTextView.setText(getString(R.string.full_name));
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
+                    }
+
                     if (NYHelper.isStringNotEmpty(storage.user.getPhone()))contactPhoneNumberTextView.setText(storage.user.getPhone());
                     if (NYHelper.isStringNotEmpty(storage.user.getEmail()))contactEmailTextView.setText(storage.user.getEmail());
                 }
@@ -394,7 +402,6 @@ public class BookingServiceActivity extends BasicActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
