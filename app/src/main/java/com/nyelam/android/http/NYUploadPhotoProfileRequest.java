@@ -3,7 +3,9 @@ package com.nyelam.android.http;
 import android.content.Context;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.Summary;
+import com.nyelam.android.data.User;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONObject;
@@ -14,9 +16,9 @@ import java.io.File;
  * Created by Aprilian Nur Wakhid Daini on 1/23/2018.
  */
 
-public class NYUploadPhotoProfileRequest extends NYBasicAuthRequest<Boolean> {
+public class NYUploadPhotoProfileRequest extends NYBasicAuthRequest<AuthReturn> {
 
-    private static String KEY_SUCCESS = "success";
+    private static String KEY_USER = "user";
 
     private static String POST_FILE = "file";
 
@@ -31,11 +33,15 @@ public class NYUploadPhotoProfileRequest extends NYBasicAuthRequest<Boolean> {
 
 
     @Override
-    protected Boolean onProcessSuccessData(JSONObject obj) throws Exception {
-        if (obj.has(KEY_SUCCESS) && obj.get(KEY_SUCCESS) instanceof Boolean){
-            return obj.getBoolean(KEY_SUCCESS);
+    protected AuthReturn onProcessSuccessData(JSONObject obj) throws Exception {
+        if (obj.has(KEY_USER) && obj.getJSONObject(KEY_USER) != null){
+
+            AuthReturn authReturn = new AuthReturn();
+            authReturn.parse(obj);
+            return authReturn;
+
         } else{
-            return false;
+            return null;
         }
     }
 

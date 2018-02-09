@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,22 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.danzoye.lib.util.GalleryCameraInvoker;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
+import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYUploadPhotoCoverRequest;
 import com.nyelam.android.http.NYUploadPhotoProfileRequest;
 import com.nyelam.android.profile.EditProfileActivity;
+import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -94,6 +102,84 @@ public class MyAccountFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initControl();
+        initPhoto();
+    }
+
+    private void initPhoto() {
+
+        LoginStorage loginStorage = new LoginStorage(getActivity());
+        if (loginStorage != null && loginStorage.isUserLogin()){
+
+            NYLog.e("CEK USER : "+loginStorage.user.toString());
+
+            User user = loginStorage.user;
+
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
+
+            // foto profile
+            if (user.getPicture() == null || TextUtils.isEmpty(user.getPicture())) {
+                photoProfileImageView.setImageResource(R.mipmap.ic_launcher);
+            } else {
+                ImageLoader.getInstance().loadImage(user.getPicture(), NYHelper.getOption(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        photoProfileImageView.setImageResource(R.mipmap.ic_launcher);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        photoProfileImageView.setImageBitmap(loadedImage);
+                        //activity.getCache().put(imageUri, loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        photoProfileImageView.setImageResource(R.mipmap.ic_launcher);
+                    }
+                });
+
+                ImageLoader.getInstance().displayImage(user.getPicture(), photoProfileImageView, NYHelper.getOption());
+            }
+
+
+            // foto cover
+            if (user.getCover() == null || TextUtils.isEmpty(user.getCover())) {
+                coverImageView.setImageResource(R.drawable.example_pic);
+            } else {
+                ImageLoader.getInstance().loadImage(user.getCover(), NYHelper.getOption(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        coverImageView.setImageResource(R.drawable.example_pic);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        coverImageView.setImageBitmap(loadedImage);
+                        //activity.getCache().put(imageUri, loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        coverImageView.setImageResource(R.drawable.example_pic);
+                    }
+                });
+
+                ImageLoader.getInstance().displayImage(user.getCover(), coverImageView, NYHelper.getOption());
+            }
+        }
+
+
+
     }
 
     private void initControl() {
@@ -365,10 +451,10 @@ public class MyAccountFragment extends Fragment implements
             progressDialog.show();
             if (isCover) {
                 NYUploadPhotoCoverRequest req = new NYUploadPhotoCoverRequest(getActivity(), photoCover);
-                spcMgr.execute(req, onConfirmPaymentRequest());
+                spcMgr.execute(req, onUploadPhotoRequest());
             } else {
                 NYUploadPhotoProfileRequest req = new NYUploadPhotoProfileRequest(getActivity(), photoProfile);
-                spcMgr.execute(req, onConfirmPaymentRequest());
+                spcMgr.execute(req, onUploadPhotoRequest());
             }
 
         } catch (Exception e) {
@@ -377,8 +463,8 @@ public class MyAccountFragment extends Fragment implements
         }
     }
 
-    private RequestListener<Boolean> onConfirmPaymentRequest() {
-        return new RequestListener<Boolean>() {
+    private RequestListener<AuthReturn> onUploadPhotoRequest() {
+        return new RequestListener<AuthReturn>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 hideLoading();
@@ -386,8 +472,16 @@ public class MyAccountFragment extends Fragment implements
             }
 
             @Override
-            public void onRequestSuccess(Boolean success) {
+            public void onRequestSuccess(AuthReturn authReturn) {
                 hideLoading();
+
+                NYLog.e("INI APA WOY ? "+authReturn.toString());
+
+                LoginStorage loginStorage = new LoginStorage(getActivity());
+                loginStorage.user = authReturn.getUser();
+                loginStorage.nyelamToken = authReturn.getToken();
+                loginStorage.save();
+
                 NYHelper.handlePopupMessage(getActivity(), getString(R.string.message_update_profile_success), null);
             }
         };
