@@ -302,8 +302,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="John Doe"
-                        android:textColor="@color/ny_black1"
+                        android:text="Full name"
+                        android:textColor="@color/ny_grey4"
                         android:textSize="16sp" />
 
                     <TextView

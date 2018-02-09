@@ -47,7 +47,6 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         List<CountryCode> products = NYHelper.generateList(rawProducts, CountryCode.class);
         if (products != null && products.size() > 0){
 
-
         } else {
             //countCartTextView.setVisibility(View.GONE);
         }

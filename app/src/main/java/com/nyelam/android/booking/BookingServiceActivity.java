@@ -3,6 +3,7 @@ package com.nyelam.android.booking;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -253,7 +254,13 @@ public class BookingServiceActivity extends BasicActivity {
                     bookingContact = new BookingContact();
                     bookingContact.parse(obj);
 
-                    if (NYHelper.isStringNotEmpty(bookingContact.getName()))contactNameTextView.setText(bookingContact.getName());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getName())){
+                        contactNameTextView.setText(bookingContact.getName());
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
+                    } else {
+                        contactNameTextView.setText(getString(R.string.full_name));
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
+                    }
                     if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber()))contactPhoneNumberTextView.setText(bookingContact.getPhoneNumber());
                     if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
                 } catch (JSONException e) {

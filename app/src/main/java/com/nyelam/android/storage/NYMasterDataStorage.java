@@ -117,11 +117,17 @@ public class NYMasterDataStorage {
                             NYLog.d("+++ countries size = 0");
                         }
 
+
+                        NYLog.d("+++ countries size : result = "+result.toString());
+
                         if (result == null || result.next < 1 || result.item == null || result.item.getList() == null || result.item.getList().isEmpty()) {
                             nextPage = null;
                         } else {
                             nextPage = String.valueOf(result.next);
                         }
+
+                        NYLog.d("+++ countries size : next page = "+nextPage);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         return e;
