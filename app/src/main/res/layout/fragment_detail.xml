@@ -117,7 +117,7 @@
                             <TextView
                                 android:id="@+id/label_min_person"
                                 android:layout_below="@+id/label_date"
-                                android:text="Max Person : "
+                                android:text="Min Person : "
                                 android:textColor="@color/ny_black1"
                                 android:textSize="14sp"
                                 android:layout_marginTop="@dimen/padding"
@@ -136,7 +136,7 @@
                             <TextView
                                 android:id="@+id/label_max_person"
                                 android:layout_below="@+id/label_min_person"
-                                android:text="Min Person : "
+                                android:text="Max Person : "
                                 android:textColor="@color/ny_black1"
                                 android:textSize="14sp"
                                 android:layout_marginTop="@dimen/padding"
