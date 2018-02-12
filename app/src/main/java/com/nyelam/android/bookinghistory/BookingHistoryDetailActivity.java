@@ -85,7 +85,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         initControl();
         initExtra();
 
-        Toast.makeText(this, idOrder, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, idOrder, Toast.LENGTH_SHORT).show();
     }
 
     private void initExtra() {
@@ -406,6 +406,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             @Override
             public void onRequestSuccess(Boolean success) {
                 hideLoadingBar();
+                getOrderDetail(true);
                 NYHelper.handlePopupMessage(BookingHistoryDetailActivity.this, getString(R.string.confirmation_payment_success), null);
             }
         };
@@ -490,7 +491,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         if (file != null){
             this.file = file;
             if (NYHelper.isStringNotEmpty(file.getName()))transferEvidenceTextView.setText(file.getName());
-            Toast.makeText(this, file.getName(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, file.getName(), Toast.LENGTH_SHORT).show();
         }
 
 
