@@ -282,23 +282,36 @@ public class BookingServiceSummaryActivity extends BasicActivity {
 
             final int position = pos;
 
-            LayoutInflater linflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View myParticipantsView = linflaterAddons.inflate(R.layout.view_item_participant, null); //here item is the the layout you want to inflate
+            LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_participant, null); //here item is the the layout you want to inflate
 
             LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(this, 10));
             myParticipantsView.setLayoutParams(layoutParamsAddons);
 
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
+            TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
             TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
             LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
-            if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
-                if (NYHelper.isStringNotEmpty(participant.getName())) nameTextView.setText(participant.getName());
+            if (participant != null) {
+                if (NYHelper.isStringNotEmpty(participant.getName())){
+                    nameTextView.setText(participant.getName());
+                }  else{
+                    nameTextView.setText("Participant "+String.valueOf(position+1));
+                }
+
+                if (NYHelper.isStringNotEmpty(participant.getEmail())){
+                    emailTextView.setText(participant.getEmail());
+                } else {
+                    emailTextView.setText("-");
+                }
+
                 changeTextView.setVisibility(View.GONE);
                 fillLinearLayout.setVisibility(View.GONE);
             } else {
                 nameTextView.setText("Participant "+String.valueOf(position+1));
+                emailTextView.setText("-");
                 changeTextView.setVisibility(View.GONE);
                 fillLinearLayout.setVisibility(View.GONE);
             }
