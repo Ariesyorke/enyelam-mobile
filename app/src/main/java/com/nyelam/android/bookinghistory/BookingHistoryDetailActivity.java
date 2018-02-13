@@ -333,7 +333,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                             totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
                         }
 
-
                         if (summary.getParticipants() != null && summary.getParticipants().size() > 0){
                             participantContainerLinearLayout.removeAllViews();
                             int pos = 0;

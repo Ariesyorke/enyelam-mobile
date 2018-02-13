@@ -29,6 +29,37 @@
     <string name="province">Province</string>
     <string name="city">City</string>
     <string name="save">Save</string>
+    <string name="change">Change</string>
+    <string name="next">Next</string>
+
+    <!--Detail Order-->
+    <string name="order">Order</string>
+    <string name="service_name">Service Name</string>
+    <string name="location">Location</string>
+    <string name="sub_total">Sub Total</string>
+    <string name="voucher">Voucher</string>
+    <string name="total">Total</string>
+    <string name="total_price">Total Price </string>
+    <string name="check_your_booking">Check your booking is write correctly</string>
+    <string name="review_your_booking">Review and  fill a detailed booking</string>
+    <string name="your_booking">Your Booking</string>
+    <string name="booking_summary">Booking Summary</string>
+    <string name="payment">Payment</string>
+    <string name="transfer_to">Transfer To\nBANK BCA</string>
+    <string name="bank_branch">Citra Grand Bekasi Branch</string>
+    <string name="account_number_label">Account Number</string>
+    <string name="account_number">711-50-76761</string>
+    <string name="account_name_label">Account Name</string>
+    <string name="account_name">ISNOKE INDO KARYA, PT</string>
+    <string name="contact_details">Contact Details</string>
+    <string name="participants">Participants</string>
+    <string name="participants_detail">Participants Detail</string>
+    <string name="booking_details">Booking Details</string>
+    <string name="choose_file">Choose File</string>
+    <string name="confirm">Confirm</string>
+
+
+
 
     <string name="enter_a_dive_spot">Enter a dive spot name</string>
     <string name="keyword">Keyword</string>

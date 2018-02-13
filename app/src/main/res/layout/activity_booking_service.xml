@@ -31,7 +31,7 @@
                     android:background="@android:color/transparent"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:text="Booking Details"/>
+                    android:text="@string/booking_details"/>
 
                 <!--<ImageView
                     android:id="@+id/menu_item_imageView"
@@ -126,7 +126,7 @@
                 android:background="#1286ec"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:text="Review and  fill a detailed booking"
+                android:text="@string/review_your_booking"
                 android:textColor="@color/colorWhite" />
 
             <TextView
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/ny_grey3"
                 android:padding="@dimen/padding"
-                android:text="Your Booking"
+                android:text="@string/your_booking"
                 android:textColor="@color/ny_black1"
                 android:textStyle="bold" />
 
@@ -149,7 +149,7 @@
                     android:id="@+id/schedule_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sel, 1 Jan 2000"
+                    android:text="Date"
                     android:textColor="@color/ny_black1"
                     android:textStyle="bold" />
 
@@ -164,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:layout_marginTop="@dimen/padding"
-                        android:text="Service Name"
+                        android:text="@string/service_name"
                         android:textColor="@color/ny_black1" />
                 </LinearLayout>
 
@@ -173,7 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding"
-                    android:text="Location"
+                    android:text="@string/location"
                     android:textSize="15sp"
                     android:textColor="@color/ny_grey4" />
 
@@ -187,7 +187,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/padding"
-                        android:text="Participants "
+                        android:text="@string/participants"
                         android:textSize="14sp"
                         android:textColor="@color/ny_grey4" />
                     <TextView
@@ -211,7 +211,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/padding"
-                        android:text="Sub Total "
+                        android:text="@string/sub_total"
                         android:textSize="14sp"
                         android:textColor="@color/ny_grey4" />
                     <TextView
@@ -237,7 +237,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:layout_marginTop="@dimen/padding"
-                        android:text="Voucher "
+                        android:text="@string/voucher"
                         android:textColor="@color/ny_grey4" />
                     <TextView
                         android:id="@+id/voucher_textView"
@@ -261,7 +261,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:layout_marginTop="@dimen/padding"
-                        android:text="Total Price "
+                        android:text="@string/total_price"
                         android:textColor="@color/ny_grey4" />
                     <TextView
                         android:id="@+id/total_price_textView"
@@ -281,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/ny_grey3"
                 android:padding="@dimen/padding"
-                android:text="Contact Details"
+                android:text="@string/contact_details"
                 android:textColor="@color/ny_black1"
                 android:textStyle="bold" />
 
@@ -302,7 +302,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Full name"
+                        android:text="@string/full_name"
                         android:textColor="@color/ny_grey4"
                         android:textSize="16sp" />
 
@@ -310,7 +310,7 @@
                         android:id="@+id/change_contact_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change"
+                        android:text="@string/change"
                         android:textAllCaps="true"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="14sp"
@@ -327,7 +327,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Phone Number"
+                        android:text="@string/phone_number"
                         android:textColor="@color/ny_grey4"
                         android:textSize="14sp" />
 
@@ -335,7 +335,7 @@
                         android:id="@+id/contact_phone_number_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+62"
+                        android:text="-"
                         android:textColor="@color/ny_black1"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -370,7 +370,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/ny_grey3"
                 android:padding="@dimen/padding"
-                android:text="Participants Detail"
+                android:text="@string/participants_detail"
                 android:textColor="@color/ny_black1"
                 android:textStyle="bold" />
 
@@ -394,7 +394,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:text="Next"
+                    android:text="@string/next"
                     android:textSize="14sp"
                     android:textAllCaps="true"
                     android:textStyle="bold"
