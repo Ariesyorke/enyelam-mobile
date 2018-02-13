@@ -98,20 +98,20 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/label_date"
                                 android:text="Date : "
                                 android:textColor="@color/ny_black1"
                                 android:textSize="14sp"
-                                android:layout_marginTop="@dimen/padding"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/date_textView"
                                 android:layout_toRightOf="@+id/label_date"
-                                android:text="23 Nov 2017 - 24 Nov 2017"
+                                android:text="-"
                                 android:textColor="@color/ny_black1"
                                 android:textSize="14sp"
-                                android:layout_marginTop="@dimen/padding"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
                             <TextView
@@ -120,7 +120,6 @@
                                 android:text="Min Person : "
                                 android:textColor="@color/ny_black1"
                                 android:textSize="14sp"
-                                android:layout_marginTop="@dimen/padding"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
                             <TextView
@@ -130,7 +129,6 @@
                                 android:text="-"
                                 android:textColor="@color/ny_black1"
                                 android:textSize="14sp"
-                                android:layout_marginTop="@dimen/padding"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
                             <TextView
@@ -188,7 +186,37 @@
                                     android:layout_height="1dp"/>
                             </RelativeLayout>
 
+
                             <RelativeLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:id="@+id/label_transportation"
+                                    android:text="Transportation : "
+                                    android:textColor="@color/ny_black1"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="@dimen/padding"
+                                    android:layout_marginBottom="@dimen/padding"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <ImageView
+                                    android:id="@+id/icon_transportation_imageView"
+                                    android:src="@drawable/ny_circle_blue"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp" />
+                                <View
+                                    android:layout_alignParentBottom="true"
+                                    android:background="@color/ny_grey3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"/>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:visibility="gone"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
                                 android:layout_marginLeft="@dimen/padding"
@@ -254,38 +282,6 @@
                                 android:layout_marginLeft="@dimen/padding"
                                 android:layout_height="wrap_content">
                                 <TextView
-                                    android:id="@+id/label_transportation"
-                                    android:text="Transportation : "
-                                    android:textColor="@color/ny_black1"
-                                    android:textSize="14sp"
-                                    android:layout_marginTop="@dimen/padding"
-                                    android:layout_marginBottom="@dimen/padding"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-                                <ImageView
-                                    android:id="@+id/icon_transportation_imageView"
-                                    android:src="@drawable/ny_circle_blue"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_centerVertical="true"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp" />
-                                <View
-                                    android:layout_alignParentBottom="true"
-                                    android:background="@color/ny_grey3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"/>
-                            </RelativeLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <RelativeLayout
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
-                                android:layout_marginRight="@dimen/padding"
-                                android:layout_height="wrap_content">
-                                <TextView
                                     android:id="@+id/label_towel"
                                     android:text="Towel : "
                                     android:textColor="@color/ny_black1"
@@ -308,12 +304,9 @@
                                     android:layout_height="1dp"/>
                             </RelativeLayout>
 
-                            <RelativeLayout
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
-                                android:layout_marginLeft="@dimen/padding"
-                                android:layout_height="wrap_content"/>
                         </LinearLayout>
+
+
 
 
 
