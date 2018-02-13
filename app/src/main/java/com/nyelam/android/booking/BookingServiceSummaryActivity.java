@@ -25,6 +25,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -36,7 +37,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingServiceSummaryActivity extends BasicActivity {
+public class BookingServiceSummaryActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private ProgressDialog progressDialog;
@@ -78,14 +79,7 @@ public class BookingServiceSummaryActivity extends BasicActivity {
                 } else {
                     Toast.makeText(BookingServiceSummaryActivity.this, "cartToken null", Toast.LENGTH_SHORT).show();
                 }*/
-
-                NYDoDiveServiceOrderRequest req = null;
-                try {
-                    req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toString(), participantList.toString());
-                    spcMgr.execute(req, onCreateOrderServiceRequest());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
             }
         });
     }
@@ -407,6 +401,22 @@ public class BookingServiceSummaryActivity extends BasicActivity {
     protected void onStart() {
         super.onStart();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
+
+    @Override
+    public void onChooseListener(int position) {
+
+    }
+
+    @Override
+    public void onAcceptAgreementListener() {
+        NYDoDiveServiceOrderRequest req = null;
+        try {
+            req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toString(), participantList.toString());
+            spcMgr.execute(req, onCreateOrderServiceRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -193,4 +193,9 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         initRequest();
     }
 
+    @Override
+    public void onAcceptAgreementListener() {
+
+    }
+
 }
