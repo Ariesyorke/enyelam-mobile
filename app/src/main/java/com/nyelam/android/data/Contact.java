@@ -11,15 +11,26 @@ import org.json.JSONObject;
 
 public class Contact implements Parseable {
 
+    private static String KEY_NAME = "name";
     private static String KEY_EMAIL_ADDRESS = "email_address";
+    private static String KEY_EMAIL = "email";
     private static String KEY_PHONE_NUMBER = "phone_number";
     private static String KEY_COUNTRY_CODE = "country_code";
     private static String KEY_LOCATION = "location";
 
+    private String name;
     private String emailAddress;
     private String phoneNumber;
     private String countryCode;
     private Location location;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getEmailAddress() {
         return emailAddress;
@@ -59,8 +70,16 @@ public class Contact implements Parseable {
         if (obj == null) return;
 
         try {
+            if (!obj.isNull(KEY_NAME)) {
+                setName(obj.getString(KEY_NAME));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
             if (!obj.isNull(KEY_EMAIL_ADDRESS)) {
                 setEmailAddress(obj.getString(KEY_EMAIL_ADDRESS));
+            } else if (!obj.isNull(KEY_EMAIL)) {
+                setEmailAddress(obj.getString(KEY_EMAIL));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -89,6 +108,14 @@ public class Contact implements Parseable {
     public String toString() {
 
         JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getName())) {
+                obj.put(KEY_NAME, getName());
+            } else {
+                obj.put(KEY_NAME, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!TextUtils.isEmpty(getEmailAddress())) {

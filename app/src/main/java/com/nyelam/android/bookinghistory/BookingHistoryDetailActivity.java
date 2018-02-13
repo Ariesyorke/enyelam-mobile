@@ -22,10 +22,12 @@ import com.danzoye.lib.util.GalleryCameraInvoker;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Cart;
+import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.Participant;
 import com.nyelam.android.data.Summary;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYDoDiveBookingDetailRequest;
@@ -299,6 +301,9 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 if (newSummary != null){
                     summary = newSummary;
 
+
+                    NYLog.e("CEK SUMMARY : "+summary);
+
                     mainLinearLayout.setVisibility(View.VISIBLE);
 
                     /*
@@ -308,6 +313,16 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     private TextView contactEmailTextView;
                     private LinearLayout participantContainerLinearLayout;
                     */
+
+
+                    if (summary != null && summary.getContact() != null){
+                        Contact contact = summary.getContact();
+                        if (NYHelper.isStringNotEmpty(contact.getName())) contactNameTextView.setText(contact.getName());
+                        if (NYHelper.isStringNotEmpty(contact.getPhoneNumber())) contactPhoneNumberTextView.setText(contact.getPhoneNumber());
+                        if (NYHelper.isStringNotEmpty(contact.getEmailAddress())) contactEmailTextView.setText(contact.getEmailAddress());
+                    }
+
+
 
                     if (summary.getOrder() != null){
 
@@ -340,23 +355,36 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
                                 final int position = pos;
 
-                                LayoutInflater linflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                View myParticipantsView = linflaterAddons.inflate(R.layout.view_item_participant, null); //here item is the the layout you want to inflate
+                                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_participant, null); //here item is the the layout you want to inflate
 
                                 LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(BookingHistoryDetailActivity.this, 10));
                                 myParticipantsView.setLayoutParams(layoutParamsAddons);
 
                                 TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
+                                TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
                                 TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
                                 LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
-                                if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
-                                    if (NYHelper.isStringNotEmpty(participant.getName())) nameTextView.setText(participant.getName());
+                                if (participant != null) {
+                                    if (NYHelper.isStringNotEmpty(participant.getName())){
+                                        nameTextView.setText(participant.getName());
+                                    }  else{
+                                        nameTextView.setText("Participant "+String.valueOf(position+1));
+                                    }
+
+                                    if (NYHelper.isStringNotEmpty(participant.getEmail())){
+                                        emailTextView.setText(participant.getEmail());
+                                    } else {
+                                        emailTextView.setText("-");
+                                    }
+
                                     changeTextView.setVisibility(View.GONE);
                                     fillLinearLayout.setVisibility(View.GONE);
                                 } else {
                                     nameTextView.setText("Participant "+String.valueOf(position+1));
+                                    emailTextView.setText("-");
                                     changeTextView.setVisibility(View.GONE);
                                     fillLinearLayout.setVisibility(View.GONE);
                                 }

@@ -34,6 +34,7 @@
 
     <!--Detail Order-->
     <string name="order">Order</string>
+    <string name="fill_out_the_form">Fill Out the Form</string>
     <string name="service_name">Service Name</string>
     <string name="location">Location</string>
     <string name="sub_total">Sub Total</string>

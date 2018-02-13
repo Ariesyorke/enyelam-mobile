@@ -441,7 +441,7 @@
                                     android:padding="5dp"
                                     android:gravity="center"
                                     android:layout_gravity="center"
-                                    android:textSize="14sp"
+                                    android:textSize="16sp"
                                     android:text="@string/bank_branch"
                                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 

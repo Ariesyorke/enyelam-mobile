@@ -74,7 +74,21 @@ public class Summary implements Parseable {
             }
         }
 
+
         try {
+            if(!obj.isNull(KEY_SERVICE)) {
+                JSONObject o = obj.getJSONObject(KEY_SERVICE);
+                if(o != null) {
+                    diveService = new DiveService();
+                    diveService.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        /*try {
             if(!obj.has(KEY_SERVICE) && obj.get(KEY_SERVICE) instanceof JSONObject && !obj.isNull(KEY_SERVICE)) {
                 JSONObject o = obj.getJSONObject(KEY_SERVICE);
                 if(o != null && o.length() > 0) {
@@ -84,7 +98,7 @@ public class Summary implements Parseable {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
         if(!obj.isNull(KEY_CONTACT)) {
