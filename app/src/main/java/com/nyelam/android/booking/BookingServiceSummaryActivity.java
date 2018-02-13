@@ -21,6 +21,7 @@ import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
+import com.nyelam.android.data.Summary;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
@@ -323,8 +324,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private RequestListener<Boolean> onCreateOrderServiceRequest() {
-        return new RequestListener<Boolean>() {
+    private RequestListener<Summary> onCreateOrderServiceRequest() {
+        return new RequestListener<Summary>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (progressDialog != null) {
@@ -334,17 +335,17 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
 
             @Override
-            public void onRequestSuccess(Boolean result) {
+            public void onRequestSuccess(final Summary result) {
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
-
 
                 NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Your order was successful", false,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                                if (result != null && NYHelper.isStringNotEmpty(result.toString()))intent.putExtra(NYHelper.SUMMARY, result.toString());
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             }

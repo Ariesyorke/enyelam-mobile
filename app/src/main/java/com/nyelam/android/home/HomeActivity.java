@@ -30,13 +30,18 @@ import com.nyelam.android.R;
 import com.nyelam.android.StarterActivity;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
+import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageTabItemView;
 import com.nyelam.android.view.NYMenuDrawerFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,12 +78,26 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        initExtra();
         initView();
         initTab();
         initControl();
         initPermission();
     }
 
+    private void initExtra() {
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+
+            if(intent.hasExtra(NYHelper.SUMMARY) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SUMMARY))){
+                intent = new Intent(this, BookingHistoryDetailActivity.class);
+                intent.putExtra(NYHelper.SUMMARY, extras.getString(NYHelper.SUMMARY));
+                startActivity(intent);
+            }
+        }
+    }
     private void initPermission() {
         ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,

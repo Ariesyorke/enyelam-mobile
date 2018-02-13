@@ -7,6 +7,7 @@ import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.SearchResultList;
+import com.nyelam.android.data.Summary;
 
 import org.greenrobot.greendao.annotation.OrderBy;
 import org.json.JSONObject;
@@ -15,9 +16,10 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<Boolean> {
+public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<Summary> {
 
-    private static final String KEY_SUCCESS = "success";
+    //private static final String KEY_SUCCESS = "success";
+    private static final String KEY_SUMMARY = "summary";
 
     private static final String POST_CART_TOKEN = "cart_token";
     private static final String POST_CONTACT = "contact";
@@ -46,10 +48,16 @@ public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<Boolean> {
     }
 
     @Override
-    protected Boolean onProcessSuccessData(JSONObject obj) throws Exception {
+    protected Summary onProcessSuccessData(JSONObject obj) throws Exception {
 
-        Boolean isSuccess = obj.getBoolean(KEY_SUCCESS);
-        return isSuccess;
+        if (obj.has(KEY_SUMMARY) && obj.get(KEY_SUMMARY) != null){
+            Summary summary = new Summary();
+            summary.parse(obj.getJSONObject(KEY_SUMMARY));
+            return summary;
+        } else {
+            return null;
+        }
+
     }
 
 }

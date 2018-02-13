@@ -35,6 +35,9 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -94,7 +97,18 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (intent.hasExtra(NYHelper.ID_ORDER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_ORDER))) {
+            if (intent.hasExtra(NYHelper.SUMMARY)){
+
+                try {
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.SUMMARY));
+                    summary = new Summary();
+                    summary.parse(obj);
+                    setSummaryView();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (intent.hasExtra(NYHelper.ID_ORDER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_ORDER))) {
                 idOrder = extras.getString(NYHelper.ID_ORDER);
             }
         }
@@ -300,11 +314,21 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
                 if (newSummary != null){
                     summary = newSummary;
-
-
                     NYLog.e("CEK SUMMARY : "+summary);
 
-                    mainLinearLayout.setVisibility(View.VISIBLE);
+                    setSummaryView();
+
+                }
+
+            }
+        };
+    }
+
+    private void setSummaryView() {
+
+        hideLoadingBar();
+
+        mainLinearLayout.setVisibility(View.VISIBLE);
 
                     /*
                     private TextView locationTextView;
@@ -315,100 +339,93 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     */
 
 
-                    if (summary != null && summary.getContact() != null){
-                        Contact contact = summary.getContact();
-                        if (NYHelper.isStringNotEmpty(contact.getName())) contactNameTextView.setText(contact.getName());
-                        if (NYHelper.isStringNotEmpty(contact.getPhoneNumber())) contactPhoneNumberTextView.setText(contact.getPhoneNumber());
-                        if (NYHelper.isStringNotEmpty(contact.getEmailAddress())) contactEmailTextView.setText(contact.getEmailAddress());
-                    }
+        if (summary != null && summary.getContact() != null){
+            Contact contact = summary.getContact();
+            if (NYHelper.isStringNotEmpty(contact.getName())) contactNameTextView.setText(contact.getName());
+            if (NYHelper.isStringNotEmpty(contact.getPhoneNumber())) contactPhoneNumberTextView.setText(contact.getPhoneNumber());
+            if (NYHelper.isStringNotEmpty(contact.getEmailAddress())) contactEmailTextView.setText(contact.getEmailAddress());
+        }
 
 
 
-                    if (summary.getOrder() != null){
+        if (summary.getOrder() != null){
 
-                        Order order = summary.getOrder();
+            Order order = summary.getOrder();
 
-                        if (NYHelper.isStringNotEmpty(order.getStatus())){
+            if (NYHelper.isStringNotEmpty(order.getStatus())){
 
-                            statusTextView.setText(order.getStatus());
-                            if (order.getStatus().toLowerCase().equals("unpaid")){
-                                paymentLinearLayout.setVisibility(View.VISIBLE);
-                            } else {
-                                paymentLinearLayout.setVisibility(View.GONE);
-                            }
+                statusTextView.setText(order.getStatus());
+                if (order.getStatus().toLowerCase().equals("unpaid")){
+                    paymentLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    paymentLinearLayout.setVisibility(View.GONE);
+                }
+            }
+
+            if (NYHelper.isStringNotEmpty(order.getOrderId()))orderIdTextView.setText("#"+order.getOrderId());
+            scheduleTextView.setText(NYHelper.setMillisToDateMonth(order.getSchedule()));
+
+            if (order.getCart() != null){
+                Cart cart = order.getCart();
+                subTotalPriceTextView.setText(NYHelper.priceFormatter(cart.getSubTotal()));
+                //voucherTextView.setText(NYHelper.priceFormatter(cart.getVoucher().getValue()));
+                totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
+            }
+
+            if (summary.getParticipants() != null && summary.getParticipants().size() > 0){
+                participantContainerLinearLayout.removeAllViews();
+                int pos = 0;
+                for (final Participant participant : summary.getParticipants()) {
+
+                    final int position = pos;
+
+                    LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_participant, null); //here item is the the layout you want to inflate
+
+                    LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(BookingHistoryDetailActivity.this, 10));
+                    myParticipantsView.setLayoutParams(layoutParamsAddons);
+
+                    TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
+                    TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
+                    TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
+                    LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
+
+                    if (participant != null) {
+                        if (NYHelper.isStringNotEmpty(participant.getName())){
+                            nameTextView.setText(participant.getName());
+                        }  else{
+                            nameTextView.setText("Participant "+String.valueOf(position+1));
                         }
 
-                        if (NYHelper.isStringNotEmpty(order.getOrderId()))orderIdTextView.setText("#"+order.getOrderId());
-                        scheduleTextView.setText(NYHelper.setMillisToDateMonth(order.getSchedule()));
-
-                        if (order.getCart() != null){
-                            Cart cart = order.getCart();
-                            subTotalPriceTextView.setText(NYHelper.priceFormatter(cart.getSubTotal()));
-                            //voucherTextView.setText(NYHelper.priceFormatter(cart.getVoucher().getValue()));
-                            totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
+                        if (NYHelper.isStringNotEmpty(participant.getEmail())){
+                            emailTextView.setText(participant.getEmail());
+                        } else {
+                            emailTextView.setText("-");
                         }
 
-                        if (summary.getParticipants() != null && summary.getParticipants().size() > 0){
-                            participantContainerLinearLayout.removeAllViews();
-                            int pos = 0;
-                            for (final Participant participant : summary.getParticipants()) {
-
-                                final int position = pos;
-
-                                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_participant, null); //here item is the the layout you want to inflate
-
-                                LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(BookingHistoryDetailActivity.this, 10));
-                                myParticipantsView.setLayoutParams(layoutParamsAddons);
-
-                                TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
-                                TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
-                                TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
-                                LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
-
-                                if (participant != null) {
-                                    if (NYHelper.isStringNotEmpty(participant.getName())){
-                                        nameTextView.setText(participant.getName());
-                                    }  else{
-                                        nameTextView.setText("Participant "+String.valueOf(position+1));
-                                    }
-
-                                    if (NYHelper.isStringNotEmpty(participant.getEmail())){
-                                        emailTextView.setText(participant.getEmail());
-                                    } else {
-                                        emailTextView.setText("-");
-                                    }
-
-                                    changeTextView.setVisibility(View.GONE);
-                                    fillLinearLayout.setVisibility(View.GONE);
-                                } else {
-                                    nameTextView.setText("Participant "+String.valueOf(position+1));
-                                    emailTextView.setText("-");
-                                    changeTextView.setVisibility(View.GONE);
-                                    fillLinearLayout.setVisibility(View.GONE);
-                                }
-
-                                pos++;
-                                participantContainerLinearLayout.addView(myParticipantsView);
-
-                            }
-                        }
-
+                        changeTextView.setVisibility(View.GONE);
+                        fillLinearLayout.setVisibility(View.GONE);
+                    } else {
+                        nameTextView.setText("Participant "+String.valueOf(position+1));
+                        emailTextView.setText("-");
+                        changeTextView.setVisibility(View.GONE);
+                        fillLinearLayout.setVisibility(View.GONE);
                     }
 
-                    if (summary.getDiveService() != null){
-                        DiveService service = summary.getDiveService();
-                        if (NYHelper.isStringNotEmpty(service.getName()))serviceNameTextView.setText(service.getName());
-                    }
-
+                    pos++;
+                    participantContainerLinearLayout.addView(myParticipantsView);
 
                 }
-
             }
-        };
-    }
 
+        }
+
+        if (summary.getDiveService() != null){
+            DiveService service = summary.getDiveService();
+            if (NYHelper.isStringNotEmpty(service.getName()))serviceNameTextView.setText(service.getName());
+        }
+    }
 
 
     private void confirmPayment(){
