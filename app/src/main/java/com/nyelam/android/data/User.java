@@ -470,6 +470,7 @@ public class User implements Parseable {
             return obj.toString(3);
         } catch (JSONException e) {e.printStackTrace();
         }
+
         return super.toString();
     }
 }

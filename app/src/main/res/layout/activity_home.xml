@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <android.support.v7.widget.Toolbar
+                android:visibility="gone"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,10 +94,10 @@
 
                 <LinearLayout
                     android:id="@+id/tab_manager"
+                    android:orientation="horizontal"
+                    android:background="@drawable/ny_tab_menu_gradation"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@color/ny_grey2"
-                    android:orientation="horizontal"
                     android:layout_alignParentBottom="true">
 
                     <com.nyelam.android.view.NYHomepageTabItemView

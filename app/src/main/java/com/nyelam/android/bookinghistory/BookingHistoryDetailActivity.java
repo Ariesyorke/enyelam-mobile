@@ -330,15 +330,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
         mainLinearLayout.setVisibility(View.VISIBLE);
 
-                    /*
-                    private TextView locationTextView;
-                    private TextView contactNameTextView;
-                    private TextView contactPhoneNumberTextView;
-                    private TextView contactEmailTextView;
-                    private LinearLayout participantContainerLinearLayout;
-                    */
-
-
         if (summary != null && summary.getContact() != null){
             Contact contact = summary.getContact();
             if (NYHelper.isStringNotEmpty(contact.getName())) contactNameTextView.setText(contact.getName());

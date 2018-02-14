@@ -3,12 +3,16 @@ package com.nyelam.android.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
@@ -30,6 +34,8 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
     private int tabItemPosition = -1;
     private TextView textView;
     private ImageView imageView;
+    private RelativeLayout relativeLayout;
+    private View lineView;
 
     public NYHomepageTabItemView(Context context) {
         super(context);
@@ -73,6 +79,14 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
             imageView.setImageResource(R.drawable.tab_user);
         }
 
+        if (checked) {
+            relativeLayout.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.ny_blueActive));
+            lineView.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.ny_yellowActive));
+        } else {
+            relativeLayout.setBackgroundColor(Color.TRANSPARENT);
+            lineView.setBackgroundColor(Color.TRANSPARENT);
+        }
+
     }
 
     @Override
@@ -81,7 +95,6 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
             toggle();
         }
         return super.performClick();
-
     }
 
     @Override
@@ -121,10 +134,12 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
 
         setClickable(true);
 
-        setBackgroundResource(R.drawable.homepage_tab_item_selector);
+        //setBackgroundResource(R.drawable.homepage_tab_item_selector);
 
         textView = (TextView) findViewById(R.id.text);
         imageView = (ImageView) findViewById(R.id.image);
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        lineView = (View) findViewById(R.id.line_view);
 
         textView.setVisibility(GONE);
 

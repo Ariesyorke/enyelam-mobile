@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.Toast;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveSpot;
+import com.nyelam.android.data.Module;
 import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -35,6 +39,8 @@ public class HomeFragment extends Fragment {
     private CardView doDiveCardView, doCourseCardView, doShopCardView, doTogetherCardView;
     //private LinearLayout doDiveLinearLayout, doCourseLinearLayout, doShopLinearLayout;
     //private View viewBooking;
+    private RecyclerView recyclerView;
+    private List<Module> modules = null;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -139,7 +145,7 @@ public class HomeFragment extends Fragment {
         doCourseCardView = (CardView) view.findViewById(R.id.do_course_cardView);
         doShopCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
         doTogetherCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
-        //viewBooking = (View) view.findViewById(R.id.view_booking);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
     }
 
 
