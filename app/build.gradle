@@ -52,5 +52,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
     compile 'org.sufficientlysecure:html-textview:3.5'
+    /*compile 'com.github.sharish:ShimmerRecyclerView:v1.2'*/
     testCompile 'junit:junit:4.12'
 }

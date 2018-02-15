@@ -14,15 +14,17 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 2/14/2018.
  */
 
-public class Module implements Parseable {
+public abstract class Module implements Parseable {
 
-    private static String KEY_MODULES_NAME = "module_name";
-    private static String KEY_EVENTS = "events";
-    private static String KEY_DIVE_SERVICES = "dive_services";
-    private static String KEY_DIVE_SPOTS = "dive_spots";
+    protected static String KEY_MODULES_NAME = "module_name";
+    protected static String KEY_EVENTS = "events";
+    protected static String KEY_DIVE_SERVICES = "dive_services";
+    protected static String KEY_DIVE_SPOTS = "dive_spots";
 
-    private String name;
-    private List<Object> list;
+    protected String name;
+    protected List<Event> events;
+    protected List<DiveService> diveServices;
+    protected List<DiveSpot> diveSpots;
 
 
     public String getName() {
@@ -33,12 +35,28 @@ public class Module implements Parseable {
         this.name = name;
     }
 
-    public List<Object> getList() {
-        return list;
+    public List<Event> getEvents() {
+        return events;
     }
 
-    public void setList(List<Object> list) {
-        this.list = list;
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public List<DiveService> getDiveServices() {
+        return diveServices;
+    }
+
+    public void setDiveServices(List<DiveService> diveServices) {
+        this.diveServices = diveServices;
+    }
+
+    public List<DiveSpot> getDiveSpots() {
+        return diveSpots;
+    }
+
+    public void setDiveSpots(List<DiveSpot> diveSpots) {
+        this.diveSpots = diveSpots;
     }
 
     @Override
@@ -52,16 +70,15 @@ public class Module implements Parseable {
             }
         } catch (JSONException e){e.printStackTrace();}
 
-
         try {
             if(!obj.isNull(KEY_EVENTS)) {
-                list = new ArrayList<>();
+                events = new ArrayList<>();
                 JSONArray array = obj.getJSONArray(KEY_EVENTS);
                 for(int i = 0; i < array.length(); i++) {
                     JSONObject o = array.getJSONObject(i);
-                    DiveService diveService = new DiveService();
-                    diveService.parse(o);
-                    list.add(diveService);
+                    Event event = new Event();
+                    event.parse(o);
+                    events.add(event);
                 }
             }
         } catch (JSONException e) {
@@ -71,13 +88,13 @@ public class Module implements Parseable {
 
         try {
             if(!obj.isNull(KEY_DIVE_SERVICES)) {
-                list = new ArrayList<>();
+                diveServices = new ArrayList<>();
                 JSONArray array = obj.getJSONArray(KEY_DIVE_SERVICES);
                 for(int i = 0; i < array.length(); i++) {
                     JSONObject o = array.getJSONObject(i);
                     DiveService diveService = new DiveService();
                     diveService.parse(o);
-                    list.add(diveService);
+                    diveServices.add(diveService);
                 }
             }
         } catch (JSONException e) {
@@ -87,13 +104,13 @@ public class Module implements Parseable {
 
         try {
             if(!obj.isNull(KEY_DIVE_SPOTS)) {
-                list = new ArrayList<>();
+                diveSpots = new ArrayList<>();
                 JSONArray array = obj.getJSONArray(KEY_DIVE_SPOTS);
                 for(int i = 0; i < array.length(); i++) {
                     JSONObject o = array.getJSONObject(i);
                     DiveSpot diveSpot = new DiveSpot();
                     diveSpot.parse(o);
-                    list.add(diveSpot);
+                    diveSpots.add(diveSpot);
                 }
             }
         } catch (JSONException e) {
@@ -118,20 +135,47 @@ public class Module implements Parseable {
         } catch (JSONException e){e.printStackTrace();}
 
 
-        NYLog.e("MY NAME IS : "+getList().getClass().getName());
-
-        /*try {
-            if (getList() != null && !getList().isEmpty()) {
+        try {
+            if (getEvents() != null && !getEvents().isEmpty()) {
                 JSONArray array = new JSONArray();
-                for (SocialMedia a : getList() ) {
+                for (Event e : getEvents() ) {
+                    JSONObject o = new JSONObject(e.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_EVENTS, array);
+            } else  {
+                obj.put(KEY_EVENTS, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
+
+
+        //NYLog.e("MY NAME IS : "+getList().getClass().getName());
+
+        try {
+            if (getDiveServices() != null && !getDiveServices().isEmpty()) {
+                JSONArray array = new JSONArray();
+                for (DiveService a : getDiveServices() ) {
                     JSONObject o = new JSONObject(a.toString());
                     array.put(o);
                 }
-                obj.put(KEY_SOCIAL_MEDIA, array);
+                obj.put(KEY_DIVE_SERVICES, array);
             } else  {
-                obj.put(KEY_SOCIAL_MEDIA, JSONObject.NULL);
+                obj.put(KEY_DIVE_SERVICES, JSONObject.NULL);
             }
-        } catch (JSONException e){e.printStackTrace();}*/
+        } catch (JSONException e){e.printStackTrace();}
+
+        try {
+            if (getDiveSpots() != null && !getDiveSpots().isEmpty()) {
+                JSONArray array = new JSONArray();
+                for (DiveSpot a : getDiveSpots() ) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_DIVE_SPOTS, array);
+            } else  {
+                obj.put(KEY_DIVE_SPOTS, JSONObject.NULL);
+            }
+        } catch (JSONException e){e.printStackTrace();}
 
         try {
             return obj.toString(3);

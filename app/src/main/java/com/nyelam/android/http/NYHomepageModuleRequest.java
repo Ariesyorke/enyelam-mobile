@@ -4,46 +4,35 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.danzoye.lib.http.DHTTPConnectionHelper;
+import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.DiveSpotList;
+import com.nyelam.android.data.Module;
+import com.nyelam.android.data.ModuleList;
+import com.nyelam.android.data.SearchResultList;
+import com.nyelam.android.dev.NYLog;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class NYHomepageModuleRequest extends NYBasicRequest<DiveSpotList> {
+public class NYHomepageModuleRequest extends NYBasicRequest<ModuleList> {
 
-    private static final String KEY_DIVE_SPOTS = "dive_spots";
+    private static final String KEY_MODULES= "modules";
 
     private static final String POST_PAGE = "page";
-    private static final String POST_CITY_ID = "city_id";
-    private static final String POST_PROVINCE_ID = "province_id";
 
-    private static final String POST_CERTIFICATE = "certificate";
-    private static final String POST_DIVER = "diver";
-    private static final String POST_DATE = "date";
-    private static final String POST_DIVE_SPOT_ID = "dive_spot_id";
-    private static final String POST_DIVE_CATEGORY_ID = "dive_category_id";
-
-    public NYHomepageModuleRequest(Context context, String apiPath, String page, String diverId, String type) {
-        super(AuthReturn.class, context, apiPath);
-
-        if(!TextUtils.isEmpty(page)) {
-            addQuery(POST_PAGE, page);
-        }
-
-        if(!TextUtils.isEmpty(type) && type.equals("5")) {
-            addQuery(POST_PROVINCE_ID, diverId);
-        } else {
-            addQuery(POST_CITY_ID, diverId);
-        }
-
+    public NYHomepageModuleRequest(Context context) {
+        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_homepage_modules));
     }
 
-    @Override
+    /*@Override
     public String getHTTPType() {
         return DHTTPConnectionHelper.HTTP_POST;
     }
@@ -58,7 +47,52 @@ public class NYHomepageModuleRequest extends NYBasicRequest<DiveSpotList> {
         }
 
         return null;
+    }*/
+
+
+     @Override
+    public ModuleList loadDataFromNetwork() throws Exception {
+
+         NYLog.e("CEK MODULE 1");
+
+         return onProcessData(loadJSONFromAsset());
     }
+
+    @Override
+    protected ModuleList onProcessData(byte[] data) throws Exception {
+        NYLog.e("CEK MODULE 3 "+data.toString());
+        return super.onProcessData(data);
+    }
+
+    @Override
+    protected ModuleList onProcessSuccessData(JSONObject obj) throws Exception {
+        NYLog.e("CEK MODULE 4 "+obj.toString());
+
+        if  (obj.get(KEY_MODULES) != null && obj.get(KEY_MODULES) instanceof JSONArray && obj.getJSONArray(KEY_MODULES).length() > 0){
+            NYLog.e("CEK MODULE 5 "+obj.toString());
+            ModuleList moduleList = new ModuleList();
+            moduleList.parse(obj.getJSONArray(KEY_MODULES));
+            return moduleList;
+        }
+
+        return null;
+    }
+
+    public byte[] loadJSONFromAsset() {
+        try {
+            NYLog.e("CEK MODULE 2");
+            InputStream is = getContext().getAssets().open("homepage_module.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            return buffer;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 }

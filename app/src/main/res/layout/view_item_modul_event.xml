@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    card_view:cardElevation="4dp"
+    card_view:cardMaxElevation="4dp"
+    app:cardCornerRadius="3dp"
+    android:layout_margin="@dimen/padding"
+    android:layout_height="wrap_content"
+    app:ignore="NamespaceTypo">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="250dp"
+        android:layout_height="250dp">
+
+        <ImageView
+            android:id="@+id/event_imageView"
+            android:src="@drawable/example_pic"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <LinearLayout
+            android:padding="@dimen/padding_double"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/ic_pin_map_white"
+                android:layout_width="16dp"
+                android:layout_height="16dp" />
+            <TextView
+                android:id="@+id/location_textView"
+                android:text="@string/location"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/name_textView"
+            android:text="Event Name Trip 1"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_above="@+id/container_linaerLayout"
+            android:layout_marginLeft="@dimen/padding_double"
+            android:layout_marginRight="@dimen/padding_double"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:id="@+id/container_linaerLayout"
+            android:layout_alignParentBottom="true"
+            android:background="#6a000000"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:paddingBottom="@dimen/padding"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/price_textView"
+                        android:text="Rp 1000.0000"
+                        android:textColor="@color/ny_yellowActive"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="/ pax"
+                        android:textColor="@color/ny_grey2"
+                        android:textSize="13sp"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/book_now_textView"
+                    android:text="Book Now"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:background="@drawable/ny_rectangle_blue"
+                    android:padding="@dimen/padding"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

@@ -56,6 +56,7 @@ public class NYHelper {
     public static final String SCHEDULE = "schedule";
     public static final String DIVE_SPOT = "dive_spot";
     public static final String DIVE_SPOTS = "dive_spots";
+    public static final String EVENT = "event";
     public static final String DATE = "date";
     public static final String TYPE = "type";
     public static final String CERTIFICATE = "certificate";

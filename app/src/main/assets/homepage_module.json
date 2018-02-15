@@ -1,0 +1,67 @@
+{
+  "modules": [
+    {
+      "module_name": "Event",
+      "events": [
+        {
+          "id": "1",
+          "event_name": "Event Cinta Laut Indonesia",
+          "featured_image": "http://featured_image.com",
+          "start_from_price": 1000000,
+          "start_from_special_price": 1000000,
+          "location": {
+            "country": "Indonesia",
+            "province": {
+              "id": "2",
+              "name": "DKI Jakarta"
+            },
+            "city": {
+              "id": "5",
+              "name": "Jakarta"
+            },
+            "coordinate": {
+              "lat": "-6.633057399999999",
+              "lon": "106.77644590000001"
+            }
+          }
+        }]
+    },
+    {
+      "module_name": "Hot Offer",
+      "dive_services": [
+        {
+          "id": "1",
+          "name": "Dive Service",
+          "featured_image": "http://image.com",
+          "total_dives": 10,
+          "category": [
+            {
+              "id": "1",
+              "name": "Daily Trip"
+            }
+          ],
+          "dive_spot": [
+            {
+              "id": "1",
+              "name": "Dive Spot"
+            }
+          ],
+          "rating": 5,
+          "normal_price": 10000,
+          "special_price": 10000
+        }
+      ]
+    },
+    {
+      "module_name": "Popular Dive Spots",
+      "dive_spots": [
+        {
+          "id": "1",
+          "featured_image": "http://featured-image.com",
+          "name": "Bali Dive Spot"
+        }
+      ]
+    }
+  ]
+}
+

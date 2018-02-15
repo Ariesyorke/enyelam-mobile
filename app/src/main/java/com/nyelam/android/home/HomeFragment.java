@@ -7,24 +7,44 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.bookinghistory.BookingHistoryListAdapter;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Module;
+import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.detail.DetailServiceActivity;
+import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.divecenter.DiveCenterDetailActivity;
+import com.nyelam.android.divecenter.DiveCenterDetailFragment;
+import com.nyelam.android.divecenter.DiveCenterListServiceFragment;
+import com.nyelam.android.divecenter.DiveCenterMapFragment;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYDoDiveCenterDetailRequest;
+import com.nyelam.android.http.NYHomepageModuleRequest;
 import com.nyelam.android.view.NYBannerViewPager;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +52,7 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class HomeFragment extends Fragment {
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private NYBannerViewPager bannerViewPager;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
@@ -39,7 +60,13 @@ public class HomeFragment extends Fragment {
     private CardView doDiveCardView, doCourseCardView, doShopCardView, doTogetherCardView;
     //private LinearLayout doDiveLinearLayout, doCourseLinearLayout, doShopLinearLayout;
     //private View viewBooking;
-    private RecyclerView recyclerView;
+    private TextView eventsSeeAllTextView;
+    private TextView hotOffersSeeAllTextView;
+    private TextView popularDiveSpotsSeeAllTextView;
+    private RecyclerView  eventsRecyclerView;
+    private RecyclerView  hotOffersRecyclerView;
+    private RecyclerView popularDiveSpotsRecyclerView;
+    private EventsRecyclerViewAdapter eventsRecyclerViewAdapter;
     private List<Module> modules = null;
 
     public HomeFragment() {
@@ -74,7 +101,67 @@ public class HomeFragment extends Fragment {
         initView(view);
         initBanner();
         initControl();
+        initAdapter();
+        getListData();
     }
+
+    private void initAdapter() {
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        eventsRecyclerView.setLayoutManager(layoutManager);
+        eventsRecyclerViewAdapter = new EventsRecyclerViewAdapter(getActivity());
+        eventsRecyclerView.setAdapter(eventsRecyclerViewAdapter);
+        //progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void getListData() {
+        NYHomepageModuleRequest req = new NYHomepageModuleRequest(getActivity());
+        spcMgr.execute(req, onGetDetailDiveCenterRequest());
+    }
+
+    private RequestListener<ModuleList> onGetDetailDiveCenterRequest() {
+        return new RequestListener<ModuleList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }*/
+                NYHelper.handleAPIException(getActivity(), spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(ModuleList results) {
+
+                if (results != null && results.getList() != null && results.getList().size() > 1){
+
+                    NYLog.e("CEK MODULE 6 "+results.getList().toString());
+
+                    for (Module module : results.getList()){
+
+                        if (module.getName().equals("Event") && module.getEvents() != null && module.getEvents().size() > 0 ){
+                            eventsRecyclerViewAdapter.addResults(module.getEvents());
+                            eventsRecyclerViewAdapter.notifyDataSetChanged();
+                            NYLog.e("CEK MODULE 6 SUCCESS");
+                        } /*else if (module.getName().equals("Hot Offer") && module.getEvents() != null && module.getEvents().size() > 0 ){
+                            eventsRecyclerViewAdapter.addResults(module.getEvents());
+                            eventsRecyclerViewAdapter.notifyDataSetChanged();
+                        } else if (module.getName().equals("Popular Dive Spots") && module.getEvents() != null && module.getEvents().size() > 0 ){
+                            eventsRecyclerViewAdapter.addResults(module.getEvents());
+                            eventsRecyclerViewAdapter.notifyDataSetChanged();
+                        }*/
+
+                    }
+
+
+                }
+
+
+
+
+            }
+        };
+    }
+
 
     private void initControl() {
         doDiveCardView.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +232,12 @@ public class HomeFragment extends Fragment {
         doCourseCardView = (CardView) view.findViewById(R.id.do_course_cardView);
         doShopCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
         doTogetherCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        eventsSeeAllTextView = (TextView) view.findViewById(R.id.events_see_all_textView);
+        hotOffersSeeAllTextView = (TextView) view.findViewById(R.id.hot_offers_see_all_textView);
+        popularDiveSpotsSeeAllTextView = (TextView) view.findViewById(R.id.popular_dive_spots_see_all_textView);
+        eventsRecyclerView = (RecyclerView) view.findViewById(R.id.events_recyler_view);
+        hotOffersRecyclerView = (RecyclerView) view.findViewById(R.id.hot_offers_recyler_view);
+        popularDiveSpotsRecyclerView = (RecyclerView) view.findViewById(R.id.popular_dive_spots_recyler_view);
     }
 
 
@@ -169,11 +261,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        spcMgr.start(getActivity());
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
     public interface OnFragmentInteractionListener {

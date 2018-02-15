@@ -41,7 +41,6 @@
                     android:layout_height="48dp"
                     android:layout_centerHorizontal="true"
                     android:layout_alignBottom="@+id/promotion_view_pager"
-                    android:layout_marginBottom="@dimen/padding"
                     app:ci_drawable="@drawable/ny_circle_white"
                     app:ci_orientation="horizontal">
                 </me.relex.circleindicator.CircleIndicator>
@@ -291,10 +290,153 @@
 
 
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyler_view"
+            <!--List Item Horizontalll-->
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Events"
+                        android:textColor="@color/ny_black1"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <View
+                        android:background="@color/ny_grey3"
+                        android:layout_margin="@dimen/padding"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"/>
+                    <TextView
+                        android:id="@+id/events_see_all_textView"
+                        android:text="see all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/events_recyler_view"
+                    app:reverseLayout="true"
+                    android:divider="@null"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <!--<com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/events_recyler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:shimmer_demo_child_count="10"
+                    app:shimmer_demo_grid_child_count="2"
+                    app:shimmer_demo_layout="@layout/layout_demo_grid"
+                    app:shimmer_demo_layout_manager_type="grid"
+                    app:shimmer_demo_angle="20"
+                    />-->
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Hot Offers"
+                        android:textColor="@color/ny_black1"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <View
+                        android:background="@color/ny_grey3"
+                        android:layout_margin="@dimen/padding"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"/>
+                    <TextView
+                        android:id="@+id/hot_offers_see_all_textView"
+                        android:text="see all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/hot_offers_recyler_view"
+                    app:reverseLayout="true"
+                    android:divider="@null"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <!--<com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/hot_offers_recyler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:shimmer_demo_child_count="10"
+                    app:shimmer_demo_grid_child_count="2"
+                    app:shimmer_demo_layout="@layout/layout_demo_grid"
+                    app:shimmer_demo_layout_manager_type="grid"
+                    app:shimmer_demo_angle="20"
+                    />-->
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Popular Dive Spots"
+                        android:textColor="@color/ny_black1"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <View
+                        android:background="@color/ny_grey3"
+                        android:layout_margin="@dimen/padding"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"/>
+                    <TextView
+                        android:id="@+id/popular_dive_spots_see_all_textView"
+                        android:text="see all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/popular_dive_spots_recyler_view"
+                    app:reverseLayout="true"
+                    android:divider="@null"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <!--<com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/popular_dive_spots_recyler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:shimmer_demo_child_count="10"
+                    app:shimmer_demo_grid_child_count="2"
+                    app:shimmer_demo_layout="@layout/layout_demo_grid"
+                    app:shimmer_demo_layout_manager_type="grid"
+                    app:shimmer_demo_angle="20"
+                    />-->
+
+            </LinearLayout>
+
 
 
 

@@ -30,4 +30,7 @@
     <color name="ny_orange">#FF9812</color>
     <color name="ny_yellowActive">#DEE525</color>
 
+
+    <color name="demo_dark_transparent">#24000000</color>
+
 </resources>
