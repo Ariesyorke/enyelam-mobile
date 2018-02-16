@@ -18,8 +18,10 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.data.SearchService;
 import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
+import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.StrikethroughTextView;
 
@@ -186,8 +188,15 @@ public class HotOffersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(activity, DetailServiceActivity.class);
-            intent.putExtra(NYHelper.EVENT, diveService.toString());
+
+            SearchService searchService = new SearchService();
+            searchService.setName(diveService.getName());
+            searchService.setId(diveService.getId());
+            searchService.setLicense(false);
+            searchService.setType(2);
+
+            Intent intent = new Intent(activity, DoDiveActivity.class);
+            intent.putExtra(NYHelper.SEARCH_RESULT, searchService.toString());
             activity.startActivity(intent);
         }
     }

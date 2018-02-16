@@ -7,8 +7,8 @@ android {
         applicationId "com.nyelam.android"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 6
-        versionName '0.0.6'
+        versionCode 7
+        versionName '0.0.7'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -29,6 +29,7 @@ dependencies {
     compile('com.octo.android.robospice:robospice:1.4.14') {
         exclude group: 'org.apache.commons', module: 'commons-io'
     }
+    /*compile 'com.github.sharish:ShimmerRecyclerView:v1.2'*/
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:animated-vector-drawable:26.1.0'
     compile 'com.android.support:mediarouter-v7:26.1.0'
@@ -52,6 +53,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
     compile 'org.sufficientlysecure:html-textview:3.5'
-    /*compile 'com.github.sharish:ShimmerRecyclerView:v1.2'*/
     testCompile 'junit:junit:4.12'
 }

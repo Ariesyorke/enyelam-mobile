@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class DetailServiceFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView priceTextView, dateTextView, maxPersonTextView, minPersonTextView, descriptionTextView, licenseTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView;
+    private RelativeLayout diveGuideRelativeLayout, equipmentRelativeLayout, foodRelativeLayout, transportationRelativeLayout, towelRelativeLayout;
     private StrikethroughTextView priceStrikeThroughTextView;
 
     public DetailServiceFragment() {
@@ -79,6 +81,13 @@ public class DetailServiceFragment extends Fragment {
         icFoodImageView = (ImageView) v.findViewById(R.id.icon_food_imageView);
         icTransportationImageView = (ImageView) v.findViewById(R.id.icon_transportation_imageView);
         icTowelImageView = (ImageView) v.findViewById(R.id.icon_towel_imageView);
+
+        diveGuideRelativeLayout = (RelativeLayout) v.findViewById(R.id.dive_guide_relativeLayout);
+        equipmentRelativeLayout = (RelativeLayout) v.findViewById(R.id.equipment_relativeLayout);
+        foodRelativeLayout = (RelativeLayout) v.findViewById(R.id.food_relativeLayout);
+        transportationRelativeLayout = (RelativeLayout) v.findViewById(R.id.transportation_relativeLayout);
+        towelRelativeLayout = (RelativeLayout) v.findViewById(R.id.towel_relativeLayout);
+
     }
 
     public void setContent(DiveService service){
@@ -107,12 +116,40 @@ public class DetailServiceFragment extends Fragment {
 
            Facilities fac = service.getFacilities();
            if (fac != null){
-               if (fac.isLicense())licenseTextView.setText("License needed");
-               NYHelper.setFacilities(fac.isDiveGuide(), icDiveGuideImageView);
-               NYHelper.setFacilities(fac.isDiveEquipment(), icEquipmentImageView);
-               NYHelper.setFacilities(fac.isFood(), icFoodImageView);
-               NYHelper.setFacilities(fac.isTransportation(), icTransportationImageView);
-               NYHelper.setFacilities(fac.isTowel(), icTowelImageView);
+               if (fac.getLicense() != null && fac.getLicense()){
+                   licenseTextView.setText("License needed");
+               }
+
+               if (fac.getDiveGuide() != null && fac.getDiveGuide()){
+                   NYHelper.setFacilities(fac.getDiveGuide(), icDiveGuideImageView);
+               } else {
+                   diveGuideRelativeLayout.setVisibility(View.GONE);
+               }
+
+               if (fac.getDiveEquipment() != null && fac.getDiveEquipment()){
+                   NYHelper.setFacilities(fac.getDiveEquipment(), icEquipmentImageView);
+               } else {
+                   equipmentRelativeLayout.setVisibility(View.GONE);
+               }
+
+               if (fac.getFood() != null && fac.getFood()){
+                   NYHelper.setFacilities(fac.getFood(), icFoodImageView);
+               } else {
+                   foodRelativeLayout.setVisibility(View.GONE);
+               }
+
+               if (fac.getTransportation() != null && fac.getTransportation()){
+                   NYHelper.setFacilities(fac.getTransportation(), icTransportationImageView);
+               } else {
+                   diveGuideRelativeLayout.setVisibility(View.GONE);
+               }
+
+               if (fac.getDiveGuide() != null && fac.getDiveGuide()){
+                   NYHelper.setFacilities(fac.getDiveGuide(), icTowelImageView);
+               } else {
+                   towelRelativeLayout.setVisibility(View.GONE);
+               }
+
            }
 
            progressBar.setVisibility(View.GONE);

@@ -20,58 +20,58 @@ public class Facilities implements Parseable {
     private static String KEY_LICENSE = "license";
     private static String KEY_TRANSPORTATION = "transportation";
 
-    private boolean diveGuide;
-    private boolean food;
-    private boolean towel;
-    private boolean diveEquipment;
-    private boolean license;
-    private boolean transportation;
+    private Boolean diveGuide;
+    private Boolean food;
+    private Boolean towel;
+    private Boolean diveEquipment;
+    private Boolean license;
+    private Boolean transportation;
 
-    public boolean isDiveGuide() {
+    public Boolean getDiveGuide() {
         return diveGuide;
     }
 
-    public void setDiveGuide(boolean diveGuide) {
+    public void setDiveGuide(Boolean diveGuide) {
         this.diveGuide = diveGuide;
     }
 
-    public boolean isFood() {
+    public Boolean getFood() {
         return food;
     }
 
-    public void setFood(boolean food) {
+    public void setFood(Boolean food) {
         this.food = food;
     }
 
-    public boolean isTowel() {
+    public Boolean getTowel() {
         return towel;
     }
 
-    public void setTowel(boolean towel) {
+    public void setTowel(Boolean towel) {
         this.towel = towel;
     }
 
-    public boolean isDiveEquipment() {
+    public Boolean getDiveEquipment() {
         return diveEquipment;
     }
 
-    public void setDiveEquipment(boolean diveEquipment) {
+    public void setDiveEquipment(Boolean diveEquipment) {
         this.diveEquipment = diveEquipment;
     }
 
-    public boolean isLicense() {
+    public Boolean getLicense() {
         return license;
     }
 
-    public void setLicense(boolean license) {
+    public void setLicense(Boolean license) {
         this.license = license;
     }
 
-    public boolean isTransportation() {
+    public Boolean getTransportation() {
         return transportation;
     }
 
-    public void setTransportation(boolean transportation) {
+    public void setTransportation(Boolean transportation) {
         this.transportation = transportation;
     }
 
@@ -123,27 +123,27 @@ public class Facilities implements Parseable {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put(KEY_DIVE_GUIDE, isDiveGuide());
+            obj.put(KEY_DIVE_GUIDE, getDiveGuide());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            obj.put(KEY_FOOD, isFood());
+            obj.put(KEY_FOOD, getFood());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            obj.put(KEY_TOWEL, isTowel());
+            obj.put(KEY_TOWEL, getTowel());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            obj.put(KEY_DIVE_EQUIPMENT, isDiveEquipment());
+            obj.put(KEY_DIVE_EQUIPMENT, getDiveEquipment());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            obj.put(KEY_LICENSE, isLicense());
+            obj.put(KEY_LICENSE, getLicense());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            obj.put(KEY_TRANSPORTATION, isTransportation());
+            obj.put(KEY_TRANSPORTATION, getTransportation());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {

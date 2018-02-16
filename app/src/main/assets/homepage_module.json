@@ -58,7 +58,32 @@
         {
           "id": "1",
           "featured_image": "http://featured-image.com",
-          "name": "Bali Dive Spot"
+          "name": "Nusa Dua"
+        },
+        {
+          "id": "2",
+          "featured_image": "http://featured-image.com",
+          "name": "Sanur DIVESPOT"
+        },
+        {
+          "id": "3",
+          "featured_image": "http://featured-image.com",
+          "name": "Lembongan Reef"
+        },
+        {
+          "id": "4",
+          "featured_image": "http://featured-image.com",
+          "name": "Blue Corner"
+        },
+        {
+          "id": "5",
+          "featured_image": "http://featured-image.com",
+          "name": "Sakenan"
+        },
+        {
+          "id": "6",
+          "featured_image": "http://featured-image.com",
+          "name": "Crystal Bay"
         }
       ]
     }

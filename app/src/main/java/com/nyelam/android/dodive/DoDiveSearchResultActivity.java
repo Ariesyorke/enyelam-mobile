@@ -36,6 +36,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     protected String keyword, diverId, diver, certificate, date, type;
     private FloatingActionButton sortFloatingButton;
     //protected String diveSpotId;
+    private ImageView filterImageView;
     private ImageView searchImageView;
     private int page = 1;
     private int sortingType = 1;
@@ -65,6 +66,14 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DoDiveSearchResultActivity.this, DoDiveActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        filterImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListDiveCenterActivity.class);
                 startActivity(intent);
             }
         });
@@ -132,6 +141,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         sortFloatingButton = (FloatingActionButton) findViewById(R.id.sort_floatingButton);
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
+        filterImageView = (ImageView) findViewById(R.id.filter_imageView);
     }
 
     private RequestListener<DiveCenterList> onSearchServiceRequest() {

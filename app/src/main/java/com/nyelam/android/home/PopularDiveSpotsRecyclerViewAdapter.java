@@ -20,8 +20,10 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Event;
+import com.nyelam.android.data.SearchService;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.divespot.DiveSpotDetailActivity;
+import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.StrikethroughTextView;
 
@@ -177,9 +179,17 @@ public class PopularDiveSpotsRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(activity, DiveSpotDetailActivity.class);
-            intent.putExtra(NYHelper.EVENT, diveSpot.toString());
+
+            SearchService searchService = new SearchService();
+            searchService.setName(diveSpot.getName());
+            searchService.setId(diveSpot.getId());
+            searchService.setLicense(false);
+            searchService.setType(1);
+
+            Intent intent = new Intent(activity, DoDiveActivity.class);
+            intent.putExtra(NYHelper.SEARCH_RESULT, searchService.toString());
             activity.startActivity(intent);
+
         }
     }
 

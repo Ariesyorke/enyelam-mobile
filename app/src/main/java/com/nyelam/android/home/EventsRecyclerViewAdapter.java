@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -170,20 +171,18 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                     eventImageView.setImageResource(R.drawable.example_pic);
                 }
 
-
             }
-
-
-
 
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(activity, DiveCenterDetailActivity.class);
+            /*Intent intent = new Intent(activity, DiveCenterDetailActivity.class);
             intent.putExtra(NYHelper.EVENT, event.toString());
-            activity.startActivity(intent);
+            activity.startActivity(intent);*/
+
+            Toast.makeText(activity, "Layout event belum dibuat", Toast.LENGTH_SHORT).show();
         }
     }
 

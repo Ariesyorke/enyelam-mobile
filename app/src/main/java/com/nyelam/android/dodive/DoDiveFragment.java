@@ -92,8 +92,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
 
     private void initExtra() {
+        Intent intent = getActivity().getIntent();
         Bundle extras = getActivity().getIntent().getExtras();
-        if (extras != null) {
+        if (extras != null && intent.hasExtra(NYHelper.SEARCH_RESULT) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SEARCH_RESULT))) {
             try {
                 JSONObject obj = new JSONObject(extras.getString(NYHelper.SEARCH_RESULT));
                 searchService = new SearchService();

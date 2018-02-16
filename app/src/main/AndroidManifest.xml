@@ -60,7 +60,8 @@
         <activity android:name=".profile.EditProfileActivity" />
         <activity android:name=".divecenter.DiveCenterDetailActivity" />
         <activity android:name=".divespot.DiveSpotDetailActivity" />
-        <activity android:name=".dodive.DoDiveSearchResultDiveSpotActivity"></activity>
+        <activity android:name=".dodive.DoDiveSearchResultDiveSpotActivity" />
+        <activity android:name=".dodive.FilterListDiveCenterActivity"></activity>
     </application>
 
 </manifest>
