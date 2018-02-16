@@ -102,9 +102,8 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
         private ImageView featuredImageView;
         private TextView diveCenterNameTextView;
         private TextView locationTextView;
+        private TextView ratingTextView;
         private RatingBar ratingBar;
-        //category
-        //start
         private StrikethroughTextView priceStrikethroughTextView;
         private TextView priceTextView;
         private TextView totalDiveTextView;
@@ -120,6 +119,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
             totalDiveTextView = (TextView) itemView.findViewById(R.id.total_dive_textView);
+            ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
 
             this.itemView = itemView;
@@ -131,6 +131,8 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             if (diveCenter != null){
 
                 ratingBar.setRating((int) diveCenter.getRating());
+
+                ratingTextView.setText(String.valueOf(diveCenter.getRating()));
 
                 if (NYHelper.isStringNotEmpty(diveCenter.getName())) diveCenterNameTextView.setText(diveCenter.getName());
 
@@ -163,7 +165,6 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
                     totalDiveTextView.setText(dives);
                 }
 
-
                 double normalPrice = Double.valueOf(diveCenter.getStartFromPrice());
                 double specialPrice = Double.valueOf(diveCenter.getStartFromSpecialPrice());
 
@@ -187,7 +188,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
 
                         @Override
                         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            featuredImageView.setImageResource(R.drawable.logo_nyelam_transparent);
+                            featuredImageView.setImageResource(R.drawable.example_pic);
                         }
 
                         @Override
@@ -198,21 +199,16 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
 
                         @Override
                         public void onLoadingCancelled(String imageUri, View view) {
-                            featuredImageView.setImageResource(R.drawable.logo_nyelam_transparent);
+                            featuredImageView.setImageResource(R.drawable.example_pic);
                         }
                     });
 
                     ImageLoader.getInstance().displayImage(diveCenter.getFeaturedImage(), featuredImageView, NYHelper.getOption());
 
                 } else {
-                    featuredImageView.setImageResource(R.drawable.logo_nyelam_transparent);
+                    featuredImageView.setImageResource(R.drawable.example_pic);
                 }
-
-
             }
-
-
-
 
             itemView.setOnClickListener(this);
         }

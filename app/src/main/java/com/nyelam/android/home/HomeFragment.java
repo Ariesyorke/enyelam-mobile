@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class HomeFragment extends Fragment {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
+    private ImageView menuItemImageView;
     private NYBannerViewPager bannerViewPager;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
@@ -180,6 +182,14 @@ public class HomeFragment extends Fragment {
 
 
     private void initControl() {
+
+        menuItemImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getActivity()).openMenuDrawer();
+            }
+        });
+
         doDiveCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -242,6 +252,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initView(View view) {
+        menuItemImageView = (ImageView) view.findViewById(R.id.menu_item_imageView);
         bannerViewPager = (NYBannerViewPager) view.findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) view.findViewById(R.id.circle_indicator);
         doDiveCardView = (CardView) view.findViewById(R.id.do_dive_cardView);

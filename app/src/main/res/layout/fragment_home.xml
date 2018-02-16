@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,6 +6,7 @@
     android:background="#F2F2F2"
     android:orientation="vertical"
     tools:context="com.nyelam.android.home.HomeFragment">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -44,18 +45,6 @@
                     app:ci_drawable="@drawable/ny_circle_white"
                     app:ci_orientation="horizontal">
                 </me.relex.circleindicator.CircleIndicator>
-                <LinearLayout
-                    android:background="#40000000"
-                    android:paddingLeft="@dimen/padding"
-                    android:paddingRight="@dimen/padding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@drawable/logo_nyelam_white"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp" />
-                </LinearLayout>
             </RelativeLayout>
 
 
@@ -710,4 +699,28 @@
     </ScrollView>
 
 
-</LinearLayout>
+    <RelativeLayout
+        android:background="#40000000"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/logo_nyelam_white"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_gravity="center_vertical"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+
+        <ImageView
+            android:id="@+id/menu_item_imageView"
+            android:src="@drawable/ic_navigation_drawer"
+            android:padding="@dimen/padding"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
