@@ -354,6 +354,7 @@
                         android:text="Hot Offers"
                         android:textColor="@color/ny_black1"
                         android:textStyle="bold"
+                        android:paddingTop="@dimen/padding"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
@@ -399,6 +400,7 @@
                         android:text="Popular Dive Spots"
                         android:textColor="@color/ny_black1"
                         android:textStyle="bold"
+                        android:paddingTop="@dimen/padding"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View

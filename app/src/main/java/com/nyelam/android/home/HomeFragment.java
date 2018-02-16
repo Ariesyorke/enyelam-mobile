@@ -67,6 +67,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView  hotOffersRecyclerView;
     private RecyclerView popularDiveSpotsRecyclerView;
     private EventsRecyclerViewAdapter eventsRecyclerViewAdapter;
+    private HotOffersRecyclerViewAdapter hotOffersRecyclerViewAdapter;
+    private PopularDiveSpotsRecyclerViewAdapter popularDiveSpotsRecyclerViewAdapter;
     private List<Module> modules = null;
 
     public HomeFragment() {
@@ -111,6 +113,20 @@ public class HomeFragment extends Fragment {
         eventsRecyclerView.setLayoutManager(layoutManager);
         eventsRecyclerViewAdapter = new EventsRecyclerViewAdapter(getActivity());
         eventsRecyclerView.setAdapter(eventsRecyclerViewAdapter);
+
+        LinearLayoutManager layoutManagerHotOffers
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        hotOffersRecyclerView.setLayoutManager(layoutManagerHotOffers);
+        hotOffersRecyclerViewAdapter = new HotOffersRecyclerViewAdapter(getActivity());
+        hotOffersRecyclerView.setAdapter(hotOffersRecyclerViewAdapter);
+
+        LinearLayoutManager layoutManagerPopularDiveSpot
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        popularDiveSpotsRecyclerView.setLayoutManager(layoutManagerPopularDiveSpot);
+        popularDiveSpotsRecyclerViewAdapter = new PopularDiveSpotsRecyclerViewAdapter(getActivity());
+        popularDiveSpotsRecyclerView.setAdapter(popularDiveSpotsRecyclerViewAdapter);
+
+
         //progressBar.setVisibility(View.VISIBLE);
     }
 
@@ -142,13 +158,13 @@ public class HomeFragment extends Fragment {
                             eventsRecyclerViewAdapter.addResults(module.getEvents());
                             eventsRecyclerViewAdapter.notifyDataSetChanged();
                             NYLog.e("CEK MODULE 6 SUCCESS");
-                        } /*else if (module.getName().equals("Hot Offer") && module.getEvents() != null && module.getEvents().size() > 0 ){
-                            eventsRecyclerViewAdapter.addResults(module.getEvents());
-                            eventsRecyclerViewAdapter.notifyDataSetChanged();
-                        } else if (module.getName().equals("Popular Dive Spots") && module.getEvents() != null && module.getEvents().size() > 0 ){
-                            eventsRecyclerViewAdapter.addResults(module.getEvents());
-                            eventsRecyclerViewAdapter.notifyDataSetChanged();
-                        }*/
+                        } else if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
+                            hotOffersRecyclerViewAdapter.addResults(module.getDiveServices());
+                            hotOffersRecyclerViewAdapter.notifyDataSetChanged();
+                        } else if (module.getName().equals("Popular Dive Spots") && module.getDiveSpots() != null && module.getDiveSpots().size() > 0 ){
+                            popularDiveSpotsRecyclerViewAdapter.addResults(module.getDiveSpots());
+                            popularDiveSpotsRecyclerViewAdapter.notifyDataSetChanged();
+                        }
 
                     }
 

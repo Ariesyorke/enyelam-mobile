@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -16,9 +15,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
-import com.nyelam.android.data.DiveCenter;
+import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.StrikethroughTextView;
@@ -30,27 +30,27 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class HotOffersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity activity;
-    private List<Event> eventList;
+    private List<DiveService> diveServices;
 
-    public EventsRecyclerViewAdapter(Activity activity) {
+    public HotOffersRecyclerViewAdapter(Activity activity) {
         this.activity = activity;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_modul_event, parent, false);
-        return new EventsRecyclerViewAdapter.PromoViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_modul_hot_offers, parent, false);
+        return new HotOffersRecyclerViewAdapter.PromoViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PromoViewHolder) {
             PromoViewHolder vh = (PromoViewHolder) holder;
-            vh.setModel(eventList.get(position));
+            vh.setModel(diveServices.get(position));
         }
     }
 
@@ -62,29 +62,29 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public int getItemCount() {
         int count = 0;
-        if (eventList != null && !eventList.isEmpty()) {
-            count += eventList.size();
+        if (diveServices != null && !diveServices.isEmpty()) {
+            count += diveServices.size();
         }
         return count;
     }
 
-    public void addResult(Event event) {
-        if (this.eventList == null) {
-            this.eventList = new ArrayList<>();
+    public void addResult(DiveService diveService) {
+        if (this.diveServices == null) {
+            this.diveServices = new ArrayList<>();
         }
-        this.eventList.add(event);
+        this.diveServices.add(diveService);
     }
 
-    public void addResults(List<Event> events) {
-        if (this.eventList == null) {
-            this.eventList = new ArrayList<>();
+    public void addResults(List<DiveService> diveServices) {
+        if (this.diveServices == null) {
+            this.diveServices = new ArrayList<>();
         }
 
-        this.eventList = events;
+        this.diveServices = diveServices;
     }
 
     public void clear() {
-        this.eventList = new ArrayList<>();
+        this.diveServices = new ArrayList<>();
     }
 
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -94,8 +94,9 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         private TextView locationTextView;
         private StrikethroughTextView priceStrikethroughTextView;
         private TextView priceTextView;
+        private TextView dateTextView;
         private View itemView;
-        private Event event;
+        private DiveService diveService;
 
         public PromoViewHolder(View itemView) {
             super(itemView);
@@ -104,30 +105,34 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             locationTextView = (TextView) itemView.findViewById(R.id.location_textView);
             priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
+            dateTextView = (TextView) itemView.findViewById(R.id.date_textView);
             this.itemView = itemView;
         }
 
-        public void setModel(Event event) {
-            this.event = event;
+        public void setModel(DiveService diveService) {
+            this.diveService = diveService;
 
-            if (event != null){
+            if (diveService != null){
 
-                if (NYHelper.isStringNotEmpty(event.getName())) nameTextView.setText(event.getName());
+                if (NYHelper.isStringNotEmpty(diveService.getName())) nameTextView.setText(diveService.getName());
 
-                if (event.getLocation() != null) {
+                if (diveService.getDiveSpots().get(0) != null && diveService.getDiveSpots().get(0).getLocation() != null) {
 
-                    Location location = event.getLocation();
+                    Location location = diveService.getDiveSpots().get(0).getLocation();
                     String locString = "";
-
                     if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locString += location.getCity().getName();
                     if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locString += ", "+location.getProvince().getName();
-
+                    //if (NYHelper.isStringNotEmpty(location.getCountry())) locString += ", "+location.getCountry();
                     locationTextView.setText(locString);
                 }
 
 
-                double normalPrice = Double.valueOf(event.getNormalPrice());
-                double specialPrice = Double.valueOf(event.getSpecialPrice());
+                if (diveService.getSchedule() != null){
+                    dateTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate())+" - "+NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()));
+                }
+
+                double normalPrice = Double.valueOf(diveService.getNormalPrice());
+                double specialPrice = Double.valueOf(diveService.getSpecialPrice());
 
                 if (specialPrice < normalPrice && specialPrice > 0){
                     priceTextView.setText(NYHelper.priceFormatter(specialPrice));
@@ -140,8 +145,8 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
                 //SET IMAGE
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
-                if (NYHelper.isStringNotEmpty(event.getFeaturedImage())) {
-                    ImageLoader.getInstance().loadImage(event.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
+                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
                         @Override
                         public void onLoadingStarted(String imageUri, View view) {
 
@@ -164,7 +169,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                         }
                     });
 
-                    ImageLoader.getInstance().displayImage(event.getFeaturedImage(), eventImageView, NYHelper.getOption());
+                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), eventImageView, NYHelper.getOption());
 
                 } else {
                     eventImageView.setImageResource(R.drawable.example_pic);
@@ -181,8 +186,8 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(activity, DiveCenterDetailActivity.class);
-            intent.putExtra(NYHelper.EVENT, event.toString());
+            Intent intent = new Intent(activity, DetailServiceActivity.class);
+            intent.putExtra(NYHelper.EVENT, diveService.toString());
             activity.startActivity(intent);
         }
     }
