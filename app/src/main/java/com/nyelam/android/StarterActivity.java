@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.nyelam.android.auth.AuthActivity;
+import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
@@ -44,20 +45,21 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
         DaoSession session = ((NYApplication) getApplicationContext()).getDaoSession();
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
-        List<CountryCode> products = NYHelper.generateList(rawProducts, CountryCode.class);
-        if (products != null && products.size() > 0){
+        List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
+        if (countryCodes != null && countryCodes.size() > 0){
 
         } else {
             //countCartTextView.setVisibility(View.GONE);
         }
 
-        if (products != null && products.size() > 0) {
+        if (countryCodes != null && countryCodes.size() > 0) {
             new Handler().postDelayed(
                 new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(StarterActivity.this, HomeActivity.class));
-                        finish();
+                        /*startActivity(new Intent(StarterActivity.this, HomeActivity.class));
+                        finish();*/
+                        onLoadCategories();
                     }
                 }, SPLASH_TIME);
         } else  {
@@ -82,6 +84,32 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
             @Override
             public void onDataLoaded(List<CountryCode> items) {
+                /*Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();*/
+                onLoadCategories();
+            }
+        },true);
+    }
+
+
+    private void onLoadCategories() {
+        if (masterDataStorage == null)masterDataStorage = new NYMasterDataStorage(this);
+
+        masterDataStorage.loadCategories(new NYMasterDataStorage.LoadDataListener<Category>() {
+            @Override
+            public void onLoadFailed(Exception e) {
+                NYHelper.handleAPIException(StarterActivity.this, e, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onDataLoaded(List<Category> items) {
                 Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);

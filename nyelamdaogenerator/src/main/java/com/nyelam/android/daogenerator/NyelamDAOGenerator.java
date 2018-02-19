@@ -8,7 +8,7 @@ import org.greenrobot.greendao.generator.ToMany;
 
 public class NyelamDAOGenerator {
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "com.nyelam.android.data.dao");
+        Schema schema = new Schema(2, "com.nyelam.android.data.dao");
 
         //Country Code
         Entity countryCode = schema.addEntity("NYCountryCode");
@@ -17,6 +17,15 @@ public class NyelamDAOGenerator {
         countryCode.addStringProperty("countryName");
         countryCode.addStringProperty("countryNumber");
         countryCode.addStringProperty("countryImage");
+
+
+        //Category
+        Entity category = schema.addEntity("NYCategory");
+        category.addStringProperty("id").primaryKey();
+        category.addStringProperty("name");
+        category.addStringProperty("iconUrl");
+        category.addByteArrayProperty("iconImage");
+        //category.addBooleanProperty("status");
 
         try {
             new DaoGenerator().generateAll(schema, "./app/src/main/java");
