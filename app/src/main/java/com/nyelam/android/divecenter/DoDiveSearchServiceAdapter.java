@@ -19,7 +19,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.StrikethroughTextView;
+import com.nyelam.android.view.font.StrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;

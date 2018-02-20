@@ -43,7 +43,7 @@
                 android:layout_marginTop="@dimen/padding_half"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <com.nyelam.android.view.StrikethroughTextView
+            <com.nyelam.android.view.font.StrikethroughTextView
                 android:id="@+id/price_strikethrough_textView"
                 android:text="Rp 123.456"
                 android:textSize="14sp"

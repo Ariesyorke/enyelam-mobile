@@ -32,5 +32,6 @@
 
 
     <color name="demo_dark_transparent">#24000000</color>
+    <color name="ny_dark_transparent">#64000000</color>
 
 </resources>

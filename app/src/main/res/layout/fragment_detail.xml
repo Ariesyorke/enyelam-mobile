@@ -35,7 +35,7 @@
                         android:padding="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <com.nyelam.android.view.StrikethroughTextView
+                        <com.nyelam.android.view.font.StrikethroughTextView
                             android:id="@+id/price_strikethrough_textView"
                             android:text="Rp 1.950.000"
                             android:textColor="@color/ny_black1"
@@ -219,7 +219,6 @@
 
                             <RelativeLayout
                                 android:id="@+id/equipment_relativeLayout"
-                                android:visibility="gone"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
                                 android:layout_marginLeft="@dimen/padding"
@@ -310,12 +309,6 @@
                             </RelativeLayout>
 
                         </LinearLayout>
-
-
-
-
-
-
 
 
                         <View

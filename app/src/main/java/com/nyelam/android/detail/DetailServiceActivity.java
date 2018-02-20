@@ -89,7 +89,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected String diver;
     protected String schedule;
     protected String certificate;
-    private TextView nameTextView, ratingTextView, bookingTextView;
+    private TextView titleTextView, bookingTextView;
     private ProgressDialog progressDialog;
     //private View viewTabManager;
     private boolean triggerBook;
@@ -175,18 +175,23 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
             }
 
+            // TODO: title (tanggal + jumlah)
+            if (NYHelper.isStringNotEmpty(diver) && NYHelper.isStringNotEmpty(schedule)){
+                if (Integer.valueOf(diver) > 1){
+                    titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax(s)");
+                } else {
+                    titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax");
+                }
+                int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+                toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+            }
+
             if(intent.hasExtra(NYHelper.SERVICE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SERVICE))){
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(extras.getString(NYHelper.SERVICE));
                     diveService = new DiveService();
                     diveService.parse(obj);
-                    if (diveService != null && NYHelper.isStringNotEmpty(diveService.getName())) nameTextView.setText(diveService.getName());
-                    if (diveService != null && diveService.getRating() > 0){
-                        ratingTextView.setText("*"+String.valueOf(diveService.getRating()));
-                    } else {
-                        ratingTextView.setText("-");
-                    }
                     initBanner();
                     //Toast.makeText(this, diveService.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -301,8 +306,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
         bannerViewPager = (NYBannerViewPager) findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
-        nameTextView = (TextView) findViewById(R.id.name_textView);
-        ratingTextView = (TextView) findViewById(R.id.rating_textView);
+        titleTextView = (TextView) findViewById(R.id.title_textView);
         bookingTextView = (TextView) findViewById(R.id.booking_textView);
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
@@ -378,12 +382,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             if (position == 0) {
                 DetailServiceFragment fragment = DetailServiceFragment.newInstance();
-                return fragment;
-            } else if (position == 1) {
-                DetailServiceDiveSpotsFragment fragment = DetailServiceDiveSpotsFragment.newInstance();
-                return fragment;
-            }  else if (position == 2) {
-                DetailServiceDiveCenterFragment fragment = DetailServiceDiveCenterFragment.newInstance();
                 return fragment;
             } else {
                 DetailServiceReviewFragment fragment = DetailServiceReviewFragment.newInstance();

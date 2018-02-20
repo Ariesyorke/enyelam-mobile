@@ -16,14 +16,11 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.SearchService;
-import com.nyelam.android.detail.DetailServiceActivity;
-import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.StrikethroughTextView;
+import com.nyelam.android.view.font.StrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;

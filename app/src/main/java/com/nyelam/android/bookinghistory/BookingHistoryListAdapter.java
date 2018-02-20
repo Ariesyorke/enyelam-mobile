@@ -19,10 +19,8 @@ import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.Summary;
-import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.StrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;

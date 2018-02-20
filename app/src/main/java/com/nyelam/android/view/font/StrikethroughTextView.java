@@ -1,4 +1,4 @@
-package com.nyelam.android.view;
+package com.nyelam.android.view.font;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,7 +12,6 @@ import android.widget.TextView;
  */
 
 public class StrikethroughTextView extends android.support.v7.widget.AppCompatTextView {
-
 
     public StrikethroughTextView(Context context) {
         super(context);

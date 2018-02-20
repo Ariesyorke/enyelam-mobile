@@ -124,7 +124,6 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
     }
 
 
@@ -137,7 +136,7 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttrs) {
-        View.inflate(context, R.layout.view_homepage_tab_item, this);
+        View.inflate(context, R.layout.view_detail_tab_item, this);
 
         textView = (TextView) findViewById(R.id.text);
         imageView = (ImageView) findViewById(R.id.image);
@@ -147,12 +146,13 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
         imageView.setVisibility(GONE);
         lineView.setVisibility(VISIBLE);
 
-        normalColor = ContextCompat.getColor(context, R.color.ny_grey2);
-        normalColorWhite = ContextCompat.getColor(context, R.color.colorWhite);
-        checkedColor = ContextCompat.getColor(context, R.color.ny_green_blue);
+        normalColor = ContextCompat.getColor(context, R.color.colorWhite);
+        //normalColorWhite = ContextCompat.getColor(context, R.color.colorWhite);
+        normalColorWhite = ContextCompat.getColor(context, android.R.color.transparent);
+        checkedColor = ContextCompat.getColor(context, R.color.ny_yellowActive);
 
         setClickable(true);
-        setBackgroundResource(R.drawable.homepage_tab_item_selector);
+        setBackgroundResource(android.R.color.transparent);
 
         String text = "";
         Drawable icon = null;
@@ -188,6 +188,11 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
         }
 
         textView.setText(text);
+
+
+        if (getTabItemPosition() == 0){
+            this.setChecked(true);
+        }
 
     }
 }
