@@ -58,6 +58,7 @@
     <string name="booking_details">Booking Details</string>
     <string name="choose_file">Choose File</string>
     <string name="confirm">Confirm</string>
+    <string name="book_now">Book Now</string>
 
 
     <string name="enter_a_dive_spot">Enter a dive spot name</string>
@@ -119,6 +120,14 @@
     <string name="logout">Logout</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
+    <!--facilities-->
+    <string name="about_trips">About Trips</string>
+    <string name="dive_guide">Dive Guide</string>
+    <string name="equipment">Equipment</string>
+    <string name="food">Food</string>
+    <string name="transportation">Transportation</string>
+    <string name="towel">Towel</string>
 
 
     <string-array name="menu_tab">

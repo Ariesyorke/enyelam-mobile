@@ -305,9 +305,9 @@ public class NYHelper {
 
     public static void setFacilities(boolean isTrue, ImageView icImageView) {
         if (isTrue){
-            icImageView.setImageResource(R.drawable.ic_available);
+            icImageView.setImageResource(R.drawable.ic_boat_active);
         } else {
-            icImageView.setImageResource(R.drawable.ic_not_available);
+            icImageView.setImageResource(R.drawable.ic_boat_disable);
         }
     }
 

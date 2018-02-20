@@ -23,24 +23,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ny_grey1"
         android:layout_gravity="bottom"
         android:gravity="center"
         app:layout_behavior="com.nyelam.android.view.NYQuickReturnFooterBehavior"
         android:orientation="horizontal">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:background="@color/colorWhite"
+            android:background="@android:color/transparent"
             android:padding="@dimen/padding"
             android:elevation="3dp"
             android:paddingTop="5dp">
 
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
             <TextView
                 android:id="@+id/booking_textView"
-                android:text="Booking"
+                android:text="@string/book_now"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
@@ -48,14 +51,15 @@
                 android:background="@drawable/ny_book_disable"
                 android:gravity="center"
                 android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/padding"
                 android:paddingBottom="@dimen/padding"
                 android:paddingLeft="@dimen/padding_triple"
                 android:paddingRight="@dimen/padding_triple" />
 
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.AppBarLayout
@@ -86,7 +90,7 @@
 
                 <com.nyelam.android.view.NYBannerViewPager
                     android:id="@+id/promotion_view_pager"
-                    android:background="@color/ny_yellowActive"
+                    android:background="@color/ny_blue2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
