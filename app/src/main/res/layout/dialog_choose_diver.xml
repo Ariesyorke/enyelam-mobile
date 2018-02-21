@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_linearLayout"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="@dimen/padding_double"
+    android:layout_marginBottom="@dimen/padding_double"
+    android:background="@drawable/ny_rectangle_white"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:text="Choose Total Diver"
+        android:textColor="@color/ny_black1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textAllCaps="true"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:scrollbars="none"
+        android:layout_marginTop="@dimen/padding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <org.sufficientlysecure.htmltextview.HtmlTextView
+                android:id="@+id/agreementTextView"
+                android:text=""
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:id="@+id/container_linaerLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

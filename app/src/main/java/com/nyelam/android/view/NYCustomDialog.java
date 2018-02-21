@@ -2,11 +2,17 @@ package com.nyelam.android.view;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -14,7 +20,9 @@ import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.dodive.DoDiveFragment;
 import com.nyelam.android.dodive.DoDiveSearchResultActivity;
+import com.nyelam.android.helper.NYHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -30,7 +38,7 @@ public class NYCustomDialog {
 
     // interface to handle the dialog click back to the Activity
     public interface OnDialogFragmentClickListener {
-        void onChooseListener(int position);
+        void onChooseListener(Object position);
         void onAcceptAgreementListener();
     }
 
@@ -66,7 +74,7 @@ public class NYCustomDialog {
                 View radioButton = group.findViewById(checkedId);
                 int index = group.indexOfChild(radioButton);
 
-                listener.onChooseListener(index);
+                listener.onChooseListener((Integer) index);
 
                 dialog.dismiss();
             }
@@ -136,6 +144,62 @@ public class NYCustomDialog {
         dialog.show();
 
     }
+
+
+
+    public void showTotalDiverDialog(final Activity activity){
+
+        this.listener = (OnDialogFragmentClickListener) activity;
+
+        dialog = new Dialog(activity);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_choose_diver);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
+        linearLayout.setMinimumWidth(width*3/4);
+
+        LinearLayout containerLinearLayout = (LinearLayout) dialog.findViewById(R.id.container_linaerLayout);
+        for (int i=1; i<=10; i++){
+
+            LayoutInflater inflaterAddons = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View diverView = inflaterAddons.inflate(R.layout.view_drop_down_country_code, null); //here item is the the layout you want to inflate
+
+            LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(activity, 5));
+            diverView.setLayoutParams(layoutParamsAddons);
+
+
+            LinearLayout mainLinearLayout = (LinearLayout) diverView.findViewById(R.id.main_linearLayout);
+            TextView diverTextView = (TextView)diverView.findViewById(R.id.country_code_textView);
+
+            diverTextView.setText(String.valueOf(i));
+
+
+            final String div = String.valueOf(i);
+
+            mainLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onChooseListener(String.valueOf(div));
+                    dialog.dismiss();
+                    //Toast.makeText(activity, "hallo "+div, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            containerLinearLayout.addView(diverView);
+        }
+
+        dialog.show();
+
+    }
+
 
 
 }

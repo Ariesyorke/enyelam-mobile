@@ -12,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
@@ -23,23 +26,30 @@ import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
+import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.view.NYCustomDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     private SearchResult searchResult;
-    private TextView diverTextView, certificateTextView, datetimeTextView, searchTextView;
+    private TextView certificateTextView, datetimeTextView, searchTextView;
+    public TextView diverTextView;
+    private Spinner diverSpinner;
     private com.nyelam.android.view.NYEditTextWarning keywordTextView;
-    private Switch certificateSwitch;
-    private LinearLayout plusLinearLayout, minusLinearLayout;
+    private CheckBox certificateCheckBox;
     private DatePickerDialog datePickerDialog;
-    private String keyword, diverId, type, date;
+    private String keyword, diverId, type, date, diver = null;
     private SearchService searchService;
+    private TotalDiverSpinnerAdapter diverAdapter;
+    private LinearLayout diverLinearLayout, datetimeLinearLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,6 +87,20 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         initExtra();
         initDatePicker();
         initControl();
+        initAdapter();
+    }
+
+    private void initAdapter() {
+        List<String> divers = new ArrayList<>();
+        for (int i=1; i <= 10; i++){
+            divers.add(String.valueOf(i));
+        }
+
+        diverAdapter = new TotalDiverSpinnerAdapter(getActivity());
+        diverSpinner.setAdapter(diverAdapter);
+        diverAdapter.addDivers(divers);
+        diverAdapter.notifyDataSetChanged();
+
     }
 
     private void initDatePicker() {
@@ -109,11 +133,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 if (obj.has("id"))diverId = obj.getString("id");
 
                 if (obj.has("license") && obj.getBoolean("license")){
-                    certificateSwitch.setChecked(true);
-                    certificateSwitch.setClickable(false);
+                    certificateCheckBox.setChecked(true);
+                    certificateCheckBox.setClickable(false);
                 } else {
-                    certificateSwitch.setChecked(false);
-                    certificateSwitch.setClickable(true);
+                    certificateCheckBox.setChecked(false);
+                    certificateCheckBox.setClickable(true);
                 }
 
 
@@ -135,22 +159,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 startActivity(intent);
             }
         });
-        minusLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int count = Integer.valueOf(diverTextView.getText().toString());
-                if (count-1 >= 1){
-                    diverTextView.setText(String.valueOf((count-1)));
-                }
-            }
-        });
-        plusLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int count = Integer.valueOf(diverTextView.getText().toString());
-                diverTextView.setText(String.valueOf((count+1)));
-            }
-        });
 
         datetimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,19 +167,28 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             }
         });
 
+        diverLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NYCustomDialog dialog = new NYCustomDialog();
+                dialog.showTotalDiverDialog(getActivity());
+            }
+        });
+
         searchTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String diver = diverTextView.getText().toString();
+                // TODO: get diver count
+                //String diver = diverTextView.getText().toString();
                 String certificate = "0";
-                if (certificateSwitch.isChecked()){
+                if (certificateCheckBox.isChecked()){
                     certificate = "1";
                 } else {
                     certificate = "0";
                 }
 
-                if (!TextUtils.isEmpty(type)){
+                if (!TextUtils.isEmpty(type) && diver != null){
 
                     NYLog.e("CEK DATE 0 : "+date);
 
@@ -255,6 +272,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         fragmentTransaction.commitAllowingStateLoss();*/
                     }
 
+                } else if (diver == null){
+                    Toast.makeText(getActivity(), "Pilih jumlah diver", Toast.LENGTH_SHORT).show();
                 } else {
                     keywordTextView.isEmpty();
                 }
@@ -264,13 +283,15 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
     private void initView(View v) {
         keywordTextView = (com.nyelam.android.view.NYEditTextWarning) v.findViewById(R.id.keyword_textView);
-        diverTextView = (TextView) v.findViewById(R.id.diver_textView);
-        minusLinearLayout = (LinearLayout) v.findViewById(R.id.minus_linearLayout);
-        plusLinearLayout = (LinearLayout) v.findViewById(R.id.plus_linearLayout);
+        //diverTextView = (TextView) v.findViewById(R.id.diver_textView);
+        diverSpinner = (Spinner) v.findViewById(R.id.diver_spinner);
         datetimeTextView = (TextView)v.findViewById(R.id.datetime_textView);
         certificateTextView = (TextView) v.findViewById(R.id.certificate_textView);
+        diverTextView = (TextView) v.findViewById(R.id.diver_textView);
         searchTextView = (TextView) v.findViewById(R.id.search_textView);
-        certificateSwitch = (Switch) v.findViewById(R.id.certificate_switch);
+        certificateCheckBox = (CheckBox) v.findViewById(R.id.certificate_checkBox);
+        diverLinearLayout = (LinearLayout) v.findViewById(R.id.diver_linearLayout);
+        datetimeLinearLayout = (LinearLayout) v.findViewById(R.id.datetime_linearLayout);
     }
 
 
@@ -324,5 +345,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         //void onFragmentInteraction(Uri uri);
+        //void onDiver(String diver);
     }
+
+    public void setDiver(String diver){
+        diverTextView.setText(diver);
+        this.diver = diver;
+    }
+
+
 }

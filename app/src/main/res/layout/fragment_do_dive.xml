@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/ny_gradient_right_left"
+    android:background="@android:color/transparent"
     tools:context="com.nyelam.android.dodive.DoDiveActivity">
 
     <!--<android.support.v7.widget.Toolbar
@@ -35,12 +35,12 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>-->
 
-    <View
+    <!--<View
         android:id="@+id/view"
         android:layout_below="@+id/toolbar"
         android:background="@color/colorGradationSoftLeft"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"/>-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -51,41 +51,40 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/logo_nyelam_white"
-                android:layout_marginTop="@dimen/padding_double"
+                android:src="@drawable/ic_logo_white"
+                android:layout_marginTop="@dimen/padding_triple"
+                android:layout_marginBottom="@dimen/padding_triple"
                 android:layout_gravity="center"
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content" />
-
 
             <LinearLayout
                 android:orientation="vertical"
-                android:background="@drawable/ny_rectangle_gradation_blue"
-                android:layout_margin="@dimen/padding_double"
-                android:paddingLeft="@dimen/padding_double"
-                android:paddingRight="@dimen/padding_double"
-                android:paddingTop="@dimen/padding_double"
-                android:paddingBottom="@dimen/padding"
+                android:background="@drawable/ny_rectangle_blue_search_box"
+                android:layout_marginLeft="@dimen/padding_triple"
+                android:layout_marginRight="@dimen/padding_triple"
+                android:layout_marginTop="@dimen/padding_triple"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/padding_triple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
 
 
+
                 <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_blue_search_box_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <com.nyelam.android.view.NYEditTextWarning
                         android:id="@+id/keyword_textView"
                         android:hint="@string/keyword"
                         android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
+                        android:textColor="@color/ny_grey1"
+                        android:textColorHint="@color/ny_grey1"
                         android:singleLine="true"
                         android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/padding"
                         android:paddingTop="@dimen/padding"
                         android:paddingBottom="@dimen/padding"
@@ -94,41 +93,144 @@
                 </LinearLayout>
 
 
+
+
+
+
+
+
+
                 <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
+                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/padding_double"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
-                        android:background="@drawable/ny_rectangle_white"
+                        android:id="@+id/datetime_linearLayout"
                         android:orientation="horizontal"
-                        android:layout_width="match_parent"
+                        android:background="@drawable/ny_rectangle_blue_search_box_two"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:id="@+id/certificate_textView"
-                            android:hint="@string/certificate"
+                            android:id="@+id/datetime_textView"
+                            android:text="Date"
                             android:textSize="14sp"
-                            android:textColor="@color/colorBlack"
-                            android:textColorHint="@color/ny_grey4"
+                            android:textColor="@color/ny_grey3"
                             android:singleLine="true"
                             android:maxLines="1"
-                            android:paddingLeft="@dimen/padding_double"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/padding"
                             android:paddingTop="@dimen/padding"
                             android:paddingBottom="@dimen/padding"
-                            android:layout_weight="1"
+                            android:layout_marginRight="@dimen/padding_half"
                             android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content" />
-                        <Switch
-                            android:id="@+id/certificate_switch"
-                            android:theme="@style/NYSwitchTheme"
+                        <ImageView
+                            android:src="@drawable/ic_down_arrow"
                             android:layout_marginRight="@dimen/padding"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_gravity="center"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/diver_linearLayout"
+                        android:background="@drawable/ny_rectangle_blue_search_box_two"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:id="@+id/diver_textView"
+                            android:text="@string/diver"
+                            android:textSize="14sp"
+                            android:textColor="@color/ny_grey3"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/padding"
+                            android:paddingTop="@dimen/padding"
+                            android:paddingBottom="@dimen/padding"
+                            android:layout_marginRight="@dimen/padding_half"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content" />
+
+                        <Spinner
+                            android:visibility="gone"
+                            android:id="@+id/diver_spinner"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/padding"
+                            android:paddingTop="@dimen/padding"
+                            android:paddingBottom="@dimen/padding"
+                            android:backgroundTint="@android:color/transparent"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"/>
+
+                        <ImageView
+                            android:src="@drawable/ic_down_arrow"
+                            android:layout_marginRight="@dimen/padding"
+                            android:layout_gravity="center"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+
+
+
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--<Switch
+                        android:id="@+id/certificate_switch"
+                        android:theme="@style/NYSwitchTheme"
+                        android:layout_marginRight="@dimen/padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true" />-->
+
+                    <CheckBox
+                        android:id="@+id/certificate_checkBox"
+                        style="@style/CheckBoxCustomStyle"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/certificate_textView"
+                        android:hint="@string/diving_license"
+                        android:textSize="15sp"
+                        android:textColor="@color/ny_grey1"
+                        android:textColorHint="@color/ny_grey1"
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingRight="@dimen/padding"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
 
                 <!--<LinearLayout
@@ -155,133 +257,21 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>-->
 
-                <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:layout_weight="6"
-                        android:layout_width="0dp"
-                        android:orientation="vertical"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:text="@string/date"
-                            android:textSize="14sp"
-                            android:textColor="@color/colorWhite"
-                            android:textColorHint="@color/ny_grey2"
-                            android:background="@drawable/ny_rectangle_blue_dark"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:maxLines="1"
-                            android:paddingLeft="@dimen/padding_double"
-                            android:paddingRight="@dimen/padding"
-                            android:paddingTop="@dimen/padding"
-                            android:paddingBottom="@dimen/padding"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/datetime_textView"
-                            android:text="01/05/2018"
-                            android:textSize="13sp"
-                            android:textColor="@color/ny_grey4"
-                            android:background="@drawable/ny_rectangle_white"
-                            android:singleLine="true"
-                            android:maxLines="1"
-                            android:paddingLeft="@dimen/padding_double"
-                            android:paddingRight="@dimen/padding"
-                            android:paddingTop="@dimen/padding"
-                            android:paddingBottom="@dimen/padding"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_weight="5"
-                        android:layout_width="0dp"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:text="@string/diver"
-                            android:textSize="14sp"
-                            android:textColor="@color/colorWhite"
-                            android:textColorHint="@color/ny_grey2"
-                            android:background="@drawable/ny_rectangle_blue_dark"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:maxLines="1"
-                            android:paddingLeft="@dimen/padding_double"
-                            android:paddingRight="@dimen/padding"
-                            android:paddingTop="@dimen/padding"
-                            android:paddingBottom="@dimen/padding"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:background="@drawable/ny_rectangle_white"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <LinearLayout
-                                android:id="@+id/minus_linearLayout"
-                                android:background="@drawable/ny_circle_dark_blue"
-                                android:layout_marginLeft="@dimen/padding_half"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:layout_width="28dp"
-                                android:layout_height="28dp">
-                                <ImageView
-                                    android:src="@drawable/ic_minus"
-                                    android:layout_gravity="center"
-                                    android:layout_width="18dp"
-                                    android:layout_height="18dp" />
-                            </LinearLayout>
-                            <TextView
-                                android:id="@+id/diver_textView"
-                                android:text="1"
-                                android:textSize="16sp"
-                                android:textColor="@color/ny_grey4"
-                                android:singleLine="true"
-                                android:maxLines="1"
-                                android:paddingTop="@dimen/padding"
-                                android:paddingBottom="@dimen/padding"
-                                android:gravity="center"
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content" />
-                            <LinearLayout
-                                android:id="@+id/plus_linearLayout"
-                                android:background="@drawable/ny_circle_dark_blue"
-                                android:layout_marginRight="@dimen/padding_half"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:layout_width="28dp"
-                                android:layout_height="28dp">
-                                <ImageView
-                                    android:src="@drawable/ic_plus"
-                                    android:layout_gravity="center"
-                                    android:layout_width="18dp"
-                                    android:layout_height="18dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </LinearLayout>
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/search_textView"
-                android:text="@string/search"
+                android:text="@string/dive_now"
                 android:textColor="@color/colorWhite"
-                android:textSize="15sp"
-                android:background="@drawable/ny_rectangle_blue_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/ny_rectangle_blue_soft"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:layout_marginTop="@dimen/padding"
                 android:layout_marginLeft="@dimen/padding_triple"
                 android:layout_marginRight="@dimen/padding_triple"
-                android:layout_marginBottom="@dimen/padding_double"
+                android:layout_marginBottom="@dimen/padding_triple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

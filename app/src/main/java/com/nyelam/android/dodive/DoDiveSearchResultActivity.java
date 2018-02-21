@@ -197,8 +197,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     }
 
     @Override
-    public void onChooseListener(int position) {
-        sortingType = position;
+    public void onChooseListener(Object position) {
+        sortingType = (Integer) position;
         //Toast.makeText(this, String.valueOf(sortingType), Toast.LENGTH_SHORT).show();
         initRequest();
     }

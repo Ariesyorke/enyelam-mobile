@@ -65,10 +65,12 @@
     <string name="keyword">Keyword</string>
     <string name="dive_spot">Dive Spot</string>
     <string name="certificate">Certificate</string>
+    <string name="diving_license">Diving License</string>
     <string name="dive_center">Dive Center</string>
     <string name="date">Date</string>
     <string name="diver">Diver</string>
     <string name="search">Search</string>
+    <string name="dive_now">Dive Now</string>
     <string name="recent_searches">Recent searches</string>
     <string name="search_results">Search results</string>
     <string name="warn_server_error">Internal Server Error</string>

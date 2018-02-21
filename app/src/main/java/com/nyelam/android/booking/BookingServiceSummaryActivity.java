@@ -404,8 +404,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
+
     @Override
-    public void onChooseListener(int position) {
+    public void onChooseListener(Object position) {
 
     }
 

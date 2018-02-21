@@ -8,17 +8,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 
 public class DoDiveActivity extends BasicActivity implements
-    DoDiveFragment.OnFragmentInteractionListener,
-    DoDiveResultDiveCenterFragment.OnFragmentInteractionListener,
-    DoDiveResultDiveSpotsFragment.OnFragmentInteractionListener {
+        DoDiveFragment.OnFragmentInteractionListener,
+        DoDiveResultDiveCenterFragment.OnFragmentInteractionListener,
+        DoDiveResultDiveSpotsFragment.OnFragmentInteractionListener,
+        NYCustomDialog.OnDialogFragmentClickListener{
 
+    private DoDiveFragment fragment;
     private TextView titleTextView;
     private ImageView searchImageView;
 
@@ -34,7 +38,9 @@ public class DoDiveActivity extends BasicActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+        
         titleTextView = (TextView) findViewById(R.id.title_textView);
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
     }
@@ -48,7 +54,7 @@ public class DoDiveActivity extends BasicActivity implements
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        DoDiveFragment fragment = new DoDiveFragment();
+        fragment = new DoDiveFragment();
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
     }
@@ -71,5 +77,17 @@ public class DoDiveActivity extends BasicActivity implements
         }
 
     }
+
+    @Override
+    public void onChooseListener(Object position) {
+        fragment.setDiver((String) position);
+        //Toast.makeText(this, (String) position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAcceptAgreementListener() {
+
+    }
+
 
 }
