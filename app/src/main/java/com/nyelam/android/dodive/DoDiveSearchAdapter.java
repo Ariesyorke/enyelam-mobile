@@ -37,9 +37,14 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private Context context;
     private List<SearchResult> searchResults;
+    private String date, diver;
+    private boolean certificate;
 
-    public DoDiveSearchAdapter(Context context) {
+    public DoDiveSearchAdapter(Context context, String date, String diver, boolean certificate) {
         this.context = context;
+        this.date = date;
+        this.diver = diver;
+        this.certificate = certificate;
     }
 
     @Override
@@ -193,10 +198,15 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Intent intent = new Intent(context, DoDiveActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
+            intent.putExtra(NYHelper.CERTIFICATE, certificate);
+            intent.putExtra(NYHelper.SCHEDULE, date);
+            intent.putExtra(NYHelper.DIVER, diver);
 
             if (searchResult.getType().equals("1")){
                 intent.putExtra(NYHelper.DIVE_SPOT, searchResult.toString());
             }
+
+
 
             context.startActivity(intent);
         }

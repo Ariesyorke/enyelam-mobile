@@ -84,8 +84,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        initExtra();
         initDatePicker();
+        initExtra();
         initControl();
         initAdapter();
     }
@@ -118,6 +118,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private void initExtra() {
         Intent intent = getActivity().getIntent();
         Bundle extras = getActivity().getIntent().getExtras();
+
         if (extras != null && intent.hasExtra(NYHelper.SEARCH_RESULT) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SEARCH_RESULT))) {
             try {
                 JSONObject obj = new JSONObject(extras.getString(NYHelper.SEARCH_RESULT));
@@ -140,7 +141,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     certificateCheckBox.setClickable(true);
                 }
 
-
                 //Toast.makeText(this, "Type : "+type, Toast.LENGTH_SHORT).show();
 
 
@@ -149,6 +149,34 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             }
             // and get whatever type user account id is
         }
+
+        if (extras != null){
+
+            if (intent.hasExtra(NYHelper.CERTIFICATE)){
+                certificateCheckBox.setChecked(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
+            }
+
+            if (intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.SCHEDULE))){
+
+                date = intent.getStringExtra(NYHelper.SCHEDULE);
+                Calendar c = Calendar.getInstance();
+                c.setTimeInMillis(Long.valueOf(date)*1000);
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                datePickerDialog = new DatePickerDialog(
+                        getActivity(), this, year, month, day);
+                datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
+            }
+
+            if (intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.DIVER))){
+                diverTextView.setText(intent.getStringExtra(NYHelper.DIVER));
+                diver = intent.getStringExtra(NYHelper.DIVER);
+            }
+
+
+        }
+
     }
 
     private void initControl() {
@@ -156,6 +184,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DoDiveSearchActivity.class);
+                intent.putExtra(NYHelper.CERTIFICATE, certificateCheckBox.isChecked());
+                intent.putExtra(NYHelper.SCHEDULE, date);
+                intent.putExtra(NYHelper.DIVER, diver);
                 startActivity(intent);
             }
         });

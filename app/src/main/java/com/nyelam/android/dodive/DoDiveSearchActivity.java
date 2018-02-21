@@ -1,5 +1,6 @@
 package com.nyelam.android.dodive;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +15,15 @@ import android.widget.TextView;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.SearchResultList;
+import com.nyelam.android.data.SearchService;
+import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DoDiveSearchActivity extends AppCompatActivity {
 
@@ -27,21 +33,47 @@ public class DoDiveSearchActivity extends AppCompatActivity {
     private EditText searchEditText;
     private TextView labelTextView;
     private TextView noResultTextView;
+    private String date, diver;
+    private boolean certificate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_dive_search);
+        initGetExtras();
         initView();
         initControl();
         initAdapter();
+    }
+
+    private void initGetExtras() {
+
+        Intent intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null){
+
+            if (intent.hasExtra(NYHelper.CERTIFICATE)){
+                certificate = intent.getBooleanExtra(NYHelper.CERTIFICATE, false);
+            }
+
+            if (intent.hasExtra(NYHelper.SCHEDULE)){
+                date = intent.getStringExtra(NYHelper.SCHEDULE);
+            }
+
+            if (intent.hasExtra(NYHelper.DIVER)){
+                diver = intent.getStringExtra(NYHelper.DIVER);
+            }
+
+        }
+
     }
 
     private void initAdapter() {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        doDiveSearchAdapter = new DoDiveSearchAdapter(this);
+        doDiveSearchAdapter = new DoDiveSearchAdapter(this, date, diver, certificate);
         recyclerView.setAdapter(doDiveSearchAdapter);
     }
 

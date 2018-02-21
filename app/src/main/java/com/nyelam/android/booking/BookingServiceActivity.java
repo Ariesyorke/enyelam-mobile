@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,8 @@ public class BookingServiceActivity extends BasicActivity {
     private LinearLayout particpantContainerLinearLayout, nextLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
-    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView;
+    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
+    private RatingBar ratingBar;
 
     private DiveService diveService;
     private int diver = 0;
@@ -142,6 +144,8 @@ public class BookingServiceActivity extends BasicActivity {
                 certificate = intent.getStringExtra(NYHelper.CERTIFICATE);
             }
 
+
+
             if (intent.hasExtra(NYHelper.CART_RETURN) && extras.get(NYHelper.CART_RETURN) != null){
                 try {
                     cartReturn = new CartReturn();
@@ -193,14 +197,20 @@ public class BookingServiceActivity extends BasicActivity {
                     }*/
 
                     // TODO: location from where ?
-                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getContact().getLocation().getCountry())) {
-                        Location loc = new Location();
-                        loc = diveService.getDiveCenter().getContact().getLocation();
-                        locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
-                    } else{
-                        locationTextView.setVisibility(View.GONE);
+                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null){
+                        Location location = diveService.getDiveCenter().getContact().getLocation();
+                        String locationText = "";
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locationText=locationText+location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getCity().getName();
+                        if (location.getCountry() != null && NYHelper.isStringNotEmpty(location.getCountry())) locationText=locationText+", "+location.getCountry();
+                        locationTextView.setText(locationText);
                     }
 
+
+                    // TODO: Rating and Visited
+                    ratingBar.setRating(diveService.getRating());
+                    ratingTextView.setText(String.valueOf(diveService.getRating()));
+                    //visitedTextView.setText(String.valueOf(diveService.getVisited()));
                     // TODO: schedule
                     /*if (diveService.getSchedule() != null){
                         long start = diveService.getSchedule().getStartDate();
@@ -301,6 +311,10 @@ public class BookingServiceActivity extends BasicActivity {
         subTotalPriceTextView = (TextView) findViewById(R.id.sub_total_price_textView);
         totalPriceTextView = (TextView) findViewById(R.id.total_price_textView);
 
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingTextView = (TextView) findViewById(R.id.rating_textView);
+        visitedTextView = (TextView) findViewById(R.id.visited_textView);
+
         particpantContainerLinearLayout = (LinearLayout) findViewById(R.id.participant_container_linearLayout);
         contactNameTextView = (TextView) findViewById(R.id.contact_name_textView);
         contactPhoneNumberTextView = (TextView) findViewById(R.id.contact_phone_number_textView);
@@ -343,7 +357,7 @@ public class BookingServiceActivity extends BasicActivity {
             if (participant != null && NYHelper.isStringNotEmpty(participant.getEmail())) {
                 if (NYHelper.isStringNotEmpty(participant.getEmail())) emailTextView.setText(participant.getEmail());
             } else {
-                emailTextView.setText("example@mail.com");
+                emailTextView.setText("Email");
             }
 
             changeTextView.setOnClickListener(new View.OnClickListener() {
@@ -400,7 +414,8 @@ public class BookingServiceActivity extends BasicActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
     @Override

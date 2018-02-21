@@ -364,7 +364,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/ny_grey3"
                     android:padding="@dimen/padding"
-                    android:text="@string/participants_detail"
+                    android:text="@string/participant_details"
                     android:textColor="@color/ny_black1"
                     android:textStyle="bold" />
 

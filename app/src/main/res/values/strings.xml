@@ -13,6 +13,7 @@
     <string name="register">Register</string>
     <string name="username">Username</string>
     <string name="full_name">Full Name</string>
+    <string name="customer_name">Customer Name</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email_address">E-mail Address</string>
@@ -29,7 +30,7 @@
     <string name="province">Province</string>
     <string name="city">City</string>
     <string name="save">Save</string>
-    <string name="change">Change</string>
+    <string name="change">change</string>
     <string name="next">Next</string>
 
     <!--Detail Order-->
@@ -54,7 +55,7 @@
     <string name="account_name">ISNOKE INDO KARYA, PT</string>
     <string name="contact_details">Contact Details</string>
     <string name="participants">Participants</string>
-    <string name="participants_detail">Participants Detail</string>
+    <string name="participant_details">Participant Details</string>
     <string name="booking_details">Booking Details</string>
     <string name="choose_file">Choose File</string>
     <string name="confirm">Confirm</string>

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nyelam.android.BasicActivity;
@@ -54,8 +55,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView;
-    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView;
-
+    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
+    private RatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,13 +163,19 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     }*/
 
                     // TODO: location from where ?
-                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getContact().getLocation().getCountry())) {
-                        Location loc = new Location();
-                        loc = diveService.getDiveCenter().getContact().getLocation();
-                        locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
-                    } else{
-                        locationTextView.setVisibility(View.GONE);
+                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null){
+                        Location location = diveService.getDiveCenter().getContact().getLocation();
+                        String locationText = "";
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locationText=locationText+location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getCity().getName();
+                        if (location.getCountry() != null && NYHelper.isStringNotEmpty(location.getCountry())) locationText=locationText+", "+location.getCountry();
+                        locationTextView.setText(locationText);
                     }
+
+
+                    // TODO: Rating and Visited
+                    ratingBar.setRating(diveService.getRating());
+                    ratingTextView.setText(String.valueOf(diveService.getRating()));
 
                     // TODO: schedule
                     /*if (diveService.getSchedule() != null){
@@ -264,6 +271,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         contactEmailTextView = (TextView) findViewById(R.id.contact_email_textView);
         orderLinearLayout = (LinearLayout) findViewById(R.id.order_linearLayout);
 
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingTextView = (TextView) findViewById(R.id.rating_textView);
+        visitedTextView = (TextView) findViewById(R.id.visited_textView);
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));
@@ -322,6 +333,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
     private RequestListener<Summary> onCreateOrderServiceRequest() {

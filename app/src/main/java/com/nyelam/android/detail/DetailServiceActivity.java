@@ -336,6 +336,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
     @Override
@@ -348,7 +350,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
             }
         },500);
     }
-
 
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
         private static final int FRAGMENT_COUNT = 4;
