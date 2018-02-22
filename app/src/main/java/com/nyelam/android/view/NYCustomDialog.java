@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -105,8 +106,18 @@ public class NYCustomDialog {
         LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
         linearLayout.setMinimumWidth(width*3/4);
 
-        TextView acceptTextView = (TextView) dialog.findViewById(R.id.accept_textView);
+        ImageView closeImageView = (ImageView) dialog.findViewById(R.id.close_imageView);
+        final CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.checkBox);
 
+        closeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        TextView acceptTextView = (TextView) dialog.findViewById(R.id.accept_textView);
 
         String agreementText = "Pada saat Anda mengakses website dan atau layanan online yang Kami sediakan, maka semua informasi dan data pribadi Anda akan Kami kumpulkan dengan ketentuan sebagai berikut :\n" +
                 "<br/>\n" +
@@ -136,8 +147,14 @@ public class NYCustomDialog {
         acceptTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onAcceptAgreementListener();
-                dialog.dismiss();
+
+                if (checkBox.isChecked()){
+                    listener.onAcceptAgreementListener();
+                    dialog.dismiss();
+                } else{
+                    Toast.makeText(activity, "Please, read and checklist agreement to order", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

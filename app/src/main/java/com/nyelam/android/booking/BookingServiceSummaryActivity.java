@@ -74,8 +74,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         orderLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.show();
-
                 /*if (NYHelper.isStringNotEmpty(cartToken)){
                     Toast.makeText(BookingServiceSummaryActivity.this, cartToken, Toast.LENGTH_SHORT).show();
                 } else {
@@ -425,6 +423,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     @Override
     public void onAcceptAgreementListener() {
+
+        progressDialog.show();
         NYDoDiveServiceOrderRequest req = null;
         try {
             req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toString(), participantList.toString());
@@ -432,6 +432,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 }
