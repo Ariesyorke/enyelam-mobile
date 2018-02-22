@@ -18,96 +18,24 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark">
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
                     android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                    app:fontTextStyle="reguler"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/colorWhite"
                     android:background="@android:color/transparent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:text="@string/booking_details"/>
-
-                <!--<ImageView
-                    android:id="@+id/menu_item_imageView"
-                    android:src="@drawable/ic_action_menu_item"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />-->
-            </RelativeLayout>
+            </LinearLayout>
         </android.support.v7.widget.Toolbar>
-
-        <RelativeLayout
-            android:visibility="gone"
-            android:padding="@dimen/padding"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/book_layout"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="1"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorGradationLeft"
-                    android:gravity="center"
-                    android:background="@drawable/ny_circle_white"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp" />
-                <TextView
-                    android:text="Pesan"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorWhite"
-                    android:gravity="center"
-                    android:layout_marginLeft="@dimen/padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_toRightOf="@+id/book_layout"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="@dimen/padding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <View
-                    android:background="#89f5f5f5"
-                    android:layout_marginRight="@dimen/padding"
-                    android:layout_width="16dp"
-                    android:layout_height="1dp" />
-                <TextView
-                    android:text="2"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorGradationLeft"
-                    android:gravity="center"
-                    android:background="@drawable/ny_circle_blue_transparant"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp" />
-                <TextView
-                    android:text="Bayar"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#89f5f5f5"
-                    android:gravity="center"
-                    android:layout_marginLeft="@dimen/padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </RelativeLayout>
 
     </LinearLayout>
 
@@ -130,45 +58,64 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/main_linearLayout"
                 android:visibility="gone"
+                android:id="@+id/main_linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/order_id_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#1286ec"
-                    android:gravity="center"
-                    android:padding="@dimen/padding"
-                    android:text="#1828281"
-                    android:textColor="@color/colorWhite" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:background="@color/ny_grey3"
+                <RelativeLayout
+                    android:background="@color/ny_blue7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/padding"
-                        android:text="Your Order"
-                        android:textColor="@color/ny_black1"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/status_textView"
-                        android:padding="@dimen/padding"
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/your_book_textView"
+                        app:fontTextStyle="mediumItalic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
+                        android:text="@string/your_booking_id"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold" />
+
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="mediumItalic"
+                        android:id="@+id/order_id_textView"
+                        android:layout_toRightOf="@id/your_book_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/padding"
+                        android:text="#1828281"
+                        android:textColor="@color/colorWhite" />
+
+
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="mediumItalic"
+                        android:id="@+id/status_textView"
                         android:text="-"
                         android:textSize="14sp"
-                        android:textColor="#ea2614"
-                        android:textAllCaps="true"/>
-                </LinearLayout>
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorWhite"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+
 
 
                 <LinearLayout
@@ -176,40 +123,104 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding">
+                    android:paddingTop="@dimen/padding_double"
+                    android:paddingBottom="@dimen/padding_double"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
 
-                    <TextView
+
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="reguler"
                         android:id="@+id/schedule_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sel, 01 Jan 1990"
-                        android:textColor="@color/ny_black1"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/service_name_textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:layout_marginTop="@dimen/padding"
-                        android:text="@string/service_name"
+                        android:text="@string/date"
                         android:textColor="@color/ny_black1" />
-
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/location_textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:text="@string/location"
-                        android:textSize="14sp"
-                        android:textColor="@color/ny_grey4" />
 
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="mediumItalic"
+                            android:id="@+id/service_name_textView"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="22sp"
+                            android:layout_marginTop="@dimen/padding"
+                            android:text="@string/service_name"
+                            android:textColor="@color/ny_black1" />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="@style/StarRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:isIndicator="false"
+                            android:numStars="5"
+                            android:rating="4"
+                            android:stepSize="1.0"
+                            android:layout_gravity="start" />
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/rating_textView"
+                            android:text="5.0"
+                            android:textSize="14sp"
+                            android:textColor="@color/ny_black1"
+                            android:layout_marginLeft="@dimen/padding_half"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/visited_textView"
+                            android:text="/ 50 visited"
+                            android:textSize="14sp"
+                            android:textColor="@color/ny_black1"
+                            android:layout_marginLeft="@dimen/padding_half"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:src="@drawable/ic_pin_map"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="medium"
+                            android:id="@+id/location_textView"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:text="@string/location"
+                            android:textSize="15sp"
+                            android:textColor="@color/ny_black1" />
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/padding_double"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
@@ -217,13 +228,15 @@
                             android:text="@string/sub_total"
                             android:textSize="14sp"
                             android:textColor="@color/ny_grey4" />
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="bold"
                             android:id="@+id/sub_total_price_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/padding"
                             android:layout_marginLeft="@dimen/padding"
-                            android:textSize="14sp"
+                            android:layout_marginStart="@dimen/padding"
+                            android:textSize="16sp"
                             android:text="Rp 0"
                             android:textColor="@color/ny_orange" />
                     </LinearLayout>
@@ -234,7 +247,8 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -242,13 +256,15 @@
                             android:layout_marginTop="@dimen/padding"
                             android:text="@string/voucher"
                             android:textColor="@color/ny_grey4" />
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:id="@+id/voucher_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/padding"
                             android:layout_marginLeft="@dimen/padding"
-                            android:textSize="14sp"
+                            android:layout_marginStart="@dimen/padding"
+                            android:textSize="16sp"
                             android:text="Rp 0"
                             android:textColor="@color/ny_orange" />
                     </LinearLayout>
@@ -258,7 +274,8 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -266,26 +283,33 @@
                             android:layout_marginTop="@dimen/padding"
                             android:text="@string/total_price"
                             android:textColor="@color/ny_grey4" />
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="bold"
                             android:id="@+id/total_price_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/padding"
                             android:layout_marginLeft="@dimen/padding"
-                            android:textSize="14sp"
+                            android:layout_marginStart="@dimen/padding"
+                            android:textSize="16sp"
                             android:text="Rp 0"
                             android:textColor="@color/ny_orange" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <TextView
+
+
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="mediumItalic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/ny_grey3"
-                    android:padding="@dimen/padding"
+                    android:background="@color/ny_blue7"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/padding"
+                    android:paddingBottom="@dimen/padding"
                     android:text="@string/contact_details"
-                    android:textColor="@color/ny_black1"
+                    android:textColor="@color/colorWhite"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -293,22 +317,32 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding">
+                    android:padding="@dimen/activity_horizontal_margin">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="mediumItalic"
                             android:id="@+id/contact_name_textView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/full_name"
+                            android:text="@string/customer_name"
                             android:textColor="@color/ny_black1"
                             android:textSize="16sp" />
 
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/change_contact_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/change"
+                            android:textAllCaps="false"
+                            android:textColor="@color/ny_blue7"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -317,7 +351,8 @@
                         android:layout_marginTop="@dimen/padding"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -325,7 +360,8 @@
                             android:textColor="@color/ny_grey4"
                             android:textSize="14sp" />
 
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:id="@+id/contact_phone_number_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -340,7 +376,8 @@
                         android:layout_marginTop="@dimen/padding"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -348,24 +385,28 @@
                             android:textColor="@color/ny_grey4"
                             android:textSize="14sp" />
 
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="reguler"
                             android:id="@+id/contact_email_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="-"
+                            android:text="example@mail.com"
                             android:textColor="@color/ny_black1"
                             android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
 
 
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="mediumItalic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/ny_grey3"
-                    android:padding="@dimen/padding"
+                    android:background="@color/ny_blue7"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/padding"
+                    android:paddingBottom="@dimen/padding"
                     android:text="@string/participant_details"
-                    android:textColor="@color/ny_black1"
+                    android:textColor="@color/colorWhite"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -373,7 +414,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding"/>
+                    android:padding="@dimen/activity_horizontal_margin"/>
 
 
 
@@ -384,13 +425,17 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <TextView
+
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="mediumItalic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/ny_grey3"
-                        android:padding="@dimen/padding"
+                        android:background="@color/ny_blue7"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
                         android:text="@string/payment"
-                        android:textColor="@color/ny_black1"
+                        android:textColor="@color/colorWhite"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -399,17 +444,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="mediumItalic"
                             android:text="@string/transfer_to"
                             android:textSize="18sp"
                             android:textColor="@color/ny_black1"
                             android:gravity="center"
-                            android:padding="@dimen/padding"
+                            android:padding="@dimen/padding_half"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
-
-
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="mediumItalic"
+                            android:layout_marginBottom="@dimen/padding"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
+                            android:text="@string/bank_branch"
+                            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                         <TableLayout
                             android:id="@+id/tabla_cuerpo"
@@ -420,52 +475,26 @@
                             android:layout_height="match_parent">
 
                             <TableRow
-                                android:id="@+id/tableRow3"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <!--<TextView
-                                    android:layout_weight="1"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    android:gravity="center"
-                                    android:textSize="14sp"
-                                    android:text="Cabang"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>-->
-
-                                <TextView
-                                    android:layout_weight="2"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    android:gravity="center"
-                                    android:layout_gravity="center"
-                                    android:textSize="16sp"
-                                    android:text="@string/bank_branch"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                            </TableRow>
-
-                            <TableRow
                                 android:id="@+id/tableRow4"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <TextView
+                                <com.nyelam.android.view.font.NYTextView
+                                    app:fontTextStyle="reguler"
                                     android:id="@+id/textView1"
-                                    android:layout_weight="1"
+                                    android:layout_weight="2"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
-                                    android:gravity="center"
+                                    android:gravity="left"
                                     android:textSize="14sp"
                                     android:text="@string/account_number_label"
                                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-                                <TextView
+                                <com.nyelam.android.view.font.NYTextView
+                                    app:fontTextStyle="reguler"
                                     android:id="@+id/textView2"
-                                    android:layout_weight="2"
+                                    android:layout_weight="3"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
@@ -480,25 +509,27 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:layout_weight="1"
+                                <com.nyelam.android.view.font.NYTextView
+                                    app:fontTextStyle="reguler"
+                                    android:layout_weight="2"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
-                                    android:gravity="center"
+                                    android:gravity="left"
                                     android:textSize="14sp"
                                     android:text="@string/account_name_label"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-                                <TextView
-                                    android:layout_weight="2"
+                                <com.nyelam.android.view.font.NYTextView
+                                    app:fontTextStyle="reguler"
+                                    android:layout_weight="3"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
                                     android:gravity="center"
                                     android:textSize="14sp"
                                     android:text="@string/account_name"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                             </TableRow>
                         </TableLayout>
@@ -513,7 +544,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
+                            <com.nyelam.android.view.font.NYTextView
+                                app:fontTextStyle="reguler"
                                 android:id="@+id/choose_file_textView"
                                 android:text="@string/choose_file"
                                 android:textColor="@color/ny_black1"
@@ -538,29 +570,47 @@
 
                         </LinearLayout>
 
+
+
+
+
+
+
+
                         <LinearLayout
-                            android:id="@+id/confirm_linearLayout"
-                            android:background="@drawable/ny_rectangle_blue"
-                            android:gravity="center"
-                            android:layout_gravity="center"
-                            android:paddingLeft="80dp"
-                            android:paddingRight="80dp"
-                            android:layout_marginTop="@dimen/padding_double"
-                            android:layout_marginBottom="@dimen/padding_double"
-                            android:layout_width="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                            <TextView
-                                android:text="@string/confirm"
-                                android:textSize="14sp"
-                                android:textAllCaps="true"
-                                android:textStyle="bold"
-                                android:textColor="@color/colorWhite"
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"/>
+                            <LinearLayout
+                                android:id="@+id/confirm_linearLayout"
+                                android:background="@drawable/ny_rectangle_blue_soft"
                                 android:gravity="center"
                                 android:layout_gravity="center"
-                                android:padding="@dimen/padding_half"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:paddingLeft="@dimen/padding"
+                                android:paddingRight="@dimen/padding"
+                                android:layout_marginTop="@dimen/padding_double"
+                                android:layout_marginBottom="@dimen/padding_double"
+                                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:text="@string/confirm"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorWhite"
+                                    android:gravity="center"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/padding"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
                         </LinearLayout>
+
 
                     </LinearLayout>
                 </LinearLayout>

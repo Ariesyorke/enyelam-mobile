@@ -45,9 +45,10 @@
     <string name="check_your_booking">Check your booking is write correctly</string>
     <string name="review_your_booking">Review and  fill a detailed booking</string>
     <string name="your_booking">Your Booking</string>
+    <string name="your_booking_id">Your Booking ID : </string>
     <string name="booking_summary">Booking Summary</string>
     <string name="payment">Payment</string>
-    <string name="transfer_to">Transfer To\nBANK BCA</string>
+    <string name="transfer_to">Transfer To BANK BCA</string>
     <string name="bank_branch">Citra Grand Bekasi Branch</string>
     <string name="account_number_label">Account Number</string>
     <string name="account_number">711-50-76761</string>
