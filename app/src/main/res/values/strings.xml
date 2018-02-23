@@ -33,6 +33,9 @@
     <string name="change">change</string>
     <string name="next">Next</string>
 
+
+    <string name="lorem_ipsum_dolor">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+
     <!--Detail Order-->
     <string name="order">Order</string>
     <string name="fill_out_the_form">Fill out the form</string>
@@ -69,6 +72,8 @@
     <string name="certificate">Certificate</string>
     <string name="diving_license">Diving License</string>
     <string name="dive_center">Dive Center</string>
+    <string name="who_we_are">Who We Are</string>
+    <string name="our_trips_services">Our Trips Services</string>
     <string name="date">Date</string>
     <string name="diver">Diver</string>
     <string name="search">Search</string>

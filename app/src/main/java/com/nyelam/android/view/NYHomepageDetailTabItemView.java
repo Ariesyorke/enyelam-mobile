@@ -71,10 +71,6 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
                 int checkedTabItemPos = ((DetailServiceActivity)activity).onCheckedChanged(this, this.checked);
                 if (checkedTabItemPos > -1)
                     ((DetailServiceActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
-            } else if (activity instanceof DiveCenterDetailActivity){
-                int checkedTabItemPos = ((DiveCenterDetailActivity)activity).onCheckedChanged(this, this.checked);
-                if (checkedTabItemPos > -1)
-                    ((DiveCenterDetailActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
             }
         }
 
@@ -181,14 +177,9 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
             int checkedTabItemPos = ((DetailServiceActivity)activity).onCheckedChanged(this, this.checked);
             if (checkedTabItemPos > -1)
                 ((DetailServiceActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
-        } else if (activity != null && activity instanceof DiveCenterDetailActivity) {
-            int checkedTabItemPos = ((DiveCenterDetailActivity)activity).onCheckedChanged(this, this.checked);
-            if (checkedTabItemPos > -1)
-                ((DiveCenterDetailActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
         }
 
         textView.setText(text);
-
 
         if (getTabItemPosition() == 0){
             this.setChecked(true);

@@ -1,36 +1,57 @@
 package com.nyelam.android.divecenter;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.Coordinate;
 import com.nyelam.android.data.DiveCenter;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.Location;
+import com.nyelam.android.divespot.DiveSpotDetailActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoDiveCenterDetailRequest;
+import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
-import com.nyelam.android.view.NYHomepageDetailTabItemView;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -42,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -49,53 +71,125 @@ import me.relex.circleindicator.CircleIndicator;
 public class DiveCenterDetailActivity extends AppCompatActivity implements
         DiveCenterDetailFragment.OnFragmentInteractionListener,
         DiveCenterMapFragment.OnFragmentInteractionListener,
-        DiveCenterListServiceFragment.OnFragmentInteractionListener {
-
-    private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"));
+        DiveCenterListServiceFragment.OnFragmentInteractionListener,
+        OnMapReadyCallback {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private NYBannerViewPager bannerViewPager;
     private CircleIndicator circleIndicator;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
-    private NYFragmentPagerAdapter fragmentAdapter;
-    private Fragment fragment;
-    private ImageView menuItemImageView;
     private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
-    private LinearLayout tabManager;
     private NYCustomViewPager viewPager;
-    private boolean mProtectFromCheckedChange = false;
-    private boolean mProtectFromPagerChange = false;
     private String serviceId;
-    //protected DiveService diveService, newDiveService;
+    private int page = 1;
+    private List<DiveService> serviceList;
+
     protected DiveCenter diveCenter;
     protected String diver;
     protected String certificate;
     protected String schedule;
-    private TextView nameTextView, ratingTextView, bookingTextView;
     private ProgressDialog progressDialog;
     private boolean triggerBook;
     private String diveSpotId;
     protected String type;
     protected String diverId = "";
 
+    private DoDiveSearchServiceAdapter serviceAdapter;
+    private RecyclerView recyclerView;
+    private RatingBar ratingBar;
+    private TextView titleTextView, nameTextView, ratingTextView, visitedTextView, phoneNumberTextView, locationTextView, descriptionTextView, noResultTextView;
+
+    private GoogleMap map;
+    private ProgressBar progressBar;
+    private TextView noLocationTextView, openMapTextView;
+    private SupportMapFragment mapFragment;
+    private LinearLayout mapLinearLayout, phoneNumberLinearLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dive_center_detail);
         initView();
+        initMap();
         initToolbar();
         initExtra();
-        initTab();
+        initAdapter();
         initRequest();
         initControl();
-
-        //Toast.makeText(this, "Diver "+diver, Toast.LENGTH_SHORT).show();
     }
 
-    /*public DiveService getDiveService() {
-        return newDiveService;
-    }*/
+    private void initControl() {
+
+        // TODO: call  dan map - deskripsi dan visited dan gambar belum
+
+        phoneNumberLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (diveCenter != null && diveCenter.getContact() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getPhoneNumber())){
+
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + diveCenter.getContact().getPhoneNumber()));
+                    if (ActivityCompat.checkSelfPermission(DiveCenterDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    startActivity(intent);
+
+                }
+
+
+            }
+        });
+
+
+
+        openMapTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (diveCenter != null && NYHelper.isStringNotEmpty(diveCenter.getName()) && diveCenter.getContact() != null && diveCenter.getContact().getLocation() != null &&
+                        diveCenter.getContact().getLocation().getCoordinate() != null){
+                    Coordinate coordinate = diveCenter.getContact().getLocation().getCoordinate();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:<"+coordinate.getLat()+">,<"+coordinate.getLon()+">?q=<"+coordinate.getLat()+">,<"+coordinate.getLon()+">("+diveCenter.getName()+")"));
+                    startActivity(intent);
+
+                }
+            }
+        });
+
+    }
+
+    private void initMap() {
+        mapFragment.getMapAsync(this);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        ViewGroup.LayoutParams params = mapFragment.getView().getLayoutParams();
+        params.height = (int)(width*0.7);
+        mapFragment.getView().setLayoutParams(params);
+    }
+
+    private void initAdapter() {
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        serviceList = new ArrayList<>();
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+        recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
+        serviceAdapter = new DoDiveSearchServiceAdapter(this, diver, schedule, certificate);
+        recyclerView.setAdapter(serviceAdapter);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -105,9 +199,6 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void initControl() {
     }
 
     private void initExtra() {
@@ -140,6 +231,17 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
             }
 
+            // TODO: title (tanggal + jumlah)
+            if (NYHelper.isStringNotEmpty(diver) && NYHelper.isStringNotEmpty(schedule)){
+                if (Integer.valueOf(diver) > 1){
+                    titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax(s)");
+                } else {
+                    titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax");
+                }
+                int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+                toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+            }
+
             if(intent.hasExtra(NYHelper.DIVE_CENTER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVE_CENTER))){
                 JSONObject obj = null;
                 try {
@@ -147,11 +249,6 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                     diveCenter = new DiveCenter();
                     diveCenter.parse(obj);
                     if (diveCenter != null && NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
-                    if (diveCenter != null && diveCenter.getRating() > 0){
-                        ratingTextView.setText("*"+String.valueOf(diveCenter.getRating()));
-                    } else {
-                        ratingTextView.setText("-");
-                    }
                     initBanner();
                     //Toast.makeText(this, diveService.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -178,6 +275,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                     progressBar.setVisibility(View.GONE);
                 }*/
                 NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
+                //noResultTextView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -187,23 +285,33 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
                 if (diveCenter != null){
 
-                    if (NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
-                    if (diveCenter.getRating() > 0) ratingTextView.setText(String.valueOf("*"+diveCenter.getRating()));
+                    getServiceList();
 
-                    fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
-                    if (fragment != null && fragment instanceof DiveCenterListServiceFragment){
+                    if (NYHelper.isStringNotEmpty(diveCenter.getName()))nameTextView.setText(diveCenter.getName());
+                    ratingBar.setRating(diveCenter.getRating());
+                    ratingTextView.setText(String.valueOf(diveCenter.getRating()));
+                    //visitedTextView.setText(diveCenter.getName());
 
-                        ((DiveCenterListServiceFragment) fragment).setContent(diveCenter);
+                    if (diveCenter.getContact() != null){
+                        Contact contact = diveCenter.getContact();
+                        if (NYHelper.isStringNotEmpty(contact.getPhoneNumber())){
+                            phoneNumberTextView.setText(contact.getPhoneNumber());
+                        } else{
+                            phoneNumberTextView.setText("-");
+                        }
 
-                    } else if (fragment != null && fragment instanceof DiveCenterDetailFragment){
-
-                        ((DiveCenterDetailFragment) fragment).setContent(diveCenter);
-
-                    } else if (fragment != null && fragment instanceof DiveCenterMapFragment){
-
-                        ((DiveCenterMapFragment) fragment).setContent(diveCenter);
-
+                        if (contact.getLocation()!=null){
+                            Location location = contact.getLocation();
+                            String locationText = "";
+                            if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locationText=locationText+location.getCity().getName();
+                            if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getCity().getName();
+                            if (location.getCountry() != null && NYHelper.isStringNotEmpty(location.getCountry())) locationText=locationText+", "+location.getCountry();
+                            locationTextView.setText(locationText);
+                        } else {
+                            locationTextView.setText("-");
+                        }
                     }
+
 
                 }
 
@@ -211,25 +319,86 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         };
     }
 
+
+
+    protected void getServiceList() {
+
+        if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())
+                && !TextUtils.isEmpty(diver)
+                && !TextUtils.isEmpty(certificate)){
+
+            String apiPath = getString(R.string.api_path_dodive_service_list);
+            if (NYHelper.isStringNotEmpty(type) && type.equals("1")){
+                apiPath = getString(R.string.api_path_dodive_service_list_by_divespot);
+            } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
+                apiPath = getString(R.string.api_path_dodive_service_list_by_category);
+            }
+
+            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId);
+            spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+        }
+    }
+
+    private RequestListener<DiveServiceList> onGetServiceByDiveCenterRequest() {
+        return new RequestListener<DiveServiceList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressBar != null)progressBar.setVisibility(View.GONE);
+                //NYHelper.handleAPIException(.this, spiceException, null);
+                noResultTextView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onRequestSuccess(DiveServiceList results) {
+
+                if (progressBar != null)progressBar.setVisibility(View.GONE);
+
+                if (serviceList == null) serviceList = new ArrayList<>();
+                if (results != null && results.getList().size() > 0){
+                    serviceList = results.getList();
+                    serviceAdapter.addResults(serviceList);
+                    serviceAdapter.notifyDataSetChanged();
+                    noResultTextView.setVisibility(View.GONE);
+                } else {
+                    noResultTextView.setVisibility(View.VISIBLE);
+                }
+
+            }
+        };
+    }
+
+
+
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        tabManager = (LinearLayout) findViewById(R.id.tab_manager);
         viewPager = (NYCustomViewPager) findViewById(R.id.view_pager);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //viewTabManager = (View) findViewById(R.id.view_tab_manager);
-        menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
         bannerViewPager = (NYBannerViewPager) findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
+
+        titleTextView = (TextView) findViewById(R.id.title_textView);
         nameTextView = (TextView) findViewById(R.id.name_textView);
         ratingTextView = (TextView) findViewById(R.id.rating_textView);
-        bookingTextView = (TextView) findViewById(R.id.booking_textView);
+        visitedTextView = (TextView) findViewById(R.id.visited_textView);
+        phoneNumberTextView = (TextView) findViewById(R.id.phone_number_textView);
+        locationTextView = (TextView) findViewById(R.id.location_textView);
+        descriptionTextView = (TextView) findViewById(R.id.title_textView);
+        openMapTextView  = (TextView) findViewById(R.id.title_textView);
+        noResultTextView  = (TextView) findViewById(R.id.no_result_textView);
 
-        fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(fragmentAdapter);
+        recyclerView  = (RecyclerView) findViewById(R.id.recyclerView);
+        ratingBar  = (RatingBar) findViewById(R.id.ratingBar);
+        phoneNumberLinearLayout  = (LinearLayout) findViewById(R.id.phone_number_linearLayout);
+
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));
+
+
+        noLocationTextView = (TextView) findViewById(R.id.no_location_textView);
+        openMapTextView = (TextView) findViewById(R.id.open_map_textView);
+        mapLinearLayout  = (LinearLayout) findViewById(R.id.map_linearLayout);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
     private void initBanner() {
@@ -251,209 +420,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
-
-    public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 3;
-        private Map<Integer, String> fragmentTags;
-        private FragmentManager fragmentManager;
-
-        public NYFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-            this.fragmentManager = fm;
-            this.fragmentTags = new HashMap<>();
-        }
-
-        @Override
-        public int getCount() {
-            return FRAGMENT_COUNT;
-        }
-
-        public Fragment getFragment(int position) {
-
-            String tag = fragmentTags.get(position);
-            if (tag == null) {
-                return null;
-            }
-
-            Bundle b = new Bundle();
-            fragmentManager.putFragment(b, tag, fragmentManager.findFragmentByTag(tag));
-            return fragmentManager.findFragmentByTag(tag);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                DiveCenterListServiceFragment fragment = DiveCenterListServiceFragment.newInstance();
-                return fragment;
-            } else if (position == 1) {
-                DiveCenterDetailFragment fragment = DiveCenterDetailFragment.newInstance();
-                return fragment;
-            } else {
-                DiveCenterMapFragment fragment = DiveCenterMapFragment.newInstance();
-                return fragment;
-            }
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            Object obj = super.instantiateItem(container, position);
-
-            if (obj instanceof Fragment) {
-                Fragment f = (Fragment) obj;
-                String tag = f.getTag();
-                fragmentTags.put(position, tag);
-            }
-
-            return obj;
-        }
-    }
-
-
-    public void movePagerToTabItemPosition(int tabItemPosition) {
-
-        mProtectFromPagerChange = true;
-        if (tabItemPosition > -1) {
-            viewPager.setCurrentItem(tabItemPosition, true);
-        }
-        mProtectFromPagerChange = false;
-    }
-
-    public int onCheckedChanged(NYHomepageDetailTabItemView view, boolean checked) {
-        if (mProtectFromCheckedChange) {
-            return -1;
-        }
-
-        mProtectFromCheckedChange = true;
-
-        int checkedTabItemPosition = -1;
-
-        for (int i = 0; i < tabManager.getChildCount(); i++) {
-            View child = tabManager.getChildAt(i);
-            if (child instanceof NYHomepageDetailTabItemView) {
-                if (child == view) {
-                    setCheckedStateForTab(child.getId(), checked);
-                    checkedTabItemPosition = ((NYHomepageDetailTabItemView) child).getTabItemPosition();
-                } else {
-                    setCheckedStateForTab(child.getId(), false);
-                }
-            }
-        }
-
-        mProtectFromCheckedChange = false;
-        return checkedTabItemPosition;
-    }
-
-    private void setCheckedStateForTab(int id, boolean checked) {
-        View checkedView = tabManager.findViewById(id);
-        if (checkedView != null && checkedView instanceof Checkable) {
-            ((Checkable) checkedView).setChecked(checked);
-        }
-    }
-
-    public class Frags {
-
-        private int position;
-        private String tag;
-
-        public Frags(int pos, String tag) {
-            this.position = pos;
-            this.tag = tag;
-        }
-
-        public int getPosition() {
-            return position;
-        }
-
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
-        public String getTag() {
-            return tag;
-        }
-
-        public void setTag(String tag) {
-            this.tag = tag;
-        }
-
-        public void closeDrawer(){
-            //close navigation drawer
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-    }
-
-
-    private void initTab() {
-        //tabMenu = getResources().getStringArray(R.array.menu_tab);
-        //viewTabManager.setAlpha(0.5f);
-        //NavDrawer
-        setSupportActionBar(toolbar);
-
-        viewPager.setOffscreenPageLimit(3);
-        //viewPager.setAdapter(new NYFragmentPagerAdapter(getSupportFragmentManager()));
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                //KTLog.e("CEK 1");
-                //Toast.makeText(MainActivity.this, "test 1", Toast.LENGTH_SHORT).show();
-                fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
-                if (fragment != null && fragment instanceof DiveCenterListServiceFragment){
-
-                    ((DiveCenterListServiceFragment) fragment).setContent(diveCenter);
-
-                } else if (fragment != null && fragment instanceof DiveCenterDetailFragment){
-
-                    ((DiveCenterDetailFragment) fragment).setContent(diveCenter);
-
-                } else if (fragment != null && fragment instanceof DiveCenterMapFragment){
-
-                    ((DiveCenterMapFragment) fragment).setContent(diveCenter);
-
-                }
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                //Toast.makeText(DetailServiceActivity.this, "1", Toast.LENGTH_SHORT).show();
-
-                //KTLog.e("CEK 2");
-                //Always
-                //allFragments.contains(KTFragmentPagerAdapter.class.);
-                /*if (stack.contains(position)) {
-                    stack.pop(position);
-                }*/
-                //Toast.makeText(MainActivity.this, "test 2 "+String.valueOf(stack.size()), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                //KTLog.e("CEK 3");
-
-                if (mProtectFromPagerChange) {
-                    return;
-                }
-
-                NYHomepageDetailTabItemView view = (NYHomepageDetailTabItemView) tabManager.getChildAt(position);
-                onCheckedChanged(view, true);
-                fragment = ((NYFragmentPagerAdapter) viewPager.getAdapter()).getFragment(position);
-                if (position == 0 && fragment != null) {
-                    fragment.onResume();
-                }
-            }
-        });
-
-        for (int i = 0; i < tabManager.getChildCount(); i++) {
-            View child = tabManager.getChildAt(i);
-            if (child instanceof NYHomepageDetailTabItemView) {
-                ((NYHomepageDetailTabItemView) child).setDetailServiceActivity(this);
-            }
-        }
-
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -469,9 +438,6 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         spcMgr.start(getApplicationContext());
-
-        setCheckedStateForTab(0, true);
-        movePagerToTabItemPosition(0);
     }
 
     @Override
@@ -480,4 +446,71 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
+        // Enable MyLocation Button in the Map
+        if (ActivityCompat.checkSelfPermission(DiveCenterDetailActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        map.setMyLocationEnabled(false);
+        map.getUiSettings().setScrollGesturesEnabled(false);
+        map.getUiSettings().setZoomGesturesEnabled(false);
+
+        // Already two locations
+        map.clear();
+        // Adding new item to the ArrayList
+        if (diveCenter != null){
+
+            LatLng pos2 = new LatLng(0, 0);
+
+            if (diveCenter.getContact() != null && diveCenter.getContact().getLocation() != null && diveCenter.getContact().getLocation().getCoordinate() != null){
+                double lat = diveCenter.getContact().getLocation().getCoordinate().getLat();
+                double lon = diveCenter.getContact().getLocation().getCoordinate().getLon();
+                pos2 = new LatLng(lat,lon);
+            }
+            //center camera map
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos2, 12.0f));
+
+            // Creating MarkerOptions
+            BitmapDescriptor iconPin = BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_map);
+
+            String name = "";
+            String address = "";
+
+            if (NYHelper.isStringNotEmpty(diveCenter.getName())) name = diveCenter.getName();
+            if (diveCenter.getContact() != null && diveCenter.getContact().getLocation() != null){
+                Location loc = diveCenter.getContact().getLocation();
+                if (loc.getCity() != null && NYHelper.isStringNotEmpty(loc.getCity().getName())) address += loc.getCity().getName();
+                if (loc.getProvince() != null && NYHelper.isStringNotEmpty(loc.getCity().getName())) address += ", "+loc.getProvince().getName();
+                if (NYHelper.isStringNotEmpty(loc.getCountry())) address += ", "+loc.getCountry();
+            }
+
+            MarkerOptions optionsClient = new MarkerOptions().position(pos2)
+                    .title(name)
+                    .snippet(address)
+                    .icon(iconPin);
+
+
+
+            // Add new marker to the Google Map Android API V2
+            Marker marker = map.addMarker(optionsClient);
+            marker.showInfoWindow();
+
+            //noLocationTextView.setVisibility(View.GONE);
+            //progressBar.setVisibility(View.GONE);
+            mapLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            //progressBar.setVisibility(View.GONE);
+            //noLocationTextView.setVisibility(View.VISIBLE);
+            mapLinearLayout.setVisibility(View.VISIBLE);
+        }
+    }
 }

@@ -107,8 +107,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
         initTab();
         initRequest();
         initControl();
-
-        //Toast.makeText(this, "Diver "+diver, Toast.LENGTH_SHORT).show();
     }
 
     public DiveService getDiveService() {
