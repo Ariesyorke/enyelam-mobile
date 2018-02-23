@@ -70,6 +70,14 @@ public class NYHelper {
     public static final int LOGIN_REQ = 101;
     public static final String ID_ORDER = "id_order";
     public static final String SUMMARY = "summary";
+    public static final String BANK_TRANSFER = "ban_transfer";
+    public static final String MIDTRANS = "midtrans";
+
+    public static final String NY_ACCEPT_FRAUD_STATUS = "accept";
+    public static final String NY_TRANSACTION_STATUS_CAPTURE = "capture";
+    public static final String TRANSACTION_COMPLETED = "transaction_completed";
+    public static final String TRANSACTION_PENDING = "pending";
+    public static final String CATEGORIES = "categories";
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));

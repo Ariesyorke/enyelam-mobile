@@ -152,7 +152,7 @@
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/total_dive_textView"
                             app:fontTextStyle="reguler"
-                            android:text="Total Dives \t\t\t\t\t\t: "
+                            android:text="Total Dives \t\t\t\t\t: "
                             android:textColor="@color/ny_black1"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -160,7 +160,7 @@
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/trip_durations_textView"
                             app:fontTextStyle="reguler"
-                            android:text="Trip Durations \t\t: "
+                            android:text="Trip Durations \t: "
                             android:textColor="@color/ny_black1"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -169,7 +169,7 @@
                     <com.nyelam.android.view.font.NYTextView
                         android:id="@+id/total_dive_spot_textView"
                         app:fontTextStyle="reguler"
-                        android:text="Total Dive Spots \t\t: "
+                        android:text="Total Dive Spots \t: "
                         android:textColor="@color/ny_black1"
                         android:layout_marginTop="@dimen/padding"
                         android:layout_width="match_parent"
@@ -201,7 +201,7 @@
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/address_textView"
                             app:fontTextStyle="reguler"
-                            android:text="Sanur Bali \nGedung Bali Aqua Lt.1, Jalan Sekar Waru No.1 \nDenpasar Selatan, Snur Kauh \nKota Denpasar, Bali - 08282"
+                            android:text="Address"
                             android:lineSpacingMultiplier="1.2"
                             android:textColor="@color/ny_black1"
                             android:layout_gravity="center_vertical"
@@ -223,7 +223,7 @@
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/phone_number_textView"
                             app:fontTextStyle="reguler"
-                            android:text="(0451) 721891"
+                            android:text="Phone Number"
                             android:textColor="@color/ny_black1"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
@@ -257,7 +257,7 @@
                         android:layout_marginRight="2dp"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
                         <ImageView
                             android:src="@drawable/ic_license"
                             android:layout_width="wrap_content"
@@ -282,7 +282,7 @@
                         android:layout_gravity="center"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
                         <ImageView
                             android:src="@drawable/ic_user_active"
                             android:layout_width="wrap_content"

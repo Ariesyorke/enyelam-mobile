@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -26,6 +27,9 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DoDiveSearchResultActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -40,6 +44,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private ImageView searchImageView;
     private int page = 1;
     private int sortingType = 1;
+    private ArrayList<String> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,13 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListDiveCenterActivity.class);
+                intent.putExtra(NYHelper.KEYWORD, keyword);
+                intent.putExtra(NYHelper.ID_DIVER, diverId);
+                intent.putExtra(NYHelper.DIVER, diver);
+                intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                intent.putExtra(NYHelper.SCHEDULE, date);
+                intent.putExtra(NYHelper.TYPE, type);
+                intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);
                 startActivity(intent);
             }
         });
@@ -94,11 +106,13 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         }
 
         NYDoDiveSearchDiveCenterRequest req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
-                url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType));
+                url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType), categories);
         spcMgr.execute(req, onSearchServiceRequest());
     }
 
     private void initExtra() {
+        categories = new ArrayList<>();
+
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -114,11 +128,13 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 type = extras.getString(NYHelper.TYPE);
             }
 
-            /*if(!extras.get(NYHelper.DIVE_SPOT_ID).equals(null)){
-                diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);
-            }*/
+            if(intent.hasExtra(NYHelper.CATEGORIES) && !extras.get(NYHelper.CATEGORIES).equals(null)){
+                categories = extras.getStringArrayList(NYHelper.CATEGORIES);
+            }
 
         }
+
+
     }
 
     private void initAdapter() {

@@ -2,6 +2,7 @@ package com.nyelam.android.http;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.widget.ListView;
 
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.data.AuthReturn;
@@ -10,6 +11,8 @@ import com.nyelam.android.data.DiveServiceList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
@@ -31,12 +34,19 @@ public class NYDoDiveSearchDiveCenterRequest extends NYBasicRequest<DiveCenterLi
     private static final String POST_PROVINCE_ID = "province_id";
     private static final String POST_CITY_ID = "city_id";
     private static final String POST_SORT_BY = "sort_by";
+    private static final String POST_CATEGORIES = "dive_category_id[]";
 
-    public NYDoDiveSearchDiveCenterRequest(Context context, String apiPath, String page, String diverId, String type, String certificate, String diver, String date, String sortBy) {
+    public NYDoDiveSearchDiveCenterRequest(Context context, String apiPath, String page, String diverId, String type, String certificate, String diver, String date, String sortBy, List<String> categories) {
         super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(page)) {
             addQuery(POST_PAGE, page);
+        }
+
+        if (categories != null && categories.size() > 0){
+            for (String st : categories){
+                addQuery(POST_CATEGORIES, st);
+            }
         }
 
         if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(diverId)) {

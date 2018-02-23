@@ -3,6 +3,11 @@
     <integer name="api_ver">1</integer>
     <string name="google_public_api_key">AIzaSyDVv3hzB0qfY3oW0NXJtQMtx4SYw3re9_k</string>
 
+    <string name="client_key">Mid-client-LmqmZSunNywXQf-f</string>
+    <string name="client_key_development">SB-Mid-client-_2uec0T1LQec4odt</string>
+    <string name="api_veritrans_production">https://api.veritrans.co.id/v2</string>
+    <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
+
 
     <string name="host_url">http://nyelam-adam.dantech.id/</string>
     <string name="api_path_login">api/user/login</string>

@@ -87,7 +87,7 @@ public class DoDiveResultDiveCenterFragment extends Fragment {
         }
 
         NYDoDiveSearchDiveCenterRequest req = new NYDoDiveSearchDiveCenterRequest(getActivity(),
-                url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(0));
+                url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(0), null);
         spcMgr.execute(req, onSearchServiceRequest());
     }
 

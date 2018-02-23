@@ -185,7 +185,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         serviceList = new ArrayList<>();
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
-        recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
+        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
         serviceAdapter = new DoDiveSearchServiceAdapter(this, diver, schedule, certificate);
         recyclerView.setAdapter(serviceAdapter);
     }

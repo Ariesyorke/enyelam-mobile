@@ -6,19 +6,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.midtrans.sdk.corekit.core.MidtransSDK;
+import com.midtrans.sdk.corekit.core.TransactionRequest;
+import com.midtrans.sdk.corekit.models.CustomerDetails;
+import com.midtrans.sdk.corekit.models.ItemDetails;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.CartReturn;
+import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
@@ -29,6 +37,7 @@ import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -47,6 +56,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private int diver = 0;
     private String schedule = "0";
     private String certificate = "0";
+    private String payment = NYHelper.BANK_TRANSFER;
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -57,6 +67,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView;
     private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
     private RatingBar ratingBar;
+
+    private RadioGroup radioGroup;
+    private RadioButton bankTransferRadioButton, midtransRadioButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +96,27 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
             }
         });
+
+        midtransRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (midtransRadioButton.isChecked()){
+                    bankTransferRadioButton.setChecked(false);
+                    payment = NYHelper.MIDTRANS;
+                }
+            }
+        });
+
+        bankTransferRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bankTransferRadioButton.isChecked()){
+                    midtransRadioButton.setChecked(false);
+                    payment = NYHelper.BANK_TRANSFER;
+                }
+            }
+        });
+
     }
 
     private void initData() {
@@ -273,6 +308,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         ratingTextView = (TextView) findViewById(R.id.rating_textView);
         visitedTextView = (TextView) findViewById(R.id.visited_textView);
 
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
+        midtransRadioButton = (RadioButton) findViewById(R.id.midtransRadioButton);
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));
@@ -355,10 +394,37 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
-                                if (result != null && NYHelper.isStringNotEmpty(result.toString()))intent.putExtra(NYHelper.SUMMARY, result.toString());
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                                if (payment.equals(NYHelper.MIDTRANS)){
+                                    TransactionRequest transactionRequest = new TransactionRequest(result.getOrder().getOrderId(), result.getOrder().getCart().getTotal());
+                                    //ADD ORDERED ITEMS
+                                    ArrayList<ItemDetails> itemDetails = new ArrayList<>();
+                                    /*for (int i = 0; i < result.getOrder().getCart().get.getList().size(); i++) {
+                                        ItemDetails item = new ItemDetails(tickets.getList().get(i).getId(), (int) (tickets.getList().get(i).getSpecialPrice() > 0 ? tickets.getList().get(i).getSpecialPrice() : tickets.getList().get(i).getPrice()), tickets.getList().get(i).getOrderedTicket(), tickets.getList().get(i).getTicketType());
+                                        itemDetails.add(item);
+                                    }*/
+
+
+                                    for (int i = 0; i < result.getParticipants().size(); i++) {
+                                        ItemDetails item = new ItemDetails(result.getDiveService().getId(), (int) (result.getDiveService().getSpecialPrice() > 0 ? result.getDiveService().getSpecialPrice() : result.getDiveService().getNormalPrice()), 1, result.getDiveService().getName());
+                                        itemDetails.add(item);
+                                    }
+                                    transactionRequest.setItemDetails(itemDetails);
+
+
+                                    Contact contact = result.getContact();
+                                    CustomerDetails customerDetails = new CustomerDetails( contact.getName(), null, contact.getEmailAddress(), contact.getPhoneNumber());
+
+                                    transactionRequest.setCustomerDetails(customerDetails);
+                                    MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
+                                    MidtransSDK.getInstance().startPaymentUiFlow(BookingServiceSummaryActivity.this);
+
+                                } else {
+                                    Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                                    if (result != null && NYHelper.isStringNotEmpty(result.toString()))intent.putExtra(NYHelper.SUMMARY, result.toString());
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                }
+
                             }
                         });
             }

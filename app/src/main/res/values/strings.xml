@@ -101,6 +101,7 @@
     <string name="message_update_profile_success">Your profile has been successfully updated</string>
 
     <string name="confirmation_payment_success">Your confirmation payment has been send, thanks.</string>
+    <string name="transaction_success">Thank you for your order!</string>
 
 
     <!--Booking-->

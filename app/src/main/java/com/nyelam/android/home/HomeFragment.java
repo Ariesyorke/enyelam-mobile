@@ -13,39 +13,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.bookinghistory.BookingHistoryListAdapter;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
-import com.nyelam.android.data.DiveCenter;
-import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Module;
 import com.nyelam.android.data.ModuleList;
-import com.nyelam.android.detail.DetailServiceActivity;
 import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.divecenter.DiveCenterDetailActivity;
-import com.nyelam.android.divecenter.DiveCenterDetailFragment;
-import com.nyelam.android.divecenter.DiveCenterListServiceFragment;
-import com.nyelam.android.divecenter.DiveCenterMapFragment;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYDoDiveCenterDetailRequest;
 import com.nyelam.android.http.NYHomepageModuleRequest;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
