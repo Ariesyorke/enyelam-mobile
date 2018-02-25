@@ -55,7 +55,6 @@ public class NYMasterDataStorage {
         loadCountriesInternal(listener, true, clearOnSuccess);
     }
 
-
     private List<CountryCode> loadCountriesFromCacheInternal(DaoSession session) {
         List<NYCountryCode> rawInterests = session.getNYCountryCodeDao().queryBuilder().list();
         return NYHelper.generateList(rawInterests, CountryCode.class);
@@ -147,11 +146,6 @@ public class NYMasterDataStorage {
         };
         new Thread(runnable).start();
     }
-
-
-
-
-
 
 
 

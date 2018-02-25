@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 
 public class ForgotPasswordStorage extends AbstractStorage {
-    private static final String FILENAME = "kleen:storage:forgot-password";
+    private static final String FILENAME = "nyelam:storage:forgot-password";
     private static final String KEY_FORGOT = "forgot";
     private static final String KEY_EMAIL = "email";
 
