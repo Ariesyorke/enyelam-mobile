@@ -90,12 +90,15 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
                 .setColorTheme(new CustomColorTheme("#FFE51255", "#B61548", "#FFE51255")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
 
-        SdkCoreFlowBuilder.init()
+
+
+
+        /*SdkCoreFlowBuilder.init()
                 .setContext(this)
                 .enableLog(true)
                 .setClientKey(getResources().getString(R.string.client_key_development))
                 .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development))
-                .buildSDK();
+                .buildSDK();*/
 
     }
 
