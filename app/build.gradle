@@ -33,11 +33,10 @@ dependencies {
     /*compile 'com.github.sharish:ShimmerRecyclerView:v1.2'*/
 
     // For u sing the Veritrans Sandbox
-    //compile 'com.midtrans:corekit:1.15.0-SANDBOX'
-    compile 'com.midtrans:uikit:1.15.0-SANDBOX'
-    compile ('com.midtrans:scancard:1.15.0'){
-        exclude module: 'uikit'
-    }
+    /*compile ('com.midtrans:scancard:1.15.0'){
+            exclude module: 'uikit'
+        }*/
+
     // For using the Veritrans Production
 
     // compile 'com.midtrans:corekit:1.11.0'
@@ -76,4 +75,5 @@ dependencies {
     compile 'org.sufficientlysecure:html-textview:3.5'
     compile 'com.android.support:multidex:1.0.0'
     testCompile 'junit:junit:4.12'
+    compile project(':uikit')
 }

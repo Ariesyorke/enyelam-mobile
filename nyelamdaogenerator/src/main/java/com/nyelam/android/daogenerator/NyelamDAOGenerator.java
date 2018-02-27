@@ -25,6 +25,8 @@ public class NyelamDAOGenerator {
         category.addStringProperty("name");
         category.addStringProperty("iconUrl");
         category.addByteArrayProperty("iconImage");
+
+
         //category.addBooleanProperty("status");
 
         try {

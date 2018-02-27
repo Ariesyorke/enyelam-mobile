@@ -1,1 +1,1 @@
-include ':app', ':nyelamdaogenerator'
+include ':app', ':nyelamdaogenerator', ':uikit'

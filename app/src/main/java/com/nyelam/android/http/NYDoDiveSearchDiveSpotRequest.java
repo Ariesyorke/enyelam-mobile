@@ -27,7 +27,7 @@ public class NYDoDiveSearchDiveSpotRequest extends NYBasicRequest<DiveSpotList> 
     private static final String POST_DIVER = "diver";
     private static final String POST_DATE = "date";
     private static final String POST_DIVE_SPOT_ID = "dive_spot_id";
-    private static final String POST_DIVE_CATEGORY_ID = "dive_category_id";
+    private static final String POST_DIVE_CATEGORY_ID = "dive_category_id[]";
 
     public NYDoDiveSearchDiveSpotRequest(Context context, String apiPath, String page, String diverId, String type) {
         super(AuthReturn.class, context, apiPath);

@@ -28,7 +28,7 @@ public class NYDoDiveSearchDiveCenterRequest extends NYBasicRequest<DiveCenterLi
     private static final String POST_DATE = "date";
 
     private static final String POST_DIVE_SPOT_ID = "dive_spot_id";
-    private static final String POST_DIVE_CATEGORY_ID = "dive_category_id";
+    private static final String POST_DIVE_CATEGORY_ID = "dive_category_id[]";
     //private static final String POST_DIVE_CENTER_ID = "dive_center_id";
     //private static final String POST_COUNTRY_ID = "country_id";
     private static final String POST_PROVINCE_ID = "province_id";
