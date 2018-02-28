@@ -39,7 +39,10 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
+        checkConnection();
+    }
 
+    private void checkConnection() {
         if (NYHelper.checkConnection(StarterActivity.this)) {
             // Its Available...
             startSplashTimer();
@@ -52,11 +55,12 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                             if (NYHelper.checkConnection(StarterActivity.this)){
                                 dialog.dismiss();
                                 startSplashTimer();
+                            } else {
+                                checkConnection();
                             }
                         }
-            });
+                    });
         }
-
     }
 
     private void startSplashTimer() {
@@ -92,12 +96,12 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         masterDataStorage.loadCountries(new NYMasterDataStorage.LoadDataListener<CountryCode>() {
             @Override
             public void onLoadFailed(Exception e) {
-                NYHelper.handleAPIException(StarterActivity.this, e, new DialogInterface.OnClickListener() {
+                /*NYHelper.handleAPIException(StarterActivity.this, e, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
                     }
-                });
+                });*/
             }
 
             @Override
@@ -118,12 +122,12 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         masterDataStorage.loadCategories(new NYMasterDataStorage.LoadDataListener<Category>() {
             @Override
             public void onLoadFailed(Exception e) {
-                NYHelper.handleAPIException(StarterActivity.this, e, new DialogInterface.OnClickListener() {
+                /*NYHelper.handleAPIException(StarterActivity.this, e, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
                     }
-                });
+                });*/
             }
 
             @Override
