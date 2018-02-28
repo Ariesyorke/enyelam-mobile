@@ -26,6 +26,8 @@ import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYHomepageModuleRequest;
+import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -137,29 +139,32 @@ public class HomeFragment extends Fragment {
 
                 if (results != null && results.getList() != null && results.getList().size() > 1){
 
-                    NYLog.e("CEK MODULE 6 "+results.getList().toString());
+                    ModulHomepageStorage modulHomepageStorage = new ModulHomepageStorage(getActivity());
 
                     for (Module module : results.getList()){
 
                         if (module.getName().equals("Event") && module.getEvents() != null && module.getEvents().size() > 0 ){
                             eventsRecyclerViewAdapter.addResults(module.getEvents());
                             eventsRecyclerViewAdapter.notifyDataSetChanged();
-                            NYLog.e("CEK MODULE 6 SUCCESS");
+                            // TODO: SAVE TO STORAGE
+                            modulHomepageStorage.setModuleEvents(module.getEvents());
                         } else if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
                             hotOffersRecyclerViewAdapter.addResults(module.getDiveServices());
                             hotOffersRecyclerViewAdapter.notifyDataSetChanged();
+                            // TODO: SAVE TO STORAGE
+                            modulHomepageStorage.setModuleServices(module.getDiveServices());
                         } else if (module.getName().equals("Popular Dive Spots") && module.getDiveSpots() != null && module.getDiveSpots().size() > 0 ){
                             popularDiveSpotsRecyclerViewAdapter.addResults(module.getDiveSpots());
                             popularDiveSpotsRecyclerViewAdapter.notifyDataSetChanged();
+                            // TODO: SAVE TO STORAGE
+                            modulHomepageStorage.setModuleDiveSpots(module.getDiveSpots());
                         }
 
                     }
 
+                    modulHomepageStorage.save();
 
                 }
-
-
-
 
             }
         };
@@ -275,6 +280,27 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         spcMgr.start(getActivity());
+        initCacheModule();
+    }
+
+    private void initCacheModule() {
+        ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
+
+        if (modulStorage != null){
+
+            if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0 ){
+                eventsRecyclerViewAdapter.addResults(modulStorage.getModuleEvents());
+                eventsRecyclerViewAdapter.notifyDataSetChanged();
+            } else if (modulStorage.getModuleServices() != null && modulStorage.getModuleServices().size() > 0 ){
+                hotOffersRecyclerViewAdapter.addResults(modulStorage.getModuleServices());
+                hotOffersRecyclerViewAdapter.notifyDataSetChanged();
+            } else if (modulStorage.getModuleDiveSpots() != null && modulStorage.getModuleDiveSpots().size() > 0 ){
+                popularDiveSpotsRecyclerViewAdapter.addResults(modulStorage.getModuleDiveSpots());
+                popularDiveSpotsRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+        }
+
     }
 
     @Override
@@ -283,10 +309,15 @@ public class HomeFragment extends Fragment {
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         //void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
 }

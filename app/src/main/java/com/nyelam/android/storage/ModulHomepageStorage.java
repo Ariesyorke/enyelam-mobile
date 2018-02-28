@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.danzoye.lib.util.AbstractStorage;
+import com.nyelam.android.data.Additional;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Event;
@@ -12,6 +13,7 @@ import com.nyelam.android.data.ModuleDiveSpot;
 import com.nyelam.android.data.ModuleEvent;
 import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.data.ModuleService;
+import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
@@ -34,31 +36,31 @@ public class ModulHomepageStorage extends AbstractStorage {
     private static final String KEY_MODULE_EVENT = "Events";
     private static final String KEY_MODULE_SERVICE = "Hot Offer";
 
-    public ModuleDiveSpot moduleDiveSpots;
-    public ModuleEvent moduleEvents;
-    public ModuleService moduleServices;
+    public List<DiveSpot> moduleDiveSpots;
+    public List<Event> moduleEvents;
+    public List<DiveService> moduleServices;
 
-    public ModuleDiveSpot getModuleDiveSpots() {
+    public List<DiveSpot> getModuleDiveSpots() {
         return moduleDiveSpots;
     }
 
-    public void setModuleDiveSpots(ModuleDiveSpot moduleDiveSpots) {
+    public void setModuleDiveSpots(List<DiveSpot> moduleDiveSpots) {
         this.moduleDiveSpots = moduleDiveSpots;
     }
 
-    public ModuleEvent getModuleEvents() {
+    public List<Event> getModuleEvents() {
         return moduleEvents;
     }
 
-    public void setModuleEvents(ModuleEvent moduleEvents) {
+    public void setModuleEvents(List<Event> moduleEvents) {
         this.moduleEvents = moduleEvents;
     }
 
-    public ModuleService getModuleServices() {
+    public List<DiveService> getModuleServices() {
         return moduleServices;
     }
 
-    public void setModuleServices(ModuleService moduleServices) {
+    public void setModuleServices(List<DiveService> moduleServices) {
         this.moduleServices = moduleServices;
     }
 
@@ -75,47 +77,50 @@ public class ModulHomepageStorage extends AbstractStorage {
     @Override
     protected void onParseData(JSONObject obj) throws JSONException {
 
-        if (obj.has(KEY_MODULES) &&  obj.get(KEY_MODULES) instanceof JSONArray){
-
-            JSONArray array = obj.getJSONArray(KEY_MODULES);
-
-            ModuleList list = new ModuleList();
-            list.parse(array);
-
-            if (array.length() > 0){
-
-                for(int i = 0; i < array.length(); i++) {
-                    JSONObject o = array.getJSONObject(i);
-                    String type = o.getString("module_name");
-                    //Module result = null;
-
-                    NYLog.e("CEK MODULE : "+i+" , "+o.toString());
-
-                    if (type.equals("Event")) {
-
-                        NYLog.e("CEK MODULE : event");
-
-                        moduleEvents = new ModuleEvent();
-                        moduleEvents.parse(o);
-                    } else if (type.equals("Hot Offer")){
-
-                        NYLog.e("CEK MODULE : hot offer");
-
-                        moduleServices = new ModuleService();
-                        moduleServices.parse(o);
-                    } else if (type.equals("Popular Dive Spots")){
-
-                        NYLog.e("CEK MODULE : dive spot");
-
-                        moduleDiveSpots = new ModuleDiveSpot();
-                        moduleDiveSpots.parse(o);
+        try {
+            if (!obj.isNull(KEY_MODULE_EVENT)) {
+                JSONArray array = obj.getJSONArray(KEY_MODULE_EVENT);
+                if (array != null && array.length() > 0) {
+                    moduleEvents = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        Event event = new Event();
+                        event.parse(o);
+                        moduleEvents.add(event);
                     }
-
                 }
-
             }
+        } catch (JSONException e) {e.printStackTrace();}
 
-        }
+        try {
+            if (!obj.isNull(KEY_MODULE_SERVICE)) {
+                JSONArray array = obj.getJSONArray(KEY_MODULE_SERVICE);
+                if (array != null && array.length() > 0) {
+                    moduleServices = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        DiveService service = new DiveService();
+                        service.parse(o);
+                        moduleServices.add(service);
+                    }
+                }
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_MODULE_DIVE_SPOT)) {
+                JSONArray array = obj.getJSONArray(KEY_MODULE_DIVE_SPOT);
+                if (array != null && array.length() > 0) {
+                    moduleDiveSpots = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        DiveSpot diveSpot = new DiveSpot();
+                        diveSpot.parse(o);
+                        moduleDiveSpots.add(diveSpot);
+                    }
+                }
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
     }
 
@@ -126,7 +131,7 @@ public class ModulHomepageStorage extends AbstractStorage {
         try {
             if (moduleEvents != null) {
                 JSONArray array = new JSONArray();
-                for (Event a : getModuleEvents().getEvents()) {
+                for (Event a : getModuleEvents()) {
                     JSONObject o = new JSONObject(a.toString());
                     array.put(o);
                 }
@@ -139,7 +144,7 @@ public class ModulHomepageStorage extends AbstractStorage {
         try {
             if (moduleServices != null) {
                 JSONArray array = new JSONArray();
-                for (DiveService a : getModuleServices().getDiveServices()) {
+                for (DiveService a : getModuleServices()) {
                     JSONObject o = new JSONObject(a.toString());
                     array.put(o);
                 }
@@ -153,7 +158,7 @@ public class ModulHomepageStorage extends AbstractStorage {
         try {
             if (moduleDiveSpots != null) {
                 JSONArray array = new JSONArray();
-                for (DiveSpot a : getModuleDiveSpots().getDiveSpots()) {
+                for (DiveSpot a : getModuleDiveSpots()) {
                     JSONObject o = new JSONObject(a.toString());
                     array.put(o);
                 }
