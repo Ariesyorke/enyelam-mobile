@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -236,6 +237,12 @@ public class EcoTripActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void initView() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+
         titleTextView = (TextView) findViewById(R.id.title_textView);
         keywordTextView = (com.nyelam.android.view.NYEditTextWarning) findViewById(R.id.keyword_textView);
         diverSpinner = (Spinner) findViewById(R.id.diver_spinner);
@@ -260,7 +267,6 @@ public class EcoTripActivity extends AppCompatActivity implements DatePickerDial
 
         date = String.valueOf(cal.getTimeInMillis()/1000);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

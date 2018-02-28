@@ -1,15 +1,21 @@
 package com.nyelam.android.storage;
 
+import android.app.Service;
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.danzoye.lib.util.AbstractStorage;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.Order;
+import com.nyelam.android.data.Participant;
 import com.nyelam.android.dev.NYLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by dantech on 11/7/16.
@@ -17,14 +23,18 @@ import org.json.JSONObject;
 public class VeritransStorage extends AbstractStorage {
     private static final String FILENAME = "nyelam:storage:veritrans-token";
     private static final String KEY_VERITRANS_TOKEN = "veritrans_token";
-    private static final String KEY_ORDER_ID = "order_id";
+    private static final String KEY_ORDER = "order";
     private static final String KEY_CONTACT = "contact";
     private static final String KEY_CART = "cart";
+    private static final String KEY_SERVICE = "service";
+    private static final String KEY_TOTAL_PARTICIPANTS = "total_participants";
 
-    public String orderId;
+    public Order order;
     public String veritransToken;
     public Contact contact;
     public Cart cart;
+    public DiveService service;
+    public int totalParticipants;
 
     public VeritransStorage(Context context) {
         super(context);
@@ -42,8 +52,10 @@ public class VeritransStorage extends AbstractStorage {
         if (!obj.isNull(KEY_VERITRANS_TOKEN)) {
             veritransToken = obj.getString(KEY_VERITRANS_TOKEN);
         }
-        if (!obj.isNull(KEY_ORDER_ID)) {
-            orderId = obj.getString(KEY_ORDER_ID);
+        if(!obj.isNull(KEY_ORDER)) {
+            JSONObject o = obj.getJSONObject(KEY_ORDER);
+            order = new Order();
+            order.parse(o);
         }
         if(!obj.isNull(KEY_CONTACT)) {
             JSONObject o = obj.getJSONObject(KEY_CONTACT);
@@ -55,6 +67,15 @@ public class VeritransStorage extends AbstractStorage {
             cart = new Cart();
             cart.parse(o);
         }
+        if(!obj.isNull(KEY_SERVICE)) {
+            JSONObject o = obj.getJSONObject(KEY_SERVICE);
+            service = new DiveService();
+            service.parse(o);
+        }
+
+        if(!obj.isNull(KEY_TOTAL_PARTICIPANTS)) {
+            totalParticipants = obj.getInt(KEY_TOTAL_PARTICIPANTS);
+        }
     }
 
     @Override
@@ -63,8 +84,8 @@ public class VeritransStorage extends AbstractStorage {
         if (!TextUtils.isEmpty(veritransToken)) {
             obj.put(KEY_VERITRANS_TOKEN, veritransToken);
         }
-        if (!TextUtils.isEmpty(orderId)) {
-            obj.put(KEY_ORDER_ID, orderId);
+        if(cart != null) {
+            obj.put(KEY_ORDER, new JSONObject(order.toString()));
         }
         if(contact != null) {
             obj.put(KEY_CONTACT, new JSONObject(contact.toString()));
@@ -72,6 +93,11 @@ public class VeritransStorage extends AbstractStorage {
         if(cart != null) {
             obj.put(KEY_CART, new JSONObject(cart.toString()));
         }
+        if(service != null) {
+            obj.put(KEY_SERVICE, new JSONObject(service.toString()));
+        }
+        obj.put(KEY_TOTAL_PARTICIPANTS, totalParticipants);
+
         return obj;
     }
 }

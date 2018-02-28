@@ -3,6 +3,7 @@ package com.nyelam.android;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
@@ -76,7 +77,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         //SdkUIFlowBuilder.init(getApplicationContext(),getResources().getString(R.string.client_key_development),getResources().getString(R.string.api_veritrans_development),this);
 
 
-        /*SdkUIFlowBuilder.init()
+        SdkUIFlowBuilder.init()
                 .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(this) // context is mandatory
                 .setTransactionFinishedCallback(new TransactionFinishedCallback() {
@@ -87,11 +88,8 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
                 }) // set transaction finish callback (sdk callback)
                 .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
-                .setColorTheme(new CustomColorTheme("#FFE51255", "#B61548", "#FFE51255")) // set theme. it will replace theme on snap theme on MAP ( optional)
-                .buildSDK();*/
-
-
-
+                .setColorTheme(new CustomColorTheme("#FFE51255", "#2196F3","#FFE51255")) // set theme. it will replace theme on snap theme on MAP ( optional)
+                .buildSDK();
 
         /*SdkCoreFlowBuilder.init()
                 .setContext(this)

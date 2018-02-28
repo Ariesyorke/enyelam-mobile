@@ -10,20 +10,29 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchResultList;
 import com.nyelam.android.data.SearchService;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
+import com.nyelam.android.storage.KeywordHistoryStorage;
+import com.nyelam.android.storage.ModulHomepageStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class DoDiveSearchActivity extends AppCompatActivity {
 
@@ -101,13 +110,30 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                     NYDoDiveSearchTypeRequest req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
                     spcMgr.execute(req, onSearchKeywordRequest());
                 } else {
-                    doDiveSearchAdapter.clear();
-                    doDiveSearchAdapter.notifyDataSetChanged();
-                    labelTextView.setText(getResources().getString(R.string.recent_searches));
-                    noResultTextView.setVisibility(View.VISIBLE);
+                    loadHistoryCache();
                 }
             }
         });
+    }
+
+    private void loadHistoryCache() {
+        doDiveSearchAdapter.clear();
+        KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(DoDiveSearchActivity.this);
+        if (keywordHistoryStorage.getSearchResults() != null){
+            noResultTextView.setVisibility(View.GONE);
+            doDiveSearchAdapter.clear();
+
+            List<SearchResult> searchList = new ArrayList<>();
+            searchList = keywordHistoryStorage.getSearchResults();
+            Collections.reverse(searchList);
+            doDiveSearchAdapter.addResults(searchList);
+            doDiveSearchAdapter.notifyDataSetChanged();
+
+        } else {
+            doDiveSearchAdapter.clear();
+            doDiveSearchAdapter.notifyDataSetChanged();
+            noResultTextView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initView() {
@@ -136,6 +162,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                 /*if(progressDialog != null && progressDialog.isShowing()){
                     progressDialog.dismiss();
                 }*/
+
                 if (results != null){
                     noResultTextView.setVisibility(View.GONE);
                     doDiveSearchAdapter.clear();
@@ -157,12 +184,15 @@ public class DoDiveSearchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         spcMgr.start(this);
+        KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(this);
+        NYLog.e("cek history : "+keywordHistoryStorage.getSearchResults());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
+        loadHistoryCache();
     }
 
 

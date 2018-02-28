@@ -49,13 +49,17 @@ import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.data.Order;
+import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
 import com.nyelam.android.data.Summary;
+import com.nyelam.android.data.VeritransToken;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.storage.VeritransStorage;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
@@ -74,6 +78,7 @@ import java.util.Map;
 public class BookingServiceSummaryActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener, TransactionFinishedCallback {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    private OrderReturn orderReturn;
     private ProgressDialog progressDialog;
     private DiveService diveService;
     private int diver = 0;
@@ -110,7 +115,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         initParticipantLayout();
         initControl();
         // SDK initiation for UIflow
-        initMidtransSdk();
+        //initMidtransSdk();
     }
 
 
@@ -404,8 +409,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
-    private RequestListener<Summary> onCreateOrderServiceRequest() {
-        return new RequestListener<Summary>() {
+    private RequestListener<OrderReturn> onCreateOrderServiceRequest() {
+        return new RequestListener<OrderReturn>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (progressDialog != null) {
@@ -415,9 +420,20 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
 
             @Override
-            public void onRequestSuccess(final Summary result) {
+            public void onRequestSuccess(final OrderReturn result) {
                 if (progressDialog != null) {
                     progressDialog.dismiss();
+                }
+
+                orderReturn = result;
+                if (result != null){
+                    VeritransStorage veritransStorage = new VeritransStorage(BookingServiceSummaryActivity.this);
+                    veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
+                    veritransStorage.contact = result.getSummary().getContact();
+                    veritransStorage.cart = result.getSummary().getOrder().getCart();
+                    veritransStorage.order = result.getSummary().getOrder();
+                    veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
+                    veritransStorage.save();
                 }
 
                 NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Your order was successful", false,
@@ -425,45 +441,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (payment.equals(NYHelper.MIDTRANS)){
-
-
-
-                                    /*NYGetVeritransToken req = new NYGetVeritransToken(OrderActivity.this, cartReturn.cartToken, voucherCode, contact, ticketDrafts, lastBestLoc);
-                                    spcMgr.execute(req, onGetVeritransRequest());*/
-
-
-
-                                    /*TransactionRequest transactionRequest = new TransactionRequest(result.getOrder().getOrderId(), result.getOrder().getCart().getTotal());
-                                    //ADD ORDERED ITEMS
-                                    ArrayList<ItemDetails> itemDetails = new ArrayList<>();
-                                    *//*for (int i = 0; i < result.getOrder().getCart().get.getList().size(); i++) {
-                                        ItemDetails item = new ItemDetails(tickets.getList().get(i).getId(), (int) (tickets.getList().get(i).getSpecialPrice() > 0 ? tickets.getList().get(i).getSpecialPrice() : tickets.getList().get(i).getPrice()), tickets.getList().get(i).getOrderedTicket(), tickets.getList().get(i).getTicketType());
-                                        itemDetails.add(item);
-                                    }*//*
-
-
-                                    for (int i = 0; i < result.getParticipants().size(); i++) {
-                                        ItemDetails item = new ItemDetails(result.getDiveService().getId(), (int) (result.getDiveService().getSpecialPrice() > 0 ? result.getDiveService().getSpecialPrice() : result.getDiveService().getNormalPrice()), 1, result.getDiveService().getName());
-                                        itemDetails.add(item);
-                                    }
-                                    transactionRequest.setItemDetails(itemDetails);
-
-
-                                    Contact contact = result.getContact();
-                                    CustomerDetails customerDetails = new CustomerDetails( contact.getName(), null, contact.getEmailAddress(), contact.getPhoneNumber());
-
-                                    transactionRequest.setCustomerDetails(customerDetails);a
-                                    MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
-                                    MidtransSDK.getInstance().startPaymentUiFlow(BookingServiceSummaryActivity.this);*/
-
-
-                                    /*MidtransSDK.getInstance().setTransactionRequest(initTransactionRequest());
-                                    NYLog.e("OPO IKI TRANS DONE");
-                                    UIKitCustomSetting setting = MidtransSDK.getInstance().getUIKitCustomSetting();
-                                    setting.setSkipCustomerDetailsPages(true);
-                                    MidtransSDK.getInstance().setUIKitCustomSetting(setting);
-                                    MidtransSDK.getInstance().startPaymentUiFlow(BookingServiceSummaryActivity.this);
-                                    NYLog.e("OPO IKI PAYMENT");*/
 
                                     testVeritrans();
 
@@ -482,76 +459,51 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     private void testVeritrans() {
 
-        UserDetail userDetail = null;
+        VeritransStorage veritransStorage = new VeritransStorage(this);
+        Contact contact = veritransStorage.contact;
+        Order order = veritransStorage.order;
+        String token = veritransStorage.veritransToken;
+        Cart cart = veritransStorage.cart;
+        DiveService service = veritransStorage.service;
+        Integer totalParticipants = veritransStorage.totalParticipants;
 
-        if (userDetail == null) {
-            userDetail = new UserDetail();
-            userDetail.setUserFullName("Budi Utomo");
-            userDetail.setEmail("budi@utomo.com");
-            userDetail.setPhoneNumber("08123456789");
-            // set user ID as identifier of saved card (can be anything as long as unique),
-            // randomly generated by SDK if not supplied
-            userDetail.setUserId("budi-6789");
+        if (veritransStorage != null){
+            UserDetail userDetail = null;
 
-            /*ArrayList<UserAddress> userAddresses = new ArrayList<>();
-            UserAddress userAddress = new UserAddress();
-            userAddress.setAddress("Jalan Andalas Gang Sebelah No. 1");
-            userAddress.setCity("Jakarta");
-            userAddress.setAddressType(com.midtrans.sdk.corekit.core.Constants.ADDRESS_TYPE_BOTH);
-            userAddress.setZipcode("12345");
-            userAddress.setCountry("IDN");
-            userAddresses.add(userAddress);
-            userDetail.setUserAddresses(userAddresses);*/
-            LocalDataHandler.saveObject("user_details", userDetail);
+            if (userDetail == null) {
+                userDetail = new UserDetail();
+                if (contact != null){
+                    userDetail.setUserFullName(contact.getName());
+                    userDetail.setEmail(contact.getEmailAddress());
+                    userDetail.setPhoneNumber(contact.getPhoneNumber());
+
+                    LoginStorage loginStorage = new LoginStorage(this);
+                    userDetail.setUserId(loginStorage.user.getUserId());
+                    LocalDataHandler.saveObject("user_details", userDetail);
+                }
+            }
+
+            UIKitCustomSetting setting = MidtransSDK.getInstance().getUIKitCustomSetting();
+            setting.setSkipCustomerDetailsPages(true);
+            MidtransSDK.getInstance().setUIKitCustomSetting(setting);
+
+            TransactionRequest transactionRequest;
+            if (cart != null){
+                transactionRequest = new TransactionRequest(order.getOrderId(), cart.getTotal());
+            } else {
+                transactionRequest = new TransactionRequest(order.getOrderId(), 0);
+            }
+
+            // Create array list and add above item details in it and then set it to transaction request.
+            ArrayList<ItemDetails> itemDetailsList = new ArrayList<>();
+            if (service != null)itemDetailsList.add(new ItemDetails(service.getId(), (int)service.getNormalPrice(), totalParticipants, service.getName()));
+            transactionRequest.setItemDetails(itemDetailsList);
+
+            MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
+            MidtransSDK.getInstance().startPaymentUiFlow(this, token);
+            //MidtransSDK.getInstance().startPaymentUiFlow(this, "eba5b676-abea-4b6d-8f88-3ad1517f2e2e");
         }
 
-        UIKitCustomSetting setting = MidtransSDK.getInstance().getUIKitCustomSetting();
-        setting.setSkipCustomerDetailsPages(true);
-        MidtransSDK.getInstance().setUIKitCustomSetting(setting);
-
-
-        TransactionRequest transactionRequest = new TransactionRequest("1", 600000);
-
-
-
-
-
-        ItemDetails itemDetails1 = new ItemDetails("1", 6000, 2, "Item 1");
-        ItemDetails itemDetails2 = new ItemDetails("2", 75000, 1, "Item 2");
-
-        // Create array list and add above item details in it and then set it to transaction request.
-        ArrayList<ItemDetails> itemDetailsList = new ArrayList<>();
-        itemDetailsList.add(itemDetails1);
-        itemDetailsList.add(itemDetails2);
-
-        // Set item details into the transaction request.
-        transactionRequest.setItemDetails(itemDetailsList);
-
-
-
-//        CreditCard creditCardOptions = new CreditCard();
-//        // Set to true if you want to save card to Snap
-//        creditCardOptions.setSaveCard(false);
-//        // Set to true to save card token as `one click` token
-//        creditCardOptions.setSecure(false);
-//        // Set bank name when using MIGS channel
-//        creditCardOptions.setBank(BankType.BCA);
-//        // Set MIGS channel (ONLY for BCA, BRI and Maybank Acquiring bank)
-//        //creditCardOptions.setChannel(CreditCard.MIGS);
-//        // Set Credit Card Options
-//        transactionRequest.setCreditCard(creditCardOptions);
-        // Set transaction request into SDK instance
-
-
-
-        ArrayList<String> enablePayments = new ArrayList<>();
-        enablePayments.add("bank_transfer");
-        enablePayments.add("credit_card");
-        transactionRequest.setEnabledPayments(enablePayments);
-
-        MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
-
-        MidtransSDK.getInstance().startPaymentUiFlow(this);
 
     }
 
@@ -624,107 +576,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     }
 
-
-
-
-    private TransactionRequest initTransactionRequest() {
-        // Create new Transaction Request
-        TransactionRequest transactionRequestNew = new
-                TransactionRequest(System.currentTimeMillis() + "", 6000);
-
-        //set customer details
-        transactionRequestNew.setCustomerDetails(initCustomerDetails());
-
-        // Set user details
-        UserDetail userDetail = new UserDetail();
-        userDetail.setUserFullName("Aprilian");
-        userDetail.setEmail("aprilian@gmail.com");
-        userDetail.setPhoneNumber("018882828");
-        userDetail.setUserId("1");
-        // Save the user detail. It will skip the user detail screen
-        LocalDataHandler.saveObject("user_detail", userDetail);
-
-        // set item details
-        ItemDetails itemDetails = new ItemDetails("1", 1000, 1, "Trekking Shoes");
-        ItemDetails itemDetails1 = new ItemDetails("2", 1000, 2, "Casual Shoes");
-        ItemDetails itemDetails2 = new ItemDetails("3", 1000, 3, "Formal Shoes");
-
-        // Add item details into item detail list.
-        ArrayList<ItemDetails> itemDetailsArrayList = new ArrayList<>();
-        itemDetailsArrayList.add(itemDetails);
-        itemDetailsArrayList.add(itemDetails1);
-        itemDetailsArrayList.add(itemDetails2);
-        transactionRequestNew.setItemDetails(itemDetailsArrayList);
-
-        CreditCard creditCard = new CreditCard();
-        // Set to true if you want to save card to Snap
-        creditCard.setSaveCard(false);
-        // Set to true to save card token as `one click` token
-        creditCard.setSecure(false);
-        creditCard.setBank(BankType.PERMATA);
-
-        transactionRequestNew.setCreditCard(creditCard);
-
-        creditCard.setType(CardTokenRequest.TYPE_AUTHORIZE);
-
-        NYLog.e("OPO IKI INIT TRANSACTION");
-
-        return transactionRequestNew;
-    }
-
-
-
-
-    /*private void setInstallmentOption(CreditCard creditCard) {
-        Installment installment = new Installment();
-
-        Map<String, ArrayList<Integer>> bankTerms = new HashMap<>();
-
-        if (installmentBriSelection.isChecked()) {
-            setInstallmentBankTerm(bankTerms, Constants.INSTALLMENT_BANK_BRI);
-        } else if (installmentBniSelection.isChecked()) {
-            setInstallmentBankTerm(bankTerms, Constants.INSTALLMENT_BANK_BNI);
-        } else if (installmentMandiriSelection.isChecked()) {
-
-        } else if (installmentBcaSelection.isChecked()) {
-            setInstallmentBankTerm(bankTerms, Constants.INSTALLMENT_BANK_BCA);
-        } else if (installmentBcaSelection.isChecked()) {
-            setInstallmentBankTerm(bankTerms, Constants.INSTALLMENT_BANK_CIMB);
-        } else {
-            installment = null;
-        }
-        if (installment != null) {
-            installment.setTerms(bankTerms);
-
-            if (installmentRequired) {
-                installment.setRequired(true);
-            } else {
-                installment.setRequired(false);
-            }
-        }
-
-
-        creditCard.setInstallment(installment);
-    }*/
-
-
-    private CustomerDetails initCustomerDetails() {
-
-        NYLog.e("OPO IKI INIT CUSTOMER");
-
-        String userId = "129191";
-        String phone = "085310102020";
-        String fullname = "Aprilian Nur";
-        String email = "aprilian@gmail.com";
-
-        //define customer detail (mandatory for coreflow)
-        CustomerDetails mCustomerDetails = new CustomerDetails();
-        mCustomerDetails.setPhone(phone);
-        mCustomerDetails.setFirstName(fullname);
-        mCustomerDetails.setEmail(email);
-
-        return mCustomerDetails;
-    }
 
     private void initMidtransSdk() {
         NYLog.e("OPO IKI INIT");

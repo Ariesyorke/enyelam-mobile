@@ -22,6 +22,7 @@ import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.data.SearchSpot;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.storage.KeywordHistoryStorage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -195,6 +196,30 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick(View v) {
+
+            // TODO: ini cache storage
+            KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(context);
+            List<SearchResult> searchResults = keywordHistoryStorage.getSearchResults();
+            if (searchResults == null) searchResults = new ArrayList<>();
+
+            // TODO: cehck if object didnt exist add to storage
+            boolean isExist = false;
+            for (SearchResult s : searchResults){
+                if (s != null && NYHelper.isStringNotEmpty(s.getId()) && searchResult != null && NYHelper.isStringNotEmpty(searchResult.getId()) && s.getId().equals(searchResult.getId()) && s.getType().equals(searchResult.getType())){
+                    isExist = true;
+                    searchResults.remove(s);
+                    searchResults.add(searchResult);
+                    break;
+                }
+            }
+            if (!isExist){
+                if (searchResults.size() > 5) searchResults.remove(4);
+                searchResults.add(searchResult);
+            }
+            keywordHistoryStorage.setSearchResults(searchResults);
+            keywordHistoryStorage.save();
+
+
             Intent intent = new Intent(context, DoDiveActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
@@ -205,8 +230,6 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (searchResult.getType().equals("1")){
                 intent.putExtra(NYHelper.DIVE_SPOT, searchResult.toString());
             }
-
-
 
             context.startActivity(intent);
         }

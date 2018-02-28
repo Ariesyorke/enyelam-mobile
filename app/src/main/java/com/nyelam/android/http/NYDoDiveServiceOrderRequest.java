@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.SearchResultList;
 import com.nyelam.android.data.Summary;
 
@@ -16,7 +17,7 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<Summary> {
+public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<OrderReturn> {
 
     //private static final String KEY_SUCCESS = "success";
     private static final String KEY_SUMMARY = "summary";
@@ -48,16 +49,11 @@ public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<Summary> {
     }
 
     @Override
-    protected Summary onProcessSuccessData(JSONObject obj) throws Exception {
+    protected OrderReturn onProcessSuccessData(JSONObject obj) throws Exception {
 
-        if (obj.has(KEY_SUMMARY) && obj.get(KEY_SUMMARY) != null){
-            Summary summary = new Summary();
-            summary.parse(obj.getJSONObject(KEY_SUMMARY));
-            return summary;
-        } else {
-            return null;
-        }
-
+        OrderReturn orderReturn = new OrderReturn();
+        orderReturn.parse(obj);
+        return  orderReturn;
     }
 
 }
