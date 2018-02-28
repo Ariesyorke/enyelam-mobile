@@ -10,12 +10,15 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -319,7 +322,7 @@ public class NYHelper {
         }
     }
 
-    public static int integerToDP (Context myContext, Integer myInteger) {
+    public static int integerToDP(Context myContext, Integer myInteger) {
         Resources r = myContext.getResources();
         int px = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -360,4 +363,25 @@ public class NYHelper {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
     }
+
+    /** CHECK WHETHER INTERNET CONNECTION IS AVAILABLE OR NOT */
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+        if (activeNetworkInfo != null) { // connected to the internet
+            Toast.makeText(context, activeNetworkInfo.getTypeName(), Toast.LENGTH_SHORT).show();
+
+            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                return true;
+            } else if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

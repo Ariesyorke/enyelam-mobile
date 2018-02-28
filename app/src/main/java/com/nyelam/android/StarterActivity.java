@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.nyelam.android.auth.AuthActivity;
+import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.dao.DaoSession;
@@ -38,7 +39,24 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
-        startSplashTimer();
+
+        if (NYHelper.checkConnection(StarterActivity.this)) {
+            // Its Available...
+            startSplashTimer();
+        } else {
+            // Not Available...
+            NYHelper.handlePopupMessage(StarterActivity.this, getString(R.string.warn_no_connection), false,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (NYHelper.checkConnection(StarterActivity.this)){
+                                dialog.dismiss();
+                                startSplashTimer();
+                            }
+                        }
+            });
+        }
+
     }
 
     private void startSplashTimer() {
