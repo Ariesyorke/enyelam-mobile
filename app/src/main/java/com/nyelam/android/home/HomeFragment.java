@@ -23,6 +23,7 @@ import com.nyelam.android.data.Module;
 import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveActivity;
+import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYHomepageModuleRequest;
 import com.nyelam.android.view.NYBannerViewPager;
@@ -43,7 +44,7 @@ public class HomeFragment extends Fragment {
     private NYBannerViewPager bannerViewPager;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
-    private CardView doDiveCardView, doCourseCardView, doShopCardView, doTogetherCardView;
+    private CardView doDiveCardView, doCourseCardView, doShopCardView, ecoTripCardView;
     //private LinearLayout doDiveLinearLayout, doCourseLinearLayout, doShopLinearLayout;
     //private View viewBooking;
     private TextView eventsSeeAllTextView;
@@ -197,10 +198,11 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        doTogetherCardView.setOnClickListener(new View.OnClickListener() {
+        ecoTripCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NYHelper.handlePopupMessage(getActivity(), "Cooming soon", null);
+                Intent intent = new Intent(getActivity(), EcoTripActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -242,7 +244,7 @@ public class HomeFragment extends Fragment {
         doDiveCardView = (CardView) view.findViewById(R.id.do_dive_cardView);
         doCourseCardView = (CardView) view.findViewById(R.id.do_course_cardView);
         doShopCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
-        doTogetherCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
+        ecoTripCardView = (CardView) view.findViewById(R.id.eco_trip_cardView);
         eventsSeeAllTextView = (TextView) view.findViewById(R.id.events_see_all_textView);
         hotOffersSeeAllTextView = (TextView) view.findViewById(R.id.hot_offers_see_all_textView);
         popularDiveSpotsSeeAllTextView = (TextView) view.findViewById(R.id.popular_dive_spots_see_all_textView);

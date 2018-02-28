@@ -223,7 +223,7 @@
 
 
                     <android.support.v7.widget.CardView
-                        android:id="@+id/do_together_cardView"
+                        android:id="@+id/eco_trip_cardView"
                         android:layout_marginLeft="@dimen/padding_half"
                         app:cardCornerRadius="4dp"
                         app:cardElevation="5dp"
