@@ -191,15 +191,15 @@ public class HomeFragment extends Fragment {
         doCourseCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getActivity(), "Cooming soon", Toast.LENGTH_SHORT).show();
-                NYHelper.handlePopupMessage(getActivity(), "Cooming soon", null);
+                //Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+                NYHelper.handlePopupMessage(getActivity(), "Coming soon", null);
             }
         });
 
         doShopCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NYHelper.handlePopupMessage(getActivity(), "Cooming soon", null);
+                NYHelper.handlePopupMessage(getActivity(), "Coming soon", null);
             }
         });
 
