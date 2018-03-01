@@ -76,11 +76,11 @@ public class DetailServiceDiveSpotsFragment extends Fragment {
         noResultTextView = (TextView) view.findViewById(R.id.no_result_textView);
     }
 
-    public void setDiveSpot(DiveService service){
+    public void setDiveSpot(){
         progressBar.setVisibility(View.GONE);
-        if (service != null && service.getDiveSpots() != null && service.getDiveSpots().size() > 0){
+        if (((DetailServiceActivity)getActivity()).newDiveService != null && ((DetailServiceActivity)getActivity()).newDiveService .getDiveSpots() != null && ((DetailServiceActivity)getActivity()).newDiveService.getDiveSpots().size() > 0){
             adapter.clear();
-            adapter.addResults(service.getDiveSpots());
+            adapter.addResults(((DetailServiceActivity)getActivity()).newDiveService.getDiveSpots());
             adapter.notifyDataSetChanged();
             noResultTextView.setVisibility(View.GONE);
         } else {

@@ -105,9 +105,11 @@ public class DetailServiceFragment extends Fragment {
 
     }
 
-    public void setContent(DiveService service){
+    public void setContent(){
 
-        if (getActivity() instanceof DetailServiceActivity && service != null){
+        if (((DetailServiceActivity)getActivity()).newDiveService != null){
+
+            DiveService service = ((DetailServiceActivity)getActivity()).newDiveService;
 
             DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
 

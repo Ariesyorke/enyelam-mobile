@@ -3,6 +3,7 @@
     android:id="@+id/dialog_linearLayout"
     android:orientation="vertical" android:layout_width="match_parent"
     android:padding="@dimen/padding_double"
+    android:layout_marginTop="@dimen/padding_double"
     android:layout_marginBottom="@dimen/padding_double"
     android:background="@drawable/ny_rectangle_white"
     android:layout_height="wrap_content">

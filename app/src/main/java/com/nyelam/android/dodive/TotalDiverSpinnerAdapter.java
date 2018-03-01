@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -86,6 +87,7 @@ public class TotalDiverSpinnerAdapter extends BaseAdapter implements SpinnerAdap
         TextView diverTextView = (TextView) view.findViewById(R.id.country_number_textView);
         diverTextView.setText(diverList.get(position));
         //countryNumberTextView.setTextColor(color);
+        diverTextView.setGravity(Gravity.CENTER);
         diverTextView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
 
         return view;
@@ -102,13 +104,16 @@ public class TotalDiverSpinnerAdapter extends BaseAdapter implements SpinnerAdap
         }
         LinearLayout mainLinearLayout = (LinearLayout) view.findViewById(R.id.main_linearLayout);
         TextView diverTextView = (TextView)view.findViewById(R.id.country_code_textView);
+        View lineView = (View)view.findViewById(R.id.line_view);
+
+        lineView.setVisibility(View.VISIBLE);
+        diverTextView.setGravity(Gravity.CENTER);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
         diverTextView.setWidth(width*4/6);
-
 
 
         String diver = diverList.get(position);

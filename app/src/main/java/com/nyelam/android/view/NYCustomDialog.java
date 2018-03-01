@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -189,12 +190,15 @@ public class NYCustomDialog {
             View diverView = inflaterAddons.inflate(R.layout.view_drop_down_country_code, null); //here item is the the layout you want to inflate
 
             LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(activity, 5));
+            layoutParamsAddons.setMargins(0, NYHelper.integerToDP(activity, 5), 0, NYHelper.integerToDP(activity, 5));
             diverView.setLayoutParams(layoutParamsAddons);
 
-
             LinearLayout mainLinearLayout = (LinearLayout) diverView.findViewById(R.id.main_linearLayout);
-            TextView diverTextView = (TextView)diverView.findViewById(R.id.country_code_textView);
+            TextView diverTextView = (TextView) diverView.findViewById(R.id.country_code_textView);
+            View lineView = (View) diverView.findViewById(R.id.line_view);
+
+            lineView.setVisibility(View.VISIBLE);
+            diverTextView.setGravity(Gravity.CENTER);
 
             diverTextView.setText(String.valueOf(i));
 

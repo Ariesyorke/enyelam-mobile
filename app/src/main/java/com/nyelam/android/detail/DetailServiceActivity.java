@@ -240,15 +240,15 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
                     if (fragment != null && fragment instanceof DetailServiceFragment){
 
-                        ((DetailServiceFragment) fragment).setContent(newDiveService);
+                        ((DetailServiceFragment) fragment).setContent();
 
                     } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
 
-                        ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
+                        ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot();
 
                     } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
 
-                        ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
+                        ((DetailServiceDiveCenterFragment) fragment).setDiveCenter();
 
                     } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
                         //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
@@ -494,15 +494,15 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
                 if (fragment != null && fragment instanceof DetailServiceFragment){
 
-                    ((DetailServiceFragment) fragment).setContent(newDiveService);
+                    ((DetailServiceFragment) fragment).setContent();
 
                 } else if (fragment != null && fragment instanceof DetailServiceDiveSpotsFragment){
 
-                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot(newDiveService);
+                    ((DetailServiceDiveSpotsFragment) fragment).setDiveSpot();
 
                 } else if (fragment != null && fragment instanceof DetailServiceDiveCenterFragment){
 
-                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter(newDiveService);
+                    ((DetailServiceDiveCenterFragment) fragment).setDiveCenter();
 
                 } else if (fragment != null && fragment instanceof DetailServiceFragment){
                     //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();

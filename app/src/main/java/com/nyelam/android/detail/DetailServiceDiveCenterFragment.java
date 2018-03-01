@@ -90,19 +90,20 @@ public class DetailServiceDiveCenterFragment extends Fragment {
         //circleImageView = (ImageView) v.findViewById(R.id.picture_imageView);
     }
 
-    public void setDiveCenter(DiveService service){
-        if (service != null && service.getDiveCenter() != null){
+    public void setDiveCenter(){
 
-            diveCenter = service.getDiveCenter();
+        if(((DetailServiceActivity)getActivity()).newDiveService != null && ((DetailServiceActivity)getActivity()).newDiveService.getDiveCenter() != null){
 
-            if (NYHelper.isStringNotEmpty(service.getDiveCenter().getName()))nameTextView.setText(service.getDiveCenter().getName());
-            if (service.getDiveCenter().getRating() > 0){
-                ratingTextView.setText("*"+String.valueOf(service.getDiveCenter().getRating()));
+            diveCenter = ((DetailServiceActivity)getActivity()).newDiveService.getDiveCenter();
+
+            if (NYHelper.isStringNotEmpty(diveCenter.getName()))nameTextView.setText(((DetailServiceActivity)getActivity()).newDiveService.getDiveCenter().getName());
+            if (diveCenter.getRating() > 0){
+                ratingTextView.setText("*"+String.valueOf(diveCenter.getRating()));
             } else{
                 ratingTextView.setText("no rating");
             }
 
-            ratingBar.setRating(service.getDiveCenter().getRating());
+            ratingBar.setRating(diveCenter.getRating());
 
             progressBar.setVisibility(View.GONE);
             mainCardView.setVisibility(View.VISIBLE);
