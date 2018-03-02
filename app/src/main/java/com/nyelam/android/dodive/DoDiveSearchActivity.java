@@ -100,9 +100,6 @@ public class DoDiveSearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //if (qty.getText().toString().equals(s.toString())){return;}
-                //.makeText(DoDiveSearchActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
-                //String keyword = NYHelper.trim(s.toString());
                 String keyword = s.toString().trim();
                 if (keyword != null && !TextUtils.isEmpty(keyword)){
                     noResultTextView.setVisibility(View.GONE);
@@ -119,7 +116,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
     private void loadHistoryCache() {
         doDiveSearchAdapter.clear();
         KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(DoDiveSearchActivity.this);
-        if (keywordHistoryStorage.getSearchResults() != null){
+        if (keywordHistoryStorage.getSearchResults() != null && keywordHistoryStorage.getSearchResults().size() > 0){
             noResultTextView.setVisibility(View.GONE);
             doDiveSearchAdapter.clear();
 
@@ -132,7 +129,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
         } else {
             doDiveSearchAdapter.clear();
             doDiveSearchAdapter.notifyDataSetChanged();
-            noResultTextView.setVisibility(View.VISIBLE);
+            noResultTextView.setVisibility(View.GONE);
         }
     }
 
