@@ -38,8 +38,9 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     private Toolbar toolbar;
     private ProgressDialog progressDialog;
     private EditText firstNameEditText, lastNameEditText, usernameEditText, emailEditText, phoneNumberEditText;
-    private TextView updateTextView;
+    private TextView updateTextView, countryCodeTextView;
     private Spinner countryCodeSpinner;
+    private String countryCodeId = "360";
     private CountryCodeAdapter countryCodeAdapter;
 
     @Override
@@ -78,6 +79,11 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                 if (NYHelper.isStringNotEmpty(user.getEmail()))emailEditText.setText(user.getEmail());
 
                 if (NYHelper.isStringNotEmpty(user.getUsername()))usernameEditText.setText(user.getUsername());
+
+                if (user.getCountryCode() != null && NYHelper.isStringNotEmpty(user.getCountryCode().getId()) && NYHelper.isStringNotEmpty(user.getCountryCode().getCountryNumber())){
+                    countryCodeId = user.getCountryCode().getId();
+                    countryCodeTextView.setText("+ "+user.getCountryCode().getCountryNumber());
+                }
             }
 
 
@@ -131,8 +137,9 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                 String email = emailEditText.getText().toString().trim();
                 String phoneNumber = phoneNumberEditText.getText().toString().trim();
 
-                CountryCode countryCode = (CountryCode) countryCodeSpinner.getSelectedItem();
-                String countryCodeId = countryCode.getId();
+                if (NYHelper.isStringNotEmpty(phoneNumber) && phoneNumber.charAt(0) == '0'){
+                    phoneNumber = phoneNumber.substring(1);
+                }
 
                 if (!NYHelper.isStringNotEmpty(firstName)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_first_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
@@ -152,11 +159,11 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-    private void updateProfile(String fullname, String username, String countryCode, String phoneNumber){
+    private void updateProfile(String fullname, String username, String countryCodeId, String phoneNumber){
 
         try {
             progressDialog.show();
-            NYUpdateUserProfileRequest req = new NYUpdateUserProfileRequest(this, fullname, username, countryCode, phoneNumber);
+            NYUpdateUserProfileRequest req = new NYUpdateUserProfileRequest(this, fullname, username, countryCodeId, phoneNumber);
             spcMgr.execute(req, onUpdateProfileRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,6 +207,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
         updateTextView = (TextView) findViewById(R.id.update_textView);
         countryCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
+        countryCodeTextView = (TextView) findViewById(R.id.country_code_textView);
         countryCodeSpinner.setOnItemSelectedListener(this);
 
         progressDialog = new ProgressDialog(this);
@@ -240,6 +248,14 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         countryCodeAdapter.setSelectedPosition(position);
         countryCodeAdapter.notifyDataSetChanged();
+
+        CountryCode countryCode = (CountryCode) countryCodeSpinner.getSelectedItem();
+        if (countryCode != null && NYHelper.isStringNotEmpty(countryCode.getId()) && NYHelper.isStringNotEmpty(countryCode.getCountryCode())){
+            String countryCodeId = countryCode.getId();
+            countryCodeTextView.setText("+ "+countryCode.getCountryNumber());
+            this.countryCodeId = countryCodeId;
+        }
+
     }
 
     @Override

@@ -65,6 +65,10 @@ public class GalleryCameraInvoker {
     private int reqCodeGallery;
     private boolean cropImage;
     private File croppedFile;
+    private boolean isAspectCustom;
+    private int aspectX;
+    private int aspectY;
+
 
     public void invokeCamera() {
         Object instance = activity;
@@ -110,6 +114,26 @@ public class GalleryCameraInvoker {
         onShowOptionList(fragment.getActivity());
         return cameraFile;
     }
+
+    public File invokeGalleryAndCamera(android.support.v4.app.Fragment fragment, Callback callback, int requestCodeCamera, int requestCodeGallery, boolean cropImage, boolean isOriginalFileStored, boolean isAspectCustom, int aspectX, int aspectY) {
+        this.fragmentSupport = fragment;
+        this.callback = callback;
+        this.reqCodeCamera = requestCodeCamera;
+        this.reqCodeGallery = requestCodeGallery;
+        this.cropImage = cropImage;
+        this.isAspectCustom = isAspectCustom;
+        this.aspectY = aspectY;
+        this.aspectX = aspectX;
+        try {
+            cameraFile = createCameraFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        onShowOptionList(fragment.getActivity());
+        return cameraFile;
+    }
+
 
     public File invokeGalleryAndCamera(
             Activity activity, Callback callback, int requestCodeCamera, int requestCodeGallery, boolean cropImage) {
@@ -182,19 +206,19 @@ public class GalleryCameraInvoker {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_GALLERY_WITH_CROP) {
             if (resultCode == Activity.RESULT_OK) {
-                if(Build.VERSION.SDK_INT < 24) {
+                if (!isAspectCustom) {
                     croppedFile = tryCropImage(data.getData(), this.reqCodeGallery);
                 } else {
-                    croppedFile = tryCropImageNougat(data.getData(), this.reqCodeGallery);
+                    croppedFile = tryCropImage(data.getData(), this.reqCodeGallery, aspectX, aspectY);
                 }
             }
         } else if (requestCode == REQ_CODE_CAMERA_WITH_CROP) {
             if (resultCode == Activity.RESULT_OK) {
-                if(Build.VERSION.SDK_INT < 24) {
+                Uri uri = FileProvider.getUriForFile(activity != null? activity : (fragment != null ? fragment.getActivity(): fragmentSupport.getActivity()), BuildConfig.APPLICATION_ID + ".provider", cameraFile);
+                if (!isAspectCustom) {
                     croppedFile = tryCropImage(Uri.fromFile(cameraFile), this.reqCodeCamera);
                 } else {
-                    Uri uri = FileProvider.getUriForFile(activity != null? activity : (fragment != null ? fragment.getActivity(): fragmentSupport.getActivity()), BuildConfig.APPLICATION_ID + ".provider", cameraFile);
-                    croppedFile = tryCropImageNougat(uri, this.reqCodeCamera);
+                    croppedFile = tryCropImageforNougat(uri, this.reqCodeCamera);
                 }
             }
         } else if (requestCode == this.reqCodeGallery) {
@@ -203,12 +227,7 @@ public class GalleryCameraInvoker {
                 if (!cropImage) {
                     selectedImage = data.getData();
                 } else {
-                    if(Build.VERSION.SDK_INT < 24) {
-                        selectedImage = Uri.fromFile(croppedFile);
-                    } else {
-                        selectedImage = FileProvider.getUriForFile(activity != null ? activity : this.fragmentSupport.getActivity(), BuildConfig.APPLICATION_ID + ".provider",
-                                croppedFile);
-                    }
+                    selectedImage = Uri.fromFile(croppedFile);
                 }
 
                 if (selectedImage == null) {
@@ -619,71 +638,7 @@ public class GalleryCameraInvoker {
         return oututFile;
     }
 
-    protected File tryCropImage(Uri selectedImage, int nextReqCode) {
-        Activity context = activity;
-        if (context == null) {
-            if (fragment != null) {
-                context = fragment.getActivity();
-            } else if (fragmentSupport != null) {
-                context = fragmentSupport.getActivity();
-            }
-        }
 
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");
-
-        List<ResolveInfo> list = context.getPackageManager()
-                .queryIntentActivities(intent, 0);
-        int size = list.size();
-
-        if (size > 0) {
-            String captureTime = String.valueOf(System
-                    .currentTimeMillis());
-            String filename = new StringBuffer("raw_")
-                    .append(captureTime).append(".jpg").toString();
-            File root = context.getExternalCacheDir();
-            File media = new File(new StringBuffer(
-                    root.getAbsolutePath()).append("/draft/")
-                    .toString());
-
-            File oututFile = null;
-            if (!media.exists() && !media.mkdirs()) {
-            } else {
-                oututFile = new File(media, filename);
-            }
-
-            intent.setData(selectedImage);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);
-            intent.putExtra("output", Uri.fromFile(oututFile));
-
-            Intent i = new Intent(intent);
-            ResolveInfo res = list.get(0);
-
-            i.setComponent(new ComponentName(
-                    res.activityInfo.packageName, res.activityInfo.name));
-
-            Object instance = activity;
-            if (instance == null) {
-                instance = fragment;
-            }
-            if (instance == null) {
-                instance = fragmentSupport;
-            }
-            if (instance instanceof Activity) {
-                ((Activity) instance).startActivityForResult(i, nextReqCode);
-            } else if (instance instanceof android.support.v4.app.Fragment) {
-                ((android.support.v4.app.Fragment) instance)
-                        .startActivityForResult(i, nextReqCode);
-            } else if (instance instanceof android.app.Fragment) {
-                ((android.app.Fragment) instance).startActivityForResult(i, nextReqCode);
-            }
-            return oututFile;
-
-        }
-        return null;
-    }
 
     private void invokeCamera(Object instance) {
         Context context = activity;
@@ -749,6 +704,260 @@ public class GalleryCameraInvoker {
             ((android.app.Fragment) instance).startActivityForResult(
                     chooserIntent, reqCode);
         }
+    }
+
+
+    protected File tryCropImage(Uri selectedImage, int nextReqCode) {
+        Activity context = activity;
+        if (context == null) {
+            if (fragment != null) {
+                context = fragment.getActivity();
+            } else if (fragmentSupport != null) {
+                context = fragmentSupport.getActivity();
+            }
+        }
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        context.getApplicationContext().grantUriPermission(context.getPackageName(), selectedImage, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        List<ResolveInfo> list = context.getPackageManager()
+                .queryIntentActivities(intent, 0);
+        for (ResolveInfo resolveInfo : list) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, selectedImage, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        int size = list.size();
+
+        if (size > 0) {
+            String captureTime = String.valueOf(System
+                    .currentTimeMillis());
+            String filename = new StringBuffer("raw_")
+                    .append(captureTime).append(".jpg").toString();
+            File root = context.getExternalCacheDir();
+            File media = new File(new StringBuffer(
+                    root.getAbsolutePath()).append("/draft/")
+                    .toString());
+
+            File oututFile = null;
+            if (!media.exists() && !media.mkdirs()) {
+            } else {
+                oututFile = new File(media, filename);
+            }
+
+            intent.setData(selectedImage);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("scale", true);
+
+            if (Build.VERSION.SDK_INT >= 24) {
+                Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", oututFile);
+                context.grantUriPermission("com.android.camera",
+                        uri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                intent.setDataAndType(uri, "*/image");
+                intent.putExtra("output", uri);
+            } else {
+                intent.putExtra("output", Uri.fromFile(oututFile));
+            }
+
+            Intent i = new Intent(intent);
+            ResolveInfo res = list.get(0);
+
+            i.setComponent(new ComponentName(
+                    res.activityInfo.packageName, res.activityInfo.name));
+
+            Object instance = activity;
+            if (instance == null) {
+                instance = fragment;
+            }
+            if (instance == null) {
+                instance = fragmentSupport;
+            }
+            if (instance instanceof Activity) {
+                ((Activity) instance).startActivityForResult(i, nextReqCode);
+            } else if (instance instanceof android.support.v4.app.Fragment) {
+                ((android.support.v4.app.Fragment) instance)
+                        .startActivityForResult(i, nextReqCode);
+            } else if (instance instanceof android.app.Fragment) {
+                ((android.app.Fragment) instance).startActivityForResult(i, nextReqCode);
+            }
+            return oututFile;
+
+        }
+        return null;
+    }
+
+    protected File tryCropImageforNougat(Uri selectedImage, int nextReqCode) {
+        Activity context = activity;
+        if (context == null) {
+            if (fragment != null) {
+                context = fragment.getActivity();
+            } else if (fragmentSupport != null) {
+                context = fragmentSupport.getActivity();
+            }
+        }
+
+        String captureTime = String.valueOf(System
+                .currentTimeMillis());
+        String filename = new StringBuffer("raw_")
+                .append(captureTime).append(".jpg").toString();
+        File root = context.getExternalCacheDir();
+        File media = new File(new StringBuffer(
+                root.getAbsolutePath()).append("/draft/")
+                .toString());
+
+        File oututFile = null;
+        if (!media.exists() && !media.mkdirs()) {
+        } else {
+            oututFile = new File(media, filename);
+        }
+        Object instance = activity;
+        if (instance == null) {
+            instance = fragment;
+        }
+        if (instance == null) {
+            instance = fragmentSupport;
+        }
+        if (instance instanceof Activity) {
+            Uri uri = FileProvider.getUriForFile((Activity)instance, BuildConfig.APPLICATION_ID + ".provider", oututFile);
+            Crop.of(selectedImage, uri).start((Activity)instance, nextReqCode);
+        } else if (instance instanceof android.support.v4.app.Fragment) {
+            Uri uri = FileProvider.getUriForFile(((android.support.v4.app.Fragment) instance).getActivity(), BuildConfig.APPLICATION_ID + ".provider", oututFile);
+            Crop.of(selectedImage, uri).start(((android.support.v4.app.Fragment) instance).getActivity(), (android.support.v4.app.Fragment) instance, nextReqCode);
+        } else if (instance instanceof android.app.Fragment) {
+            Uri uri = FileProvider.getUriForFile(((android.app.Fragment) instance).getActivity(), BuildConfig.APPLICATION_ID + ".provider", oututFile);
+            Crop.of(selectedImage, uri).start(((android.app.Fragment) instance).getActivity(), (android.app.Fragment) instance, nextReqCode);
+        }
+        return oututFile;
+    }
+
+    protected File tryCropImageforNougat(Uri selectedImage, int nextReqCode, int aspectX, int aspectY) {
+        Activity context = activity;
+        if (context == null) {
+            if (fragment != null) {
+                context = fragment.getActivity();
+            } else if (fragmentSupport != null) {
+                context = fragmentSupport.getActivity();
+            }
+        }
+
+        String captureTime = String.valueOf(System
+                .currentTimeMillis());
+        String filename = new StringBuffer("raw_")
+                .append(captureTime).append(".jpg").toString();
+        File root = context.getExternalCacheDir();
+        File media = new File(new StringBuffer(
+                root.getAbsolutePath()).append("/draft/")
+                .toString());
+
+        File oututFile = null;
+        if (!media.exists() && !media.mkdirs()) {
+        } else {
+            oututFile = new File(media, filename);
+        }
+        Object instance = activity;
+        if (instance == null) {
+            instance = fragment;
+        }
+        if (instance == null) {
+            instance = fragmentSupport;
+        }
+        if (instance instanceof Activity) {
+            Uri uri = FileProvider.getUriForFile((Activity)instance, BuildConfig.APPLICATION_ID + ".provider", oututFile);
+            Crop.of(selectedImage, uri).withAspect(aspectX, aspectY).start((Activity)instance, nextReqCode);
+        } else if (instance instanceof android.support.v4.app.Fragment) {
+            Uri uri = FileProvider.getUriForFile(((android.support.v4.app.Fragment) instance).getActivity(), BuildConfig.APPLICATION_ID + ".provider", oututFile);
+            Crop.of(selectedImage, uri).withAspect(aspectX, aspectY).start(((android.support.v4.app.Fragment) instance).getActivity(), (android.support.v4.app.Fragment) instance, nextReqCode);
+        } else if (instance instanceof android.app.Fragment) {
+            Uri uri = FileProvider.getUriForFile(((android.app.Fragment) instance).getActivity(), BuildConfig.APPLICATION_ID + ".provider", oututFile);
+            Crop.of(selectedImage, uri).withAspect(aspectX, aspectY).start(((android.app.Fragment) instance).getActivity(), (android.app.Fragment) instance, nextReqCode);
+        }
+        return oututFile;
+    }
+
+    protected File tryCropImage(Uri selectedImage, int nextReqCode, int aspectX, int aspectY) {
+        Activity context = activity;
+        if (context == null) {
+            if (fragment != null) {
+                context = fragment.getActivity();
+            } else if (fragmentSupport != null) {
+                context = fragmentSupport.getActivity();
+            }
+        }
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+
+        List<ResolveInfo> list = context.getPackageManager()
+                .queryIntentActivities(intent, 0);
+        int size = list.size();
+
+        if (size > 0) {
+            String captureTime = String.valueOf(System
+                    .currentTimeMillis());
+            String filename = new StringBuffer("raw_")
+                    .append(captureTime).append(".jpg").toString();
+            File root = context.getExternalCacheDir();
+            File media = new File(new StringBuffer(
+                    root.getAbsolutePath()).append("/draft/")
+                    .toString());
+
+            File oututFile = null;
+            if (!media.exists() && !media.mkdirs()) {
+            } else {
+                oututFile = new File(media, filename);
+            }
+
+            intent.setData(selectedImage);
+            intent.putExtra("aspectX", aspectX);
+            intent.putExtra("aspectY", aspectY);
+            intent.putExtra("scale", true);
+            intent.putExtra("output", Uri.fromFile(oututFile));
+
+            Intent i = new Intent(intent);
+            ResolveInfo res = list.get(0);
+
+            i.setComponent(new ComponentName(
+                    res.activityInfo.packageName, res.activityInfo.name));
+
+            Object instance = activity;
+            if (instance == null) {
+                instance = fragment;
+            }
+            if (instance == null) {
+                instance = fragmentSupport;
+            }
+            if (instance instanceof Activity) {
+                ((Activity) instance).startActivityForResult(i, nextReqCode);
+            } else if (instance instanceof android.support.v4.app.Fragment) {
+                ((android.support.v4.app.Fragment) instance)
+                        .startActivityForResult(i, nextReqCode);
+            } else if (instance instanceof android.app.Fragment) {
+                ((android.app.Fragment) instance).startActivityForResult(i, nextReqCode);
+            }
+            return oututFile;
+
+        }
+        return null;
+    }
+
+
+    private File createCameraFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
+                .format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = this.fragmentSupport.getActivity()
+                .getExternalCacheDir();
+
+
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 
     public static interface Callback {

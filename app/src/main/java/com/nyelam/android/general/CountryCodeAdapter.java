@@ -70,6 +70,9 @@ public class CountryCodeAdapter extends BaseAdapter implements SpinnerAdapter {
         return null;
     }
 
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
 
     @Override
     public long getItemId(int i) {
@@ -86,7 +89,7 @@ public class CountryCodeAdapter extends BaseAdapter implements SpinnerAdapter {
             view = View.inflate(context, R.layout.view_country_code, null);
         }
         TextView countryNumberTextView = (TextView) view.findViewById(R.id.country_number_textView);
-        countryNumberTextView.setText(countryCodes.get(position).getCountryNumber());
+//        countryNumberTextView.setText(countryCodes.get(position).getCountryNumber());
         countryNumberTextView.setTextColor(color);
 
         return view;
@@ -116,7 +119,7 @@ public class CountryCodeAdapter extends BaseAdapter implements SpinnerAdapter {
         CountryCode countryCode = countryCodes.get(position);
         if (countryCode != null){
             if (NYHelper.isStringNotEmpty(countryCode.getCountryName()) && NYHelper.isStringNotEmpty(countryCode.getId())){
-                countryCodeTextView.setText(countryCodes.get(position).getCountryName() + " "+"(" + countryCodes.get(position).getCountryNumber() +")");
+                countryCodeTextView.setText(countryCodes.get(position).getCountryName() + " "+"(+ " + countryCodes.get(position).getCountryNumber() +")");
             }
         }
 

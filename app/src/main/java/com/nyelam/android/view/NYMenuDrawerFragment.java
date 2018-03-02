@@ -21,6 +21,7 @@ import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.storage.LoginStorage;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 
 /**
  * Created by Aprilian Nur on 12/6/2017.
@@ -34,7 +35,7 @@ public class NYMenuDrawerFragment extends Fragment {
     private ProgressDialog progressDialog;
     private OnFragmentInteractionListener mListener;
     private TextView nameProfileTextView;
-    private LinearLayout accountLinearLayout, logoutLinearLayout;
+    private LinearLayout loginLinearLayout, messageLinearLayout, accountLinearLayout, diveGuidanceLinearLayout, settingLinearLayout, logoutLinearLayout;
     //private LoginStorage loginStorage;
 
     public static NYMenuDrawerFragment newInstance() {
@@ -64,7 +65,11 @@ public class NYMenuDrawerFragment extends Fragment {
     }
 
     private void initView(View v) {
+        loginLinearLayout = (LinearLayout) v.findViewById(R.id.action_login_linearLayout);
         accountLinearLayout = (LinearLayout) v.findViewById(R.id.action_account_linearLayout);
+        messageLinearLayout = (LinearLayout) v.findViewById(R.id.action_message_linearLayout);
+        diveGuidanceLinearLayout = (LinearLayout) v.findViewById(R.id.action_dive_guideance_linearLayout);
+        settingLinearLayout = (LinearLayout) v.findViewById(R.id.action_setting_linearLayout);
         logoutLinearLayout = (LinearLayout) v.findViewById(R.id.action_logout_linearLayout);
     }
 
@@ -75,6 +80,20 @@ public class NYMenuDrawerFragment extends Fragment {
             public void onClick(View v)
             {
                 //mListener.onIntentCareer();
+                if (getActivity() instanceof HomeActivity){
+                    HomeActivity activity = (HomeActivity) getActivity();
+                    activity.setSelectedTab(3);
+                }
+
+            }
+        });
+
+        loginLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AuthActivity.class);
+                intent.putExtra(NYHelper.IS_MAIN_ACTIVITY, true);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -102,6 +121,27 @@ public class NYMenuDrawerFragment extends Fragment {
 
                 AlertDialog alert = builder.create();
                 alert.show();
+            }
+        });
+
+        messageLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
+            }
+        });
+
+        diveGuidanceLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
+            }
+        });
+
+        settingLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
             }
         });
     }
@@ -134,8 +174,16 @@ public class NYMenuDrawerFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-
-
+        LoginStorage loginStorage = new LoginStorage(getActivity());
+        if (loginStorage.isUserLogin()){
+            loginLinearLayout.setVisibility(View.GONE);
+            accountLinearLayout.setVisibility(View.VISIBLE);
+            logoutLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            loginLinearLayout.setVisibility(View.VISIBLE);
+            accountLinearLayout.setVisibility(View.GONE);
+            logoutLinearLayout.setVisibility(View.GONE);
+        }
 
     }
 

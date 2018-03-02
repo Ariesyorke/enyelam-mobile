@@ -80,8 +80,8 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
         }
 
         if (checked) {
-            relativeLayout.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.ny_blueActive));
-            lineView.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.ny_yellowActive));
+            relativeLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.ny_blueActive));
+            lineView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.ny_yellowActive));
         } else {
             relativeLayout.setBackgroundColor(Color.TRANSPARENT);
             lineView.setBackgroundColor(Color.TRANSPARENT);
@@ -161,6 +161,15 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
                 a.recycle();
             }
         }
+
+        if (checked) {
+            relativeLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.ny_blueActive));
+            lineView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.ny_yellowActive));
+        } else {
+            relativeLayout.setBackgroundColor(Color.TRANSPARENT);
+            lineView.setBackgroundColor(Color.TRANSPARENT);
+        }
+
         textView.setText(text);
         imageView.setImageDrawable(icon);
         refreshDrawableState();

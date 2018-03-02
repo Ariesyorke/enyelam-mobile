@@ -255,6 +255,8 @@ public class MyAccountFragment extends Fragment implements
 
 
     protected void onChangePhoto() {
+
+
         invoker = new GalleryCameraInvoker() {
 
             @Override
@@ -364,7 +366,7 @@ public class MyAccountFragment extends Fragment implements
                 isPickingPhoto = true;
             }
         };
-        invoker.invokeGalleryAndCamera(this, this, REQ_CODE_CAMERA, REQ_CODE_GALLERY, true);
+        invoker.invokeGalleryAndCamera(this, this, REQ_CODE_CAMERA, REQ_CODE_GALLERY, true, false, true, 3, 1);
     }
 
 

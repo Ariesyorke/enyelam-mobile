@@ -67,7 +67,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     private View loadingView;
     private LinearLayout tabManager;
     private NYCustomViewPager viewPager;
-    private int checkedId = -1;
+    private int checkedId = 0;
     private boolean mProtectFromCheckedChange = false;
     private boolean mProtectFromPagerChange = false;
     private String [] tabMenu;
@@ -188,10 +188,11 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
 
     public void movePagerToTabItemPosition(int tabItemPosition) {
+        setCheckedId(tabItemPosition);
         LoginStorage loginStorage = new LoginStorage(getApplicationContext());
         if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2 || tabItemPosition == 3)){
             Intent intent = new Intent(this, AuthActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, NYHelper.REQ_LOGIN);
         } else {
             mProtectFromPagerChange = true;
             if (tabItemPosition > -1) {
@@ -236,7 +237,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     }
 
     private void setCheckedStateForTab(int id, boolean checked) {
-
         // TODO: state drawable
         View checkedView = tabManager.findViewById(id);
         if (checkedView != null && checkedView instanceof Checkable) {
@@ -408,8 +408,16 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     @Override
     protected void onResume() {
         super.onResume();
-        setCheckedStateForTab(getLastKey(), true);
-        //setCheckedId(getLastKey());
+        LoginStorage loginStorage = new LoginStorage(this);
+        if (!loginStorage.isUserLogin()){
+            NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(0);
+            onCheckedChanged(view, true);
+            movePagerToTabItemPosition(0);
+        } else {
+            NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(checkedId);
+            onCheckedChanged(view, true);
+            movePagerToTabItemPosition(checkedId);
+        }
     }
 
     @Override
@@ -437,5 +445,14 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             // permissions this app might request
         }
     }
+
+
+    public void setSelectedTab(int pos){
+        NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(3);
+        onCheckedChanged(view, true);
+        movePagerToTabItemPosition(3);
+        drawerLayout.closeDrawers();
+    }
+
 
 }

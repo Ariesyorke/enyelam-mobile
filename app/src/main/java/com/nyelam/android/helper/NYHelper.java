@@ -68,6 +68,7 @@ public class NYHelper {
     public static final String CART_TOKEN = "cart_token";
     public static final String POSITION = "position";
     public static final String IS_NOT_NEW = "is_not_new";
+    public static final String IS_MAIN_ACTIVITY = "is_main_activity";
     public static final String DIVE_SPOT_ID = "dive_spot_id";
     public static final String CART_RETURN = "cart_return";
     public static final int LOGIN_REQ = 101;
@@ -81,6 +82,7 @@ public class NYHelper {
     public static final String TRANSACTION_COMPLETED = "transaction_completed";
     public static final String TRANSACTION_PENDING = "pending";
     public static final String CATEGORIES = "categories";
+    public static final int REQ_LOGIN = 41;
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));

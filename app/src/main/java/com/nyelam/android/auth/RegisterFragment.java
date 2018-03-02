@@ -46,7 +46,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
     protected Spinner countryCodeSpinner;
     private CountryCodeAdapter countryCodeAdapter;
     private EditText emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
-    private TextView registerTextView, loginTextView;
+    private TextView registerTextView, loginTextView, plusTextView;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -91,7 +91,8 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
                 String confirmPassword = confirmPasswordEditText.getText().toString();
                 CountryCode countryCode = (CountryCode) countryCodeSpinner.getSelectedItem();
                 //CountryCode countryCode = (CountryCode) countryCodeAdapter.getItem(countryCodeSpinner.getSelectedItemPosition()) ;
-                String countryCodeId = countryCode.getCountryCode();
+                String countryCodeId = "360";
+                if (countryCode != null)  countryCodeId = countryCode.getId();
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(getActivity(), getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
@@ -126,6 +127,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
 
     private void initView(View v) {
         emailEditText = (EditText) v.findViewById(R.id.email_editText);
+        plusTextView = (TextView) v.findViewById(R.id.plus_textView);
         phoneNumberEditText = (EditText) v.findViewById(R.id.phone_number_editText);
         passwordEditText = (EditText) v.findViewById(R.id.password_editText);
         confirmPasswordEditText = (EditText) v.findViewById(R.id.confirm_password_editText);
@@ -232,6 +234,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         countryCodeAdapter.setSelectedPosition(position);
         countryCodeAdapter.notifyDataSetChanged();
+        plusTextView.setText("+"+((CountryCode)countryCodeAdapter.getItem(position)).getCountryNumber());
     }
 
     @Override

@@ -168,29 +168,85 @@
 
                         <LinearLayout
                             android:orientation="horizontal"
-                            android:padding="@dimen/padding"
                             android:layout_marginTop="@dimen/padding_half"
                             android:background="@drawable/selector_edittext"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                            <Spinner
-                                android:id="@+id/country_code_spinner"
+
+                            <RelativeLayout
+                                android:padding="@dimen/padding"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:spinnerMode="dropdown"
-                                android:gravity="center"
-                                android:background="@drawable/ny_rectangle_white"
-                                android:layout_gravity="center">
-                            </Spinner>
+                                android:layout_height="wrap_content">
+                                <RelativeLayout
+                                    android:id="@+id/spinner_linearLayout"
+                                    android:orientation="horizontal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignTop="@+id/phone_number_layout"
+                                    android:paddingRight="@dimen/padding"
+                                    android:layout_alignBottom="@+id/phone_number_layout">
+                                    <TextView
+                                        android:id="@+id/country_code_textView"
+                                        android:text="+62"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/black"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                    <RelativeLayout
+                                        android:layout_toRightOf="@id/country_code_textView"
+                                        android:layout_alignBottom="@id/country_code_textView"
+                                        android:layout_marginLeft="@dimen/padding"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignTop="@id/country_code_textView">
+                                        <ImageView
+                                            android:src="@drawable/ic_down_arrow_black"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginBottom="8dp"
+                                            android:layout_width="8dp"
+                                            android:layout_height="8dp" />
+                                    </RelativeLayout>
+
+                                </RelativeLayout>
+
+                                <Spinner
+                                    android:id="@+id/country_code_spinner"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="@dimen/padding"
+                                    android:paddingRight="@dimen/padding"
+                                    android:spinnerMode="dropdown"
+                                    android:backgroundTint="@android:color/transparent"
+                                    android:gravity="bottom|center_horizontal"
+                                    android:layout_alignTop="@+id/spinner_linearLayout"
+                                    android:layout_alignBottom="@+id/spinner_linearLayout"
+                                    android:layout_alignRight="@+id/spinner_linearLayout"
+                                    android:layout_alignLeft="@+id/spinner_linearLayout"
+                                    android:layout_gravity="bottom"
+                                    android:layout_marginBottom="10dp"/>
+                            </RelativeLayout>
+
+
+
+                            <View
+                                android:id="@+id/spinner_view"
+                                android:layout_toRightOf="@id/spinner_linearLayout"
+                                android:background="@color/ny_grey2"
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"/>
+
                             <EditText
+                                android:layout_toRightOf="@id/spinner_view"
                                 android:id="@+id/phone_number_editText"
-                                android:hint="@string/phone_number"
+                                android:hint="@string/phone_number_hint"
                                 android:textSize="14sp"
+                                android:layout_gravity="center_vertical"
                                 android:textColor="@color/ny_black1"
-                                android:background="@android:color/transparent"
                                 android:layout_marginLeft="@dimen/padding"
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
+                                android:background="@android:color/transparent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
 
