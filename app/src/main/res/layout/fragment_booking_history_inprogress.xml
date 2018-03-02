@@ -35,15 +35,16 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp" />
 
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="reguler"
                     android:id="@+id/no_result_textView"
                     android:visibility="gone"
-                    android:text="@string/warn_no_results_found"
+                    android:text="@string/warn_no_purchase_available"
                     android:textSize="18sp"
                     android:textColor="@color/ny_black1"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_marginTop="@dimen/padding_triple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

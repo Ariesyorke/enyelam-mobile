@@ -14,10 +14,12 @@
     <string name="register">Register</string>
     <string name="username">Username</string>
     <string name="full_name">Full Name</string>
+    <string name="full_name_hint">Full Name *</string>
     <string name="customer_name">Customer Name</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email_address">E-mail Address</string>
+    <string name="email_address_hint">E-mail Address *</string>
     <string name="phone_number">Phone Number</string>
     <string name="phone_number_hint">Phone Number *</string>
     <string name="phone_number_ex">Phone number (eg. +905...)</string>
@@ -84,6 +86,7 @@
     <string name="search_results">Search results</string>
     <string name="warn_server_error">Internal Server Error</string>
     <string name="warn_no_results_found">No results found.</string>
+    <string name="warn_no_purchase_available">Sorry, No Purchase Available</string>
     <string name="warn_no_reviews_found">No reviews found.</string>
     <string name="warn_no_services_found">No services found.</string>
     <string name="warn_no_location_found">No location found.</string>
@@ -144,8 +147,8 @@
 
     <string-array name="menu_tab">
         <item>Home</item>
-        <item>Socmed</item>
         <item>Transaction</item>
+        <item>Socmed</item>
         <item>My Account</item>
     </string-array>
 

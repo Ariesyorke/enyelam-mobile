@@ -69,7 +69,7 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/name_editText"
-                        android:hint="Full name"
+                        android:hint="@string/full_name_hint"
                         android:textSize="14sp"
                         android:textColor="@color/ny_black1"
                         android:layout_width="match_parent"
@@ -87,7 +87,7 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/email_editText"
-                        android:hint="Email address"
+                        android:hint="@string/email_address_hint"
                         android:textSize="14sp"
                         android:textColor="@color/ny_black1"
                         android:layout_width="match_parent"

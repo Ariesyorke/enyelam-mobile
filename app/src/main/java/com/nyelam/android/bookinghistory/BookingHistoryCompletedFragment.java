@@ -66,7 +66,6 @@ public class BookingHistoryCompletedFragment extends Fragment {
         initView(view);
         initAdapter();
         initControl();
-        onRequestHistory();
 
         View itemView = (View) view.findViewById(R.id.item_view);
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +152,12 @@ public class BookingHistoryCompletedFragment extends Fragment {
     public void onStart() {
         super.onStart();
         spcMgr.start(getActivity());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRequestHistory();
     }
 
     @Override

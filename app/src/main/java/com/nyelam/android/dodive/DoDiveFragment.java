@@ -49,7 +49,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private String keyword, diverId, type, date, diver = null;
     private SearchService searchService;
     private TotalDiverSpinnerAdapter diverAdapter;
-    private LinearLayout diverLinearLayout, datetimeLinearLayout;
+    private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -191,6 +191,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             }
         });
 
+        licenseLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                certificateCheckBox.setChecked(!certificateCheckBox.isChecked());
+            }
+        });
+
         datetimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -323,6 +330,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         certificateCheckBox = (CheckBox) v.findViewById(R.id.certificate_checkBox);
         diverLinearLayout = (LinearLayout) v.findViewById(R.id.diver_linearLayout);
         datetimeLinearLayout = (LinearLayout) v.findViewById(R.id.datetime_linearLayout);
+        licenseLinearLayout = (LinearLayout) v.findViewById(R.id.license_linearLayout);
     }
 
 
