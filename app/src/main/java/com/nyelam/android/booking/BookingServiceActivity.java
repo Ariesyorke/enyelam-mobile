@@ -69,7 +69,6 @@ public class BookingServiceActivity extends BasicActivity {
                 intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                 intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                 intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
-
                 intent.putExtra(NYHelper.SCHEDULE, schedule);
                 intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
@@ -81,26 +80,32 @@ public class BookingServiceActivity extends BasicActivity {
             @Override
             public void onClick(View v) {
 
-                boolean isFill = true;
+                boolean isContactEmpty = false;
+                boolean isParticipantEmpty = false;
+
 
                 if (bookingContact != null){
                     if (!NYHelper.isStringNotEmpty(bookingContact.getName())){
-                        isFill = false;
-                    } else if (isFill && !NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())){
-                        isFill = false;
-                    } else if (isFill && !NYHelper.isStringNotEmpty(bookingContact.getEmail())){
-                        isFill = false;
-                    } else if (isFill){
+                        isContactEmpty = true;
+                    } else if (!isContactEmpty && !NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())){
+                        isContactEmpty = true;
+                    } else if (!isContactEmpty && !NYHelper.isStringNotEmpty(bookingContact.getEmail())){
+                        isContactEmpty = true;
+                    } else if (!isParticipantEmpty){
                         for (Participant p : participantList){
-                            if (p == null || !NYHelper.isStringNotEmpty(p.getName())){
-                                isFill = false;
+                            if (p == null || !NYHelper.isStringNotEmpty(p.getName()) || !NYHelper.isStringNotEmpty(p.getEmail())){
+                                isParticipantEmpty = true;
                                 break;
                             }
                         }
                     }
                 }
 
-                if (isFill){
+                if (isContactEmpty){
+                    Toast.makeText(BookingServiceActivity.this, getString(R.string.warn_field_contact_details_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                } else if (isParticipantEmpty){
+                    Toast.makeText(BookingServiceActivity.this, getString(R.string.warn_field_participant_details_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                } else {
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceSummaryActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
@@ -112,8 +117,6 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(BookingServiceActivity.this, "Fill empty field to order", Toast.LENGTH_SHORT).show();
                 }
 
             }

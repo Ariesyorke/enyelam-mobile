@@ -36,6 +36,10 @@
     <string name="save">Save</string>
     <string name="change">change</string>
     <string name="next">Next</string>
+    <string name="bank_transfer">Bank Transfer</string>
+    <string name="bank_transfer_label">Pay from ATM Transfer</string>
+    <string name="virtual_account_or_credit_card">Virtual Account/Credit Card</string>
+    <string name="virtual_account_or_credit_card_label">Pay using Virtual Account or Credit Card</string>
 
 
     <string name="lorem_ipsum_dolor">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
@@ -67,6 +71,7 @@
     <string name="booking_details">Booking Details</string>
     <string name="choose_file">Choose File</string>
     <string name="confirm">Confirm</string>
+    <string name="pay_now">Pay Now</string>
     <string name="book_now">Book Now</string>
 
 
@@ -91,15 +96,17 @@
     <string name="warn_no_services_found">No services found.</string>
     <string name="warn_no_location_found">No location found.</string>
     <string name="forgot_password_message">Click OK to recover your password</string>
-    <string name="warn_field_name_cannot_be_empty">Field Name cannot be empty</string>
-    <string name="warn_field_first_name_cannot_be_empty">Field First Name cannot be empty</string>
-    <string name="warn_field_username_cannot_be_empty">Field Username cannot be empty</string>
+    <string name="warn_field_name_cannot_be_empty">Name cannot be empty</string>
+    <string name="warn_field_first_name_cannot_be_empty">First name cannot be empty</string>
+    <string name="warn_field_username_cannot_be_empty">FUsername cannot be empty</string>
     <string name="warn_email_not_valid">Please, input valid email address</string>
-    <string name="warn_field_email_cannot_be_empty">Field Email cannot be empty</string>
-    <string name="warn_field_phone_cannot_be_empty">Field Phone Number cannot be empty</string>
-    <string name="warn_field_password_cannot_be_empty">Field Password cannot be empty</string>
+    <string name="warn_field_email_cannot_be_empty">Email cannot be empty</string>
+    <string name="warn_field_phone_cannot_be_empty">Phone number cannot be empty</string>
+    <string name="warn_field_password_cannot_be_empty">Password cannot be empty</string>
     <string name="warn_field_confirm_password_didnt_match">Password and confirm password didn\'t match</string>
-    <string name="warn_field_confirm_password_cannot_be_empty">Field Confirm Password cannot be empty</string>
+    <string name="warn_field_confirm_password_cannot_be_empty">Confirm password cannot be empty</string>
+    <string name="warn_field_contact_details_cannot_be_empty">Contact Details cannot be Empty</string>
+    <string name="warn_field_participant_details_cannot_be_empty">Participant Details cannot be Empty</string>
     <string name="warn_field_password_length">Password length must be 6 characters or more</string>
     <string name="warn_logout">Are you sure want to sign out ?</string>
 
