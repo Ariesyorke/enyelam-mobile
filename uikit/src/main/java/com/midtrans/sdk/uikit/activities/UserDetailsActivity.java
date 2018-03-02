@@ -60,7 +60,6 @@ public class UserDetailsActivity extends BaseActivity {
 
         Log.e("cek User Detail"," Activity oncreate");
 
-
         String invalidMessage = getInvalidPropertiesMessage();
         if (!TextUtils.isEmpty(invalidMessage)) {
             showInformationDialog(invalidMessage);

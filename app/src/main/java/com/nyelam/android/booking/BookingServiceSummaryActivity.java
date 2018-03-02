@@ -84,7 +84,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private int diver = 0;
     private String schedule = "0";
     private String certificate = "0";
-    private String payment = NYHelper.BANK_TRANSFER;
+    private String paymentType = "1";
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -137,7 +137,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             public void onClick(View v) {
                 if (midtransRadioButton.isChecked()){
                     bankTransferRadioButton.setChecked(false);
-                    payment = NYHelper.MIDTRANS;
+                    paymentType = "2";
                 }
             }
         });
@@ -147,7 +147,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             public void onClick(View v) {
                 if (bankTransferRadioButton.isChecked()){
                     midtransRadioButton.setChecked(false);
-                    payment = NYHelper.BANK_TRANSFER;
+                    paymentType = "1";
                 }
             }
         });
@@ -440,7 +440,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (payment.equals(NYHelper.MIDTRANS)){
+                                if (paymentType.equals("2")){
 
                                     testVeritrans();
 
@@ -568,8 +568,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         progressDialog.show();
         NYDoDiveServiceOrderRequest req = null;
         try {
-            req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toString(), participantList.toString());
-            spcMgr.execute(req, onCreateOrderServiceRequest());
+            req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toString(), participantList.toString(), paymentType);            spcMgr.execute(req, onCreateOrderServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();
         }

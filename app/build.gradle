@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         multiDexEnabled = true
-        versionCode 8
-        versionName '0.0.8'
+        versionCode 9
+        versionName '0.0.9'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -31,24 +31,16 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-io'
     }
     /*compile 'com.github.sharish:ShimmerRecyclerView:v1.2'*/
-
     // For u sing the Veritrans Sandbox
     /*compile ('com.midtrans:scancard:1.15.0'){
-            exclude module: 'uikit'
-        }*/
-
+                exclude module: 'uikit'
+            }*/
     // For using the Veritrans Production
-
     // compile 'com.midtrans:corekit:1.11.0'
-
     // For using the Veritrans Sandbox
-
     // For using the Veritrans Production
-
     //  compile 'com.midtrans:uikit:1.0.1'
-
     //    compile ('com.midtrans:scancard:1.0.1'){
-
     //        exclude module: 'uikit'
     compile project(':uikit')
     compile 'com.android.support:appcompat-v7:26.1.0'
