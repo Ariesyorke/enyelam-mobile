@@ -46,7 +46,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
     protected Spinner countryCodeSpinner;
     private CountryCodeAdapter countryCodeAdapter;
     private EditText emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
-    private TextView registerTextView;
+    private TextView registerTextView, loginTextView;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -116,6 +116,12 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
                 }
             }
         });
+        loginTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     private void initView(View v) {
@@ -124,6 +130,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
         passwordEditText = (EditText) v.findViewById(R.id.password_editText);
         confirmPasswordEditText = (EditText) v.findViewById(R.id.confirm_password_editText);
         registerTextView = (TextView) v.findViewById(R.id.register_textView);
+        loginTextView = (TextView) v.findViewById(R.id.login_textView);
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getString(R.string.loading));
