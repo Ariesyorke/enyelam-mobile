@@ -227,6 +227,12 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.DIVER, diver);
 
+            DoDiveSearchActivity activity = (DoDiveSearchActivity)context;
+            if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+            }
+
+
             if (searchResult.getType().equals("1")){
                 intent.putExtra(NYHelper.DIVE_SPOT, searchResult.toString());
             }

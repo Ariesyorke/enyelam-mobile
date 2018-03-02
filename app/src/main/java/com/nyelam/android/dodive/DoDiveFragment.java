@@ -52,6 +52,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private LinearLayout diverLinearLayout, datetimeLinearLayout;
 
     private OnFragmentInteractionListener mListener;
+    private boolean isEcoTrip;
 
     public DoDiveFragment() {
         // Required empty public constructor
@@ -183,10 +184,16 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         keywordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getActivity(), DoDiveSearchActivity.class);
                 intent.putExtra(NYHelper.CERTIFICATE, certificateCheckBox.isChecked());
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.DIVER, diver);
+                DoDiveActivity activity = (DoDiveActivity) getActivity();
+                if(activity.isEcoTrip()) {
+                    intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+                }
+
                 startActivity(intent);
             }
         });
@@ -222,6 +229,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 if (!TextUtils.isEmpty(type) && diver != null){
 
                     NYLog.e("CEK DATE 0 : "+date);
+                    DoDiveActivity activity = (DoDiveActivity) getActivity();
+                    NYLog.e("HAS EXTRA " + activity.isEcoTrip());
 
                     // TODO: ganti fragment yg dulu activity & yg dulu EXTRA sekarang BUNDLE
                     Intent intent;
@@ -236,6 +245,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
+                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                            intent.putExtra(NYHelper.ECO_TRIP, 1);
+                        }
                         startActivity(intent);
                     } else if (type.equals("4") || type.equals("5") || type.equals("6")){
 
@@ -249,6 +261,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
+                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                            intent.putExtra(NYHelper.ECO_TRIP, 1);
+                        }
                         startActivity(intent);
 
                         /*Bundle args = new Bundle();
@@ -281,6 +296,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
+                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                            intent.putExtra(NYHelper.ECO_TRIP, 1);
+                        }
                         startActivity(intent);
 
                         /*Bundle args = new Bundle();

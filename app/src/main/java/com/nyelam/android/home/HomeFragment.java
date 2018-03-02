@@ -211,13 +211,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        /*viewBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
-                startActivity(intent);
-            }
-        });*/
+
     }
 
 
