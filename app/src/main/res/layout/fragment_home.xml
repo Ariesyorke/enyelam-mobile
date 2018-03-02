@@ -110,9 +110,8 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
-
                     <android.support.v7.widget.CardView
-                        android:id="@+id/do_course_cardView"
+                        android:id="@+id/eco_trip_cardView"
                         android:layout_marginLeft="@dimen/padding_half"
                         app:cardCornerRadius="4dp"
                         app:cardElevation="5dp"
@@ -146,7 +145,7 @@
                             </LinearLayout>
 
                             <TextView
-                                android:text="@string/do_course"
+                                android:text="@string/eco_trip"
                                 android:textSize="16sp"
                                 android:textStyle="italic|bold"
                                 android:textColor="@color/ny_grey2"
@@ -156,11 +155,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent" />
                         </LinearLayout>
-                        <RelativeLayout
-                            android:background="#6fdfdfdf"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                        </RelativeLayout>
                     </android.support.v7.widget.CardView>
 
                 </LinearLayout>
@@ -233,8 +227,9 @@
                     </android.support.v7.widget.CardView>
 
 
+
                     <android.support.v7.widget.CardView
-                        android:id="@+id/eco_trip_cardView"
+                        android:id="@+id/do_course_cardView"
                         android:layout_marginLeft="@dimen/padding_half"
                         app:cardCornerRadius="4dp"
                         app:cardElevation="5dp"
@@ -268,7 +263,7 @@
                             </LinearLayout>
 
                             <TextView
-                                android:text="@string/eco_trip"
+                                android:text="@string/do_course"
                                 android:textSize="16sp"
                                 android:textStyle="italic|bold"
                                 android:textColor="@color/ny_grey2"
@@ -278,6 +273,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent" />
                         </LinearLayout>
+                        <RelativeLayout
+                            android:background="#6fdfdfdf"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        </RelativeLayout>
                     </android.support.v7.widget.CardView>
 
                 </LinearLayout>

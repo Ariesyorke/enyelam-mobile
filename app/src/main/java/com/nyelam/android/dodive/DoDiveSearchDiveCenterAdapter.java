@@ -163,17 +163,23 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
                     totalDiveTextView.setText(dives);
                 }
 
-                double normalPrice = Double.valueOf(diveCenter.getStartFromPrice());
-                double specialPrice = Double.valueOf(diveCenter.getStartFromSpecialPrice());
+                if (NYHelper.isStringNotEmpty(diveCenter.getStartFromPrice()) && NYHelper.isStringNotEmpty(diveCenter.getStartFromSpecialPrice())){
 
-                if (specialPrice < normalPrice && specialPrice > 0){
-                    priceTextView.setText(NYHelper.priceFormatter(specialPrice));
-                    priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
-                    priceStrikethroughTextView.setVisibility(View.VISIBLE);
-                } else {
-                    priceTextView.setText(NYHelper.priceFormatter(normalPrice));
-                    priceStrikethroughTextView.setVisibility(View.GONE);
+                    double normalPrice = Double.valueOf(diveCenter.getStartFromPrice());
+                    double specialPrice = Double.valueOf(diveCenter.getStartFromSpecialPrice());
+
+                    if (specialPrice < normalPrice && specialPrice > 0){
+                        priceTextView.setText(NYHelper.priceFormatter(specialPrice));
+                        priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
+                        priceStrikethroughTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        priceTextView.setText(NYHelper.priceFormatter(normalPrice));
+                        priceStrikethroughTextView.setVisibility(View.GONE);
+                    }
                 }
+
+
+
 
                 //SET IMAGE
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));

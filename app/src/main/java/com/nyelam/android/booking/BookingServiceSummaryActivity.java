@@ -99,7 +99,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private RadioGroup radioGroup;
     private RadioButton bankTransferRadioButton, midtransRadioButton;
 
-
     private String veritransToken;
     private TextView expiredDateTextView;
     private CountDownTimer countDownTimer;
@@ -114,8 +113,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         initData();
         initParticipantLayout();
         initControl();
-        // SDK initiation for UIflow
-        //initMidtransSdk();
     }
 
 
@@ -575,25 +572,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     }
 
-
-    private void initMidtransSdk() {
-        NYLog.e("OPO IKI INIT");
-        SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
-                .setContext(this) // context is mandatory
-                .setTransactionFinishedCallback(this) // set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url
-                .enableLog(true) // enable sdk log
-                .setColorTheme(new CustomColorTheme("#FFE51255", "#B61548", "#FFE51255")) // will replace theme on snap theme on MAP
-                .buildSDK();
-
-        /*SdkCoreFlowBuilder.init()
-                .setContext(this)
-                .enableLog(true)
-                .setClientKey(getResources().getString(R.string.client_key_development))
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development))
-                .buildSDK();*/
-    }
 
     @Override
     public void onTransactionFinished(TransactionResult transactionResult) {

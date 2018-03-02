@@ -54,6 +54,8 @@
     <string name="activity_bank_transfer_mandiri">Mandiri Bank Transfer</string>
     <string name="activity_bank_transfer_permata">Permata Bank Transfer</string>
     <string name="activity_save_credit_card">Registered Credit Card</string>
+    <string name="error_empty_tcash_token_field">T-Cash Token can not be empty.</string>
+    <string name="activity_bank_transfer_all_bank">Transfer to Another Bank</string>
     <!-- User Address -->
     <string name="title_user_details">User Information</string>
     <string name="hint_address">Address</string>
