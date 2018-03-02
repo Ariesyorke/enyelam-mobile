@@ -104,9 +104,17 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         } else {
             url = getResources().getString(R.string.api_path_dodive_search_dive_center_by_city);
         }
+        NYDoDiveSearchDiveCenterRequest req = null;
 
-        NYDoDiveSearchDiveCenterRequest req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
-                url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType), categories);
+        if(getIntent().hasExtra(NYHelper.ECO_TRIP)) {
+            int ecoTrip = getIntent().getIntExtra(NYHelper.ECO_TRIP, 1);
+            req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
+                    url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType), categories, String.valueOf(ecoTrip));
+        } else {
+            req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
+                    url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType), categories);
+        }
+
         spcMgr.execute(req, onSearchServiceRequest());
     }
 

@@ -18,6 +18,7 @@ import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.storage.NYMasterDataStorage;

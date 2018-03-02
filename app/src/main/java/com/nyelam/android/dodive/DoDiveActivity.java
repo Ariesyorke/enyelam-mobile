@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
@@ -27,10 +28,16 @@ public class DoDiveActivity extends BasicActivity implements
     private TextView titleTextView;
     private ImageView searchImageView;
     private ImageView backgroundImageView;
+    private boolean ecoTrip = false;
+
+    public boolean isEcoTrip() {
+        return ecoTrip;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ecoTrip = getIntent().hasExtra(NYHelper.IS_ECO_TRIP);
         setContentView(R.layout.activity_do_dive);
         initView();
         initFragment();
