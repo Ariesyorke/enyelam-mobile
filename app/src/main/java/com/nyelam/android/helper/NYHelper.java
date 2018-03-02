@@ -38,8 +38,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -385,5 +387,34 @@ public class NYHelper {
         }
         return false;
     }
+
+    public static DisplayImageOptions getCompressedOption(Context context) {
+//        final String httpAuthUsername = context.getResources().getString(R.string.http_auth_username);
+//        final String httpAuthPassword = context.getResources().getString(R.string.http_auth_password);
+        Map<String, String> headers = new HashMap<String, String>() {
+//            {
+//                String httpAuth = new StringBuffer("Basic ")
+//                        .append(Base64.encodeToString(
+//                                new StringBuffer(httpAuthUsername)
+//                                        .append(":")
+//                                        .append(httpAuthPassword)
+//                                        .toString()
+//                                        .getBytes(),
+//                                Base64.DEFAULT)).toString();
+//                put("Authorization", httpAuth);
+//            }
+        };
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .resetViewBeforeLoading(false)  // default
+                .delayBeforeLoading(1000)
+                .extraForDownloader(headers)
+                .cacheInMemory(true) // default
+                .cacheOnDisk(true) // default
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
+                .bitmapConfig(Bitmap.Config.ARGB_8888) // default
+                .build();
+        return options;
+    }
+
 
 }

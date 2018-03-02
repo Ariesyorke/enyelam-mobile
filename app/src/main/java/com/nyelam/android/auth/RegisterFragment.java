@@ -94,6 +94,10 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
                 String countryCodeId = "360";
                 if (countryCode != null)  countryCodeId = countryCode.getId();
 
+                if (NYHelper.isStringNotEmpty(phoneNumber) && phoneNumber.charAt(0) == '0'){
+                    phoneNumber = phoneNumber.substring(1);
+                }
+
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(getActivity(), getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isValidEmaillId(email)){

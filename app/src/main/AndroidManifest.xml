@@ -43,14 +43,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".home.HomeActivity" />
-        <activity android:name=".auth.AuthActivity" />
+        <activity
+            android:name=".auth.AuthActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <service
             android:name=".backgroundservice.NYSpiceService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".dodive.DoDiveActivity" />
+        <activity android:name=".dodive.DoDiveActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".dodive.DoDiveSearchActivity" />
         <activity android:name=".detail.DetailServiceActivity" />
         <activity android:name=".dodive.DoDiveSearchResultActivity" />

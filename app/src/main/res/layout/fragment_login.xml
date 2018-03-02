@@ -1,14 +1,22 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ny_gradient_right_left"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#ca1a60ab"
     tools:context="com.nyelam.android.auth.LoginFragment">
 
-    <ScrollView
+    <ImageView
+        android:id="@+id/background_imageView"
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent" />
+
+    <ScrollView
+        android:isScrollContainer="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -22,11 +30,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="medium"
                 android:text="Welcome to Nyelam!"
                 android:textColor="@color/colorWhite"
                 android:textSize="20sp"
-                android:textStyle="bold"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
@@ -35,10 +43,10 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:background="@drawable/ny_rectangle_gradation_blue"
+                android:background="@drawable/ny_rectangle_blue_search_box"
                 android:layout_margin="@dimen/padding_double"
-                android:paddingLeft="@dimen/padding_double"
-                android:paddingRight="@dimen/padding_double"
+                android:paddingLeft="@dimen/padding_triple"
+                android:paddingRight="@dimen/padding_triple"
                 android:paddingTop="@dimen/padding_double"
                 android:paddingBottom="@dimen/padding"
                 android:layout_width="match_parent"
@@ -47,21 +55,21 @@
 
 
                 <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_blue_search_box_two"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <EditText
                         android:id="@+id/email_editText"
                         android:hint="@string/email"
                         android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
+                        android:textColor="@color/ny_grey1"
+                        android:textColorHint="@color/ny_grey1"
+                        android:backgroundTint="@android:color/transparent"
                         android:singleLine="true"
                         android:maxLines="1"
-                        android:background="@drawable/ny_rectangle_white"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
                         android:paddingTop="@dimen/padding"
                         android:paddingBottom="@dimen/padding"
                         android:layout_width="match_parent"
@@ -70,8 +78,7 @@
 
 
                 <LinearLayout
-                    android:background="@drawable/ny_rectangle_transparant_white_border"
-                    android:padding="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_blue_search_box_two"
                     android:layout_marginTop="@dimen/padding_double"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -79,21 +86,22 @@
                         android:id="@+id/password_editText"
                         android:hint="@string/password"
                         android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/ny_grey2"
-                        android:background="@drawable/ny_rectangle_white"
+                        android:textColor="@color/ny_grey1"
+                        android:textColorHint="@color/ny_grey1"
+                        android:backgroundTint="@android:color/transparent"
                         android:singleLine="true"
                         android:maxLines="1"
                         android:inputType="textPassword"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
                         android:paddingTop="@dimen/padding"
                         android:paddingBottom="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="reguler"
                     android:id="@+id/forgot_password_textView"
                     android:text="@string/forgot_password"
                     android:textSize="15sp"
@@ -101,30 +109,33 @@
                     android:padding="@dimen/padding"
                     android:gravity="center"
                     android:layout_marginTop="@dimen/padding"
+                    android:layout_marginBottom="@dimen/padding"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
-            <TextView
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="medium"
                 android:id="@+id/login_textView"
                 android:text="@string/login"
                 android:textColor="@color/colorWhite"
-                android:textSize="15sp"
-                android:background="@drawable/ny_rectangle_blue_dark"
+                android:textSize="18sp"
+                android:background="@drawable/ny_rectangle_blue_soft"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:layout_marginTop="@dimen/padding"
                 android:layout_marginLeft="@dimen/padding_triple"
                 android:layout_marginRight="@dimen/padding_triple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
 
-            <TextView
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="medium"
                 android:text="@string/or"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/colorWhite"
                 android:padding="@dimen/padding_double"
                 android:gravity="center"
@@ -133,15 +144,16 @@
                 android:layout_height="wrap_content" />
 
 
-            <TextView
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="medium"
                 android:id="@+id/register_textView"
                 android:text="@string/register"
                 android:textColor="@color/colorWhite"
-                android:textSize="15sp"
-                android:background="@drawable/ny_rectangle_blue_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/ny_rectangle_blue_soft"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:layout_marginBottom="@dimen/padding_double"
                 android:layout_marginLeft="@dimen/padding_triple"
                 android:layout_marginRight="@dimen/padding_triple"
                 android:layout_width="match_parent"
@@ -150,4 +162,5 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+
+</RelativeLayout>

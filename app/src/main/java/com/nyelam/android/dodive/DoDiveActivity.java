@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.helper.NYHelper;
@@ -25,6 +26,7 @@ public class DoDiveActivity extends BasicActivity implements
     private DoDiveFragment fragment;
     private TextView titleTextView;
     private ImageView searchImageView;
+    private ImageView backgroundImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class DoDiveActivity extends BasicActivity implements
         
         titleTextView = (TextView) findViewById(R.id.title_textView);
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
+        backgroundImageView = (ImageView) findViewById(R.id.background_imageView);
+        ImageLoader.getInstance().displayImage("drawable://"+R.drawable.background_blur,backgroundImageView, NYHelper.getCompressedOption(this));
     }
 
     private void initFragment() {

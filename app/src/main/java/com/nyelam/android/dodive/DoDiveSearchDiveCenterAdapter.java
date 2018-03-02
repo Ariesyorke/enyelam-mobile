@@ -181,6 +181,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
 
 
 
+
                 //SET IMAGE
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                 if (NYHelper.isStringNotEmpty(diveCenter.getFeaturedImage())) {

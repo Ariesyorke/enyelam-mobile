@@ -178,7 +178,8 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             intent.putExtra(NYHelper.EVENT, event.toString());
             activity.startActivity(intent);*/
 
-            Toast.makeText(activity, "Layout event belum dibuat", Toast.LENGTH_SHORT).show();
+            NYHelper.handlePopupMessage(activity, activity.getString(R.string.coming_soon), null);
+
         }
     }
 

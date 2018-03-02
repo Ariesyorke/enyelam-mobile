@@ -12,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
@@ -34,6 +36,7 @@ public class LoginFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private TextView loginTextView, registerTextView, forgotPasswordTextView;
     private EditText emailEditText, passwordEditText;
+    private ImageView backgroundImageView;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -52,6 +55,7 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        getActivity().getWindow().setBackgroundDrawableResource(R.drawable.background_blur);
     }
 
     @Override
@@ -67,7 +71,6 @@ public class LoginFragment extends Fragment {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
-
         initView(view);
         initControl();
     }
@@ -142,6 +145,8 @@ public class LoginFragment extends Fragment {
         loginTextView = (TextView) v.findViewById(R.id.login_textView);
         registerTextView = (TextView) v.findViewById(R.id.register_textView);
         forgotPasswordTextView = (TextView) v.findViewById(R.id.forgot_password_textView);
+        backgroundImageView = (ImageView) v.findViewById(R.id.background_imageView);
+        ImageLoader.getInstance().displayImage("drawable://"+R.drawable.background_blur, backgroundImageView, NYHelper.getCompressedOption(getActivity()));
     }
 
 

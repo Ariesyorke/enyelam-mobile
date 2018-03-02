@@ -186,7 +186,7 @@ public class HotOffersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         @Override
         public void onClick(View v) {
 
-            SearchService searchService = new SearchService();
+            /*SearchService searchService = new SearchService();
             searchService.setName(diveService.getName());
             searchService.setId(diveService.getId());
             searchService.setLicense(false);
@@ -194,7 +194,10 @@ public class HotOffersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
             Intent intent = new Intent(activity, DoDiveActivity.class);
             intent.putExtra(NYHelper.SEARCH_RESULT, searchService.toString());
-            activity.startActivity(intent);
+            activity.startActivity(intent);*/
+
+            NYHelper.handlePopupMessage(activity, activity.getString(R.string.coming_soon), null);
+
         }
     }
 
