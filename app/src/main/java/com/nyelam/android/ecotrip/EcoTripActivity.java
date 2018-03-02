@@ -39,21 +39,25 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import me.relex.circleindicator.CircleIndicator;
+
 public class EcoTripActivity extends AppCompatActivity {
 
     private NYBannerViewPager ecoTripViewPager;
     private EcoTripViewPagerAdapter ecoTripViewPagerAdapter;
+    private CircleIndicator circleIndicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eco_trip);
         initView();
-        //initViewPager();
+        initViewPager();
         initControl();
     }
 
-    /*private void initViewPager() {
-        ecoTripViewPagerAdapter = new EcoTripViewPagerAdapter();
+    private void initViewPager() {
+        ecoTripViewPagerAdapter = new EcoTripViewPagerAdapter(getSupportFragmentManager());
         ecoTripViewPager.setAdapter(ecoTripViewPagerAdapter);
         circleIndicator.setViewPager(ecoTripViewPager);
 
@@ -70,8 +74,8 @@ public class EcoTripActivity extends AppCompatActivity {
         ecoTripViewPagerAdapter.setBannerList(bannerList);
         ecoTripViewPagerAdapter.notifyDataSetChanged();
         ecoTripViewPager.setOffscreenPageLimit(bannerList.getList().size());
-        circleIndicator.setViewPager(ecoTripViewPagerAdapter);
-    }*/
+        circleIndicator.setViewPager(ecoTripViewPager);
+    }
 
     private void initControl() {
 
@@ -79,6 +83,7 @@ public class EcoTripActivity extends AppCompatActivity {
 
     private void initView() {
         ecoTripViewPager = (NYBannerViewPager) findViewById(R.id.eco_trip_view_pager);
+        circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
     }
 
 }

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -11,4 +11,14 @@
         android:layout_height="match_parent">
     </com.nyelam.android.view.NYBannerViewPager>
 
-</LinearLayout>
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/circle_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/padding_double"
+        app:ci_drawable="@drawable/ny_circle_white"
+        app:ci_orientation="horizontal">
+    </me.relex.circleindicator.CircleIndicator>
+
+</RelativeLayout>

@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,35 +19,22 @@ import com.nyelam.android.home.BannerFragment;
  * Created by Aprilian Nur Wakhid Daini on 1/5/2018.
  */
 
-public abstract class EcoTripViewPagerAdapter extends PagerAdapter {
+public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
 
     private BannerList bannerList;
     private int count = 0;
-    private Activity activity;
 
-    public EcoTripViewPagerAdapter(Activity activity){
-        this.activity = activity;
+    public EcoTripViewPagerAdapter(FragmentManager fm) {
+        super(fm);
+        bannerList = new BannerList();
     }
 
-    @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        return super.instantiateItem(container, position);
+    public Fragment getItem(int position) {
+        Banner retBanner = null;
+        if(bannerList != null && bannerList.getList() != null) retBanner = bannerList.getList().get(position);
+        return BannerFragment.newInstance(position, retBanner);
     }
-    
-
-    /*public EcoTripViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-            bannerList = new BannerList();
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Banner retBanner = null;
-            if(bannerList != null && bannerList.getList() != null) retBanner = bannerList.getList().get(position);
-            return BannerFragment.newInstance(position, retBanner);
-        }
-    */
 
     @Override
     public int getItemPosition(Object object) {
@@ -69,14 +58,12 @@ public abstract class EcoTripViewPagerAdapter extends PagerAdapter {
         return count;
     }
 
+
     public void clear() {
         bannerList = new BannerList();
     }
 
 
-
-    @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return false;
-    }
 }
+
+
