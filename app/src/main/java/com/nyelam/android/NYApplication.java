@@ -80,12 +80,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         SdkUIFlowBuilder.init()
                 .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(this) // context is mandatory
-                .setTransactionFinishedCallback(new TransactionFinishedCallback() {
-                    @Override
-                    public void onTransactionFinished(TransactionResult result) {
-                        // Handle finished transaction here.
-                    }
-                }) // set transaction finish callback (sdk callback)
+                .setTransactionFinishedCallback(this) // set transaction finish callback (sdk callback)
                 .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#FFE51255", "#2196F3","#FFE51255")) // set theme. it will replace theme on snap theme on MAP ( optional)
@@ -102,7 +97,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
 
     @Override
     public void onTransactionFinished(TransactionResult transactionResult) {
-        Toast.makeText(this, getResources().getString(R.string.search_results), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, getResources().getString(R.string.search_results), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, HomeActivity.class);
         //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
         if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {

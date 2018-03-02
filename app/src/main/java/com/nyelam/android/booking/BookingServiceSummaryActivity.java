@@ -149,6 +149,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
         });
 
+
     }
 
     private void initData() {
@@ -413,7 +414,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
-                NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, null);
+                NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
             }
 
             @Override
@@ -423,7 +429,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
 
                 orderReturn = result;
-                if (result != null){
+
+                if (paymentType.equals("2") && result != null && result.getVeritransToken() != null){
+
                     VeritransStorage veritransStorage = new VeritransStorage(BookingServiceSummaryActivity.this);
                     veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
                     veritransStorage.contact = result.getSummary().getContact();
@@ -431,25 +439,28 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     veritransStorage.order = result.getSummary().getOrder();
                     veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
                     veritransStorage.save();
-                }
 
-                NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Your order was successful", false,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (paymentType.equals("2")){
+                    testVeritrans();
 
-                                    testVeritrans();
+                } else {
+                    NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Your order was successful", false,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (paymentType.equals("2")){
 
-                                } else {
-                                    Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
-                                    if (result != null && NYHelper.isStringNotEmpty(result.toString()))intent.putExtra(NYHelper.SUMMARY, result.toString());
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
+                                        testVeritrans();
+
+                                    } else {
+                                        Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                                        if (result != null && NYHelper.isStringNotEmpty(result.toString()))intent.putExtra(NYHelper.SUMMARY, result.toString());
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+
                                 }
-
-                            }
-                        });
+                            });
+                }
             }
         };
     }
@@ -495,6 +506,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             ArrayList<ItemDetails> itemDetailsList = new ArrayList<>();
             if (service != null)itemDetailsList.add(new ItemDetails(service.getId(), (int)service.getNormalPrice(), totalParticipants, service.getName()));
             transactionRequest.setItemDetails(itemDetailsList);
+
 
             MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
             MidtransSDK.getInstance().startPaymentUiFlow(this, token);
