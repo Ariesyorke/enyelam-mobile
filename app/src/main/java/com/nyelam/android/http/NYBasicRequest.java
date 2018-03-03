@@ -201,6 +201,7 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
                 errorMessage = "unknown error";
             }
 
+
             String code = "unknown code";
             String error = "unknown error";
 
@@ -215,11 +216,18 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
             long doneTime = System.currentTimeMillis();
             long processTiming = doneTime - gaStartTiming;
 
-            NYStatusFailedException e = new NYStatusFailedException("request status failed with code " + code + " - " + error);
-            e.setCode(code);
-            e.setError(error);
-            e.setMessage(errorMessage);
-            throw e;
+            if (code.equals(CODE_CART_EXPIRED)) {
+                NYCartExpiredException e = new NYCartExpiredException();
+                e.setCode(code);
+                e.setError(error);
+                throw e;
+            } else {
+                NYStatusFailedException e = new NYStatusFailedException("request status failed with code " + code + " - " + error);
+                e.setCode(code);
+                e.setError(error);
+                e.setMessage(errorMessage);
+                throw e;
+            }
 
             //long doneTime = System.currentTimeMillis();
             //long processTiming = doneTime - gaStartTiming;

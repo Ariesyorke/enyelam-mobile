@@ -80,14 +80,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         //SdkUIFlowBuilder.init(getApplicationContext(),getResources().getString(R.string.client_key_development),getResources().getString(R.string.api_veritrans_development),this);
 
 
-        SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
-                .setContext(this) // context is mandatory
-                .setTransactionFinishedCallback(this) // set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
-                .enableLog(true) // enable sdk log (optional)
-                .setColorTheme(new CustomColorTheme("#FFE51255", "#2196F3","#FFE51255")) // set theme. it will replace theme on snap theme on MAP ( optional)
-                .buildSDK();
+
 
         /*SdkCoreFlowBuilder.init()
                 .setContext(this)

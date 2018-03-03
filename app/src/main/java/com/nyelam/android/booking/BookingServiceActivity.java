@@ -18,9 +18,11 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.CartReturn;
+import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.LoginStorage;
 
@@ -286,7 +288,11 @@ public class BookingServiceActivity extends BasicActivity {
                 if (storage.isUserLogin() && storage.user != null){
                     bookingContact = new BookingContact();
                     bookingContact.setName(storage.user.getFullname());
-                    bookingContact.setPhoneNumber(storage.user.getPhone());
+                    if(storage.user.getCountryCode() != null) {
+                        CountryCode c = storage.user.getCountryCode();
+                        bookingContact.setPhoneNumber("+" + c.getCountryNumber() + storage.user.getPhone());
+                        contactPhoneNumberTextView.setText("+" + c.getCountryNumber() + storage.user.getPhone());
+                    }
                     bookingContact.setEmail(storage.user.getEmail());
                     if (NYHelper.isStringNotEmpty(storage.user.getFullname())){
                         contactNameTextView.setText(storage.user.getFullname());
@@ -296,7 +302,6 @@ public class BookingServiceActivity extends BasicActivity {
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
                     }
 
-                    if (NYHelper.isStringNotEmpty(storage.user.getPhone()))contactPhoneNumberTextView.setText(storage.user.getPhone());
                     if (NYHelper.isStringNotEmpty(storage.user.getEmail()))contactEmailTextView.setText(storage.user.getEmail());
                 }
             }
