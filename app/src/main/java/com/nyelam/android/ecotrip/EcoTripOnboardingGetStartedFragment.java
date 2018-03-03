@@ -19,6 +19,8 @@ import com.nyelam.android.view.font.NYTextView;
 
 public class EcoTripOnboardingGetStartedFragment extends Fragment {
     private View bookNowButton;
+    private int backgroundResource = R.drawable.eco_trip_5_bg;
+    private ImageView backgroundImageView;
 
     public EcoTripOnboardingGetStartedFragment() {
         // Required empty public constructor
@@ -48,6 +50,7 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        backgroundImageView = (ImageView)view.findViewById(R.id.background_imageView);
         bookNowButton = view.findViewById(R.id.book_eco_trip_button);
         bookNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +60,7 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override

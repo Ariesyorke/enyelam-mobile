@@ -204,15 +204,13 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             // TODO: cehck if object didnt exist add to storage
             boolean isExist = false;
-            for (SearchResult s : searchResults){
+            for (SearchResult s : searchResults) {
                 if (s != null && NYHelper.isStringNotEmpty(s.getId()) && searchResult != null && NYHelper.isStringNotEmpty(searchResult.getId()) && s.getId().equals(searchResult.getId()) && s.getType().equals(searchResult.getType())){
                     isExist = true;
-                    searchResults.remove(s);
-                    searchResults.add(searchResult);
                     break;
                 }
             }
-            if (!isExist){
+            if (!isExist) {
                 if (searchResults.size() > 5) searchResults.remove(4);
                 searchResults.add(searchResult);
             }

@@ -24,6 +24,7 @@ import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.nyelam.android.storage.KeywordHistoryStorage;
 import com.nyelam.android.storage.ModulHomepageStorage;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -53,8 +54,12 @@ public class DoDiveSearchActivity extends AppCompatActivity {
         initView();
         initControl();
         initAdapter();
+        initFirstData();
     }
 
+    private void initFirstData() {
+        loadHistoryCache();
+    }
     private void initGetExtras() {
 
         Intent intent = getIntent();
@@ -101,11 +106,13 @@ public class DoDiveSearchActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String keyword = s.toString().trim();
-                if (keyword != null && !TextUtils.isEmpty(keyword)){
+                spcMgr.cancel(NYSpiceService.class, "search_result");
+                if (keyword != null && !TextUtils.isEmpty(keyword) && keyword.length() > 2){
                     noResultTextView.setVisibility(View.GONE);
                     labelTextView.setText(getResources().getString(R.string.search_results));
                     NYDoDiveSearchTypeRequest req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
-                    spcMgr.execute(req, onSearchKeywordRequest());
+                    spcMgr.execute(req, "search_result", DurationInMillis.NEVER, onSearchKeywordRequest());
+//                    spcMgr.execute(req, onSearchKeywordRequest());
                 } else {
                     loadHistoryCache();
                 }
@@ -116,6 +123,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
     private void loadHistoryCache() {
         doDiveSearchAdapter.clear();
         KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(DoDiveSearchActivity.this);
+        NYLog.e("ISI JSON " + keywordHistoryStorage.getSearchResults() );
         if (keywordHistoryStorage.getSearchResults() != null && keywordHistoryStorage.getSearchResults().size() > 0){
             noResultTextView.setVisibility(View.GONE);
             doDiveSearchAdapter.clear();
@@ -181,15 +189,12 @@ public class DoDiveSearchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         spcMgr.start(this);
-        KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(this);
-        NYLog.e("cek history : "+keywordHistoryStorage.getSearchResults());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
-        loadHistoryCache();
     }
 
 

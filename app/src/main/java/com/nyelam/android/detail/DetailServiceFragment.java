@@ -140,13 +140,14 @@ public class DetailServiceFragment extends Fragment {
             //visitedTextView.setText(String.valueOf(service.getVisited()));
 
 
-            String totalDivesString = totalDivesTextView.getText().toString();
+            String totalDivesString = "Total Dives \t\t\t\t\t: ";
             totalDivesTextView.setText(totalDivesString+String.valueOf(service.getTotalDives()));
 
-            String diveSpotString = totalDiveSpotsTextView.getText().toString();
+            String diveSpotString = "Total Dive Spots \t: ";
             if (service.getDiveSpots() != null)totalDiveSpotsTextView.setText(diveSpotString+String.valueOf(service.getDiveSpots().size()));
 
-            String daysString = tripDurationsTextView.getText().toString();
+            String daysString = "Trip Durations \t: ";
+
             if (service.getDays() > 1){
                 tripDurationsTextView.setText(daysString+String.valueOf(service.getDays())+" Days");
             } else {

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.Category;
@@ -28,7 +32,13 @@ import com.octo.android.robospice.SpiceService;
 import java.util.List;
 
 public class StarterActivity extends AppCompatActivity  implements NYMasterDataStorage.LoadDataListener<CountryCode>{
-
+    private int[] backgroundDrawables = {
+            R.drawable.eco_trip_1_bg,
+            R.drawable.eco_trip_2_bg,
+            R.drawable.eco_trip_3_bg,
+            R.drawable.eco_trip_4_bg,
+            R.drawable.background_blur
+    };
     private final int SPLASH_TIME = 3000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private SpiceManager spcMgr = new SpiceManager(SpiceService.class);
@@ -40,7 +50,47 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
-        checkConnection();
+        getCacheBackground(0);
+
+    }
+
+    private void getCacheBackground(final int index) {
+        ImageLoader.getInstance().loadImage("drawable://" + backgroundDrawables[index], NYHelper.getCompressedOption(this), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                int nextIndex = index;
+                nextIndex += 1;
+                if (nextIndex < backgroundDrawables.length) {
+                    getCacheBackground(nextIndex);
+                } else {
+                    checkConnection();
+                }
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                NYApplication application = (NYApplication)getApplication();
+                application.addCache(imageUri, loadedImage);
+                int nextIndex = index;
+                nextIndex += 1;
+                if (nextIndex < backgroundDrawables.length) {
+                    getCacheBackground(nextIndex);
+                } else {
+                    checkConnection();
+                }
+            }
+
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
     }
 
     private void checkConnection() {

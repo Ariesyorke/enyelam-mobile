@@ -1,6 +1,7 @@
 package com.nyelam.android.ecotrip;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.helper.NYHelper;
 
@@ -56,7 +60,34 @@ public class EcoTripOnboardingFragment extends Fragment {
         if (getArguments() != null) {
             int backgroundResource = getArguments().getInt(KEY_BACKGROUND_RESOURCE);
             int iconResource = getArguments().getInt(KEY_ICON_RESOURCE);
-            ImageLoader.getInstance().displayImage("drawable://"+backgroundResource, backgroundImageView, NYHelper.getCompressedOption(getActivity()));
+            String imageUri = "drawable://" + backgroundResource;
+            final NYApplication application = (NYApplication) getActivity().getApplication();
+            if(application.getCache(imageUri) != null) {
+                Bitmap bitmap = application.getCache(imageUri);
+                backgroundImageView.setImageBitmap(bitmap);
+            } else {
+                ImageLoader.getInstance().displayImage("drawable://" + backgroundResource, backgroundImageView, NYHelper.getCompressedOption(getActivity()), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        application.addCache(imageUri, loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                    }
+                });
+            }
             iconImageView.setBackgroundResource(iconResource);
         }
     }

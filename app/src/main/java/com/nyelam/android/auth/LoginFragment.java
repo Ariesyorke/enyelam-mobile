@@ -2,6 +2,7 @@ package com.nyelam.android.auth;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
@@ -146,7 +148,15 @@ public class LoginFragment extends Fragment {
         registerTextView = (TextView) v.findViewById(R.id.register_textView);
         forgotPasswordTextView = (TextView) v.findViewById(R.id.forgot_password_textView);
         backgroundImageView = (ImageView) v.findViewById(R.id.background_imageView);
-        ImageLoader.getInstance().displayImage("drawable://"+R.drawable.background_blur, backgroundImageView, NYHelper.getCompressedOption(getActivity()));
+        NYApplication application = (NYApplication)getActivity().getApplication();
+        String imageUri = "drawable://"+R.drawable.background_blur;
+
+        if(application.getCache(imageUri) != null) {
+            Bitmap bitmap = application.getCache(imageUri);
+            backgroundImageView.setImageBitmap(bitmap);
+        } else {
+            ImageLoader.getInstance().displayImage(imageUri, backgroundImageView, NYHelper.getCompressedOption(getActivity()));
+        }
     }
 
 
