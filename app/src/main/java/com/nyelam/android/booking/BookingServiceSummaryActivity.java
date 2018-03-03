@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,23 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
-import com.midtrans.sdk.corekit.core.Constants;
 import com.midtrans.sdk.corekit.core.LocalDataHandler;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
-import com.midtrans.sdk.corekit.core.PaymentMethod;
-import com.midtrans.sdk.corekit.core.SdkCoreFlowBuilder;
 import com.midtrans.sdk.corekit.core.TransactionRequest;
 import com.midtrans.sdk.corekit.core.UIKitCustomSetting;
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
-import com.midtrans.sdk.corekit.models.BankType;
-import com.midtrans.sdk.corekit.models.BillInfoModel;
-import com.midtrans.sdk.corekit.models.CardTokenRequest;
-import com.midtrans.sdk.corekit.models.CustomerDetails;
 import com.midtrans.sdk.corekit.models.ItemDetails;
-import com.midtrans.sdk.corekit.models.UserAddress;
 import com.midtrans.sdk.corekit.models.UserDetail;
-import com.midtrans.sdk.corekit.models.snap.CreditCard;
-import com.midtrans.sdk.corekit.models.snap.Installment;
 import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 import com.nyelam.android.BasicActivity;
@@ -52,17 +40,15 @@ import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
-import com.nyelam.android.data.Summary;
-import com.nyelam.android.data.VeritransToken;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.http.NYCartExpiredException;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -71,9 +57,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BookingServiceSummaryActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener, TransactionFinishedCallback {
 
@@ -158,12 +142,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
-
-            //NYLog.e("CEK INI 2 :"+extras.get(NYHelper.SERVICE));
-
-            /*if (intent.hasExtra(NYHelper.CART_TOKEN)){
-                cartToken = extras.getString(NYHelper.CART_TOKEN);
-            }*/
 
             if (intent.hasExtra(NYHelper.DIVER)){
                 diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
@@ -414,12 +392,23 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
-                NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                if(spiceException != null) {
+                    if (spiceException.getCause() instanceof NYCartExpiredException) {
+                        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //TODO KALO CART EXPIRED
+                            }
+                        });
+                    } else {
+                        NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
+                            }
+                        });
                     }
-                });
+                }
             }
 
             @Override
@@ -440,32 +429,37 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
                     veritransStorage.save();
 
-                    testVeritrans();
+                    PayUsingVeritrans();
 
                 } else {
-                    NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Your order was successful", false,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (paymentType.equals("2")){
-
-                                        testVeritrans();
-
-                                    } else {
+                    if(paymentType.equals("2")) {
+                        PayUsingVeritrans();
+                    } else {
+                        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
-                                        if (result != null && NYHelper.isStringNotEmpty(result.toString()))intent.putExtra(NYHelper.SUMMARY, result.toString());
+                                        intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     }
-
-                                }
-                            });
+                                }, "Check Order");
+                    }
                 }
             }
         };
     }
 
-    private void testVeritrans() {
+    private void PayUsingVeritrans() {
+        SdkUIFlowBuilder.init()
+                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
+                .setContext(this) // context is mandatory
+                .setTransactionFinishedCallback(this) // set transaction finish callback (sdk callback)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
+                .enableLog(true) // enable sdk log (optional)
+                .setColorTheme(new CustomColorTheme("#FFE51255", "#2196F3","#FFE51255")) // set theme. it will replace theme on snap theme on MAP ( optional)
+                .buildSDK();
 
         VeritransStorage veritransStorage = new VeritransStorage(this);
         Contact contact = veritransStorage.contact;
@@ -586,9 +580,25 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
 
     @Override
-    public void onTransactionFinished(TransactionResult transactionResult) {
-        NYLog.e("OPO IKI ");
-        Toast.makeText(this, "finish", Toast.LENGTH_SHORT).show();
+    public void onTransactionFinished(final TransactionResult transactionResult) {
+
+        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                        //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
+                        if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
+                            if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
+                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                            } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
+                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
+                            }
+                        }
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                }, "Check Order");
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveSpot;
@@ -83,11 +84,11 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
                 String email = emailInputEditText.getText().toString().trim();
 
                 if (!NYHelper.isStringNotEmpty(name)){
-                    nameInputEditText.setError(getString(R.string.warn_field_name_cannot_be_empty));
+                    Toast.makeText(BookingServiceParticipantActivity.this, getString(R.string.warn_field_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(email)){
-                    emailInputEditText.setError(getString(R.string.warn_field_email_cannot_be_empty));
+                    Toast.makeText(BookingServiceParticipantActivity.this, getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isValidEmaillId(email)){
-                    emailInputEditText.setError(getString(R.string.warn_email_not_valid));
+                    Toast.makeText(BookingServiceParticipantActivity.this, getString(R.string.warn_email_not_valid), Toast.LENGTH_SHORT).show();
                 } else {
 
                     name = NYHelper.capitalizeString(name);

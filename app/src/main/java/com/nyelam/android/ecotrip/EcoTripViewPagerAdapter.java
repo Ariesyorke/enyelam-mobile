@@ -32,7 +32,7 @@ public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position != 4) {
-            return EcoTripOnboardingFragment.newInstance(backgroundDrawables[position], iconDrawables[position]);
+            return EcoTripOnboardingFragment.newInstance(backgroundDrawables[position], iconDrawables[position], position);
         } else {
             return EcoTripOnboardingGetStartedFragment.newInstance();
         }

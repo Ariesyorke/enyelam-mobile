@@ -28,7 +28,6 @@ public class NYImageRatioImageView extends android.support.v7.widget.AppCompatIm
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int measuredWidthSize = MeasureSpec.getSize(widthMeasureSpec);
         int desiredHeightSize = (RATIO[1] * measuredWidthSize) / RATIO[0];
 

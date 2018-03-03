@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.BookingContact;
@@ -42,15 +43,14 @@ public class BookingServiceContactActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString().trim();
 
                 if (!NYHelper.isStringNotEmpty(name)){
-                    nameEditText.setError(getString(R.string.warn_field_name_cannot_be_empty));
+                    Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_field_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(phone)){
-                    phoneEditText.setError(getString(R.string.warn_field_phone_cannot_be_empty));
+                    Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_field_phone_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(email)){
-                    emailEditText.setError(getString(R.string.warn_field_email_cannot_be_empty));
+                    Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isValidEmaillId(email)){
-                    emailEditText.setError(getString(R.string.warn_email_not_valid));
+                    Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_email_not_valid), Toast.LENGTH_SHORT).show();
                 } else {
-
                     name = NYHelper.capitalizeString(name);
                     bookingContact.setName(name);
                     bookingContact.setPhoneNumber(phone);

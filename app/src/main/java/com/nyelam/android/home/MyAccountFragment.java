@@ -223,7 +223,7 @@ public class MyAccountFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 isCover = true;
-                onChangePhoto();
+                onChangeCover();
             }
         });
 
@@ -255,6 +255,119 @@ public class MyAccountFragment extends Fragment implements
 
 
     protected void onChangePhoto() {
+        invoker = new GalleryCameraInvoker() {
+
+            @Override
+            protected int maxImageWidth() {
+                return getResources().getDimensionPixelSize(R.dimen.max_create_place_image_width);
+            }
+
+            @Override
+            protected File onProcessingImageFromCamera(String path) {
+                File realFile = super.onProcessingImageFromCamera(path);
+
+                Bitmap bitmap = null;
+                int targetW = getResources().getDimensionPixelSize(R.dimen.create_place_photo_thumb_width);
+
+                // Get the dimensions of the bitmap
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                int photoW = bmOptions.outWidth;
+                int scaleFactor = photoW / targetW;
+
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+
+                bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+
+                // Log.d("danzoye", "thumb bitmap = " + bitmap);
+
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, imageStream);
+                bitmap.recycle();
+
+                String localPath = realFile.getPath();
+                String thumbPath = localPath.replace("JPEG", "THUMB");
+                File pictureFile = new File(thumbPath);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(imageStream.toByteArray());
+                    fos.close();
+
+                    return realFile;
+                } catch (FileNotFoundException e) {
+                    // Log.e("danzoye", "File not found: " + e.getMessage());
+                } catch (IOException e) {
+                    // Log.e("danzoye", "Error accessing file: " + e.getMessage());
+                } finally {
+                    System.gc();
+                }
+                return null;
+            }
+
+            @Override
+            protected File onProcessingImageFromGallery(InputStream inputStream) throws IOException {
+                File realFile = super.onProcessingImageFromGallery(inputStream);
+
+                int targetW = getResources().getDimensionPixelSize(R.dimen.create_place_photo_thumb_width);
+
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                int targetH = (photoH * targetW) / photoW;
+
+                // Determine how much to scale down the image
+                int scaleFactor = photoW / targetW;
+
+                // Decode the image file into a Bitmap sized to fill the
+                // View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+
+                Bitmap bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, imageStream);
+                bitmap.recycle();
+
+                String localPath = realFile.getPath();
+                String thumbPath = localPath.replace("JPEG", "THUMB");
+                File pictureFile = new File(thumbPath);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(imageStream.toByteArray());
+                    fos.close();
+
+                    return realFile;
+                } catch (FileNotFoundException e) {
+                    // Log.e("danzoye", "File not found: " + e.getMessage());
+                } catch (IOException e) {
+                    // Log.e("danzoye", "Error accessing file: " + e.getMessage());
+                } finally {
+                    System.gc();
+                }
+                return null;
+
+            }
+
+            @Override
+            protected void onShowOptionList(Context context) {
+                super.onShowOptionList(context);
+                isPickingPhoto = true;
+            }
+        };
+        invoker.invokeGalleryAndCamera(this, this, REQ_CODE_CAMERA, REQ_CODE_GALLERY, true);
+    }
+
+    protected void onChangeCover() {
 
 
         invoker = new GalleryCameraInvoker() {

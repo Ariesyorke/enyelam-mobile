@@ -348,6 +348,21 @@ public class NYHelper {
                 .show();
     }
 
+    public static final void handlePopupMessage(Context context, String message, boolean isCancelable , DialogInterface.OnClickListener listener, String okButton) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setNeutralButton(okButton,
+                        listener!=null? listener : new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                .setCancelable(isCancelable)
+                .create()
+                .show();
+    }
+
 
     public static final void handlePopupMessage(Context context, String message, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

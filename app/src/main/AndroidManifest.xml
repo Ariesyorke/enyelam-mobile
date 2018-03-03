@@ -42,9 +42,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.HomeActivity" />
+        <activity android:name=".home.HomeActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".auth.AuthActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
 
         <service
@@ -54,20 +56,34 @@
 
         <activity android:name=".dodive.DoDiveActivity"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".dodive.DoDiveSearchActivity" />
-        <activity android:name=".detail.DetailServiceActivity" />
-        <activity android:name=".dodive.DoDiveSearchResultActivity" />
-        <activity android:name=".booking.BookingServiceActivity" />
-        <activity android:name=".booking.BookingServiceParticipantActivity" />
-        <activity android:name=".booking.BookingServiceContactActivity" />
-        <activity android:name=".booking.BookingServiceSummaryActivity" />
-        <activity android:name=".bookinghistory.BookingHistoryDetailActivity" />
-        <activity android:name=".profile.EditProfileActivity" />
-        <activity android:name=".divecenter.DiveCenterDetailActivity" />
-        <activity android:name=".divespot.DiveSpotDetailActivity" />
-        <activity android:name=".dodive.DoDiveSearchResultDiveSpotActivity" />
-        <activity android:name=".dodive.FilterListDiveCenterActivity" />
-        <activity android:name=".ecotrip.EcoTripActivity"></activity>
+        <activity android:name=".dodive.DoDiveSearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".detail.DetailServiceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".dodive.DoDiveSearchResultActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".booking.BookingServiceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".booking.BookingServiceParticipantActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".booking.BookingServiceContactActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".booking.BookingServiceSummaryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".bookinghistory.BookingHistoryDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".profile.EditProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".divecenter.DiveCenterDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".divespot.DiveSpotDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".dodive.DoDiveSearchResultDiveSpotActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".dodive.FilterListDiveCenterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ecotrip.EcoTripActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
