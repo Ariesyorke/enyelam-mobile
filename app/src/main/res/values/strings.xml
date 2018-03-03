@@ -39,7 +39,7 @@
     <string name="bank_transfer">Bank Transfer</string>
     <string name="bank_transfer_label">Pay from ATM Transfer</string>
     <string name="virtual_account_or_credit_card">Virtual Account/Credit Card</string>
-    <string name="virtual_account_or_credit_card_label">Pay using Virtual Account or Credit Card</string>
+    <string name="virtual_account_or_credit_card_label">Pay using Midtrans payment gateway</string>
 
     <string name="book_eco_trip">Book you Eco-Trip</string>
 
@@ -99,8 +99,10 @@
     <string name="forgot_password_message">Click OK to recover your password</string>
     <string name="warn_field_name_cannot_be_empty">Name cannot be empty</string>
     <string name="warn_field_first_name_cannot_be_empty">First name cannot be empty</string>
-    <string name="warn_field_username_cannot_be_empty">FUsername cannot be empty</string>
+    <string name="warn_field_username_cannot_be_empty">Username cannot be empty</string>
     <string name="warn_email_not_valid">Please, input valid email address</string>
+    <string name="warn_empty_keyword">Keyword cannot be empty</string>
+    <string name="warn_total_diver">Please, choose total Diver</string>
     <string name="warn_field_email_cannot_be_empty">Email cannot be empty</string>
     <string name="warn_field_phone_cannot_be_empty">Phone number cannot be empty</string>
     <string name="warn_field_password_cannot_be_empty">Password cannot be empty</string>

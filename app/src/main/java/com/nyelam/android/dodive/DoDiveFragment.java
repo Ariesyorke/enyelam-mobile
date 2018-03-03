@@ -43,7 +43,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private TextView certificateTextView, datetimeTextView, searchTextView;
     public TextView diverTextView;
     private Spinner diverSpinner;
-    private com.nyelam.android.view.NYEditTextWarning keywordTextView;
+    private com.nyelam.android.view.font.NYTextView keywordTextView;
     private CheckBox certificateCheckBox;
     private DatePickerDialog datePickerDialog;
     private String keyword, diverId, type, date, diver = null;
@@ -111,6 +111,21 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         int day = c.get(Calendar.DAY_OF_MONTH);
         datePickerDialog = new DatePickerDialog(
                 getActivity(), this, year, month, day);
+
+        /*Calendar mcurrentDate=Calendar.getInstance();
+        year=mcurrentDate.get(Calendar.YEAR);
+        month=mcurrentDate.get(Calendar.MONTH);
+        day=mcurrentDate.get(Calendar.DAY_OF_MONTH);*/
+
+        // TODO Hide Future Date Here
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        // TODO Hide Future Date Here
+        //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        // TODO Hide Past Date Here
+        //datePickerDialog.show();
+
+
+
         date = String.valueOf(c.getTimeInMillis()/1000);
         datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
     }
@@ -167,6 +182,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 datePickerDialog = new DatePickerDialog(
                         getActivity(), this, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
                 datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
             }
 
@@ -233,11 +249,16 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     certificate = "0";
                 }
 
-                if (!TextUtils.isEmpty(type) && diver != null){
 
-                    NYLog.e("CEK DATE 0 : "+date);
+                if (!NYHelper.isStringNotEmpty(type)){
+                    Toast.makeText(getActivity(), getString(R.string.warn_empty_keyword), Toast.LENGTH_SHORT).show();
+                } else if (!NYHelper.isStringNotEmpty(diver)) {
+                    Toast.makeText(getActivity(), getString(R.string.warn_total_diver), Toast.LENGTH_SHORT).show();
+                } else {
+
+                    //NYLog.e("CEK DATE 0 : "+date);
                     DoDiveActivity activity = (DoDiveActivity) getActivity();
-                    NYLog.e("HAS EXTRA " + activity.isEcoTrip());
+                    //NYLog.e("HAS EXTRA " + activity.isEcoTrip());
 
                     // TODO: ganti fragment yg dulu activity & yg dulu EXTRA sekarang BUNDLE
                     Intent intent;
@@ -328,17 +349,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         fragmentTransaction.commitAllowingStateLoss();*/
                     }
 
-                } else if (diver == null){
-                    Toast.makeText(getActivity(), "Pilih jumlah diver", Toast.LENGTH_SHORT).show();
-                } else {
-                    keywordTextView.isEmpty();
                 }
             }
         });
     }
 
     private void initView(View v) {
-        keywordTextView = (com.nyelam.android.view.NYEditTextWarning) v.findViewById(R.id.keyword_textView);
+        keywordTextView = (com.nyelam.android.view.font.NYTextView) v.findViewById(R.id.keyword_textView);
         //diverTextView = (TextView) v.findViewById(R.id.diver_textView);
         diverSpinner = (Spinner) v.findViewById(R.id.diver_spinner);
         datetimeTextView = (TextView)v.findViewById(R.id.datetime_textView);

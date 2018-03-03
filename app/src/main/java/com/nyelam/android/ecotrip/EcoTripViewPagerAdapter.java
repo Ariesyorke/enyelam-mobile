@@ -22,7 +22,6 @@ public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
             R.drawable.eco_trip_2,
             R.drawable.eco_trip_3,
             R.drawable.eco_trip_4
-
     };
 
     public EcoTripViewPagerAdapter(FragmentManager fm) {
