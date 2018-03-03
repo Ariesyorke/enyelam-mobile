@@ -279,7 +279,10 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     @Override
     public void onBackPressed() {
-
+        if(drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END);
+            return;
+        }
         if (getLastKey() == 0){
             finish();
         } else if (fragses.size() > 1) {

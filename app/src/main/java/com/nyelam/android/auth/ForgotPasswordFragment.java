@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.helper.NYHelper;
@@ -30,6 +34,7 @@ public class ForgotPasswordFragment extends Fragment {
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private TextView resetTextView;
     private EditText emailEditText;
+    private ImageView backgroundImageView;
 
     public ForgotPasswordFragment() {
         // Required empty public constructor
@@ -119,10 +124,20 @@ public class ForgotPasswordFragment extends Fragment {
     private void initView(View view) {
         emailEditText = (EditText) view.findViewById(R.id.email_editText);
         resetTextView = (TextView) view.findViewById(R.id.reset_textView);
-
+        backgroundImageView = (ImageView)view.findViewById(R.id.background_imageView);
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage(getString(R.string.loading));
         pDialog.setCancelable(false);
+
+        NYApplication application = (NYApplication)getActivity().getApplication();
+        String imageUri = "drawable://"+R.drawable.background_blur;
+
+        if(application.getCache(imageUri) != null) {
+            Bitmap bitmap = application.getCache(imageUri);
+            backgroundImageView.setImageBitmap(bitmap);
+        } else {
+            ImageLoader.getInstance().displayImage(imageUri, backgroundImageView, NYHelper.getCompressedOption(getActivity()));
+        }
     }
 
     @Override
