@@ -74,7 +74,6 @@ public class City implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-
         try {
             return obj.toString(3);
         } catch (JSONException e) {e.printStackTrace();}

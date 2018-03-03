@@ -401,7 +401,8 @@ public class DiveCenter implements Parseable {
 
         try{
             if(getContact()!=null){
-                obj.put(KEY_CONTACT, getContact());
+                JSONObject objLoc = new JSONObject(getContact().toString());
+                obj.put(KEY_CONTACT, objLoc);
             } else {
                 obj.put(KEY_CONTACT, JSONObject.NULL);
             }

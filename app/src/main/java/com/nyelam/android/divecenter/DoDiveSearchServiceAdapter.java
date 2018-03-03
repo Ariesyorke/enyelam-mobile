@@ -154,7 +154,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
                         @Override
                         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                            serviceImageView.setImageResource(R.drawable.logo_nyelam);
                         }
 
                         @Override
@@ -165,14 +165,14 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
                         @Override
                         public void onLoadingCancelled(String imageUri, View view) {
-                            serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                            serviceImageView.setImageResource(R.drawable.logo_nyelam);
                         }
                     });
 
                     ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
 
                 } else {
-                    serviceImageView.setImageResource(R.mipmap.ic_launcher);
+                    serviceImageView.setImageResource(R.drawable.logo_nyelam);
                 }
 
             }

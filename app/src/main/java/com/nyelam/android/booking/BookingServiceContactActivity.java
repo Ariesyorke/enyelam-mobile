@@ -76,6 +76,8 @@ public class BookingServiceContactActivity extends AppCompatActivity {
         phoneEditText = (TextInputEditText) findViewById(R.id.phone_number_contact_editText);
         emailEditText = (TextInputEditText) findViewById(R.id.email_contact_editText);
         saveTextView = (TextView) findViewById(R.id.save_contact_textView);
+
+        emailEditText.setKeyListener(null);
     }
 
     private void getExtra() {
