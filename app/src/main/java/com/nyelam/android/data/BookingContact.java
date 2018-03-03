@@ -14,10 +14,12 @@ public class BookingContact implements Parseable {
     private static String KEY_NAME = "name";
     private static String KEY_PHONE_NUMBER = "phone_number";
     private static String KEY_EMAIL = "email";
+    private static String KEY_COUNTRY_CODE = "country_code";
 
     private String name;
     private String phoneNumber;
     private String email;
+    private CountryCode countryCode;
 
     public String getName() {
         return name;
@@ -43,6 +45,14 @@ public class BookingContact implements Parseable {
         this.email = email;
     }
 
+    public CountryCode getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(CountryCode countryCode) {
+        this.countryCode = countryCode;
+    }
+
     @Override
     public void parse(JSONObject obj) {
 
@@ -65,6 +75,17 @@ public class BookingContact implements Parseable {
                 setEmail(obj.getString(KEY_EMAIL));
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_COUNTRY_CODE)) {
+                JSONObject objUser = obj.getJSONObject(KEY_COUNTRY_CODE);
+                CountryCode countryCode = new CountryCode();
+                countryCode.parse(objUser);
+                setCountryCode(countryCode);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -96,6 +117,17 @@ public class BookingContact implements Parseable {
                 obj.put(KEY_EMAIL, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (getCountryCode() != null) {
+                JSONObject objCountryCode = new JSONObject(getCountryCode().toString());
+                obj.put(KEY_COUNTRY_CODE, objCountryCode);
+            } else {
+                obj.put(KEY_COUNTRY_CODE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
             return obj.toString(3);

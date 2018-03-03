@@ -200,6 +200,10 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //make title center
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+
         firstNameEditText = (EditText) findViewById(R.id.first_name_editText);
         lastNameEditText = (EditText) findViewById(R.id.last_name_editText);
         usernameEditText = (EditText) findViewById(R.id.username_editText);

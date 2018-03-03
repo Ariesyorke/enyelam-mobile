@@ -7,6 +7,7 @@
     <string name="home">Home</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="password_hint">Password *</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="login">Login</string>
     <string name="or">or</string>
@@ -24,6 +25,7 @@
     <string name="phone_number_hint">Phone Number *</string>
     <string name="phone_number_ex">Phone number (eg. +905...)</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password_hint">Confirm Password *</string>
     <string name="select_gender">Select Gender</string>
     <string name="loading">Please wait...</string>
     <string name="events">Events</string>

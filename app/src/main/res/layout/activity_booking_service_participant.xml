@@ -108,7 +108,7 @@
             <TextView
                 android:id="@+id/save_textView"
                 android:text="Save"
-                android:textAllCaps="true"
+                android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="14sp"

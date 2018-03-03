@@ -79,9 +79,6 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
 
         //SdkUIFlowBuilder.init(getApplicationContext(),getResources().getString(R.string.client_key_development),getResources().getString(R.string.api_veritrans_development),this);
 
-
-
-
         /*SdkCoreFlowBuilder.init()
                 .setContext(this)
                 .enableLog(true)

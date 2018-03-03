@@ -182,6 +182,8 @@ public class BookingServiceActivity extends BasicActivity {
 
                 diveService = new DiveService();
 
+                NYLog.e("Cek Dive Service di Booking Service : "+diveService.toString());
+
                 try {
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.SERVICE));
                     diveService.parse(obj);
@@ -189,6 +191,8 @@ public class BookingServiceActivity extends BasicActivity {
                     e.printStackTrace();
                 }
 
+
+                NYLog.e("Cek Dive Service di Booking Service 2 : "+diveService.toString());
 
                 if (cartReturn != null && cartReturn.getCart() != null){
                     subTotalPriceTextView.setText(NYHelper.priceFormatter(cartReturn.getCart().getCurrency(), cartReturn.getCart().getSubTotal()));
@@ -211,14 +215,27 @@ public class BookingServiceActivity extends BasicActivity {
                     }*/
 
                     // TODO: location from where ?
-                    if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null){
+                    /*if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null){
                         Location location = diveService.getDiveCenter().getContact().getLocation();
                         String locationText = "";
                         if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locationText=locationText+location.getCity().getName();
                         if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getCity().getName();
                         if (location.getCountry() != null && NYHelper.isStringNotEmpty(location.getCountry())) locationText=locationText+", "+location.getCountry();
                         locationTextView.setText(locationText);
+                    }*/
+
+                    // TODO: location from where ?
+                    if (diveService.getDiveSpots() != null && diveService.getDiveSpots().size() > 0 && diveService.getDiveSpots().get(0).getLocation() != null){
+                        Location location = diveService.getDiveSpots().get(0).getLocation();
+                        String locationText = "";
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locationText=locationText+location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getCity().getName();
+                        if (location.getCountry() != null && NYHelper.isStringNotEmpty(location.getCountry())) locationText=locationText+", "+location.getCountry();
+                        locationTextView.setText(locationText);
                     }
+
+
+
 
 
                     // TODO: Rating and Visited
@@ -286,7 +303,7 @@ public class BookingServiceActivity extends BasicActivity {
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
                     }
 
-                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber()))contactPhoneNumberTextView.setText(bookingContact.getPhoneNumber());
+                    if (bookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(bookingContact.getCountryCode().getCountryNumber()) && NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())) contactPhoneNumberTextView.setText("+"+bookingContact.getCountryCode().getCountryNumber()+bookingContact.getPhoneNumber());
                     if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -299,9 +316,10 @@ public class BookingServiceActivity extends BasicActivity {
                     bookingContact.setName(storage.user.getFullname());
                     if(storage.user.getCountryCode() != null) {
                         CountryCode c = storage.user.getCountryCode();
-                        bookingContact.setPhoneNumber("+" + c.getCountryNumber() + storage.user.getPhone());
+                        bookingContact.setPhoneNumber(storage.user.getPhone());
                         contactPhoneNumberTextView.setText("+" + c.getCountryNumber() + storage.user.getPhone());
                     }
+
                     bookingContact.setEmail(storage.user.getEmail());
                     if (NYHelper.isStringNotEmpty(storage.user.getFullname())){
                         contactNameTextView.setText(storage.user.getFullname());

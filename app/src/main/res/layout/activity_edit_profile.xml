@@ -22,7 +22,7 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:textColor="@color/colorWhite"
                 android:background="@android:color/transparent"
                 android:textSize="18sp"
@@ -199,7 +199,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignTop="@+id/phone_number_layout"
-                                    android:paddingRight="@dimen/padding"
+                                    android:paddingRight="@dimen/padding_half"
                                     android:layout_alignBottom="@+id/phone_number_layout">
                                     <TextView
                                         android:id="@+id/country_code_textView"
@@ -276,12 +276,23 @@
                         android:id="@+id/update_textView"
                         android:text="Update"
                         android:textColor="@color/colorWhite"
-                        android:background="@drawable/ny_rectangle_gradation_blue"
+                        android:background="@drawable/ny_rectangle_orange"
                         android:gravity="center"
                         android:padding="@dimen/padding"
                         android:layout_margin="@dimen/padding_double"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+
+                    <!--<TextView
+                        android:id="@+id/update_textView"
+                        android:text="Update"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/ny_rectangle_gradation_blue"
+                        android:gravity="center"
+                        android:padding="@dimen/padding"
+                        android:layout_margin="@dimen/padding_double"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />-->
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
