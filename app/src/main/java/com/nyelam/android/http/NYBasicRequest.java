@@ -136,7 +136,6 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
             NYLog.d("return debug HEADERS = null");
         }
 
-        NYLog.e("isi json "+json);
 
         JSONObject obj = new JSONObject(json);
 

@@ -2,17 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ca1a60ab">
 
     <ImageView
         android:id="@+id/background_imageView"
-        android:src="@drawable/background_blur"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:background="#ca1a60ab"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

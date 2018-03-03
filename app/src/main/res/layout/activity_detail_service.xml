@@ -1,236 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:descendantFocusability="beforeDescendants"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
-    <com.nyelam.android.view.NYCustomViewPager
-        android:id="@+id/view_pager"
-        android:descendantFocusability="blocksDescendants"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:background="@color/colorWhite"
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/book_now_container">
+
+
+        <com.nyelam.android.view.NYCustomViewPager
+            android:id="@+id/view_pager"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
 
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        app:layout_behavior="com.nyelam.android.view.NYQuickReturnFooterBehavior"
-        android:orientation="horizontal">
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:titleEnabled="false">
 
-        <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/banner_relativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true">
+
+                    <ProgressBar
+                        android:id="@+id/banner_progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/ny_blue2"
+                        android:indeterminateTintMode="src_atop" />
+
+                    <com.nyelam.android.view.NYBannerViewPager
+                        android:id="@+id/promotion_view_pager"
+                        android:background="@color/ny_blue2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                    <me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/circle_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_alignBottom="@+id/promotion_view_pager"
+                        android:layout_centerHorizontal="true"
+                        app:ci_drawable="@drawable/ny_circle_white"
+                        app:ci_orientation="horizontal"/>
+
+                </RelativeLayout>
+
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="48dp"
+                    android:background="@color/ny_dark_transparent"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                    app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/title_textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            app:fontTextStyle="reguler"
+                            android:text="14 February 2018, 2 pax(s)"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.Toolbar>
+
+                <LinearLayout
+                    android:id="@+id/tab_manager"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:background="@color/ny_dark_transparent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed">
+
+                    <com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/home_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        app:tabChecked="true"
+                        app:tabItemPosition="home"
+                        app:tabItemText="Detail"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_b" />
+
+                    <com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/socialmedia_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="socmed"
+                        app:tabItemText="Reviews"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />
+
+                    <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/socialmedia_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:tabItemPosition="socmed"
+                        app:tabItemText="Dive Spots"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />
+
+                    <com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/transaction_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:tabItemPosition="transaction"
+                        app:tabItemText="Dive Center"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
+
+                    <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/my_account_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="my_account"
+                        app:tabItemText="Reviews"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
+
+                </LinearLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+        <!--<LinearLayout
+            android:background="@color/ny_grey3"
+            android:padding="@dimen/padding"
+            android:layout_gravity="bottom"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@color/colorWhite"
-            android:padding="@dimen/padding"
-            android:elevation="3dp"
-            android:paddingTop="5dp">
+            app:layout_behavior="com.nyelam.android.view.NYQuickReturnFooterBehavior">
 
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
             <TextView
-                android:id="@+id/booking_textView"
-                android:text="@string/book_now"
+                android:text="Booking"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:background="@drawable/ny_book_disable"
                 android:gravity="center"
-                android:layout_centerInParent="true"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ny_rectangle_orange"
                 android:paddingTop="@dimen/padding"
                 android:paddingBottom="@dimen/padding"
                 android:paddingLeft="@dimen/padding_triple"
                 android:paddingRight="@dimen/padding_triple" />
 
-        </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>-->
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    </android.support.design.widget.CoordinatorLayout>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/book_now_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="horizontal">-->
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
-
-            <RelativeLayout
-                android:id="@+id/banner_relativeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true">
-
-                <ProgressBar
-                    android:id="@+id/banner_progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/ny_blue2"
-                    android:indeterminateTintMode="src_atop" />
-
-                <com.nyelam.android.view.NYBannerViewPager
-                    android:id="@+id/promotion_view_pager"
-                    android:background="@color/ny_blue2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-                <me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/circle_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_alignBottom="@+id/promotion_view_pager"
-                    android:layout_centerHorizontal="true"
-                    app:ci_drawable="@drawable/ny_circle_white"
-                    app:ci_orientation="horizontal"/>
-
-            </RelativeLayout>
-
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:background="@color/ny_dark_transparent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                app:layout_collapseMode="pin">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/title_textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        app:fontTextStyle="reguler"
-                        android:text="14 February 2018, 2 pax(s)"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-
-            </android.support.v7.widget.Toolbar>
-
-            <LinearLayout
-                android:id="@+id/tab_manager"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:background="@color/ny_dark_transparent"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:tabGravity="fill"
-                app:tabMode="fixed">
-
-                <com.nyelam.android.view.NYHomepageDetailTabItemView
-                    android:id="@+id/home_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    app:tabChecked="true"
-                    app:tabItemPosition="home"
-                    app:tabItemText="Detail"
-                    app:tabSrcIcon="@drawable/ic_navigation_home_b" />
-
-                <com.nyelam.android.view.NYHomepageDetailTabItemView
-                    android:id="@+id/socialmedia_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:tabItemPosition="socmed"
-                    app:tabItemText="Reviews"
-                    app:tabSrcIcon="@drawable/ic_navigation_home_a" />
-
-                <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
-                    android:id="@+id/socialmedia_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:visibility="gone"
-                    app:tabItemPosition="socmed"
-                    app:tabItemText="Dive Spots"
-                    app:tabSrcIcon="@drawable/ic_navigation_home_a" />
-
-                <com.nyelam.android.view.NYHomepageDetailTabItemView
-                    android:id="@+id/transaction_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:visibility="gone"
-                    app:tabItemPosition="transaction"
-                    app:tabItemText="Dive Center"
-                    app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
-
-                <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
-                    android:id="@+id/my_account_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:tabItemPosition="my_account"
-                    app:tabItemText="Reviews"
-                    app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
-
-            </LinearLayout>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-
-    <!--<LinearLayout
-        android:background="@color/ny_grey3"
-        android:padding="@dimen/padding"
-        android:layout_gravity="bottom"
-        android:gravity="center"
+    <!--</LinearLayout>-->
+    <LinearLayout
+        android:id="@+id/book_now_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="com.nyelam.android.view.NYQuickReturnFooterBehavior">
+        android:layout_marginTop="2dp"
+        android:background="@color/colorWhite"
+        android:padding="@dimen/padding"
+        android:layout_alignParentBottom="true"
+        android:elevation="3dp"
+        android:paddingTop="5dp">
 
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
         <TextView
-            android:text="Booking"
+            android:id="@+id/booking_textView"
+            android:text="@string/book_now"
             android:textSize="14sp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:background="@drawable/ny_book_disable"
             android:gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ny_rectangle_orange"
             android:paddingTop="@dimen/padding"
             android:paddingBottom="@dimen/padding"
             android:paddingLeft="@dimen/padding_triple"
             android:paddingRight="@dimen/padding_triple" />
 
-    </LinearLayout>-->
-
-</android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
+</RelativeLayout>
 
 
 

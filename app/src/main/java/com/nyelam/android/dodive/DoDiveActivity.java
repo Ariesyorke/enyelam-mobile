@@ -1,6 +1,7 @@
 package com.nyelam.android.dodive;
 
 import android.app.FragmentManager;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nyelam.android.BasicActivity;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
@@ -53,7 +55,15 @@ public class DoDiveActivity extends BasicActivity implements
         titleTextView = (TextView) findViewById(R.id.title_textView);
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
         backgroundImageView = (ImageView) findViewById(R.id.background_imageView);
-        ImageLoader.getInstance().displayImage("drawable://"+R.drawable.background_blur,backgroundImageView, NYHelper.getCompressedOption(this));
+        String imageUri = "drawable://"+R.drawable.background_blur;
+        NYApplication application = (NYApplication)getApplication();
+
+        if(application.getCache(imageUri) != null) {
+            Bitmap bitmap = application.getCache(imageUri);
+            backgroundImageView.setImageBitmap(bitmap);
+        } else {
+            ImageLoader.getInstance().displayImage(imageUri, backgroundImageView, NYHelper.getCompressedOption(this));
+        }
     }
 
     private void initFragment() {

@@ -2,8 +2,10 @@ package com.nyelam.android;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.LruCache;
 import android.widget.Toast;
 
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
@@ -19,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.nyelam.android.data.dao.DaoMaster;
 import com.nyelam.android.data.dao.DaoSession;
@@ -37,7 +40,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
     public DaoSession getDaoSession() {
         return daoSession;
     }
-
+    public LruCache<String, Bitmap> imageCache;
 
     @Override
     public void onCreate() {
@@ -47,7 +50,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
-        /*File cacheDir = StorageUtils.getCacheDirectory(this);
+        File cacheDir = StorageUtils.getCacheDirectory(this);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.NORM_PRIORITY - 2) // default
                 .tasksProcessingOrder(QueueProcessingType.FIFO) // default
@@ -59,13 +62,13 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
                 .diskCacheSize(50 * 1024 * 1024)
                 .diskCacheFileCount(100)
                 .diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
-                .imageDownloader(new CustomImageDownloader(this)) // default
+                .imageDownloader(new BaseImageDownloader(this)) // default
                 .imageDecoder(new BaseImageDecoder(false)) // default
                 .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
                 .writeDebugLogs()
                 .build();
 
-        ImageLoader.getInstance().init(config);*/
+        ImageLoader.getInstance().init(config);
 
 
         /*SdkUIFlowBuilder.init(this,getResources().getString(R.string.client_key),getResources().getString(R.string.api_veritrans_development),this)
@@ -109,5 +112,20 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    public void addCache(String url, Bitmap image) {
+        if(imageCache == null) {
+            int cacheSize = 4 * 1024 * 1024; // 4MiB
+            imageCache = new LruCache<>(cacheSize);
+        }
+        imageCache.put(url,image);
+    }
+
+    public Bitmap getCache(String url) {
+        if(imageCache == null) {
+            return null;
+        }
+        return imageCache.get(url);
     }
 }

@@ -28,7 +28,6 @@ import java.util.List;
  */
 
 public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private Activity activity;
     private List<Event> eventList;
 
