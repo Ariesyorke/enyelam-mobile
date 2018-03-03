@@ -161,10 +161,10 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 HomeFragment fragment = HomeFragment.newInstance();
                 return fragment;
             } else if (position == 1) {
-                SocmedFragment fragment = SocmedFragment.newInstance();
+                TransactionFragment fragment = TransactionFragment.newInstance();
                 return fragment;
             }  else if (position == 2) {
-                TransactionFragment fragment = TransactionFragment.newInstance();
+                SocmedFragment fragment = SocmedFragment.newInstance();
                 return fragment;
             } else {
                 MyAccountFragment fragment = MyAccountFragment.newInstance();

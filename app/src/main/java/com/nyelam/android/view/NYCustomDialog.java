@@ -109,11 +109,18 @@ public class NYCustomDialog {
 
         ImageView closeImageView = (ImageView) dialog.findViewById(R.id.close_imageView);
         final CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.checkBox);
-
         closeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        final LinearLayout checkBoxLinearLayout = (LinearLayout) dialog.findViewById(R.id.checkBox_linearLayout);
+        checkBoxLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBox.setChecked(!checkBox.isChecked());
             }
         });
 
@@ -153,7 +160,7 @@ public class NYCustomDialog {
                     listener.onAcceptAgreementListener();
                     dialog.dismiss();
                 } else{
-                    Toast.makeText(activity, "Please, read and checklist agreement to order", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, activity.getString(R.string.warn_check_agreement_to_continue), Toast.LENGTH_SHORT).show();
                 }
 
             }

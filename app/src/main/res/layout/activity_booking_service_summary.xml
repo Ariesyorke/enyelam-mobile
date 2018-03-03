@@ -526,7 +526,7 @@
                                 android:layout_height="40dp" />
                             <TextView
                                 android:id="@+id/bank_transfer_label"
-                                android:text="Bank Transfer"
+                                android:text="@string/bank_transfer"
                                 android:textColor="@color/ny_black1"
                                 android:textSize="16sp"
                                 android:layout_marginLeft="@dimen/padding"
@@ -536,7 +536,7 @@
                             <TextView
                                 android:layout_below="@+id/bank_transfer_label"
                                 android:layout_toRightOf="@+id/bank_transfer"
-                                android:text="Pay from ATM Transfer"
+                                android:text="@string/bank_transfer_label"
                                 android:textColor="@color/ny_grey4"
                                 android:textSize="14sp"
                                 android:layout_marginLeft="@dimen/padding"
@@ -569,7 +569,7 @@
                                 android:layout_height="40dp" />
                             <TextView
                                 android:id="@+id/midtrans_label"
-                                android:text="Midtrans"
+                                android:text="@string/virtual_account_or_credit_card"
                                 android:textColor="@color/ny_black1"
                                 android:textSize="16sp"
                                 android:layout_marginLeft="@dimen/padding"
@@ -579,7 +579,7 @@
                             <TextView
                                 android:layout_below="@+id/midtrans_label"
                                 android:layout_toRightOf="@+id/midtrans"
-                                android:text="Pay using Midtrans Payment Gateway"
+                                android:text="@string/virtual_account_or_credit_card_label"
                                 android:textColor="@color/ny_grey4"
                                 android:textSize="14sp"
                                 android:layout_marginLeft="@dimen/padding"
@@ -622,7 +622,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="@string/confirm"
+                        android:text="@string/pay_now"
                         android:textSize="17sp"
                         android:textStyle="bold"
                         android:textColor="@color/colorWhite"

@@ -193,6 +193,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/license_linearLayout"
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/padding_double"
                     android:layout_width="match_parent"

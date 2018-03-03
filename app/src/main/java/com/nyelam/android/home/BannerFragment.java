@@ -52,8 +52,9 @@ public class BannerFragment extends Fragment {
             public void onClick(View v) {
                 // Open browser on click if not null
                 if(banner != null && banner.getUrl() != null){
-                    Intent intent= new Intent(Intent.ACTION_VIEW, Uri.parse(banner.getUrl()));
-                    startActivity(intent);
+                    /*Intent intent= new Intent(Intent.ACTION_VIEW, Uri.parse(banner.getUrl()));
+                    startActivity(intent);*/
+                    NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
                 }
             }
         });

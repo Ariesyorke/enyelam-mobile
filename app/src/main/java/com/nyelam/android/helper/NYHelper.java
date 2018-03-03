@@ -254,6 +254,85 @@ public class NYHelper {
 
     }
 
+
+    public static final void handleAPIException(final Context context, Exception e, boolean isCancelable, DialogInterface.OnClickListener listener) {
+
+        //NYLog.e("ERROR APA : "+e.getCause().getMessage());
+
+        String message = context.getResources().getString(R.string.warn_no_connection);
+        if (e.getCause() != null) {
+            if (e.getCause().getMessage().contains("Internal Server Error")){
+                message = context.getString(R.string.warn_server_error);
+            } else {
+                message = e.getCause().getMessage();
+            }
+        }
+
+
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setNeutralButton(android.R.string.ok,
+                        listener != null ? listener : new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                .setCancelable(true)
+                .create()
+                .show();*/
+
+        if (listener != null) {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+            mBuilder.setMessage(message)
+                    .setNeutralButton(android.R.string.ok,
+                            listener != null ? listener : new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                    .setCancelable(isCancelable);
+            if (!mBuilder.create().isShowing()) {
+                mBuilder.create().show();
+            }
+        } else {
+            if (e.getCause() instanceof NYStatusInvalidTokenException) {
+                LoginStorage loginStorage = new LoginStorage(context);
+                loginStorage.clear();
+                Intent intent = new Intent(context, AuthActivity.class);
+                intent.putExtra(AuthActivity.REQ_INVALID_TOKEN, message);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+
+            } else {
+                // TODO: helper ini saya comment
+                /*Intent intent = new Intent(context, HelperActivity.class);
+                intent.putExtra(HelperActivity.ERROR_MESSAGE, message);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(intent);*/
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(message)
+                        .setNeutralButton(android.R.string.ok,
+                                listener != null ? listener : new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                        .setCancelable(isCancelable)
+                        .create()
+                        .show();
+
+            }
+        }
+
+    }
+
     public static final void handlePopupMessage(Context context, String message, boolean isCancelable , DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message)
