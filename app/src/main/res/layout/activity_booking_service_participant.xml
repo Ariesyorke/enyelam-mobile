@@ -73,7 +73,10 @@
                         android:textSize="14sp"
                         android:textColor="@color/ny_black1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:imeOptions="actionNext"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -91,7 +94,10 @@
                         android:textSize="14sp"
                         android:textColor="@color/ny_black1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:imeOptions="actionDone"/>
 
                 </android.support.design.widget.TextInputLayout>
 

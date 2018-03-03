@@ -61,6 +61,16 @@ public class BookingServiceActivity extends BasicActivity {
         initControl();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == NYHelper.REQ_CART_EXPIRED) {
+            if(resultCode == RESULT_OK) {
+                finish();
+            }
+        }
+    }
+
     private void initControl() {
         changeContactTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,9 +128,8 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.SCHEDULE, schedule);
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                    startActivity(intent);
+                    startActivityForResult(intent, NYHelper.REQ_CART_EXPIRED);
                 }
-
             }
         });
     }

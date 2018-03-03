@@ -87,6 +87,7 @@ public class NYHelper {
     public static final String TRANSACTION_PENDING = "pending";
     public static final String CATEGORIES = "categories";
     public static final int REQ_LOGIN = 41;
+    public static final int REQ_CART_EXPIRED = 1405;
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));

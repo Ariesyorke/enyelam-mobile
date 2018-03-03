@@ -55,6 +55,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:imeOptions="actionNext"
                     android:hint="Email *"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -135,6 +138,9 @@
                             android:layout_height="match_parent"
                             android:textSize="16sp"
                             android:inputType="phone"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"
                             android:hint="Phone Number *"/>
                     </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
@@ -152,6 +158,9 @@
                     android:id="@+id/password_editText"
                     android:textSize="16sp"
                     android:hint="Password *"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:imeOptions="actionNext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"/>
@@ -169,6 +178,9 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:imeOptions="actionDone"
                     android:hint="Confirm Password *"/>
             </android.support.design.widget.TextInputLayout>
 

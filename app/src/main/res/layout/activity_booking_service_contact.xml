@@ -72,6 +72,9 @@
                         android:hint="@string/full_name_hint"
                         android:textSize="14sp"
                         android:textColor="@color/ny_black1"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:imeOptions="actionNext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -99,6 +102,9 @@
                         android:hint="@string/phone_number_hint"
                         android:textSize="14sp"
                         android:textColor="@color/ny_black1"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:imeOptions="actionDone"
                         android:inputType="phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -116,6 +122,8 @@
                         android:hint="@string/email_address_hint"
                         android:textSize="14sp"
                         android:textColor="@color/ny_grey2"
+                        android:singleLine="true"
+                        android:maxLines="1"
                         android:inputType="textEmailAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

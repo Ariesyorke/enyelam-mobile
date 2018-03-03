@@ -1,5 +1,6 @@
 package com.nyelam.android.booking;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -397,7 +398,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //TODO KALO CART EXPIRED
+                                setResult(Activity.RESULT_OK);
+                                finish();
                             }
                         });
                     } else {
@@ -420,6 +422,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 orderReturn = result;
 
                 if (paymentType.equals("2") && result != null && result.getVeritransToken() != null){
+                    //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
 
                     VeritransStorage veritransStorage = new VeritransStorage(BookingServiceSummaryActivity.this);
                     veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
@@ -432,10 +435,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     PayUsingVeritrans();
 
                 } else {
-                    if(paymentType.equals("2")) {
-                        PayUsingVeritrans();
-                    } else {
-                        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
+                    //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
+                    NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -445,7 +446,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                                         startActivity(intent);
                                     }
                                 }, "Check Order");
-                    }
                 }
             }
         };
@@ -510,6 +510,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -581,7 +586,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     @Override
     public void onTransactionFinished(final TransactionResult transactionResult) {
-
+        //TODO DISINI HANDLE KALO TRANSAKSI DI MIDTRANS SUKSES
         NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
                 new DialogInterface.OnClickListener() {
                     @Override
