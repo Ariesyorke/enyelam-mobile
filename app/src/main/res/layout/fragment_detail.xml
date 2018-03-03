@@ -24,15 +24,12 @@
                 android:layout_height="40dp" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/main_linearLayout"
                 android:padding="@dimen/padding_double"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-
-
-
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -41,7 +38,7 @@
                     <com.nyelam.android.view.font.NYTextView
                         android:id="@+id/title_textView"
                         app:fontTextStyle="semiBoldItalic"
-                        android:text="Bali Diving Safari / 3 Days"
+                        android:text="Service Name / 0 Days"
                         android:textColor="@color/ny_black1"
                         android:textSize="24sp"
                         android:layout_width="match_parent"
@@ -67,12 +64,12 @@
                             android:layout_height="20dp"
                             android:isIndicator="false"
                             android:numStars="5"
-                            android:rating="4"
+                            android:rating="0"
                             android:stepSize="1.0"
                             android:layout_gravity="start" />
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/rating_textView"
-                            android:text="5.0"
+                            android:text="0.0"
                             android:textSize="14sp"
                             android:textColor="@color/ny_black1"
                             android:layout_marginLeft="@dimen/padding_half"
@@ -110,7 +107,7 @@
                         <com.nyelam.android.view.font.StrikethroughTextView
                             android:id="@+id/price_strikethrough_textView"
                             android:visibility="gone"
-                            android:text="Rp 1.950.000"
+                            android:text="Rp -"
                             android:textColor="@color/ny_black1"
                             android:textSize="16sp"
                             android:layout_marginRight="@dimen/padding"
@@ -118,7 +115,7 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/price_textView"
-                            android:text="Rp 1.950.000"
+                            android:text="Rp - "
                             android:textColor="@color/ny_orange"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -291,7 +288,7 @@
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/category_textView"
                             app:fontTextStyle="italic"
-                            android:text="Diving"
+                            android:text="Category"
                             android:textColor="@color/colorWhite"
                             android:layout_marginLeft="@dimen/padding"
                             android:layout_width="wrap_content"

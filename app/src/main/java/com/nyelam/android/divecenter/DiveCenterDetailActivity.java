@@ -100,7 +100,8 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private TextView titleTextView, nameTextView, ratingTextView, visitedTextView, phoneNumberTextView, locationTextView, descriptionTextView, noResultTextView;
 
     private GoogleMap map;
-    private ProgressBar progressBar;
+    private LinearLayout mainLinearLayout;
+    private ProgressBar mainProgressBar, serviceProgressBar;
     private TextView noLocationTextView, openMapTextView;
     private SupportMapFragment mapFragment;
     private LinearLayout mapLinearLayout, phoneNumberLinearLayout;
@@ -271,19 +272,25 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         return new RequestListener<DiveCenter>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                /*if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }*/
+                if (mainProgressBar != null) {
+                    mainProgressBar.setVisibility(View.GONE);
+                }
                 NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
                 //noResultTextView.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onRequestSuccess(DiveCenter results) {
+                if (mainProgressBar != null) {
+                    mainProgressBar.setVisibility(View.GONE);
+                }
+
                 if (diveCenter == null) diveCenter = new DiveCenter();
                 diveCenter = results;
 
                 if (diveCenter != null){
+
+                    mainLinearLayout.setVisibility(View.VISIBLE);
 
                     getServiceList();
 
@@ -343,7 +350,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         return new RequestListener<DiveServiceList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                if (progressBar != null)progressBar.setVisibility(View.GONE);
+                if (serviceProgressBar != null)serviceProgressBar.setVisibility(View.GONE);
                 //NYHelper.handleAPIException(.this, spiceException, null);
                 noResultTextView.setVisibility(View.VISIBLE);
             }
@@ -351,7 +358,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
             @Override
             public void onRequestSuccess(DiveServiceList results) {
 
-                if (progressBar != null)progressBar.setVisibility(View.GONE);
+                if (serviceProgressBar != null)serviceProgressBar.setVisibility(View.GONE);
 
                 if (serviceList == null) serviceList = new ArrayList<>();
                 if (results != null && results.getList().size() > 0){
@@ -374,6 +381,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         viewPager = (NYCustomViewPager) findViewById(R.id.view_pager);
         bannerViewPager = (NYBannerViewPager) findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
+        mainProgressBar = (ProgressBar) findViewById(R.id.main_progress_bar);
+        serviceProgressBar = (ProgressBar) findViewById(R.id.service_progress_bar);
+        mainLinearLayout = (LinearLayout) findViewById(R.id.main_linearLayout);
 
         titleTextView = (TextView) findViewById(R.id.title_textView);
         nameTextView = (TextView) findViewById(R.id.name_textView);
@@ -381,8 +391,8 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         visitedTextView = (TextView) findViewById(R.id.visited_textView);
         phoneNumberTextView = (TextView) findViewById(R.id.phone_number_textView);
         locationTextView = (TextView) findViewById(R.id.location_textView);
-        descriptionTextView = (TextView) findViewById(R.id.title_textView);
-        openMapTextView  = (TextView) findViewById(R.id.title_textView);
+        descriptionTextView = (TextView) findViewById(R.id.description_textView);
+        openMapTextView  = (TextView) findViewById(R.id.open_map_textView);
         noResultTextView  = (TextView) findViewById(R.id.no_result_textView);
 
         recyclerView  = (RecyclerView) findViewById(R.id.recyclerView);

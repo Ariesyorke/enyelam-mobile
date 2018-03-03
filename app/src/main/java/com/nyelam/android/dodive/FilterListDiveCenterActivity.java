@@ -95,6 +95,9 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
 
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+
         categoriesLinearLayout = (LinearLayout) findViewById(R.id.categories_linearLayout);
         doneTextView = (TextView) findViewById(R.id.done_textView);
     }
