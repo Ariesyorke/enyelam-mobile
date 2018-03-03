@@ -83,6 +83,15 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         initTab();
         initControl();
         initPermission();
+
+        //TODO IF TRANSACTION COMPLETED
+        Intent intent = getIntent();
+        if(intent.hasExtra(NYHelper.TRANSACTION_COMPLETED)) {
+            NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(1);
+            onCheckedChanged(view, true);
+            movePagerToTabItemPosition(1);
+            intent.removeExtra(NYHelper.TRANSACTION_COMPLETED);
+        }
     }
 
     private void initExtra() {

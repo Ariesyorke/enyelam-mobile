@@ -51,7 +51,6 @@ public class BookingServiceContactActivity extends AppCompatActivity {
                 } else if (!NYHelper.isValidEmaillId(email)){
                     Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_email_not_valid), Toast.LENGTH_SHORT).show();
                 } else {
-
                     name = NYHelper.capitalizeString(name);
                     bookingContact.setName(name);
                     bookingContact.setPhoneNumber(phone);

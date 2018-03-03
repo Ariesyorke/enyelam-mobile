@@ -397,7 +397,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                //TODO KALO CART EXPIRED
                             }
                         });
                     } else {
@@ -440,8 +440,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
-                                        if (result != null && NYHelper.isStringNotEmpty(result.toString()))
-                                            intent.putExtra(NYHelper.SUMMARY, result.toString());
+                                        intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     }
@@ -581,12 +580,21 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
 
     @Override
-    public void onTransactionFinished(TransactionResult transactionResult) {
+    public void onTransactionFinished(final TransactionResult transactionResult) {
+
         NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                        //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
+                        if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
+                            if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
+                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                            } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
+                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
+                            }
+                        }
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
