@@ -92,7 +92,7 @@
                                 android:layout_width="45dp"
                                 android:layout_height="45dp">
                                 <ImageView
-                                    android:src="@drawable/logo_nyelam_transparent"
+                                    android:src="@drawable/ic_home_menu_do_dive"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
@@ -139,7 +139,7 @@
                                 android:layout_width="45dp"
                                 android:layout_height="45dp">
                                 <ImageView
-                                    android:src="@drawable/logo_nyelam_transparent"
+                                    android:src="@drawable/ic_home_menu_ecotrip"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
@@ -203,7 +203,7 @@
                                 android:layout_width="45dp"
                                 android:layout_height="45dp">
                                 <ImageView
-                                    android:src="@drawable/logo_nyelam_transparent"
+                                    android:src="@drawable/ic_home_menu_do_shop"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
@@ -257,7 +257,7 @@
                                 android:layout_width="45dp"
                                 android:layout_height="45dp">
                                 <ImageView
-                                    android:src="@drawable/logo_nyelam_transparent"
+                                    android:src="@drawable/ic_home_menu_do_course"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
