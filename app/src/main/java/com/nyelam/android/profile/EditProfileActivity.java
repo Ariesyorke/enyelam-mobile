@@ -133,7 +133,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             public void onClick(View v) {
                 String firstName = firstNameEditText.getText().toString().trim();
                 String lastName = lastNameEditText.getText().toString().trim();
-                String username = usernameEditText.getText().toString().trim();
+                String username = null;
                 String email = emailEditText.getText().toString().trim();
                 String phoneNumber = phoneNumberEditText.getText().toString().trim();
 

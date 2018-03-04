@@ -225,7 +225,7 @@
                 android:id="@+id/update_textView"
                 android:text="Update"
                 android:textColor="@color/colorWhite"
-                android:background="@drawable/ny_rectangle_orange"
+                android:background="@drawable/ny_rectangle_blue_soft"
                 android:gravity="center"
                 android:padding="@dimen/padding"
                 android:layout_marginLeft="@dimen/padding_double"
