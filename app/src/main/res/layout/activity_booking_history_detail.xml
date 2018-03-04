@@ -181,7 +181,7 @@
                             android:layout_height="wrap_content" />
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/visited_textView"
-                            android:text="/ 50 visited"
+                            android:text="/ 0 visited"
                             android:textSize="14sp"
                             android:textColor="@color/ny_black1"
                             android:layout_marginLeft="@dimen/padding_half"

@@ -143,8 +143,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
                 if (!NYHelper.isStringNotEmpty(firstName)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_first_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
-                } else  if (!NYHelper.isStringNotEmpty(username)){
-                    Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_username_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else  if (!NYHelper.isStringNotEmpty(email)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else  if (!NYHelper.isValidEmaillId(email)){

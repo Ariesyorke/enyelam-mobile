@@ -18,6 +18,7 @@
     <string name="full_name_hint">Full Name *</string>
     <string name="customer_name">Customer Name</string>
     <string name="first_name">First Name</string>
+    <string name="first_name_hint">First Name *</string>
     <string name="last_name">Last Name</string>
     <string name="email_address">E-mail Address</string>
     <string name="email_address_hint">E-mail Address *</string>
@@ -42,6 +43,7 @@
     <string name="bank_transfer_label">Pay from ATM Transfer</string>
     <string name="virtual_account_or_credit_card">Virtual Account/Credit Card</string>
     <string name="virtual_account_or_credit_card_label">Pay using Midtrans payment gateway</string>
+    <string name="open_map">Open Map</string>
 
     <string name="book_eco_trip">Book you Eco-Trip</string>
 

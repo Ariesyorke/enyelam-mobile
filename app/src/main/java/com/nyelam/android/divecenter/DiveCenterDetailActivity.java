@@ -311,7 +311,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                             Location location = contact.getLocation();
                             String locationText = "";
                             if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locationText=locationText+location.getCity().getName();
-                            if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getCity().getName();
+                            if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getProvince().getName();
                             if (location.getCountry() != null && NYHelper.isStringNotEmpty(location.getCountry())) locationText=locationText+", "+location.getCountry();
                             locationTextView.setText(locationText);
                         } else {

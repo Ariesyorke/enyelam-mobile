@@ -12,17 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/colorGradationLeft"
+        android:background="@drawable/ny_rectangle_gradation_blue_toolbar"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="reguler"
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:textColor="@color/colorWhite"
                 android:background="@android:color/transparent"
                 android:textSize="18sp"
@@ -215,11 +216,6 @@
 
 
 
-
-
-
-
-
                 <android.support.design.widget.TextInputLayout
                     android:layout_marginTop="@dimen/padding"
                     android:layout_width="match_parent"
@@ -242,7 +238,8 @@
             </LinearLayout>
 
 
-            <TextView
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="medium"
                 android:id="@+id/save_contact_textView"
                 android:text="@string/save"
                 android:textAllCaps="false"
