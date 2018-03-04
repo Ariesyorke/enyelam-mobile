@@ -89,12 +89,12 @@ public class DiveCenterListServiceFragment extends Fragment {
         if (getActivity() instanceof  DiveCenterDetailActivity){
 
             DiveCenterDetailActivity activity = (DiveCenterDetailActivity)getActivity();
-            adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.diver, activity.schedule, activity.certificate);
+            adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.diver, activity.schedule, activity.certificate, activity.diveCenter);
 
         } else if (getActivity() instanceof DiveSpotDetailActivity){
 
             DiveSpotDetailActivity activity = (DiveSpotDetailActivity)getActivity();
-            adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.getDiver(), activity.getSchedule(), activity.getCerificate());
+            adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.getDiver(), activity.getSchedule(), activity.getCerificate(), null);
         }
 
         recyclerView.setAdapter(adapter);

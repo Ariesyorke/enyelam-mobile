@@ -1,8 +1,7 @@
-package com.nyelam.android.detail;
+package com.nyelam.android.diveservice;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,14 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
-import com.nyelam.android.data.DiveService;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 

@@ -16,8 +16,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
-import com.nyelam.android.detail.DetailServiceActivity;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.StrikethroughTextView;
 
@@ -35,12 +36,14 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
     private String diver;
     private String date;
     private String certificate;
+    private DiveCenter diveCenter;
 
-    public DoDiveSearchServiceAdapter(Activity activity, String diver,String date, String certificate) {
+    public DoDiveSearchServiceAdapter(Activity activity, String diver,String date, String certificate, DiveCenter diveCenter) {
         this.activity = activity;
         this.diver = diver;
         this.date = date;
         this.certificate = certificate;
+        this.diveCenter = diveCenter;
     }
 
     @Override
@@ -188,7 +191,9 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
-
+            if (diveCenter != null) {
+                intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+            }
             /*intent.putExtra(NYHelper.DIVER, ((DoDiveSearchResultActivity)activity).diver);
             intent.putExtra(NYHelper.SCHEDULE, ((DoDiveSearchResultActivity)activity).date);
 

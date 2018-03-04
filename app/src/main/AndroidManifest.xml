@@ -61,7 +61,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".dodive.DoDiveSearchActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".detail.DetailServiceActivity"
+        <activity android:name=".diveservice.DetailServiceActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".dodive.DoDiveSearchResultActivity"
             android:screenOrientation="portrait"/>

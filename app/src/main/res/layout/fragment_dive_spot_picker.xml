@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
-    tools:context="com.nyelam.android.detail.DiveSpotPickerFragment">
+    tools:context="com.nyelam.android.diveservice.DiveSpotPickerFragment">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

@@ -1,7 +1,6 @@
-package com.nyelam.android.detail;
+package com.nyelam.android.diveservice;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,16 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
-import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.dodive.DoDiveSearchAdapter;
-
-import java.util.List;
 
 public class DetailServiceDiveSpotsFragment extends Fragment {
 
