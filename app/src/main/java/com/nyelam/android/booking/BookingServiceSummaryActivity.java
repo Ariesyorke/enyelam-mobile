@@ -37,6 +37,7 @@ import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
@@ -80,12 +81,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView;
-    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
+    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView, divecenterNameTextView;
     private RatingBar ratingBar;
-
+    private DiveCenter center;
     private RadioGroup radioGroup;
     private RadioButton bankTransferRadioButton, midtransRadioButton;
-
+    private DiveCenter diveCenter;
     private String veritransToken;
     private TextView expiredDateTextView;
     private CountDownTimer countDownTimer;
@@ -145,6 +146,33 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
+            if (intent.hasExtra(NYHelper.DIVE_CENTER)) {
+                try {
+                    JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.DIVE_CENTER));
+                    diveCenter = new DiveCenter();
+                    diveCenter.parse(obj);
+                    divecenterNameTextView.setText(diveCenter.getName());
+                    String location = "";
+                    if(diveCenter.getContact() != null) {
+                        Contact c = diveCenter.getContact();
+                        if(c.getLocation() != null) {
+                            Location l = c.getLocation();
+                            if(l.getCity() != null) {
+                                location = l.getCity().getName() + " ";
+                            }
+                            if(l.getProvince() != null) {
+                                location += l.getProvince().getName() + ", ";
+                            }
+                            if(l.getCountry() != null) {
+                                location += l.getCountry();
+                            }
+                            locationTextView.setText(location);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
             if (intent.hasExtra(NYHelper.DIVER)){
                 diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
@@ -280,7 +308,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     bookingContact.parse(obj);
 
                     if (NYHelper.isStringNotEmpty(bookingContact.getName()))contactNameTextView.setText(bookingContact.getName());
-                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber()))contactPhoneNumberTextView.setText(bookingContact.getPhoneNumber());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber()))contactPhoneNumberTextView.setText("+"+bookingContact.getCountryCode().getCountryNumber() + bookingContact.getPhoneNumber());
                     if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -325,7 +353,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
         midtransRadioButton = (RadioButton) findViewById(R.id.midtransRadioButton);
-
+        divecenterNameTextView = (TextView)findViewById(R.id.dive_center_name_textView);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));
@@ -460,7 +488,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 .setTransactionFinishedCallback(this) // set transaction finish callback (sdk callback)
                 .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
-                .setColorTheme(new CustomColorTheme("#FFE51255", "#2196F3","#FFE51255")) // set theme. it will replace theme on snap theme on MAP ( optional)
+                .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
 
         VeritransStorage veritransStorage = new VeritransStorage(this);

@@ -96,6 +96,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     View view = DoDiveSearchActivity.this.getCurrentFocus();
                     if (view != null) {
@@ -103,6 +104,14 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                NYLog.e("SCROLL DX : " + dx);
+                NYLog.e("SCROLL DY : " + dy);
+
             }
         });
     }
@@ -139,7 +148,6 @@ public class DoDiveSearchActivity extends AppCompatActivity {
     private void loadHistoryCache() {
         doDiveSearchAdapter.clear();
         KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(DoDiveSearchActivity.this);
-        NYLog.e("ISI JSON " + keywordHistoryStorage.getSearchResults() );
         if (keywordHistoryStorage.getSearchResults() != null && keywordHistoryStorage.getSearchResults().size() > 0){
             noResultTextView.setVisibility(View.GONE);
             doDiveSearchAdapter.clear();

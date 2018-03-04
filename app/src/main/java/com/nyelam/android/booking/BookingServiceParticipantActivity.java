@@ -48,7 +48,6 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
             position = bundle.getInt(NYHelper.POSITION);
             participants = new ArrayList<>();
 
-            NYLog.e("TES Participant : "+bundle.getString(NYHelper.PARTICIPANT));
             try {
                 JSONArray array = new JSONArray(bundle.getString(NYHelper.PARTICIPANT));
                 if (array != null && array.length() > 0) {

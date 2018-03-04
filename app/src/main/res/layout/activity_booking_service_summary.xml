@@ -234,7 +234,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/dive_center_name_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="@string/dive_center"
+                    android:textColor="@color/ny_black1" />
                 <LinearLayout
                     android:gravity="center"
                     android:orientation="horizontal"

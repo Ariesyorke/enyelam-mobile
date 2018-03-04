@@ -63,14 +63,14 @@
         android:layout_width="match_parent"
         android:layout_height="0.3dp"/>
 
-    <ScrollView
-        android:background="@color/colorWhite"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<ScrollView-->
+        <!--android:background="@color/colorWhite"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <!--<include layout="@layout/view_item_search"/>
             <include layout="@layout/view_item_search"/>-->
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
 
 
 </LinearLayout>
