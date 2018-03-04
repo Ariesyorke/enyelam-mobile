@@ -190,7 +190,7 @@
     <string name="tab_permata_alto">Permata/Alto</string>
     <string name="payment_instrution">Payment Instruction</string>
     <string name="payment_code">Payment Code</string>
-
+    <string name="check_order">Check Order</string>
     <!-- Mandiri bank transfer Instruction-->
     <string name="instruction">Instructions</string>
 

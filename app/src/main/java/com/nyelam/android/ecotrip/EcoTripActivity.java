@@ -3,6 +3,7 @@ package com.nyelam.android.ecotrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.nyelam.android.R;
 
@@ -31,7 +32,26 @@ public class EcoTripActivity extends AppCompatActivity {
     }
 
     private void initControl() {
+        ecoTripViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 4) {
+                    circleIndicator.setVisibility(View.GONE);
+                } else {
+                    circleIndicator.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void initView() {

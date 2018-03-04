@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
+import com.nyelam.android.data.Summary;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
@@ -63,7 +65,6 @@ import java.util.List;
 public class BookingServiceSummaryActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener, TransactionFinishedCallback {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
-    private OrderReturn orderReturn;
     private ProgressDialog progressDialog;
     private DiveService diveService;
     private int diver = 0;
@@ -74,6 +75,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private BookingContact bookingContact;
     //private String cartToken;
     private CartReturn cartReturn;
+    private OrderReturn orderReturn;
 
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, locationTextView;
@@ -420,7 +422,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
 
                 orderReturn = result;
-
                 if (paymentType.equals("2") && result != null && result.getVeritransToken() != null){
                     //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
 
@@ -442,10 +443,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
                                         intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                        intent.putExtra(NYHelper.ORDER, orderReturn.getSummary().toString());
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     }
-                                }, "Check Order");
+                                }, getResources().getString(R.string.check_order));
                 }
             }
         };
@@ -576,7 +578,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         progressDialog.show();
         NYDoDiveServiceOrderRequest req = null;
         try {
-            req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toString(), participantList.toString(), paymentType);            spcMgr.execute(req, onCreateOrderServiceRequest());
+            req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType);
+            spcMgr.execute(req, onCreateOrderServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -596,6 +599,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
                             if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
                                 intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
                             } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
                                 intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
                             }

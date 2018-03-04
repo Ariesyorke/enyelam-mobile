@@ -83,6 +83,7 @@
                         android:paddingRight="@dimen/padding"
                         android:paddingTop="@dimen/padding_half"
                         android:paddingBottom="@dimen/padding_half"
+                        android:visibility="gone"
                         android:layout_marginRight="@dimen/padding"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

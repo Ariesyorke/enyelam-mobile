@@ -85,6 +85,8 @@ public class NYHelper {
     public static final String NY_TRANSACTION_STATUS_CAPTURE = "capture";
     public static final String TRANSACTION_COMPLETED = "transaction_completed";
     public static final String TRANSACTION_PENDING = "pending";
+    public static final String ORDER = "order";
+    public static final String ORDER_HELPER = "order_id";
     public static final String CATEGORIES = "categories";
     public static final int REQ_LOGIN = 41;
     public static final int REQ_CART_EXPIRED = 1405;
