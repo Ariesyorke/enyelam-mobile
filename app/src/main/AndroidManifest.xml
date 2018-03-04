@@ -85,6 +85,7 @@
         <activity android:name=".dodive.FilterListDiveCenterActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ecotrip.EcoTripActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"
             android:screenOrientation="portrait"></activity>
     </application>
 

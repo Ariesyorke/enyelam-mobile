@@ -317,6 +317,7 @@ public class BookingServiceActivity extends BasicActivity {
                     if(storage.user.getCountryCode() != null) {
                         CountryCode c = storage.user.getCountryCode();
                         bookingContact.setPhoneNumber(storage.user.getPhone());
+                        bookingContact.setCountryCode(c);
                         contactPhoneNumberTextView.setText("+" + c.getCountryNumber() + storage.user.getPhone());
                     }
 

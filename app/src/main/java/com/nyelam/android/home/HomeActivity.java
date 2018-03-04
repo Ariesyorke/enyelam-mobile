@@ -87,9 +87,17 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         //TODO IF TRANSACTION COMPLETED
         Intent intent = getIntent();
         if(intent.hasExtra(NYHelper.TRANSACTION_COMPLETED)) {
-            NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(1);
-            onCheckedChanged(view, true);
-            movePagerToTabItemPosition(1);
+            if(intent.hasExtra(NYHelper.ORDER)) {
+                Intent i = new Intent(this, BookingHistoryDetailActivity.class);
+                i.putExtra(NYHelper.ORDER, intent.getStringExtra(NYHelper.ORDER));
+                intent.removeExtra(NYHelper.ORDER);
+                startActivity(i);
+            } else if (intent.hasExtra(NYHelper.ID_ORDER)) {
+                Intent i = new Intent(this, BookingHistoryDetailActivity.class);
+                i.putExtra(NYHelper.ID_ORDER, intent.getStringExtra(NYHelper.ID_ORDER));
+                intent.removeExtra(NYHelper.ID_ORDER);
+                startActivity(i);
+            }
             intent.removeExtra(NYHelper.TRANSACTION_COMPLETED);
         }
     }

@@ -89,6 +89,35 @@ public class BookingContact implements Parseable {
 
     }
 
+    public String toServer() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getName())) {
+                obj.put(KEY_NAME, getName());
+            } else {
+                obj.put(KEY_NAME, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getPhoneNumber())) {
+                obj.put(KEY_PHONE_NUMBER, "+" + getCountryCode().getCountryNumber() + getPhoneNumber());
+            } else {
+                obj.put(KEY_PHONE_NUMBER, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getEmail())) {
+                obj.put(KEY_EMAIL, getEmail());
+            } else {
+                obj.put(KEY_EMAIL, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return super.toString();
+    }
     @Override
     public String toString() {
 
@@ -135,5 +164,4 @@ public class BookingContact implements Parseable {
 
         return super.toString();
     }
-
 }
