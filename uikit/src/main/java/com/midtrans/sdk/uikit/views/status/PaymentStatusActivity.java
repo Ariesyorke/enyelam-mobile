@@ -189,31 +189,31 @@ public class PaymentStatusActivity extends BaseActivity {
 
     @Override
     public void initTheme() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            switch (this.paymentStatus) {
-                case UiKitConstants.STATUS_SUCCESS:
-                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.payment_status_success));
-                    break;
-                case UiKitConstants.STATUS_PENDING:
-                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.payment_status_pending));
-                    break;
-                default:
-                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.payment_status_failed));
-                    break;
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            switch (this.paymentStatus) {
+//                case UiKitConstants.STATUS_SUCCESS:
+//                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.payment_status_success));
+//                    break;
+//                case UiKitConstants.STATUS_PENDING:
+//                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.payment_status_pending));
+//                    break;
+//                default:
+//                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.payment_status_failed));
+//                    break;
+//            }
+//        }
 
-        switch (this.paymentStatus) {
-            case UiKitConstants.STATUS_SUCCESS:
-                layoutMain.setBackgroundColor(ContextCompat.getColor(this, R.color.payment_status_success));
-                break;
-            case UiKitConstants.STATUS_PENDING:
-                layoutMain.setBackgroundColor(ContextCompat.getColor(this, R.color.payment_status_pending));
-                break;
-            default:
-                layoutMain.setBackgroundColor(ContextCompat.getColor(this, R.color.payment_status_failed));
-                break;
-        }
+//        switch (this.paymentStatus) {
+//            case UiKitConstants.STATUS_SUCCESS:
+//                layoutMain.setBackgroundColor(ContextCompat.getColor(this, R.color.payment_status_success));
+//                break;
+//            case UiKitConstants.STATUS_PENDING:
+//                layoutMain.setBackgroundColor(ContextCompat.getColor(this, R.color.payment_status_pending));
+//                break;
+//            default:
+//                layoutMain.setBackgroundColor(ContextCompat.getColor(this, R.color.payment_status_failed));
+//                break;
+//        }
 
         buttonInstruction.setTextColor(ContextCompat.getColor(this, R.color.white));
         buttonInstruction.setIconColorFilter(ContextCompat.getColor(this, R.color.white));
