@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:visibility="gone"
         android:orientation="horizontal"
         android:padding="@dimen/padding"
         android:layout_width="match_parent"
@@ -66,7 +67,6 @@
                     android:layout_marginLeft="@dimen/padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -90,16 +90,24 @@
                     android:layout_marginTop="@dimen/padding_half"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
             </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
 
     <View
+        android:visibility="gone"
         android:layout_marginTop="@dimen/padding_half"
         android:background="@color/ny_grey1"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
+
+    <com.nyelam.android.view.font.NYTextView
+        android:text="@string/coming_soon"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:padding="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

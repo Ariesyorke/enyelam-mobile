@@ -19,6 +19,7 @@ import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.CountryCode;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
@@ -36,7 +37,7 @@ import java.util.List;
 public class BookingServiceActivity extends BasicActivity {
 
     private LinearLayout particpantContainerLinearLayout, nextLinearLayout;
-    private TextView serviceNameTextView, scheduleTextView, locationTextView;
+    private TextView serviceNameTextView, scheduleTextView, diveCenterNameTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
     private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
     private RatingBar ratingBar;
@@ -49,6 +50,7 @@ public class BookingServiceActivity extends BasicActivity {
     private BookingContact bookingContact;
     //private String cartToken;
     private CartReturn cartReturn;
+    private DiveCenter diveCenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class BookingServiceActivity extends BasicActivity {
                 intent.putExtra(NYHelper.SCHEDULE, schedule);
                 intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                 startActivity(intent);
             }
         });
@@ -124,10 +127,10 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
-
                     intent.putExtra(NYHelper.SCHEDULE, schedule);
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                    intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                     startActivityForResult(intent, NYHelper.REQ_CART_EXPIRED);
                 }
             }
@@ -254,6 +257,36 @@ public class BookingServiceActivity extends BasicActivity {
 
             }
 
+            if (intent.hasExtra(NYHelper.DIVE_CENTER) && extras.get(NYHelper.DIVE_CENTER) != null) {
+
+                diveCenter = new DiveCenter();
+
+                try {
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
+                    diveCenter.parse(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (diveCenter != null){
+
+                    if (NYHelper.isStringNotEmpty(diveCenter.getName())){
+                        diveCenterNameTextView.setText(diveCenter.getName());
+                    }
+
+                    if (diveCenter.getContact() != null && diveCenter.getContact().getLocation() != null){
+                        Location location = diveCenter.getContact().getLocation();
+                        String locString = "";
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locString += location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locString += ", "+location.getProvince().getName();
+                        if (NYHelper.isStringNotEmpty(location.getCountry())) locString += ", "+location.getCountry();
+                        locationTextView.setText(locString);
+                    }
+
+                }
+
+            }
+
             if (extras.get(NYHelper.PARTICIPANT) == null){
                 for (int i = 0; i < diver; i++){
                     participantList.add(i, new Participant());
@@ -342,6 +375,7 @@ public class BookingServiceActivity extends BasicActivity {
 
         serviceNameTextView = (TextView) findViewById(R.id.service_name_textView);
         scheduleTextView = (TextView) findViewById(R.id.schedule_textView);
+        diveCenterNameTextView = (TextView) findViewById(R.id.dive_center_name_textView);
         locationTextView = (TextView) findViewById(R.id.location_textView);
         detailPriceTextView = (TextView) findViewById(R.id.detail_price_textView);
         subTotalPriceTextView = (TextView) findViewById(R.id.sub_total_price_textView);
@@ -409,10 +443,10 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
-
                     intent.putExtra(NYHelper.SCHEDULE, schedule);
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                    intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                     startActivity(intent);
                 }
             });
@@ -431,10 +465,10 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
                     intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
                     intent.putExtra(NYHelper.POSITION, position);
-
                     intent.putExtra(NYHelper.SCHEDULE, schedule);
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                    intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                     startActivity(intent);
                 }
             });

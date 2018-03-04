@@ -3,9 +3,11 @@ package com.nyelam.android.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,8 +20,12 @@ import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Module;
 import com.nyelam.android.data.ModuleList;
+import com.nyelam.android.data.NYEventsModule;
+import com.nyelam.android.data.NYModule;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -30,8 +36,15 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -49,13 +62,22 @@ public class HomeFragment extends Fragment {
     private TextView eventsSeeAllTextView;
     private TextView hotOffersSeeAllTextView;
     private TextView popularDiveSpotsSeeAllTextView;
+
+
+    private RecyclerView recyclerView;
+    private HomePageAdapter adapter;
+
+
+    /*
     private RecyclerView  eventsRecyclerView;
     private RecyclerView  hotOffersRecyclerView;
-    private RecyclerView popularDiveSpotsRecyclerView;
-    private EventsRecyclerViewAdapter eventsRecyclerViewAdapter;
+    private RecyclerView popularDiveSpotsRecyclerView;*/
+
+    /*private EventsRecyclerViewAdapter eventsRecyclerViewAdapter;
     private HotOffersRecyclerViewAdapter hotOffersRecyclerViewAdapter;
-    private PopularDiveSpotsRecyclerViewAdapter popularDiveSpotsRecyclerViewAdapter;
-    private List<Module> modules = null;
+    private PopularDiveSpotsRecyclerViewAdapter popularDiveSpotsRecyclerViewAdapter;*/
+
+    private List<NYModule> modules = null;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -86,15 +108,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        adapter = new HomePageAdapter(getContext(), this);
         initView(view);
         initBanner();
         initControl();
         initAdapter();
+        initCacheModule();
         getListData();
     }
 
     private void initAdapter() {
-        LinearLayoutManager layoutManager
+        /*LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         eventsRecyclerView.setLayoutManager(layoutManager);
         eventsRecyclerViewAdapter = new EventsRecyclerViewAdapter(getActivity());
@@ -110,10 +134,33 @@ public class HomeFragment extends Fragment {
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         popularDiveSpotsRecyclerView.setLayoutManager(layoutManagerPopularDiveSpot);
         popularDiveSpotsRecyclerViewAdapter = new PopularDiveSpotsRecyclerViewAdapter(getActivity());
-        popularDiveSpotsRecyclerView.setAdapter(popularDiveSpotsRecyclerViewAdapter);
+        popularDiveSpotsRecyclerView.setAdapter(popularDiveSpotsRecyclerViewAdapter);*/
 
 
         //progressBar.setVisibility(View.VISIBLE);
+
+
+
+        final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
+
+            @Override
+            public int getSpanSize(int position) {
+
+                switch (adapter.getItemViewType(position)){
+                    case HomePageAdapter.VIEW_TYPE_HEADER:
+                        return 2 ;
+                    case HomePageAdapter.VIEW_TYPE_SLIDER:
+                        return 2;
+                    default:
+                        return 1;
+                }
+            }
+        });
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
     }
 
     private void getListData() {
@@ -134,7 +181,79 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRequestSuccess(ModuleList results) {
 
+
                 if (results != null && results.getList() != null && results.getList().size() > 1){
+
+                    NYLog.e("ngopi INIT");
+
+                    ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
+
+                    for (Module module : results.getList()){
+
+                        if (module.getName().equals("Event") && module.getEvents() != null && module.getEvents().size() > 0 ){
+
+                            NYLog.e("ngopi EVENT");
+
+                            List<NYModule> result = null;
+
+                            if (modulStorage != null){
+
+                                if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0){
+                                    result = new ArrayList<>();
+                                    List<Event> events = modulStorage.getModuleEvents();
+                                    for(Event e : events) {
+                                        NYModule nyModule = new NYEventsModule();
+                                        try {
+                                            JSONObject objEvent = new JSONObject(e.toString());
+                                            nyModule.parse(objEvent);
+                                            result.add(nyModule);
+                                        } catch (JSONException e1) {
+                                            e1.printStackTrace();
+                                        }
+
+                                    }
+                                }
+
+
+                            }
+
+
+                            adapter.clear();
+
+                            if (modules != null && !modules.isEmpty()){
+                                if(modules.size()> 2) {
+                                    NYEventsModule eventsModule = new NYEventsModule();
+                                    eventsModule.setModuleName("Category");
+                                    eventsModule.setModuleType("category");
+                                    modules.add(2,eventsModule);
+                                }
+
+                                adapter.addModules(result);
+                                adapter.notifyDataSetChanged();
+                            }
+
+
+                        } else if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
+
+                        } else if (module.getName().equals("Popular Dive Spots") && module.getDiveSpots() != null && module.getDiveSpots().size() > 0 ){
+
+                        }
+
+                        NYLog.e("ngopi MODULE : "+module.getName());
+
+                    }
+
+                    NYLog.e("ngopi napa : "+adapter.getItemCount());
+
+                    modulStorage.save();
+
+                }
+
+
+
+
+
+                /*if (results != null && results.getList() != null && results.getList().size() > 1){
 
                     ModulHomepageStorage modulHomepageStorage = new ModulHomepageStorage(getActivity());
 
@@ -145,7 +264,7 @@ public class HomeFragment extends Fragment {
                             eventsRecyclerViewAdapter.notifyDataSetChanged();
                             // TODO: SAVE TO STORAGE
                             modulHomepageStorage.setModuleEvents(module.getEvents());
-                        } else if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
+                        } zelse if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
                             hotOffersRecyclerViewAdapter.addResults(module.getDiveServices());
                             hotOffersRecyclerViewAdapter.notifyDataSetChanged();
                             // TODO: SAVE TO STORAGE
@@ -161,7 +280,7 @@ public class HomeFragment extends Fragment {
 
                     modulHomepageStorage.save();
 
-                }
+                }*/
 
             }
         };
@@ -244,9 +363,12 @@ public class HomeFragment extends Fragment {
         eventsSeeAllTextView = (TextView) view.findViewById(R.id.events_see_all_textView);
         hotOffersSeeAllTextView = (TextView) view.findViewById(R.id.hot_offers_see_all_textView);
         popularDiveSpotsSeeAllTextView = (TextView) view.findViewById(R.id.popular_dive_spots_see_all_textView);
-        eventsRecyclerView = (RecyclerView) view.findViewById(R.id.events_recyler_view);
+
+        /*eventsRecyclerView = (RecyclerView) view.findViewById(R.id.events_recyler_view);
         hotOffersRecyclerView = (RecyclerView) view.findViewById(R.id.hot_offers_recyler_view);
-        popularDiveSpotsRecyclerView = (RecyclerView) view.findViewById(R.id.popular_dive_spots_recyler_view);
+        popularDiveSpotsRecyclerView = (RecyclerView) view.findViewById(R.id.popular_dive_spots_recyler_view);*/
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.events_recyler_view);
     }
 
 
@@ -271,7 +393,6 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         spcMgr.start(getActivity());
-        initCacheModule();
     }
 
     private void initCacheModule() {
@@ -279,7 +400,7 @@ public class HomeFragment extends Fragment {
 
         if (modulStorage != null){
 
-            if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0 ){
+            /*if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0 ){
                 eventsRecyclerViewAdapter.addResults(modulStorage.getModuleEvents());
                 eventsRecyclerViewAdapter.notifyDataSetChanged();
             } else if (modulStorage.getModuleServices() != null && modulStorage.getModuleServices().size() > 0 ){
@@ -288,7 +409,61 @@ public class HomeFragment extends Fragment {
             } else if (modulStorage.getModuleDiveSpots() != null && modulStorage.getModuleDiveSpots().size() > 0 ){
                 popularDiveSpotsRecyclerViewAdapter.addResults(modulStorage.getModuleDiveSpots());
                 popularDiveSpotsRecyclerViewAdapter.notifyDataSetChanged();
+            }*/
+
+            // TODO: gabungin ke modul
+
+
+            /*modules = oModules;
+            if (progressBar != null){
+                progressBar.setVisibility(View.GONE);
             }
+
+            refreshLayout.setRefreshing(false);
+            recyclerView.setVisibility(View.VISIBLE);
+            actionMore.setVisibility(View.VISIBLE);*/
+
+
+            List<NYModule> result = null;
+
+            if (modulStorage != null){
+
+                if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0){
+                    result = new ArrayList<>();
+                    List<Event> events = modulStorage.getModuleEvents();
+                    for(Event e : events) {
+                        NYModule module = new NYEventsModule();
+                        try {
+                            JSONObject objEvent = new JSONObject(e.toString());
+                            module.parse(objEvent);
+                            result.add(module);
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+
+                    }
+                }
+
+
+            }
+
+
+            adapter.clear();
+
+            if (modules != null && !modules.isEmpty()){
+                if(modules.size()> 2) {
+                    NYEventsModule eventsModule = new NYEventsModule();
+                    eventsModule.setModuleName("Category");
+                    eventsModule.setModuleType("category");
+                    modules.add(2,eventsModule);
+                }
+
+                adapter.addModules(modules);
+                adapter.notifyDataSetChanged();
+            }
+
+
+
 
         }
 

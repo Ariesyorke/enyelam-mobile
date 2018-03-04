@@ -79,13 +79,14 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private OrderReturn orderReturn;
 
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout;
-    private TextView serviceNameTextView, scheduleTextView, locationTextView;
+    private TextView serviceNameTextView, scheduleTextView, diveCenterNameTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView;
-    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView, divecenterNameTextView;
+    private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
     private RatingBar ratingBar;
     private DiveCenter center;
     private RadioGroup radioGroup;
     private RadioButton bankTransferRadioButton, midtransRadioButton;
+    private LinearLayout bankTransferLinearLayout, midtransLinearLayout;
     private DiveCenter diveCenter;
     private String veritransToken;
     private TextView expiredDateTextView;
@@ -137,8 +138,27 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
         });
 
+        midtransLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                midtransRadioButton.setChecked(true);
+                bankTransferRadioButton.setChecked(false);
+                paymentType = "2";
+            }
+        });
+
+        bankTransferLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bankTransferRadioButton.setChecked(true);
+                midtransRadioButton.setChecked(false);
+                paymentType = "1";
+            }
+        });
 
     }
+
+
 
     private void initData() {
 
@@ -146,32 +166,35 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
-            if (intent.hasExtra(NYHelper.DIVE_CENTER)) {
+            if (intent.hasExtra(NYHelper.DIVE_CENTER) && extras.get(NYHelper.DIVE_CENTER) != null) {
+
+                diveCenter = new DiveCenter();
+
                 try {
-                    JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.DIVE_CENTER));
-                    diveCenter = new DiveCenter();
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
                     diveCenter.parse(obj);
-                    divecenterNameTextView.setText(diveCenter.getName());
-                    String location = "";
-                    if(diveCenter.getContact() != null) {
-                        Contact c = diveCenter.getContact();
-                        if(c.getLocation() != null) {
-                            Location l = c.getLocation();
-                            if(l.getCity() != null) {
-                                location = l.getCity().getName() + " ";
-                            }
-                            if(l.getProvince() != null) {
-                                location += l.getProvince().getName() + ", ";
-                            }
-                            if(l.getCountry() != null) {
-                                location += l.getCountry();
-                            }
-                            locationTextView.setText(location);
-                        }
-                    }
+                    NYLog.e("CEK DIVE CENTER : "+diveCenter.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                if (diveCenter != null){
+
+                    if (NYHelper.isStringNotEmpty(diveCenter.getName())){
+                        diveCenterNameTextView.setText(diveCenter.getName());
+                    }
+
+                    if (diveCenter.getContact() != null && diveCenter.getContact().getLocation() != null){
+                        Location location = diveCenter.getContact().getLocation();
+                        String locString = "";
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locString += location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locString += ", "+location.getProvince().getName();
+                        if (NYHelper.isStringNotEmpty(location.getCountry())) locString += ", "+location.getCountry();
+                        locationTextView.setText(locString);
+                    }
+
+                }
+
             }
 
             if (intent.hasExtra(NYHelper.DIVER)){
@@ -335,6 +358,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         serviceNameTextView = (TextView) findViewById(R.id.service_name_textView);
         scheduleTextView = (TextView) findViewById(R.id.schedule_textView);
+        diveCenterNameTextView = (TextView)findViewById(R.id.dive_center_name_textView);
         locationTextView = (TextView) findViewById(R.id.location_textView);
         detailPriceTextView = (TextView) findViewById(R.id.detail_price_textView);
         subTotalPriceTextView = (TextView) findViewById(R.id.sub_total_price_textView);
@@ -353,7 +377,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
         midtransRadioButton = (RadioButton) findViewById(R.id.midtransRadioButton);
-        divecenterNameTextView = (TextView)findViewById(R.id.dive_center_name_textView);
+
+        bankTransferLinearLayout = (LinearLayout) findViewById(R.id.payment_bank_transfer_linearLayout);
+        midtransLinearLayout = (LinearLayout) findViewById(R.id.payment_midtrans_linearLayout);
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));

@@ -70,5 +70,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
     compile 'org.sufficientlysecure:html-textview:3.5'
+    compile 'org.lucasr.twowayview:twowayview:0.1.4'
     testCompile 'junit:junit:4.12'
 }
