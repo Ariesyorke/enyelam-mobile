@@ -24,7 +24,7 @@ public class DiveCenter implements Parseable {
     private static String KEY_CONTACT = "contact";
     private static String KEY_MEMBERSHIP = "membership";
     private static String KEY_STATUS = "status";
-
+    private static String KEY_DESCRIPTION = "description";
 
 
     private static String KEY_FEATURED_IMAGE = "featured_image";
@@ -37,6 +37,7 @@ public class DiveCenter implements Parseable {
 
     private String id;
     private String name;
+    private String description;
     private String subtitle;
     private String imageLogo;
     private List<String> images;
@@ -53,6 +54,14 @@ public class DiveCenter implements Parseable {
     private String startFromTotalDives;
     private String startFromDays;
 
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getId() {
         return id;
@@ -319,6 +328,14 @@ public class DiveCenter implements Parseable {
         }
 
         try {
+            if(!obj.isNull(KEY_DESCRIPTION)) {
+                setDescription(obj.getString(KEY_DESCRIPTION));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
             if (!obj.isNull(KEY_FEATURED_IMAGE)) {
                 setFeaturedImage(obj.getString(KEY_FEATURED_IMAGE));
             }
@@ -354,6 +371,16 @@ public class DiveCenter implements Parseable {
     @Override
     public String toString() {
         JSONObject obj = new JSONObject();
+
+        try {
+            if(!TextUtils.isEmpty(getDescription())) {
+                obj.put(KEY_DESCRIPTION, getDescription());
+            } else {
+                obj.put(KEY_DESCRIPTION, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
             if (!TextUtils.isEmpty(getId())) {
