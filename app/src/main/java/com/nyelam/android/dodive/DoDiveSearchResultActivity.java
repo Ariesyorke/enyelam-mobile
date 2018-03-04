@@ -32,6 +32,8 @@ import java.util.List;
 
 public class DoDiveSearchResultActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener {
 
+    private int mRequestCode = 100;
+
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoDiveSearchDiveCenterAdapter diveCenterAdapter;
     private ProgressBar progressBar;
@@ -86,7 +88,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.TYPE, type);
                 intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent, mRequestCode);
             }
         });
     }

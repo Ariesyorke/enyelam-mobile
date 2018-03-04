@@ -80,7 +80,11 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.TYPE, type);
                 intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
+
             }
         });
     }
@@ -101,7 +105,6 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
         categoriesLinearLayout = (LinearLayout) findViewById(R.id.categories_linearLayout);
         doneTextView = (TextView) findViewById(R.id.done_textView);
     }
-
 
     private void initExtra() {
         categories = new ArrayList<>();
@@ -127,7 +130,6 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
 
         }
 
-
     }
 
     @Override
@@ -139,7 +141,6 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
 
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onLoadFailed(Exception e) {

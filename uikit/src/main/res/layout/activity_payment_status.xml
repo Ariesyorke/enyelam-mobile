@@ -5,7 +5,7 @@
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray.primary">
+    android:background="@color/white">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="@string/payment_successful"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
                 android:gravity="center"
                 android:padding="@dimen/eight_dp"
                 android:text="@string/thank_you"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="@dimen/thirtytwo_sp" />
 
             <com.midtrans.sdk.uikit.widgets.SemiBoldTextView
@@ -94,7 +94,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/status_order_id"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/small_text_size"
                             android:textStyle="bold" />
 
@@ -104,7 +104,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:text="@string/text_order_id_here"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/primary_text_size" />
                     </LinearLayout>
 
@@ -135,7 +135,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/status_payable_amount"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/small_text_size"
                             android:textStyle="bold" />
 
@@ -145,7 +145,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:text="@string/text_amount_here"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/primary_text_size" />
                     </LinearLayout>
 
@@ -175,7 +175,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/status_redeemed_point"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/small_text_size"
                             android:textStyle="bold" />
 
@@ -185,7 +185,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:text="@string/text_amount_here"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/primary_text_size" />
                     </LinearLayout>
 
@@ -215,7 +215,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/status_due_amount"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/small_text_size"
                             android:textStyle="bold" />
 
@@ -225,7 +225,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:text="@string/text_due_amount_here"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/primary_text_size" />
 
                     </LinearLayout>
@@ -257,7 +257,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/status_due_installment"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/small_text_size"
                             android:textStyle="bold" />
 
@@ -267,7 +267,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:text="@string/due_installment_here"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/primary_text_size" />
 
                     </LinearLayout>
@@ -295,7 +295,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/text_payment_type"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/small_text_size"
                             android:textStyle="bold" />
 
@@ -305,7 +305,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:text="@string/text_payment_type_here"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/primary_text_size"
                             android:textStyle="" />
 

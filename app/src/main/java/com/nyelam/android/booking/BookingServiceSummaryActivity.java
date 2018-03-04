@@ -436,7 +436,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                 } else {
                     //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
-                    NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
+                    NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -587,7 +587,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     @Override
     public void onTransactionFinished(final TransactionResult transactionResult) {
         //TODO DISINI HANDLE KALO TRANSAKSI DI MIDTRANS SUKSES
-        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Thank You, Your Order was Successful.", false,
+        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

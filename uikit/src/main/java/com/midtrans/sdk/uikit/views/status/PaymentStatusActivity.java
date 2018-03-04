@@ -181,8 +181,6 @@ public class PaymentStatusActivity extends BaseActivity {
         layoutMain = (FrameLayout) findViewById(R.id.layout_main);
         layoutDetails = (LinearLayout) findViewById(R.id.layout_status_details);
         layoutPointAmount = (LinearLayout) findViewById(R.id.layout_status_point_amount);
-
-
         imageStatusLogo = (ImageView) findViewById(R.id.image_status_payment);
 
         buttonInstruction = (FancyButton) findViewById(R.id.button_status_see_instruction);
