@@ -115,7 +115,9 @@ public class BookingContact implements Parseable {
                 obj.put(KEY_EMAIL, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
-
+        try {
+            return obj.toString(3);
+        } catch (JSONException e) {e.printStackTrace();}
         return super.toString();
     }
     @Override

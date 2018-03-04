@@ -249,7 +249,12 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                     obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
                     diveCenter = new DiveCenter();
                     diveCenter.parse(obj);
-                    if (diveCenter != null && NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
+                    if (NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
+                    if(!TextUtils.isEmpty(diveCenter.getDescription())) {
+                        descriptionTextView.setText(diveCenter.getDescription());
+                    } else {
+                        descriptionTextView.setText("-");
+                    }
                     initBanner();
                     //Toast.makeText(this, diveService.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {

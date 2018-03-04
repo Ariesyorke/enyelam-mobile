@@ -60,7 +60,8 @@
 
                 <TextView
                     android:text="Fullname must match ID Card"
-                    android:textColor="@color/ny_orange"
+                    android:textColor="@color/ny_black1"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -246,7 +247,7 @@
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="14sp"
-                android:background="@drawable/ny_rectangle_orange"
+                android:background="@drawable/ny_rectangle_blue_soft"
                 android:gravity="center"
                 android:padding="@dimen/padding"
                 android:layout_margin="@dimen/padding_double"
