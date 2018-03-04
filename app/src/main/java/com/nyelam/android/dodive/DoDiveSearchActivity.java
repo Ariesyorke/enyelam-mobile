@@ -109,8 +109,7 @@ public class DoDiveSearchActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                NYLog.e("SCROLL DX : " + dx);
-                NYLog.e("SCROLL DY : " + dy);
+
 
             }
         });

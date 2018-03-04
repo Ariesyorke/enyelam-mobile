@@ -93,6 +93,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private String diveSpotId;
     protected String type;
     protected String diverId = "";
+    private boolean ecoTrip = false;
 
     private DoDiveSearchServiceAdapter serviceAdapter;
     private RecyclerView recyclerView;
@@ -105,6 +106,10 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private TextView noLocationTextView, openMapTextView;
     private SupportMapFragment mapFragment;
     private LinearLayout mapLinearLayout, phoneNumberLinearLayout;
+
+    public boolean isEcoTrip() {
+        return ecoTrip;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +212,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-
+            if(intent.hasExtra(NYHelper.IS_ECO_TRIP)) {
+                ecoTrip = true;
+            }
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))){
                 diver = extras.getString(NYHelper.DIVER);
             }
@@ -346,8 +353,14 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 apiPath = getString(R.string.api_path_dodive_service_list_by_category);
             }
 
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId);
-            spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+            if(isEcoTrip()) {
+                NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId, "1");
+                spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+            } else {
+                NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId);
+                spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+            }
+
         }
     }
 

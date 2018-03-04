@@ -47,6 +47,11 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private int page = 1;
     private int sortingType = 1;
     private ArrayList<String> categories;
+    private boolean ecotrip = false;
+
+    public boolean isEcotrip() {
+        return ecotrip;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +116,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
         if(getIntent().hasExtra(NYHelper.ECO_TRIP)) {
             int ecoTrip = getIntent().getIntExtra(NYHelper.ECO_TRIP, 1);
+            ecotrip = true;
             req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
                     url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType), categories, String.valueOf(ecoTrip));
         } else {
