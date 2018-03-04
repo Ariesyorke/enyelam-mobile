@@ -7,6 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/ny_blue2</item>
     </style>
+    <style name="Fullscreen" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 
     <style name="NYSwitchTheme" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->

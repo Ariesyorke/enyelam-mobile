@@ -22,9 +22,9 @@
     <application
         android:name=".NYApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_rounded"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_rounded"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:theme, android:allowBackup">
@@ -36,6 +36,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".StarterActivity"
+            android:theme="@style/Fullscreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,7 +61,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".dodive.DoDiveSearchActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".detail.DetailServiceActivity"
+        <activity android:name=".diveservice.DetailServiceActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".dodive.DoDiveSearchResultActivity"
             android:screenOrientation="portrait"/>
@@ -85,7 +86,7 @@
         <activity android:name=".dodive.FilterListDiveCenterActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ecotrip.EcoTripActivity"
-            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"
+            android:theme="@style/Fullscreen"
             android:screenOrientation="portrait"></activity>
     </application>
 

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorWhite"
-    tools:context="com.nyelam.android.detail.DetailServiceFragment">
+    tools:context="com.nyelam.android.diveservice.DetailServiceFragment">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

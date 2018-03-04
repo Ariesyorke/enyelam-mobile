@@ -14,10 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
-import com.nyelam.android.data.DiveCenter;
-import com.nyelam.android.detail.DetailServiceActivity;
-import com.nyelam.android.divecenter.DiveCenterDetailActivity;
-import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/8/2018.

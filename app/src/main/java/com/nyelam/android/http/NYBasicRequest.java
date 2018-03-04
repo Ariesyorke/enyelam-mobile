@@ -116,7 +116,7 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
     @Override
     protected DATA onProcessData(byte[] data) throws Exception {
         String json = new String(data);
-
+        NYLog.e("JSON " + json);
         NYLog.d("return debug getUrl() = " + getUrl());
         if (getQueries() != null && !getQueries().isEmpty()) {
             NYLog.d("return debug POST = ");

@@ -1,4 +1,4 @@
-package com.nyelam.android.detail;
+package com.nyelam.android.diveservice;
 
 import android.content.Context;
 import android.graphics.Color;

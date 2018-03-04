@@ -1,7 +1,6 @@
-package com.nyelam.android.detail;
+package com.nyelam.android.diveservice;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -20,9 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
@@ -31,9 +28,9 @@ import com.nyelam.android.booking.BookingServiceActivity;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.CartReturn;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DiveCenterDetailFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
@@ -44,7 +41,6 @@ import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageDetailTabItemView;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -90,6 +86,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected String schedule;
     protected String certificate;
     private TextView titleTextView, bookingTextView;
+    private DiveCenter diveCenter;
     private ProgressDialog progressDialog;
     //private View viewTabManager;
     private boolean triggerBook;
@@ -144,7 +141,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
         try {
-            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule);
+            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, diveCenter.getId());
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +153,15 @@ public class DetailServiceActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-
+            if (intent.hasExtra(NYHelper.DIVE_CENTER)) {
+                try {
+                    JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.DIVE_CENTER));
+                    diveCenter = new DiveCenter();
+                    diveCenter.parse(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))){
                 diver = extras.getString(NYHelper.DIVER);
             }
@@ -564,14 +569,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         spcMgr.start(this);
-        /*if(triggerBook) {
+        if(triggerBook) {
             triggerBook = false;
-            if(!TextUtils.isEmpty(diveSpotId)) {
-                doBook();
-            } else {
-                openDiveSpotPickerDialog();
-            }
-        }*/
+            doBook();
+        }
     }
 
     @Override

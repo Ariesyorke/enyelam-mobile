@@ -1,4 +1,4 @@
-package com.nyelam.android.detail;
+package com.nyelam.android.diveservice;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,16 +13,8 @@ import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.data.SearchDiveCenter;
-import com.nyelam.android.data.SearchResult;
-import com.nyelam.android.data.SearchService;
-import com.nyelam.android.data.SearchSpot;
 import com.nyelam.android.divespot.DiveSpotDetailActivity;
-import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

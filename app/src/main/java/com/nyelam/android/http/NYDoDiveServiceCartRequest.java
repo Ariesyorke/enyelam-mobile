@@ -20,6 +20,7 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
     private static final String KEY_CART = "cart";
 
     private static final String POST_DIVE_SERVICE_ID = "dive_service_id";
+    private static final String POST_DIVE_CENTER_ID = "dive_center_id";
     private static final String POST_DIVER = "diver";
     private static final String POST_TYPE = "type";
     private static final String POST_SCHEDULE = "schedule";
@@ -33,6 +34,33 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
 
         if(!TextUtils.isEmpty(diver)) {
             addQuery(POST_DIVER, diver);
+        }
+
+        /*if(!TextUtils.isEmpty(type)) {
+            addQuery(POST_TYPE, type);
+        }*/
+
+        addQuery(POST_TYPE, "1");
+
+        if(!TextUtils.isEmpty(schedule)) {
+            addQuery(POST_SCHEDULE, schedule);
+        }
+
+    }
+
+    public NYDoDiveServiceCartRequest(Context context, String diveServiceId, String diver, String schedule, String diveCenterId) throws Exception {
+        super(CartReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_cart));
+
+        if(!TextUtils.isEmpty(diveServiceId)) {
+            addQuery(POST_DIVE_SERVICE_ID, diveServiceId);
+        }
+
+        if(!TextUtils.isEmpty(diver)) {
+            addQuery(POST_DIVER, diver);
+        }
+
+        if(!TextUtils.isEmpty(diveCenterId)) {
+            addQuery(POST_DIVE_CENTER_ID, diveCenterId);
         }
 
         /*if(!TextUtils.isEmpty(type)) {

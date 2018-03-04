@@ -1,4 +1,4 @@
-package com.nyelam.android.detail;
+package com.nyelam.android.diveservice;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
