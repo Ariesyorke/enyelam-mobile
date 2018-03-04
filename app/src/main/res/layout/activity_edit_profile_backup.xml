@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.nyelam.android.profile.EditProfileActivity">
 
     <android.support.v7.widget.Toolbar
@@ -45,258 +46,194 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/padding_double"
+            android:paddingRight="@dimen/padding_double"
+            android:paddingBottom="@dimen/padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
-                android:layout_margin="@dimen/activity_vertical_margin"
+
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/padding_double"
-                    android:paddingLeft="@dimen/padding"
-                    android:paddingRight="@dimen/padding"
-                    android:paddingBottom="@dimen/padding"
+                <EditText
+                    android:id="@+id/first_name_editText"
+                    android:hint="@string/first_name_hint"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:backgroundTint="@color/selecetor_edittext_line"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
 
-                    <LinearLayout
-                        android:orientation="vertical"
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/last_name_editText"
+                    android:hint="@string/last_name"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:backgroundTint="@color/selecetor_edittext_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/username_editText"
+                    android:hint="@string/username"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:backgroundTint="@color/selecetor_edittext_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/email_editText"
+                    android:hint="@string/email_address_hint"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/ny_grey2"
+                    android:imeOptions="actionNext"
+                    android:backgroundTint="@color/selecetor_edittext_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/spinner_linearLayout"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/phone_number_layout"
+                        android:paddingRight="@dimen/padding"
+                        android:layout_alignBottom="@+id/phone_number_layout">
+                        <TextView
+                            android:id="@+id/plus_textView"
+                            android:text="+ 62"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"
+                            android:layout_alignParentBottom="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"/>
+                        <RelativeLayout
+                            android:layout_toRightOf="@id/plus_textView"
+                            android:layout_alignBottom="@id/plus_textView"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@id/plus_textView">
+                            <ImageView
+                                android:src="@drawable/ic_down_arrow_black"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="8dp"
+                                android:layout_width="8dp"
+                                android:layout_height="8dp" />
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                    <Spinner
+                        android:id="@+id/country_code_spinner"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/padding"
+                        android:paddingRight="@dimen/padding"
+                        android:spinnerMode="dropdown"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="bottom|center_horizontal"
+                        android:layout_alignTop="@+id/spinner_linearLayout"
+                        android:layout_alignBottom="@+id/spinner_linearLayout"
+                        android:layout_alignRight="@+id/spinner_linearLayout"
+                        android:layout_alignLeft="@+id/spinner_linearLayout"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"/>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/phone_number_layout"
+                        android:layout_toRightOf="@id/spinner_linearLayout"
+                        android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <TextView
-                            android:text="@string/first_name"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
                         <EditText
-                            android:id="@+id/first_name_editText"
-                            android:hint="@string/first_name"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:padding="@dimen/padding"
+                            android:id="@+id/phone_number_editText"
+                            android:backgroundTint="@color/selecetor_edittext_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="16sp"
+                            android:inputType="phone"
                             android:singleLine="true"
                             android:maxLines="1"
-                            android:imeOptions="actionDone"
-                            android:layout_marginTop="@dimen/padding_half"
-                            android:background="@drawable/selector_edittext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
+                            android:imeOptions="actionNext"
+                            android:hint="@string/phone_number_hint"/>
+                    </android.support.design.widget.TextInputLayout>
+                </RelativeLayout>
+            </android.support.design.widget.TextInputLayout>
 
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:text="@string/last_name"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                        <EditText
-                            android:id="@+id/last_name_editText"
-                            android:hint="@string/last_name"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:singleLine="true"
-                            android:maxLines="1"
-                            android:imeOptions="actionDone"
-                            android:padding="@dimen/padding"
-                            android:layout_marginTop="@dimen/padding_half"
-                            android:background="@drawable/selector_edittext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:text="@string/username"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                        <EditText
-                            android:id="@+id/username_editText"
-                            android:hint="@string/username"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:padding="@dimen/padding"
-                            android:layout_marginTop="@dimen/padding_half"
-                            android:singleLine="true"
-                            android:maxLines="1"
-                            android:imeOptions="actionDone"
-                            android:background="@drawable/selector_edittext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:text="@string/email"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                        <EditText
-                            android:id="@+id/email_editText"
-                            android:hint="@string/email"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:padding="@dimen/padding"
-                            android:layout_marginTop="@dimen/padding_half"
-                            android:enabled="false"
-                            android:singleLine="true"
-                            android:maxLines="1"
-                            android:imeOptions="actionDone"
-                            android:background="@drawable/ny_rectangle_grey_disable_edittext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:text="@string/phone_number"
-                            android:textSize="14sp"
-                            android:textColor="@color/ny_black1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/padding_half"
-                            android:background="@drawable/selector_edittext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <RelativeLayout
-                                android:paddingLeft="@dimen/padding"
-                                android:paddingRight="@dimen/padding_half"
-                                android:paddingTop="@dimen/padding"
-                                android:paddingBottom="@dimen/padding"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-                                <RelativeLayout
-                                    android:id="@+id/spinner_linearLayout"
-                                    android:orientation="horizontal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@+id/phone_number_layout"
-                                    android:paddingRight="@dimen/padding_half"
-                                    android:layout_alignBottom="@+id/phone_number_layout">
-                                    <TextView
-                                        android:id="@+id/country_code_textView"
-                                        android:text="+62"
-                                        android:textSize="16sp"
-                                        android:textColor="@color/black"
-                                        android:layout_alignParentBottom="true"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content" />
-                                    <RelativeLayout
-                                        android:layout_toRightOf="@id/country_code_textView"
-                                        android:layout_alignBottom="@id/country_code_textView"
-                                        android:layout_marginLeft="@dimen/padding"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignTop="@id/country_code_textView">
-                                        <ImageView
-                                            android:src="@drawable/ic_down_arrow_black"
-                                            android:layout_centerInParent="true"
-                                            android:layout_marginBottom="8dp"
-                                            android:layout_width="8dp"
-                                            android:layout_height="8dp" />
-                                    </RelativeLayout>
-
-                                </RelativeLayout>
-
-                                <Spinner
-                                    android:id="@+id/country_code_spinner"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:paddingLeft="@dimen/padding"
-                                    android:paddingRight="@dimen/padding"
-                                    android:spinnerMode="dropdown"
-                                    android:backgroundTint="@android:color/transparent"
-                                    android:gravity="bottom|center_horizontal"
-                                    android:layout_alignTop="@+id/spinner_linearLayout"
-                                    android:layout_alignBottom="@+id/spinner_linearLayout"
-                                    android:layout_alignRight="@+id/spinner_linearLayout"
-                                    android:layout_alignLeft="@+id/spinner_linearLayout"
-                                    android:layout_gravity="bottom"
-                                    android:layout_marginBottom="10dp"/>
-                            </RelativeLayout>
-
-
-
-                            <View
-                                android:id="@+id/spinner_view"
-                                android:layout_toRightOf="@id/spinner_linearLayout"
-                                android:background="@color/ny_grey2"
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"/>
-
-                            <EditText
-                                android:layout_toRightOf="@id/spinner_view"
-                                android:id="@+id/phone_number_editText"
-                                android:hint="@string/phone_number_hint"
-                                android:textSize="14sp"
-                                android:layout_gravity="center_vertical"
-                                android:textColor="@color/ny_black1"
-                                android:layout_marginLeft="@dimen/padding"
-                                android:singleLine="true"
-                                android:maxLines="1"
-                                android:imeOptions="actionDone"
-                                android:background="@android:color/transparent"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                    <TextView
-                        android:id="@+id/update_textView"
-                        android:text="Update"
-                        android:textColor="@color/colorWhite"
-                        android:background="@drawable/ny_rectangle_orange"
-                        android:gravity="center"
-                        android:padding="@dimen/padding"
-                        android:layout_margin="@dimen/padding_double"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <!--<TextView
-                        android:id="@+id/update_textView"
-                        android:text="Update"
-                        android:textColor="@color/colorWhite"
-                        android:background="@drawable/ny_rectangle_gradation_blue"
-                        android:gravity="center"
-                        android:padding="@dimen/padding"
-                        android:layout_margin="@dimen/padding_double"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />-->
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/update_textView"
+                android:text="Update"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/ny_rectangle_orange"
+                android:gravity="center"
+                android:padding="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_double"
+                android:layout_marginRight="@dimen/padding_double"
+                android:layout_marginTop="@dimen/padding_triple"
+                android:layout_marginBottom="@dimen/padding_triple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>

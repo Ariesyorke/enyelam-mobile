@@ -145,7 +145,6 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
         }
 
-
     }
 
     private void initAdapter() {

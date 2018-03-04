@@ -24,7 +24,7 @@
                 android:layout_height="40dp" />
 
             <LinearLayout
-                android:visibility="gone"
+
                 android:id="@+id/main_linearLayout"
                 android:padding="@dimen/padding_double"
                 android:orientation="vertical"
@@ -77,7 +77,7 @@
                             android:layout_height="wrap_content" />
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/visited_textView"
-                            android:text="/ 50 visited"
+                            android:text="/ 0 visited"
                             android:textSize="14sp"
                             android:textColor="@color/ny_black1"
                             android:layout_marginLeft="@dimen/padding_half"
@@ -146,31 +146,92 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <com.nyelam.android.view.font.NYTextView
-                            android:id="@+id/total_dive_textView"
-                            app:fontTextStyle="reguler"
-                            android:text="Total Dives \t\t\t\t\t: "
-                            android:textColor="@color/ny_black1"
-                            android:layout_width="0dp"
+
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content" />
-                        <com.nyelam.android.view.font.NYTextView
-                            android:id="@+id/trip_durations_textView"
-                            app:fontTextStyle="reguler"
-                            android:text="Trip Durations \t: "
-                            android:textColor="@color/ny_black1"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <com.nyelam.android.view.font.NYTextView
+                                app:fontTextStyle="reguler"
+                                android:text="Total Dives"
+                                android:textColor="@color/ny_black1"
+                                android:layout_width="0dp"
+                                android:layout_weight="3"
+                                android:layout_height="wrap_content" />
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/total_dive_textView"
+                                app:fontTextStyle="reguler"
+                                android:text=": 0"
+                                android:textColor="@color/ny_black1"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <com.nyelam.android.view.font.NYTextView
+                                app:fontTextStyle="reguler"
+                                android:text="Trip Durations"
+                                android:textColor="@color/ny_black1"
+                                android:layout_width="0dp"
+                                android:layout_weight="3"
+                                android:layout_height="wrap_content" />
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/trip_durations_textView"
+                                app:fontTextStyle="reguler"
+                                android:text=": 0"
+                                android:textColor="@color/ny_black1"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+
                     </LinearLayout>
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/total_dive_spot_textView"
-                        app:fontTextStyle="reguler"
-                        android:text="Total Dive Spots \t: "
-                        android:textColor="@color/ny_black1"
+
+
+                    <LinearLayout
                         android:layout_marginTop="@dimen/padding"
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content">
+                            <com.nyelam.android.view.font.NYTextView
+                                app:fontTextStyle="reguler"
+                                android:text="Total Dive Spots"
+                                android:textColor="@color/ny_black1"
+                                android:layout_width="0dp"
+                                android:layout_weight="3"
+                                android:layout_height="wrap_content" />
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/total_dive_spot_textView"
+                                app:fontTextStyle="reguler"
+                                android:text=": 0"
+                                android:textColor="@color/ny_black1"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content">
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
 

@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/open_map_textView"
-                android:text="Tap on the map for fullscreen view."
+                android:text="@string/open_map"
                 android:textSize="13sp"
                 android:textColor="@color/ny_black1"
                 android:gravity="center"

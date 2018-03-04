@@ -139,21 +139,17 @@ public class DetailServiceFragment extends Fragment {
             ratingTextView.setText(String.valueOf(service.getRating()));
             //visitedTextView.setText(String.valueOf(service.getVisited()));
 
+            totalDivesTextView.setText(": "+String.valueOf(service.getTotalDives()));
 
-            String totalDivesString = "Total Dives \t\t\t\t\t: ";
-            totalDivesTextView.setText(totalDivesString+String.valueOf(service.getTotalDives()));
+            if (service.getDiveSpots() != null)totalDiveSpotsTextView.setText(": "+String.valueOf(service.getDiveSpots().size()));
 
-            String diveSpotString = "Total Dive Spots \t: ";
-            if (service.getDiveSpots() != null)totalDiveSpotsTextView.setText(diveSpotString+String.valueOf(service.getDiveSpots().size()));
 
-            String daysString = "Trip Durations \t: ";
 
             if (service.getDays() > 1){
-                tripDurationsTextView.setText(daysString+String.valueOf(service.getDays())+" Days");
+                tripDurationsTextView.setText(": "+String.valueOf(service.getDays())+" Days");
             } else {
-                tripDurationsTextView.setText(daysString+String.valueOf(service.getDays())+" Day");
+                tripDurationsTextView.setText(": "+String.valueOf(service.getDays())+" Day");
             }
-
 
             if (service.getDiveCenter() != null && service.getDiveCenter().getContact() != null){
                 if (NYHelper.isStringNotEmpty(service.getDiveCenter().getContact().getPhoneNumber()))phoneNumberTextView.setText(service.getDiveCenter().getContact().getPhoneNumber());
