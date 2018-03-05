@@ -19,7 +19,7 @@ public class DiveCenter implements Parseable {
     private static String KEY_NAME = "name";
     private static String KEY_SUBTITLE = "subtitle";
     private static String KEY_IMAGE_LOGO = "image_logo";
-    private static String KEY_IMAGES = "picture";
+    private static String KEY_IMAGES = "images";
     private static String KEY_RATING = "rating";
     private static String KEY_CONTACT = "contact";
     private static String KEY_MEMBERSHIP = "membership";

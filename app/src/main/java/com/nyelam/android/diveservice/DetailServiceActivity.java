@@ -124,10 +124,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         bookingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 LoginStorage storage = new LoginStorage(getApplicationContext());
-
-                if (storage.isUserLogin()){
+                if (storage.isUserLogin()) {
                     doBook();
                 } else {
                     Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
@@ -326,6 +324,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
         List<Banner> banners = new ArrayList<>();
         if (diveService != null && diveService.getFeaturedImage() != null && !TextUtils.isEmpty(diveService.getFeaturedImage()))banners.add(new Banner("1", diveService.getFeaturedImage(), "captio", null));
         bannerList.setList(banners);
+        if(diveService != null && diveService.getImages() != null && !diveService.getImages().isEmpty()) {
+            int i = 1;
+            for(String image: diveCenter.getImages()) {
+                banners.add(new Banner(String.valueOf(i), image, "gallery", null));
+                i++;
+            }
+        }
         //input data data
         bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
         bannerViewPager.setAdapter(bannerViewPagerAdapter);

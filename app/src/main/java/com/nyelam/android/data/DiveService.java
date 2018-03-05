@@ -32,6 +32,7 @@ public class DiveService implements Parseable {
     private static String KEY_NORMAL_PRICE = "normal_price";
     private static String KEY_SPECIAL_PRICE = "special_price";
     private static String KEY_DIVE_CENTER = "dive_center";
+    private static String KEY_IMAGES = "images";
 
     private String id;
     private String name;
@@ -49,6 +50,15 @@ public class DiveService implements Parseable {
     private double normalPrice;
     private double specialPrice;
     private DiveCenter diveCenter;
+private List<String> images;
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
 
     public String getId() {
         return id;
@@ -349,6 +359,30 @@ public class DiveService implements Parseable {
             }
         }
 
+        if(!obj.isNull(KEY_IMAGES)) {
+            try {
+                if(obj.get(KEY_IMAGES) instanceof JSONArray) {
+                    JSONArray array = obj.getJSONArray(KEY_IMAGES);
+                    if (array != null && array.length() > 0) {
+                        images = new ArrayList<>();
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject o = array.getJSONObject(i);
+                            String a = o.getString(KEY_IMAGES);
+                            images.add(a);
+                        }
+                    }
+                }  else if (obj.get(KEY_IMAGES) instanceof JSONObject) {
+                    JSONObject o = obj.getJSONObject(KEY_IMAGES);
+                    if(o != null && o.length() > 0) {
+                        images = new ArrayList<>();
+                        String d = o.getString(KEY_IMAGES);
+                        images.add(d);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -483,6 +517,18 @@ public class DiveService implements Parseable {
                     array.put(o);
                 }
                 obj.put(KEY_DIVE_SPOTS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(images != null && !images.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(String image : images) {
+                    array.put(image);
+                }
+                obj.put(KEY_IMAGES, array);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

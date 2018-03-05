@@ -55,7 +55,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
 
     private OnFragmentInteractionListener mListener;
-    private boolean isEcoTrip;
 
     public DoDiveFragment() {
         // Required empty public constructor
@@ -289,7 +288,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
                         if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                            intent.putExtra(NYHelper.ECO_TRIP, 1);
+                            intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
                         startActivity(intent);
                     } else if (type.equals("4") || type.equals("5") || type.equals("6")){

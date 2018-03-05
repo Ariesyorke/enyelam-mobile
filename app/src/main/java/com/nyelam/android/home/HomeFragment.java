@@ -128,11 +128,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onRequestSuccess(ModuleList results) {
-                NYLog.e("SUCCESS!!");
-                if (results != null && results.getList() != null && results.getList().size() > 1){
-
+                if (results != null && results.getList() != null && !results.getList().isEmpty()){
+                    adapter.clear();
                     adapter.addModules(results.getList());
-
+                    adapter.notifyDataSetChanged();
                     ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
                     modulStorage.setModuleList(results);
                     modulStorage.save();
@@ -145,7 +144,7 @@ public class HomeFragment extends Fragment {
 
 
     private void initControl() {
-
+        recyclerView.setNestedScrollingEnabled(false);
         menuItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -27,28 +27,27 @@ public class ModuleList extends NYAbstractList<Module> {
             //Module result = null;
 
 
-            if (type.equals("Event")) {
+            if (type.equals("Events")) {
 
                 ModuleEvent result = new ModuleEvent();
                 result.parse(o);
                 getList().add(result);
             } else if (type.equals("Hot Offer")){
 
-
                 ModuleService result = new ModuleService();
                 result.parse(o);
                 getList().add(result);
-            } else if (type.equals("Popular Dive Spots")){
 
-                NYLog.e("CEK MODULE : dive spot");
+            } else if (type.equals("Popular Dive Spot")){
+
 
                 ModuleDiveSpot result = new ModuleDiveSpot();
                 result.parse(o);
                 getList().add(result);
+
             }
 
         }
 
-        NYLog.e("CEK MODULE WHAT : "+getList().toString());
     }
 }

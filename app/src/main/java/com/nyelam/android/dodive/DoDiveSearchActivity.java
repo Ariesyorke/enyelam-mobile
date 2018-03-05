@@ -23,6 +23,7 @@ import com.nyelam.android.data.SearchResultList;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYDoDiveSearchDiveCenterRequest;
 import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.nyelam.android.storage.KeywordHistoryStorage;
 import com.nyelam.android.storage.ModulHomepageStorage;
@@ -134,7 +135,12 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                 if (keyword != null && !TextUtils.isEmpty(keyword) && keyword.length() > 2){
                     noResultTextView.setVisibility(View.GONE);
                     labelTextView.setText(getResources().getString(R.string.search_results));
-                    NYDoDiveSearchTypeRequest req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
+                    NYDoDiveSearchTypeRequest req = null;
+                    if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword, "1");
+                    } else {
+                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
+                    }
                     spcMgr.execute(req, "search_result", DurationInMillis.NEVER, onSearchKeywordRequest());
 //                    spcMgr.execute(req, onSearchKeywordRequest());
                 } else {

@@ -118,7 +118,6 @@ public class PopularDiveSpotsRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 GradientDrawable gd = new GradientDrawable(
                         GradientDrawable.Orientation.TOP_BOTTOM,
                         drColor.get(this.getAdapterPosition()%5));
-
                 gd.setCornerRadius(0f);
                 gd.setAlpha(180);
 

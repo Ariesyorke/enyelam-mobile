@@ -432,7 +432,16 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private void initBanner() {
         BannerList bannerList = new BannerList();
         List<Banner> banners = new ArrayList<>();
-        if (diveCenter != null && diveCenter.getFeaturedImage() != null && !TextUtils.isEmpty(diveCenter.getFeaturedImage()))banners.add(new Banner("1", diveCenter.getFeaturedImage(), "captio", null));
+        if (diveCenter != null && diveCenter.getFeaturedImage() != null && !TextUtils.isEmpty(diveCenter.getFeaturedImage())) {
+            banners.add(new Banner("1", diveCenter.getFeaturedImage(), "captio", null));
+        }
+        if(diveCenter != null && diveCenter.getImages() != null && !diveCenter.getImages().isEmpty()) {
+            int i = 1;
+            for(String image: diveCenter.getImages()) {
+                banners.add(new Banner(String.valueOf(i), image, "gallery", null));
+                i++;
+            }
+        }
         bannerList.setList(banners);
         //input data data
         bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
