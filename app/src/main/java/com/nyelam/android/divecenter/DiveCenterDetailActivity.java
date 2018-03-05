@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -258,7 +259,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                     diveCenter.parse(obj);
                     if (NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
                     if(!TextUtils.isEmpty(diveCenter.getDescription())) {
-                        descriptionTextView.setText(diveCenter.getDescription());
+                        descriptionTextView.setText(Html.fromHtml(diveCenter.getDescription()));
                     } else {
                         descriptionTextView.setText("-");
                     }
@@ -330,8 +331,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                             locationTextView.setText("-");
                         }
                     }
-
-
+                    initBanner();
                 }
 
             }

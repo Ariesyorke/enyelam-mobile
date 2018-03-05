@@ -33,6 +33,7 @@ public class DiveService implements Parseable {
     private static String KEY_SPECIAL_PRICE = "special_price";
     private static String KEY_DIVE_CENTER = "dive_center";
     private static String KEY_IMAGES = "images";
+    private static String KEY_DESCRIPTION = "description";
 
     private String id;
     private String name;
@@ -50,7 +51,17 @@ public class DiveService implements Parseable {
     private double normalPrice;
     private double specialPrice;
     private DiveCenter diveCenter;
-private List<String> images;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private List<String> images;
 
     public void setImages(List<String> images) {
         this.images = images;
@@ -192,6 +203,14 @@ private List<String> images;
     public void parse(JSONObject obj) {
         if (obj == null) return;
 
+
+        try {
+            if(!obj.isNull(KEY_DESCRIPTION)) {
+                setDescription(obj.getString(KEY_DESCRIPTION));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
@@ -361,23 +380,12 @@ private List<String> images;
 
         if(!obj.isNull(KEY_IMAGES)) {
             try {
-                if(obj.get(KEY_IMAGES) instanceof JSONArray) {
-                    JSONArray array = obj.getJSONArray(KEY_IMAGES);
-                    if (array != null && array.length() > 0) {
+                JSONArray array = obj.getJSONArray(KEY_IMAGES);
+                for(int i = 0; i < array.length(); i++) {
+                    if(images == null) {
                         images = new ArrayList<>();
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject o = array.getJSONObject(i);
-                            String a = o.getString(KEY_IMAGES);
-                            images.add(a);
-                        }
                     }
-                }  else if (obj.get(KEY_IMAGES) instanceof JSONObject) {
-                    JSONObject o = obj.getJSONObject(KEY_IMAGES);
-                    if(o != null && o.length() > 0) {
-                        images = new ArrayList<>();
-                        String d = o.getString(KEY_IMAGES);
-                        images.add(d);
-                    }
+                    images.add(array.getString(i));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -391,7 +399,15 @@ private List<String> images;
     public String toString() {
 
         JSONObject obj = new JSONObject();
-
+        try {
+            if(!TextUtils.isEmpty(getDescription())) {
+                obj.put(KEY_DESCRIPTION, getDescription());
+            } else {
+                obj.put(KEY_DESCRIPTION, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!TextUtils.isEmpty(getId())) {
                 obj.put(KEY_ID, getId());

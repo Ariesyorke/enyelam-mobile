@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +111,11 @@ public class DetailServiceFragment extends Fragment {
         if (((DetailServiceActivity)getActivity()).newDiveService != null){
 
             DiveService service = ((DetailServiceActivity)getActivity()).newDiveService;
-
+            if(!TextUtils.isEmpty(service.getDescription())) {
+                descriptionTextView.setText(Html.fromHtml(service.getDescription()));
+            } else {
+                descriptionTextView.setText("-");
+            }
             DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
 
             if (NYHelper.isStringNotEmpty(service.getName())){

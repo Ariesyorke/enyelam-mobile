@@ -226,7 +226,7 @@ public class DiveCenter implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        /*if(!obj.isNull(KEY_IMAGES)) {
+        if(!obj.isNull(KEY_IMAGES)) {
             try {
                 JSONArray array = obj.getJSONArray(KEY_IMAGES);
                 if(array != null && array.length() > 0) {
@@ -239,32 +239,32 @@ public class DiveCenter implements Parseable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }*/
-
-        if(!obj.isNull(KEY_IMAGES)) {
-            try {
-                if(obj.get(KEY_IMAGES) instanceof JSONArray) {
-                    JSONArray array = obj.getJSONArray(KEY_IMAGES);
-                    if (array != null && array.length() > 0) {
-                        images = new ArrayList<>();
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject o = array.getJSONObject(i);
-                            String a = o.getString(KEY_IMAGES);
-                            images.add(a);
-                        }
-                    }
-                }  else if (obj.get(KEY_IMAGES) instanceof JSONObject) {
-                    JSONObject o = obj.getJSONObject(KEY_IMAGES);
-                    if(o != null && o.length() > 0) {
-                        images = new ArrayList<>();
-                        String d = o.getString(KEY_IMAGES);
-                        images.add(d);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
+//
+//        if(!obj.isNull(KEY_IMAGES)) {
+//            try {
+//                if(obj.get(KEY_IMAGES) instanceof JSONArray) {
+//                    JSONArray array = obj.getJSONArray(KEY_IMAGES);
+//                    if (array != null && array.length() > 0) {
+//                        images = new ArrayList<>();
+//                        for (int i = 0; i < array.length(); i++) {
+//                            JSONObject o = array.getJSONObject(i);
+//                            String a = o.getString(KEY_IMAGES);
+//                            images.add(a);
+//                        }
+//                    }
+//                }  else if (obj.get(KEY_IMAGES) instanceof JSONObject) {
+//                    JSONObject o = obj.getJSONObject(KEY_IMAGES);
+//                    if(o != null && o.length() > 0) {
+//                        images = new ArrayList<>();
+//                        String d = o.getString(KEY_IMAGES);
+//                        images.add(d);
+//                    }
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
         if(!obj.isNull(KEY_CONTACT)) {
