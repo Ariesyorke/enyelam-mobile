@@ -30,6 +30,7 @@ import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
+import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
 
 import java.text.DecimalFormat;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -151,6 +153,12 @@ public class NYHelper {
         LoginStorage storage = new LoginStorage(context);
         storage.nyelamToken = authReturn.getToken();
         storage.user = authReturn.getUser();
+        return storage.save();
+    }
+
+    public static boolean saveEmailUser(Context context, String email) {
+        EmailLoginStorage storage = new EmailLoginStorage(context);
+        storage.email = email;
         return storage.save();
     }
 
