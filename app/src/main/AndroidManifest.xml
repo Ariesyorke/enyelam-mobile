@@ -35,59 +35,80 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".StarterActivity"
-            android:theme="@style/Fullscreen"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".StarterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.HomeActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".home.HomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".auth.AuthActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <service
             android:name=".backgroundservice.NYSpiceService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".dodive.DoDiveActivity"
+        <activity
+            android:name=".dodive.DoDiveActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".dodive.DoDiveSearchActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".diveservice.DetailServiceActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".dodive.DoDiveSearchResultActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".booking.BookingServiceActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".booking.BookingServiceParticipantActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".booking.BookingServiceContactActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".booking.BookingServiceSummaryActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".bookinghistory.BookingHistoryDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".profile.EditProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".divecenter.DiveCenterDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".divespot.DiveSpotDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".dodive.DoDiveSearchResultDiveSpotActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".dodive.FilterListDiveCenterActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ecotrip.EcoTripActivity"
-            android:theme="@style/Fullscreen"
-            android:screenOrientation="portrait"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".dodive.DoDiveSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".diveservice.DetailServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dodive.DoDiveSearchResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".booking.BookingServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".booking.BookingServiceParticipantActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".booking.BookingServiceContactActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".booking.BookingServiceSummaryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bookinghistory.BookingHistoryDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".profile.EditProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".divecenter.DiveCenterDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".divespot.DiveSpotDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dodive.DoDiveSearchResultDiveSpotActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dodive.FilterListDiveCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ecotrip.EcoTripActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Fullscreen" />
+        <activity
+            android:name=".VeritransNotificationActivity"
+            android:label="@string/title_activity_blank_notification"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

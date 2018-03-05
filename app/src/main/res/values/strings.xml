@@ -166,6 +166,7 @@
         <item>Socmed</item>
         <item>My Account</item>
     </string-array>
+    <string name="title_activity_blank_notification">BlankNotificationActivity</string>
 
 
 </resources>

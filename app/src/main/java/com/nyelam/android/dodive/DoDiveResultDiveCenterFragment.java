@@ -124,7 +124,7 @@ public class DoDiveResultDiveCenterFragment extends Fragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        diveCenterAdapter = new DoDiveSearchDiveCenterAdapter(getActivity(), diver, date, certificate, type, diverId);
+        diveCenterAdapter = new DoDiveSearchDiveCenterAdapter((DoDiveSearchResultActivity) getActivity(), diver, date, certificate, type, diverId);
         recyclerView.setAdapter(diveCenterAdapter);
     }
 

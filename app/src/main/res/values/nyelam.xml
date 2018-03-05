@@ -16,7 +16,6 @@
     <string name="api_path_master_country">api/master/country</string>
     <string name="api_path_master_category">api/service/masterCategory</string>
     <string name="api_path_master_dodive_search">api/master/dodive/search</string>
-
     <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>
     <string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>
     <string name="api_path_dodive_search_by_country">api/dodive/service/country</string>
