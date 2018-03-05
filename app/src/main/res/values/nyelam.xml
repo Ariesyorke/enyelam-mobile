@@ -46,6 +46,7 @@
     <string name="api_path_dodive_dive_center_detail">api/divecenter/detail</string>
     <string name="api_path_dodive_dive_spot_detail">api/divespot/detail</string>
     <string name="api_path_dodive_confirm_payment">api/order/paymentProof</string>
+    <string name="api_path_change_password">api/user/changepass</string>
     <string name="api_path_update_profile">api/user/profile/edit</string>
     <string name="api_path_upload_profile">api/user/photo</string>
     <string name="api_path_upload_cover">api/user/cover</string>

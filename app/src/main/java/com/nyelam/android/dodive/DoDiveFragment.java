@@ -134,9 +134,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // TODO Hide Past Date Here
         //datePickerDialog.show();
-
-
-
+        
         date = String.valueOf(c.getTimeInMillis()/1000);
         datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
     }
