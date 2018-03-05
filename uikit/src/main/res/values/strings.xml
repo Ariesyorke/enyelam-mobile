@@ -681,13 +681,13 @@
     <string name="valid_date">10 September 2015, 16:00</string>
     <string name="mandir_bill_instruction">how can i pay with mandiri bill payment ?</string>
     <string name="thank_you">Thank you!</string>
-    <string name="text_payment_type">PAYMENT TYPE</string>
-    <string name="status_payable_amount">TOTAL AMOUNT</string>
-    <string name="status_order_id">ORDER ID</string>
+    <string name="text_payment_type">Payment Type</string>
+    <string name="status_payable_amount">Total Amount</string>
+    <string name="status_order_id">Order ID</string>
     <string name="text_payment_time">PAYMENT TIME</string>
     <string name="text_payment_time_here">Payment Time Here</string>
-    <string name="status_due_amount">TOTAL DUE AMOUNT</string>
-    <string name="status_due_installment">DUE INSTALLMENT</string>
+    <string name="status_due_amount">Total Due Amount</string>
+    <string name="status_due_installment">Due Installment</string>
     <string name="text_due_amount_here">Due Amount Here</string>
     <string name="due_installment_here">Due Installment Here</string>
     <string name="status_bank">BANK</string>
@@ -777,7 +777,7 @@
     <string name="total_bni_point">Your total BNI points</string>
     <string name="bank_bni">BNI</string>
     <string name="bank_mandiri">Mandiri</string>
-    <string name="status_redeemed_point">POINT DISCOUNT</string>
+    <string name="status_redeemed_point">Point Discount</string>
     <string name="pay_without_bank_point">Pay without %1$s</string>
 
     <!-- bni internet  payment instruction -->
