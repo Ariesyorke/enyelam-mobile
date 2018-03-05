@@ -24,12 +24,8 @@ public class NYChangePasswordRequest extends NYBasicAuthRequest<JSONObject> {
     private static String POST_NEW_PASSWORD = "new_password";
     private static String POST_CONFIRM_NEW_PASSWORD = "confirm_new_password";
 
-    private Context context;
-
     public NYChangePasswordRequest(Context context, String currentPassword, String newPassword, String confirmNewPassword) throws Exception {
         super(Summary.class, context, context.getResources().getString(R.string.api_path_change_password));
-
-        this.context = context;
 
         if (NYHelper.isStringNotEmpty(currentPassword)){
             addQuery(POST_CURRENT_PASSWORD, StringHelper.md5(currentPassword.getBytes()) );

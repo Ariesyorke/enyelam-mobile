@@ -134,7 +134,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // TODO Hide Past Date Here
         //datePickerDialog.show();
-        
+
         date = String.valueOf(c.getTimeInMillis()/1000);
         datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
     }
@@ -422,7 +422,12 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     @Override
     public void onResume() {
         super.onResume();
-        if (getActivity() instanceof DoDiveActivity)((DoDiveActivity)getActivity()).setTitle("Do Dive", true, false);
+
+        if (getActivity() instanceof DoDiveActivity && ((DoDiveActivity) getActivity()).isEcoTrip()){
+            ((DoDiveActivity)getActivity()).setTitle(getString(R.string.eco_trip), true, false);
+        } else {
+            ((DoDiveActivity)getActivity()).setTitle(getString(R.string.do_dive), true, false);
+        }
     }
 
     public interface OnFragmentInteractionListener {
