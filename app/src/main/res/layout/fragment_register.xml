@@ -238,7 +238,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:background="@drawable/ny_rectangle_orange"
+                android:background="@drawable/ny_rectangle_blue_soft"
                 android:gravity="center"
                 android:padding="@dimen/padding"
                 android:layout_marginTop="@dimen/padding_double"

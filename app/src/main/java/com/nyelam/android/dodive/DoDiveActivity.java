@@ -58,6 +58,8 @@ public class DoDiveActivity extends BasicActivity implements
         String imageUri = "drawable://"+R.drawable.background_blur;
         NYApplication application = (NYApplication)getApplication();
 
+        if (ecoTrip) titleTextView.setText(getString(R.string.eco_trip));
+
         if(application.getCache(imageUri) != null) {
             Bitmap bitmap = application.getCache(imageUri);
             backgroundImageView.setImageBitmap(bitmap);
