@@ -12,6 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.City;
+import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.Coordinate;
+import com.nyelam.android.data.DiveCenter;
+import com.nyelam.android.data.Location;
+import com.nyelam.android.data.Province;
+import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
 
@@ -52,6 +59,7 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
         bookNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO HARCODE ECOTRIP!!
                 Intent intent = new Intent(getActivity(), DoDiveActivity.class);
                 intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                 startActivity(intent);

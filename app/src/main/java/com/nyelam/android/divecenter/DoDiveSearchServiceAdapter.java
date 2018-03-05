@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.StrikethroughTextView;
@@ -43,6 +44,10 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         this.diver = diver;
         this.date = date;
         this.certificate = certificate;
+        this.diveCenter = diveCenter;
+    }
+
+    public void setDiveCenter(DiveCenter diveCenter) {
         this.diveCenter = diveCenter;
     }
 
@@ -191,6 +196,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
+            NYLog.e("BEFORE DIVE CENTER " + diveCenter);
             if (diveCenter != null) {
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
             }

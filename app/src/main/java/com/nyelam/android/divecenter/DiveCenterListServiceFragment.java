@@ -86,12 +86,14 @@ public class DiveCenterListServiceFragment extends Fragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        if (getActivity() instanceof  DiveCenterDetailActivity){
-
+        if (getActivity() instanceof  DiveCenterDetailActivity) {
+            NYLog.e("PANGGIL 2");
             DiveCenterDetailActivity activity = (DiveCenterDetailActivity)getActivity();
+            NYLog.e("DIVE CENTER BEFORE " + activity.diveCenter);
             adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.diver, activity.schedule, activity.certificate, activity.diveCenter);
 
         } else if (getActivity() instanceof DiveSpotDetailActivity){
+            NYLog.e("PANGGIL 1");
 
             DiveSpotDetailActivity activity = (DiveSpotDetailActivity)getActivity();
             adapter = new DoDiveSearchServiceAdapter(getActivity(), activity.getDiver(), activity.getSchedule(), activity.getCerificate(), null);

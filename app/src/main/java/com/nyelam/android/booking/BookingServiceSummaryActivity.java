@@ -498,7 +498,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
                                         intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
-                                        intent.putExtra(NYHelper.ORDER, orderReturn.getSummary().toString());
+                                        intent.putExtra(NYHelper.ID_ORDER, orderReturn.getSummary().getOrder().getOrderId());
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     }

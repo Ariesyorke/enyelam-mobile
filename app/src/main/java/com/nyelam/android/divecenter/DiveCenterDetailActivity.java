@@ -45,6 +45,7 @@ import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divespot.DiveSpotDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
@@ -300,7 +301,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
                 if (diveCenter == null) diveCenter = new DiveCenter();
                 diveCenter = results;
-
+                serviceAdapter.setDiveCenter(results);
                 if (diveCenter != null){
 
                     mainLinearLayout.setVisibility(View.VISIBLE);

@@ -208,25 +208,35 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
         }
 
+        //TODO HARCODE ECOTRIP!!
+        DoDiveActivity activity = (DoDiveActivity) getActivity();
+        if(activity.isEcoTrip()) {
+            keywordTextView.setText("Save Our Small Island");
+            type = "3";
+            diverId = "23";
+        }
     }
 
     private void initControl() {
+
         keywordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(getActivity(), DoDiveSearchActivity.class);
-                intent.putExtra(NYHelper.CERTIFICATE, certificateCheckBox.isChecked());
-                intent.putExtra(NYHelper.SCHEDULE, date);
-                intent.putExtra(NYHelper.DIVER, diver);
                 DoDiveActivity activity = (DoDiveActivity) getActivity();
-                if(activity.isEcoTrip()) {
-                    intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
-                }
+                if(!activity.isEcoTrip()) {
+                    Intent intent = new Intent(getActivity(), DoDiveSearchActivity.class);
+                    intent.putExtra(NYHelper.CERTIFICATE, certificateCheckBox.isChecked());
+                    intent.putExtra(NYHelper.SCHEDULE, date);
+                    intent.putExtra(NYHelper.DIVER, diver);
+                    if (activity.isEcoTrip()) {
+                        intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+                    }
 
-                startActivity(intent);
+                    startActivity(intent);
+                }
             }
         });
+
 
         licenseLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
