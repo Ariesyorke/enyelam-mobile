@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.midtrans.sdk.corekit.core.Logger;
 import com.midtrans.sdk.corekit.core.PaymentType;
 import com.midtrans.sdk.corekit.models.TransactionResponse;
+import com.midtrans.sdk.corekit.utilities.Utils;
 import com.midtrans.sdk.uikit.R;
 import com.midtrans.sdk.uikit.abstracts.BaseActivity;
 import com.midtrans.sdk.uikit.utilities.MessageUtil;
@@ -336,14 +337,15 @@ public class PaymentStatusActivity extends BaseActivity {
             }
 
             // Set order id
-            textOrderId.setText(String.valueOf(transactionResponse.getOrderId()));
+            textOrderId.setText(String.valueOf("#"+transactionResponse.getOrderId()));
 
             // Set total amount
             try {
                 String amount = transactionResponse.getGrossAmount();
                 if (!TextUtils.isEmpty(amount)) {
                     String formattedAmount = amount.split(Pattern.quote(".")).length == 2 ? amount.split(Pattern.quote("."))[0] : amount;
-                    textTotalAmount.setText(formattedAmount);
+                    String currencyAmount = getString(R.string.prefix_money, Utils.getFormattedAmount(Double.valueOf(amount)));
+                    textTotalAmount.setText(currencyAmount);
                 }
             } catch (RuntimeException e) {
                 Logger.e(TAG, "amount:" + e.getMessage());

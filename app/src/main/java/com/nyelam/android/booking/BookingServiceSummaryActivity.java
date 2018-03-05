@@ -174,7 +174,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 try {
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
                     diveCenter.parse(obj);
-                    NYLog.e("CEK DIVE CENTER : "+diveCenter.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

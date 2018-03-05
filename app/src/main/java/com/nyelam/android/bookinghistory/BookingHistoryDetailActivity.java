@@ -23,7 +23,9 @@ import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
@@ -72,6 +74,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private TextView scheduleTextView;
     private TextView serviceNameTextView;
     private TextView locationTextView;
+    private TextView diveCenterTextView;
     private TextView subTotalPriceTextView;
     private TextView voucherTextView;
     private TextView totalPriceTextView;
@@ -143,6 +146,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private void initView() {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_swipeRefreshLayout);
+        diveCenterTextView = (TextView) findViewById(R.id.dive_center_name_textView);
         orderIdTextView = (TextView) findViewById(R.id.order_id_textView);
         statusTextView = (TextView) findViewById(R.id.status_textView);
         scheduleTextView = (TextView) findViewById(R.id.schedule_textView);
@@ -339,14 +343,32 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 if (NYHelper.isStringNotEmpty(contact.getEmailAddress())) contactEmailTextView.setText(contact.getEmailAddress());
             }
 
-            if (summary.getOrder() != null){
+            if(summary.getDiveService() != null) {
+                DiveCenter diveCenter = summary.getDiveService().getDiveCenter();
+                if(diveCenter != null) {
+                    diveCenterTextView.setText(diveCenter.getName());
+                    if(diveCenter.getContact() != null) {
+                        Contact c = diveCenter.getContact();
+                        if (c.getLocation() != null) {
+                            Location location = c.getLocation();
+                            String locString = "";
+                            if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locString += location.getCity().getName();
+                            if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locString += ", "+location.getProvince().getName();
+                            if (NYHelper.isStringNotEmpty(location.getCountry())) locString += ", "+location.getCountry();
+                            locationTextView.setText(locString);
+                        }
+                    }
+                }
+            }
+
+            if (summary.getOrder() != null) {
 
                 Order order = summary.getOrder();
 
                 if (NYHelper.isStringNotEmpty(order.getStatus())){
 
                     statusTextView.setText(order.getStatus());
-                    if (order.getStatus().toLowerCase().equals("unpaid")){
+                    if (order.getStatus().equalsIgnoreCase("unpaid") && orderReturn.getVeritransToken() == null){
                         paymentLinearLayout.setVisibility(View.VISIBLE);
                     } else {
                         paymentLinearLayout.setVisibility(View.GONE);
