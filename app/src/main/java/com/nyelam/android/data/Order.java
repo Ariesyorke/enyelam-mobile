@@ -57,7 +57,6 @@ public class Order implements Parseable {
         this.cart = cart;
     }
 
-
     @Override
     public void parse(JSONObject obj) {
 

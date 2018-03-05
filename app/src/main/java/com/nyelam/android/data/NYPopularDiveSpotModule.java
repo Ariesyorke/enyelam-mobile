@@ -21,11 +21,11 @@ public class NYPopularDiveSpotModule extends NYModule {
     private List<DiveSpot> diveSpots;
     private int position;
 
-    public List<DiveSpot> getProducts() {
+    public List<DiveSpot> getDiveSpots() {
         return diveSpots;
     }
 
-    public void setProducts(List<DiveSpot> diveSpots) {
+    public void setDiveSpots(List<DiveSpot> diveSpots) {
         this.diveSpots = diveSpots;
     }
 

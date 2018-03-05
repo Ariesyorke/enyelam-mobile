@@ -159,7 +159,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
 
-
     private void initData() {
 
         Intent intent = getIntent();

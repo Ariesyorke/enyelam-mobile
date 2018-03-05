@@ -78,7 +78,8 @@ public class NYHelper {
     public static final int LOGIN_REQ = 101;
     public static final String ID_ORDER = "id_order";
     public static final String SUMMARY = "summary";
-    public static final String BANK_TRANSFER = "ban_transfer";
+    public static final String ORDER_RETURN = "order_return";
+    public static final String BANK_TRANSFER = "bank_transfer";
     public static final String MIDTRANS = "midtrans";
 
     public static final String NY_ACCEPT_FRAUD_STATUS = "accept";

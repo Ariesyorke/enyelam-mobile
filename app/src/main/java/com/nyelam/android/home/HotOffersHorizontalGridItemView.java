@@ -10,58 +10,60 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
+import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.helper.NYHelper;
 
 /**
- * Created by Sonic on 15/01/2018.
+ * Created by Aprilian Nur Wakhid Daini on 3/5/2018.
  */
 
-public class EventsHorizontalGridItemView extends FrameLayout {
+public class HotOffersHorizontalGridItemView extends FrameLayout {
 
     private Context context;
     private ImageView imageView;
     private TextView locationTextView;
     private TextView nameTextView;
     private TextView priceTextView;
+    private TextView dateTextView;
     private TextView bookNowTextView;
     private LinearLayout containerLinearLayout;
     private View rootView;
-    private Event event;
+    private DiveService diveService;
 
     @Override
     public View getRootView() {
         return rootView;
     }
 
-    public Event getEvent() {
-        return event;
+    public DiveService getDiveService() {
+        return diveService;
     }
 
-    public void setEvent(Event event) {
-        if (event == null) return;
+    public void setDiveService(DiveService diveService) {
+        if (diveService == null) return;
 
-        this.event = event;
+        this.diveService = diveService;
         reloadView();
     }
 
-    public EventsHorizontalGridItemView(@NonNull Context context) {
+    public HotOffersHorizontalGridItemView(@NonNull Context context) {
         super(context);
         init(context);
     }
 
     private void init(Context context){
-        inflate(context, R.layout.view_item_modul_event, this);
+        inflate(context, R.layout.view_item_modul_hot_offers, this);
 
-        imageView = findViewById(R.id.event_imageView);
+        imageView = findViewById(R.id.service_imageView);
         locationTextView = findViewById(R.id.location_textView);
         nameTextView = findViewById(R.id.name_textView);
         containerLinearLayout = findViewById(R.id.container_linaerLayout);
+        dateTextView = findViewById(R.id.date_textView);
         priceTextView = findViewById(R.id.price_textView);
         bookNowTextView = findViewById(R.id.book_now_textView);
 
@@ -69,13 +71,13 @@ public class EventsHorizontalGridItemView extends FrameLayout {
     }
 
     private void reloadView(){
-        if (event != null){
+        if (diveService != null){
 
-            if (NYHelper.isStringNotEmpty(event.getName())) nameTextView.setText(event.getName());
+            if (NYHelper.isStringNotEmpty(diveService.getName())) nameTextView.setText(diveService.getName());
 
-            if (event.getLocation() != null) {
+            if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null && diveService.getDiveCenter().getContact().getLocation() != null) {
 
-                Location location = event.getLocation();
+                Location location = diveService.getDiveCenter().getContact().getLocation();
                 String locString = "";
 
                 if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())) locString += location.getCity().getName();
@@ -85,8 +87,8 @@ public class EventsHorizontalGridItemView extends FrameLayout {
             }
 
 
-            double normalPrice = Double.valueOf(event.getNormalPrice());
-            double specialPrice = Double.valueOf(event.getSpecialPrice());
+            double normalPrice = Double.valueOf(diveService.getNormalPrice());
+            double specialPrice = Double.valueOf(diveService.getSpecialPrice());
 
             if (specialPrice < normalPrice && specialPrice > 0){
                 priceTextView.setText(NYHelper.priceFormatter(specialPrice));
@@ -98,8 +100,8 @@ public class EventsHorizontalGridItemView extends FrameLayout {
             }
 
             //SET IMAGE
-            if (NYHelper.isStringNotEmpty(event.getFeaturedImage())) {
-                ImageLoader.getInstance().loadImage(event.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+            if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
+                ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
 
@@ -122,7 +124,7 @@ public class EventsHorizontalGridItemView extends FrameLayout {
                     }
                 });
 
-                ImageLoader.getInstance().displayImage(event.getFeaturedImage(), imageView, NYHelper.getOption());
+                ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), imageView, NYHelper.getOption());
 
             } else {
                 imageView.setImageResource(R.drawable.example_pic);

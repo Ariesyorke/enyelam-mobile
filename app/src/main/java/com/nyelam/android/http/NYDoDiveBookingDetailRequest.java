@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
+import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Summary;
 import com.nyelam.android.helper.NYHelper;
 
@@ -13,7 +14,7 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/23/2018.
  */
 
-public class NYDoDiveBookingDetailRequest extends NYBasicAuthRequest<Summary> {
+public class NYDoDiveBookingDetailRequest extends NYBasicAuthRequest<OrderReturn> {
 
     private static String KEY_SUMMARY = "summary";
     private static String POST_BOOKING_DETAIL_ID = "booking_detail_id";
@@ -28,10 +29,10 @@ public class NYDoDiveBookingDetailRequest extends NYBasicAuthRequest<Summary> {
     }
 
     @Override
-    protected Summary onProcessSuccessData(JSONObject obj) throws Exception {
-        Summary summary = new Summary();
-        summary.parse(obj.getJSONObject(KEY_SUMMARY));
-        return summary;
+    protected OrderReturn onProcessSuccessData(JSONObject obj) throws Exception {
+        OrderReturn orderReturn = new OrderReturn();
+        orderReturn.parse(obj);
+        return orderReturn;
     }
 
 }

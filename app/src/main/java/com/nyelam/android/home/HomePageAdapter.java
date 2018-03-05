@@ -11,11 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Event;
 import com.nyelam.android.data.NYEventsModule;
 import com.nyelam.android.data.NYHotOffersModule;
 import com.nyelam.android.data.NYModule;
 import com.nyelam.android.data.NYPopularDiveSpotModule;
+import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.helper.NYHelper;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -33,6 +37,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private List<NYModule> modules;
     private EventsAdapter eventsAdapter;
+    private HotOffersAdapter hotOffersAdapter;
     //private HotOffersAdapter hotOffersAdapter;
     //private PopularDiveSpotsAdapter popularDiveSpotsAdapter;
     //private ProductDetailActivity BestSellerAdapter;
@@ -55,6 +60,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.modules = new ArrayList<>();
         }
         this.modules.addAll(modules);
+
+        NYLog.e("HOMEPAGE ADAPTER "+modules.get(0).toString());
     }
 
     public void clear() {
@@ -65,6 +72,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        NYLog.e("HOMEPAGE CEK VIEWTYPE "+viewType);
 
         switch (viewType) {
             case VIEW_TYPE_HEADER:
@@ -83,13 +92,16 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (holder instanceof SectionHeader) {
             ((SectionHeader) holder).tvTitle.setText(item.getModuleName());
-
         } else if (holder instanceof EventsItem) {
             EventsItem eventsItem = ((EventsItem) holder);
-
             NYEventsModule eventsModule = (NYEventsModule) item;
             eventsAdapter = new EventsAdapter(context, eventsModule);
             eventsItem.twoWayView.setAdapter(eventsAdapter);
+        } else if (holder instanceof HotOffersItem) {
+            HotOffersItem hotOffersItem = ((HotOffersItem) holder);
+            NYHotOffersModule hotOffersModule = (NYHotOffersModule) item;
+            hotOffersAdapter = new HotOffersAdapter(context, hotOffersModule);
+            hotOffersItem.twoWayView.setAdapter(eventsAdapter);
         }
 
     }
@@ -104,6 +116,45 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
+    private int getViewType(int position) {
+        int index = 0;
+        for (int i = 0; i < modules.size(); i++) {
+            if (index == position) {
+                return VIEW_TYPE_HEADER;
+            }
+            index++;
+
+            if (modules.get(i) instanceof NYEventsModule) {
+                NYEventsModule eventsModule = (NYEventsModule) modules.get(i);
+                List<Event> events = eventsModule.getEvents();
+                for (int c = 0; c < events.size(); c++) {
+                    if (index == position) {
+                        return VIEW_TYPE_SLIDER;
+                    }
+                    index++;
+                }
+            } else if (modules.get(i) instanceof NYHotOffersModule) {
+                NYHotOffersModule hotOffersModule = (NYHotOffersModule) modules.get(i);
+                List<DiveService> diveServices = hotOffersModule.getDiveServices();
+                for (int c = 0; c < diveServices.size(); c++) {
+                    if (index == position) {
+                        return VIEW_TYPE_SLIDER;
+                    }
+                    index++;
+                }
+            } else if (modules.get(i) instanceof NYPopularDiveSpotModule) {
+                NYPopularDiveSpotModule popularDiveSpotModule = (NYPopularDiveSpotModule) modules.get(i);
+                List<DiveSpot> diveSpots = popularDiveSpotModule.getDiveSpots();
+                for (int c = 0; c < diveSpots.size(); c++) {
+                    if (index == position) {
+                        return VIEW_TYPE_SLIDER;
+                    }
+                    index++;
+                }
+            }
+        }
+        return index;
+    }
 
 
 
@@ -120,9 +171,9 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             index++;
 
             if (modules.get(i) instanceof NYEventsModule) {
-                NYEventsModule categoryModule = (NYEventsModule) modules.get(i);
-                List<Event> categories = categoryModule.getEvents();
-                for (int c = 0; c < categories.size(); c++) {
+                NYEventsModule eventsModule = (NYEventsModule) modules.get(i);
+                List<Event> events = eventsModule.getEvents();
+                for (int c = 0; c < events.size(); c++) {
                     if (index == position) {
                         return i;
                     }
@@ -135,43 +186,12 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
+    @Override
+    public int getItemViewType(int position) {
+        int viewType = getViewType(position);
+        return viewType;
+    }
 
-    /*private int getIndex(int position) {
-        int index = 0;
-        for (int i = 0; i < modules.size(); i++) {
-            if (index == position) {
-                return i;
-            }
-            index++;
-            if (modules.get(i) instanceof OProductModule) {
-                OProductModule productModule = (OProductModule) modules.get(i);
-                if(productModule.getModuleType().equals("grid")) {
-                    List<ODAOProduct> products = productModule.getProducts();
-                    for (int j = 0; j < products.size(); j++) {
-                        if (index == position) {
-                            return j;
-                        }
-                        index++;
-                    }
-                } else if (productModule.getModuleType().equals("slider")) {
-                    if(index == position) {
-                        return -1;
-                    }
-                    index++;
-                }
-            } else if (modules.get(i) instanceof OCategoryModule) {
-                OCategoryModule categoryModule = (OCategoryModule) modules.get(i);
-                List<ODAOCategory> categories = categoryModule.getCategories();
-                for (int c = 0; c < categories.size(); c++) {
-                    if (index == position) {
-                        return c;
-                    }
-                    index++;
-                }
-            }
-        }
-        return index;
-    }*/
 
     @Override
     public int getItemCount() {
@@ -181,6 +201,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             for (NYModule module : modules) {
                 if (module instanceof NYEventsModule) {
                     NYEventsModule eventsModule = (NYEventsModule) module;
+
+                    NYLog.e("HOMEPAGE MODULE 1 "+eventsModule.toString());
+                    NYLog.e("HOMEPAGE MODULE 2 "+eventsModule.getEvents().toString());
+
                     if(module.getModuleType().equals("grid")) {
                         if (eventsModule.getEvents() != null && !eventsModule.getEvents().isEmpty()) {
                             count += eventsModule.getEvents().size();
@@ -196,8 +220,6 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }*/
 
                 // TODO: cek ini
-
-
             }
         }
         return count;
@@ -210,13 +232,25 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static class SectionHeader extends RecyclerView.ViewHolder {
 
         public TextView tvTitle;
+        public TextView tvSeeAll;
 
-        public SectionHeader(Context context, ViewGroup parent) {
+        public SectionHeader(final Context context, ViewGroup parent) {
             super(LayoutInflater.from(context).inflate(R.layout.section_header, parent, false));
 
             tvTitle = itemView.findViewById(R.id.header_textView);
+            tvSeeAll = itemView.findViewById(R.id.see_all_textView);
+
+            tvSeeAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon), null);
+                }
+            });
         }
     }
+
+
+
 
 
     public static class EventsItem extends RecyclerView.ViewHolder {
@@ -231,8 +265,6 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-
-    //adapter product best seller
     static class EventsAdapter extends BaseAdapter {
         private static final int VIEW_TYPE_ITEM = 0;
         private static final int[] VIEW_TYPES = new int[]{VIEW_TYPE_ITEM};
@@ -290,15 +322,197 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return VIEW_TYPES.length;
         }
 
-        private View onCreateEventItem(View view, Event product){
+        private View onCreateEventItem(View view, Event event){
             if (view == null){
                 view = new EventsHorizontalGridItemView(context);
             }
 
             EventsHorizontalGridItemView bestSellerHorizontal = (EventsHorizontalGridItemView) view;
-            bestSellerHorizontal.setProduct(product);
+            bestSellerHorizontal.setEvent(event);
 
             return view;
         }
     }
+
+
+
+
+
+
+
+
+    public static class HotOffersItem extends RecyclerView.ViewHolder {
+        public TwoWayView twoWayView;
+
+        public HotOffersItem(Context context, ViewGroup parent) {
+            super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
+
+            twoWayView = itemView.findViewById(R.id.two_way_view);
+            twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
+        }
+    }
+
+
+    static class HotOffersAdapter extends BaseAdapter {
+        private static final int VIEW_TYPE_ITEM = 0;
+        private static final int[] VIEW_TYPES = new int[]{VIEW_TYPE_ITEM};
+        private Context context;
+        private NYHotOffersModule hotOffers;
+
+        public HotOffersAdapter(Context context, NYHotOffersModule hotOffers) {
+            this.context = context;
+            this.hotOffers = hotOffers;
+        }
+
+        @Override
+        public int getCount() {
+            int count = 0;
+            if (hotOffers.getDiveServices() != null && !hotOffers.getDiveServices().isEmpty()) {
+                count += hotOffers.getDiveServices().size();
+            }
+            return count;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            int viewType = getItemViewType(position);
+            if (viewType == VIEW_TYPE_ITEM) {
+                return hotOffers.getDiveServices().get(position);
+            }
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (hotOffers.getModuleName() != null && position < hotOffers.getDiveServices().size()) {
+                return VIEW_TYPE_ITEM;
+            }
+            return IGNORE_ITEM_VIEW_TYPE;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+            int viewType = getItemViewType(position);
+            if (viewType == VIEW_TYPE_ITEM){
+                return onCreateHotOfferItem(view, (DiveService) getItem(position));
+            }
+
+            return view;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return VIEW_TYPES.length;
+        }
+
+        private View onCreateHotOfferItem(View view, DiveService diveService){
+            if (view == null){
+                view = new HotOffersHorizontalGridItemView(context);
+            }
+
+            HotOffersHorizontalGridItemView hotOffersHorizontalGridItemView = (HotOffersHorizontalGridItemView) view;
+            hotOffersHorizontalGridItemView.setDiveService(diveService);
+
+            return view;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /*public static class PopularItem extends RecyclerView.ViewHolder {
+        public TwoWayView twoWayView;
+
+        public HotOffersItem(Context context, ViewGroup parent) {
+            super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
+
+            twoWayView = itemView.findViewById(R.id.two_way_view);
+            twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
+        }
+    }
+
+
+    static class HotOffersAdapter extends BaseAdapter {
+        private static final int VIEW_TYPE_ITEM = 0;
+        private static final int[] VIEW_TYPES = new int[]{VIEW_TYPE_ITEM};
+        private Context context;
+        private NYHotOffersModule hotOffers;
+
+        public HotOffersAdapter(Context context, NYHotOffersModule hotOffers) {
+            this.context = context;
+            this.hotOffers = hotOffers;
+        }
+
+        @Override
+        public int getCount() {
+            int count = 0;
+            if (hotOffers.getDiveServices() != null && !hotOffers.getDiveServices().isEmpty()) {
+                count += hotOffers.getDiveServices().size();
+            }
+            return count;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            int viewType = getItemViewType(position);
+            if (viewType == VIEW_TYPE_ITEM) {
+                return hotOffers.getDiveServices().get(position);
+            }
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (hotOffers.getModuleName() != null && position < hotOffers.getDiveServices().size()) {
+                return VIEW_TYPE_ITEM;
+            }
+            return IGNORE_ITEM_VIEW_TYPE;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+            int viewType = getItemViewType(position);
+            if (viewType == VIEW_TYPE_ITEM){
+                return onCreateHotOfferItem(view, (DiveService) getItem(position));
+            }
+
+            return view;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return VIEW_TYPES.length;
+        }
+
+        private View onCreateHotOfferItem(View view, DiveService diveService){
+            if (view == null){
+                view = new HotOffersHorizontalGridItemView(context);
+            }
+
+            HotOffersHorizontalGridItemView hotOffersHorizontalGridItemView = (HotOffersHorizontalGridItemView) view;
+            hotOffersHorizontalGridItemView.setDiveService(diveService);
+
+            return view;
+        }
+    }*/
+
+
+
 }

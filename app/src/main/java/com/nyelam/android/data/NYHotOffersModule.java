@@ -18,15 +18,15 @@ public class NYHotOffersModule extends NYModule {
     private static final String KEY_PRODUCTS = "product";
     private static final String KEY_POSITION = "position";
 
-    private List<DiveSpot> diveSpots;
+    private List<DiveService> diveServices;
     private int position;
 
-    public List<DiveSpot> getProducts() {
-        return diveSpots;
+    public List<DiveService> getDiveServices() {
+        return diveServices;
     }
 
-    public void setProducts(List<DiveSpot> diveSpots) {
-        this.diveSpots = diveSpots;
+    public void setDiveServices(List<DiveService> diveServices) {
+        this.diveServices = diveServices;
     }
 
     public int getPosition() {
@@ -45,12 +45,12 @@ public class NYHotOffersModule extends NYModule {
                 for(int i = 0; i < array.length(); i++) {
                     JSONObject o = array.getJSONObject(i);
 
-                    DiveSpot diveSpot = new DiveSpot();
-                    diveSpot.parse(o);
-                    if (diveSpots == null) {
-                        diveSpots = new ArrayList<>();
+                    DiveService diveService = new DiveService();
+                    diveService.parse(o);
+                    if (diveService == null) {
+                        diveServices = new ArrayList<>();
                     }
-                    diveSpots.add(diveSpot);
+                    diveServices.add(diveService);
                 }
             }
 

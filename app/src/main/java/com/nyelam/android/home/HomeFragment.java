@@ -20,11 +20,16 @@ import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Module;
+import com.nyelam.android.data.ModuleEvent;
 import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.data.NYEventsModule;
+import com.nyelam.android.data.NYHotOffersModule;
 import com.nyelam.android.data.NYModule;
+import com.nyelam.android.data.NYPopularDiveSpotModule;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
@@ -181,106 +186,80 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRequestSuccess(ModuleList results) {
 
-
                 if (results != null && results.getList() != null && results.getList().size() > 1){
 
                     NYLog.e("ngopi INIT");
 
+                    modules = new ArrayList<>();
+
                     ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
+
+                    List<NYModule> result = new ArrayList<>();
 
                     for (Module module : results.getList()){
 
                         if (module.getName().equals("Event") && module.getEvents() != null && module.getEvents().size() > 0 ){
 
-                            NYLog.e("ngopi EVENT");
+                            List<Event> events = module.getEvents();
 
-                            List<NYModule> result = null;
+                            //adapter.clear();
 
-                            if (modulStorage != null){
-
-                                if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0){
-                                    result = new ArrayList<>();
-                                    List<Event> events = modulStorage.getModuleEvents();
-                                    for(Event e : events) {
-                                        NYModule nyModule = new NYEventsModule();
-                                        try {
-                                            JSONObject objEvent = new JSONObject(e.toString());
-                                            nyModule.parse(objEvent);
-                                            result.add(nyModule);
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        }
-
-                                    }
-                                }
-
-
-                            }
-
-
-                            adapter.clear();
-
-                            if (modules != null && !modules.isEmpty()){
-                                if(modules.size()> 2) {
-                                    NYEventsModule eventsModule = new NYEventsModule();
-                                    eventsModule.setModuleName("Category");
-                                    eventsModule.setModuleType("category");
-                                    modules.add(2,eventsModule);
-                                }
-
-                                adapter.addModules(result);
-                                adapter.notifyDataSetChanged();
-                            }
+                            NYEventsModule eventsModule = new NYEventsModule();
+                            eventsModule.setModuleName("Events");
+                            eventsModule.setModuleType("slider");
+                            eventsModule.setEvents(events);
+                            modules.add(eventsModule);
+                            result.add(eventsModule);
+                            //adapter.addModules(result);
+                            //adapter.notifyDataSetChanged();
 
 
                         } else if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
 
+                            List<DiveService> services = module.getDiveServices();
+
+                            //adapter.clear();
+
+                            NYHotOffersModule hotOffersModule = new NYHotOffersModule();
+                            hotOffersModule.setModuleName("Hot Offer");
+                            hotOffersModule.setModuleType("slider");
+                            hotOffersModule.setDiveServices(services);
+                            modules.add(hotOffersModule);
+                            result.add(hotOffersModule);
+                            //adapter.addModules(result);
+                            //adapter.notifyDataSetChanged();
+
                         } else if (module.getName().equals("Popular Dive Spots") && module.getDiveSpots() != null && module.getDiveSpots().size() > 0 ){
+
+                            List<DiveSpot> diveSpots = module.getDiveSpots();
+
+                            //adapter.clear();
+
+                            NYPopularDiveSpotModule popularDiveSpotModule = new NYPopularDiveSpotModule();
+                            popularDiveSpotModule.setModuleName("Popular Dive Spots");
+                            popularDiveSpotModule.setModuleType("slider");
+                            popularDiveSpotModule.setDiveSpots(diveSpots);
+                            modules.add(popularDiveSpotModule);
+                            result.add(popularDiveSpotModule);
+                            //adapter.addModules(result);
+                            //adapter.notifyDataSetChanged();
 
                         }
 
-                        NYLog.e("ngopi MODULE : "+module.getName());
-
                     }
 
-                    NYLog.e("ngopi napa : "+adapter.getItemCount());
+
+                    if  (result.size() > 0 ){
+                        adapter.clear();
+                        adapter.addModules(result);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    //modulStorage.setModuleDiveSpots(module.getDiveSpots());
 
                     modulStorage.save();
 
                 }
-
-
-
-
-
-                /*if (results != null && results.getList() != null && results.getList().size() > 1){
-
-                    ModulHomepageStorage modulHomepageStorage = new ModulHomepageStorage(getActivity());
-
-                    for (Module module : results.getList()){
-
-                        if (module.getName().equals("Event") && module.getEvents() != null && module.getEvents().size() > 0 ){
-                            eventsRecyclerViewAdapter.addResults(module.getEvents());
-                            eventsRecyclerViewAdapter.notifyDataSetChanged();
-                            // TODO: SAVE TO STORAGE
-                            modulHomepageStorage.setModuleEvents(module.getEvents());
-                        } zelse if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
-                            hotOffersRecyclerViewAdapter.addResults(module.getDiveServices());
-                            hotOffersRecyclerViewAdapter.notifyDataSetChanged();
-                            // TODO: SAVE TO STORAGE
-                            modulHomepageStorage.setModuleServices(module.getDiveServices());
-                        } else if (module.getName().equals("Popular Dive Spots") && module.getDiveSpots() != null && module.getDiveSpots().size() > 0 ){
-                            popularDiveSpotsRecyclerViewAdapter.addResults(module.getDiveSpots());
-                            popularDiveSpotsRecyclerViewAdapter.notifyDataSetChanged();
-                            // TODO: SAVE TO STORAGE
-                            modulHomepageStorage.setModuleDiveSpots(module.getDiveSpots());
-                        }
-
-                    }
-
-                    modulHomepageStorage.save();
-
-                }*/
 
             }
         };
@@ -424,7 +403,8 @@ public class HomeFragment extends Fragment {
             actionMore.setVisibility(View.VISIBLE);*/
 
 
-            List<NYModule> result = null;
+            // TODO: load from cache
+            /*List<NYModule> result = null;
 
             if (modulStorage != null){
 
@@ -451,16 +431,17 @@ public class HomeFragment extends Fragment {
             adapter.clear();
 
             if (modules != null && !modules.isEmpty()){
+
                 if(modules.size()> 2) {
                     NYEventsModule eventsModule = new NYEventsModule();
                     eventsModule.setModuleName("Category");
                     eventsModule.setModuleType("category");
-                    modules.add(2,eventsModule);
+                    modules.add(1,eventsModule);
                 }
 
                 adapter.addModules(modules);
                 adapter.notifyDataSetChanged();
-            }
+            }*/
 
 
 
