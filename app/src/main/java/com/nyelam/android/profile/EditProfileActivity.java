@@ -1,6 +1,7 @@
 package com.nyelam.android.profile;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -188,7 +189,12 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     progressDialog.dismiss();
                 }
 
-                NYHelper.handlePopupMessage(EditProfileActivity.this, getString(R.string.message_update_profile_success), null);
+                NYHelper.handlePopupMessage(EditProfileActivity.this, getString(R.string.message_update_profile_success), false, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        onBackPressed();
+                    }
+                });
 
                 NYHelper.saveUserData(EditProfileActivity.this, authReturn);
 

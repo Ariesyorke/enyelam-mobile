@@ -1,6 +1,7 @@
 package com.nyelam.android.profile;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -107,12 +108,23 @@ public class ChangePasswordActivity extends BasicActivity {
 
                 if (isSuccess && objSuccess.has(KEY_REASON)) {
                     try {
-                        NYHelper.handlePopupMessage(ChangePasswordActivity.this, objSuccess.getString(KEY_REASON), null);
+                        NYHelper.handlePopupMessage(ChangePasswordActivity.this, objSuccess.getString(KEY_REASON), false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                onBackPressed();
+                            }
+                        });
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else if (isSuccess){
-                    NYHelper.handlePopupMessage(ChangePasswordActivity.this, getString(R.string.message_update_password_success), null);
+                    NYHelper.handlePopupMessage(ChangePasswordActivity.this, getString(R.string.message_update_password_success), false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            onBackPressed();
+                        }
+                    });
                 } else if (!isSuccess && objSuccess.has(KEY_REASON)) {
                     try {
                         NYHelper.handlePopupMessage(ChangePasswordActivity.this,objSuccess.getString(KEY_REASON), null);
