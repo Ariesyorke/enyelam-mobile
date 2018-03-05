@@ -100,6 +100,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in, android.R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out);
                 transaction.replace(R.id.fragment_container, RegisterFragment.newInstance());
                 transaction.addToBackStack(LoginFragment.class.getName());
                 transaction.commit();
