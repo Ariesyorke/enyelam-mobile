@@ -62,27 +62,11 @@ public class HomeFragment extends Fragment {
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
     private CardView doDiveCardView, doCourseCardView, doShopCardView, ecoTripCardView;
-    //private LinearLayout doDiveLinearLayout, doCourseLinearLayout, doShopLinearLayout;
-    //private View viewBooking;
-    private TextView eventsSeeAllTextView;
-    private TextView hotOffersSeeAllTextView;
-    private TextView popularDiveSpotsSeeAllTextView;
 
 
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
 
-
-    /*
-    private RecyclerView  eventsRecyclerView;
-    private RecyclerView  hotOffersRecyclerView;
-    private RecyclerView popularDiveSpotsRecyclerView;*/
-
-    /*private EventsRecyclerViewAdapter eventsRecyclerViewAdapter;
-    private HotOffersRecyclerViewAdapter hotOffersRecyclerViewAdapter;
-    private PopularDiveSpotsRecyclerViewAdapter popularDiveSpotsRecyclerViewAdapter;*/
-
-    private List<NYModule> modules = null;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -123,49 +107,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void initAdapter() {
-        /*LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        eventsRecyclerView.setLayoutManager(layoutManager);
-        eventsRecyclerViewAdapter = new EventsRecyclerViewAdapter(getActivity());
-        eventsRecyclerView.setAdapter(eventsRecyclerViewAdapter);
-
-        LinearLayoutManager layoutManagerHotOffers
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        hotOffersRecyclerView.setLayoutManager(layoutManagerHotOffers);
-        hotOffersRecyclerViewAdapter = new HotOffersRecyclerViewAdapter(getActivity());
-        hotOffersRecyclerView.setAdapter(hotOffersRecyclerViewAdapter);
-
-        LinearLayoutManager layoutManagerPopularDiveSpot
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        popularDiveSpotsRecyclerView.setLayoutManager(layoutManagerPopularDiveSpot);
-        popularDiveSpotsRecyclerViewAdapter = new PopularDiveSpotsRecyclerViewAdapter(getActivity());
-        popularDiveSpotsRecyclerView.setAdapter(popularDiveSpotsRecyclerViewAdapter);*/
-
-
-        //progressBar.setVisibility(View.VISIBLE);
-
-
-
-        final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
-
-            @Override
-            public int getSpanSize(int position) {
-
-                switch (adapter.getItemViewType(position)){
-                    case HomePageAdapter.VIEW_TYPE_HEADER:
-                        return 2 ;
-                    case HomePageAdapter.VIEW_TYPE_SLIDER:
-                        return 2;
-                    default:
-                        return 1;
-                }
-            }
-        });
-
-        recyclerView.setLayoutManager(layoutManager);
+        LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(verticalLayoutManager);
         recyclerView.setAdapter(adapter);
-
     }
 
     private void getListData() {
@@ -180,83 +124,17 @@ public class HomeFragment extends Fragment {
                 /*if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }*/
-                NYHelper.handleAPIException(getActivity(), spiceException, null);
             }
 
             @Override
             public void onRequestSuccess(ModuleList results) {
-
+                NYLog.e("SUCCESS!!");
                 if (results != null && results.getList() != null && results.getList().size() > 1){
 
-                    NYLog.e("ngopi INIT");
-
-                    modules = new ArrayList<>();
+                    adapter.addModules(results.getList());
 
                     ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
-
-                    List<NYModule> result = new ArrayList<>();
-
-                    for (Module module : results.getList()){
-
-                        if (module.getName().equals("Event") && module.getEvents() != null && module.getEvents().size() > 0 ){
-
-                            List<Event> events = module.getEvents();
-
-                            //adapter.clear();
-
-                            NYEventsModule eventsModule = new NYEventsModule();
-                            eventsModule.setModuleName("Events");
-                            eventsModule.setModuleType("slider");
-                            eventsModule.setEvents(events);
-                            modules.add(eventsModule);
-                            result.add(eventsModule);
-                            //adapter.addModules(result);
-                            //adapter.notifyDataSetChanged();
-
-
-                        } else if (module.getName().equals("Hot Offer") && module.getDiveServices() != null && module.getDiveServices().size() > 0 ){
-
-                            List<DiveService> services = module.getDiveServices();
-
-                            //adapter.clear();
-
-                            NYHotOffersModule hotOffersModule = new NYHotOffersModule();
-                            hotOffersModule.setModuleName("Hot Offer");
-                            hotOffersModule.setModuleType("slider");
-                            hotOffersModule.setDiveServices(services);
-                            modules.add(hotOffersModule);
-                            result.add(hotOffersModule);
-                            //adapter.addModules(result);
-                            //adapter.notifyDataSetChanged();
-
-                        } else if (module.getName().equals("Popular Dive Spots") && module.getDiveSpots() != null && module.getDiveSpots().size() > 0 ){
-
-                            List<DiveSpot> diveSpots = module.getDiveSpots();
-
-                            //adapter.clear();
-
-                            NYPopularDiveSpotModule popularDiveSpotModule = new NYPopularDiveSpotModule();
-                            popularDiveSpotModule.setModuleName("Popular Dive Spots");
-                            popularDiveSpotModule.setModuleType("slider");
-                            popularDiveSpotModule.setDiveSpots(diveSpots);
-                            modules.add(popularDiveSpotModule);
-                            result.add(popularDiveSpotModule);
-                            //adapter.addModules(result);
-                            //adapter.notifyDataSetChanged();
-
-                        }
-
-                    }
-
-
-                    if  (result.size() > 0 ){
-                        adapter.clear();
-                        adapter.addModules(result);
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    //modulStorage.setModuleDiveSpots(module.getDiveSpots());
-
+                    modulStorage.setModuleList(results);
                     modulStorage.save();
 
                 }
@@ -338,16 +216,8 @@ public class HomeFragment extends Fragment {
         doDiveCardView = (CardView) view.findViewById(R.id.do_dive_cardView);
         doCourseCardView = (CardView) view.findViewById(R.id.do_course_cardView);
         doShopCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
-        ecoTripCardView = (CardView) view.findViewById(R.id.eco_trip_cardView);
-        eventsSeeAllTextView = (TextView) view.findViewById(R.id.events_see_all_textView);
-        hotOffersSeeAllTextView = (TextView) view.findViewById(R.id.hot_offers_see_all_textView);
-        popularDiveSpotsSeeAllTextView = (TextView) view.findViewById(R.id.popular_dive_spots_see_all_textView);
-
-        /*eventsRecyclerView = (RecyclerView) view.findViewById(R.id.events_recyler_view);
-        hotOffersRecyclerView = (RecyclerView) view.findViewById(R.id.hot_offers_recyler_view);
-        popularDiveSpotsRecyclerView = (RecyclerView) view.findViewById(R.id.popular_dive_spots_recyler_view);*/
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.events_recyler_view);
+        ecoTripCardView = (CardView)view.findViewById(R.id.eco_trip_cardView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
     }
 
 
@@ -376,76 +246,9 @@ public class HomeFragment extends Fragment {
 
     private void initCacheModule() {
         ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
-
-        if (modulStorage != null){
-
-            /*if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0 ){
-                eventsRecyclerViewAdapter.addResults(modulStorage.getModuleEvents());
-                eventsRecyclerViewAdapter.notifyDataSetChanged();
-            } else if (modulStorage.getModuleServices() != null && modulStorage.getModuleServices().size() > 0 ){
-                hotOffersRecyclerViewAdapter.addResults(modulStorage.getModuleServices());
-                hotOffersRecyclerViewAdapter.notifyDataSetChanged();
-            } else if (modulStorage.getModuleDiveSpots() != null && modulStorage.getModuleDiveSpots().size() > 0 ){
-                popularDiveSpotsRecyclerViewAdapter.addResults(modulStorage.getModuleDiveSpots());
-                popularDiveSpotsRecyclerViewAdapter.notifyDataSetChanged();
-            }*/
-
-            // TODO: gabungin ke modul
-
-
-            /*modules = oModules;
-            if (progressBar != null){
-                progressBar.setVisibility(View.GONE);
-            }
-
-            refreshLayout.setRefreshing(false);
-            recyclerView.setVisibility(View.VISIBLE);
-            actionMore.setVisibility(View.VISIBLE);*/
-
-
-            // TODO: load from cache
-            /*List<NYModule> result = null;
-
-            if (modulStorage != null){
-
-                if (modulStorage.getModuleEvents() != null && modulStorage.getModuleEvents().size() > 0){
-                    result = new ArrayList<>();
-                    List<Event> events = modulStorage.getModuleEvents();
-                    for(Event e : events) {
-                        NYModule module = new NYEventsModule();
-                        try {
-                            JSONObject objEvent = new JSONObject(e.toString());
-                            module.parse(objEvent);
-                            result.add(module);
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-
-                    }
-                }
-
-
-            }
-
-
-            adapter.clear();
-
-            if (modules != null && !modules.isEmpty()){
-
-                if(modules.size()> 2) {
-                    NYEventsModule eventsModule = new NYEventsModule();
-                    eventsModule.setModuleName("Category");
-                    eventsModule.setModuleType("category");
-                    modules.add(1,eventsModule);
-                }
-
-                adapter.addModules(modules);
-                adapter.notifyDataSetChanged();
-            }*/
-
-
-
-
+        ModuleList moduleList = modulStorage.getModuleList();
+        if (moduleList != null && moduleList.getList() != null && !moduleList.getList().isEmpty()) {
+            adapter.addModules(moduleList.getList());
         }
 
     }

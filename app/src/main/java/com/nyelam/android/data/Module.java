@@ -22,9 +22,6 @@ public abstract class Module implements Parseable {
     protected static String KEY_DIVE_SPOTS = "dive_spots";
 
     protected String name;
-    protected List<Event> events;
-    protected List<DiveService> diveServices;
-    protected List<DiveSpot> diveSpots;
 
 
     public String getName() {
@@ -35,29 +32,6 @@ public abstract class Module implements Parseable {
         this.name = name;
     }
 
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }
-
-    public List<DiveService> getDiveServices() {
-        return diveServices;
-    }
-
-    public void setDiveServices(List<DiveService> diveServices) {
-        this.diveServices = diveServices;
-    }
-
-    public List<DiveSpot> getDiveSpots() {
-        return diveSpots;
-    }
-
-    public void setDiveSpots(List<DiveSpot> diveSpots) {
-        this.diveSpots = diveSpots;
-    }
 
     @Override
     public void parse(JSONObject obj) {
@@ -70,52 +44,7 @@ public abstract class Module implements Parseable {
             }
         } catch (JSONException e){e.printStackTrace();}
 
-        try {
-            if(!obj.isNull(KEY_EVENTS)) {
-                events = new ArrayList<>();
-                JSONArray array = obj.getJSONArray(KEY_EVENTS);
-                for(int i = 0; i < array.length(); i++) {
-                    JSONObject o = array.getJSONObject(i);
-                    Event event = new Event();
-                    event.parse(o);
-                    events.add(event);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-
-        try {
-            if(!obj.isNull(KEY_DIVE_SERVICES)) {
-                diveServices = new ArrayList<>();
-                JSONArray array = obj.getJSONArray(KEY_DIVE_SERVICES);
-                for(int i = 0; i < array.length(); i++) {
-                    JSONObject o = array.getJSONObject(i);
-                    DiveService diveService = new DiveService();
-                    diveService.parse(o);
-                    diveServices.add(diveService);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            if(!obj.isNull(KEY_DIVE_SPOTS)) {
-                diveSpots = new ArrayList<>();
-                JSONArray array = obj.getJSONArray(KEY_DIVE_SPOTS);
-                for(int i = 0; i < array.length(); i++) {
-                    JSONObject o = array.getJSONObject(i);
-                    DiveSpot diveSpot = new DiveSpot();
-                    diveSpot.parse(o);
-                    diveSpots.add(diveSpot);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -135,47 +64,7 @@ public abstract class Module implements Parseable {
         } catch (JSONException e){e.printStackTrace();}
 
 
-        try {
-            if (getEvents() != null && !getEvents().isEmpty()) {
-                JSONArray array = new JSONArray();
-                for (Event e : getEvents() ) {
-                    JSONObject o = new JSONObject(e.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_EVENTS, array);
-            } else  {
-                obj.put(KEY_EVENTS, JSONObject.NULL);
-            }
-        } catch (JSONException e){e.printStackTrace();}
-
-
         //NYLog.e("MY NAME IS : "+getList().getClass().getName());
-
-        try {
-            if (getDiveServices() != null && !getDiveServices().isEmpty()) {
-                JSONArray array = new JSONArray();
-                for (DiveService a : getDiveServices() ) {
-                    JSONObject o = new JSONObject(a.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_DIVE_SERVICES, array);
-            } else  {
-                obj.put(KEY_DIVE_SERVICES, JSONObject.NULL);
-            }
-        } catch (JSONException e){e.printStackTrace();}
-
-        try {
-            if (getDiveSpots() != null && !getDiveSpots().isEmpty()) {
-                JSONArray array = new JSONArray();
-                for (DiveSpot a : getDiveSpots() ) {
-                    JSONObject o = new JSONObject(a.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_DIVE_SPOTS, array);
-            } else  {
-                obj.put(KEY_DIVE_SPOTS, JSONObject.NULL);
-            }
-        } catch (JSONException e){e.printStackTrace();}
 
         try {
             return obj.toString(3);

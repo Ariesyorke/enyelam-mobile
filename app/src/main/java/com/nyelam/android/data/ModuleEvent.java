@@ -6,13 +6,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 2/14/2018.
  */
 
 public class ModuleEvent extends Module implements Parseable {
+    protected List<Event> events;
 
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
 
     @Override
     public void parse(JSONObject obj) {
@@ -28,7 +38,7 @@ public class ModuleEvent extends Module implements Parseable {
 
         try {
             if(!obj.isNull(KEY_EVENTS)) {
-                diveServices = new ArrayList<>();
+                events = new ArrayList<>();
                 JSONArray array = obj.getJSONArray(KEY_EVENTS);
                 for(int i = 0; i < array.length(); i++) {
                     JSONObject o = array.getJSONObject(i);

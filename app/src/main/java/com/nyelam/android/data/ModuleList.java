@@ -27,18 +27,13 @@ public class ModuleList extends NYAbstractList<Module> {
             //Module result = null;
 
 
-            NYLog.e("CEK MODULE : "+i+" , "+o.toString());
-
             if (type.equals("Event")) {
-
-                NYLog.e("CEK MODULE : event");
 
                 ModuleEvent result = new ModuleEvent();
                 result.parse(o);
                 getList().add(result);
             } else if (type.equals("Hot Offer")){
 
-                NYLog.e("CEK MODULE : hot offer");
 
                 ModuleService result = new ModuleService();
                 result.parse(o);

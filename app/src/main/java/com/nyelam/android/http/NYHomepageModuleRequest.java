@@ -32,37 +32,6 @@ public class NYHomepageModuleRequest extends NYBasicRequest<ModuleList> {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_homepage_modules));
     }
 
-    /*@Override
-    public String getHTTPType() {
-        return DHTTPConnectionHelper.HTTP_POST;
-    }
-
-    @Override
-    protected DiveSpotList onProcessSuccessData(JSONObject obj) throws Exception {
-
-        if(obj.has(KEY_DIVE_SPOTS) && obj.get(KEY_DIVE_SPOTS) instanceof JSONArray) {
-            DiveSpotList diveSpotList = new DiveSpotList();
-            diveSpotList.parse(obj.getJSONArray(KEY_DIVE_SPOTS));
-            return diveSpotList;
-        }
-
-        return null;
-    }*/
-
-
-     @Override
-    public ModuleList loadDataFromNetwork() throws Exception {
-
-         NYLog.e("CEK MODULE 1");
-
-         return onProcessData(loadJSONFromAsset());
-    }
-
-    @Override
-    protected ModuleList onProcessData(byte[] data) throws Exception {
-        NYLog.e("CEK MODULE 3 "+data.toString());
-        return super.onProcessData(data);
-    }
 
     @Override
     protected ModuleList onProcessSuccessData(JSONObject obj) throws Exception {
