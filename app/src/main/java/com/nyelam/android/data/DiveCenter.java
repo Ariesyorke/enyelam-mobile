@@ -25,7 +25,7 @@ public class DiveCenter implements Parseable {
     private static String KEY_MEMBERSHIP = "membership";
     private static String KEY_STATUS = "status";
     private static String KEY_DESCRIPTION = "description";
-
+    private static String KEY_LOC = "location";
 
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_CATEGORIES = "categories";
@@ -45,7 +45,7 @@ public class DiveCenter implements Parseable {
     private Contact contact;
     private Membership membership;
     private int status;
-
+    private Location location;
 
     private List<Category> categories;
     private String featuredImage;
@@ -54,6 +54,13 @@ public class DiveCenter implements Parseable {
     private String startFromTotalDives;
     private String startFromDays;
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public String getDescription() {
         return description;
@@ -186,7 +193,15 @@ public class DiveCenter implements Parseable {
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
-
+        try {
+            if(!obj.isNull(KEY_LOC)) {
+                JSONObject o = obj.getJSONObject(KEY_LOC);
+                location = new Location();
+                location.parse(o);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
@@ -372,6 +387,14 @@ public class DiveCenter implements Parseable {
     public String toString() {
         JSONObject obj = new JSONObject();
 
+        try {
+            if (getLocation() != null) {
+                JSONObject o = new JSONObject(getLocation().toString());
+                obj.put(KEY_LOCATION, o);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if(!TextUtils.isEmpty(getDescription())) {
                 obj.put(KEY_DESCRIPTION, getDescription());

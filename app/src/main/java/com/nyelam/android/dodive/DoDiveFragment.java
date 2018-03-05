@@ -191,7 +191,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 datePickerDialog = new DatePickerDialog(
                         getActivity(), this, year, month, day);
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+                if (Build.VERSION.SDK_INT <= 21) {
+                    //this is where the crash happens
+                    datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
+                } else {
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                }
                 datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
             }
 
