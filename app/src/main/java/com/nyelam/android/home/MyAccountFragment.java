@@ -35,6 +35,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYUploadPhotoCoverRequest;
 import com.nyelam.android.http.NYUploadPhotoProfileRequest;
+import com.nyelam.android.profile.ChangePasswordActivity;
 import com.nyelam.android.profile.EditProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
@@ -64,7 +65,7 @@ public class MyAccountFragment extends Fragment implements
 
     private OnFragmentInteractionListener mListener;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
-    private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout;
+    private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout, changePasswordRelativeLayout;
     private File photoProfile, photoCover;
     private ImageView coverImageView, changeCoverImageView;
     private CircleImageView photoProfileImageView;
@@ -191,6 +192,14 @@ public class MyAccountFragment extends Fragment implements
             }
         });
 
+        changePasswordRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         logoutRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,8 +249,8 @@ public class MyAccountFragment extends Fragment implements
 
     private void initView(View view) {
         editProfileRelativeLayout = (RelativeLayout) view.findViewById(R.id.edit_profile_relativeLayout);
+        changePasswordRelativeLayout = (RelativeLayout) view.findViewById(R.id.change_password_relativeLayout);
         logoutRelativeLayout = (RelativeLayout) view.findViewById(R.id.logout_relativeLayout);
-
         coverImageView = (ImageView) view.findViewById(R.id.cover_imageView);
         changeCoverImageView = (ImageView) view.findViewById(R.id.change_cover_imageView);
         photoProfileImageView = (CircleImageView) view.findViewById(R.id.photo_profile_circleImageView);
@@ -250,8 +259,6 @@ public class MyAccountFragment extends Fragment implements
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(true);
     }
-
-
 
 
     protected void onChangePhoto() {

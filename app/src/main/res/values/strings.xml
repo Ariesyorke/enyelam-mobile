@@ -27,6 +27,12 @@
     <string name="phone_number_ex">Phone number (eg. +905...)</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirm_password_hint">Confirm Password *</string>
+    <string name="current_password">Current Password</string>
+    <string name="current_password_hint">Current Password *</string>
+    <string name="new_password">New Password</string>
+    <string name="new_password_hint">New Password *</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="confirm_new_password_hint">Confirm New Password *</string>
     <string name="select_gender">Select Gender</string>
     <string name="loading">Please wait...</string>
     <string name="events">Events</string>
@@ -37,7 +43,8 @@
     <string name="province">Province</string>
     <string name="city">City</string>
     <string name="save">Save</string>
-    <string name="change">change</string>
+    <string name="change">Change</string>
+    <string name="change_password">Change Password</string>
     <string name="next">Next</string>
     <string name="bank_transfer">Bank Transfer</string>
     <string name="bank_transfer_label">Pay from ATM Transfer</string>
@@ -115,10 +122,17 @@
     <string name="warn_field_contact_details_cannot_be_empty">Contact Details cannot be Empty</string>
     <string name="warn_field_participant_details_cannot_be_empty">Participant Details cannot be Empty</string>
     <string name="warn_field_password_length">Password length must be 6 characters or more</string>
+
+    <string name="warn_field_current_password_cannot_be_empty">Current password cannot be empty</string>
+    <string name="warn_field_new_password_cannot_be_empty">New password cannot be empty</string>
+    <string name="warn_field_confirm_new_password_cannot_be_empty">Confirm password cannot be empty</string>
+    <string name="warn_field_confirm_new_password_didnt_macth">New password and confirm password didn\'t match</string>
+
     <string name="warn_check_agreement_to_continue">Please read carefully and check the agreement to continue</string>
     <string name="warn_logout">Are you sure want to sign out ?</string>
 
     <string name="message_update_profile_success">Your profile has been successfully updated</string>
+    <string name="message_update_password_success">Your password has been successfully updated</string>
 
     <string name="confirmation_payment_success">Your confirmation payment has been send, thanks.</string>
     <string name="transaction_success">Thank You, Your Order was Successful</string>

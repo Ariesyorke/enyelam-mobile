@@ -24,7 +24,7 @@
                 android:layout_height="40dp" />
 
             <LinearLayout
-
+                android:visibility="gone"
                 android:id="@+id/main_linearLayout"
                 android:padding="@dimen/padding_double"
                 android:orientation="vertical"

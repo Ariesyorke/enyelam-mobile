@@ -19,6 +19,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.helper.NYHelper;
 
 public class EcoTripOnboardingFragment extends Fragment {
+
     private static final String KEY_BACKGROUND_RESOURCE = "background_resource";
     private static final String KEY_ICON_RESOURCE = "icon_resource";
     private static final String KEY_POSITION = "position";

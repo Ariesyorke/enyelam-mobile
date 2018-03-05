@@ -25,7 +25,10 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYLoginRequest;
+import com.nyelam.android.storage.EmailLoginStorage;
+import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -136,6 +139,7 @@ public class LoginFragment extends Fragment {
                 }
 
                 NYHelper.saveUserData(getActivity(), authReturn);
+                if (NYHelper.isStringNotEmpty(emailEditText.getText().toString()))NYHelper.saveEmailUser(getActivity(), emailEditText.getText().toString());
                 mListener.isLoginSuccess(true);
             }
         };
@@ -158,6 +162,10 @@ public class LoginFragment extends Fragment {
         } else {
             ImageLoader.getInstance().displayImage(imageUri, backgroundImageView, NYHelper.getCompressedOption(getActivity()));
         }
+
+        EmailLoginStorage storage = new EmailLoginStorage(getActivity());
+        if (storage != null && NYHelper.isStringNotEmpty(storage.email)) emailEditText.setText(storage.email);
+
     }
 
 
