@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.NTransactionResult;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.VeritransNotificationRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -18,7 +21,7 @@ import org.json.JSONObject;
 public class VeritransNotificationActivity extends AppCompatActivity {
     private NTransactionResult result;
     private String orderId;
-    private SpiceManager spcMgr;
+    private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
 
     @Override
     public void onBackPressed() {
@@ -43,7 +46,7 @@ public class VeritransNotificationActivity extends AppCompatActivity {
                     spcMgr.execute(req, new RequestListener<Boolean>() {
                         @Override
                         public void onRequestFailure(SpiceException spiceException) {
-                            Intent intent = new Intent(VeritransNotificationActivity.this, VeritransNotificationActivity.class);
+                            Intent intent = new Intent(VeritransNotificationActivity.this, HomeActivity.class);
                             intent.putExtra(NYHelper.ID_ORDER, orderId);
                             intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -52,7 +55,7 @@ public class VeritransNotificationActivity extends AppCompatActivity {
 
                         @Override
                         public void onRequestSuccess(Boolean aBoolean) {
-                            Intent intent = new Intent(VeritransNotificationActivity.this, VeritransNotificationActivity.class);
+                            Intent intent = new Intent(VeritransNotificationActivity.this, HomeActivity.class);
                             intent.putExtra(NYHelper.ID_ORDER, orderId);
                             intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

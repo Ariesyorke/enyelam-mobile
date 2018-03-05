@@ -26,4 +26,5 @@ public class VeritransNotificationRequest extends DJSONRequest<Boolean> {
         NYLog.e("RESPONSE : "+ response);
         return true;
     }
+
 }
