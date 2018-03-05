@@ -80,7 +80,7 @@ public class OrderReturn {
         }
 
         try{
-            if(getSummary()!=null){
+            if(getVeritransToken()!=null){
                 JSONObject objVeritrans = new JSONObject(getVeritransToken().toString());
                 obj.put(KEY_VERITRANS_TOKEN, objVeritrans);
             } else {

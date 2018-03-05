@@ -234,14 +234,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/dive_center_name_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="@string/dive_center"
-                    android:textColor="@color/ny_black1" />
+
                 <LinearLayout
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -252,17 +245,29 @@
                         android:src="@drawable/ic_pin_map"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="medium"
-                        android:id="@+id/location_textView"
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_marginLeft="@dimen/padding"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:text="@string/location"
-                        android:textSize="15sp"
-                        android:textColor="@color/ny_black1" />
-
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="medium"
+                            android:id="@+id/dive_center_name_textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dive_center"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black1" />
+                        <com.nyelam.android.view.font.NYTextView
+                            app:fontTextStyle="medium"
+                            android:id="@+id/location_textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/location"
+                            android:textSize="14sp"
+                            android:textColor="@color/ny_grey4" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -511,6 +516,7 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:id="@+id/payment_bank_transfer_linearLayout"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -554,6 +560,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/payment_midtrans_linearLayout"
                         android:layout_marginTop="@dimen/activity_vertical_margin"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"

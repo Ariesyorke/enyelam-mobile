@@ -17,7 +17,7 @@
         android:layout_height="250dp">
 
         <ImageView
-            android:id="@+id/event_imageView"
+            android:id="@+id/service_imageView"
             android:src="@drawable/example_pic"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"

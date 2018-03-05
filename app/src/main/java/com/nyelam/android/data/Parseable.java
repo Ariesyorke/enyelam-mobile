@@ -1,5 +1,8 @@
 package com.nyelam.android.data;
 
+import android.content.Context;
+import android.support.annotation.Nullable;
+
 import org.json.JSONObject;
 
 /**

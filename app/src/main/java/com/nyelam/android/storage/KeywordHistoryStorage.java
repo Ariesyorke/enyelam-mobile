@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 public class KeywordHistoryStorage extends AbstractStorage {
-    private static final String FILENAME = "nyelam:storage:modul-homepage";
+    private static final String FILENAME = "nyelam:storage:keyword-history";
     private static final String KEY_KEYWORD_HISTORY= "keyword_history";
 
     public List<SearchResult> searchResults;

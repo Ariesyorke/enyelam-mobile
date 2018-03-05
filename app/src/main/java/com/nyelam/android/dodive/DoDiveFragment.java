@@ -3,6 +3,7 @@ package com.nyelam.android.dodive;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
@@ -118,7 +121,15 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         day=mcurrentDate.get(Calendar.DAY_OF_MONTH);*/
 
         // TODO Hide Future Date Here
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+        if (Build.VERSION.SDK_INT <= 21) {
+            //this is where the crash happens
+            datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
+        } else {
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        }
+
         // TODO Hide Future Date Here
         //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // TODO Hide Past Date Here
