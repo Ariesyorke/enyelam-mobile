@@ -130,7 +130,8 @@
     <string name="warn_field_new_password_cannot_be_empty">New password cannot be empty</string>
     <string name="warn_field_confirm_new_password_cannot_be_empty">Confirm password cannot be empty</string>
     <string name="warn_field_confirm_new_password_didnt_macth">New password and confirm password didn\'t match</string>
-
+    <string name="fb_auth_failed">Facebook authentication failed. Please try again later.</string>
+    <string name="gp_auth_failed">Google authentication failed. Please try again later.</string>
     <string name="warn_check_agreement_to_continue">Please read carefully and check the agreement to continue</string>
     <string name="warn_logout">Are you sure want to sign out ?</string>
 

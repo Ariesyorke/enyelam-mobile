@@ -2,9 +2,11 @@ package com.nyelam.android.auth;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,13 +20,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.danzoye.lib.auth.facebook.FBAuthHelper;
+import com.danzoye.lib.auth.facebook.FBAuthResult;
+import com.danzoye.lib.auth.google.GPlusAuthHelper;
+import com.danzoye.lib.auth.google.GPlusAuthResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYLoginRequest;
+import com.nyelam.android.http.NYLoginSocmedRequest;
 import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
@@ -32,7 +45,7 @@ import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectP
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends AuthBaseFragment implements GoogleApiClient.OnConnectionFailedListener {
 
     private static int RC_SIGN_IN = 201;
 
@@ -43,6 +56,12 @@ public class LoginFragment extends Fragment {
     private EditText emailEditText, passwordEditText;
     private ImageView backgroundImageView;
     private LinearLayout googleLinearLayout, facebookLinearLayout;
+
+    protected FBAuthResult fbResult;
+    protected FBAuthHelper<FBAuthResult> fbAuthHelper;
+
+    protected GPlusAuthResult googleResult;
+    protected GPlusAuthHelper<GPlusAuthResult> googleAuthHelper;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -123,14 +142,14 @@ public class LoginFragment extends Fragment {
         facebookLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fbAuthHelper.auth();
             }
         });
 
         googleLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                googleAuthHelper.auth();
             }
         });
     }
@@ -186,6 +205,133 @@ public class LoginFragment extends Fragment {
     }
 
 
+
+
+
+
+    /*private RequestListener<AuthReturn> onLoginRequest() {
+        return new RequestListener<AuthReturn>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                NYHelper.handleAPIException(getActivity(), spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(AuthReturn authReturn) {
+                *//*if(progressDialog != null && progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }*//*
+
+                NYHelper.saveUserData(getActivity(), authReturn);
+                //mListener.isLoginSuccess(true);
+                //mListener.checkLocation();
+            }
+        };
+    }*/
+
+
+    @Override
+    public void onSuccess(FBAuthHelper helper, FBAuthResult result) {
+        super.onSuccess(helper, result);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken);
+        spcMgr.execute(req, onLoginSocmedRequest("fb"));
+    }
+
+    @Override
+    public void onSuccess(GPlusAuthHelper helper, GPlusAuthResult result) {
+        super.onSuccess(helper, result);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken);
+        spcMgr.execute(req, onLoginSocmedRequest("google"));
+    }
+
+    private RequestListener<AuthReturn> onLoginSocmedRequest(final String type) {
+        return new RequestListener<AuthReturn>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (spiceException != null) {
+                    progressDialog.cancel();
+                    //progressDialog.cancel();
+                    if (type.equals("fb")) {
+                        //mListener.intentRegister(fbResult.email, fbResult.firstName, fbResult.lastName, GKHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
+                        mListener.onRegisterRequest(progressDialog, fbResult.email, fbResult.firstName, fbResult.lastName, NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
+                    } else if (type.equals("google")) {
+                        //mListener.intentRegister(googleResult.email, googleResult.firstName, googleResult.lastName, GKHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken, googleResult.profilePictureUrl);
+                        mListener.onRegisterRequest(progressDialog, googleResult.email, googleResult.firstName, googleResult.lastName, NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken, googleResult.profilePictureUrl);
+                    }
+
+                } else {
+                    progressDialog.cancel();
+                    NYHelper.handleErrorMessage(getActivity(), getActivity().getResources().getString(R.string.warn_no_connection));
+                }
+            }
+
+            @Override
+            public void onRequestSuccess(AuthReturn authReturn) {
+                NYHelper.saveUserData(getActivity(), authReturn);
+                //mListener.checkLocation();
+            }
+        };
+    }
+
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        NYLog.e("handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            //Toast.makeText(getActivity(), acct.getId()+" "+acct.getDisplayName()+" "+acct.getEmail()+" "+acct.getIdToken(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), acct.getFamilyName()+" - "+acct.getGivenName(), Toast.LENGTH_SHORT).show();
+            mListener.intentRegister(acct.getEmail(), acct.getGivenName(), acct.getFamilyName(), NYHelper.GK_SOCMED_TYPE_GOOGLE, acct.getId(), acct.getIdToken(), acct.getPhotoUrl().toString());
+
+        } else {
+            // Signed out, show unauthenticated UI.
+            //updateUI(false);
+            GoogleSignInAccount acct = result.getSignInAccount();
+            mListener.intentRegister(acct.getEmail(), acct.getGivenName(), acct.getFamilyName(), NYHelper.GK_SOCMED_TYPE_GOOGLE, acct.getId(), acct.getIdToken(), acct.getPhotoUrl().toString());
+        }
+    }
+
+    public String validate(String emailAddress, String password) {
+        if (TextUtils.isEmpty(emailAddress)) {
+            return getActivity().getResources().getString(R.string.warn_field_email_cannot_be_empty);
+        } else if (TextUtils.isEmpty(password)) {
+            return getActivity().getResources().getString(R.string.warn_field_password_cannot_be_empty);
+        } else if (!NYHelper.isValidEmaillId(emailAddress)) {
+            return getActivity().getResources().getString(R.string.warn_email_not_valid);
+        }
+        return null;
+    }
+
+
+
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -217,7 +363,19 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public interface OnFragmentInteractionListener {
-        void isLoginSuccess(boolean b);
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
+
+    public interface OnFragmentInteractionListener {
+        void isLoginSuccess(boolean success);
+        void intentRegister(String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
+        void onRegisterRequest(ProgressDialog progressDialog, String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
+        void checkLocation();
+        void intentForgotPassword();
+    }
+
+
+
 }
