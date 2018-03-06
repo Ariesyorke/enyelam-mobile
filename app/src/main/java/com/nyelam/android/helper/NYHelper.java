@@ -8,12 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +35,7 @@ import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -524,5 +527,23 @@ public class NYHelper {
         return options;
     }
 
+
+
+    public static String bitmapToString(Bitmap realImage){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        realImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encodedImage;
+    }
+
+
+    public static Bitmap stringToBitmap(String previouslyEncodedImage){
+        byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+        return bitmap;
+    }
 
 }

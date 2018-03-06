@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.danzoye.lib.util.GalleryCameraInvoker;
@@ -27,19 +25,16 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYUploadPhotoCoverRequest;
 import com.nyelam.android.http.NYUploadPhotoProfileRequest;
 import com.nyelam.android.profile.ChangePasswordActivity;
 import com.nyelam.android.profile.EditProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -135,6 +130,9 @@ public class MyAccountFragment extends Fragment implements
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         photoProfileImageView.setImageBitmap(loadedImage);
+                        LoginStorage cacheImageStorage = new LoginStorage(getActivity());
+                        cacheImageStorage.photo = NYHelper.bitmapToString(loadedImage);
+                        cacheImageStorage.save();
                         //activity.getCache().put(imageUri, loadedImage);
                     }
 
@@ -166,6 +164,9 @@ public class MyAccountFragment extends Fragment implements
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         coverImageView.setImageBitmap(loadedImage);
+                        LoginStorage cacheImageStorage = new LoginStorage(getActivity());
+                        cacheImageStorage.cover = NYHelper.bitmapToString(loadedImage);
+                        cacheImageStorage.save();
                         //activity.getCache().put(imageUri, loadedImage);
                     }
 
@@ -525,9 +526,10 @@ public class MyAccountFragment extends Fragment implements
     @Override
     public void onBitmapResult(File file) {
 
-        NYLog.e("CEK IMAGE 1");
+        //NYLog.e("CEK IMAGE 1");
 
         if (file != null){
+
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 
             /*BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -535,10 +537,20 @@ public class MyAccountFragment extends Fragment implements
             bitmap = Bitmap.createScaledBitmap(bitmap,parent.getWidth(),parent.getHeight(),true);*/
 
             if (isCover){
+
+                LoginStorage cacheImageStorage = new LoginStorage(getActivity());
+                cacheImageStorage.cover = NYHelper.bitmapToString(bitmap);
+                cacheImageStorage.save();
+
                 photoCover = file;
                 coverImageView.setImageBitmap(bitmap);
                 NYLog.e("CEK IMAGE 2");
             } else {
+
+                LoginStorage cacheImageStorage = new LoginStorage(getActivity());
+                cacheImageStorage.photo = NYHelper.bitmapToString(bitmap);
+                cacheImageStorage.save();
+
                 photoProfile = file;
                 photoProfileImageView.setImageBitmap(bitmap);
                 NYLog.e("CEK IMAGE 3");
@@ -597,8 +609,6 @@ public class MyAccountFragment extends Fragment implements
             public void onRequestSuccess(AuthReturn authReturn) {
                 hideLoading();
 
-                NYLog.e("INI APA WOY ? "+authReturn.toString());
-
                 LoginStorage loginStorage = new LoginStorage(getActivity());
                 loginStorage.user = authReturn.getUser();
                 loginStorage.nyelamToken = authReturn.getToken();
@@ -618,6 +628,24 @@ public class MyAccountFragment extends Fragment implements
     public void onStart() {
         super.onStart();
         spcMgr.start(getActivity());
+
+        try{
+            LoginStorage cacheImageStorage = new LoginStorage(getActivity());
+            if (cacheImageStorage != null){
+                if (cacheImageStorage.photo != null){
+                    //NYLog.e("CEK IMAGE CACHE photo : "+cacheImageStorage.photo.toString());
+                    photoProfileImageView.setImageBitmap(NYHelper.stringToBitmap(cacheImageStorage.photo));
+                }
+
+                if (cacheImageStorage.cover != null){
+                    //NYLog.e("CEK IMAGE CACHE cover : "+cacheImageStorage.cover.toString());
+                    coverImageView.setImageBitmap(NYHelper.stringToBitmap(cacheImageStorage.cover));
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
