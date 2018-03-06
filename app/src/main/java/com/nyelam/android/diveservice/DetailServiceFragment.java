@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -30,11 +31,11 @@ public class DetailServiceFragment extends Fragment {
     private ProgressBar progressBar;
     private RatingBar ratingBar;
     private TextView titleTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
-    private TextView ratingTextView, visitedTextView;
+    private TextView ratingTextView, visitedTextView, categoryTextView;
     private TextView addressTextView, phoneNumberTextView;
     private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView;
-    private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout;
+    private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout;
     private StrikethroughTextView priceStrikeThroughTextView;
 
     public DetailServiceFragment() {
@@ -91,6 +92,7 @@ public class DetailServiceFragment extends Fragment {
         priceTextView = (TextView) v.findViewById(R.id.price_textView);
         descriptionTextView = (TextView) v.findViewById(R.id.description_textView);
         licenseTextView = (TextView) v.findViewById(R.id.license_textView);
+        categoryTextView = (TextView) v.findViewById(R.id.category_textView);
 
         icDiveGuideImageView = (ImageView) v.findViewById(R.id.icon_dive_guide_imageView);
         icEquipmentImageView = (ImageView) v.findViewById(R.id.icon_equipment_imageView);
@@ -103,6 +105,7 @@ public class DetailServiceFragment extends Fragment {
         foodLinearLayout = (LinearLayout) v.findViewById(R.id.food_linearLayout);
         transportationLinearLayout = (LinearLayout) v.findViewById(R.id.transportation_linearLayout);
         towelLinearLayout = (LinearLayout) v.findViewById(R.id.towel_linearLayout);
+        licenseLinearLayout = (LinearLayout) v.findViewById(R.id.license_linearLayout);
 
     }
 
@@ -145,9 +148,9 @@ public class DetailServiceFragment extends Fragment {
             //visitedTextView.setText(String.valueOf(service.getVisited()));
 
             totalDivesTextView.setText(": "+String.valueOf(service.getTotalDives()));
-
+            //totalDiveSpotsTextView.setText(": "+String.valueOf(service.getTotalDiveSpots()));
+            totalDiveSpotsTextView.setText(": 0");
             if (service.getDiveSpots() != null)totalDiveSpotsTextView.setText(": "+String.valueOf(service.getDiveSpots().size()));
-
 
 
             if (service.getDays() > 1){
@@ -173,10 +176,20 @@ public class DetailServiceFragment extends Fragment {
                 licenseTextView.setText("License Needed");
             } else  {
                 licenseTextView.setText("No Need License");
+                //licenseLinearLayout.setBackgroundResource(R.drawable.ny_book);
+                //licenseLinearLayout.setBackgroundColor(getResources().getColor(R.color.ny_grey1));
+                licenseLinearLayout.setBackgroundColor(getResources().getColor(R.color.ny_grey7));
+                licenseTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
             }
 
 
             if (service != null){
+
+                if (service.getCategories() != null && !service.getCategories().isEmpty() ){
+                    categoryTextView.setText(service.getCategories().get(0).getName());
+                } else {
+                    categoryTextView.setText("-");
+                }
 
                 if (service.getSpecialPrice() < service.getNormalPrice() && service.getSpecialPrice() > 0){
                     priceTextView.setText(NYHelper.priceFormatter(service.getSpecialPrice()));

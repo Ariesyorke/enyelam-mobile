@@ -64,7 +64,6 @@ public class HomeFragment extends Fragment {
     private CircleIndicator circleIndicator;
     private CardView doDiveCardView, doCourseCardView, doShopCardView, ecoTripCardView;
 
-
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
 
@@ -126,7 +125,7 @@ public class HomeFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 }*/
 
-                Toast.makeText(getActivity(), "FAILED", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "FAILED", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -136,13 +135,13 @@ public class HomeFragment extends Fragment {
                     adapter.addModules(results.getList());
                     adapter.notifyDataSetChanged();
 
-                    Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
                     ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
                     modulStorage.setModuleList(results);
                     modulStorage.save();
 
-                    NYLog.e("CEK MODUL INI "+results.toString());
+                    //NYLog.e("CEK MODUL INI "+results.toString());
                 }
 
             }
@@ -255,7 +254,7 @@ public class HomeFragment extends Fragment {
         ModuleList moduleList = modulStorage.getModuleList();
         if (moduleList != null && moduleList.getList() != null && !moduleList.getList().isEmpty()) {
             adapter.addModules(moduleList.getList());
-            NYLog.e("CEK MODUL INI "+modulStorage.getModuleList().toString());
+            //NYLog.e("CEK MODUL INI "+modulStorage.getModuleList().toString());
         }
     }
 

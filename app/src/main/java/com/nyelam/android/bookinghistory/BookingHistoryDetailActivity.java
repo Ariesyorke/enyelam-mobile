@@ -138,7 +138,11 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         confirmLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (file != null) confirmPayment();
+                if (file != null){
+                    confirmPayment();
+                } else {
+                    Toast.makeText(BookingHistoryDetailActivity.this, getString(R.string.warn_file_not_found), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

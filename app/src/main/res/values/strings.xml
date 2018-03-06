@@ -112,6 +112,7 @@
     <string name="warn_field_first_name_cannot_be_empty">First name cannot be empty</string>
     <string name="warn_field_username_cannot_be_empty">Username cannot be empty</string>
     <string name="warn_email_not_valid">Please, input valid email address</string>
+    <string name="warn_file_not_found">Please, upload image first !</string>
     <string name="warn_empty_keyword">Keyword cannot be empty</string>
     <string name="warn_total_diver">Please, choose total Diver</string>
     <string name="warn_field_email_cannot_be_empty">Email cannot be empty</string>

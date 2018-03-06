@@ -25,6 +25,7 @@ public class DiveService implements Parseable {
     private static String KEY_DIVE_SPOTS = "dive_spot";
     private static String KEY_DAYS = "days";
     private static String KEY_TOTAL_DIVES = "total_dives";
+    private static String KEY_TOTAL_DIVE_SPOTS = "total_divespot";
     private static String KEY_MIN_PERSON = "min_person";
     private static String KEY_MAX_PERSON = "max_person";
     private static String KEY_SCHEDULE = "schedule";
@@ -44,6 +45,7 @@ public class DiveService implements Parseable {
     private List<DiveSpot> diveSpots;
     private int days;
     private int totalDives;
+    private int totalDiveSpots;
     private int minPerson;
     private int maxPerson;
     private Schedule schedule;
@@ -141,6 +143,14 @@ public class DiveService implements Parseable {
 
     public void setTotalDives(int totalDives) {
         this.totalDives = totalDives;
+    }
+
+    public int getTotalDiveSpots() {
+        return totalDiveSpots;
+    }
+
+    public void setTotalDiveSpots(int totalDiveSpots) {
+        this.totalDiveSpots = totalDiveSpots;
     }
 
     public int getMinPerson() {
@@ -254,6 +264,12 @@ public class DiveService implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
+            if (!obj.isNull(KEY_TOTAL_DIVE_SPOTS)) {
+                setTotalDiveSpots(obj.getInt(KEY_TOTAL_DIVE_SPOTS));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
             if (!obj.isNull(KEY_MIN_PERSON)) {
                 setMinPerson(obj.getInt(KEY_MIN_PERSON));
             }
@@ -276,8 +292,6 @@ public class DiveService implements Parseable {
                 setSpecialPrice(obj.getInt(KEY_SPECIAL_PRICE));
             }
         } catch (JSONException e) {e.printStackTrace();}
-
-
 
         if(!obj.isNull(KEY_SCHEDULE)) {
             try {
@@ -452,6 +466,12 @@ public class DiveService implements Parseable {
 
         try {
             obj.put(KEY_TOTAL_DIVES, getTotalDives());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_TOTAL_DIVE_SPOTS, getTotalDiveSpots());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -107,8 +107,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     }
     private void initPermission() {
         ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.CALL_PHONE,
                 Manifest.permission.READ_CONTACTS,

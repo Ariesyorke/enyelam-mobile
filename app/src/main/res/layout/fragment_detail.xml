@@ -62,7 +62,7 @@
                             style="@style/StarRatingBar"
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
-                            android:isIndicator="false"
+                            android:isIndicator="true"
                             android:numStars="5"
                             android:rating="0"
                             android:stepSize="1.0"
@@ -300,6 +300,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
+                        android:id="@+id/license_linearLayout"
                         android:background="@color/ny_orange"
                         android:paddingTop="@dimen/padding_half"
                         android:paddingBottom="@dimen/padding_half"

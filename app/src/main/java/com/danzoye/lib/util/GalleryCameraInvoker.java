@@ -214,11 +214,12 @@ public class GalleryCameraInvoker {
             }
         } else if (requestCode == REQ_CODE_CAMERA_WITH_CROP) {
             if (resultCode == Activity.RESULT_OK) {
-                Uri uri = FileProvider.getUriForFile(activity != null? activity : (fragment != null ? fragment.getActivity(): fragmentSupport.getActivity()), BuildConfig.APPLICATION_ID + ".provider", cameraFile);
+//                Uri uri = FileProvider.getUriForFile(activity != null? activity : (fragment != null ? fragment.getActivity(): fragmentSupport.getActivity()), BuildConfig.APPLICATION_ID + ".provider", cameraFile);
                 if (!isAspectCustom) {
                     croppedFile = tryCropImage(Uri.fromFile(cameraFile), this.reqCodeCamera);
                 } else {
-                    croppedFile = tryCropImageforNougat(uri, this.reqCodeCamera);
+                    croppedFile = tryCropImage(Uri.fromFile(cameraFile), this.reqCodeCamera, aspectX, aspectY);
+
                 }
             }
         } else if (requestCode == this.reqCodeGallery) {
