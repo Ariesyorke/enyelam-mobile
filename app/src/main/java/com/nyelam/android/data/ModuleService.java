@@ -6,13 +6,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 2/14/2018.
  */
 
 public class ModuleService extends Module implements Parseable {
+    protected List<DiveService> diveServices;
 
+
+    public List<DiveService> getDiveServices() {
+        return diveServices;
+    }
+
+    public void setDiveServices(List<DiveService> diveServices) {
+        this.diveServices = diveServices;
+    }
 
     @Override
     public void parse(JSONObject obj) {

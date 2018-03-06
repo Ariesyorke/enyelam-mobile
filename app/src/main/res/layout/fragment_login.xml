@@ -32,7 +32,7 @@
 
             <com.nyelam.android.view.font.NYTextView
                 app:fontTextStyle="medium"
-                android:text="Welcome to Nyelam!"
+                android:text="Welcome to e-Nyelam!"
                 android:textColor="@color/colorWhite"
                 android:textSize="20sp"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"

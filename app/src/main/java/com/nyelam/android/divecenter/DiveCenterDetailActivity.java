@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -44,6 +45,7 @@ import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divespot.DiveSpotDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
@@ -93,6 +95,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private String diveSpotId;
     protected String type;
     protected String diverId = "";
+    private boolean ecoTrip = false;
 
     private DoDiveSearchServiceAdapter serviceAdapter;
     private RecyclerView recyclerView;
@@ -105,6 +108,10 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private TextView noLocationTextView, openMapTextView;
     private SupportMapFragment mapFragment;
     private LinearLayout mapLinearLayout, phoneNumberLinearLayout;
+
+    public boolean isEcoTrip() {
+        return ecoTrip;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +214,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-
+            if(intent.hasExtra(NYHelper.IS_ECO_TRIP)) {
+                ecoTrip = true;
+            }
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))){
                 diver = extras.getString(NYHelper.DIVER);
             }
@@ -251,7 +260,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                     diveCenter.parse(obj);
                     if (NYHelper.isStringNotEmpty(diveCenter.getName())) nameTextView.setText(diveCenter.getName());
                     if(!TextUtils.isEmpty(diveCenter.getDescription())) {
-                        descriptionTextView.setText(diveCenter.getDescription());
+                        descriptionTextView.setText(Html.fromHtml(diveCenter.getDescription()));
                     } else {
                         descriptionTextView.setText("-");
                     }
@@ -292,7 +301,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
                 if (diveCenter == null) diveCenter = new DiveCenter();
                 diveCenter = results;
-
+                serviceAdapter.setDiveCenter(results);
                 if (diveCenter != null){
 
                     mainLinearLayout.setVisibility(View.VISIBLE);
@@ -323,8 +332,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                             locationTextView.setText("-");
                         }
                     }
-
-
+                    initBanner();
                 }
 
             }
@@ -346,8 +354,14 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 apiPath = getString(R.string.api_path_dodive_service_list_by_category);
             }
 
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId);
-            spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+            if(isEcoTrip()) {
+                NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId, "1");
+                spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+            } else {
+                NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId);
+                spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+            }
+
         }
     }
 
@@ -419,7 +433,16 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private void initBanner() {
         BannerList bannerList = new BannerList();
         List<Banner> banners = new ArrayList<>();
-        if (diveCenter != null && diveCenter.getFeaturedImage() != null && !TextUtils.isEmpty(diveCenter.getFeaturedImage()))banners.add(new Banner("1", diveCenter.getFeaturedImage(), "captio", null));
+        if (diveCenter != null && diveCenter.getFeaturedImage() != null && !TextUtils.isEmpty(diveCenter.getFeaturedImage())) {
+            banners.add(new Banner("1", diveCenter.getFeaturedImage(), "captio", null));
+        }
+        if(diveCenter != null && diveCenter.getImages() != null && !diveCenter.getImages().isEmpty()) {
+            int i = 1;
+            for(String image: diveCenter.getImages()) {
+                banners.add(new Banner(String.valueOf(i), image, "gallery", null));
+                i++;
+            }
+        }
         bannerList.setList(banners);
         //input data data
         bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());

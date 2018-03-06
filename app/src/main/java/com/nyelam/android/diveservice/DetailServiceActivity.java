@@ -31,6 +31,7 @@ import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DiveCenterDetailFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
@@ -124,10 +125,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         bookingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 LoginStorage storage = new LoginStorage(getApplicationContext());
-
-                if (storage.isUserLogin()){
+                if (storage.isUserLogin()) {
                     doBook();
                 } else {
                     Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
@@ -236,6 +235,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
                     if (diveService == null) diveService = new DiveService();
                     newDiveService = results;
+                    diveService = newDiveService;
+
                     List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
 
                     if(diveSpots != null && !diveSpots.isEmpty() && diveSpots.size() == 1) {
@@ -258,10 +259,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
                         //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
                     }
+                    initBanner();
                 } else {
 
                 }
-
             }
         };
     }
@@ -326,6 +327,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
         List<Banner> banners = new ArrayList<>();
         if (diveService != null && diveService.getFeaturedImage() != null && !TextUtils.isEmpty(diveService.getFeaturedImage()))banners.add(new Banner("1", diveService.getFeaturedImage(), "captio", null));
         bannerList.setList(banners);
+        if(diveService != null && diveService.getImages() != null && !diveService.getImages().isEmpty()) {
+            int i = 1;
+            for(String image: diveService.getImages()) {
+                banners.add(new Banner(String.valueOf(i), image, "gallery", null));
+                i++;
+            }
+        }
         //input data data
         bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
         bannerViewPager.setAdapter(bannerViewPagerAdapter);

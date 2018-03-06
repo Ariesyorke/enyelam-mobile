@@ -19,13 +19,13 @@ public class DiveCenter implements Parseable {
     private static String KEY_NAME = "name";
     private static String KEY_SUBTITLE = "subtitle";
     private static String KEY_IMAGE_LOGO = "image_logo";
-    private static String KEY_IMAGES = "picture";
+    private static String KEY_IMAGES = "images";
     private static String KEY_RATING = "rating";
     private static String KEY_CONTACT = "contact";
     private static String KEY_MEMBERSHIP = "membership";
     private static String KEY_STATUS = "status";
     private static String KEY_DESCRIPTION = "description";
-
+    private static String KEY_LOC = "location";
 
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_CATEGORIES = "categories";
@@ -45,7 +45,7 @@ public class DiveCenter implements Parseable {
     private Contact contact;
     private Membership membership;
     private int status;
-
+    private Location location;
 
     private List<Category> categories;
     private String featuredImage;
@@ -54,6 +54,13 @@ public class DiveCenter implements Parseable {
     private String startFromTotalDives;
     private String startFromDays;
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public String getDescription() {
         return description;
@@ -186,7 +193,15 @@ public class DiveCenter implements Parseable {
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
-
+        try {
+            if(!obj.isNull(KEY_LOC)) {
+                JSONObject o = obj.getJSONObject(KEY_LOC);
+                location = new Location();
+                location.parse(o);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
@@ -211,7 +226,7 @@ public class DiveCenter implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        /*if(!obj.isNull(KEY_IMAGES)) {
+        if(!obj.isNull(KEY_IMAGES)) {
             try {
                 JSONArray array = obj.getJSONArray(KEY_IMAGES);
                 if(array != null && array.length() > 0) {
@@ -224,32 +239,32 @@ public class DiveCenter implements Parseable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }*/
-
-        if(!obj.isNull(KEY_IMAGES)) {
-            try {
-                if(obj.get(KEY_IMAGES) instanceof JSONArray) {
-                    JSONArray array = obj.getJSONArray(KEY_IMAGES);
-                    if (array != null && array.length() > 0) {
-                        images = new ArrayList<>();
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject o = array.getJSONObject(i);
-                            String a = o.getString(KEY_IMAGES);
-                            images.add(a);
-                        }
-                    }
-                }  else if (obj.get(KEY_IMAGES) instanceof JSONObject) {
-                    JSONObject o = obj.getJSONObject(KEY_IMAGES);
-                    if(o != null && o.length() > 0) {
-                        images = new ArrayList<>();
-                        String d = o.getString(KEY_IMAGES);
-                        images.add(d);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
+//
+//        if(!obj.isNull(KEY_IMAGES)) {
+//            try {
+//                if(obj.get(KEY_IMAGES) instanceof JSONArray) {
+//                    JSONArray array = obj.getJSONArray(KEY_IMAGES);
+//                    if (array != null && array.length() > 0) {
+//                        images = new ArrayList<>();
+//                        for (int i = 0; i < array.length(); i++) {
+//                            JSONObject o = array.getJSONObject(i);
+//                            String a = o.getString(KEY_IMAGES);
+//                            images.add(a);
+//                        }
+//                    }
+//                }  else if (obj.get(KEY_IMAGES) instanceof JSONObject) {
+//                    JSONObject o = obj.getJSONObject(KEY_IMAGES);
+//                    if(o != null && o.length() > 0) {
+//                        images = new ArrayList<>();
+//                        String d = o.getString(KEY_IMAGES);
+//                        images.add(d);
+//                    }
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
         if(!obj.isNull(KEY_CONTACT)) {
@@ -372,6 +387,14 @@ public class DiveCenter implements Parseable {
     public String toString() {
         JSONObject obj = new JSONObject();
 
+        try {
+            if (getLocation() != null) {
+                JSONObject o = new JSONObject(getLocation().toString());
+                obj.put(KEY_LOCATION, o);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if(!TextUtils.isEmpty(getDescription())) {
                 obj.put(KEY_DESCRIPTION, getDescription());

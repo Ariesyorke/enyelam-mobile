@@ -31,7 +31,7 @@ import java.util.List;
 
 public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Activity activity;
+    private DoDiveSearchResultActivity activity;
     private List<DiveCenter> diveCenterList;
     private String diver;
     private String date;
@@ -39,7 +39,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
     private String type;
     private String diverId;
 
-    public DoDiveSearchDiveCenterAdapter(Activity activity, String diver, String date, String certificate, String type, String diverId) {
+    public DoDiveSearchDiveCenterAdapter(DoDiveSearchResultActivity activity, String diver, String date, String certificate, String type, String diverId) {
         this.activity = activity;
         this.diver = diver;
         this.date = date;
@@ -227,6 +227,9 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.TYPE, type);
+            if(activity.isEcotrip()) {
+                intent.putExtra(NYHelper.IS_ECO_TRIP, true);
+            }
             activity.startActivity(intent);
         }
     }

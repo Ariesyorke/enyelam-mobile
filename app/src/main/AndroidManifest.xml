@@ -105,7 +105,14 @@
             android:name=".ecotrip.EcoTripActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Fullscreen" />
-        <activity android:name=".profile.ChangePasswordActivity"></activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".profile.ChangePasswordActivity"></activity>
+
+        <activity
+            android:name=".VeritransNotificationActivity"
+            android:label="@string/title_activity_blank_notification"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

@@ -23,7 +23,9 @@ import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
@@ -72,6 +74,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private TextView scheduleTextView;
     private TextView serviceNameTextView;
     private TextView locationTextView;
+    private TextView diveCenterTextView;
     private TextView subTotalPriceTextView;
     private TextView voucherTextView;
     private TextView totalPriceTextView;
@@ -98,7 +101,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (intent.hasExtra(NYHelper.ORDER_RETURN)){
+            if (intent.hasExtra(NYHelper.ORDER_RETURN)) {
 
                 try {
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.ORDER_RETURN));
@@ -143,6 +146,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private void initView() {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_swipeRefreshLayout);
+        diveCenterTextView = (TextView) findViewById(R.id.dive_center_name_textView);
         orderIdTextView = (TextView) findViewById(R.id.order_id_textView);
         statusTextView = (TextView) findViewById(R.id.status_textView);
         scheduleTextView = (TextView) findViewById(R.id.schedule_textView);
@@ -281,15 +285,12 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     }
 
 
-
-
-
-    private void getOrderDetail(Boolean isRefresh){
+    private void getOrderDetail(Boolean isRefresh) {
 
         try {
-            if (isRefresh){
+            if (isRefresh) {
                 progressBar.setVisibility(View.GONE);
-            } else{
+            } else {
                 progressBar.setVisibility(View.VISIBLE);
             }
             NYDoDiveBookingDetailRequest req = new NYDoDiveBookingDetailRequest(this, idOrder);
@@ -313,7 +314,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             public void onRequestSuccess(OrderReturn newOrderReturn) {
                 hideLoadingBar();
 
-                if (newOrderReturn != null){
+                if (newOrderReturn != null) {
                     orderReturn = newOrderReturn;
                     setSummaryView();
                 }
@@ -326,44 +327,67 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
         hideLoadingBar();
 
-        if (orderReturn != null && orderReturn.getSummary() != null){
+        if (orderReturn != null && orderReturn.getSummary() != null) {
 
             mainLinearLayout.setVisibility(View.VISIBLE);
 
             Summary summary = orderReturn.getSummary();
 
-            if (summary != null){
+            if (summary != null) {
                 Contact contact = summary.getContact();
-                if (NYHelper.isStringNotEmpty(contact.getName())) contactNameTextView.setText(contact.getName());
-                if (NYHelper.isStringNotEmpty(contact.getPhoneNumber())) contactPhoneNumberTextView.setText(contact.getPhoneNumber());
-                if (NYHelper.isStringNotEmpty(contact.getEmailAddress())) contactEmailTextView.setText(contact.getEmailAddress());
+                if (NYHelper.isStringNotEmpty(contact.getName()))
+                    contactNameTextView.setText(contact.getName());
+                if (NYHelper.isStringNotEmpty(contact.getPhoneNumber()))
+                    contactPhoneNumberTextView.setText(contact.getPhoneNumber());
+                if (NYHelper.isStringNotEmpty(contact.getEmailAddress()))
+                    contactEmailTextView.setText(contact.getEmailAddress());
             }
 
-            if (summary.getOrder() != null){
+            if (summary.getDiveService() != null) {
+                DiveCenter diveCenter = summary.getDiveService().getDiveCenter();
+                if (diveCenter != null) {
+                    diveCenterTextView.setText(diveCenter.getName());
+                    if (diveCenter.getLocation() != null) {
+                        Location location = diveCenter.getLocation();
+                        String locString = "";
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName()))
+                            locString += location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName()))
+                            locString += ", " + location.getProvince().getName();
+                        if (NYHelper.isStringNotEmpty(location.getCountry()))
+                            locString += ", " + location.getCountry();
+                        locationTextView.setText(locString);
+
+                    }
+                }
+            }
+
+            if (summary.getOrder() != null) {
 
                 Order order = summary.getOrder();
 
-                if (NYHelper.isStringNotEmpty(order.getStatus())){
+                if (NYHelper.isStringNotEmpty(order.getStatus())) {
 
                     statusTextView.setText(order.getStatus());
-                    if (order.getStatus().toLowerCase().equals("unpaid")){
+                    if (order.getStatus().equalsIgnoreCase("unpaid") && orderReturn.getVeritransToken() == null) {
                         paymentLinearLayout.setVisibility(View.VISIBLE);
                     } else {
                         paymentLinearLayout.setVisibility(View.GONE);
                     }
                 }
 
-                if (NYHelper.isStringNotEmpty(order.getOrderId()))orderIdTextView.setText("#"+order.getOrderId());
+                if (NYHelper.isStringNotEmpty(order.getOrderId()))
+                    orderIdTextView.setText("#" + order.getOrderId());
                 scheduleTextView.setText(NYHelper.setMillisToDateMonth(order.getSchedule()));
 
-                if (order.getCart() != null){
+                if (order.getCart() != null) {
                     Cart cart = order.getCart();
                     subTotalPriceTextView.setText(NYHelper.priceFormatter(cart.getSubTotal()));
                     //voucherTextView.setText(NYHelper.priceFormatter(cart.getVoucher().getValue()));
                     totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
                 }
 
-                if (summary.getParticipants() != null && summary.getParticipants().size() > 0){
+                if (summary.getParticipants() != null && summary.getParticipants().size() > 0) {
                     participantContainerLinearLayout.removeAllViews();
                     int pos = 0;
                     for (final Participant participant : summary.getParticipants()) {
@@ -383,13 +407,13 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                         LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
                         if (participant != null) {
-                            if (NYHelper.isStringNotEmpty(participant.getName())){
+                            if (NYHelper.isStringNotEmpty(participant.getName())) {
                                 nameTextView.setText(participant.getName());
-                            }  else{
-                                nameTextView.setText("Participant "+String.valueOf(position+1));
+                            } else {
+                                nameTextView.setText("Participant " + String.valueOf(position + 1));
                             }
 
-                            if (NYHelper.isStringNotEmpty(participant.getEmail())){
+                            if (NYHelper.isStringNotEmpty(participant.getEmail())) {
                                 emailTextView.setText(participant.getEmail());
                             } else {
                                 emailTextView.setText("-");
@@ -398,7 +422,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                             changeTextView.setVisibility(View.GONE);
                             fillLinearLayout.setVisibility(View.GONE);
                         } else {
-                            nameTextView.setText("Participant "+String.valueOf(position+1));
+                            nameTextView.setText("Participant " + String.valueOf(position + 1));
                             emailTextView.setText("-");
                             changeTextView.setVisibility(View.GONE);
                             fillLinearLayout.setVisibility(View.GONE);
@@ -412,13 +436,14 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
             }
 
-            if (summary.getDiveService() != null){
+            if (summary.getDiveService() != null) {
                 DiveService service = summary.getDiveService();
-                if (NYHelper.isStringNotEmpty(service.getName()))serviceNameTextView.setText(service.getName());
+                if (NYHelper.isStringNotEmpty(service.getName()))
+                    serviceNameTextView.setText(service.getName());
             }
 
 
-            if ( (orderReturn.getVeritransToken() == null || !NYHelper.isStringNotEmpty(orderReturn.getVeritransToken().getTokenId()) ) && summary.getOrder() != null  && (NYHelper.isStringNotEmpty(summary.getOrder().getStatus()) && summary.getOrder().getStatus().toLowerCase().equals("unpaid")) ){
+            if ((orderReturn.getVeritransToken() == null || !NYHelper.isStringNotEmpty(orderReturn.getVeritransToken().getTokenId())) && summary.getOrder() != null && (NYHelper.isStringNotEmpty(summary.getOrder().getStatus()) && summary.getOrder().getStatus().toLowerCase().equals("unpaid"))) {
                 paymentLinearLayout.setVisibility(View.VISIBLE);
             } else {
                 paymentLinearLayout.setVisibility(View.GONE);
@@ -433,7 +458,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     }
 
 
-    private void confirmPayment(){
+    private void confirmPayment() {
         try {
             progressDialog.show();
             NYDoDiveBookingConfirmPaymentRequest req = new NYDoDiveBookingConfirmPaymentRequest(this, idOrder, file);
@@ -460,7 +485,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             }
         };
     }
-
 
 
     private void initToolbar() {
@@ -500,9 +524,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     }
 
 
-    private void hideLoadingBar(){
+    private void hideLoadingBar() {
         if (progressBar != null) progressBar.setVisibility(View.GONE);
-        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing())
+            swipeRefreshLayout.setRefreshing(false);
         if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 
@@ -539,9 +564,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     @Override
     public void onBitmapResult(File file) {
 
-        if (file != null){
+        if (file != null) {
             this.file = file;
-            if (NYHelper.isStringNotEmpty(file.getName()))transferEvidenceTextView.setText(file.getName());
+            if (NYHelper.isStringNotEmpty(file.getName()))
+                transferEvidenceTextView.setText(file.getName());
             //Toast.makeText(this, file.getName(), Toast.LENGTH_SHORT).show();
         }
 

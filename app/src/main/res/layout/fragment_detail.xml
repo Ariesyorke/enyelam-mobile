@@ -555,7 +555,7 @@
                             android:layout_height="wrap_content" />
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/description_textView"
-                            android:text="Bali is world renowned for their abundance of tropical marine life. Bali underwater panoramas is amazing (awesome ) with beautiful coral, Many fishes in difference of color and size, shark, manta rays and mola mola. Bali dive site is unique from gentle reef, steep slope, wall and wreck. All of our dive site available by carefully selected based on through study and survey by the expert."
+                            android:text="-"
                             android:lineSpacingMultiplier="1.2"
                             android:textColor="@color/ny_grey5"
                             android:textSize="14sp"
@@ -565,14 +565,8 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
-
-
-
-
             </LinearLayout>
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
 
 </LinearLayout>

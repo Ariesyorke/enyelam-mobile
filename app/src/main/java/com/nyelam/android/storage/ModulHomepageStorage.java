@@ -32,42 +32,19 @@ public class ModulHomepageStorage extends AbstractStorage {
     private static final String FILENAME = "nyelam:storage:modul-homepage";
     private static final String KEY_MODULES = "modules";
     private static final String KEY_MODULE_HOMEPAGE = "module_homepage";
-    private static final String KEY_MODULE_DIVE_SPOT = "Popular Dive Spot";
-    private static final String KEY_MODULE_EVENT = "Events";
-    private static final String KEY_MODULE_SERVICE = "Hot Offer";
-
-    public List<DiveSpot> moduleDiveSpots;
-    public List<Event> moduleEvents;
-    public List<DiveService> moduleServices;
-
-    public List<DiveSpot> getModuleDiveSpots() {
-        return moduleDiveSpots;
-    }
-
-    public void setModuleDiveSpots(List<DiveSpot> moduleDiveSpots) {
-        this.moduleDiveSpots = moduleDiveSpots;
-    }
-
-    public List<Event> getModuleEvents() {
-        return moduleEvents;
-    }
-
-    public void setModuleEvents(List<Event> moduleEvents) {
-        this.moduleEvents = moduleEvents;
-    }
-
-    public List<DiveService> getModuleServices() {
-        return moduleServices;
-    }
-
-    public void setModuleServices(List<DiveService> moduleServices) {
-        this.moduleServices = moduleServices;
-    }
+    private ModuleList moduleList;
 
     public ModulHomepageStorage(Context context) {
         super(context);
     }
 
+    public void setModuleList(ModuleList moduleList) {
+        this.moduleList = moduleList;
+    }
+
+    public ModuleList getModuleList() {
+        return moduleList;
+    }
 
     @Override
     protected String getStorageKey() {
@@ -78,47 +55,10 @@ public class ModulHomepageStorage extends AbstractStorage {
     protected void onParseData(JSONObject obj) throws JSONException {
 
         try {
-            if (!obj.isNull(KEY_MODULE_EVENT)) {
-                JSONArray array = obj.getJSONArray(KEY_MODULE_EVENT);
-                if (array != null && array.length() > 0) {
-                    moduleEvents = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject o = array.getJSONObject(i);
-                        Event event = new Event();
-                        event.parse(o);
-                        moduleEvents.add(event);
-                    }
-                }
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!obj.isNull(KEY_MODULE_SERVICE)) {
-                JSONArray array = obj.getJSONArray(KEY_MODULE_SERVICE);
-                if (array != null && array.length() > 0) {
-                    moduleServices = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject o = array.getJSONObject(i);
-                        DiveService service = new DiveService();
-                        service.parse(o);
-                        moduleServices.add(service);
-                    }
-                }
-            }
-        } catch (JSONException e) {e.printStackTrace();}
-
-        try {
-            if (!obj.isNull(KEY_MODULE_DIVE_SPOT)) {
-                JSONArray array = obj.getJSONArray(KEY_MODULE_DIVE_SPOT);
-                if (array != null && array.length() > 0) {
-                    moduleDiveSpots = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject o = array.getJSONObject(i);
-                        DiveSpot diveSpot = new DiveSpot();
-                        diveSpot.parse(o);
-                        moduleDiveSpots.add(diveSpot);
-                    }
-                }
+            if (!obj.isNull(KEY_MODULES)) {
+                JSONArray array = obj.getJSONArray(KEY_MODULES);
+                moduleList = new ModuleList();
+                moduleList.parse(array);
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -127,47 +67,11 @@ public class ModulHomepageStorage extends AbstractStorage {
     @Override
     protected JSONObject onSaveData() throws JSONException {
         JSONObject obj = new JSONObject();
-
         try {
-            if (moduleEvents != null) {
-                JSONArray array = new JSONArray();
-                for (Event a : getModuleEvents()) {
-                    JSONObject o = new JSONObject(a.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_MODULE_EVENT, array);
-            } else  {
-                obj.put(KEY_MODULE_EVENT, JSONObject.NULL);
+            if(moduleList != null && moduleList.getList() != null && !moduleList.getList().isEmpty()) {
+                obj.put(KEY_MODULES, moduleList.toJSONArray());
             }
         } catch (JSONException e){e.printStackTrace();}
-
-        try {
-            if (moduleServices != null) {
-                JSONArray array = new JSONArray();
-                for (DiveService a : getModuleServices()) {
-                    JSONObject o = new JSONObject(a.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_MODULE_SERVICE, array);
-            } else  {
-                obj.put(KEY_MODULE_SERVICE, JSONObject.NULL);
-            }
-        } catch (JSONException e){e.printStackTrace();}
-
-
-        try {
-            if (moduleDiveSpots != null) {
-                JSONArray array = new JSONArray();
-                for (DiveSpot a : getModuleDiveSpots()) {
-                    JSONObject o = new JSONObject(a.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_MODULE_DIVE_SPOT, array);
-            } else  {
-                obj.put(KEY_MODULE_DIVE_SPOT, JSONObject.NULL);
-            }
-        } catch (JSONException e){e.printStackTrace();}
-
 
         return obj;
     }

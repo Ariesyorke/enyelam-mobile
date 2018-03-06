@@ -32,7 +32,7 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
 
     private static final String POST_SPOT_ID = "dive_spot_id";
     private static final String POST_CATEGORY_ID = "category_id";
-
+    private static final String POST_ECO_TRIP = "eco_trip";
     //public NYDoDiveSearchServiceRequest(Context context, String page, String diverId, String type, String certificate, String diver, String date) {
     public NYDoDiveSearchServiceRequest(Context context, String apiPath, String page, String diverCenterId, String certificate, String diver, String date, String type, String diverId) {
         super(AuthReturn.class, context, apiPath);
@@ -77,6 +77,56 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
 
         if(!TextUtils.isEmpty(date)) {
             addQuery(POST_DATE, date);
+        }
+
+    }
+    public NYDoDiveSearchServiceRequest(Context context, String apiPath, String page, String diverCenterId, String certificate, String diver, String date, String type, String diverId, String ecoTrip) {
+        super(AuthReturn.class, context, apiPath);
+
+        if(!TextUtils.isEmpty(diverCenterId)) {
+            addQuery(POST_DIVE_CENTER_ID, diverCenterId);
+        }
+
+        if(!TextUtils.isEmpty(page)) {
+            addQuery(POST_PAGE, page);
+        }
+
+        if (!TextUtils.isEmpty(type) && type.equals("1")){
+            addQuery(POST_SPOT_ID, diverId);
+        } else if (!TextUtils.isEmpty(type) && type.equals("2")){
+            addQuery(POST_CATEGORY_ID, diverId);
+        }
+
+        /*if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(diverId)) {
+            if(type.equals("1")) {
+                addQuery(POST_DIVE_SPOT_ID, diverId);
+            } else if(type.equals("3")) {
+                addQuery(POST_DIVE_CENTER_ID, diverId);
+            } else if(type.equals("4")) {
+                addQuery(POST_COUNTRY_ID, diverId);
+            } else if(type.equals("5")) {
+                addQuery(POST_PROVINCE_ID, diverId);
+            } else if(type.equals("6")) {
+                addQuery(POST_CITY_ID, diverId);
+            }
+        }*/
+
+        if(!TextUtils.isEmpty(certificate)) {
+            addQuery(POST_CERTIFICATE, certificate);
+        }
+
+        if(!TextUtils.isEmpty(diver)) {
+            addQuery(POST_DIVER, diver);
+        }
+
+        //addQuery(POST_DATE, "1515660257");
+
+        if(!TextUtils.isEmpty(date)) {
+            addQuery(POST_DATE, date);
+        }
+
+        if(!TextUtils.isEmpty(ecoTrip)) {
+            addQuery(POST_ECO_TRIP, ecoTrip);
         }
 
     }

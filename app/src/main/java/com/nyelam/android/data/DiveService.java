@@ -32,6 +32,8 @@ public class DiveService implements Parseable {
     private static String KEY_NORMAL_PRICE = "normal_price";
     private static String KEY_SPECIAL_PRICE = "special_price";
     private static String KEY_DIVE_CENTER = "dive_center";
+    private static String KEY_IMAGES = "images";
+    private static String KEY_DESCRIPTION = "description";
 
     private String id;
     private String name;
@@ -49,6 +51,25 @@ public class DiveService implements Parseable {
     private double normalPrice;
     private double specialPrice;
     private DiveCenter diveCenter;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private List<String> images;
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
 
     public String getId() {
         return id;
@@ -182,6 +203,14 @@ public class DiveService implements Parseable {
     public void parse(JSONObject obj) {
         if (obj == null) return;
 
+
+        try {
+            if(!obj.isNull(KEY_DESCRIPTION)) {
+                setDescription(obj.getString(KEY_DESCRIPTION));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
@@ -349,6 +378,19 @@ public class DiveService implements Parseable {
             }
         }
 
+        if(!obj.isNull(KEY_IMAGES)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_IMAGES);
+                for(int i = 0; i < array.length(); i++) {
+                    if(images == null) {
+                        images = new ArrayList<>();
+                    }
+                    images.add(array.getString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -357,7 +399,15 @@ public class DiveService implements Parseable {
     public String toString() {
 
         JSONObject obj = new JSONObject();
-
+        try {
+            if(!TextUtils.isEmpty(getDescription())) {
+                obj.put(KEY_DESCRIPTION, getDescription());
+            } else {
+                obj.put(KEY_DESCRIPTION, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!TextUtils.isEmpty(getId())) {
                 obj.put(KEY_ID, getId());
@@ -483,6 +533,18 @@ public class DiveService implements Parseable {
                     array.put(o);
                 }
                 obj.put(KEY_DIVE_SPOTS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(images != null && !images.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(String image : images) {
+                    array.put(image);
+                }
+                obj.put(KEY_IMAGES, array);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

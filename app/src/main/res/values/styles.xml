@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/ny_blue2</item>
     </style>
+
     <style name="Fullscreen" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
@@ -52,6 +53,7 @@
         <item name="android:windowTitleStyle">@style/dialog_title_style</item>
 
     </style>
+
     <style name="dialog_title_style" parent="android:Widget.TextView">
         <item name="android:background">@color/colorWhite</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -69,5 +71,9 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:button">@drawable/checkbox_custom_states</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

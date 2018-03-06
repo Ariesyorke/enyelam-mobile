@@ -2,24 +2,39 @@ package com.nyelam.android.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Event;
+import com.nyelam.android.data.Location;
+import com.nyelam.android.data.Module;
+import com.nyelam.android.data.ModuleDiveSpot;
+import com.nyelam.android.data.ModuleEvent;
+import com.nyelam.android.data.ModuleService;
 import com.nyelam.android.data.NYEventsModule;
 import com.nyelam.android.data.NYHotOffersModule;
-import com.nyelam.android.data.NYModule;
-import com.nyelam.android.data.NYPopularDiveSpotModule;
+import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.view.font.StrikethroughTextView;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -32,15 +47,12 @@ import java.util.List;
 
 public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int VIEW_TYPE_HEADER = 1;
-    public static final int VIEW_TYPE_SLIDER = 5;
+    public static final int VIEW_TYPE_EVENT = 2;
+    public static final int VIEW_TYPE_HOT_OFFER = 3;
+    public static final int View_TYPE_DIVE_SPOT = 4;
 
     private Context context;
-    private List<NYModule> modules;
-    private EventsAdapter eventsAdapter;
-    private HotOffersAdapter hotOffersAdapter;
-    //private HotOffersAdapter hotOffersAdapter;
-    //private PopularDiveSpotsAdapter popularDiveSpotsAdapter;
-    //private ProductDetailActivity BestSellerAdapter;
+    private List<Module> modules;
     private HomeFragment fragment;
 
     public HomePageAdapter(Context context, HomeFragment fragment) {
@@ -48,20 +60,19 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.fragment = fragment;
     }
 
-    public void addModul(NYModule module) {
+    public void addModul(Module module) {
         if (modules == null) {
             modules = new ArrayList<>();
         }
         modules.add(module);
     }
 
-    public void addModules(List<NYModule> modules) {
+    public void addModules(List<Module> modules) {
         if (this.modules == null) {
             this.modules = new ArrayList<>();
         }
         this.modules.addAll(modules);
 
-        NYLog.e("HOMEPAGE ADAPTER "+modules.get(0).toString());
     }
 
     public void clear() {
@@ -73,14 +84,23 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        NYLog.e("HOMEPAGE CEK VIEWTYPE "+viewType);
-
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 return new SectionHeader(context, parent);
-            case VIEW_TYPE_SLIDER:
-                return new EventsItem(context, parent);
+            case View_TYPE_DIVE_SPOT:
+                return new PopularItemViewHolder(context, parent);
+            case VIEW_TYPE_HOT_OFFER:
+                return new HotOffersItemViewHolder(context, parent);
+            case VIEW_TYPE_EVENT:
+                return new EventsItemViewHolder(context, parent);
         }
+//
+//        switch (viewType) {
+//            case VIEW_TYPE_HEADER:
+//                return new SectionHeader(context, parent);
+//            case VIEW_TYPE_SLIDER:
+//                return new EventsItemViewHolder(context, parent);
+//        }
         return null;
     }
 
@@ -88,33 +108,24 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int levelOneIndex = getLevelOneIndex(position);
-        NYModule item = modules.get(levelOneIndex);
+        Module item = modules.get(levelOneIndex);
 
         if (holder instanceof SectionHeader) {
-            ((SectionHeader) holder).tvTitle.setText(item.getModuleName());
-        } else if (holder instanceof EventsItem) {
-            EventsItem eventsItem = ((EventsItem) holder);
-            NYEventsModule eventsModule = (NYEventsModule) item;
-            eventsAdapter = new EventsAdapter(context, eventsModule);
-            eventsItem.twoWayView.setAdapter(eventsAdapter);
-        } else if (holder instanceof HotOffersItem) {
-            HotOffersItem hotOffersItem = ((HotOffersItem) holder);
-            NYHotOffersModule hotOffersModule = (NYHotOffersModule) item;
-            hotOffersAdapter = new HotOffersAdapter(context, hotOffersModule);
-            hotOffersItem.twoWayView.setAdapter(eventsAdapter);
+            ((SectionHeader) holder).tvTitle.setText(item.getName());
+        } else if (holder instanceof EventsItemViewHolder) {
+            EventsItemViewHolder eventsItem = ((EventsItemViewHolder) holder);
+            ModuleEvent moduleEvent = (ModuleEvent)item;
+            ((EventsItemViewHolder) holder).setModel(moduleEvent.getEvents());
+        } else if (holder instanceof HotOffersItemViewHolder) {
+            HotOffersItemViewHolder hotOffersItem = ((HotOffersItemViewHolder) holder);
+            ModuleService moduleService = (ModuleService) item;
+            hotOffersItem.setModel(moduleService.getDiveServices());
+        } else if (holder instanceof PopularItemViewHolder) {
+            PopularItemViewHolder popularViewHolder = (PopularItemViewHolder) holder;
+            ModuleDiveSpot moduleDiveSpot = (ModuleDiveSpot)item;
+            popularViewHolder.setModel(moduleDiveSpot.getDiveSpots());
         }
-
     }
-
-
-
-
-
-
-
-
-
-
 
     private int getViewType(int position) {
         int index = 0;
@@ -124,43 +135,26 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             index++;
 
-            if (modules.get(i) instanceof NYEventsModule) {
-                NYEventsModule eventsModule = (NYEventsModule) modules.get(i);
-                List<Event> events = eventsModule.getEvents();
-                for (int c = 0; c < events.size(); c++) {
-                    if (index == position) {
-                        return VIEW_TYPE_SLIDER;
-                    }
-                    index++;
+            if (modules.get(i) instanceof ModuleEvent) {
+                if (index == position) {
+                    return VIEW_TYPE_EVENT;
                 }
-            } else if (modules.get(i) instanceof NYHotOffersModule) {
-                NYHotOffersModule hotOffersModule = (NYHotOffersModule) modules.get(i);
-                List<DiveService> diveServices = hotOffersModule.getDiveServices();
-                for (int c = 0; c < diveServices.size(); c++) {
-                    if (index == position) {
-                        return VIEW_TYPE_SLIDER;
-                    }
-                    index++;
+                index++;
+            } else if (modules.get(i) instanceof ModuleService) {
+                if (index == position) {
+                    return VIEW_TYPE_HOT_OFFER;
                 }
-            } else if (modules.get(i) instanceof NYPopularDiveSpotModule) {
-                NYPopularDiveSpotModule popularDiveSpotModule = (NYPopularDiveSpotModule) modules.get(i);
-                List<DiveSpot> diveSpots = popularDiveSpotModule.getDiveSpots();
-                for (int c = 0; c < diveSpots.size(); c++) {
-                    if (index == position) {
-                        return VIEW_TYPE_SLIDER;
-                    }
-                    index++;
+                index++;
+
+            } else if (modules.get(i) instanceof ModuleDiveSpot) {
+                if (index == position) {
+                    return View_TYPE_DIVE_SPOT;
                 }
+                index++;
             }
         }
         return index;
     }
-
-
-
-
-
-
 
     private int getLevelOneIndex(int position) {
         int index = 0;
@@ -169,16 +163,21 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return i;
             }
             index++;
-
-            if (modules.get(i) instanceof NYEventsModule) {
-                NYEventsModule eventsModule = (NYEventsModule) modules.get(i);
-                List<Event> events = eventsModule.getEvents();
-                for (int c = 0; c < events.size(); c++) {
-                    if (index == position) {
-                        return i;
-                    }
-                    index++;
+            if (modules.get(i) instanceof ModuleEvent) {
+                if (index == position) {
+                    return i;
                 }
+                index++;
+            } else if (modules.get(i) instanceof ModuleService) {
+                if (index == position) {
+                    return i;
+                }
+                index++;
+            } else if (modules.get(i) instanceof ModuleDiveSpot) {
+                if (index == position) {
+                    return i;
+                }
+                index++;
             }
 
         }
@@ -197,37 +196,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemCount() {
         int count = 0;
         if (modules != null && !modules.isEmpty()) {
-            count += modules.size();
-            for (NYModule module : modules) {
-                if (module instanceof NYEventsModule) {
-                    NYEventsModule eventsModule = (NYEventsModule) module;
-
-                    NYLog.e("HOMEPAGE MODULE 1 "+eventsModule.toString());
-                    NYLog.e("HOMEPAGE MODULE 2 "+eventsModule.getEvents().toString());
-
-                    if(module.getModuleType().equals("grid")) {
-                        if (eventsModule.getEvents() != null && !eventsModule.getEvents().isEmpty()) {
-                            count += eventsModule.getEvents().size();
-                        }
-                    } else if(module.getModuleType().equals("slider")) {
-                        count++;
-                    }
-                }/* else if (module instanceof OCategoryModule) {
-                    OCategoryModule categoryModule = (OCategoryModule) module;
-                    if (categoryModule.getCategories() != null && !categoryModule.getCategories().isEmpty()) {
-                        count += categoryModule.getCategories().size();
-                    }
-                }*/
-
-                // TODO: cek ini
-            }
+            count += (modules.size() * 2);
         }
         return count;
     }
-
-
-
-
 
     public static class SectionHeader extends RecyclerView.ViewHolder {
 
@@ -249,270 +221,454 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-
-
-
-
-    public static class EventsItem extends RecyclerView.ViewHolder {
+    public static class EventsItemViewHolder extends RecyclerView.ViewHolder {
         public TwoWayView twoWayView;
+        Context context;
+        EventAdapter adapter;
+        public EventsItemViewHolder(Context context, ViewGroup parent) {
+            super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
 
-        public EventsItem(Context context, ViewGroup parent) {
+            twoWayView = itemView.findViewById(R.id.two_way_view);
+
+            twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
+            this.context = context;
+            adapter = new EventAdapter();
+            twoWayView.setAdapter(adapter);
+        }
+
+        public void setModel(List<Event> events) {
+            adapter.clear();
+            adapter.addEvents(events);
+            adapter.notifyDataSetChanged();
+            twoWayView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon), null);
+                }
+            });
+        }
+
+        public class EventAdapter extends BaseAdapter {
+            private List<Event> events;
+            public void addEvent(Event event) {
+                if(this.events == null) {
+                    this.events = new ArrayList<>();
+                }
+                this.events.add(event);
+            }
+            public void addEvents(List<Event> events) {
+                if(this.events == null) {
+                    this.events = new ArrayList<>();
+                }
+                this.events.addAll(events);
+            }
+
+            public void clear() {
+                this.events = new ArrayList<>();
+            }
+            @Override
+            public int getCount() {
+                int count = 0;
+                if(events != null && !events.isEmpty()) {
+                    count += events.size();
+                }
+                return count;
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int i, View view, ViewGroup viewGroup) {
+                if(view == null) {
+                    view = View.inflate(context, R.layout.view_item_modul_event, null);
+                }
+                final ImageView imageView = (ImageView)view.findViewById(R.id.event_imageView);
+                TextView locationTextView = (TextView)view.findViewById(R.id.location_textView);
+                TextView nameTextView = (TextView)view.findViewById(R.id.name_textView);
+                TextView priceTextView = (TextView)view.findViewById(R.id.price_textView);
+                Event event = events.get(i);
+                if (event != null) {
+
+                    if (NYHelper.isStringNotEmpty(event.getName()))
+                        nameTextView.setText(event.getName());
+
+                    if (event.getLocation() != null) {
+
+                        Location location = event.getLocation();
+                        String locString = "";
+
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName()))
+                            locString += location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName()))
+                            locString += ", " + location.getProvince().getName();
+
+                        locationTextView.setText(locString);
+                    }
+
+
+                    double normalPrice = Double.valueOf(event.getNormalPrice());
+                    double specialPrice = Double.valueOf(event.getSpecialPrice());
+
+                    if (specialPrice < normalPrice && specialPrice > 0) {
+                        priceTextView.setText(NYHelper.priceFormatter(specialPrice));
+                        //priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
+                        //priceStrikethroughTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        priceTextView.setText(NYHelper.priceFormatter(normalPrice));
+                        //priceStrikethroughTextView.setVisibility(View.GONE);
+                    }
+
+                    //SET IMAGE
+                    if (NYHelper.isStringNotEmpty(event.getFeaturedImage())) {
+                        ImageLoader.getInstance().loadImage(event.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                imageView.setImageResource(R.drawable.example_pic);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                imageView.setImageBitmap(loadedImage);
+                                //activity.getCache().put(imageUri, loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                imageView.setImageResource(R.drawable.example_pic);
+                            }
+                        });
+
+                        ImageLoader.getInstance().displayImage(event.getFeaturedImage(), imageView, NYHelper.getOption());
+
+                    } else {
+                        imageView.setImageResource(R.drawable.example_pic);
+                    }
+                }
+                return view;
+            }
+        }
+
+
+    }
+
+    public static class HotOffersItemViewHolder extends RecyclerView.ViewHolder {
+        public TwoWayView twoWayView;
+        Context context;
+        HotOffersAdapter adapter;
+
+        public HotOffersItemViewHolder(Context context, ViewGroup parent) {
             super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
 
             twoWayView = itemView.findViewById(R.id.two_way_view);
             twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
-        }
-    }
-
-
-    static class EventsAdapter extends BaseAdapter {
-        private static final int VIEW_TYPE_ITEM = 0;
-        private static final int[] VIEW_TYPES = new int[]{VIEW_TYPE_ITEM};
-        private Context context;
-        private NYEventsModule events;
-
-        public EventsAdapter(Context context, NYEventsModule events) {
             this.context = context;
-            this.events = events;
+            adapter = new HotOffersAdapter();
+            twoWayView.setAdapter(adapter);
         }
 
-        @Override
-        public int getCount() {
-            int count = 0;
-            if (events.getEvents() != null && !events.getEvents().isEmpty()) {
-                count += events.getEvents().size();
-            }
-            return count;
+        public void setModel(List<DiveService> diveServices) {
+            adapter.clear();
+            adapter.addDiveServices(diveServices);
+            adapter.notifyDataSetChanged();
+            twoWayView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon), null);
+                }
+            });
         }
 
-        @Override
-        public Object getItem(int position) {
-            int viewType = getItemViewType(position);
-            if (viewType == VIEW_TYPE_ITEM) {
-                return events.getEvents().get(position);
-            }
-            return null;
-        }
+        public class HotOffersAdapter extends BaseAdapter {
+            private List<DiveService> diveServices;
 
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (events.getModuleName() != null && position < events.getEvents().size()) {
-                return VIEW_TYPE_ITEM;
-            }
-            return IGNORE_ITEM_VIEW_TYPE;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-            int viewType = getItemViewType(position);
-            if (viewType == VIEW_TYPE_ITEM){
-                return onCreateEventItem(view, (Event) getItem(position));
+            public void addDiveService(DiveService diveService) {
+                if (this.diveServices == null) {
+                    this.diveServices = new ArrayList<>();
+                }
+                this.diveServices.add(diveService);
             }
 
-            return view;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return VIEW_TYPES.length;
-        }
-
-        private View onCreateEventItem(View view, Event event){
-            if (view == null){
-                view = new EventsHorizontalGridItemView(context);
+            public void addDiveServices(List<DiveService> diveServices) {
+                if (this.diveServices == null) {
+                    this.diveServices = new ArrayList<>();
+                }
+                this.diveServices.addAll(diveServices);
             }
 
-            EventsHorizontalGridItemView bestSellerHorizontal = (EventsHorizontalGridItemView) view;
-            bestSellerHorizontal.setEvent(event);
+            public void clear() {
+                if (diveServices != null) {
+                    diveServices.clear();
+                }
+            }
 
-            return view;
+            @Override
+            public int getCount() {
+                int count = 0;
+                if (diveServices != null && !diveServices.isEmpty()) {
+                    count += diveServices.size();
+                }
+                return count;
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int i, View view, ViewGroup viewGroup) {
+                if (view == null) {
+                    view = View.inflate(context, R.layout.view_item_modul_hot_offers, null);
+                }
+                DiveService diveService = diveServices.get(i);
+                final ImageView eventImageView = (ImageView) view.findViewById(R.id.service_imageView);
+                TextView nameTextView = (TextView) view.findViewById(R.id.name_textView);
+                TextView locationTextView = (TextView) view.findViewById(R.id.location_textView);
+                StrikethroughTextView priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
+                TextView priceTextView = (TextView) view.findViewById(R.id.price_textView);
+                TextView dateTextView = (TextView) view.findViewById(R.id.date_textView);
+                if (diveService != null) {
+
+                    if (NYHelper.isStringNotEmpty(diveService.getName()))
+                        nameTextView.setText(diveService.getName());
+
+                    if (diveService.getDiveSpots().get(0) != null && diveService.getDiveSpots().get(0).getLocation() != null) {
+
+                        Location location = diveService.getDiveSpots().get(0).getLocation();
+                        String locString = "";
+                        if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName()))
+                            locString += location.getCity().getName();
+                        if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName()))
+                            locString += ", " + location.getProvince().getName();
+                        //if (NYHelper.isStringNotEmpty(location.getCountry())) locString += ", "+location.getCountry();
+                        locationTextView.setText(locString);
+                    }
+
+
+                    if (diveService.getSchedule() != null) {
+                        dateTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()));
+                    }
+
+                    double normalPrice = Double.valueOf(diveService.getNormalPrice());
+                    double specialPrice = Double.valueOf(diveService.getSpecialPrice());
+
+                    if (specialPrice < normalPrice && specialPrice > 0) {
+                        priceTextView.setText(NYHelper.priceFormatter(specialPrice));
+                        //priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
+                        //priceStrikethroughTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        priceTextView.setText(NYHelper.priceFormatter(normalPrice));
+                        //priceStrikethroughTextView.setVisibility(View.GONE);
+                    }
+
+                    //SET IMAGE
+                    if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
+                        ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                eventImageView.setImageResource(R.drawable.example_pic);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                eventImageView.setImageBitmap(loadedImage);
+                                //activity.getCache().put(imageUri, loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                eventImageView.setImageResource(R.drawable.example_pic);
+                            }
+                        });
+
+                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), eventImageView, NYHelper.getOption());
+
+                    } else {
+                        eventImageView.setImageResource(R.drawable.example_pic);
+                    }
+
+
+                }
+                return view;
+            }
         }
     }
 
 
-
-
-
-
-
-
-    public static class HotOffersItem extends RecyclerView.ViewHolder {
+    public static class PopularItemViewHolder extends RecyclerView.ViewHolder {
         public TwoWayView twoWayView;
+        Context context;
+        DiveSpotAdapter adapter;
 
-        public HotOffersItem(Context context, ViewGroup parent) {
+        public PopularItemViewHolder(Context context, ViewGroup parent) {
             super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
 
             twoWayView = itemView.findViewById(R.id.two_way_view);
             twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
-        }
-    }
-
-
-    static class HotOffersAdapter extends BaseAdapter {
-        private static final int VIEW_TYPE_ITEM = 0;
-        private static final int[] VIEW_TYPES = new int[]{VIEW_TYPE_ITEM};
-        private Context context;
-        private NYHotOffersModule hotOffers;
-
-        public HotOffersAdapter(Context context, NYHotOffersModule hotOffers) {
             this.context = context;
-            this.hotOffers = hotOffers;
+            adapter = new DiveSpotAdapter();
+            twoWayView.setAdapter(adapter);
         }
 
-        @Override
-        public int getCount() {
-            int count = 0;
-            if (hotOffers.getDiveServices() != null && !hotOffers.getDiveServices().isEmpty()) {
-                count += hotOffers.getDiveServices().size();
+        public void setModel(final List<DiveSpot> diveSpots) {
+            adapter.clear();
+            adapter.addDiveSpots(diveSpots);
+            adapter.notifyDataSetChanged();
+            twoWayView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    DiveSpot diveSpot = diveSpots.get(i);
+                    SearchService searchService = new SearchService();
+                    searchService.setName(diveSpot.getName());
+                    searchService.setId(diveSpot.getId());
+                    searchService.setLicense(false);
+                    searchService.setType(1);
+
+                    Intent intent = new Intent(context, DoDiveActivity.class);
+                    intent.putExtra(NYHelper.SEARCH_RESULT, searchService.toString());
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+        public class DiveSpotAdapter extends BaseAdapter {
+            private List<DiveSpot> diveSpots;
+
+            public void addDiveSpot(DiveSpot diveSpot) {
+                if(this.diveSpots == null) {
+                    this.diveSpots = new ArrayList<>();
+                }
+                this.diveSpots.add(diveSpot);
             }
-            return count;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            int viewType = getItemViewType(position);
-            if (viewType == VIEW_TYPE_ITEM) {
-                return hotOffers.getDiveServices().get(position);
-            }
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (hotOffers.getModuleName() != null && position < hotOffers.getDiveServices().size()) {
-                return VIEW_TYPE_ITEM;
-            }
-            return IGNORE_ITEM_VIEW_TYPE;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-            int viewType = getItemViewType(position);
-            if (viewType == VIEW_TYPE_ITEM){
-                return onCreateHotOfferItem(view, (DiveService) getItem(position));
-            }
-
-            return view;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return VIEW_TYPES.length;
-        }
-
-        private View onCreateHotOfferItem(View view, DiveService diveService){
-            if (view == null){
-                view = new HotOffersHorizontalGridItemView(context);
+            public void addDiveSpots(List<DiveSpot> diveSpots) {
+                if(this.diveSpots == null) {
+                    this.diveSpots = new ArrayList<>();
+                }
+                this.diveSpots.addAll(diveSpots);
             }
 
-            HotOffersHorizontalGridItemView hotOffersHorizontalGridItemView = (HotOffersHorizontalGridItemView) view;
-            hotOffersHorizontalGridItemView.setDiveService(diveService);
+            public void clear() {
+                this.diveSpots = new ArrayList<>();
+            }
 
-            return view;
+            @Override
+            public int getCount() {
+                int count = 0;
+                if(diveSpots != null && !diveSpots.isEmpty()) {
+                    count += diveSpots.size();
+                }
+                return count;
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int i, View view, ViewGroup viewGroup) {
+                if (view ==  null) {
+                    view = View.inflate(context, R.layout.view_item_modul_popular_dive_spot, null);
+                }
+                final ImageView diveSpotImageView = (ImageView) view.findViewById(R.id.dive_spot_imageView);
+                TextView diveSpotNameTextView = (TextView) view.findViewById(R.id.dive_spot_name_textView);
+                LinearLayout containerLinaerLayout = (LinearLayout) view.findViewById(R.id.container_linaerLayout);
+                DiveSpot diveSpot = diveSpots.get(i);
+                if (diveSpot != null){
+
+                    List<int[]> drColor = new ArrayList<>();
+                    drColor.add(new int[] {0xFFAFD201,0xFF1E4001});
+                    drColor.add(new int[] {0xFF0000E7,0xFF000050});
+                    drColor.add(new int[] {0xFFB10000,0xFF1E0000});
+                    drColor.add(new int[] {0xFF00CB00,0xFF013A01});
+                    drColor.add(new int[] {0xFFA900E0,0xFF1C0052});
+                    drColor.add(new int[] {0xFFFE0388,0xFFF05825});
+
+                    GradientDrawable gd = new GradientDrawable(
+                            GradientDrawable.Orientation.TOP_BOTTOM,
+                            drColor.get(i%5));
+
+                    gd.setCornerRadius(0f);
+                    gd.setAlpha(180);
+
+                    int sdk = android.os.Build.VERSION.SDK_INT;
+                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        containerLinaerLayout.setBackgroundDrawable(gd);
+                    } else {
+                        NYLog.e("CONTAINER LAYOUT " + containerLinaerLayout);
+                        NYLog.e("GRADIEND " + gd);
+                        containerLinaerLayout.setBackground(gd);
+                    }
+
+
+                    if (NYHelper.isStringNotEmpty(diveSpot.getName())) diveSpotNameTextView.setText(diveSpot.getName());
+
+                    //SET IMAGE
+                    if (NYHelper.isStringNotEmpty(diveSpot.getFeaturedImage())) {
+                        ImageLoader.getInstance().loadImage(diveSpot.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                diveSpotImageView.setImageResource(R.drawable.example_pic);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                diveSpotImageView.setImageBitmap(loadedImage);
+                                //activity.getCache().put(imageUri, loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                diveSpotImageView.setImageResource(R.drawable.example_pic);
+                            }
+                        });
+
+                        ImageLoader.getInstance().displayImage(diveSpot.getFeaturedImage(), diveSpotImageView, NYHelper.getOption());
+
+                    } else {
+                        diveSpotImageView.setImageResource(R.drawable.example_pic);
+                    }
+
+
+                }
+                return view;
+
+            }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-    /*public static class PopularItem extends RecyclerView.ViewHolder {
-        public TwoWayView twoWayView;
-
-        public HotOffersItem(Context context, ViewGroup parent) {
-            super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
-
-            twoWayView = itemView.findViewById(R.id.two_way_view);
-            twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
-        }
-    }
-
-
-    static class HotOffersAdapter extends BaseAdapter {
-        private static final int VIEW_TYPE_ITEM = 0;
-        private static final int[] VIEW_TYPES = new int[]{VIEW_TYPE_ITEM};
-        private Context context;
-        private NYHotOffersModule hotOffers;
-
-        public HotOffersAdapter(Context context, NYHotOffersModule hotOffers) {
-            this.context = context;
-            this.hotOffers = hotOffers;
-        }
-
-        @Override
-        public int getCount() {
-            int count = 0;
-            if (hotOffers.getDiveServices() != null && !hotOffers.getDiveServices().isEmpty()) {
-                count += hotOffers.getDiveServices().size();
-            }
-            return count;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            int viewType = getItemViewType(position);
-            if (viewType == VIEW_TYPE_ITEM) {
-                return hotOffers.getDiveServices().get(position);
-            }
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (hotOffers.getModuleName() != null && position < hotOffers.getDiveServices().size()) {
-                return VIEW_TYPE_ITEM;
-            }
-            return IGNORE_ITEM_VIEW_TYPE;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-            int viewType = getItemViewType(position);
-            if (viewType == VIEW_TYPE_ITEM){
-                return onCreateHotOfferItem(view, (DiveService) getItem(position));
-            }
-
-            return view;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return VIEW_TYPES.length;
-        }
-
-        private View onCreateHotOfferItem(View view, DiveService diveService){
-            if (view == null){
-                view = new HotOffersHorizontalGridItemView(context);
-            }
-
-            HotOffersHorizontalGridItemView hotOffersHorizontalGridItemView = (HotOffersHorizontalGridItemView) view;
-            hotOffersHorizontalGridItemView.setDiveService(diveService);
-
-            return view;
-        }
-    }*/
-
 
 
 }

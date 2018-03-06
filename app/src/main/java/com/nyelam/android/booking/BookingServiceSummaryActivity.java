@@ -32,6 +32,7 @@ import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
+import com.nyelam.android.VeritransNotificationActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.data.Cart;
@@ -40,6 +41,7 @@ import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.data.NTransactionResult;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
@@ -172,7 +174,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 try {
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
                     diveCenter.parse(obj);
-                    NYLog.e("CEK DIVE CENTER : "+diveCenter.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -497,7 +498,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
                                         intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
-                                        intent.putExtra(NYHelper.ORDER, orderReturn.getSummary().toString());
+                                        intent.putExtra(NYHelper.ID_ORDER, orderReturn.getSummary().getOrder().getOrderId());
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     }
@@ -648,14 +649,21 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(BookingServiceSummaryActivity.this, VeritransNotificationActivity.class);
                         //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
                         if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
                             if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
+                                NTransactionResult result = new NTransactionResult();
+                                result.setData(transactionResult.getResponse());
                                 intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                                 intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
                             } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
+                                NTransactionResult result = new NTransactionResult();
+                                result.setData(transactionResult.getResponse());
                                 intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
+                                intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
                             }
                         }
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

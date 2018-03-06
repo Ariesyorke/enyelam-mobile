@@ -55,7 +55,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
 
     private OnFragmentInteractionListener mListener;
-    private boolean isEcoTrip;
 
     public DoDiveFragment() {
         // Required empty public constructor
@@ -191,7 +190,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 datePickerDialog = new DatePickerDialog(
                         getActivity(), this, year, month, day);
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+                if (Build.VERSION.SDK_INT <= 21) {
+                    //this is where the crash happens
+                    datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
+                } else {
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                }
                 datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
             }
 
@@ -203,25 +208,35 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
         }
 
+        //TODO HARCODE ECOTRIP!!
+        DoDiveActivity activity = (DoDiveActivity) getActivity();
+        if(activity.isEcoTrip()) {
+            keywordTextView.setText("Save Our Small Island");
+            type = "3";
+            diverId = "23";
+        }
     }
 
     private void initControl() {
+
         keywordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(getActivity(), DoDiveSearchActivity.class);
-                intent.putExtra(NYHelper.CERTIFICATE, certificateCheckBox.isChecked());
-                intent.putExtra(NYHelper.SCHEDULE, date);
-                intent.putExtra(NYHelper.DIVER, diver);
                 DoDiveActivity activity = (DoDiveActivity) getActivity();
-                if(activity.isEcoTrip()) {
-                    intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
-                }
+                if(!activity.isEcoTrip()) {
+                    Intent intent = new Intent(getActivity(), DoDiveSearchActivity.class);
+                    intent.putExtra(NYHelper.CERTIFICATE, certificateCheckBox.isChecked());
+                    intent.putExtra(NYHelper.SCHEDULE, date);
+                    intent.putExtra(NYHelper.DIVER, diver);
+                    if (activity.isEcoTrip()) {
+                        intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+                    }
 
-                startActivity(intent);
+                    startActivity(intent);
+                }
             }
         });
+
 
         licenseLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,7 +298,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
                         if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                            intent.putExtra(NYHelper.ECO_TRIP, 1);
+                            intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
                         startActivity(intent);
                     } else if (type.equals("4") || type.equals("5") || type.equals("6")){

@@ -8,15 +8,17 @@
     <string name="api_veritrans_production">https://api.veritrans.co.id/v2</string>
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
-    <string name="host_url">http://nyelam-adam.dantech.id/</string>
-    <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
+    <!-- DEVELOPMENT -->
+    <!--<string name="host_url">http://nyelam-adam.dantech.id/</string>-->
+
+    <!-- STAGING -->
+    <string name="host_url">http://nyelam.dantech.id/</string>
     <string name="api_path_login">api/user/login</string>
     <string name="api_path_register">api/user/register</string>
     <string name="api_path_forgot_password">api/user/forgotpass</string>
     <string name="api_path_master_country">api/master/country</string>
     <string name="api_path_master_category">api/service/masterCategory</string>
     <string name="api_path_master_dodive_search">api/master/dodive/search</string>
-
     <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>
     <string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>
     <string name="api_path_dodive_search_by_country">api/dodive/service/country</string>
@@ -36,7 +38,7 @@
     <string name="api_path_dodive_service_list_by_divespot">api/service/serviceDivespotList</string>
     <string name="api_path_dodive_service_list_by_category">api/service/serviceCategoryList</string>
 
-    <string name="api_path_homepage_modules">api/</string>
+    <string name="api_path_homepage_modules">api/master/homepage</string>
     <string name="api_path_dodive_detail_service">api/service/detail</string>
     <string name="api_path_dodive_book_service_cart">api/order/bookservicecart</string>
     <string name="api_path_dodive_book_service_voucher_cart"></string>
