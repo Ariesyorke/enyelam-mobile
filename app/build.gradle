@@ -38,14 +38,14 @@ dependencies {
     // For u sing the Veritrans Sandbox
     /*compile ('com.midtrans:scancard:1.15.0'){
                     exclude module: 'uikit'
-                }*/
+                }*/exclude module: 'uikit'
     // For using the Veritrans Production
     // compile 'com.midtrans:corekit:1.11.0'
     // For using the Veritrans Sandbox
     // For using the Veritrans Production
     //  compile 'com.midtrans:uikit:1.0.1'
     //    compile ('com.midtrans:scancard:1.0.1'){
-    //        exclude module: 'uikit'
+    //
     compile project(':uikit')
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:animated-vector-drawable:26.1.0'
