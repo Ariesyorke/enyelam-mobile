@@ -127,14 +127,25 @@ public class NYCustomDialog {
 
         TextView acceptTextView = (TextView) dialog.findViewById(R.id.accept_textView);
 
-        String agreementText = "Pada saat Anda mengakses website dan atau layanan online yang Kami sediakan, maka semua informasi dan data pribadi Anda akan Kami kumpulkan dengan ketentuan sebagai berikut :\n" +
-                "<br/>\n" +
-                "<ol type=\"a\">\n" +
-                " <br/> <li>Kami akan mengumpulkan informasi mengenai komputer atau pun media apapun yang Anda gunakan, termasuk IP address, sistem operasi, browser yang digunakan, URL, halaman, lokasi geografis dan waktu akses serta data lainnya terkait dengan penggunaan komputer Anda (“Detail IP”).</li>\n" +
-                " <br/> <li>Kami akan meminta Anda untuk mengisi data-data pribadi Anda secara benar, jelas, lengkap, akurat dan tidak menyesatkan, seperti nama, alamat email, nomor telepon, alamat lengkap, informasi yang digunakan untuk pembayaran, informasi kartu kredit (nomor kartu kredit dan masa berlaku kartu kredit) dan data-data lain yang Kami perlukan guna melakukan transaksi melalui website dan layanan online lainnya yang Kami sediakan agar Anda dapat memanfaatkan layanan yang Anda butuhkan. Kami tidak bertanggung jawab atas segala kerugian yang mungkin terjadi karena informasi dan atau data yang tidak benar, jelas, lengkap, akurat dan menyesatkan yang Anda berikan.</li>\n" +
-                " <br/> <li>Kami dapat menggunakan data pribadi Anda dan informasi lainnya yang dikumpulkan dengan tujuan pemasaran Media Sosial menggunakan tehnik grafik langsung dan terbuka dan untuk tujuan pemasaran digital konvensional, seperti mengirimkan Anda newsletter secara otomatis melalui surat elektronik untuk memberitahukan informasi produk baru, penawaran khusus atau informasi lainnya yang menurut Kami akan menarik bagi Anda.</li>\n" +
-                " <br/> <li>Dalam menggunakan layanan Kami, informasi-informasi yang Anda berikan dapat Kami gunakan dan berikan kepada pihak ketiga yang bekerjasama dengan Kami, sejauh untuk kepentingan transaksi dan penggunaan layanan Kami.</li>\n" +
-                " <br/> <li>Segala informasi yang Kami terima dapat Kami gunakan untuk melindungi diri Kami terhadap segala tuntutan dan hukum yang berlaku terkait dengan penggunaan layanan dan pelanggaran yang Anda lakukan pada website Kami atas segala ketentuan sebagaimana diatur dalam persyaratan layanan tiket.com dan pedoman penggunaan produk dan layanan Kami, termasuk dan tidak terbatas apabila dibutuhkan atas perintah Pengadilan dalam proses hukum.</li>\n" +
+        String agreementText = "<ol type=\"a\">\n" +
+                " <br/> <li>Jangan buang sampah sembarangan.</li>\n" +
+                " <br/> <li>Hindari menggunakan kemasan kecil seperti sabun sachet.</li>\n" +
+                " <br/> <li>Gunakan krim kulit, Sunblock, dan semprotan anti-serangga yang alami dan tidak beracun.</li>\n" +
+                " <br/> <li>Membawa botol isi ulang.</li>\n" +
+                " <br/> <li>Membawa tas yang dapat digunakan kembali.</li>\n" +
+                " <br/> <li>Kurangi pemakaian material yang sekali pakai.</li>\n" +
+                " <br/> <li>Jangan memakan spesies yang terancam, hampir punah atau yang dilindungi.</li>\n" +
+                " <br/> <li>Hindari membawa dan memakai produk yang mengandung microbeads (seperti sabun yang mengandung scrubs).</li>\n" +
+                " <br/> <li>Melatih keseimbangan untuk mencegah menabrak karang.</li>\n" +
+                " <br/> <li>Jangan menginjak atau menyentuh karang.</li>\n" +
+                " <br/> <li>Hindari mengaduk sedimen/pasir.</li>\n" +
+                " <br/> <li>Yakinkan semua peralatan menyelam aman dan tidak terseret.</li>\n" +
+                " <br/> <li>Jangan memberi makan, menangkap, menyentuh, mengganggu atau menangkap biota laut.</li>\n" +
+                " <br/> <li>Jangan mengoleksi biota laut apapun, bisa saja itu ilegal.</li>\n" +
+                " <br/> <li>Laporkan aktivitas ilegal/tidak sepantasnya terhadap lingkungan kepada otoritas setempat.</li>\n" +
+                " <br/> <li>Dukung wisata ramah lingkungan.</li>\n" +
+                " <br/> <li>Jangan ambil sampah laut yang telah ditumbuhi karang.</li>\n" +
+                " <br/> <li>Jangan ragu untuk mengedukasi atau menegur orang lain terkait pelanggaran etika ini.</li>\n" +
                 "</ol>";
 
 

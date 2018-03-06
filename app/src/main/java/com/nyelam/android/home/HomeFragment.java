@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -124,6 +125,8 @@ public class HomeFragment extends Fragment {
                 /*if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }*/
+
+                Toast.makeText(getActivity(), "FAILED", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -132,10 +135,14 @@ public class HomeFragment extends Fragment {
                     adapter.clear();
                     adapter.addModules(results.getList());
                     adapter.notifyDataSetChanged();
+
+                    Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
+
                     ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
                     modulStorage.setModuleList(results);
                     modulStorage.save();
 
+                    NYLog.e("CEK MODUL INI "+results.toString());
                 }
 
             }
@@ -248,8 +255,8 @@ public class HomeFragment extends Fragment {
         ModuleList moduleList = modulStorage.getModuleList();
         if (moduleList != null && moduleList.getList() != null && !moduleList.getList().isEmpty()) {
             adapter.addModules(moduleList.getList());
+            NYLog.e("CEK MODUL INI "+modulStorage.getModuleList().toString());
         }
-
     }
 
     @Override

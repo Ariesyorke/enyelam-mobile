@@ -618,8 +618,7 @@ public class MyAccountFragment extends Fragment implements
             }
         };
     }
-
-
+    
     private void hideLoading(){
         if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }

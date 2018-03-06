@@ -9,10 +9,10 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <!--<string name="host_url">http://nyelam-adam.dantech.id/</string>-->
+    <string name="host_url">http://nyelam-adam.dantech.id/</string>
 
     <!-- STAGING -->
-    <string name="host_url">http://nyelam.dantech.id/</string>
+    <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
     <string name="api_path_login">api/user/login</string>
     <string name="api_path_register">api/user/register</string>
     <string name="api_path_forgot_password">api/user/forgotpass</string>

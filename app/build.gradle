@@ -38,7 +38,7 @@ dependencies {
     // For u sing the Veritrans Sandbox
     /*compile ('com.midtrans:scancard:1.15.0'){
                     exclude module: 'uikit'
-                }*/exclude module: 'uikit'
+                }*/
     // For using the Veritrans Production
     // compile 'com.midtrans:corekit:1.11.0'
     // For using the Veritrans Sandbox
