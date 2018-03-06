@@ -42,6 +42,7 @@ public class LoginFragment extends Fragment {
     private TextView loginTextView, registerTextView, forgotPasswordTextView;
     private EditText emailEditText, passwordEditText;
     private ImageView backgroundImageView;
+    private LinearLayout googleLinearLayout, facebookLinearLayout;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -118,6 +119,20 @@ public class LoginFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+        facebookLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        googleLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private RequestListener<AuthReturn> onLoginRequest() {
@@ -150,6 +165,8 @@ public class LoginFragment extends Fragment {
         emailEditText = (EditText) v.findViewById(R.id.email_editText);
         passwordEditText = (EditText) v.findViewById(R.id.password_editText);
         loginTextView = (TextView) v.findViewById(R.id.login_textView);
+        googleLinearLayout = (LinearLayout) v.findViewById(R.id.google_linearLayout);
+        facebookLinearLayout = (LinearLayout) v.findViewById(R.id.facebook_linearLayout);
         registerTextView = (TextView) v.findViewById(R.id.register_textView);
         forgotPasswordTextView = (TextView) v.findViewById(R.id.forgot_password_textView);
         backgroundImageView = (ImageView) v.findViewById(R.id.background_imageView);

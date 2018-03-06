@@ -11,6 +11,8 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="login">Login</string>
     <string name="or">or</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
     <string name="reset">Reset</string>
     <string name="register">Register</string>
     <string name="username">Username</string>

@@ -264,6 +264,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                     } else {
                         descriptionTextView.setText("-");
                     }
+
+                    //Toast.makeText(this, diveCenter.getDescription(), Toast.LENGTH_SHORT).show();
+
                     initBanner();
                     //Toast.makeText(this, diveService.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -312,6 +315,13 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                     ratingBar.setRating(diveCenter.getRating());
                     ratingTextView.setText(String.valueOf(diveCenter.getRating()));
                     //visitedTextView.setText(diveCenter.getName());
+
+                    if(!TextUtils.isEmpty(diveCenter.getDescription())) {
+                        descriptionTextView.setText(Html.fromHtml(diveCenter.getDescription()));
+                    } else {
+                        descriptionTextView.setText("-");
+
+                    }
 
                     if (diveCenter.getContact() != null){
                         Contact contact = diveCenter.getContact();

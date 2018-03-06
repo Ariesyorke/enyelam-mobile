@@ -139,11 +139,74 @@
                 android:text="@string/or"
                 android:textSize="16sp"
                 android:textColor="@color/colorWhite"
-                android:padding="@dimen/padding_double"
+                android:paddingLeft="@dimen/padding_double"
+                android:paddingRight="@dimen/padding_double"
+                android:paddingTop="@dimen/padding_double"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+
+
+            <LinearLayout
+                android:layout_marginBottom="@dimen/padding_triple"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/facebook_linearLayout"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginEnd="@dimen/padding"
+                    android:padding="@dimen/padding_double"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:background="@drawable/ny_circle_white"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@drawable/ic_facebook_logo"
+                        android:contentDescription="@string/app_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/google_linearLayout"
+                    android:layout_marginStart="@dimen/padding"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginRight="0dp"
+                    android:padding="@dimen/padding_double"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:background="@drawable/ny_circle_white"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:src="@drawable/ic_google_plus"
+                        tools:ignore="ContentDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
 
             <com.nyelam.android.view.font.NYTextView
@@ -156,6 +219,7 @@
                 android:background="@drawable/ny_rectangle_blue_soft"
                 android:gravity="center"
                 android:padding="@dimen/padding"
+                android:layout_marginBottom="@dimen/padding_double"
                 android:layout_marginLeft="@dimen/padding_triple"
                 android:layout_marginRight="@dimen/padding_triple"
                 android:layout_width="match_parent"
