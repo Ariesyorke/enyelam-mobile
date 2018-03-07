@@ -230,8 +230,8 @@ public class DetailServiceFragment extends Fragment {
                         //diveGuideLinearLayout.setVisibility(View.GONE);
                     }
 
-                    if (fac.getDiveGuide() != null && fac.getDiveGuide()){
-                        NYHelper.setFacilities(fac.getDiveGuide(), icTowelImageView);
+                    if (fac.getTowel() != null && fac.getTowel()){
+                        NYHelper.setFacilities(fac.getTowel(), icTowelImageView);
                     } else {
                         //towelLinearLayout.setVisibility(View.GONE);
                     }
