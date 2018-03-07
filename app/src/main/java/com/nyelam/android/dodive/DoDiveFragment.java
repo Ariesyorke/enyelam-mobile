@@ -1,6 +1,5 @@
 package com.nyelam.android.dodive;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -30,6 +29,7 @@ import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYCustomDialog;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,34 +108,67 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
     private void initDatePicker() {
         final Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(
-                getActivity(), this, year, month, day);
 
         /*Calendar mcurrentDate=Calendar.getInstance();
         year=mcurrentDate.get(Calendar.YEAR);
         month=mcurrentDate.get(Calendar.MONTH);
         day=mcurrentDate.get(Calendar.DAY_OF_MONTH);*/
 
-        // TODO Hide Future Date Here
         //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-
-        if (Build.VERSION.SDK_INT <= 21) {
-            //this is where the crash happens
-            datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
-        } else {
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        }
+//        if (Build.VERSION.SDK_INT <= 21) {
+//            //this is where the crash happens
+//            datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
+//        } else {
+//            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+//        }
 
         // TODO Hide Future Date Here
         //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // TODO Hide Past Date Here
         //datePickerDialog.show();
+        DoDiveActivity activity = (DoDiveActivity)getActivity();
+        if(activity.isEcoTrip()) {
+            List<Calendar> calendars = new ArrayList<>();
+            int divider = 12 - month;
 
-        date = String.valueOf(c.getTimeInMillis()/1000);
-        datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
+            for(int i = 0; i < divider; i++) {
+                Calendar a = Calendar.getInstance();
+                a.setTime(new Date());
+                a.add(Calendar.MONTH, i);
+                a.set(Calendar.DAY_OF_WEEK, a.getFirstDayOfWeek());
+                a.set(Calendar.WEEK_OF_MONTH, 3);
+                for(int j = 0; j < 7; j++) {
+                    if(a.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        calendars.add(a);
+                        break;
+                    } else {
+                        a.add(Calendar.DAY_OF_WEEK, j);
+                    }
+                }
+                if(i == 0) {
+                    int eYear = a.get(Calendar.YEAR);
+                    int eMonth = a.get(Calendar.MONTH);
+                    int eDay = a.get(Calendar.DAY_OF_MONTH);
+                    date = String.valueOf(a.getTimeInMillis()/1000);
+                    datePickerDialog = DatePickerDialog.newInstance(this, eYear, eMonth, eDay);
+                    datePickerDialog.setMinDate(a);
+                    datetimeTextView.setText(String.valueOf(eDay) + "/" + String.valueOf(eMonth+1) + "/" + String.valueOf(eYear));
+                }
+            }
+            Calendar[] cals = new Calendar[calendars.size()];
+            calendars.toArray(cals);
+            datePickerDialog.setSelectableDays(cals);
+        } else {
+            datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
+            datePickerDialog.setMinDate(c);
+            date = String.valueOf(c.getTimeInMillis()/1000);
+            datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
+        }
+
     }
 
 
@@ -184,19 +217,61 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
                 date = intent.getStringExtra(NYHelper.SCHEDULE);
                 Calendar c = Calendar.getInstance();
-                c.setTimeInMillis(Long.valueOf(date)*1000);
+                c.setTime(new Date());
                 int year = c.get(Calendar.YEAR);
                 int month = c.get(Calendar.MONTH);
                 int day = c.get(Calendar.DAY_OF_MONTH);
-                datePickerDialog = new DatePickerDialog(
-                        getActivity(), this, year, month, day);
 
-                if (Build.VERSION.SDK_INT <= 21) {
-                    //this is where the crash happens
-                    datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
+                DoDiveActivity activity = (DoDiveActivity)getActivity();
+                if(activity.isEcoTrip()) {
+                    List<Calendar> calendars = new ArrayList<>();
+                    Calendar b = Calendar.getInstance();
+                    int divider = 12 - month;
+
+                    for(int i = 0; i < divider; i++) {
+                        Calendar a = Calendar.getInstance();
+                        a.setTime(new Date());
+                        a.add(Calendar.MONTH, i);
+                        a.set(Calendar.DAY_OF_WEEK, a.getFirstDayOfWeek());
+                        a.set(Calendar.WEEK_OF_MONTH, 3);
+                        for(int j = 0; j < 7; j++) {
+                            if(a.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                                calendars.add(a);
+                                break;
+                            } else {
+                                a.add(Calendar.DAY_OF_WEEK, j);
+                            }
+                        }
+                        if(i == 0) {
+                            int eYear = a.get(Calendar.YEAR);
+                            int eMonth = a.get(Calendar.MONTH);
+                            int eDay = a.get(Calendar.DAY_OF_MONTH);
+                            date = String.valueOf(a.getTimeInMillis()/1000);
+                            datePickerDialog = DatePickerDialog.newInstance(this, eYear, eMonth, eDay);
+                            datePickerDialog.setMinDate(a);
+                        }
+                    }
+                    Calendar[] cals = new Calendar[calendars.size()];
+                    calendars.toArray(cals);
+                    datePickerDialog.setSelectableDays(cals);
                 } else {
-                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                    c.setTimeInMillis(Long.valueOf(date)*1000);
+                    year = c.get(Calendar.YEAR);
+                    month = c.get(Calendar.MONTH);
+                    day = c.get(Calendar.DAY_OF_MONTH);
+                    datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(new Date());
+                    datePickerDialog.setMinDate(cal);
                 }
+
+//                if (Build.VERSION.SDK_INT <= 21) {
+//                    //this is where the crash happens
+//                    datePickerDialog.setMinDate(cal.getTime() - 100000);
+//                } else {
+//                    datePickerDialog.setMinDate(Calendar.getInstance());
+//                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+//                }
                 datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
             }
 
@@ -248,7 +323,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         datetimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                datePickerDialog.show();
+                datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
             }
         });
 
@@ -394,19 +469,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
 
     @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        datetimeTextView.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, view.getDayOfMonth());
-        cal.set(Calendar.MONTH, view.getMonth());
-        cal.set(Calendar.YEAR, view.getYear());
-
-        date = String.valueOf(cal.getTimeInMillis()/1000);
-    }
-
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
@@ -443,6 +505,21 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         } else {
             ((DoDiveActivity)getActivity()).setTitle(getString(R.string.do_dive), true, false);
         }
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        cal.set(Calendar.MONTH, monthOfYear);
+        cal.set(Calendar.YEAR, year);
+        int y = cal.get(Calendar.YEAR);
+        int m = cal.get(Calendar.MONTH);
+        int d = cal.get(Calendar.DAY_OF_MONTH);
+
+        date = String.valueOf(cal.getTimeInMillis()/1000);
+        datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
+
     }
 
     public interface OnFragmentInteractionListener {

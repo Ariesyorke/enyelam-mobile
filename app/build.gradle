@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         multiDexEnabled = true
-        versionCode 18
-        versionName '0.0.18'
+        versionCode 17
+        versionName '0.0.17'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -76,5 +76,6 @@ dependencies {
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
     compile 'org.sufficientlysecure:html-textview:3.5'
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
+    compile 'com.wdullaer:materialdatetimepicker:3.5.1'
     testCompile 'junit:junit:4.12'
 }

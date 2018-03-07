@@ -27,6 +27,7 @@ import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
 import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCustomViewPager;
@@ -35,8 +36,10 @@ import com.nyelam.android.view.NYMenuDrawerFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class HomeActivity extends BasicActivity implements HomeFragment.OnFragmentInteractionListener,
