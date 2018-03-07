@@ -42,7 +42,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     };
 
 
-    private final int SPLASH_TIME = 3000;
+//    private final int SPLASH_TIME = 3000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS = 1;
     private SpiceManager spcMgr = new SpiceManager(SpiceService.class);
     private NYMasterDataStorage masterDataStorage;
@@ -55,8 +55,8 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
         //initiatePermission();
-        //getCacheBackground(0);
-        checkConnection();
+        getCacheBackground(0);
+//        checkConnection();
     }
 
     @Override
@@ -204,15 +204,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         }
 
         if (countryCodes != null && countryCodes.size() > 0) {
-            new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        /*startActivity(new Intent(StarterActivity.this, HomeActivity.class));
-                        finish();*/
-                        onLoadCategories();
-                    }
-                }, SPLASH_TIME);
+            onLoadCategories();
         } else  {
             onLoadCountryCodes();
         }
