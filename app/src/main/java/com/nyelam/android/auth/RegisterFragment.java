@@ -187,13 +187,18 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
 
                     if (fbAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_FACEBOOK)){
 
-                        if (fbAuthResult.gender != null && fbAuthResult.gender.equals("male")){
+                        if (fbAuthResult.gender != null && fbAuthResult.gender.equalsIgnoreCase("male")){
                             gender = "1";
-                        } else if (fbAuthResult.gender != null && fbAuthResult.gender.equals("female")){
+                        } else if (fbAuthResult.gender != null && fbAuthResult.gender.equalsIgnoreCase("female")){
                             gender = "2";
                         }
-
-                        req = new NYRegisterRequest(getActivity(), fbAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  socmedType, fbAuthResult.id, fbAuthResult.accessToken, fbAuthResult.profilePictureUrl);
+                        String fullname ="";
+                        if(!TextUtils.isEmpty(fbAuthResult.firstName) && !TextUtils.isEmpty(fbAuthResult.lastName)) {
+                            fullname = fbAuthResult.firstName + " " + fbAuthResult.lastName;
+                        } else {
+                            fullname = fbAuthResult.firstName;
+                        }
+                        req = new NYRegisterRequest(getActivity(), fullname, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  socmedType, fbAuthResult.id, fbAuthResult.accessToken, fbAuthResult.profilePictureUrl);
                     } else if (gPlusAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_GOOGLE)){
 
                         if (gPlusAuthResult.gender != null && gPlusAuthResult.gender.equals("male")){
@@ -202,7 +207,14 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
                             gender = "2";
                         }
 
-                        req = new NYRegisterRequest(getActivity(), gPlusAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  socmedType, gPlusAuthResult.id, gPlusAuthResult.accessToken, gPlusAuthResult.profilePictureUrl);
+                        String fullname ="";
+                        if(!TextUtils.isEmpty(gPlusAuthResult.firstName) && !TextUtils.isEmpty(gPlusAuthResult.lastName)) {
+                            fullname = gPlusAuthResult.firstName + " " + gPlusAuthResult.lastName;
+                        } else {
+                            fullname = gPlusAuthResult.firstName;
+                        }
+
+                        req = new NYRegisterRequest(getActivity(), fullname, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  socmedType, gPlusAuthResult.id, gPlusAuthResult.accessToken, gPlusAuthResult.profilePictureUrl);
                     } else {
                         req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  null, null, null, null);
                     }
