@@ -201,11 +201,11 @@ public class HomeFragment extends Fragment {
         //craete TEMP data banner
         BannerList bannerList = new BannerList();
         List<Banner> banners = new ArrayList<>();
-        banners.add(new Banner("1", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-a.jpg", "captio", "http://www.nyelam.com"));
-        banners.add(new Banner("2", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-b.jpg", "captio", "http://www.nyelam.com"));
-        banners.add(new Banner("3", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-x1.jpg", "captio", "http://www.nyelam.com"));
-        banners.add(new Banner("4", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-x2.jpg", "captio", "http://www.nyelam.com"));
-        banners.add(new Banner("5", "https://nyelam-com-apk-android-application-mobile.rembon.co.id/v100/new_assets/images/pictures/slider-x3.jpg", "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_3), "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("4", "drawable://" + String.valueOf(R.drawable.banner_4), "captio", "http://www.nyelam.com"));
+        banners.add(new Banner("5", "drawable://" + String.valueOf(R.drawable.banner_5), "captio", "http://www.nyelam.com"));
         bannerList.setList(banners);
         //input data data
         bannerViewPagerAdapter.setBannerList(bannerList);
