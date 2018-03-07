@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.helper.NYHelper;
@@ -92,8 +93,18 @@ public class BannerFragment extends Fragment {
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
 
+
+        //SET IMAGE
+        NYApplication application = (NYApplication) getActivity().getApplication();
+        Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+        if(b != null) {
+            imageView.setImageBitmap(b);
+        } else {
+            imageView.setImageResource(R.drawable.bg_placeholder);
+        }
+
         if (banner.getImageUrl() == null || TextUtils.isEmpty(banner.getImageUrl())) {
-            imageView.setImageResource(R.drawable.splash);
+            imageView.setImageResource(R.drawable.bg_placeholder);
         } else {
             ImageLoader.getInstance().loadImage(banner.getImageUrl(), NYHelper.getOption(), new ImageLoadingListener() {
                 @Override
@@ -103,7 +114,7 @@ public class BannerFragment extends Fragment {
 
                 @Override
                 public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    imageView.setImageResource(R.drawable.splash);
+                    //imageView.setImageResource(R.drawable.bg_placeholder);
                 }
 
                 @Override
@@ -114,7 +125,7 @@ public class BannerFragment extends Fragment {
 
                 @Override
                 public void onLoadingCancelled(String imageUri, View view) {
-                    imageView.setImageResource(R.drawable.splash);
+                    //imageView.setImageResource(R.drawable.bg_placeholder);
                 }
             });
 

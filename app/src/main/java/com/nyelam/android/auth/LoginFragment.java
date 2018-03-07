@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +59,8 @@ public class LoginFragment extends AuthBaseFragment implements
     private static final int REQ_CODE_AUTH_FB = 0;
     private static final int REQ_CODE_AUTH_GOOGLE = 1;
 
-    private ProgressDialog progressDialog, socemdProgressDialog;
+    //private ProgressDialog progressDialog;
+    private RelativeLayout loadingRealtiveLayout;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private TextView loginTextView, registerTextView, forgotPasswordTextView;
@@ -135,9 +137,6 @@ public class LoginFragment extends AuthBaseFragment implements
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setCancelable(false);
         initView(view);
         initControl();
     }
@@ -154,7 +153,7 @@ public class LoginFragment extends AuthBaseFragment implements
                 } else if (TextUtils.isEmpty(password)){
                     Toast.makeText(getActivity(), "Password can't be empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    progressDialog.show();
+                    loadingRealtiveLayout.setVisibility(View.VISIBLE);
                     NYLoginRequest req = new NYLoginRequest(getContext(), email, password);
                     spcMgr.execute(req, onLoginRequest());
                 }
@@ -201,18 +200,15 @@ public class LoginFragment extends AuthBaseFragment implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
+                loadingRealtiveLayout.setVisibility(View.GONE);
 
                 NYHelper.handleAPIException(getActivity(), spiceException, null);
             }
 
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
-                if(progressDialog != null && progressDialog.isShowing()){
-                    progressDialog.dismiss();
-                }
+
+                loadingRealtiveLayout.setVisibility(View.GONE);
 
                 NYHelper.saveUserData(getActivity(), authReturn);
                 if (NYHelper.isStringNotEmpty(emailEditText.getText().toString()))NYHelper.saveEmailUser(getActivity(), emailEditText.getText().toString());
@@ -231,6 +227,7 @@ public class LoginFragment extends AuthBaseFragment implements
         registerTextView = (TextView) v.findViewById(R.id.register_textView);
         forgotPasswordTextView = (TextView) v.findViewById(R.id.forgot_password_textView);
         backgroundImageView = (ImageView) v.findViewById(R.id.background_imageView);
+        loadingRealtiveLayout = (RelativeLayout) v.findViewById(R.id.loading_realtiveLayout);
         NYApplication application = (NYApplication)getActivity().getApplication();
         String imageUri = "drawable://"+R.drawable.background_blur;
 
@@ -281,12 +278,9 @@ public class LoginFragment extends AuthBaseFragment implements
     public void onSuccess(FBAuthHelper helper, FBAuthResult result) {
         super.onSuccess(helper, result);
 
-        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+        //if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
 
-        socemdProgressDialog = new ProgressDialog(getActivity());
-        socemdProgressDialog.setMessage(getString(R.string.loading));
-        socemdProgressDialog.setCancelable(false);
-        socemdProgressDialog.show();
+        loadingRealtiveLayout.setVisibility(View.VISIBLE);
 
         fbResult = result;
 
@@ -299,12 +293,9 @@ public class LoginFragment extends AuthBaseFragment implements
     @Override
     public void onSuccess(GPlusAuthHelper helper, GPlusAuthResult result) {
         super.onSuccess(helper, result);
-        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+        //if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
 
-        socemdProgressDialog = new ProgressDialog(getActivity());
-        socemdProgressDialog.setMessage(getString(R.string.loading));
-        socemdProgressDialog.setCancelable(false);
-        socemdProgressDialog.show();
+        loadingRealtiveLayout.setVisibility(View.VISIBLE);
 
         googleResult = result;
 
@@ -319,7 +310,9 @@ public class LoginFragment extends AuthBaseFragment implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (spiceException != null) {
-                    if (socemdProgressDialog != null && socemdProgressDialog.isShowing()) socemdProgressDialog.dismiss();
+
+                    loadingRealtiveLayout.setVisibility(View.GONE);
+
                     //progressDialog.cancel();
                     if (type.equals("fb")) {
 
@@ -328,21 +321,21 @@ public class LoginFragment extends AuthBaseFragment implements
 
                         //mListener.intentRegister(fbResult.email, fbResult.firstName, fbResult.lastName, GKHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
                         //mListener.onRegisterRequest(progressDialog, fbResult.email, fbResult.firstName, fbResult.lastName, NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
-                        mListener.onRegisterRequest(progressDialog,  NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.toString());
+                        mListener.onRegisterRequest(NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.toString());
                     } else if (type.equals("google")) {
                         //mListener.intentRegister(googleResult.email, googleResult.firstName, googleResult.lastName, GKHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken, googleResult.profilePictureUrl);
-                        mListener.onRegisterRequest(progressDialog, NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.toString());
+                        mListener.onRegisterRequest(NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.toString());
                     }
 
                 } else {
-                    socemdProgressDialog.dismiss();
+                    loadingRealtiveLayout.setVisibility(View.GONE);
                     NYHelper.handleErrorMessage(getActivity(), getActivity().getResources().getString(R.string.warn_no_connection));
                 }
             }
 
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
-                if (socemdProgressDialog != null && socemdProgressDialog.isShowing()) socemdProgressDialog.dismiss();
+                loadingRealtiveLayout.setVisibility(View.GONE);
                 NYHelper.saveUserData(getActivity(), authReturn);
 
                 NYLog.e("LOGIN SOCMED SUCCES");
@@ -358,7 +351,6 @@ public class LoginFragment extends AuthBaseFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == REQ_CODE_AUTH_FB){
@@ -400,9 +392,6 @@ public class LoginFragment extends AuthBaseFragment implements
     }
 
 
-
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -442,8 +431,8 @@ public class LoginFragment extends AuthBaseFragment implements
     public interface OnFragmentInteractionListener {
         void isLoginSuccess(boolean success);
         void intentRegister(String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
-        void onRegisterRequest(ProgressDialog progressDialog, String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
-        void onRegisterRequest(ProgressDialog progressDialog, String socmedType, String authResult);
+        void onRegisterRequest(String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
+        void onRegisterRequest(String socmedType, String authResult);
         void intentForgotPassword();
     }
 

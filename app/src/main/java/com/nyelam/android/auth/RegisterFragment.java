@@ -136,7 +136,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
 
     private void initExtra() {
 
-        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+        if (progressDialog != null) progressDialog.dismiss();
 
         if (fbAuthResult != null){
             if (NYHelper.isStringNotEmpty(fbAuthResult.email))emailEditText.setText(fbAuthResult.email);
@@ -282,7 +282,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
         return new RequestListener<AuthReturn>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                if (progressDialog != null && progressDialog.isShowing())progressDialog.dismiss();
+                if (progressDialog != null )progressDialog.dismiss();
                 if (spiceException != null) {
                     NYHelper.handleAPIException(getActivity(), spiceException, null);
                 } else {
@@ -291,7 +291,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
             }
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
-                if(progressDialog != null && progressDialog.isShowing()){
+                if(progressDialog != null){
                     progressDialog.dismiss();
                 }
 

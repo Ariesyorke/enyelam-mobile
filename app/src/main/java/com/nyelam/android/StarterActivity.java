@@ -37,8 +37,11 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             R.drawable.eco_trip_3_bg,
             R.drawable.eco_trip_4_bg,
             R.drawable.eco_trip_5_bg,
-            R.drawable.background_blur
+            R.drawable.background_blur,
+            R.drawable.bg_placeholder
     };
+
+
     private final int SPLASH_TIME = 3000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS = 1;
     private SpiceManager spcMgr = new SpiceManager(SpiceService.class);

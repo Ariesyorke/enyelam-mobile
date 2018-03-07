@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
@@ -211,6 +212,14 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
 
                 //SET IMAGE
+                NYApplication application = (NYApplication) activity.getApplication();
+                Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+                if(b != null) {
+                    serviceImageView.setImageBitmap(b);
+                } else {
+                    serviceImageView.setImageResource(R.drawable.bg_placeholder);
+                }
+
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                 if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
                     ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
@@ -221,7 +230,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
                         @Override
                         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            serviceImageView.setImageResource(R.drawable.example_pic);
+
                         }
 
                         @Override
@@ -232,14 +241,14 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
                         @Override
                         public void onLoadingCancelled(String imageUri, View view) {
-                            serviceImageView.setImageResource(R.drawable.example_pic);
+
                         }
                     });
 
                     ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
 
                 } else {
-                    serviceImageView.setImageResource(R.drawable.example_pic);
+                    serviceImageView.setImageResource(R.drawable.bg_placeholder);
                 }
 
             }

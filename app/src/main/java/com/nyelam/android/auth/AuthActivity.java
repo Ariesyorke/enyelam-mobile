@@ -74,7 +74,7 @@ public class AuthActivity extends BasicActivity implements
     }
 
     @Override
-    public void onRegisterRequest(ProgressDialog progressDialog, String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl) {
+    public void onRegisterRequest(String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl) {
 
         /*if (progressDialog != null)progressDialog.dismiss();
 
@@ -99,7 +99,7 @@ public class AuthActivity extends BasicActivity implements
 
 
     @Override
-    public void onRegisterRequest(ProgressDialog progressDialog, String socmedType, String authResult) {
+    public void onRegisterRequest(String socmedType, String authResult) {
 
         if (progressDialog != null)progressDialog.dismiss();
 
