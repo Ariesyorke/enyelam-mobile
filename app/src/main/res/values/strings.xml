@@ -24,6 +24,10 @@
     <string name="last_name">Last Name</string>
     <string name="email_address">E-mail Address</string>
     <string name="email_address_hint">E-mail Address *</string>
+    <string name="birth_place_hint">Birth Place</string>
+    <string name="certificate_number_hint">Certificate Number</string>
+    <string name="certificate_date_hint">Certificate Date</string>
+    <string name="birth_date_hint">Birth Date</string>
     <string name="phone_number">Phone Number</string>
     <string name="phone_number_hint">Phone Number *</string>
     <string name="phone_number_ex">Phone number (eg. +905...)</string>

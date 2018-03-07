@@ -223,12 +223,173 @@
                             android:focusable="true"
                             android:focusableInTouchMode="true"
                             android:maxLines="1"
-                            android:imeOptions="actionNext"
+                            android:imeOptions="actionDone"
                             android:hint="@string/phone_number_hint"/>
                     </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
             </android.support.design.widget.TextInputLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/gender_input_layout"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/gender_editText"
+                        android:hint="@string/birth_date_hint"
+                        android:textSize="16sp"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/ny_grey2"
+                        android:imeOptions="actionNext"
+                        android:backgroundTint="@color/selecetor_edittext_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:src="@drawable/ic_down_arrow_black"
+                    android:layout_height="12dp"
+                    android:layout_width="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"/>
+                <com.nyelam.android.view.NYSpinner
+                    android:id="@+id/gender_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:backgroundTint="@android:color/transparent"
+                    android:gravity="bottom|center_horizontal"
+                    android:layout_alignTop="@id/gender_input_layout"
+                    android:layout_alignBottom="@id/gender_input_layout"
+                    android:background="@android:color/transparent"/>
+            </RelativeLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/birth_place_editText"
+                    android:hint="@string/birth_place_hint"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/ny_grey2"
+                    android:imeOptions="actionDone"
+                    android:backgroundTint="@color/selecetor_edittext_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/birth_date_input_layout"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/birth_date_editText"
+                        android:hint="@string/birth_date_hint"
+                        android:textSize="16sp"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/ny_grey2"
+                        android:imeOptions="actionNext"
+                        android:backgroundTint="@color/selecetor_edittext_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:src="@drawable/ic_down_arrow_black"
+                    android:layout_height="12dp"
+                    android:layout_width="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"/>
+                <Button
+                    android:id="@+id/birth_date_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/birth_date_input_layout"
+                    android:layout_alignBottom="@id/birth_date_input_layout"
+                    android:background="@android:color/transparent"/>
+            </RelativeLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/certificate_number_editText"
+                    android:hint="@string/certificate_number_hint"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/ny_grey2"
+                    android:imeOptions="actionDone"
+                    android:backgroundTint="@color/selecetor_edittext_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/certifcate_date_input_layout"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/ceritificate_date_editText"
+                        android:hint="@string/birth_date_hint"
+                        android:textSize="16sp"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/ny_grey2"
+                        android:imeOptions="actionNext"
+                        android:backgroundTint="@color/selecetor_edittext_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:src="@drawable/ic_down_arrow_black"
+                    android:layout_height="12dp"
+                    android:layout_width="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"/>
+                <Button
+                    android:id="@+id/ceritifcate_date_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/certifcate_date_input_layout"
+                    android:layout_alignBottom="@id/certifcate_date_input_layout"
+                    android:background="@android:color/transparent"/>
+            </RelativeLayout>
             <TextView
                 android:id="@+id/update_textView"
                 android:text="Update"
