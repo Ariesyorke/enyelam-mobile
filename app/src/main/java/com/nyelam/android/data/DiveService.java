@@ -26,6 +26,8 @@ public class DiveService implements Parseable {
     private static String KEY_DAYS = "days";
     private static String KEY_TOTAL_DIVES = "total_dives";
     private static String KEY_TOTAL_DIVE_SPOTS = "total_divespot";
+    private static String KEY_VISITED = "visited";
+    private static String KEY_LICENSE = "license";
     private static String KEY_MIN_PERSON = "min_person";
     private static String KEY_MAX_PERSON = "max_person";
     private static String KEY_SCHEDULE = "schedule";
@@ -46,6 +48,8 @@ public class DiveService implements Parseable {
     private int days;
     private int totalDives;
     private int totalDiveSpots;
+    private int visited;
+    private boolean license;
     private int minPerson;
     private int maxPerson;
     private Schedule schedule;
@@ -151,6 +155,22 @@ public class DiveService implements Parseable {
 
     public void setTotalDiveSpots(int totalDiveSpots) {
         this.totalDiveSpots = totalDiveSpots;
+    }
+
+    public int getVisited() {
+        return visited;
+    }
+
+    public void setVisited(int visited) {
+        this.visited = visited;
+    }
+
+    public boolean isLicense() {
+        return license;
+    }
+
+    public void setLicense(boolean license) {
+        this.license = license;
     }
 
     public int getMinPerson() {
@@ -268,6 +288,19 @@ public class DiveService implements Parseable {
                 setTotalDiveSpots(obj.getInt(KEY_TOTAL_DIVE_SPOTS));
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_VISITED)) {
+                setVisited(obj.getInt(KEY_VISITED));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_LICENSE)) {
+                setLicense(obj.getBoolean(KEY_LICENSE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
 
         try {
             if (!obj.isNull(KEY_MIN_PERSON)) {
@@ -472,6 +505,18 @@ public class DiveService implements Parseable {
 
         try {
             obj.put(KEY_TOTAL_DIVE_SPOTS, getTotalDiveSpots());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_VISITED, getVisited());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_LICENSE, isLicense());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -8,13 +8,12 @@ import android.support.v4.app.Fragment;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.nyelam.android.dev.NYLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import id.kleen.android.dev.GKLog;
 
 
 /**
@@ -48,7 +47,7 @@ public class GPlusAuthHelper<RESULT extends GPlusAuthResult> {
             context = fragment.getActivity();
         }
 
-        GKLog.e("Google auth");
+        NYLog.e("Google auth");
 
         final int gms = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (gms != ConnectionResult.SUCCESS) {
@@ -124,7 +123,7 @@ public class GPlusAuthHelper<RESULT extends GPlusAuthResult> {
 
                 String json = data
                         .getStringExtra(DGoogleActivity.RESULT_EXTRA_DATA);
-                GKLog.e("isi data "+json);
+                NYLog.e("isi data "+json);
 
                 try {
                     JSONObject obj = new JSONObject(json);

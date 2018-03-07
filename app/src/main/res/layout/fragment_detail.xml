@@ -98,7 +98,7 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <com.nyelam.android.view.font.StrikethroughTextView
+                        <com.nyelam.android.view.font.NYStrikethroughTextView
                             android:id="@+id/price_strikethrough_textView"
                             android:visibility="gone"
                             android:text="Rp -"

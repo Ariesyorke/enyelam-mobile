@@ -11,9 +11,11 @@ import android.widget.TextView;
  * Created by Aprilian Nur Wakhid Daini on 1/12/2018.
  */
 
-public class StrikethroughTextView extends android.support.v7.widget.AppCompatTextView {
+public class NYStrikethroughTextView extends android.support.v7.widget.AppCompatTextView {
 
-    public StrikethroughTextView(Context context) {
+    private int textPosition = -1;
+
+    public NYStrikethroughTextView(Context context) {
         super(context);
         /*Typeface face=Typeface.createFromAsset(context.getAssets(), "Helvetica_Neue.ttf");
         this.setTypeface(face);*/
@@ -21,7 +23,7 @@ public class StrikethroughTextView extends android.support.v7.widget.AppCompatTe
         this.setPaintFlags(this.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
-    public StrikethroughTextView(Context context, AttributeSet attrs) {
+    public NYStrikethroughTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         /*Typeface face=Typeface.createFromAsset(context.getAssets(), "Helvetica_Neue.ttf");
         this.setTypeface(face);*/
@@ -29,7 +31,7 @@ public class StrikethroughTextView extends android.support.v7.widget.AppCompatTe
         this.setPaintFlags(this.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
-    public StrikethroughTextView(Context context, AttributeSet attrs, int defStyle) {
+    public NYStrikethroughTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         /*Typeface face= Typeface.createFromAsset(context.getAssets(), "Helvetica_Neue.ttf");
         this.setTypeface(face);*/

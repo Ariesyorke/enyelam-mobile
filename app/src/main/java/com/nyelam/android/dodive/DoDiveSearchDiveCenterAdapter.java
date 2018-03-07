@@ -1,6 +1,5 @@
 package com.nyelam.android.dodive;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,7 @@ import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.font.StrikethroughTextView;
+import com.nyelam.android.view.font.NYStrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +101,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
         private TextView locationTextView;
         private TextView ratingTextView;
         private RatingBar ratingBar;
-        private StrikethroughTextView priceStrikethroughTextView;
+        private NYStrikethroughTextView priceStrikethroughTextView;
         private TextView priceTextView;
         private TextView totalDiveTextView;
         private View itemView;
@@ -114,7 +113,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             featuredImageView = (ImageView) itemView.findViewById(R.id.featured_imageView);
             diveCenterNameTextView = (TextView) itemView.findViewById(R.id.dive_center_name_textView);
             locationTextView = (TextView) itemView.findViewById(R.id.location_textView);
-            priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
+            priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
             totalDiveTextView = (TextView) itemView.findViewById(R.id.total_dive_textView);
             ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);

@@ -61,6 +61,26 @@ public class AuthActivity extends BasicActivity implements
     }
 
     @Override
+    public void intentRegister(String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl) {
+
+    }
+
+    @Override
+    public void onRegisterRequest(ProgressDialog progressDialog, String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl) {
+
+    }
+
+    @Override
+    public void checkLocation() {
+
+    }
+
+    @Override
+    public void intentForgotPassword() {
+
+    }
+
+    @Override
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
         super.onBackPressed();

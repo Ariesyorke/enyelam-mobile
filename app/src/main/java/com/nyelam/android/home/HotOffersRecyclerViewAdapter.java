@@ -1,7 +1,6 @@
 package com.nyelam.android.home;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,10 +16,8 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
-import com.nyelam.android.data.SearchService;
-import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.font.StrikethroughTextView;
+import com.nyelam.android.view.font.NYStrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +88,7 @@ public class HotOffersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         private ImageView eventImageView;
         private TextView nameTextView;
         private TextView locationTextView;
-        private StrikethroughTextView priceStrikethroughTextView;
+        private NYStrikethroughTextView priceStrikethroughTextView;
         private TextView priceTextView;
         private TextView dateTextView;
         private View itemView;
@@ -102,7 +99,7 @@ public class HotOffersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             eventImageView = (ImageView) itemView.findViewById(R.id.event_imageView);
             nameTextView = (TextView) itemView.findViewById(R.id.name_textView);
             locationTextView = (TextView) itemView.findViewById(R.id.location_textView);
-            priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
+            priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
             dateTextView = (TextView) itemView.findViewById(R.id.date_textView);
             this.itemView = itemView;
