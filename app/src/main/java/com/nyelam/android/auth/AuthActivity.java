@@ -45,6 +45,9 @@ public class AuthActivity extends BasicActivity implements
 
     @Override
     public void isLoginSuccess(boolean success) {
+
+        NYLog.e("LOGIN SOCMED SUCCES INTENT");
+
         if(progressDialog != null) progressDialog.dismiss();
         if (success) {
 //            if(getIntent().hasExtra(NYHelper.IS_MAIN_ACTIVITY)) {
@@ -96,7 +99,7 @@ public class AuthActivity extends BasicActivity implements
 
 
     @Override
-    public void onRegisterRequest(ProgressDialog progressDialog, String socmedType, FBAuthResult fbAuthResult) {
+    public void onRegisterRequest(ProgressDialog progressDialog, String socmedType, String authResult) {
 
         if (progressDialog != null)progressDialog.dismiss();
 
@@ -106,17 +109,13 @@ public class AuthActivity extends BasicActivity implements
         transaction.setCustomAnimations(R.anim.slide_in, android.R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out);
 
         Bundle args = new Bundle();
-        args.putString(NYHelper.RESULT, fbAuthResult.toString());
+
+        args.putString(NYHelper.RESULT, authResult);
         args.putString(NYHelper.SOCMED_TYPE, socmedType);
 
         transaction.replace(R.id.fragment_container, RegisterFragment.newInstance(args));
         transaction.addToBackStack(LoginFragment.class.getName());
         transaction.commit();
-    }
-
-    @Override
-    public void checkLocation() {
-
     }
 
     @Override

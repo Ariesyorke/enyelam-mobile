@@ -21,8 +21,7 @@ public class NYLoginSocmedRequest extends NYBasicRequest<AuthReturn> {
     private static final String POST_EMAIL_ADDRESS = "email_address";
 
     public NYLoginSocmedRequest(Context context, String email, String type, String id, String accessToken) {
-        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_login));
-
+        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_socmed_login));
         if(!TextUtils.isEmpty(email)) {
             addQuery(POST_EMAIL_ADDRESS, email);
         }

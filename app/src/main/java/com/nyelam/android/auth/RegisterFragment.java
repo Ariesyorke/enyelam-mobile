@@ -182,10 +182,27 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
 
                     progressDialog.show();
                     NYRegisterRequest req;
+
+                    String gender = null;
+
                     if (fbAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_FACEBOOK)){
-                        req = new NYRegisterRequest(getActivity(), fbAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, fbAuthResult.id, fbAuthResult.accessToken, fbAuthResult.profilePictureUrl);
+
+                        if (fbAuthResult.gender != null && fbAuthResult.gender.equals("male")){
+                            gender = "1";
+                        } else if (fbAuthResult.gender != null && fbAuthResult.gender.equals("female")){
+                            gender = "2";
+                        }
+
+                        req = new NYRegisterRequest(getActivity(), fbAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  socmedType, fbAuthResult.id, fbAuthResult.accessToken, fbAuthResult.profilePictureUrl);
                     } else if (gPlusAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_GOOGLE)){
-                        req = new NYRegisterRequest(getActivity(), gPlusAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, gPlusAuthResult.id, gPlusAuthResult.accessToken, gPlusAuthResult.profilePictureUrl);
+
+                        if (gPlusAuthResult.gender != null && gPlusAuthResult.gender.equals("male")){
+                            gender = "1";
+                        } else if (gPlusAuthResult.gender != null && gPlusAuthResult.gender.equals("female")){
+                            gender = "2";
+                        }
+
+                        req = new NYRegisterRequest(getActivity(), gPlusAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, gender,  socmedType, gPlusAuthResult.id, gPlusAuthResult.accessToken, gPlusAuthResult.profilePictureUrl);
                     } else {
                         req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  null, null, null, null);
                     }

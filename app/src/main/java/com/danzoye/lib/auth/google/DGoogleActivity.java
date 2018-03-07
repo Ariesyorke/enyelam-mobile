@@ -164,8 +164,8 @@ public class DGoogleActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dgoogle);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestServerAuthCode(getResources().getString(R.string.alternative_client_id))
-                .requestIdToken(getResources().getString(R.string.alternative_client_id))
+                .requestServerAuthCode(getResources().getString(R.string.client_side))
+                .requestIdToken(getResources().getString(R.string.client_side))
                 .requestEmail()
                 .build();
 

@@ -280,6 +280,9 @@ public class LoginFragment extends AuthBaseFragment implements
     @Override
     public void onSuccess(FBAuthHelper helper, FBAuthResult result) {
         super.onSuccess(helper, result);
+
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+
         socemdProgressDialog = new ProgressDialog(getActivity());
         socemdProgressDialog.setMessage(getString(R.string.loading));
         socemdProgressDialog.setCancelable(false);
@@ -296,10 +299,17 @@ public class LoginFragment extends AuthBaseFragment implements
     @Override
     public void onSuccess(GPlusAuthHelper helper, GPlusAuthResult result) {
         super.onSuccess(helper, result);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+
+        socemdProgressDialog = new ProgressDialog(getActivity());
+        socemdProgressDialog.setMessage(getString(R.string.loading));
+        socemdProgressDialog.setCancelable(false);
+        socemdProgressDialog.show();
+
+        googleResult = result;
+
+        NYLog.e("CEK google USER : "+result.toString());
+
         NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), googleResult.email, NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken);
         spcMgr.execute(req, onLoginSocmedRequest("google"));
     }
@@ -309,7 +319,7 @@ public class LoginFragment extends AuthBaseFragment implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (spiceException != null) {
-                    socemdProgressDialog.dismiss();
+                    if (socemdProgressDialog != null && socemdProgressDialog.isShowing()) socemdProgressDialog.dismiss();
                     //progressDialog.cancel();
                     if (type.equals("fb")) {
 
@@ -318,10 +328,10 @@ public class LoginFragment extends AuthBaseFragment implements
 
                         //mListener.intentRegister(fbResult.email, fbResult.firstName, fbResult.lastName, GKHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
                         //mListener.onRegisterRequest(progressDialog, fbResult.email, fbResult.firstName, fbResult.lastName, NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
-                        mListener.onRegisterRequest(progressDialog,  NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult);
+                        mListener.onRegisterRequest(progressDialog,  NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.toString());
                     } else if (type.equals("google")) {
                         //mListener.intentRegister(googleResult.email, googleResult.firstName, googleResult.lastName, GKHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken, googleResult.profilePictureUrl);
-                        mListener.onRegisterRequest(progressDialog, googleResult.email, googleResult.firstName, googleResult.lastName, NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken, googleResult.profilePictureUrl);
+                        mListener.onRegisterRequest(progressDialog, NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.toString());
                     }
 
                 } else {
@@ -332,9 +342,12 @@ public class LoginFragment extends AuthBaseFragment implements
 
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
-                if (socemdProgressDialog != null)socemdProgressDialog.cancel();
+                if (socemdProgressDialog != null && socemdProgressDialog.isShowing()) socemdProgressDialog.dismiss();
                 NYHelper.saveUserData(getActivity(), authReturn);
-                //mListener.checkLocation();
+
+                NYLog.e("LOGIN SOCMED SUCCES");
+
+                mListener.isLoginSuccess(true);
             }
         };
     }
@@ -430,8 +443,7 @@ public class LoginFragment extends AuthBaseFragment implements
         void isLoginSuccess(boolean success);
         void intentRegister(String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
         void onRegisterRequest(ProgressDialog progressDialog, String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
-        void onRegisterRequest(ProgressDialog progressDialog, String socmedType, FBAuthResult fbAuthResult);
-        void checkLocation();
+        void onRegisterRequest(ProgressDialog progressDialog, String socmedType, String authResult);
         void intentForgotPassword();
     }
 
