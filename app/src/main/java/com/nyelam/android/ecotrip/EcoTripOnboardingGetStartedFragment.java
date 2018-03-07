@@ -3,6 +3,7 @@ package com.nyelam.android.ecotrip;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,8 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
     private View bookNowButton;
     private int backgroundResource = R.drawable.eco_trip_5_bg;
     private ImageView backgroundImageView;
+    private View activitiesButton;
+
     public EcoTripOnboardingGetStartedFragment() {
         // Required empty public constructor
     }
@@ -59,10 +62,20 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        activitiesButton = view.findViewById(R.id.our_activities_button);
         backgroundImageView = (ImageView)view.findViewById(R.id.background_imageView);
         bookNowButton = view.findViewById(R.id.book_eco_trip_button);
         String imageUri = "drawable://" + R.drawable.eco_trip_5_bg;
         final NYApplication application = (NYApplication) getActivity().getApplication();
+        activitiesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "http://www.sosis.id";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
         if(application.getCache(imageUri) != null) {
             Bitmap bitmap = application.getCache(imageUri);
             backgroundImageView.setImageBitmap(bitmap);
