@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,9 +43,13 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private Toolbar toolbar;
     private ProgressDialog progressDialog;
-    private EditText firstNameEditText, lastNameEditText, usernameEditText, emailEditText, phoneNumberEditText;
+    private EditText firstNameEditText, lastNameEditText, usernameEditText, emailEditText,
+            phoneNumberEditText, birthPlaceEditText, birthDateEditText,
+            certificateNumberEditText, certificateDateEditText, genderEditText;
     private TextView updateTextView, countryCodeTextView;
-    private NYSpinner countryCodeSpinner;
+    private View birthDateButton, certificateDateButton;
+    private NYSpinner countryCodeSpinner, genderSpinner;
+    private NYGenderSpinnerAdapter adapter;
     private String countryCodeId = "360";
     private CountryCodeAdapter countryCodeAdapter;
 
@@ -99,16 +104,13 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
             List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
             if (countryCodes != null && countryCodes.size() > 0){
-                NYLog.e("tes isi DAO Country Code : "+countryCodes.toString());
                 countryCodeAdapter.addCountryCodes(countryCodes);
             }
 
             countryCodeSpinner.setAdapter(countryCodeAdapter);
 
-            NYLog.e("CEK INI APA ? = "+storage.user.getCountryCode().getId());
 
             if (countryCodes != null && countryCodes.size() > 0){
-                NYLog.e("CEK INI APA ? 2");
                 int pos = 0;
                 for (CountryCode countryCode : countryCodes){
                     if (countryCode != null && NYHelper.isStringNotEmpty(countryCode.getId()) &&
@@ -117,8 +119,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                         countryCodeSpinner.setSelection(pos);
                         countryCodeAdapter.setSelectedPosition(pos);
                         countryCodeAdapter.notifyDataSetChanged();
-
-                        NYLog.e("CEK INI APA ? pos = "+pos);
 
                         break;
                     }
@@ -220,6 +220,23 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         updateTextView = (TextView) findViewById(R.id.update_textView);
         countryCodeSpinner = (NYSpinner) findViewById(R.id.country_code_spinner);
         countryCodeTextView = (TextView) findViewById(R.id.country_code_textView);
+        birthPlaceEditText = (EditText)findViewById(R.id.birth_place_editText);
+        birthDateEditText = (EditText) findViewById(R.id.birth_date_editText);
+        certificateNumberEditText = (EditText)findViewById(R.id.certificate_number_editText);
+        certificateDateEditText = (EditText)findViewById(R.id.ceritificate_date_editText);
+        genderEditText = (EditText)findViewById(R.id.gender_editText);
+        genderSpinner = (NYSpinner)findViewById(R.id.gender_spinner);
+        birthDateButton = findViewById(R.id.birth_date_button);
+        certificateDateButton = findViewById(R.id.ceritifcate_date_button);
+
+        birthDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager)EditProfileActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        });
+
         countryCodeSpinner.setOnItemSelectedListener(this);
 
         countryCodeSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
