@@ -22,7 +22,7 @@
 
             <ImageView
                 android:id="@+id/featured_imageView"
-                android:src="@drawable/example_pic"
+                android:src="@drawable/bg_placeholder"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

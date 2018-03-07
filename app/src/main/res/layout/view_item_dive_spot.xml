@@ -17,7 +17,7 @@
 
         <ImageView
             android:id="@+id/service_imageView"
-            android:src="@drawable/example_pic"
+            android:src="@drawable/bg_placeholder"
             android:scaleType="centerCrop"
             android:layout_width="130dp"
             android:layout_height="match_parent" />

@@ -183,9 +183,9 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
                     progressDialog.show();
                     NYRegisterRequest req;
                     if (fbAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_FACEBOOK)){
-                        req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, fbAuthResult.id, fbAuthResult.accessToken, fbAuthResult.profilePictureUrl);
+                        req = new NYRegisterRequest(getActivity(), fbAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, fbAuthResult.id, fbAuthResult.accessToken, fbAuthResult.profilePictureUrl);
                     } else if (gPlusAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_GOOGLE)){
-                        req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, gPlusAuthResult.id, gPlusAuthResult.accessToken, gPlusAuthResult.profilePictureUrl);
+                        req = new NYRegisterRequest(getActivity(), gPlusAuthResult.name, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, gPlusAuthResult.id, gPlusAuthResult.accessToken, gPlusAuthResult.profilePictureUrl);
                     } else {
                         req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  null, null, null, null);
                     }

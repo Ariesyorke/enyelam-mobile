@@ -15,12 +15,17 @@ import org.json.JSONObject;
 
 public class NYLoginSocmedRequest extends NYBasicRequest<AuthReturn> {
 
-private static final String POST_TYPE = "type";
-private static final String POST_ID = "id";
-private static final String POST_ACCESS_TOKEN = "access_token";
+    private static final String POST_TYPE = "type";
+    private static final String POST_ID = "id";
+    private static final String POST_ACCESS_TOKEN = "access_token";
+    private static final String POST_EMAIL_ADDRESS = "email_address";
 
-    public NYLoginSocmedRequest(Context context, String type, String id, String accessToken) {
+    public NYLoginSocmedRequest(Context context, String email, String type, String id, String accessToken) {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_login));
+
+        if(!TextUtils.isEmpty(email)) {
+            addQuery(POST_EMAIL_ADDRESS, email);
+        }
 
         if(!TextUtils.isEmpty(type)) {
             addQuery(POST_TYPE, type);

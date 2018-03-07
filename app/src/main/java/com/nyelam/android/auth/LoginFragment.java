@@ -58,7 +58,7 @@ public class LoginFragment extends AuthBaseFragment implements
     private static final int REQ_CODE_AUTH_FB = 0;
     private static final int REQ_CODE_AUTH_GOOGLE = 1;
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog, socemdProgressDialog;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private TextView loginTextView, registerTextView, forgotPasswordTextView;
@@ -280,16 +280,16 @@ public class LoginFragment extends AuthBaseFragment implements
     @Override
     public void onSuccess(FBAuthHelper helper, FBAuthResult result) {
         super.onSuccess(helper, result);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        socemdProgressDialog = new ProgressDialog(getActivity());
+        socemdProgressDialog.setMessage(getString(R.string.loading));
+        socemdProgressDialog.setCancelable(false);
+        socemdProgressDialog.show();
 
         fbResult = result;
 
         NYLog.e("CEK FB USER : "+result.toString());
 
-        NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken);
+        NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), fbResult.email, NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken);
         spcMgr.execute(req, onLoginSocmedRequest("fb"));
     }
 
@@ -300,7 +300,7 @@ public class LoginFragment extends AuthBaseFragment implements
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(false);
         progressDialog.show();
-        NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken);
+        NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), googleResult.email, NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken);
         spcMgr.execute(req, onLoginSocmedRequest("google"));
     }
 
@@ -309,12 +309,12 @@ public class LoginFragment extends AuthBaseFragment implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (spiceException != null) {
-                    progressDialog.cancel();
+                    socemdProgressDialog.dismiss();
                     //progressDialog.cancel();
                     if (type.equals("fb")) {
 
-                        NYLog.e("CEK FB 1 ");
-                        NYLog.e("CEK FB 1 "+fbResult.toString());
+                        //NYLog.e("CEK FB 1 ");
+                        //NYLog.e("CEK FB 1 "+fbResult.toString());
 
                         //mListener.intentRegister(fbResult.email, fbResult.firstName, fbResult.lastName, GKHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
                         //mListener.onRegisterRequest(progressDialog, fbResult.email, fbResult.firstName, fbResult.lastName, NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
@@ -325,14 +325,14 @@ public class LoginFragment extends AuthBaseFragment implements
                     }
 
                 } else {
-                    progressDialog.cancel();
+                    socemdProgressDialog.dismiss();
                     NYHelper.handleErrorMessage(getActivity(), getActivity().getResources().getString(R.string.warn_no_connection));
                 }
             }
 
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
-                if (progressDialog != null)progressDialog.cancel();
+                if (socemdProgressDialog != null)socemdProgressDialog.cancel();
                 NYHelper.saveUserData(getActivity(), authReturn);
                 //mListener.checkLocation();
             }

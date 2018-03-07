@@ -97,6 +97,7 @@ public class AuthActivity extends BasicActivity implements
 
     @Override
     public void onRegisterRequest(ProgressDialog progressDialog, String socmedType, FBAuthResult fbAuthResult) {
+
         if (progressDialog != null)progressDialog.dismiss();
 
         NYLog.e("CEK FB 2");

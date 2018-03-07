@@ -17,12 +17,12 @@ import org.json.JSONObject;
 
 public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
 
-    private static final String POST_SOCMED_TYPE = "socmed_type";
-    private static final String POST_SOCMED_ID = "socmed_id";
-    private static final String POST_SOCMED_ACCESS_TOKEN = "socmed_access_token";
+    private static final String POST_SOCMED_TYPE = "type";
+    private static final String POST_SOCMED_ID = "id";
+    private static final String POST_SOCMED_ACCESS_TOKEN = "access_token";
     private static final String POST_EMAIL = "email";
 
-    private static final String POST_USERNAME = "username";
+    private static final String POST_FULLNAME = "fullname";
     private static final String POST_PHONE = "phone";
     private static final String POST_PASSWORD = "password";
     private static final String POST_CONFIRM_PASSWORD = "confirm_password";
@@ -31,7 +31,7 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
     private static final String POST_COUNTRY_CODE_ID = "country_id";
 
     public NYRegisterRequest(Context context,
-                             String username,
+                             String fullname,
                              String email,
                              String phoneNumber,
                              String countryCodeId,
@@ -60,10 +60,8 @@ public class NYRegisterRequest extends NYBasicRequest<AuthReturn> {
             addQuery(POST_EMAIL, email);
         }
 
-
-
-        if(!TextUtils.isEmpty(username)) {
-            addQuery(POST_USERNAME, username);
+        if(!TextUtils.isEmpty(fullname)) {
+            addQuery(POST_FULLNAME, fullname);
         }
 
         if(!TextUtils.isEmpty(phoneNumber)) {
