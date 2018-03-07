@@ -239,7 +239,7 @@
                     android:layout_height="wrap_content">
                     <EditText
                         android:id="@+id/gender_editText"
-                        android:hint="@string/birth_date_hint"
+                        android:hint="@string/gender_hint"
                         android:textSize="16sp"
                         android:singleLine="true"
                         android:maxLines="1"
@@ -361,7 +361,7 @@
                     android:layout_height="wrap_content">
                     <EditText
                         android:id="@+id/ceritificate_date_editText"
-                        android:hint="@string/birth_date_hint"
+                        android:hint="@string/certificate_date_hint"
                         android:textSize="16sp"
                         android:singleLine="true"
                         android:maxLines="1"

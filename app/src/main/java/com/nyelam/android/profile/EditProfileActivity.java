@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -60,6 +61,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     private NYGenderSpinnerAdapter genderSpinnerAdapter;
     private String countryCodeId = "360";
     private CountryCodeAdapter countryCodeAdapter;
+    private Date certificateDate, dateBirth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +120,40 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
             countryCodeSpinner.setAdapter(countryCodeAdapter);
             genderSpinner.setAdapter(genderSpinnerAdapter);
-
+            if(user != null) {
+                if(!TextUtils.isEmpty(user.getBirthPlace())) {
+                    birthPlaceEditText.setText(user.getBirthPlace());
+                }
+                if(!TextUtils.isEmpty(user.getCertificateNumber())) {
+                    certificateNumberEditText.setText(user.getCertificateNumber());
+                }
+                dateBirth = user.getBirthdate();
+                certificateDate = user.getCertificateDate();
+                if(dateBirth != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    birthDateEditText.setText(sdf.format(dateBirth));
+                }
+                if(certificateDate != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    certificateDateEditText.setText(sdf.format(certificateDate));
+                }
+                if (!TextUtils.isEmpty(user.getGender())) {
+                    String gender = user.getGender();
+                    if (gender.equalsIgnoreCase("Male")) {
+                        genderEditText.setText("Male");
+                        genderSpinner.setSelection(0);
+                    } else {
+                        genderEditText.setText("Female");
+                        genderSpinner.setSelection(1);
+                    }
+                } else {
+                    genderEditText.setText("Male");
+                    genderSpinner.setSelection(0);
+                }
+            }  else {
+                genderEditText.setText("Male");
+                genderSpinner.setSelection(0);
+            }
             if (countryCodes != null && countryCodes.size() > 0){
                 int pos = 0;
                 for (CountryCode countryCode : countryCodes){
@@ -150,7 +185,11 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                 String username = null;
                 String email = emailEditText.getText().toString().trim();
                 String phoneNumber = phoneNumberEditText.getText().toString().trim();
-
+                String gender = String.valueOf(genderSpinner.getSelectedItemPosition()+1);
+                String birthDate = dateBirth != null? String.valueOf(dateBirth.getTime()/1000) : null;
+                String dateCertificate = certificateDate != null? String.valueOf(certificateDate.getTime()/1000): null;
+                String certificateNumber = certificateNumberEditText.getText().toString();
+                String birthPlace = birthPlaceEditText.getText().toString();
                 if (NYHelper.isStringNotEmpty(phoneNumber) && phoneNumber.charAt(0) == '0'){
                     phoneNumber = phoneNumber.substring(1);
                 }
@@ -164,18 +203,18 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                 } else  if (!NYHelper.isStringNotEmpty(phoneNumber)){
                     Toast.makeText(EditProfileActivity.this, getString(R.string.warn_field_phone_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else {
-                    updateProfile(firstName+" "+lastName, username, countryCodeId, phoneNumber);
+                    updateProfile(firstName+" "+lastName, username, countryCodeId, phoneNumber, gender, birthDate, dateCertificate, certificateNumber, birthPlace);
                 }
             }
         });
     }
 
 
-    private void updateProfile(String fullname, String username, String countryCodeId, String phoneNumber){
+    private void updateProfile(String fullname, String username, String countryCodeId, String phoneNumber, String gender, String birthDate, String dateCertificate, String certificateNumber, String birthPlace){
 
         try {
             progressDialog.show();
-            NYUpdateUserProfileRequest req = new NYUpdateUserProfileRequest(this, fullname, username, countryCodeId, phoneNumber);
+            NYUpdateUserProfileRequest req = new NYUpdateUserProfileRequest(this, fullname, username, countryCodeId, phoneNumber, gender, birthDate, dateCertificate, certificateNumber, birthPlace);
             spcMgr.execute(req, onUpdateProfileRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,11 +282,47 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager)EditProfileActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                showBirthdatePicker(new Date());
+            }
+        });
+
+        certificateDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager)EditProfileActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                showCertificatePicker(new Date());
             }
         });
 
         countryCodeSpinner.setOnItemSelectedListener(this);
+        genderSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+            @Override
+            public void onSpinnerOpened(Spinner spinner) {
+                InputMethodManager imm = (InputMethodManager)EditProfileActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+            }
 
+            @Override
+            public void onSpinnerClosed(Spinner spinner) {
+
+            }
+        });
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0) {
+                    genderEditText.setText("Male");
+                } else {
+                    genderEditText.setText("Female");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         countryCodeSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
             @Override
             public void onSpinnerOpened(Spinner spinner) {
@@ -292,6 +367,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
                     SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
                     Date birthday = cal.getTime();
+                    certificateDate = cal.getTime();
                     certificateDateEditText.setText(format.format(birthday));
                     dialog.dismiss();
                 }
@@ -310,6 +386,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     cal.set(year, monthOfYear, dayOfMonth);
                     SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
                     Date birthday = cal.getTime();
+                    certificateDate = cal.getTime();
                     certificateDateEditText.setText(format.format(birthday));
                 }
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
@@ -349,6 +426,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
                     SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
                     Date birthday = cal.getTime();
+                    dateBirth = cal.getTime();
                     birthDateEditText.setText(format.format(birthday));
                     dialog.dismiss();
                 }
@@ -367,6 +445,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     cal.set(year, monthOfYear, dayOfMonth);
                     SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
                     Date birthday = cal.getTime();
+                    dateBirth = cal.getTime();
                     birthDateEditText.setText(format.format(birthday));
                 }
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));

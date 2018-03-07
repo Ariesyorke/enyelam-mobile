@@ -6,6 +6,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.Summary;
 import com.nyelam.android.data.User;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONObject;
@@ -24,8 +25,15 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
     private static String POST_USERNAME = "username";
     private static String POST_COUNTRY_CODE = "country_code";
     private static String POST_PHONE_NUMBER = "phone_number";
+    private static String POST_GENDER = "gender";
+    private static String POST_BIRTH_DATE = "birth_date";
+    private static String POST_CERTIFICATE_DATE = "certificate_date";
+    private static String POST_CERTIFICATE_NUMBER = "certificate_number";
+    private static String POST_BIRTH_PLACE = "birth_place";
 
-    public NYUpdateUserProfileRequest(Context context, String fullname, String username, String countryCode, String phoneNumber) throws Exception {
+    public NYUpdateUserProfileRequest(Context context, String fullname, String username, String countryCode, String phoneNumber,
+                                      String gender, String birthDate, String dateCertificate,
+                                      String certificateNumber, String birthPlace) throws Exception {
         super(Summary.class, context, context.getResources().getString(R.string.api_path_update_profile));
 
         if (NYHelper.isStringNotEmpty(fullname)){
@@ -44,10 +52,31 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
             addQuery(POST_PHONE_NUMBER, phoneNumber);
         }
 
+        if(NYHelper.isStringNotEmpty(gender)) {
+            addQuery(POST_GENDER, gender);
+        }
+
+        if(NYHelper.isStringNotEmpty(birthDate)) {
+            addQuery(POST_BIRTH_DATE, birthDate);
+        }
+
+        if(NYHelper.isStringNotEmpty(dateCertificate)) {
+            addQuery(POST_CERTIFICATE_DATE, dateCertificate);
+        }
+
+        if(NYHelper.isStringNotEmpty(certificateNumber)) {
+            addQuery(POST_CERTIFICATE_NUMBER, certificateNumber);
+        }
+
+        if(NYHelper.isStringNotEmpty(birthPlace)) {
+            addQuery(POST_BIRTH_PLACE, birthPlace);
+        }
+
     }
 
     @Override
     protected AuthReturn onProcessSuccessData(JSONObject obj) throws Exception {
+        NYLog.e("USER DATA " + obj.toString(3));
         if (obj.has(KEY_USER) && obj.get(KEY_USER) != null){
             AuthReturn authReturn = new AuthReturn();
             authReturn.parse(obj);

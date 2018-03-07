@@ -30,8 +30,8 @@ public class User implements Parseable {
     private static String KEY_REFERRAL_CODE = "referral_code";
     private static String KEY_ADDESS = "address";
     private static String KEY_FILE_PATH = "file_path";
-    private static String KEY_BIRTH_PLACE = "birth_place";
-    private static String KEY_BIRTH_DATE = "birth_date";
+    private static String KEY_BIRTH_PLACE = "birthplace";
+    private static String KEY_BIRTH_DATE = "birthdate";
     private static String KEY_CERTIFICATE_NUMBER = "certificate_number";
     private static String KEY_CERTIFICATE_DATE = "certificate_date";
     private static String KEY_USERNAME = "username";
@@ -398,9 +398,9 @@ public class User implements Parseable {
         }
         try {
             if(getCertificateDate() != null) {
-                obj.put(KEY_CERTIFICATE_NUMBER, getCertificateDate().getTime()/1000);
+                obj.put(KEY_CERTIFICATE_DATE, getCertificateDate().getTime()/1000);
             } else {
-                obj.put(KEY_CERTIFICATE_NUMBER, JSONObject.NULL);
+                obj.put(KEY_CERTIFICATE_DATE, JSONObject.NULL);
             }
         } catch (JSONException e) {
             e.printStackTrace();
