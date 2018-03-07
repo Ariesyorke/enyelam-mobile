@@ -203,7 +203,7 @@
                             android:layout_height="wrap_content">
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="reguler"
-                                android:text="Total Dive Spots"
+                                android:text="DiveSpot Option"
                                 android:textColor="@color/ny_black1"
                                 android:layout_width="0dp"
                                 android:layout_weight="3"

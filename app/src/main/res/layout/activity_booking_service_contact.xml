@@ -26,6 +26,8 @@
                 android:layout_centerInParent="true"
                 android:textColor="@color/colorWhite"
                 android:background="@android:color/transparent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:text="Contact Detail"/>
@@ -177,7 +179,7 @@
 
                         </RelativeLayout>
 
-                        <Spinner
+                        <com.nyelam.android.view.NYSpinner
                             android:id="@+id/country_code_spinner"
                             android:layout_alignParentBottom="true"
                             android:layout_width="wrap_content"
@@ -210,6 +212,8 @@
                                 android:singleLine="true"
                                 android:maxLines="1"
                                 android:imeOptions="actionNext"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:hint="@string/phone_number_hint"/>
                         </android.support.design.widget.TextInputLayout>
                     </RelativeLayout>
@@ -231,6 +235,8 @@
                         android:singleLine="true"
                         android:maxLines="1"
                         android:inputType="textEmailAddress"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:backgroundTint="@color/selecetor_edittext_line"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

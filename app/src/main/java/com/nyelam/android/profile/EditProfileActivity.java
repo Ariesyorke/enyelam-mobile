@@ -1,12 +1,14 @@
 package com.nyelam.android.profile;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
+import com.nyelam.android.auth.RegisterFragment;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.CountryCode;
@@ -27,6 +30,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYLoginRequest;
 import com.nyelam.android.http.NYUpdateUserProfileRequest;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -40,7 +44,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     private ProgressDialog progressDialog;
     private EditText firstNameEditText, lastNameEditText, usernameEditText, emailEditText, phoneNumberEditText;
     private TextView updateTextView, countryCodeTextView;
-    private Spinner countryCodeSpinner;
+    private NYSpinner countryCodeSpinner;
     private String countryCodeId = "360";
     private CountryCodeAdapter countryCodeAdapter;
 
@@ -214,10 +218,22 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         emailEditText = (EditText) findViewById(R.id.email_editText);
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
         updateTextView = (TextView) findViewById(R.id.update_textView);
-        countryCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
+        countryCodeSpinner = (NYSpinner) findViewById(R.id.country_code_spinner);
         countryCodeTextView = (TextView) findViewById(R.id.country_code_textView);
         countryCodeSpinner.setOnItemSelectedListener(this);
 
+        countryCodeSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+            @Override
+            public void onSpinnerOpened(Spinner spinner) {
+                InputMethodManager imm = (InputMethodManager)EditProfileActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+            }
+
+            @Override
+            public void onSpinnerClosed(Spinner spinner) {
+
+            }
+        });
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(false);
