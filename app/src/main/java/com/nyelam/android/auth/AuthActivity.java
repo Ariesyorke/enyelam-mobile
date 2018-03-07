@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.danzoye.lib.auth.facebook.FBAuthResult;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.helper.NYHelper;
@@ -15,7 +16,9 @@ import com.nyelam.android.storage.LoginStorage;
 public class AuthActivity extends BasicActivity implements
     LoginFragment.OnFragmentInteractionListener,
     RegisterFragment.OnFragmentInteractionListener,
-    ForgotPasswordFragment.OnFragmentInteractionListener{
+    ForgotPasswordFragment.OnFragmentInteractionListener,
+        AuthBaseFragment.OnFragmentInteractionListener,
+        AuthBaseFragment.Callback{
 
     public static final String REQ_INVALID_TOKEN = "invalid_token";
     private ProgressDialog progressDialog;
@@ -86,4 +89,23 @@ public class AuthActivity extends BasicActivity implements
         super.onBackPressed();
     }
 
+    @Override
+    public void onSignUpFacebook(FBAuthResult result) {
+
+    }
+
+    @Override
+    public void onLoginSuccess(String email) {
+
+    }
+
+    @Override
+    public void onSignUpSuccess() {
+
+    }
+
+    @Override
+    public void onForgot() {
+
+    }
 }

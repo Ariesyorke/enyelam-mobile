@@ -52,7 +52,8 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
         //initiatePermission();
-        getCacheBackground(0);
+        //getCacheBackground(0);
+        checkConnection();
     }
 
     @Override

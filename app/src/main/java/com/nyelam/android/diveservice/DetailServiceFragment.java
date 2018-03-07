@@ -149,6 +149,8 @@ public class DetailServiceFragment extends Fragment {
 
             totalDivesTextView.setText(": "+String.valueOf(service.getTotalDives()));
             //totalDiveSpotsTextView.setText(": "+String.valueOf(service.getTotalDiveSpots()));
+
+
             totalDiveSpotsTextView.setText(": 0");
             if (service.getDiveSpots() != null)totalDiveSpotsTextView.setText(": "+String.valueOf(service.getDiveSpots().size()));
 

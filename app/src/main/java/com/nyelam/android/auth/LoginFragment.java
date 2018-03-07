@@ -45,9 +45,18 @@ import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectP
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-public class LoginFragment extends AuthBaseFragment implements GoogleApiClient.OnConnectionFailedListener {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class LoginFragment extends AuthBaseFragment implements
+        GoogleApiClient.OnConnectionFailedListener,
+        AuthBaseFragment.OnFragmentInteractionListener {
 
     private static int RC_SIGN_IN = 201;
+    private static final String KEY_FB_RESULT = "fb result";
+    private static final String KEY_GOOGLE_RESULT = "google result";
+    private static final int REQ_CODE_AUTH_FB = 0;
+    private static final int REQ_CODE_AUTH_GOOGLE = 1;
 
     private ProgressDialog progressDialog;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -81,6 +90,39 @@ public class LoginFragment extends AuthBaseFragment implements GoogleApiClient.O
         if (getArguments() != null) {
         }
         getActivity().getWindow().setBackgroundDrawableResource(R.drawable.background_blur);
+
+        fbAuthHelper = new FBAuthHelper<>(this, this, FBAuthResult.class, REQ_CODE_AUTH_FB);
+        googleAuthHelper = new GPlusAuthHelper<>(this, this, GPlusAuthResult.class, REQ_CODE_AUTH_GOOGLE);
+
+        if (savedInstanceState == null) {
+
+        } else {
+
+            try {
+                fbResult = new FBAuthResult();
+                fbResult.parse(new JSONObject(savedInstanceState.getString(KEY_FB_RESULT)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                NYLog.e(e);
+                fbResult = null;
+            }
+
+            NYLog.e("Google 1");
+
+            try {
+                googleResult = new GPlusAuthResult();
+                googleResult.parse(new JSONObject(savedInstanceState.getString(KEY_GOOGLE_RESULT)));
+                NYLog.e("Google Auth : "+googleResult.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                NYLog.e(e);
+                googleResult = null;
+
+                NYLog.e("Google Auth : null");
+
+            }
+
+        }
     }
 
     @Override
@@ -242,6 +284,9 @@ public class LoginFragment extends AuthBaseFragment implements GoogleApiClient.O
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+        NYLog.e("CEK FB USER : "+result.toString());
+
         NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken);
         spcMgr.execute(req, onLoginSocmedRequest("fb"));
     }
@@ -280,6 +325,7 @@ public class LoginFragment extends AuthBaseFragment implements GoogleApiClient.O
 
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
+                if (progressDialog != null)progressDialog.cancel();
                 NYHelper.saveUserData(getActivity(), authReturn);
                 //mListener.checkLocation();
             }
@@ -293,8 +339,13 @@ public class LoginFragment extends AuthBaseFragment implements GoogleApiClient.O
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == REQ_CODE_AUTH_FB){
+            fbAuthHelper.onActivityResult(requestCode, resultCode, data);
+        } else if (requestCode == REQ_CODE_AUTH_GOOGLE) {
+            googleAuthHelper.onActivityResult(requestCode, resultCode, data);
+        } else  if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }

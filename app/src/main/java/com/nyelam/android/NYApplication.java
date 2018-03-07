@@ -8,6 +8,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LruCache;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.SdkCoreFlowBuilder;
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
@@ -45,6 +47,9 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
     @Override
     public void onCreate() {
         super.onCreate();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "goo-db", null);
         SQLiteDatabase db = helper.getWritableDatabase();

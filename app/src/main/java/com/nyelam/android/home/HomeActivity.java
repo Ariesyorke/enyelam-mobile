@@ -411,6 +411,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     @Override
     protected void onStart() {
         super.onStart();
+        NYHelper.printHashKey(this);
     }
 
     @Override

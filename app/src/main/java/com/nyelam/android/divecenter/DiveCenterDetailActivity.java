@@ -19,6 +19,7 @@ import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -104,10 +105,11 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
     private GoogleMap map;
     private LinearLayout mainLinearLayout;
-    private ProgressBar mainProgressBar, serviceProgressBar;
+    private ProgressBar mainProgressBar, serviceProgressBar, mapProgressBar;
     private TextView noLocationTextView, openMapTextView;
     private SupportMapFragment mapFragment;
     private LinearLayout mapLinearLayout, phoneNumberLinearLayout;
+    private FrameLayout mapFrameLayout;
 
     public boolean isEcoTrip() {
         return ecoTrip;
@@ -303,7 +305,12 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 }
 
                 if (diveCenter == null) diveCenter = new DiveCenter();
+
                 diveCenter = results;
+
+                mapProgressBar.setVisibility(View.GONE);
+                mapFrameLayout.setVisibility(View.VISIBLE);
+
                 serviceAdapter.setDiveCenter(results);
                 if (diveCenter != null){
 
@@ -438,6 +445,8 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         openMapTextView = (TextView) findViewById(R.id.open_map_textView);
         mapLinearLayout  = (LinearLayout) findViewById(R.id.map_linearLayout);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapProgressBar = (ProgressBar) findViewById(R.id.map_progress_bar);
+        mapFrameLayout = (FrameLayout) findViewById(R.id.map_frameLayout);
     }
 
     private void initBanner() {
