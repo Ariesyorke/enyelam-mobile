@@ -438,6 +438,12 @@ public class NYHelper {
         }
     }
 
+    public static final long getMinimumBirthdate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1900, Calendar.JANUARY, 1);
+        return calendar.getTimeInMillis();
+    }
+
     public static int integerToDP(Context myContext, Integer myInteger) {
         Resources r = myContext.getResources();
         int px = (int) TypedValue.applyDimension(

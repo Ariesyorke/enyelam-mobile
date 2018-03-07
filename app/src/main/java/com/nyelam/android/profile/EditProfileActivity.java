@@ -1,8 +1,11 @@
 package com.nyelam.android.profile;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,9 +40,13 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    private static final String DISPLAY_DATE_FORMAT = "dd MMM yyyy";
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private Toolbar toolbar;
@@ -49,7 +57,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     private TextView updateTextView, countryCodeTextView;
     private View birthDateButton, certificateDateButton;
     private NYSpinner countryCodeSpinner, genderSpinner;
-    private NYGenderSpinnerAdapter adapter;
+    private NYGenderSpinnerAdapter genderSpinnerAdapter;
     private String countryCodeId = "360";
     private CountryCodeAdapter countryCodeAdapter;
 
@@ -99,6 +107,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
             countryCodeAdapter = new CountryCodeAdapter(this);
 
+            genderSpinnerAdapter = new NYGenderSpinnerAdapter(this);
 
             DaoSession session = ((NYApplication) getApplicationContext()).getDaoSession();
             List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
@@ -108,7 +117,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             }
 
             countryCodeSpinner.setAdapter(countryCodeAdapter);
-
+            genderSpinner.setAdapter(genderSpinnerAdapter);
 
             if (countryCodes != null && countryCodes.size() > 0){
                 int pos = 0;
@@ -256,6 +265,120 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         progressDialog.setCancelable(false);
     }
 
+    private void showCertificatePicker(Date date) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        if (Build.VERSION.SDK_INT >= 21) {
+            final Dialog dialog = new Dialog(this);
+            dialog.setTitle(new SimpleDateFormat(DISPLAY_DATE_FORMAT).format(date));
+            dialog.setContentView(R.layout.view_date_picker);
+            final DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.date_picker);
+            View setButton = dialog.findViewById(R.id.set_button);
+            View cancelButton = dialog.findViewById(R.id.cancel_button);
+            dialog.setCancelable(true);
+            dialog.show();
+            datePicker.setMinDate(NYHelper.getMinimumBirthdate());
+            datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                    cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    dialog.setTitle(new SimpleDateFormat(DISPLAY_DATE_FORMAT).format(cal.getTime()));
+                }
+            });
+            setButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    Date birthday = cal.getTime();
+                    certificateDateEditText.setText(format.format(birthday));
+                    dialog.dismiss();
+                }
+            });
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(year, monthOfYear, dayOfMonth);
+                    SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    Date birthday = cal.getTime();
+                    certificateDateEditText.setText(format.format(birthday));
+                }
+            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            dialog.show();
+            dialog.setCancelable(true);
+            DatePicker datePicker = dialog.getDatePicker();
+            datePicker.setMinDate(NYHelper.getMinimumBirthdate());
+            dialog.getDatePicker().setCalendarViewShown(false);
+            dialog.getDatePicker().setSpinnersShown(true);
+        }
+    }
+
+    private void showBirthdatePicker(Date date) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        if (Build.VERSION.SDK_INT >= 21) {
+            final Dialog dialog = new Dialog(this);
+            dialog.setTitle(new SimpleDateFormat(DISPLAY_DATE_FORMAT).format(date));
+            dialog.setContentView(R.layout.view_date_picker);
+            final DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.date_picker);
+            View setButton = dialog.findViewById(R.id.set_button);
+            View cancelButton = dialog.findViewById(R.id.cancel_button);
+            dialog.setCancelable(true);
+            dialog.show();
+            datePicker.setMinDate(NYHelper.getMinimumBirthdate());
+            datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                    cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    dialog.setTitle(new SimpleDateFormat(DISPLAY_DATE_FORMAT).format(cal.getTime()));
+                }
+            });
+            setButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    Date birthday = cal.getTime();
+                    birthDateEditText.setText(format.format(birthday));
+                    dialog.dismiss();
+                }
+            });
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(year, monthOfYear, dayOfMonth);
+                    SimpleDateFormat format = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    Date birthday = cal.getTime();
+                    birthDateEditText.setText(format.format(birthday));
+                }
+            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            dialog.show();
+            dialog.setCancelable(true);
+            DatePicker datePicker = dialog.getDatePicker();
+            datePicker.setMinDate(NYHelper.getMinimumBirthdate());
+            dialog.getDatePicker().setCalendarViewShown(false);
+            dialog.getDatePicker().setSpinnersShown(true);
+        }
+    }
+
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -298,6 +421,8 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         }
 
     }
+
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

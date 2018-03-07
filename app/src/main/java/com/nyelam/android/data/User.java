@@ -1,6 +1,7 @@
 package com.nyelam.android.data;
 
-import org.apache.http.util.TextUtils;
+import android.text.TextUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +22,7 @@ public class User implements Parseable {
     private static String KEY_FIRSTNAME = "firstname";
     private static String KEY_LASTNAME = "lastname";
     private static String KEY_PHONE = "phone_number";
-    private static String KEY_BIRTHDATE = "birthdate";
+//    private static String KEY_BIRTHDATE = "birthdate";
     private static String KEY_EMAIL = "email";
     private static String KEY_PICTURE = "picture";
     private static String KEY_GENDER = "gender";
@@ -29,20 +30,49 @@ public class User implements Parseable {
     private static String KEY_REFERRAL_CODE = "referral_code";
     private static String KEY_ADDESS = "address";
     private static String KEY_FILE_PATH = "file_path";
-
+    private static String KEY_BIRTH_PLACE = "birth_place";
+    private static String KEY_BIRTH_DATE = "birth_date";
+    private static String KEY_CERTIFICATE_NUMBER = "certificate_number";
+    private static String KEY_CERTIFICATE_DATE = "certificate_date";
     private static String KEY_USERNAME = "username";
     private static String KEY_COVER = "cover";
     private static String KEY_COUNTRY_CODE = "country_code";
     private static String KEY_SOCIAL_MEDIA = "social_media";
 
-    private String userId, fullname, firstname, lastname, phone, email, picture, gender, refferalCode, address;
+    private String userId, fullname, firstname, lastname,
+            phone, email, picture, gender, refferalCode,
+            address, birthPlace, certificateNumber;
     private boolean isVerified;
     private Date birthdate;
     private File imageFile;
     private List<SocialMedia> socialMedia;
     private String username, cover;
     private CountryCode countryCode;
+    private Date certificateDate;
 
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+
+    public void setBirthPlace(String birthPlace) {
+        this.birthPlace = birthPlace;
+    }
+
+    public String getCertificateNumber() {
+        return certificateNumber;
+    }
+
+    public void setCertificateNumber(String certificateNumber) {
+        this.certificateNumber = certificateNumber;
+    }
+
+    public Date getCertificateDate() {
+        return certificateDate;
+    }
+
+    public void setCertificateDate(Date certificateDate) {
+        this.certificateDate = certificateDate;
+    }
 
     public String getUserId() {
         return userId;
@@ -186,6 +216,29 @@ public class User implements Parseable {
 
         if (obj == null) return;
 
+
+        try {
+            if(!obj.isNull(KEY_BIRTH_PLACE)) {
+                setBirthPlace(obj.getString(KEY_BIRTH_PLACE));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(!obj.isNull(KEY_CERTIFICATE_DATE)) {
+                long timestamp = obj.getLong(KEY_CERTIFICATE_DATE);
+                certificateDate = new Date(timestamp * 1000);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(!obj.isNull(KEY_CERTIFICATE_NUMBER)) {
+                setCertificateNumber(obj.getString(KEY_CERTIFICATE_NUMBER));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!obj.isNull(KEY_USER_ID)) {
                 setUserId(obj.getString(KEY_USER_ID));
@@ -263,8 +316,8 @@ public class User implements Parseable {
         } catch (JSONException e){e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_BIRTHDATE)) {
-                long timestamp = obj.optLong(KEY_BIRTHDATE) * 1000;
+            if (!obj.isNull(KEY_BIRTH_DATE)) {
+                long timestamp = obj.optLong(KEY_BIRTH_DATE) * 1000;
                 setBirthdate(new Date(timestamp));
             }
         } catch (Exception e){
@@ -325,6 +378,33 @@ public class User implements Parseable {
 
         JSONObject obj = new JSONObject();
 
+        try {
+            if(!TextUtils.isEmpty(getBirthPlace())) {
+                obj.put(KEY_BIRTH_PLACE, getBirthPlace());
+            } else {
+                obj.put(KEY_BIRTH_PLACE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(!TextUtils.isEmpty(getCertificateNumber())) {
+                obj.put(KEY_CERTIFICATE_NUMBER, getCertificateNumber());
+            } else {
+                obj.put(KEY_CERTIFICATE_NUMBER, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(getCertificateDate() != null) {
+                obj.put(KEY_CERTIFICATE_NUMBER, getCertificateDate().getTime()/1000);
+            } else {
+                obj.put(KEY_CERTIFICATE_NUMBER, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if (!TextUtils.isEmpty(getUserId())) {
                 obj.put(KEY_USER_ID, getUserId());
@@ -420,9 +500,9 @@ public class User implements Parseable {
         try {
             if (getBirthdate() != null) {
                 long timestamp = getBirthdate().getTime() / 1000;
-                obj.put(KEY_BIRTHDATE, timestamp);
+                obj.put(KEY_BIRTH_DATE, timestamp);
             } else  {
-                obj.put(KEY_BIRTHDATE, JSONObject.NULL);
+                obj.put(KEY_BIRTH_DATE, JSONObject.NULL);
             }
         } catch (JSONException e){e.printStackTrace();}
 
