@@ -58,6 +58,8 @@
                     android:maxLines="1"
                     android:inputType="textEmailAddress"
                     android:imeOptions="actionNext"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:backgroundTint="@color/selecetor_edittext_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -108,7 +110,7 @@
 
                     </RelativeLayout>
 
-                    <Spinner
+                    <com.nyelam.android.view.NYSpinner
                         android:id="@+id/country_code_spinner"
                         android:layout_alignParentBottom="true"
                         android:layout_width="wrap_content"
@@ -139,6 +141,8 @@
                             android:textSize="16sp"
                             android:inputType="phone"
                             android:singleLine="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:maxLines="1"
                             android:imeOptions="actionNext"
                             android:hint="@string/phone_number_hint"/>
@@ -161,6 +165,8 @@
                     android:singleLine="true"
                     android:maxLines="1"
                     android:imeOptions="actionNext"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:backgroundTint="@color/selecetor_edittext_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -181,6 +187,8 @@
                     android:singleLine="true"
                     android:maxLines="1"
                     android:imeOptions="actionDone"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:backgroundTint="@color/selecetor_edittext_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

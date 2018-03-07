@@ -20,6 +20,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.profile.ProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 
@@ -80,10 +81,12 @@ public class NYMenuDrawerFragment extends Fragment {
             public void onClick(View v)
             {
                 //mListener.onIntentCareer();
-                if (getActivity() instanceof HomeActivity){
-                    HomeActivity activity = (HomeActivity) getActivity();
-                    activity.setSelectedTab(3);
-                }
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+//                if (getActivity() instanceof HomeActivity) {
+//                    HomeActivity activity = (HomeActivity) getActivity();
+////                    activity.setSelectedTab(3);
+//                }
 
             }
         });

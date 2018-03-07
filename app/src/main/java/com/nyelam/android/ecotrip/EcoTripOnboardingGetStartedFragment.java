@@ -2,6 +2,7 @@ package com.nyelam.android.ecotrip;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.City;
 import com.nyelam.android.data.Contact;
@@ -56,12 +61,40 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         backgroundImageView = (ImageView)view.findViewById(R.id.background_imageView);
         bookNowButton = view.findViewById(R.id.book_eco_trip_button);
+        String imageUri = "drawable://" + R.drawable.eco_trip_5_bg;
+        final NYApplication application = (NYApplication) getActivity().getApplication();
+        if(application.getCache(imageUri) != null) {
+            Bitmap bitmap = application.getCache(imageUri);
+            backgroundImageView.setImageBitmap(bitmap);
+        } else {
+            ImageLoader.getInstance().displayImage("drawable://" + backgroundResource, backgroundImageView, NYHelper.getCompressedOption(getActivity()), new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    application.addCache(imageUri, loadedImage);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            });
+        }
         bookNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO HARCODE ECOTRIP!!
                 Intent intent = new Intent(getActivity(), DoDiveActivity.class);
                 intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+                getActivity().finish();
                 startActivity(intent);
             }
         });

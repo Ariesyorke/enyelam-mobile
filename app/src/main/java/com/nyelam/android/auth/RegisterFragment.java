@@ -31,6 +31,7 @@ import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYRegisterRequest;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -43,7 +44,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private ProgressDialog progressDialog;
-    protected Spinner countryCodeSpinner;
+    protected NYSpinner countryCodeSpinner;
     private CountryCodeAdapter countryCodeAdapter;
     private EditText emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
     private TextView registerTextView, loginTextView, plusTextView;
@@ -148,10 +149,22 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
         List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
 
-        countryCodeSpinner = (Spinner)v.findViewById(R.id.country_code_spinner);
+        countryCodeSpinner = (NYSpinner) v.findViewById(R.id.country_code_spinner);
         countryCodeSpinner.setAdapter(countryCodeAdapter);
         countryCodeSpinner.setOnItemSelectedListener(this);
 
+        countryCodeSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+            @Override
+            public void onSpinnerOpened(Spinner spinner) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+            }
+
+            @Override
+            public void onSpinnerClosed(Spinner spinner) {
+
+            }
+        });
         if (countryCodes != null && countryCodes.size() > 0){
             NYLog.e("tes isi DAO Country Code : "+countryCodes.toString());
             countryCodeAdapter.addCountryCodes(countryCodes);

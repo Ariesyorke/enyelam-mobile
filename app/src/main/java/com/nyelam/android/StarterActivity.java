@@ -36,6 +36,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             R.drawable.eco_trip_2_bg,
             R.drawable.eco_trip_3_bg,
             R.drawable.eco_trip_4_bg,
+            R.drawable.eco_trip_5_bg,
             R.drawable.background_blur
     };
     private final int SPLASH_TIME = 3000;

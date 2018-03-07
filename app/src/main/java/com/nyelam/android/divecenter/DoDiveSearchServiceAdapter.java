@@ -135,7 +135,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
 
                 totalDiveTextView.setText("Total Dives : "+String.valueOf(diveService.getTotalDives()));
-                totalDiveSpotTextView.setText("Total Dives Spot : "+String.valueOf(diveService.getTotalDiveSpots()));
+                totalDiveSpotTextView.setText("Dive Spot Option : "+String.valueOf(diveService.getTotalDiveSpots()));
 
                 /*if (diveService.getDiveSpots() != null){
                     totalDiveSpotTextView.setText("Total Dive Spot : "+String.valueOf(diveService.getDiveSpots().size()));
@@ -197,7 +197,6 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
-            NYLog.e("BEFORE DIVE CENTER " + diveCenter);
             if (diveCenter != null) {
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
             }

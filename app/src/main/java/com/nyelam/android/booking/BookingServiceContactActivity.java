@@ -1,5 +1,6 @@
 package com.nyelam.android.booking;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ProviderInfo;
 import android.support.design.widget.TextInputEditText;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,6 +26,7 @@ import com.nyelam.android.data.dao.NYCountryCode;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.view.NYSpinner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +41,7 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
     private TextView saveTextView, plusTextView;
     private TextInputEditText nameEditText, emailEditText;
     private EditText phoneEditText;
-    private Spinner countryCodeSpinner;
+    private NYSpinner countryCodeSpinner;
     private EditText phoneNumberEditText;
     private RelativeLayout spinnerRelativeLayout;
     private CountryCodeAdapter countryCodeAdapter;
@@ -100,12 +103,23 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
         emailEditText.setKeyListener(null);
         saveTextView = (TextView) findViewById(R.id.save_contact_textView);
         plusTextView = (TextView) findViewById(R.id.plus_textView);
-        countryCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
+        countryCodeSpinner = (NYSpinner) findViewById(R.id.country_code_spinner);
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
         spinnerRelativeLayout = (RelativeLayout) findViewById(R.id.spinner_relativeLayout);
 
-        countryCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
         countryCodeSpinner.setOnItemSelectedListener(this);
+        countryCodeSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+            @Override
+            public void onSpinnerOpened(Spinner spinner) {
+                InputMethodManager imm = (InputMethodManager)BookingServiceContactActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+            }
+
+            @Override
+            public void onSpinnerClosed(Spinner spinner) {
+
+            }
+        });
     }
 
     private void getExtra() {
@@ -177,7 +191,6 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
         if (countryCode != null && NYHelper.isStringNotEmpty(countryCode.getId()) && NYHelper.isStringNotEmpty(countryCode.getCountryCode())){
             String countryCodeId = countryCode.getId();
             plusTextView.setText("+ "+countryCode.getCountryNumber());
-            //this.countryCodeId = countryCodeId;
             this.countryCode = countryCode;
         }
 
