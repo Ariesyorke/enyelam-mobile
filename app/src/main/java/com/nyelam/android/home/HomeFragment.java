@@ -204,8 +204,6 @@ public class HomeFragment extends Fragment {
         banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "captio", "http://www.nyelam.com"));
         banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
         banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_3), "captio", "http://www.nyelam.com"));
-        banners.add(new Banner("4", "drawable://" + String.valueOf(R.drawable.banner_4), "captio", "http://www.nyelam.com"));
-        banners.add(new Banner("5", "drawable://" + String.valueOf(R.drawable.banner_5), "captio", "http://www.nyelam.com"));
         bannerList.setList(banners);
         //input data data
         bannerViewPagerAdapter.setBannerList(bannerList);
