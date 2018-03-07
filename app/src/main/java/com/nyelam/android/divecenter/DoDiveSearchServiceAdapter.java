@@ -15,13 +15,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.Location;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.font.StrikethroughTextView;
+import com.nyelam.android.view.font.NYStrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,13 +103,18 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView serviceImageView;
+        private TextView locationTextView;
         private TextView serviceNameTextView;
         private TextView diveCenterNameTextView;
-        private StrikethroughTextView priceStrikethroughTextView;
+        private NYStrikethroughTextView priceStrikethroughTextView;
         private TextView priceTextView;
         private TextView totalDiveTextView;
         private TextView totalDiveSpotTextView;
+        private TextView totalDayTextView;
         private RatingBar ratingBar;
+        private TextView ratingTextView;
+        private TextView visitedTextView;
+        private ImageView licenseImageView;
         private View itemView;
         private DiveService diveService;
 
@@ -115,13 +122,18 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             super(itemView);
 
             serviceImageView = (ImageView) itemView.findViewById(R.id.service_imageView);
+            locationTextView = (TextView) itemView.findViewById(R.id.location_textView);
             serviceNameTextView = (TextView) itemView.findViewById(R.id.service_name_textView);
             diveCenterNameTextView = (TextView) itemView.findViewById(R.id.dive_center_name_textView);
-            priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
+            priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
             totalDiveTextView = (TextView) itemView.findViewById(R.id.total_dive_textView);
             totalDiveSpotTextView = (TextView) itemView.findViewById(R.id.total_dive_spot_textView);
+            totalDayTextView = (TextView) itemView.findViewById(R.id.total_day_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
+            ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
+            visitedTextView = (TextView) itemView.findViewById(R.id.visited_textView);
+            licenseImageView = (ImageView) itemView.findViewById(R.id.license_imageView);
 
             this.itemView = itemView;
         }
@@ -131,17 +143,64 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (diveService != null){
 
+                if (diveService.getDiveCenter() != null && diveService.getDiveCenter().getContact() != null &&
+                        diveService.getDiveCenter().getContact().getLocation() != null ){
+
+                    String locationString = "";
+                    Location location = diveService.getDiveCenter().getContact().getLocation();
+                    if (location.getCity() != null && NYHelper.isStringNotEmpty(location.getCity().getName())){
+                        locationString = locationString+", "+location.getCity().getName();
+                    }
+
+                    if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())){
+                        locationString = locationString+", "+location.getProvince().getName();
+                    }
+
+                    if (NYHelper.isStringNotEmpty(locationString)){
+                        locationTextView.setText(locationString);
+                    } else {
+                        locationTextView.setText("-");
+                    }
+
+                }
+
                 if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
                 if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
 
-                totalDiveTextView.setText("Total Dives : "+String.valueOf(diveService.getTotalDives()));
-                totalDiveSpotTextView.setText("Dive Spot Option : "+String.valueOf(diveService.getTotalDiveSpots()));
+                if (diveService.getTotalDives() > 1){
+                    totalDiveTextView.setText(String.valueOf(diveService.getTotalDives())+" Dives");
+                } else {
+                    totalDiveTextView.setText(String.valueOf(diveService.getTotalDives())+" Dive");
+                }
+
+                if (diveService.getTotalDiveSpots() > 1){
+                    totalDiveSpotTextView.setText(String.valueOf(diveService.getTotalDiveSpots())+" Dive Spot Options");
+                } else {
+                    totalDiveSpotTextView.setText(String.valueOf(diveService.getTotalDiveSpots())+" Dive Spot Option");
+                }
+
+                if (diveService.getTotalDiveSpots() > 1){
+                    totalDayTextView.setText(String.valueOf(diveService.getDays())+" Days");
+                } else {
+                    totalDayTextView.setText(String.valueOf(diveService.getDays())+" Day");
+                }
+
+                visitedTextView.setText(String.valueOf(diveService.getVisited())+" Visited");
+
+
+                if (diveService.isLicense()){
+                    licenseImageView.setImageResource(R.drawable.ic_license_orange);
+                } else {
+                    licenseImageView.setImageResource(R.drawable.ic_license_grey);
+                }
 
                 /*if (diveService.getDiveSpots() != null){
                     totalDiveSpotTextView.setText("Total Dive Spot : "+String.valueOf(diveService.getDiveSpots().size()));
                 }*/
 
                 ratingBar.setRating(diveService.getRating());
+                ratingTextView.setText(String.valueOf(diveService.getRating()));
+
 
                 if (diveService.getSpecialPrice() < diveService.getNormalPrice() && diveService.getSpecialPrice() > 0){
                     priceTextView.setText(NYHelper.priceFormatter(diveService.getSpecialPrice()));
@@ -153,6 +212,14 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
 
                 //SET IMAGE
+                NYApplication application = (NYApplication) activity.getApplication();
+                Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+                if(b != null) {
+                    serviceImageView.setImageBitmap(b);
+                } else {
+                    serviceImageView.setImageResource(R.drawable.bg_placeholder);
+                }
+
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                 if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
                     ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
@@ -163,7 +230,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
                         @Override
                         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            serviceImageView.setImageResource(R.drawable.logo_nyelam);
+
                         }
 
                         @Override
@@ -174,14 +241,14 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
                         @Override
                         public void onLoadingCancelled(String imageUri, View view) {
-                            serviceImageView.setImageResource(R.drawable.logo_nyelam);
+
                         }
                     });
 
                     ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
 
                 } else {
-                    serviceImageView.setImageResource(R.drawable.logo_nyelam);
+                    serviceImageView.setImageResource(R.drawable.bg_placeholder);
                 }
 
             }
@@ -197,6 +264,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
+            NYLog.e("BEFORE DIVE CENTER " + diveCenter);
             if (diveCenter != null) {
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
             }

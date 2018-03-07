@@ -22,7 +22,7 @@ import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Facilities;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.font.StrikethroughTextView;
+import com.nyelam.android.view.font.NYStrikethroughTextView;
 
 public class DetailServiceFragment extends Fragment {
 
@@ -36,7 +36,7 @@ public class DetailServiceFragment extends Fragment {
     private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView;
     private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout;
-    private StrikethroughTextView priceStrikeThroughTextView;
+    private NYStrikethroughTextView priceStrikeThroughTextView;
 
     public DetailServiceFragment() {
         // Required empty public constructor
@@ -88,7 +88,7 @@ public class DetailServiceFragment extends Fragment {
         addressTextView = (TextView) v.findViewById(R.id.address_textView);
         phoneNumberTextView = (TextView) v.findViewById(R.id.phone_number_textView);
 
-        priceStrikeThroughTextView = (StrikethroughTextView) v.findViewById(R.id.price_strikethrough_textView);
+        priceStrikeThroughTextView = (NYStrikethroughTextView) v.findViewById(R.id.price_strikethrough_textView);
         priceTextView = (TextView) v.findViewById(R.id.price_textView);
         descriptionTextView = (TextView) v.findViewById(R.id.description_textView);
         licenseTextView = (TextView) v.findViewById(R.id.license_textView);
@@ -149,6 +149,8 @@ public class DetailServiceFragment extends Fragment {
 
             totalDivesTextView.setText(": "+String.valueOf(service.getTotalDives()));
             //totalDiveSpotsTextView.setText(": "+String.valueOf(service.getTotalDiveSpots()));
+
+
             totalDiveSpotsTextView.setText(": 0");
             if (service.getDiveSpots() != null)totalDiveSpotsTextView.setText(": "+String.valueOf(service.getDiveSpots().size()));
 

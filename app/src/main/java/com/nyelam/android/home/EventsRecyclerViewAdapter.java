@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,7 +17,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.font.StrikethroughTextView;
+import com.nyelam.android.view.font.NYStrikethroughTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         private ImageView eventImageView;
         private TextView nameTextView;
         private TextView locationTextView;
-        private StrikethroughTextView priceStrikethroughTextView;
+        private NYStrikethroughTextView priceStrikethroughTextView;
         private TextView priceTextView;
         private View itemView;
         private Event event;
@@ -98,7 +97,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             eventImageView = (ImageView) itemView.findViewById(R.id.event_imageView);
             nameTextView = (TextView) itemView.findViewById(R.id.name_textView);
             locationTextView = (TextView) itemView.findViewById(R.id.location_textView);
-            priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
+            priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
             priceTextView = (TextView) itemView.findViewById(R.id.price_textView);
             this.itemView = itemView;
         }

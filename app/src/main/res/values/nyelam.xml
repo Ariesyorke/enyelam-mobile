@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="api_ver">1</integer>
-    <string name="google_public_api_key">AIzaSyDVv3hzB0qfY3oW0NXJtQMtx4SYw3re9_k</string>
+    <string name="google_public_api_key">AIzaSyCfy-D36GMOD5bvlltoD8G4VHkdgg-MQ9Y</string>
+
+    <string name="client_side">359054383364-tpklucpomuel73c5ods0kj6klij2f59m.apps.googleusercontent.com</string>
+    <!--<string name="client_side">359054383364-knqg9h7pp2ftva0324sbodoe453ro3q2.apps.googleusercontent.com</string>-->
+    <string name="facebook_app_id">195409427880541</string>
+    <string name="google_sender_id">359054383364</string>
+    <string name="server_client_id">204601006116-rk847colmqa8r6fio72nt6vtajo8i55r.apps.googleusercontent.com</string>
+    <string name="alternative_client_id">204601006116-rk847colmqa8r6fio72nt6vtajo8i55r.apps.googleusercontent.com</string>
+
 
     <string name="client_key">Mid-client-LmqmZSunNywXQf-f</string>
     <string name="client_key_development">SB-Mid-client-_2uec0T1LQec4odt</string>
@@ -14,6 +22,7 @@
     <!-- STAGING -->
     <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
     <string name="api_path_login">api/user/login</string>
+    <string name="api_path_socmed_login">api/user/socmedlogin/</string>
     <string name="api_path_register">api/user/register</string>
     <string name="api_path_forgot_password">api/user/forgotpass</string>
     <string name="api_path_master_country">api/master/country</string>

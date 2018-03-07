@@ -6,6 +6,9 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +19,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +40,8 @@ import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
 
 import java.io.ByteArrayOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -49,11 +55,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/4/2018.
  */
 
 public class NYHelper {
+
+    public static final String GK_SOCMED_TYPE_FACEBOOK = "facebook";
+    public static final String GK_SOCMED_TYPE_GOOGLE = "google";
 
     public static final String ASC = "asc";
     public static final String SEARCH_RESULT = "search_result";
@@ -97,6 +108,15 @@ public class NYHelper {
     public static final int REQ_LOGIN = 41;
     public static final int REQ_CART_EXPIRED = 1405;
     public static final String TRANSACTION_RESPONSE = "transaction_response";
+    public static final String EMAIL = "email";
+    public static final String FIRST_NAME = "first_name";
+    public static final String LAST_NAME = "last_name";
+    public static final String SOCMED_TYPE = "socmed_type";
+    public static final String ID = "id";
+    public static final String ACCESS_TOKEN = "access_token";
+    public static final String PROFILE_PICTURE = "profile_picture";
+    public static final String RESULT = "result";
+
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));
@@ -552,5 +572,22 @@ public class NYHelper {
         Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
         return bitmap;
     }
+
+    public static void printHashKey(Context pContext) {
+        try {
+            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashKey = new String(Base64.encode(md.digest(), 0));
+                Log.i(TAG, "printHashKey() Hash Key: " + hashKey);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(TAG, "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e(TAG, "printHashKey()", e);
+        }
+    }
+
 
 }

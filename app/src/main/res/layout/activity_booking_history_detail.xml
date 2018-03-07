@@ -58,7 +58,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/main_linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:padding="@dimen/padding"
-                        android:text="#1828281"
+                        android:text="-"
                         android:textColor="@color/colorWhite" />
 
 
@@ -168,7 +168,7 @@
                             android:layout_height="20dp"
                             android:isIndicator="true"
                             android:numStars="5"
-                            android:rating="4"
+                            android:rating="0"
                             android:stepSize="1.0"
                             android:layout_gravity="start" />
                         <com.nyelam.android.view.font.NYTextView

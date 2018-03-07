@@ -13,10 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
@@ -28,13 +26,11 @@ import com.nyelam.android.data.Module;
 import com.nyelam.android.data.ModuleDiveSpot;
 import com.nyelam.android.data.ModuleEvent;
 import com.nyelam.android.data.ModuleService;
-import com.nyelam.android.data.NYEventsModule;
-import com.nyelam.android.data.NYHotOffersModule;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.view.font.StrikethroughTextView;
+import com.nyelam.android.view.font.NYStrikethroughTextView;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -442,7 +438,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 final ImageView eventImageView = (ImageView) view.findViewById(R.id.service_imageView);
                 TextView nameTextView = (TextView) view.findViewById(R.id.name_textView);
                 TextView locationTextView = (TextView) view.findViewById(R.id.location_textView);
-                StrikethroughTextView priceStrikethroughTextView = (StrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
+                NYStrikethroughTextView priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
                 TextView priceTextView = (TextView) view.findViewById(R.id.price_textView);
                 TextView dateTextView = (TextView) view.findViewById(R.id.date_textView);
                 if (diveService != null) {
