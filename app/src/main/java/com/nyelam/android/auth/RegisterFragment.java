@@ -19,6 +19,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.danzoye.lib.auth.facebook.FBAuthResult;
+import com.danzoye.lib.auth.google.GPlusAuthResult;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -33,8 +35,12 @@ import com.nyelam.android.http.NYRegisterRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +55,10 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
     private EditText emailEditText, phoneNumberEditText, passwordEditText, confirmPasswordEditText;
     private TextView registerTextView, loginTextView, plusTextView;
 
+    private FBAuthResult fbAuthResult;
+    private GPlusAuthResult gPlusAuthResult;
+    private String socmedType;
+
     public RegisterFragment() {
         // Required empty public constructor
     }
@@ -61,10 +71,51 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
         return fragment;
     }
 
+    public static RegisterFragment newInstance(Bundle args) {
+        RegisterFragment fragment = new RegisterFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            Bundle b = getArguments();
+
+            NYLog.e("CEK FB ARGS : "+b.toString());
+
+            if (b.get(NYHelper.SOCMED_TYPE) != null && NYHelper.isStringNotEmpty(b.getString(NYHelper.SOCMED_TYPE))){
+
+                if (b.get(NYHelper.SOCMED_TYPE) != null && b.getString(NYHelper.SOCMED_TYPE).equals(NYHelper.GK_SOCMED_TYPE_FACEBOOK)){
+
+                    socmedType = b.getString(NYHelper.SOCMED_TYPE);
+
+                    try {
+                        JSONObject obj = new JSONObject(b.getString(NYHelper.RESULT));
+                        fbAuthResult = new FBAuthResult();
+                        fbAuthResult.parse(obj);
+
+                        NYLog.e("CEK FB ARGS : "+fbAuthResult.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else if (b.get(NYHelper.SOCMED_TYPE) != null && b.getString(NYHelper.SOCMED_TYPE).equals(NYHelper.GK_SOCMED_TYPE_GOOGLE)){
+
+                    socmedType = b.getString(NYHelper.SOCMED_TYPE);
+
+                    try {
+                        JSONObject obj = new JSONObject(b.getString(NYHelper.RESULT));
+                        gPlusAuthResult = new GPlusAuthResult();
+                        gPlusAuthResult.parse(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
         }
     }
 
@@ -79,7 +130,19 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        initExtra();
         initControl();
+    }
+
+    private void initExtra() {
+
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+
+        if (fbAuthResult != null){
+            if (NYHelper.isStringNotEmpty(fbAuthResult.email))emailEditText.setText(fbAuthResult.email);
+        } else if (gPlusAuthResult != null){
+            if (NYHelper.isStringNotEmpty(gPlusAuthResult.email))emailEditText.setText(gPlusAuthResult.email);
+        }
     }
 
     private void initControl() {
@@ -116,9 +179,19 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
                 } else if (!password.equals(confirmPassword)){
                     Toast.makeText(getActivity(), getString(R.string.warn_field_confirm_password_didnt_match), Toast.LENGTH_SHORT).show();
                 } else {
+
                     progressDialog.show();
-                    NYRegisterRequest req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  null, null, null, null);
+                    NYRegisterRequest req;
+                    if (fbAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_FACEBOOK)){
+                        req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, fbAuthResult.id, fbAuthResult.accessToken, fbAuthResult.profilePictureUrl);
+                    } else if (gPlusAuthResult != null && socmedType.equals(NYHelper.GK_SOCMED_TYPE_GOOGLE)){
+                        req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  socmedType, gPlusAuthResult.id, gPlusAuthResult.accessToken, gPlusAuthResult.profilePictureUrl);
+                    } else {
+                        req = new NYRegisterRequest(getActivity(), null, email, phoneNumber,countryCodeId, password, confirmPassword, null,  null, null, null, null);
+                    }
+
                     spcMgr.execute(req, onRegisterRequest());
+
                 }
             }
         });
@@ -129,6 +202,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
     }
+
 
     private void initView(View v) {
         emailEditText = (EditText) v.findViewById(R.id.email_editText);

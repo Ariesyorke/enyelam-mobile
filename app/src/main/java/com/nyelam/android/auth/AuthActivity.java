@@ -3,12 +3,14 @@ package com.nyelam.android.auth;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.danzoye.lib.auth.facebook.FBAuthResult;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.storage.LoginStorage;
@@ -71,6 +73,44 @@ public class AuthActivity extends BasicActivity implements
     @Override
     public void onRegisterRequest(ProgressDialog progressDialog, String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl) {
 
+        /*if (progressDialog != null)progressDialog.dismiss();
+
+        NYLog.e("CEK FB 2");
+
+        FragmentTransaction transaction =  getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in, android.R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out);
+
+        Bundle args = new Bundle();
+        args.putString(NYHelper.EMAIL, email);
+        args.putString(NYHelper.FIRST_NAME, firstName);
+        args.putString(NYHelper.LAST_NAME, lastName);
+        args.putString(NYHelper.SOCMED_TYPE, socmedType);
+        args.putString(NYHelper.ID, id);
+        args.putString(NYHelper.ACCESS_TOKEN, accessToken);
+        args.putString(NYHelper.PROFILE_PICTURE, profilePictureUrl);
+
+        transaction.replace(R.id.fragment_container, RegisterFragment.newInstance(args));
+        transaction.addToBackStack(LoginFragment.class.getName());
+        transaction.commit();*/
+    }
+
+
+    @Override
+    public void onRegisterRequest(ProgressDialog progressDialog, String socmedType, FBAuthResult fbAuthResult) {
+        if (progressDialog != null)progressDialog.dismiss();
+
+        NYLog.e("CEK FB 2");
+
+        FragmentTransaction transaction =  getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in, android.R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out);
+
+        Bundle args = new Bundle();
+        args.putString(NYHelper.RESULT, fbAuthResult.toString());
+        args.putString(NYHelper.SOCMED_TYPE, socmedType);
+
+        transaction.replace(R.id.fragment_container, RegisterFragment.newInstance(args));
+        transaction.addToBackStack(LoginFragment.class.getName());
+        transaction.commit();
     }
 
     @Override

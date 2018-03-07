@@ -285,6 +285,8 @@ public class LoginFragment extends AuthBaseFragment implements
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        fbResult = result;
+
         NYLog.e("CEK FB USER : "+result.toString());
 
         NYLoginSocmedRequest req = new NYLoginSocmedRequest(getActivity(), NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken);
@@ -310,8 +312,13 @@ public class LoginFragment extends AuthBaseFragment implements
                     progressDialog.cancel();
                     //progressDialog.cancel();
                     if (type.equals("fb")) {
+
+                        NYLog.e("CEK FB 1 ");
+                        NYLog.e("CEK FB 1 "+fbResult.toString());
+
                         //mListener.intentRegister(fbResult.email, fbResult.firstName, fbResult.lastName, GKHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
-                        mListener.onRegisterRequest(progressDialog, fbResult.email, fbResult.firstName, fbResult.lastName, NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
+                        //mListener.onRegisterRequest(progressDialog, fbResult.email, fbResult.firstName, fbResult.lastName, NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult.id, fbResult.accessToken, fbResult.profilePictureUrl);
+                        mListener.onRegisterRequest(progressDialog,  NYHelper.GK_SOCMED_TYPE_FACEBOOK, fbResult);
                     } else if (type.equals("google")) {
                         //mListener.intentRegister(googleResult.email, googleResult.firstName, googleResult.lastName, GKHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken, googleResult.profilePictureUrl);
                         mListener.onRegisterRequest(progressDialog, googleResult.email, googleResult.firstName, googleResult.lastName, NYHelper.GK_SOCMED_TYPE_GOOGLE, googleResult.id, googleResult.accessToken, googleResult.profilePictureUrl);
@@ -423,6 +430,7 @@ public class LoginFragment extends AuthBaseFragment implements
         void isLoginSuccess(boolean success);
         void intentRegister(String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
         void onRegisterRequest(ProgressDialog progressDialog, String email, String firstName, String lastName, String socmedType, String id, String accessToken, String profilePictureUrl);
+        void onRegisterRequest(ProgressDialog progressDialog, String socmedType, FBAuthResult fbAuthResult);
         void checkLocation();
         void intentForgotPassword();
     }

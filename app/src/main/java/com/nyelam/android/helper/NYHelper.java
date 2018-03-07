@@ -108,6 +108,15 @@ public class NYHelper {
     public static final int REQ_LOGIN = 41;
     public static final int REQ_CART_EXPIRED = 1405;
     public static final String TRANSACTION_RESPONSE = "transaction_response";
+    public static final String EMAIL = "email";
+    public static final String FIRST_NAME = "first_name";
+    public static final String LAST_NAME = "last_name";
+    public static final String SOCMED_TYPE = "socmed_type";
+    public static final String ID = "id";
+    public static final String ACCESS_TOKEN = "access_token";
+    public static final String PROFILE_PICTURE = "profile_picture";
+    public static final String RESULT = "result";
+
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));
