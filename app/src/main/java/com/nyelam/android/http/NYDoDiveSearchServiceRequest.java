@@ -8,6 +8,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.SearchResultList;
+import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,6 +50,10 @@ public class NYDoDiveSearchServiceRequest extends NYBasicRequest<DiveServiceList
             addQuery(POST_SPOT_ID, diverId);
         } else if (!TextUtils.isEmpty(type) && type.equals("2")){
             addQuery(POST_CATEGORY_ID, diverId);
+        } else if (!TextUtils.isEmpty(type) && type.equals("5")){
+            addQuery(POST_PROVINCE_ID, diverId);
+        } else {
+            addQuery(POST_CITY_ID, diverId);
         }
 
         /*if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(diverId)) {

@@ -369,6 +369,10 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 apiPath = getString(R.string.api_path_dodive_service_list_by_divespot);
             } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
                 apiPath = getString(R.string.api_path_dodive_service_list_by_category);
+            } else if (NYHelper.isStringNotEmpty(type) && type.equals("5")){
+                apiPath = getString(R.string.api_path_dodive_service_list_by_province);
+            } else {
+                apiPath = getString(R.string.api_path_dodive_service_list_by_city);
             }
 
             if(isEcoTrip()) {
