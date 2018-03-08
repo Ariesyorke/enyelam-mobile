@@ -2,6 +2,8 @@ package com.nyelam.android.home;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.nyelam.android.R;
 
@@ -15,6 +17,7 @@ public class TermsAndConditionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms_and_condition);
 
+        initToolbar();
 
         String agreementText = "<ol type=\"a\">\n" +
                 " <br/> <b><li>CONDITIONS OF USE</li></b>\n" +
@@ -61,6 +64,26 @@ public class TermsAndConditionActivity extends AppCompatActivity {
                 new HtmlHttpImageGetter(htmlTextView));
 
 
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

@@ -170,6 +170,20 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         }, 300);
     }
 
+    @Override
+    public void openTermsAndConditions() {
+        if (drawerLayout.isDrawerOpen(Gravity.END)) {
+            drawerLayout.closeDrawer(Gravity.END);
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(HomeActivity.this, TermsAndConditionActivity.class);
+                startActivity(intent);
+            }
+        }, 300);
+    }
+
     public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
         private static final int FRAGMENT_COUNT = 2;
         private Map<Integer, String> fragmentTags;

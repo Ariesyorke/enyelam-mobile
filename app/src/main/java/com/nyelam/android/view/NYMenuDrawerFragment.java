@@ -151,8 +151,7 @@ public class NYMenuDrawerFragment extends Fragment {
         termsAndConditionLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), TermsAndConditionActivity.class);
-                startActivity(intent);
+                mListener.openTermsAndConditions();
             }
         });
     }
@@ -160,6 +159,7 @@ public class NYMenuDrawerFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void openLoginRegister();
         void openAccount();
+        void openTermsAndConditions();
         //void onIntentCareer();
         //void onIntentVideos();
         // TODO: Update argument type and name
