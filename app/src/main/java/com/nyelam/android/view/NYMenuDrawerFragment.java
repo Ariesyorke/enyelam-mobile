@@ -81,8 +81,7 @@ public class NYMenuDrawerFragment extends Fragment {
             public void onClick(View v)
             {
                 //mListener.onIntentCareer();
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                startActivity(intent);
+                mListener.openAccount();
 //                if (getActivity() instanceof HomeActivity) {
 //                    HomeActivity activity = (HomeActivity) getActivity();
 ////                    activity.setSelectedTab(3);
@@ -94,9 +93,8 @@ public class NYMenuDrawerFragment extends Fragment {
         loginLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AuthActivity.class);
-                intent.putExtra(NYHelper.IS_MAIN_ACTIVITY, true);
-                getActivity().startActivity(intent);
+                mListener.openLoginRegister();
+
             }
         });
 
@@ -150,6 +148,8 @@ public class NYMenuDrawerFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
+        void openLoginRegister();
+        void openAccount();
         //void onIntentCareer();
         //void onIntentVideos();
         // TODO: Update argument type and name

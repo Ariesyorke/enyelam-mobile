@@ -20,95 +20,95 @@
     <!--<string name="host_url">http://nyelam-adam.dantech.id/</string>-->
 
     <!-- STAGING -->
-    <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
+    <string name="host_url">http://nyelam.dantech.id/</string>
 
     <!-- PRODUCTION -->
-    <string name="host_url">https://api.e-nyelam.com/</string>
+    <!--<string name="host_url">https://api.e-nyelam.com/</string>-->
 
     <!-- API STAGING AND DEVELOPMENT -->
-    <!--<string name="api_path_login">api/user/login</string>-->
-    <!--<string name="api_path_socmed_login">api/user/socmedlogin/</string>-->
-    <!--<string name="api_path_register">api/user/register</string>-->
-    <!--<string name="api_path_forgot_password">api/user/forgotpass</string>-->
-    <!--<string name="api_path_master_country">api/master/country</string>-->
-    <!--<string name="api_path_master_category">api/service/masterCategory</string>-->
-    <!--<string name="api_path_master_dodive_search">api/master/dodive/search</string>-->
-    <!--<string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>-->
-    <!--<string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>-->
-    <!--<string name="api_path_dodive_search_by_country">api/dodive/service/country</string>-->
-    <!--<string name="api_path_dodive_search_by_province">api/dodive/service/province</string>-->
-    <!--<string name="api_path_dodive_search_by_city">api/dodive/service/city</string>-->
+    <string name="api_path_login">api/user/login</string>
+    <string name="api_path_socmed_login">api/user/socmedlogin/</string>
+    <string name="api_path_register">api/user/register</string>
+    <string name="api_path_forgot_password">api/user/forgotpass</string>
+    <string name="api_path_master_country">api/master/country</string>
+    <string name="api_path_master_category">api/service/masterCategory</string>
+    <string name="api_path_master_dodive_search">api/master/dodive/search</string>
+    <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>
+    <string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>
+    <string name="api_path_dodive_search_by_country">api/dodive/service/country</string>
+    <string name="api_path_dodive_search_by_province">api/dodive/service/province</string>
+    <string name="api_path_dodive_search_by_city">api/dodive/service/city</string>
 
 
-    <!--<string name="api_path_dodive_search_dive_center_by_category">api/dodive/center/category</string>-->
-    <!--<string name="api_path_dodive_search_dive_center_by_spot">api/dodive/center/divespot</string>-->
-    <!--<string name="api_path_dodive_search_dive_center_by_province">api/dodive/center/province</string>-->
-    <!--<string name="api_path_dodive_search_dive_center_by_city">api/dodive/center/city</string>-->
+    <string name="api_path_dodive_search_dive_center_by_category">api/dodive/center/category</string>
+    <string name="api_path_dodive_search_dive_center_by_spot">api/dodive/center/divespot</string>
+    <string name="api_path_dodive_search_dive_center_by_province">api/dodive/center/province</string>
+    <string name="api_path_dodive_search_dive_center_by_city">api/dodive/center/city</string>
 
-    <!--<string name="api_path_dodive_search_dive_spots_by_province">api/dodive/center/province</string>-->
-    <!--<string name="api_path_dodive_search_dive_spots_by_city">api/dodive/center/city</string>-->
+    <string name="api_path_dodive_search_dive_spots_by_province">api/dodive/center/province</string>
+    <string name="api_path_dodive_search_dive_spots_by_city">api/dodive/center/city</string>
 
-    <!--<string name="api_path_dodive_service_list">api/service/serviceList</string>-->
-    <!--<string name="api_path_dodive_service_list_by_divespot">api/service/serviceDivespotList</string>-->
-    <!--<string name="api_path_dodive_service_list_by_category">api/service/serviceCategoryList</string>-->
+    <string name="api_path_dodive_service_list">api/service/serviceList</string>
+    <string name="api_path_dodive_service_list_by_divespot">api/service/serviceDivespotList</string>
+    <string name="api_path_dodive_service_list_by_category">api/service/serviceCategoryList</string>
 
-    <!--<string name="api_path_homepage_modules">api/master/homepage</string>-->
-    <!--<string name="api_path_dodive_detail_service">api/service/detail</string>-->
-    <!--<string name="api_path_dodive_book_service_cart">api/order/bookservicecart</string>-->
-    <!--<string name="api_path_dodive_book_service_voucher_cart"></string>-->
-    <!--<string name="api_path_dodive_book_service_order">api/order/submit</string>-->
-    <!--<string name="api_path_dodive_booking_history">api/order/orderList</string>-->
-    <!--<string name="api_path_dodive_booking_detail">api/order/detail</string>-->
-    <!--<string name="api_path_dodive_dive_center_detail">api/divecenter/detail</string>-->
-    <!--<string name="api_path_dodive_dive_spot_detail">api/divespot/detail</string>-->
-    <!--<string name="api_path_dodive_confirm_payment">api/order/paymentProof</string>-->
-    <!--<string name="api_path_change_password">api/user/changepass</string>-->
-    <!--<string name="api_path_update_profile">api/user/profile/edit</string>-->
-    <!--<string name="api_path_upload_profile">api/user/photo</string>-->
-    <!--<string name="api_path_upload_cover">api/user/cover</string>-->
+    <string name="api_path_homepage_modules">api/master/homepage</string>
+    <string name="api_path_dodive_detail_service">api/service/detail</string>
+    <string name="api_path_dodive_book_service_cart">api/order/bookservicecart</string>
+    <string name="api_path_dodive_book_service_voucher_cart"></string>
+    <string name="api_path_dodive_book_service_order">api/order/submit</string>
+    <string name="api_path_dodive_booking_history">api/order/orderList</string>
+    <string name="api_path_dodive_booking_detail">api/order/detail</string>
+    <string name="api_path_dodive_dive_center_detail">api/divecenter/detail</string>
+    <string name="api_path_dodive_dive_spot_detail">api/divespot/detail</string>
+    <string name="api_path_dodive_confirm_payment">api/order/paymentProof</string>
+    <string name="api_path_change_password">api/user/changepass</string>
+    <string name="api_path_update_profile">api/user/profile/edit</string>
+    <string name="api_path_upload_profile">api/user/photo</string>
+    <string name="api_path_upload_cover">api/user/cover</string>
 
     <!-- API PRODUCTION -->
 
-    <string name="api_path_login">user/login</string>
-    <string name="api_path_socmed_login">user/socmedlogin/</string>
-    <string name="api_path_register">user/register</string>
-    <string name="api_path_forgot_password">user/forgotpass</string>
-    <string name="api_path_master_country">master/country</string>
-    <string name="api_path_master_category">service/masterCategory</string>
-    <string name="api_path_master_dodive_search">master/dodive/search</string>
-    <string name="api_path_dodive_search_by_spot">dodive/service/divespot</string>
-    <string name="api_path_dodive_search_by_dive_center">dodive/service/divecenter</string>
-    <string name="api_path_dodive_search_by_country">dodive/service/country</string>
-    <string name="api_path_dodive_search_by_province">dodive/service/province</string>
-    <string name="api_path_dodive_search_by_city">dodive/service/city</string>
+    <!--<string name="api_path_login">user/login</string>-->
+    <!--<string name="api_path_socmed_login">user/socmedlogin/</string>-->
+    <!--<string name="api_path_register">user/register</string>-->
+    <!--<string name="api_path_forgot_password">user/forgotpass</string>-->
+    <!--<string name="api_path_master_country">master/country</string>-->
+    <!--<string name="api_path_master_category">service/masterCategory</string>-->
+    <!--<string name="api_path_master_dodive_search">master/dodive/search</string>-->
+    <!--<string name="api_path_dodive_search_by_spot">dodive/service/divespot</string>-->
+    <!--<string name="api_path_dodive_search_by_dive_center">dodive/service/divecenter</string>-->
+    <!--<string name="api_path_dodive_search_by_country">dodive/service/country</string>-->
+    <!--<string name="api_path_dodive_search_by_province">dodive/service/province</string>-->
+    <!--<string name="api_path_dodive_search_by_city">dodive/service/city</string>-->
 
 
-    <string name="api_path_dodive_search_dive_center_by_category">dodive/center/category</string>
-    <string name="api_path_dodive_search_dive_center_by_spot">dodive/center/divespot</string>
-    <string name="api_path_dodive_search_dive_center_by_province">dodive/center/province</string>
-    <string name="api_path_dodive_search_dive_center_by_city">dodive/center/city</string>
+    <!--<string name="api_path_dodive_search_dive_center_by_category">dodive/center/category</string>-->
+    <!--<string name="api_path_dodive_search_dive_center_by_spot">dodive/center/divespot</string>-->
+    <!--<string name="api_path_dodive_search_dive_center_by_province">dodive/center/province</string>-->
+    <!--<string name="api_path_dodive_search_dive_center_by_city">dodive/center/city</string>-->
 
-    <string name="api_path_dodive_search_dive_spots_by_province">dodive/center/province</string>
-    <string name="api_path_dodive_search_dive_spots_by_city">dodive/center/city</string>
+    <!--<string name="api_path_dodive_search_dive_spots_by_province">dodive/center/province</string>-->
+    <!--<string name="api_path_dodive_search_dive_spots_by_city">dodive/center/city</string>-->
 
-    <string name="api_path_dodive_service_list">service/serviceList</string>
-    <string name="api_path_dodive_service_list_by_divespot">service/serviceDivespotList</string>
-    <string name="api_path_dodive_service_list_by_category">service/serviceCategoryList</string>
+    <!--<string name="api_path_dodive_service_list">service/serviceList</string>-->
+    <!--<string name="api_path_dodive_service_list_by_divespot">service/serviceDivespotList</string>-->
+    <!--<string name="api_path_dodive_service_list_by_category">service/serviceCategoryList</string>-->
 
-    <string name="api_path_homepage_modules">master/homepage</string>
-    <string name="api_path_dodive_detail_service">service/detail</string>
-    <string name="api_path_dodive_book_service_cart">order/bookservicecart</string>
-    <string name="api_path_dodive_book_service_voucher_cart"></string>
-    <string name="api_path_dodive_book_service_order">order/submit</string>
-    <string name="api_path_dodive_booking_history">order/orderList</string>
-    <string name="api_path_dodive_booking_detail">order/detail</string>
-    <string name="api_path_dodive_dive_center_detail">divecenter/detail</string>
-    <string name="api_path_dodive_dive_spot_detail">divespot/detail</string>
-    <string name="api_path_dodive_confirm_payment">order/paymentProof</string>
-    <string name="api_path_change_password">user/changepass</string>
-    <string name="api_path_update_profile">user/profile/edit</string>
-    <string name="api_path_upload_profile">user/photo</string>
-    <string name="api_path_upload_cover">user/cover</string>
+    <!--<string name="api_path_homepage_modules">master/homepage</string>-->
+    <!--<string name="api_path_dodive_detail_service">service/detail</string>-->
+    <!--<string name="api_path_dodive_book_service_cart">order/bookservicecart</string>-->
+    <!--<string name="api_path_dodive_book_service_voucher_cart"></string>-->
+    <!--<string name="api_path_dodive_book_service_order">order/submit</string>-->
+    <!--<string name="api_path_dodive_booking_history">order/orderList</string>-->
+    <!--<string name="api_path_dodive_booking_detail">order/detail</string>-->
+    <!--<string name="api_path_dodive_dive_center_detail">divecenter/detail</string>-->
+    <!--<string name="api_path_dodive_dive_spot_detail">divespot/detail</string>-->
+    <!--<string name="api_path_dodive_confirm_payment">order/paymentProof</string>-->
+    <!--<string name="api_path_change_password">user/changepass</string>-->
+    <!--<string name="api_path_update_profile">user/profile/edit</string>-->
+    <!--<string name="api_path_upload_profile">user/photo</string>-->
+    <!--<string name="api_path_upload_cover">user/cover</string>-->
 
 
 </resources>

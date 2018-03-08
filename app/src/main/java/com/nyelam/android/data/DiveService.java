@@ -25,6 +25,7 @@ public class DiveService implements Parseable {
     private static String KEY_DIVE_SPOTS = "dive_spot";
     private static String KEY_DAYS = "days";
     private static String KEY_TOTAL_DIVES = "total_dives";
+    private static String KEY_TOTAL_DAY = "total_day";
     private static String KEY_TOTAL_DIVE_SPOTS = "total_divespot";
     private static String KEY_VISITED = "visited";
     private static String KEY_LICENSE = "license";
@@ -272,6 +273,13 @@ public class DiveService implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
+            if(!obj.isNull(KEY_TOTAL_DAY)) {
+                setDays(obj.getInt(KEY_TOTAL_DAY));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             if (!obj.isNull(KEY_DAYS)) {
                 setDays(obj.getInt(KEY_DAYS));
             }
@@ -446,6 +454,7 @@ public class DiveService implements Parseable {
     public String toString() {
 
         JSONObject obj = new JSONObject();
+
         try {
             if(!TextUtils.isEmpty(getDescription())) {
                 obj.put(KEY_DESCRIPTION, getDescription());

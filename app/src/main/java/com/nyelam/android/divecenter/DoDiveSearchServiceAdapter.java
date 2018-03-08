@@ -179,7 +179,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
                     totalDiveSpotTextView.setText(String.valueOf(diveService.getTotalDiveSpots())+" Dive Spot Option");
                 }
 
-                if (diveService.getTotalDiveSpots() > 1){
+                if (diveService.getDays() > 1){
                     totalDayTextView.setText(String.valueOf(diveService.getDays())+" Days");
                 } else {
                     totalDayTextView.setText(String.valueOf(diveService.getDays())+" Day");

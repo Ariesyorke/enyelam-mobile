@@ -3,6 +3,7 @@ package com.nyelam.android.home;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +30,7 @@ import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.profile.ProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageTabItemView;
@@ -48,9 +50,9 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         MyAccountFragment.OnFragmentInteractionListener,
         NYMenuDrawerFragment.OnFragmentInteractionListener,
         BookingHistoryInprogressFragment.OnFragmentInteractionListener,
-        BookingHistoryCompletedFragment.OnFragmentInteractionListener{
+        BookingHistoryCompletedFragment.OnFragmentInteractionListener {
 
-    private List<Frags> tags = Arrays.asList(new Frags(0,"home"), new Frags(1,"timeline"), new Frags(2,"interest"), new Frags(3,"tags"), new Frags(4,"more"));
+    private List<Frags> tags = Arrays.asList(new Frags(0, "home"), new Frags(1, "timeline"), new Frags(2, "interest"), new Frags(3, "tags"), new Frags(4, "more"));
     private List<Frags> fragses = new ArrayList<>();
 
     private ImageView menuItemImageView;
@@ -63,7 +65,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     private int checkedId = 0;
     private boolean mProtectFromCheckedChange = false;
     private boolean mProtectFromPagerChange = false;
-    private String [] tabMenu;
+    private String[] tabMenu;
     private TextView title;
     private View viewTabManager;
 
@@ -79,8 +81,8 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
         //TODO IF TRANSACTION COMPLETED
         Intent intent = getIntent();
-        if(intent.hasExtra(NYHelper.TRANSACTION_COMPLETED)) {
-            if(intent.hasExtra(NYHelper.ORDER)) {
+        if (intent.hasExtra(NYHelper.TRANSACTION_COMPLETED)) {
+            if (intent.hasExtra(NYHelper.ORDER)) {
                 Intent i = new Intent(this, BookingHistoryDetailActivity.class);
                 i.putExtra(NYHelper.ORDER, intent.getStringExtra(NYHelper.ORDER));
                 intent.removeExtra(NYHelper.ORDER);
@@ -101,13 +103,14 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
-            if(intent.hasExtra(NYHelper.SUMMARY) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SUMMARY))){
+            if (intent.hasExtra(NYHelper.SUMMARY) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SUMMARY))) {
                 intent = new Intent(this, BookingHistoryDetailActivity.class);
                 intent.putExtra(NYHelper.SUMMARY, extras.getString(NYHelper.SUMMARY));
                 startActivity(intent);
             }
         }
     }
+
     private void initPermission() {
         ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
                 Manifest.permission.CAMERA,
@@ -131,10 +134,40 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabManager = (LinearLayout) findViewById(R.id.tab_manager);
         viewPager = (NYCustomViewPager) findViewById(R.id.view_pager);
-        title = (TextView)findViewById(R.id.title);
+        title = (TextView) findViewById(R.id.title);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewTabManager = (View) findViewById(R.id.view_tab_manager);
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
+    }
+
+    @Override
+    public void openLoginRegister() {
+        if (drawerLayout.isDrawerOpen(Gravity.END)) {
+            drawerLayout.closeDrawer(Gravity.END);
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(HomeActivity.this, AuthActivity.class);
+                intent.putExtra(NYHelper.IS_MAIN_ACTIVITY, true);
+                startActivity(intent);
+            }
+        }, 300);
+
+    }
+
+    @Override
+    public void openAccount() {
+        if (drawerLayout.isDrawerOpen(Gravity.END)) {
+            drawerLayout.closeDrawer(Gravity.END);
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        }, 300);
     }
 
     public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -200,7 +233,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     public void movePagerToTabItemPosition(int tabItemPosition) {
         setCheckedId(tabItemPosition);
         LoginStorage loginStorage = new LoginStorage(getApplicationContext());
-        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2 || tabItemPosition == 3)){
+        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2 || tabItemPosition == 3)) {
             Intent intent = new Intent(this, AuthActivity.class);
             startActivityForResult(intent, NYHelper.REQ_LOGIN);
         } else {
@@ -228,7 +261,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 if (child == view) {
 
                     LoginStorage storage = new LoginStorage(this);
-                    if (!storage.isUserLogin() && (i==1||i==3)) checked=false;
+                    if (!storage.isUserLogin() && (i == 1 || i == 3)) checked = false;
 
                     setCheckedStateForTab(child.getId(), checked);
                     checkedTabItemPosition = ((NYHomepageTabItemView) child).getTabItemPosition();
@@ -277,11 +310,10 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     }
 
-    public void removeLastFragment(int pos){
+    public void removeLastFragment(int pos) {
         Frags oldName = tags.get(pos);
-        for ( int i = fragses.size() - 1;  i >= 0; i--){
-            if(oldName.equals(fragses.get(i)))
-            {
+        for (int i = fragses.size() - 1; i >= 0; i--) {
+            if (oldName.equals(fragses.get(i))) {
                 fragses.remove(i);
             }
         }
@@ -289,11 +321,11 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.END)) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
             drawerLayout.closeDrawer(GravityCompat.END);
             return;
         }
-        if (getLastKey() == 0){
+        if (getLastKey() == 0) {
             finish();
         } else if (fragses.size() > 1) {
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
@@ -334,7 +366,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             this.tag = tag;
         }
 
-        public void closeDrawer(){
+        public void closeDrawer() {
             //close navigation drawer
             drawerLayout.closeDrawer(GravityCompat.START);
         }
@@ -400,7 +432,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     }
 
-    public void openMenuDrawer(){
+    public void openMenuDrawer() {
         drawerLayout.openDrawer(Gravity.END);
     }
 
@@ -423,7 +455,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     protected void onResume() {
         super.onResume();
         LoginStorage loginStorage = new LoginStorage(this);
-        if (!loginStorage.isUserLogin()){
+        if (!loginStorage.isUserLogin()) {
             NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(0);
             onCheckedChanged(view, true);
             movePagerToTabItemPosition(0);
@@ -461,7 +493,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     }
 
 
-    public void setSelectedTab(int pos){
+    public void setSelectedTab(int pos) {
         NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(3);
         onCheckedChanged(view, true);
         movePagerToTabItemPosition(3);
