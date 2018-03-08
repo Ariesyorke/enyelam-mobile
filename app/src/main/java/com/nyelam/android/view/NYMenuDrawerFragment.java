@@ -20,6 +20,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.home.TermsAndConditionActivity;
 import com.nyelam.android.profile.ProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
@@ -36,7 +37,7 @@ public class NYMenuDrawerFragment extends Fragment {
     private ProgressDialog progressDialog;
     private OnFragmentInteractionListener mListener;
     private TextView nameProfileTextView;
-    private LinearLayout loginLinearLayout, messageLinearLayout, accountLinearLayout, diveGuidanceLinearLayout, settingLinearLayout, logoutLinearLayout;
+    private LinearLayout loginLinearLayout, messageLinearLayout, accountLinearLayout, diveGuidanceLinearLayout, settingLinearLayout, logoutLinearLayout, termsAndConditionLinearLayout;
     //private LoginStorage loginStorage;
 
     public static NYMenuDrawerFragment newInstance() {
@@ -72,6 +73,7 @@ public class NYMenuDrawerFragment extends Fragment {
         diveGuidanceLinearLayout = (LinearLayout) v.findViewById(R.id.action_dive_guideance_linearLayout);
         settingLinearLayout = (LinearLayout) v.findViewById(R.id.action_setting_linearLayout);
         logoutLinearLayout = (LinearLayout) v.findViewById(R.id.action_logout_linearLayout);
+        termsAndConditionLinearLayout = (LinearLayout) v.findViewById(R.id.action_terms_and_condition_linearLayout);
     }
 
     private void initControl() {
@@ -143,6 +145,14 @@ public class NYMenuDrawerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
+            }
+        });
+
+        termsAndConditionLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TermsAndConditionActivity.class);
+                startActivity(intent);
             }
         });
     }
