@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -37,7 +38,7 @@ public class NYMenuDrawerFragment extends Fragment {
     private ProgressDialog progressDialog;
     private OnFragmentInteractionListener mListener;
     private TextView nameProfileTextView;
-    private LinearLayout loginLinearLayout, messageLinearLayout, accountLinearLayout, diveGuidanceLinearLayout, settingLinearLayout, logoutLinearLayout, termsAndConditionLinearLayout;
+    private LinearLayout loginLinearLayout, messageLinearLayout, accountLinearLayout, diveGuidanceLinearLayout, settingLinearLayout, logoutLinearLayout, termsAndConditionLinearLayout, contactUsLinearLayout;
     //private LoginStorage loginStorage;
 
     public static NYMenuDrawerFragment newInstance() {
@@ -74,6 +75,7 @@ public class NYMenuDrawerFragment extends Fragment {
         settingLinearLayout = (LinearLayout) v.findViewById(R.id.action_setting_linearLayout);
         logoutLinearLayout = (LinearLayout) v.findViewById(R.id.action_logout_linearLayout);
         termsAndConditionLinearLayout = (LinearLayout) v.findViewById(R.id.action_terms_and_condition_linearLayout);
+        contactUsLinearLayout = (LinearLayout) v.findViewById(R.id.action_contact_us_linearLayout);
     }
 
     private void initControl() {
@@ -152,6 +154,17 @@ public class NYMenuDrawerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mListener.openTermsAndConditions();
+            }
+        });
+
+        contactUsLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","info@e-nyelam.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hi, e-Nyelam!");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
             }
         });
     }
