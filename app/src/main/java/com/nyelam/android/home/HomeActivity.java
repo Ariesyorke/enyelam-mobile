@@ -3,6 +3,7 @@ package com.nyelam.android.home;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -180,6 +181,23 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             public void run() {
                 Intent intent = new Intent(HomeActivity.this, TermsAndConditionActivity.class);
                 startActivity(intent);
+            }
+        }, 300);
+    }
+
+    @Override
+    public void openContactUs() {
+        if (drawerLayout.isDrawerOpen(Gravity.END)) {
+            drawerLayout.closeDrawer(Gravity.END);
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","info@e-nyelam.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hi, e-Nyelam!");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
             }
         }, 300);
     }

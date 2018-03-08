@@ -160,11 +160,7 @@ public class NYMenuDrawerFragment extends Fragment {
         contactUsLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto","info@e-nyelam.com", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hi, e-Nyelam!");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                mListener.openContactUs();
             }
         });
     }
@@ -173,6 +169,7 @@ public class NYMenuDrawerFragment extends Fragment {
         void openLoginRegister();
         void openAccount();
         void openTermsAndConditions();
+        void openContactUs();
         //void onIntentCareer();
         //void onIntentVideos();
         // TODO: Update argument type and name
