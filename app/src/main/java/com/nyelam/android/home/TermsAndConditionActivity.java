@@ -22,7 +22,7 @@ public class TermsAndConditionActivity extends AppCompatActivity {
 
         String agreementText = "<ol type=\"1\">\n" +
                 " <br/><b><li>CONDITIONS OF USE</li></b>\n" +
-                " <br/> Hindari menggunakan kemasan kecil seperti sabun sachet.\n\n" +
+                " <br/> e-nyelam is offered to you, the user, conditioned on your acceptance of the terms, conditions and notices contained or incorporated by reference herein and such additional terms and conditions, agreements, and notices that may apply to any page or section of the Site.\n\n" +
                 " <br/><br/> <b><li>OVERVIEW</li></b>\n" +
                 " <br/> Your use of this Site constitutes your agreement to all terms, conditions and notices. Please read them carefully. By using this Site, you agree to these Terms and Conditions, as well as any other terms, guidelines or rules that are applicable to any portion of this Site, without limitation or qualification. If you do not agree to these Terms and Conditions, you must exit the Site immediately and discontinue any use of information or products from this Site.\n\n" +
                 " <br/><br/> <b><li>MODIFICATION OF THE SITE AND THESE TERMS & CONDITIONS</li></b>\n" +

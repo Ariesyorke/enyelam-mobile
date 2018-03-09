@@ -51,7 +51,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
     @Override
     public void onCreate() {
         super.onCreate();
-
+        //calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
         calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
 
         FacebookSdk.sdkInitialize(getApplicationContext());

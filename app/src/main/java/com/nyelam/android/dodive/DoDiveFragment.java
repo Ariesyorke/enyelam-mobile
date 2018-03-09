@@ -56,7 +56,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private TotalDiverSpinnerAdapter diverAdapter;
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
     private NYApplication application;
-    private Calendar c;
+//    private Calendar c;
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,7 +91,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         application = (NYApplication)getActivity().getApplication();
-        c = application.calendar;
+//        c = application.calendar;
         initView(view);
         initDatePicker();
         initExtra();
@@ -112,9 +112,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
     }
 
+
     private void initDatePicker() {
         //final Calendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
         //c.setTime(new Date());
+        Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -141,14 +143,12 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             List<Calendar> calendars = new ArrayList<>();
             int divider = 12 - month;
 
-
             for(int i = 0; i < divider; i++) {
 
-                //Calendar a = Calendar.getInstance();
-                Calendar a = c;
-                //cal.set(year, (month-1), day,hour,minute);
+                NYLog.e("CEK CALE ke- : "+i);
 
-                //a.setTime(new Date());
+                Calendar a = Calendar.getInstance();
+                a.setTime(new Date());
                 a.add(Calendar.MONTH, i);
                 a.set(Calendar.DAY_OF_WEEK, a.getFirstDayOfWeek());
                 a.set(Calendar.WEEK_OF_MONTH, 3);
@@ -170,9 +170,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     datetimeTextView.setText(String.valueOf(eDay) + "/" + String.valueOf(eMonth+1) + "/" + String.valueOf(eYear));
                 }
             }
+
             Calendar[] cals = new Calendar[calendars.size()];
             calendars.toArray(cals);
             datePickerDialog.setSelectableDays(cals);
+
+            NYLog.e("CEK CALE final : "+cals.length);
+
         } else {
             datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
             datePickerDialog.setMinDate(c);
@@ -225,7 +229,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             }
 
             if (intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.SCHEDULE))){
-
+                Calendar c = Calendar.getInstance();
                 date = intent.getStringExtra(NYHelper.SCHEDULE);
                 int year = c.get(Calendar.YEAR);
                 int month = c.get(Calendar.MONTH);
@@ -237,8 +241,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     int divider = 12 - month;
 
                     for(int i = 0; i < divider; i++) {
-                        Calendar a = c;
-                        //a.setTime(new Date());
+                        Calendar a = Calendar.getInstance();
+                        a.setTime(new Date());
                         a.add(Calendar.MONTH, i);
                         a.set(Calendar.DAY_OF_WEEK, a.getFirstDayOfWeek());
                         a.set(Calendar.WEEK_OF_MONTH, 3);
@@ -516,7 +520,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar cal = c;
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         cal.set(Calendar.MONTH, monthOfYear);
         cal.set(Calendar.YEAR, year);
@@ -524,6 +528,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         int m = cal.get(Calendar.MONTH);
         int d = cal.get(Calendar.DAY_OF_MONTH);
 
+        NYLog.e("TIMESTAMP " + cal.getTimeInMillis());
         date = String.valueOf(cal.getTimeInMillis()/1000);
         datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
 

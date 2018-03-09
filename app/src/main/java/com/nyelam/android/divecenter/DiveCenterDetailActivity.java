@@ -392,9 +392,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (serviceProgressBar != null)serviceProgressBar.setVisibility(View.GONE);
-                //NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
+                NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
                 noResultTextView.setVisibility(View.VISIBLE);
-                noResultTextView.setText(spiceException.getMessage());
+                //noResultTextView.setText(spiceException.getMessage());
             }
 
             @Override
