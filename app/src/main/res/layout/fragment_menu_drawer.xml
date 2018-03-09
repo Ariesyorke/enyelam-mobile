@@ -182,7 +182,6 @@
                     android:layout_marginTop="@dimen/padding_double"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -191,7 +190,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:text="@string/terms_and_condition"
-                        android:textColor="@color/ny_grey4"
+                        android:textColor="@color/colorBlack"
                         android:textSize="16sp"
                         android:letterSpacing="0.2"
                         android:layout_width="wrap_content"
@@ -208,7 +207,6 @@
                     android:layout_marginTop="@dimen/padding_double"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -217,7 +215,7 @@
                         android:layout_height="35dp" />
                     <TextView
                         android:text="@string/contact_us"
-                        android:textColor="@color/ny_grey4"
+                        android:textColor="@color/colorBlack"
                         android:textSize="16sp"
                         android:letterSpacing="0.2"
                         android:layout_width="wrap_content"

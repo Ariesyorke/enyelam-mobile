@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.home.TermsAndConditionActivity;
@@ -85,7 +86,11 @@ public class NYMenuDrawerFragment extends Fragment {
             public void onClick(View v)
             {
                 //mListener.onIntentCareer();
-                mListener.openAccount();
+
+                if (mListener != null) {
+                    mListener.openAccount();
+                }
+
 //                if (getActivity() instanceof HomeActivity) {
 //                    HomeActivity activity = (HomeActivity) getActivity();
 ////                    activity.setSelectedTab(3);
@@ -97,8 +102,9 @@ public class NYMenuDrawerFragment extends Fragment {
         loginLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.openLoginRegister();
-
+                if (mListener != null) {
+                    mListener.openLoginRegister();
+                }
             }
         });
 
@@ -153,14 +159,18 @@ public class NYMenuDrawerFragment extends Fragment {
         termsAndConditionLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.openTermsAndConditions();
+                if (mListener != null) {
+                    mListener.openTermsAndConditions();
+                }
             }
         });
 
         contactUsLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.openContactUs();
+                if (mListener != null) {
+                    mListener.openContactUs();
+                }
             }
         });
     }
@@ -180,16 +190,29 @@ public class NYMenuDrawerFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            NYLog.e("ATTACH!!");
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) activity;
+            NYLog.e("ATTACH!!");
+        } else {
+            throw new RuntimeException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        NYLog.e("DETACH");
         mListener = null;
     }
 
@@ -209,7 +232,5 @@ public class NYMenuDrawerFragment extends Fragment {
         }
 
     }
-
-
 
 }

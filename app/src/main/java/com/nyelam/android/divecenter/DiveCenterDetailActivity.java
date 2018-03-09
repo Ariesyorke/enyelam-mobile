@@ -120,7 +120,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dive_center_detail);
         initView();
-        initMap();
+    //    initMap();
         initToolbar();
         initExtra();
         initAdapter();
@@ -307,7 +307,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 if (diveCenter == null) diveCenter = new DiveCenter();
 
                 diveCenter = results;
-
+                initMap();
                 mapProgressBar.setVisibility(View.GONE);
                 mapFrameLayout.setVisibility(View.VISIBLE);
 
@@ -365,13 +365,14 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 && !TextUtils.isEmpty(certificate)){
 
             String apiPath = getString(R.string.api_path_dodive_service_list);
+
             if (NYHelper.isStringNotEmpty(type) && type.equals("1")){
                 apiPath = getString(R.string.api_path_dodive_service_list_by_divespot);
             } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
                 apiPath = getString(R.string.api_path_dodive_service_list_by_category);
             } else if (NYHelper.isStringNotEmpty(type) && type.equals("5")){
                 apiPath = getString(R.string.api_path_dodive_service_list_by_province);
-            } else {
+            } else if (NYHelper.isStringNotEmpty(type) && type.equals("6")){
                 apiPath = getString(R.string.api_path_dodive_service_list_by_city);
             }
 
@@ -391,8 +392,9 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (serviceProgressBar != null)serviceProgressBar.setVisibility(View.GONE);
-                //NYHelper.handleAPIException(.this, spiceException, null);
+                //NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
                 noResultTextView.setVisibility(View.VISIBLE);
+                noResultTextView.setText(spiceException.getMessage());
             }
 
             @Override
@@ -528,6 +530,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         // Already two locations
         map.clear();
         // Adding new item to the ArrayList
+
         if (diveCenter != null){
 
             LatLng pos2 = new LatLng(0, 0);

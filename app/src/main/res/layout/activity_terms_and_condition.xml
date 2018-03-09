@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
+    android:orientation="vertical"
     tools:context="com.nyelam.android.home.TermsAndConditionActivity">
 
     <android.support.v7.widget.Toolbar
@@ -29,15 +30,29 @@
     </android.support.v7.widget.Toolbar>
 
 
-    <org.sufficientlysecure.htmltextview.HtmlTextView
-        android:id="@+id/term_textView"
-        android:text=""
-        android:textColor="@color/ny_black1"
-        android:textSize="14sp"
-        android:padding="@dimen/padding_double"
-        android:layout_gravity="center"
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"/>
 
+
+    <ScrollView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <org.sufficientlysecure.htmltextview.HtmlTextView
+            android:id="@+id/term_textView"
+            android:text="aaaaaaaaaaaaaaaaaa"
+            android:textColor="@color/ny_black1"
+            android:textSize="14sp"
+            android:padding="@dimen/padding_double"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+    </ScrollView>
 
 </LinearLayout>
