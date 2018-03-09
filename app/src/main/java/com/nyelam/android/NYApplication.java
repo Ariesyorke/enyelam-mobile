@@ -31,6 +31,9 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/10/2018.
@@ -43,10 +46,13 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         return daoSession;
     }
     public LruCache<String, Bitmap> imageCache;
+    public Calendar calendar;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);

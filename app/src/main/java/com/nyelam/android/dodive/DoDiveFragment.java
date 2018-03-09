@@ -20,6 +20,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.SearchResult;
@@ -39,6 +40,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
@@ -53,6 +55,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private SearchService searchService;
     private TotalDiverSpinnerAdapter diverAdapter;
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
+    private NYApplication application;
+    private Calendar c;
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,6 +90,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        application = (NYApplication)getActivity().getApplication();
+        c = application.calendar;
         initView(view);
         initDatePicker();
         initExtra();
@@ -107,8 +113,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     private void initDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
+        //final Calendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
+        //c.setTime(new Date());
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -135,9 +141,14 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             List<Calendar> calendars = new ArrayList<>();
             int divider = 12 - month;
 
+
             for(int i = 0; i < divider; i++) {
-                Calendar a = Calendar.getInstance();
-                a.setTime(new Date());
+
+                //Calendar a = Calendar.getInstance();
+                Calendar a = c;
+                //cal.set(year, (month-1), day,hour,minute);
+
+                //a.setTime(new Date());
                 a.add(Calendar.MONTH, i);
                 a.set(Calendar.DAY_OF_WEEK, a.getFirstDayOfWeek());
                 a.set(Calendar.WEEK_OF_MONTH, 3);
@@ -216,8 +227,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             if (intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.SCHEDULE))){
 
                 date = intent.getStringExtra(NYHelper.SCHEDULE);
-                Calendar c = Calendar.getInstance();
-                c.setTime(new Date());
                 int year = c.get(Calendar.YEAR);
                 int month = c.get(Calendar.MONTH);
                 int day = c.get(Calendar.DAY_OF_MONTH);
@@ -225,12 +234,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 DoDiveActivity activity = (DoDiveActivity)getActivity();
                 if(activity.isEcoTrip()) {
                     List<Calendar> calendars = new ArrayList<>();
-                    Calendar b = Calendar.getInstance();
                     int divider = 12 - month;
 
                     for(int i = 0; i < divider; i++) {
-                        Calendar a = Calendar.getInstance();
-                        a.setTime(new Date());
+                        Calendar a = c;
+                        //a.setTime(new Date());
                         a.add(Calendar.MONTH, i);
                         a.set(Calendar.DAY_OF_WEEK, a.getFirstDayOfWeek());
                         a.set(Calendar.WEEK_OF_MONTH, 3);
@@ -260,9 +268,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     month = c.get(Calendar.MONTH);
                     day = c.get(Calendar.DAY_OF_MONTH);
                     datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(new Date());
-                    datePickerDialog.setMinDate(cal);
+                    //cal.setTime(new Date());
+                    datePickerDialog.setMinDate(c);
                 }
 
 //                if (Build.VERSION.SDK_INT <= 21) {
@@ -509,7 +516,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = c;
         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         cal.set(Calendar.MONTH, monthOfYear);
         cal.set(Calendar.YEAR, year);

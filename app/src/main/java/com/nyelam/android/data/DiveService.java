@@ -234,7 +234,6 @@ public class DiveService implements Parseable {
     public void parse(JSONObject obj) {
         if (obj == null) return;
 
-
         try {
             if(!obj.isNull(KEY_DESCRIPTION)) {
                 setDescription(obj.getString(KEY_DESCRIPTION));

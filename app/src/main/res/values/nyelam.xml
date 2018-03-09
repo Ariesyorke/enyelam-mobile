@@ -19,10 +19,10 @@
     <!--<string name="host_url">http://nyelam-adam.dantech.id/</string>-->
 
     <!-- STAGING -->
-    <string name="host_url">http://nyelam.dantech.id/</string>
+    <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
 
     <!-- PRODUCTION -->
-    <!--<string name="host_url">https://api.e-nyelam.com/</string>-->
+    <string name="host_url">https://api.e-nyelam.com/</string>
 
     <!-- API STAGING AND DEVELOPMENT -->
     <!--<string name="api_path_login">api/user/login</string>-->
