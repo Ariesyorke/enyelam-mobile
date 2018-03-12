@@ -560,7 +560,6 @@
 
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/payment_midtrans_linearLayout"
                         android:layout_marginTop="@dimen/activity_vertical_margin"
                         android:orientation="horizontal"

@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 
 public class VeritransNotificationRequest extends DJSONRequest<Boolean> {
-    //public static final String HOST_URL = "http://nyelam.dantech.id/notification/veritrans";
+    /*public static final String HOST_URL = "http://nyelam.dantech.id/notification/veritrans";*/
     public static final String HOST_URL = "https://e-nyelam.com/notification/veritrans";
 
     public VeritransNotificationRequest(Context context, JSONObject transactionResponse) {
