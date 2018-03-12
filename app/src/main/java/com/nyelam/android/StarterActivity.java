@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,15 +19,23 @@ import android.view.View;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CountryCode;
+import com.nyelam.android.data.ModuleList;
+import com.nyelam.android.data.Update;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.http.NYHomepageModuleRequest;
+import com.nyelam.android.http.NYUpdateVersion;
+import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.storage.NYMasterDataStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.SpiceService;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
@@ -44,7 +53,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
 //    private final int SPLASH_TIME = 3000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS = 1;
-    private SpiceManager spcMgr = new SpiceManager(SpiceService.class);
+    private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private NYMasterDataStorage masterDataStorage;
     private AlertDialog.Builder dialog;
     //    private Province province;
@@ -93,6 +102,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             // permissions this app might request
         }
     }
+
     public void initiatePermission(){
         if (Build.VERSION.SDK_INT >= 23) {
             int permissionCamera = ContextCompat.checkSelfPermission(this,
@@ -146,6 +156,8 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                 if (nextIndex < backgroundDrawables.length) {
                     getCacheBackground(nextIndex);
                 } else {
+                    // TODO: 3/12/2018
+                    //onGetUpdateRequestRequest();
                     checkConnection();
                 }
             }
@@ -159,6 +171,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                 if (nextIndex < backgroundDrawables.length) {
                     getCacheBackground(nextIndex);
                 } else {
+                    //onGetUpdateRequestRequest();
                     checkConnection();
                 }
             }
@@ -185,12 +198,87 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                                 dialog.dismiss();
                                 startSplashTimer();
                             } else {
+                                // TODO: cahnge this
+                                //getUpdateVersion();
                                 checkConnection();
                             }
                         }
                     });
         }
     }
+
+
+
+    private void getUpdateVersion() {
+        NYUpdateVersion req = null;
+        try {
+            req = new NYUpdateVersion(this, "");
+            spcMgr.execute(req, onGetUpdateRequestRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<Update> onGetUpdateRequestRequest() {
+        return new RequestListener<Update>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }*/
+            }
+
+            @Override
+            public void onRequestSuccess(final Update update) {
+
+                Integer yourVersion = 0;
+
+                if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == true){
+
+                    String wording = "";
+                    if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
+
+                    new AlertDialog.Builder(StarterActivity.this)
+                            .setTitle("Update Version")
+                            .setMessage(wording)
+                            .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(update.getLink()));
+                                    startActivity(browserIntent);
+                                }
+                            }).show();
+
+
+                } else if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == false){
+
+                    String wording = "";
+                    if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
+
+                    new AlertDialog.Builder(StarterActivity.this)
+                            .setTitle("Update Version")
+                            .setMessage(wording)
+                            .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(update.getLink()));
+                                    startActivity(browserIntent);
+                                }
+                            }).setNegativeButton("Update Later", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    checkConnection();
+                                }
+                            }).show();
+
+                }
+
+            }
+        };
+    }
+
+
+
 
     private void startSplashTimer() {
 
@@ -264,13 +352,14 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     @Override
     protected void onStart() {
         super.onStart();
+        spcMgr.start(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
-
 
     @Override
     public void onLoadFailed(Exception e) {

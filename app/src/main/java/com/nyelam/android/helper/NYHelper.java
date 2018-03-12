@@ -384,6 +384,12 @@ public class NYHelper {
                 .show();
     }
 
+
+
+
+
+
+
     public static final void handlePopupMessage(Context context, String message, boolean isCancelable , DialogInterface.OnClickListener listener, String okButton) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message)
