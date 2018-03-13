@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
@@ -175,7 +176,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private void initExtra() {
         Intent intent = getActivity().getIntent();
         Bundle extras = getActivity().getIntent().getExtras();
-
         if (extras != null && intent.hasExtra(NYHelper.SEARCH_RESULT) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SEARCH_RESULT))) {
             try {
                 JSONObject obj = new JSONObject(extras.getString(NYHelper.SEARCH_RESULT));
@@ -518,6 +518,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         int d = cal.get(Calendar.DAY_OF_MONTH);
 
         date = String.valueOf(cal.getTimeInMillis()/1000);
+        NYLog.e("TIMES STAMP " + cal.getTimeInMillis());
         datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
 
     }
