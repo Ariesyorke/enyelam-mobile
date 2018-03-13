@@ -77,12 +77,24 @@ public class UserDetailsActivity extends BaseActivity {
     }
 
     private void showInformationDialog(String message) {
+
+        Log.e("cek User Detail ","showInformation 1");
+
         if (!isFinishing()) {
+
+            Log.e("cek User Detail ","showInformation 2");
+
             try {
+
+                Log.e("cek User Detail ","showInformation 3");
+
                 AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                         .setPositiveButton(R.string.btn_close, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
+                                Log.e("cek User Detail ","showInformation 4");
+
                                 if (!isFinishing()) {
                                     dialog.dismiss();
                                 }
@@ -97,6 +109,9 @@ public class UserDetailsActivity extends BaseActivity {
                 finish();
             }
         } else {
+
+            Log.e("cek User Detail ","showInformation 5");
+
             finish();
         }
     }

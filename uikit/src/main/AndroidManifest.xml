@@ -86,10 +86,10 @@
         <activity
             android:name="com.midtrans.sdk.uikit.activities.BCAKlikPayActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name="com.midtrans.sdk.uikit.views.banktransfer.status.VaOtherBankPaymentStatusActivity"
+            android:screenOrientation="portrait" />
     </application>
-
-
 
 
 </manifest>

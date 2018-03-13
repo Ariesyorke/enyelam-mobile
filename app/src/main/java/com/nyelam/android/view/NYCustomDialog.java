@@ -3,7 +3,9 @@ package com.nyelam.android.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Html;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.StarterActivity;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveFragment;
 import com.nyelam.android.dodive.DoDiveSearchResultActivity;
@@ -42,6 +45,8 @@ public class NYCustomDialog {
     public interface OnDialogFragmentClickListener {
         void onChooseListener(Object position);
         void onAcceptAgreementListener();
+        void onCancelUpdate();
+        void doUpdateVersion(String link);
     }
 
     public void showSortingDialog(final Activity activity, int currentPosition){
@@ -176,6 +181,63 @@ public class NYCustomDialog {
 
             }
         });
+
+        dialog.show();
+
+    }
+
+
+
+
+
+
+
+
+    public void showUpdateDialog(final Activity activity, boolean isMust, String wording, final String link, Integer latestVersion){
+
+        listener = (OnDialogFragmentClickListener) activity;
+
+        dialog = new Dialog(activity);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_update_version);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+
+        LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
+        linearLayout.setMinimumWidth(width*3/4);
+
+        TextView wordingTextView = (TextView) dialog.findViewById(R.id.wording_textView);
+        if (NYHelper.isStringNotEmpty(wording)) wordingTextView.setText(wording);
+
+        TextView updateNowTextView = (TextView) dialog.findViewById(R.id.update_now_textView);
+        updateNowTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.doUpdateVersion(link);
+                /*Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nyelam.android"));
+                activity.startActivity(intent);*/
+            }
+        });
+
+        TextView updateLaterTextView = (TextView) dialog.findViewById(R.id.update_later_textView);
+        updateLaterTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                listener.onCancelUpdate();
+                /*if (activity instanceof StarterActivity){
+                    ((StarterActivity)activity).startSplashTimer();
+                }*/
+            }
+        });
+
+        if (isMust) updateLaterTextView.setVisibility(View.GONE);
 
         dialog.show();
 

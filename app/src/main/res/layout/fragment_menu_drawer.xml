@@ -178,6 +178,55 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/action_terms_and_condition_linearLayout"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:src="@drawable/ny_circle_blue"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp" />
+                    <TextView
+                        android:text="@string/terms_and_condition"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        android:letterSpacing="0.2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/padding_double" />
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/action_contact_us_linearLayout"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:src="@drawable/ny_circle_blue"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp" />
+                    <TextView
+                        android:text="@string/contact_us"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        android:letterSpacing="0.2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/padding_double" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:id="@+id/action_setting_linearLayout"
                     android:layout_marginTop="@dimen/padding_double"
                     android:layout_width="match_parent"

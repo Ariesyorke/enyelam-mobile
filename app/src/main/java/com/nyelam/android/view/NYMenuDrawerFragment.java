@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,8 +19,10 @@ import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.home.TermsAndConditionActivity;
 import com.nyelam.android.profile.ProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
@@ -36,7 +39,7 @@ public class NYMenuDrawerFragment extends Fragment {
     private ProgressDialog progressDialog;
     private OnFragmentInteractionListener mListener;
     private TextView nameProfileTextView;
-    private LinearLayout loginLinearLayout, messageLinearLayout, accountLinearLayout, diveGuidanceLinearLayout, settingLinearLayout, logoutLinearLayout;
+    private LinearLayout loginLinearLayout, messageLinearLayout, accountLinearLayout, diveGuidanceLinearLayout, settingLinearLayout, logoutLinearLayout, termsAndConditionLinearLayout, contactUsLinearLayout;
     //private LoginStorage loginStorage;
 
     public static NYMenuDrawerFragment newInstance() {
@@ -72,6 +75,8 @@ public class NYMenuDrawerFragment extends Fragment {
         diveGuidanceLinearLayout = (LinearLayout) v.findViewById(R.id.action_dive_guideance_linearLayout);
         settingLinearLayout = (LinearLayout) v.findViewById(R.id.action_setting_linearLayout);
         logoutLinearLayout = (LinearLayout) v.findViewById(R.id.action_logout_linearLayout);
+        termsAndConditionLinearLayout = (LinearLayout) v.findViewById(R.id.action_terms_and_condition_linearLayout);
+        contactUsLinearLayout = (LinearLayout) v.findViewById(R.id.action_contact_us_linearLayout);
     }
 
     private void initControl() {
@@ -81,7 +86,11 @@ public class NYMenuDrawerFragment extends Fragment {
             public void onClick(View v)
             {
                 //mListener.onIntentCareer();
-                mListener.openAccount();
+
+                if (mListener != null) {
+                    mListener.openAccount();
+                }
+
 //                if (getActivity() instanceof HomeActivity) {
 //                    HomeActivity activity = (HomeActivity) getActivity();
 ////                    activity.setSelectedTab(3);
@@ -93,8 +102,9 @@ public class NYMenuDrawerFragment extends Fragment {
         loginLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.openLoginRegister();
-
+                if (mListener != null) {
+                    mListener.openLoginRegister();
+                }
             }
         });
 
@@ -145,11 +155,31 @@ public class NYMenuDrawerFragment extends Fragment {
                 NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
             }
         });
+
+        termsAndConditionLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.openTermsAndConditions();
+                }
+            }
+        });
+
+        contactUsLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.openContactUs();
+                }
+            }
+        });
     }
 
     public interface OnFragmentInteractionListener {
         void openLoginRegister();
         void openAccount();
+        void openTermsAndConditions();
+        void openContactUs();
         //void onIntentCareer();
         //void onIntentVideos();
         // TODO: Update argument type and name
@@ -160,16 +190,29 @@ public class NYMenuDrawerFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            NYLog.e("ATTACH!!");
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) activity;
+            NYLog.e("ATTACH!!");
+        } else {
+            throw new RuntimeException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        NYLog.e("DETACH");
         mListener = null;
     }
 
@@ -189,7 +232,5 @@ public class NYMenuDrawerFragment extends Fragment {
         }
 
     }
-
-
 
 }
