@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 public class NYUpdateVersion extends NYBasicRequest<Update> {
 
-    private static String KEY_USER = "user";
+    private static String KEY_UPDATE = "update";
 
     private static String POST_PLATFORM = "platform";
     private static String POST_VERSION = "version";
@@ -36,13 +36,14 @@ public class NYUpdateVersion extends NYBasicRequest<Update> {
     @Override
     protected Update onProcessSuccessData(JSONObject obj) throws Exception {
 
-        if (obj.has(KEY_USER) && obj.get(KEY_USER) != null){
+        if (obj.has(KEY_UPDATE) && obj.get(KEY_UPDATE) != null){
             Update update = new Update();
-            update.parse(obj);
+            update.parse(obj.getJSONObject(KEY_UPDATE));
             return update;
         } else{
             return null;
         }
     }
+
 
 }

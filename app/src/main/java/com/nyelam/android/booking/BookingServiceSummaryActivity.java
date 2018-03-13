@@ -1,13 +1,13 @@
 package com.nyelam.android.booking;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -45,7 +45,6 @@ import com.nyelam.android.data.NTransactionResult;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
-import com.nyelam.android.data.Summary;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
@@ -116,7 +115,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 } else {
                     Toast.makeText(BookingServiceSummaryActivity.this, "cartToken null", Toast.LENGTH_SHORT).show();
                 }*/
-                new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
+                if (orderReturn == null){
+                    new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
+                } else {
+                    payUsingVeritrans();
+                }
             }
         });
 
@@ -488,9 +491,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
                     veritransStorage.save();
 
-                    PayUsingVeritrans();
+                    payUsingVeritrans();
 
-                } else {
+                } else if (paymentType.equals("1")){
                     //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
                     NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
                                 new DialogInterface.OnClickListener() {
@@ -508,7 +511,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         };
     }
 
-    private void PayUsingVeritrans() {
+    public void payUsingVeritrans() {
         SdkUIFlowBuilder.init()
                 .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
                 .setContext(this) // context is mandatory
@@ -570,7 +573,40 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        if (orderReturn != null){
+
+            //Toast.makeText(this, orderReturn.toString(), Toast.LENGTH_SHORT).show();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(BookingServiceSummaryActivity.this);
+            builder.setCancelable(false);
+            builder.setTitle(null);
+            builder.setMessage("Are you sure want to cancel your bookings? Any changes to your bookings will be lost.");
+            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing but close the dialog
+                    dialog.dismiss();
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+
+        } else {
+            //Toast.makeText(this, "orderReturn : NULL", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
     }
 
     @Override
@@ -641,39 +677,64 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     }
 
+    @Override
+    public void onCancelUpdate() {
+
+    }
+
+    @Override
+    public void doUpdateVersion(String link) {
+    }
 
     @Override
     public void onTransactionFinished(final TransactionResult transactionResult) {
         //TODO DISINI HANDLE KALO TRANSAKSI DI MIDTRANS SUKSES
-        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(BookingServiceSummaryActivity.this, VeritransNotificationActivity.class);
-                        //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
-                        if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
-                            if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
-                                NTransactionResult result = new NTransactionResult();
-                                result.setData(transactionResult.getResponse());
-                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
-                                intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
-                                intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
-                            } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
-                                NTransactionResult result = new NTransactionResult();
-                                result.setData(transactionResult.getResponse());
-                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
-                                intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
-                                intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
+
+        /*if (transactionResult != null){
+            if (transactionResult.getResponse() != null)NYLog.e("CEK TRANSACTION 1: "+transactionResult.getResponse().getTransactionStatus());
+            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))NYLog.e("CEK TRANSACTION 2 : "+transactionResult.getResponse().getFraudStatus());
+            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))NYLog.e("CEK TRANSACTION 3 : "+transactionResult.getResponse().getTransactionStatus());
+        } else {
+            NYLog.e("CEK TRANSACTION : null");
+        }*/
+
+        if (transactionResult != null && transactionResult.getResponse() != null && transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) && transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING)){
+            NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(BookingServiceSummaryActivity.this, VeritransNotificationActivity.class);
+                            //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
+                            if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
+                                if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
+                                    NTransactionResult result = new NTransactionResult();
+                                    result.setData(transactionResult.getResponse());
+                                    intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                    intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                    intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
+                                } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
+                                    NTransactionResult result = new NTransactionResult();
+                                    result.setData(transactionResult.getResponse());
+                                    intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
+                                    intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                    intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
+                                }
                             }
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    }
-                }, "Check Order");
+                    }, "Check Order");
+        } else {
+            bankTransferLinearLayout.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
+
 }

@@ -16,13 +16,13 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <string name="host_url">http://nyelam-adam.dantech.id/</string>
+    <!--<string name="host_url">http://nyelam-adam.dantech.id/</string>-->
 
     <!-- STAGING -->
     <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
 
     <!--&lt;!&ndash; API STAGING AND DEVELOPMENT &ndash;&gt;-->
-    <string name="api_path_login">api/user/login</string>
+    <!--<string name="api_path_login">api/user/login</string>
     <string name="api_path_update_version">api/master/UpdateVersion</string>
     <string name="api_path_socmed_login">api/user/socmedlogin/</string>
     <string name="api_path_register">api/user/register</string>
@@ -64,15 +64,15 @@
     <string name="api_path_change_password">api/user/changepass</string>
     <string name="api_path_update_profile">api/user/profile/edit</string>
     <string name="api_path_upload_profile">api/user/photo</string>
-    <string name="api_path_upload_cover">api/user/cover</string>
+    <string name="api_path_upload_cover">api/user/cover</string>-->
 
 
 
     <!-- PRODUCTION -->
-    <!--<string name="host_url">https://api.e-nyelam.com/</string>-->
+    <string name="host_url">https://api.e-nyelam.com/</string>
 
     <!-- API PRODUCTION -->
-    <!--<string name="api_path_login">user/login</string>
+    <string name="api_path_login">user/login</string>
     <string name="api_path_update_version">master/UpdateVersion</string>
     <string name="api_path_socmed_login">user/socmedlogin/</string>
     <string name="api_path_register">user/register</string>
@@ -115,7 +115,7 @@
     <string name="api_path_change_password">user/changepass</string>
     <string name="api_path_update_profile">user/profile/edit</string>
     <string name="api_path_upload_profile">user/photo</string>
-    <string name="api_path_upload_cover">user/cover</string>-->
+    <string name="api_path_upload_cover">user/cover</string>
 
 
 </resources>

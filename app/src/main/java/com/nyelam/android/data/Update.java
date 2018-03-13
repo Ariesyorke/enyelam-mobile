@@ -59,7 +59,11 @@ public class Update implements Parseable {
         if (obj == null) return;
 
         try {
-            setLatestVersion(obj.getInt(KEY_LATEST_VERSION));
+            if (obj.has(KEY_LATEST_VERSION) && obj.get(KEY_LATEST_VERSION) instanceof String){
+                setLatestVersion(Integer.valueOf(obj.getString(KEY_LATEST_VERSION)));
+            } else if (obj.has(KEY_LATEST_VERSION) && obj.get(KEY_LATEST_VERSION) instanceof Integer){
+                setLatestVersion(obj.getInt(KEY_LATEST_VERSION));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -74,7 +78,7 @@ public class Update implements Parseable {
 
         try {
             if (obj.has(KEY_LINK) && NYHelper.isStringNotEmpty(obj.getString(KEY_LINK))){
-                setWording(obj.getString(KEY_LINK));
+                setLink(obj.getString(KEY_LINK));
             }
         } catch (JSONException e) {
             e.printStackTrace();

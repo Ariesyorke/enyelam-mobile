@@ -110,5 +110,15 @@ public class DoDiveActivity extends BasicActivity implements
 
     }
 
+    @Override
+    public void onCancelUpdate() {
+
+    }
+
+    @Override
+    public void doUpdateVersion(String link) {
+
+    }
+
 
 }

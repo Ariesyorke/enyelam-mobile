@@ -240,4 +240,15 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
     }
 
+    @Override
+    public void onCancelUpdate() {
+
+    }
+
+    @Override
+    public void doUpdateVersion(String link) {
+
+    }
+
+
 }

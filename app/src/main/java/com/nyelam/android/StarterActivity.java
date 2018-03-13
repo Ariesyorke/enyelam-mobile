@@ -15,23 +15,28 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.data.Update;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.http.NYHomepageModuleRequest;
 import com.nyelam.android.http.NYUpdateVersion;
 import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.storage.NYMasterDataStorage;
+import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.SpiceService;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -39,7 +44,9 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
-public class StarterActivity extends AppCompatActivity  implements NYMasterDataStorage.LoadDataListener<CountryCode>{
+public class StarterActivity extends AppCompatActivity  implements NYMasterDataStorage.LoadDataListener<CountryCode>
+    , NYCustomDialog.OnDialogFragmentClickListener{
+
     private int[] backgroundDrawables = {
             R.drawable.eco_trip_1_bg,
             R.drawable.eco_trip_2_bg,
@@ -187,7 +194,9 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     private void checkConnection() {
         if (NYHelper.checkConnection(StarterActivity.this)) {
             // Its Available...
-            startSplashTimer();
+            // TODO: change start splash time after getUpdate
+            //startSplashTimer();
+            getUpdateVersion();
         } else {
             // Not Available...
             NYHelper.handlePopupMessage(StarterActivity.this, getString(R.string.warn_no_connection), false,
@@ -196,7 +205,9 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                         public void onClick(DialogInterface dialog, int which) {
                             if (NYHelper.checkConnection(StarterActivity.this)){
                                 dialog.dismiss();
-                                startSplashTimer();
+                                // TODO: change start splash time after getUpdate
+                                //startSplashTimer();
+                                getUpdateVersion();
                             } else {
                                 // TODO: cahnge this
                                 //getUpdateVersion();
@@ -212,7 +223,8 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     private void getUpdateVersion() {
         NYUpdateVersion req = null;
         try {
-            req = new NYUpdateVersion(this, "");
+            String versionCode = String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
+            req = new NYUpdateVersion(this, versionCode);
             spcMgr.execute(req, onGetUpdateRequestRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,46 +243,33 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             @Override
             public void onRequestSuccess(final Update update) {
 
+                NYLog.e("CEK UPDATE "+update.toString());
+
                 Integer yourVersion = 0;
 
                 if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == true){
 
+                    //Toast.makeText(StarterActivity.this, "1", Toast.LENGTH_SHORT).show();
+
                     String wording = "";
                     if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
 
-                    new AlertDialog.Builder(StarterActivity.this)
-                            .setTitle("Update Version")
-                            .setMessage(wording)
-                            .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(update.getLink()));
-                                    startActivity(browserIntent);
-                                }
-                            }).show();
-
+                    new NYCustomDialog().showUpdateDialog(StarterActivity.this, update.isMust(), update.getWording(), update.getLink(), update.getLatestVersion());
 
                 } else if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == false){
 
+                    //Toast.makeText(StarterActivity.this, "2", Toast.LENGTH_SHORT).show();
+
                     String wording = "";
                     if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
 
-                    new AlertDialog.Builder(StarterActivity.this)
-                            .setTitle("Update Version")
-                            .setMessage(wording)
-                            .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(update.getLink()));
-                                    startActivity(browserIntent);
-                                }
-                            }).setNegativeButton("Update Later", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    checkConnection();
-                                }
-                            }).show();
+                    new NYCustomDialog().showUpdateDialog(StarterActivity.this, update.isMust(), update.getWording(), update.getLink(), update.getLatestVersion());
 
+                } else {
+
+                    //Toast.makeText(StarterActivity.this, "3", Toast.LENGTH_SHORT).show();
+
+                    startSplashTimer();
                 }
 
             }
@@ -280,7 +279,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
 
 
-    private void startSplashTimer() {
+    public void startSplashTimer() {
 
         DaoSession session = ((NYApplication) getApplicationContext()).getDaoSession();
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
@@ -378,6 +377,38 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
+
+
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nyelam.android"));
+
+    @Override
+    public void onChooseListener(Object position) {
+
+    }
+
+    @Override
+    public void onAcceptAgreementListener() {
+
+    }
+
+    @Override
+    public void onCancelUpdate() {
+        startSplashTimer();
+    }
+
+    @Override
+    public void doUpdateVersion(String link) {
+        if (NYHelper.isStringNotEmpty(link)){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            startActivity(browserIntent);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nyelam.android"));
+            startActivity(intent);
+        }
+    }
+
 
 
 }

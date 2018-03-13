@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_linearLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="@dimen/padding_double"
+    android:background="@drawable/ny_rectangle_white"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:src="@drawable/logo_nyelam"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_gravity="center"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <com.nyelam.android.view.font.NYTextView
+        android:id="@+id/title_textView"
+        android:text="Update Version"
+        android:textAllCaps="true"
+        app:fontTextStyle="mediumItalic"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <com.nyelam.android.view.font.NYTextView
+        android:id="@+id/wording_textView"
+        android:text="This app version will soon be deactivated, please update to the latest version."
+        app:fontTextStyle="reguler"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="@dimen/activity_vertical_margin"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <View
+        android:visibility="gone"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@color/ny_grey1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <com.nyelam.android.view.font.NYTextView
+        android:id="@+id/update_now_textView"
+        android:text="Update Now"
+        android:textAllCaps="true"
+        app:fontTextStyle="reguler"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:background="@drawable/ny_rectangle_blue_soft"
+        android:padding="@dimen/padding"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+    <com.nyelam.android.view.font.NYTextView
+        android:id="@+id/update_later_textView"
+        android:text="Update Later"
+        android:textAllCaps="true"
+        app:fontTextStyle="reguler"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:background="@drawable/ny_rectangle_grey_dark"
+        android:padding="@dimen/padding"
+        android:layout_marginTop="@dimen/padding_half"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
