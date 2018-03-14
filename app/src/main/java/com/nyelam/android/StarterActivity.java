@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,30 +14,22 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CountryCode;
-import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.data.Update;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
-import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
-import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
-import com.nyelam.android.http.NYHomepageModuleRequest;
-import com.nyelam.android.http.NYUpdateVersion;
-import com.nyelam.android.storage.ModulHomepageStorage;
+import com.nyelam.android.http.NYUpdateVersionRequest;
 import com.nyelam.android.storage.NYMasterDataStorage;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.SpiceService;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -221,10 +212,10 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
 
     private void getUpdateVersion() {
-        NYUpdateVersion req = null;
+        NYUpdateVersionRequest req = null;
         try {
             String versionCode = String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
-            req = new NYUpdateVersion(this, versionCode);
+            req = new NYUpdateVersionRequest(this, versionCode);
             spcMgr.execute(req, onGetUpdateRequestRequest());
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         multiDexEnabled = true
-        versionCode 28
-        versionName '0.0.28'
+        versionCode 29
+        versionName '0.0.29'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -45,7 +45,7 @@ dependencies {
 
     // For using the Veritrans Production
 
-    //compile 'com.midtrans:corekit:1.11.0'
+//    compile 'com.midtrans:corekit:1.11.0'
 
     // For using the Veritrans Sandbox
 

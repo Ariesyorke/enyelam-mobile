@@ -121,9 +121,8 @@ public class NYDoDiveSearchDiveCenterRequest extends NYBasicRequest<DiveCenterLi
             addQuery(POST_DATE, date);
         }
 
-        if(!TextUtils.isEmpty(sortBy)) {
-            addQuery(POST_SORT_BY, sortBy);
-        }
+        addQuery(POST_SORT_BY, "2");
+
     }
 
     @Override

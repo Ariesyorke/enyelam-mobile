@@ -15,14 +15,14 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/23/2018.
  */
 
-public class NYUpdateVersion extends NYBasicRequest<Update> {
+public class NYUpdateVersionRequest extends NYBasicRequest<Update> {
 
     private static String KEY_UPDATE = "update";
 
     private static String POST_PLATFORM = "platform";
     private static String POST_VERSION = "version";
 
-    public NYUpdateVersion(Context context, String version) throws Exception {
+    public NYUpdateVersionRequest(Context context, String version) throws Exception {
         super(Summary.class, context, context.getResources().getString(R.string.api_path_update_version));
 
         addQuery(POST_PLATFORM, "android");
@@ -36,7 +36,7 @@ public class NYUpdateVersion extends NYBasicRequest<Update> {
     @Override
     protected Update onProcessSuccessData(JSONObject obj) throws Exception {
 
-        if (obj.has(KEY_UPDATE) && obj.get(KEY_UPDATE) != null){
+        if (!obj.isNull(KEY_UPDATE)){
             Update update = new Update();
             update.parse(obj.getJSONObject(KEY_UPDATE));
             return update;
