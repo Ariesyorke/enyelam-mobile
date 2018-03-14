@@ -85,7 +85,22 @@ public class Update implements Parseable {
         }
 
         try {
-            setMust(obj.getBoolean(KEY_IS_MUST));
+            if (obj.has(KEY_IS_MUST) && obj.get(KEY_IS_MUST) instanceof String){
+                if (Integer.valueOf(obj.getString(KEY_IS_MUST)) > 0){
+                    setMust(true);
+                } else {
+                    setMust(false);
+                }
+            } else if (obj.has(KEY_IS_MUST) && obj.get(KEY_IS_MUST) instanceof Integer){
+                if (obj.getInt(KEY_IS_MUST) > 0){
+                    setMust(true);
+                } else {
+                    setMust(false);
+                }
+            } else if (obj.has(KEY_IS_MUST) && obj.get(KEY_IS_MUST) instanceof Boolean){
+                setMust(obj.getBoolean(KEY_IS_MUST));
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

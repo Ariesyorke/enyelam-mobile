@@ -243,9 +243,14 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             @Override
             public void onRequestSuccess(final Update update) {
 
-                NYLog.e("CEK UPDATE "+update.toString());
+                //NYLog.e("CEK UPDATE "+update.toString());
 
                 Integer yourVersion = 0;
+                try {
+                    yourVersion = Integer.valueOf(String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionCode));
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
 
                 if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == true){
 
