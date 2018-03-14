@@ -99,6 +99,7 @@ public class NYHelper {
     public static final String MIDTRANS = "midtrans";
 
     public static final String NY_ACCEPT_FRAUD_STATUS = "accept";
+    public static final String NY_CHALLENGE_FRAUD_STATUS = "challenge";
     public static final String NY_TRANSACTION_STATUS_CAPTURE = "capture";
     public static final String TRANSACTION_COMPLETED = "transaction_completed";
     public static final String TRANSACTION_PENDING = "pending";

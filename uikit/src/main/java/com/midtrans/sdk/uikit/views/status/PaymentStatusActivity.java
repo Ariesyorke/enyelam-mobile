@@ -147,14 +147,14 @@ public class PaymentStatusActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (presenter != null && paymentStatus != null) {
-            if (paymentStatus.equalsIgnoreCase(UiKitConstants.STATUS_SUCCESS)) {
-                presenter.trackBackButtonClick(PAGE_NAME_SUCCESS);
-            } else if (paymentStatus.equalsIgnoreCase(UiKitConstants.STATUS_FAILED)) {
-                presenter.trackBackButtonClick(PAGE_NAME_FAILED);
-            }
-        }
-        super.onBackPressed();
+//        if (presenter != null && paymentStatus != null) {
+//            if (paymentStatus.equalsIgnoreCase(UiKitConstants.STATUS_SUCCESS)) {
+//                presenter.trackBackButtonClick(PAGE_NAME_SUCCESS);
+//            } else if (paymentStatus.equalsIgnoreCase(UiKitConstants.STATUS_FAILED)) {
+//                presenter.trackBackButtonClick(PAGE_NAME_FAILED);
+//            }
+//        }
+//        super.onBackPressed();
     }
 
     private void finishPayment() {

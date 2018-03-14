@@ -49,6 +49,7 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYCartExpiredException;
+import com.nyelam.android.http.NYDoDiveServiceCartRequest;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
@@ -78,6 +79,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     //private String cartToken;
     private CartReturn cartReturn;
     private OrderReturn orderReturn;
+    private boolean isTranssactionFailed = false;
 
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, diveCenterNameTextView, locationTextView;
@@ -115,7 +117,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 } else {
                     Toast.makeText(BookingServiceSummaryActivity.this, "cartToken null", Toast.LENGTH_SHORT).show();
                 }*/
-                if (orderReturn == null){
+                if (orderReturn == null && isTranssactionFailed){
+                    // TODO: request ulang cart token atau cart return
+                    new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
+                } else if (orderReturn == null){
                     new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
                 } else {
                     payUsingVeritrans();
@@ -511,12 +516,60 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         };
     }
 
+
+
+
+    public void requestCartToken(){
+        progressDialog.show();
+        try {
+            NYDoDiveServiceCartRequest req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId());
+            spcMgr.execute(req, onCreateCartServiceRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<CartReturn> onCreateCartServiceRequest() {
+        return new RequestListener<CartReturn>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onRequestSuccess(final CartReturn result) {
+                /*if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }*/
+                //progressDialog.show();
+
+                cartReturn = result;
+
+                if (result != null){
+                    NYDoDiveServiceOrderRequest req = null;
+                    try {
+                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType);
+                        spcMgr.execute(req, onCreateOrderServiceRequest());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    progressDialog.dismiss();
+                }
+
+
+            }
+        };
+    }
+
     public void payUsingVeritrans() {
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(this) // context is mandatory
-                .setTransactionFinishedCallback(this) // set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
+                .setTransactionFinishedCallback(this)// set transaction finish callback (sdk callback)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -666,13 +719,17 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     @Override
     public void onAcceptAgreementListener() {
 
-        progressDialog.show();
-        NYDoDiveServiceOrderRequest req = null;
-        try {
-            req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType);
-            spcMgr.execute(req, onCreateOrderServiceRequest());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (isTranssactionFailed){
+            requestCartToken();
+        } else {
+            progressDialog.show();
+            NYDoDiveServiceOrderRequest req = null;
+            try {
+                req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType);
+                spcMgr.execute(req, onCreateOrderServiceRequest());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -690,15 +747,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void onTransactionFinished(final TransactionResult transactionResult) {
         //TODO DISINI HANDLE KALO TRANSAKSI DI MIDTRANS SUKSES
 
-        /*if (transactionResult != null){
+        if (transactionResult != null){
             if (transactionResult.getResponse() != null)NYLog.e("CEK TRANSACTION 1: "+transactionResult.getResponse().getTransactionStatus());
             if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))NYLog.e("CEK TRANSACTION 2 : "+transactionResult.getResponse().getFraudStatus());
             if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))NYLog.e("CEK TRANSACTION 3 : "+transactionResult.getResponse().getTransactionStatus());
         } else {
             NYLog.e("CEK TRANSACTION : null");
-        }*/
+        }
 
-        if (transactionResult != null && transactionResult.getResponse() != null && transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) && transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING)){
+        if (transactionResult != null && transactionResult.getResponse() != null && (transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) || transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING)) ){
             NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -724,6 +781,14 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                             startActivity(intent);
                         }
                     }, "Check Order");
+        } else if (transactionResult != null && transactionResult.getResponse() != null && transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_CHALLENGE_FRAUD_STATUS)){
+
+            // TODO: jika transaksi gagal
+            orderReturn = null;
+            isTranssactionFailed = true;
+            midtransLinearLayout.setVisibility(View.VISIBLE);
+            bankTransferLinearLayout.setVisibility(View.VISIBLE);
+
         } else {
             bankTransferLinearLayout.setVisibility(View.GONE);
         }
