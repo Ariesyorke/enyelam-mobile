@@ -270,116 +270,10 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="reguler"
-                        android:visibility="gone"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:text="@string/participants"
-                        android:textSize="14sp"
-                        android:textColor="@color/ny_grey4" />
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="bold"
-                        android:id="@+id/detail_price_textView"
-                        android:gravity="right|end"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_marginStart="@dimen/padding"
-                        android:textSize="16sp"
-                        android:text="0 x @ Rp 0"
-                        android:textColor="@color/ny_orange" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="reguler"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:text="@string/sub_total"
-                        android:textSize="14sp"
-                        android:textColor="@color/ny_grey4" />
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="bold"
-                        android:id="@+id/sub_total_price_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_marginStart="@dimen/padding"
-                        android:textSize="16sp"
-                        android:text="Rp 0"
-                        android:textColor="@color/ny_orange" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:visibility="gone"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="reguler"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/padding"
-                        android:text="@string/voucher"
-                        android:textColor="@color/ny_grey4" />
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="reguler"
-                        android:id="@+id/voucher_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_marginStart="@dimen/padding"
-                        android:textSize="16sp"
-                        android:text="Rp 0"
-                        android:textColor="@color/ny_orange" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="reguler"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/padding"
-                        android:text="@string/total_price"
-                        android:textColor="@color/ny_grey4" />
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="bold"
-                        android:id="@+id/total_price_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_marginStart="@dimen/padding"
-                        android:textSize="16sp"
-                        android:text="Rp 0"
-                        android:textColor="@color/ny_orange" />
-                </LinearLayout>
-
             </LinearLayout>
+
+
+
 
             <com.nyelam.android.view.font.NYTextView
                 app:fontTextStyle="mediumItalic"
@@ -489,10 +383,6 @@
                 android:padding="@dimen/activity_horizontal_margin"/>
 
 
-
-
-
-
             <com.nyelam.android.view.font.NYTextView
                 app:fontTextStyle="mediumItalic"
                 android:layout_width="match_parent"
@@ -501,7 +391,7 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/padding"
                 android:paddingBottom="@dimen/padding"
-                android:text="Payment Options"
+                android:text="@string/payment_method"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold" />
 
@@ -516,13 +406,57 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:id="@+id/payment_midtrans_linearLayout"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:id="@+id/midtransRadioButton"
+                            android:checked="true"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <RelativeLayout
+                            android:layout_marginLeft="@dimen/padding"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <me.relex.circleindicator.CircleIndicator
+                                android:id="@+id/midtrans"
+                                android:background="@color/ny_blue6"
+                                android:layout_centerVertical="true"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp" />
+                            <TextView
+                                android:id="@+id/midtrans_label"
+                                android:text="@string/virtual_account_or_credit_card"
+                                android:textColor="@color/ny_black1"
+                                android:textSize="16sp"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_toRightOf="@+id/midtrans"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <TextView
+                                android:layout_below="@+id/midtrans_label"
+                                android:layout_toRightOf="@+id/midtrans"
+                                android:text="@string/virtual_account_or_credit_card_label"
+                                android:textColor="@color/ny_grey4"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/payment_bank_transfer_linearLayout"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <RadioButton
                             android:id="@+id/bankTransferRadioButton"
-                            android:checked="true"
                             android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -559,51 +493,140 @@
                     </LinearLayout>
 
 
-                    <LinearLayout
-                        android:id="@+id/payment_midtrans_linearLayout"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <RadioButton
-                            android:id="@+id/midtransRadioButton"
-                            android:layout_gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <RelativeLayout
-                            android:layout_marginLeft="@dimen/padding"
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <me.relex.circleindicator.CircleIndicator
-                                android:id="@+id/midtrans"
-                                android:background="@color/ny_blue6"
-                                android:layout_centerVertical="true"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp" />
-                            <TextView
-                                android:id="@+id/midtrans_label"
-                                android:text="@string/virtual_account_or_credit_card"
-                                android:textColor="@color/ny_black1"
-                                android:textSize="16sp"
-                                android:layout_marginLeft="@dimen/padding"
-                                android:layout_toRightOf="@+id/midtrans"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <TextView
-                                android:layout_below="@+id/midtrans_label"
-                                android:layout_toRightOf="@+id/midtrans"
-                                android:text="@string/virtual_account_or_credit_card_label"
-                                android:textColor="@color/ny_grey4"
-                                android:textSize="14sp"
-                                android:layout_marginLeft="@dimen/padding"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                        </RelativeLayout>
-                    </LinearLayout>
                 </RadioGroup>
             </LinearLayout>
 
+
+
+
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="mediumItalic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ny_blue7"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
+                android:text="@string/price_details"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="reguler"
+                        android:visibility="gone"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="@string/participants"
+                        android:textSize="14sp"
+                        android:textColor="@color/ny_grey4" />
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="bold"
+                        android:id="@+id/detail_price_textView"
+                        android:gravity="right|end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_marginStart="@dimen/padding"
+                        android:textSize="16sp"
+                        android:text="0 x @ Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="reguler"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="@string/sub_total"
+                        android:textSize="14sp"
+                        android:textColor="@color/ny_grey4" />
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="bold"
+                        android:id="@+id/sub_total_price_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_marginStart="@dimen/padding"
+                        android:textSize="16sp"
+                        android:text="Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="reguler"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="@string/voucher"
+                        android:textColor="@color/ny_grey4" />
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="reguler"
+                        android:id="@+id/voucher_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_marginStart="@dimen/padding"
+                        android:textSize="16sp"
+                        android:text="Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="reguler"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:text="@string/total_price"
+                        android:textColor="@color/ny_grey4" />
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="bold"
+                        android:id="@+id/total_price_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_marginStart="@dimen/padding"
+                        android:textSize="16sp"
+                        android:text="Rp 0"
+                        android:textColor="@color/ny_orange" />
+                </LinearLayout>
+            </LinearLayout>
 
 
 
@@ -647,7 +670,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
-
 
 
         </LinearLayout>

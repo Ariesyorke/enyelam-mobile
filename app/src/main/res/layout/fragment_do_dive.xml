@@ -70,9 +70,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
-
-
                 <LinearLayout
                     android:background="@drawable/ny_rectangle_blue_search_box_two"
                     android:layout_width="match_parent"

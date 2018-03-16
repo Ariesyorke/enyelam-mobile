@@ -73,7 +73,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private int diver = 0;
     private String schedule = "0";
     private String certificate = "0";
-    private String paymentType = "1";
+    private String paymentType = "2";
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -106,7 +106,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         initParticipantLayout();
         initControl();
     }
-
 
     private void initControl() {
         orderLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -477,6 +476,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     }
                 }
             }
+
 
             @Override
             public void onRequestSuccess(final OrderReturn result) {

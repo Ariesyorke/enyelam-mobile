@@ -33,6 +33,7 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
     private int backgroundResource = R.drawable.eco_trip_5_bg;
     private ImageView backgroundImageView;
     private View activitiesButton;
+    private Bitmap bitmap;
 
     public EcoTripOnboardingGetStartedFragment() {
         // Required empty public constructor
@@ -76,10 +77,10 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
                 startActivity(i);
             }
         });
-        if(application.getCache(imageUri) != null) {
+        /*if(application.getCache(imageUri) != null) {
             Bitmap bitmap = application.getCache(imageUri);
             backgroundImageView.setImageBitmap(bitmap);
-        } else {
+        } else {*/
             ImageLoader.getInstance().displayImage("drawable://" + backgroundResource, backgroundImageView, NYHelper.getCompressedOption(getActivity()), new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
@@ -93,7 +94,8 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
 
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    application.addCache(imageUri, loadedImage);
+       //             application.addCache(imageUri, loadedImage);
+                    bitmap = loadedImage;
                 }
 
                 @Override
@@ -101,10 +103,15 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
 
                 }
             });
-        }
+        //}
+
         bookNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // TODO free space
+                System.gc();
+
                 Intent intent = new Intent(getActivity(), DoDiveActivity.class);
                 intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                 getActivity().finish();
@@ -117,12 +124,18 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(bitmap != null) bitmap.recycle();
+    }
+
 
 }

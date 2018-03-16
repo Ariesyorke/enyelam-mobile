@@ -59,12 +59,15 @@ public class DoDiveActivity extends BasicActivity implements
         String imageUri = "drawable://"+R.drawable.background_blur;
         NYApplication application = (NYApplication)getApplication();
         
-        if(application.getCache(imageUri) != null) {
+        /*if(application.getCache(imageUri) != null) {
             Bitmap bitmap = application.getCache(imageUri);
             backgroundImageView.setImageBitmap(bitmap);
         } else {
             ImageLoader.getInstance().displayImage(imageUri, backgroundImageView, NYHelper.getCompressedOption(this));
-        }
+        }*/
+
+        ImageLoader.getInstance().displayImage(imageUri, backgroundImageView, NYHelper.getCompressedOption(this));
+
     }
 
     private void initFragment() {
@@ -97,7 +100,6 @@ public class DoDiveActivity extends BasicActivity implements
         } else {
             searchImageView.setVisibility(View.GONE);
         }
-
     }
 
     @Override

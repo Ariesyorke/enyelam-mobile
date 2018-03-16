@@ -179,7 +179,7 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     } else if (searchResult.getType() == 5){
                         place = context.getString(R.string.province);
                     } else if (searchResult.getType() == 6){
-                        place = context.getString(R.string.city);
+                        place = context.getString(R.string.area);
                     }
 
                     if (searchResult.getCount() != null){

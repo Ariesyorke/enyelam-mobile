@@ -163,7 +163,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 NYApplication application = (NYApplication)getApplication();
-                application.addCache(imageUri, loadedImage);
+      //          application.addCache(imageUri, loadedImage);
                 int nextIndex = index;
                 nextIndex += 1;
                 if (nextIndex < backgroundDrawables.length) {

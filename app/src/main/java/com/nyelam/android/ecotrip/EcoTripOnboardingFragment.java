@@ -31,6 +31,7 @@ public class EcoTripOnboardingFragment extends Fragment {
     };
     private ImageView backgroundImageView;
     private ImageView iconImageView;
+    private Bitmap bitmap;
 
     public EcoTripOnboardingFragment() {
         // Required empty public constructor
@@ -72,10 +73,10 @@ public class EcoTripOnboardingFragment extends Fragment {
             int backgroundResource = getArguments().getInt(KEY_BACKGROUND_RESOURCE);
             String imageUri = "drawable://" + backgroundResource;
             final NYApplication application = (NYApplication) getActivity().getApplication();
-            if(application.getCache(imageUri) != null) {
-                Bitmap bitmap = application.getCache(imageUri);
-                backgroundImageView.setImageBitmap(bitmap);
-            } else {
+//            if(application.getCache(imageUri) != null) {
+//                Bitmap bitmap = application.getCache(imageUri);
+//                backgroundImageView.setImageBitmap(bitmap);
+//            } else {
                 ImageLoader.getInstance().displayImage("drawable://" + backgroundResource, backgroundImageView, NYHelper.getCompressedOption(getActivity()), new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
@@ -89,7 +90,8 @@ public class EcoTripOnboardingFragment extends Fragment {
 
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        application.addCache(imageUri, loadedImage);
+        //                application.addCache(imageUri, loadedImage);
+                        bitmap = loadedImage;
                     }
 
                     @Override
@@ -97,7 +99,7 @@ public class EcoTripOnboardingFragment extends Fragment {
 
                     }
                 });
-            }
+//            }
         }
     }
 
@@ -109,5 +111,11 @@ public class EcoTripOnboardingFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (bitmap != null) bitmap.recycle();
     }
 }

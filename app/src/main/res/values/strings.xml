@@ -49,6 +49,7 @@
     <string name="country">Country</string>
     <string name="province">Province</string>
     <string name="city">City</string>
+    <string name="area">Area</string>
     <string name="save">Save</string>
     <string name="change">Change</string>
     <string name="change_password">Change Password</string>
@@ -88,6 +89,8 @@
     <string name="participants">Participants</string>
     <string name="participant_details">Participant Details</string>
     <string name="booking_details">Booking Details</string>
+    <string name="price_details">Price Details</string>
+    <string name="payment_method">Payment Method</string>
     <string name="choose_file">Choose File</string>
     <string name="confirm">Confirm</string>
     <string name="pay_now">Pay Now</string>

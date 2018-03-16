@@ -98,7 +98,7 @@
                             <TextView
                                 android:id="@+id/label_city"
                                 android:layout_below="@+id/label_phone_number"
-                                android:text="City : "
+                                android:text="Area : "
                                 android:textColor="@color/ny_black1"
                                 android:textSize="14sp"
                                 android:layout_marginTop="@dimen/padding"
