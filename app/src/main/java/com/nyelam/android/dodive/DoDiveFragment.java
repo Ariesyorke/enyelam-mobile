@@ -31,7 +31,6 @@ import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYCustomDialog;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -141,6 +140,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         DoDiveActivity activity = (DoDiveActivity)getActivity();
         if(activity.isEcoTrip()) {
             List<Calendar> calendars = new ArrayList<>();
+            //List<Calendar> calendarsTwo = new ArrayList<>();
             int divider = 12 - month;
 
             for(int i = 0; i < divider; i++) {
@@ -174,6 +174,12 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             Calendar[] cals = new Calendar[calendars.size()];
             calendars.toArray(cals);
             datePickerDialog.setSelectableDays(cals);
+
+
+            /*Calendar[] calsTwo = new Calendar[2];
+            calsTwo[0] = Calendar.getInstance();
+            calsTwo[0].set(2018, 4, 12);
+            datePickerDialog.setDisabledDays(calsTwo);*/
 
             NYLog.e("CEK CALE final : "+cals.length);
 

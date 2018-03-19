@@ -1,1 +1,1 @@
-include ':app', ':nyelamdaogenerator', ':uikit'
+include ':app', ':nyelamdaogenerator', ':uikit', ':materialdatetimepicker'

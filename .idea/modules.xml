@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/materialdatetimepicker/materialdatetimepicker.iml" filepath="$PROJECT_DIR$/materialdatetimepicker/materialdatetimepicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/nyelam-android.iml" filepath="$PROJECT_DIR$/nyelam-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/nyelamdaogenerator/nyelamdaogenerator.iml" filepath="$PROJECT_DIR$/nyelamdaogenerator/nyelamdaogenerator.iml" />
       <module fileurl="file://$PROJECT_DIR$/uikit/uikit.iml" filepath="$PROJECT_DIR$/uikit/uikit.iml" />
