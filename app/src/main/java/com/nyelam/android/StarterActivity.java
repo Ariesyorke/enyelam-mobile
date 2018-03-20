@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -229,6 +230,9 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                 /*if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }*/
+
+                Toast.makeText(StarterActivity.this, "fail", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -245,7 +249,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
                 if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == true){
 
-                    //Toast.makeText(StarterActivity.this, "1", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StarterActivity.this, "1", Toast.LENGTH_SHORT).show();
 
                     String wording = "";
                     if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
@@ -254,7 +258,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
                 } else if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == false){
 
-                    //Toast.makeText(StarterActivity.this, "2", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StarterActivity.this, "2", Toast.LENGTH_SHORT).show();
 
                     String wording = "";
                     if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
@@ -263,7 +267,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
                 } else {
 
-                    //Toast.makeText(StarterActivity.this, "3", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StarterActivity.this, "3", Toast.LENGTH_SHORT).show();
 
                     startSplashTimer();
                 }

@@ -28,10 +28,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -292,6 +294,11 @@ public class DatePickerDialog extends DialogFragment implements
         outState.putSerializable(KEY_TIMEZONE, mTimezone);
         outState.putParcelable(KEY_DATERANGELIMITER, mDateRangeLimiter);
         outState.putSerializable(KEY_LOCALE, mLocale);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -843,7 +850,11 @@ public class DatePickerDialog extends DialogFragment implements
     @SuppressWarnings("unused")
     public void setSelectableDays(Calendar[] selectableDays) {
         mDefaultLimiter.setSelectableDays(selectableDays);
-        if (mDayPickerView != null) mDayPickerView.onChange();
+        Log.e("CEK CALE", "IS THIS NULL" + mDayPickerView);
+        if (mDayPickerView != null) {
+            Log.e("cek cale","masuk");
+            mDayPickerView.onChange();
+        }
     }
 
     /**

@@ -144,9 +144,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             int divider = 12 - month;
 
             for(int i = 0; i < divider; i++) {
-
-                NYLog.e("CEK CALE ke- : "+i);
-
                 Calendar a = Calendar.getInstance();
                 a.setTime(new Date());
                 a.add(Calendar.MONTH, i);
@@ -157,7 +154,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         calendars.add(a);
                         break;
                     } else {
-                        a.add(Calendar.DAY_OF_WEEK, j);
+                        a.add(Calendar.DAY_OF_WEEK, 1);
                     }
                 }
                 if(i == 0) {
@@ -256,7 +253,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                                 calendars.add(a);
                                 break;
                             } else {
-                                a.add(Calendar.DAY_OF_WEEK, j);
+                                a.add(Calendar.DAY_OF_WEEK, 1);
                             }
                         }
                         if(i == 0) {
@@ -340,6 +337,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
+
             }
         });
 

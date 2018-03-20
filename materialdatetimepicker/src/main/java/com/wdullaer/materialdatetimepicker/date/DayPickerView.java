@@ -153,6 +153,7 @@ public abstract class DayPickerView extends RecyclerView implements OnDateChange
         if (mAdapter == null) {
             mAdapter = createMonthAdapter(mController);
         } else {
+            Log.e("cek cale", "masuk 2");
             mAdapter.setSelectedDay(mSelectedDay);
         }
         // refresh the view with the new parameters
