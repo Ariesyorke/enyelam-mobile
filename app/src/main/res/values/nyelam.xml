@@ -28,6 +28,8 @@
     <string name="api_path_register">api/user/register</string>
     <string name="api_path_forgot_password">api/user/forgotpass</string>
     <string name="api_path_master_country">api/master/country</string>
+    <string name="api_path_master_nationality">api/master/nationality</string>
+    <string name="api_path_master_language">api/master/language</string>
     <string name="api_path_master_category">api/service/masterCategory</string>
     <string name="api_path_master_dodive_search">api/master/dodive/search</string>
     <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>

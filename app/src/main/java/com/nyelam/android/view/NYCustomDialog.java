@@ -8,7 +8,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,21 +21,36 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.midtrans.sdk.uikit.utilities.RecyclerItemClickListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.StarterActivity;
+import com.nyelam.android.data.CountryCode;
+import com.nyelam.android.data.Language;
+import com.nyelam.android.data.Nationality;
+import com.nyelam.android.data.dao.DaoSession;
+import com.nyelam.android.data.dao.NYCountryCode;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveFragment;
 import com.nyelam.android.dodive.DoDiveSearchResultActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.profile.CountryListAdapter;
+import com.nyelam.android.profile.LanguageListAdapter;
+import com.nyelam.android.profile.NationalityListAdapter;
 
 import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 2/1/2018.
@@ -183,14 +203,7 @@ public class NYCustomDialog {
         });
 
         dialog.show();
-
     }
-
-
-
-
-
-
 
 
     public void showUpdateDialog(final Activity activity, boolean isMust, String wording, final String link, Integer latestVersion){
@@ -242,7 +255,6 @@ public class NYCustomDialog {
         dialog.show();
 
     }
-
 
 
     public void showTotalDiverDialog(final Activity activity){
@@ -300,6 +312,283 @@ public class NYCustomDialog {
         dialog.show();
 
     }
+
+
+
+
+
+
+
+
+    public void showCountryDialog(final Activity activity, CountryCode currentCountryCode){
+
+        this.listener = (OnDialogFragmentClickListener) activity;
+
+        dialog = new Dialog(activity);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_choose_country);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
+        linearLayout.setMinimumWidth(width);
+        linearLayout.setMinimumHeight(height);
+        //LinearLayout containerLinearLayout = (LinearLayout) dialog.findViewById(R.id.container_linaerLayout);
+
+        final CountryListAdapter countryListAdapter = new CountryListAdapter(activity);
+
+        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new SimpleItemDecorator(5));
+        recyclerView.setAdapter(countryListAdapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(activity, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        listener.onChooseListener(countryListAdapter.getItemByPosition(position));
+                        dialog.dismiss();
+                    }
+                })
+        );
+
+        DaoSession session = ((NYApplication) activity.getApplicationContext()).getDaoSession();
+        List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
+        final List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
+        if (countryCodes != null && countryCodes.size() > 0){
+            countryListAdapter.clear();
+            countryListAdapter.addResults(countryCodes, currentCountryCode);
+            countryListAdapter.notifyDataSetChanged();
+        }
+
+
+        ImageView backImageView = (ImageView) dialog.findViewById(R.id.back_imageView);
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        EditText searchEditText = (EditText) dialog.findViewById(R.id.search_editText);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                //new SearchTask().execute(seq.toString().trim());
+                if (!TextUtils.isEmpty(arg0.toString().trim())) {
+                    countryListAdapter.searchResults(arg0.toString().trim());
+                } else {
+                    countryListAdapter.setResults(countryCodes);
+                }
+            }
+
+        });
+
+        dialog.show();
+
+
+    }
+
+
+
+
+
+    public void showNationalityDialog(final Activity activity, final List<Nationality> nationalities, Nationality currentNationality){
+
+        this.listener = (OnDialogFragmentClickListener) activity;
+
+        dialog = new Dialog(activity);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_choose_country);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
+        linearLayout.setMinimumWidth(width);
+        linearLayout.setMinimumHeight(height);
+        //LinearLayout containerLinearLayout = (LinearLayout) dialog.findViewById(R.id.container_linaerLayout);
+
+        final NationalityListAdapter nationalityListAdapter = new NationalityListAdapter(activity);
+
+        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new SimpleItemDecorator(5));
+        recyclerView.setAdapter(nationalityListAdapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(activity, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        listener.onChooseListener(nationalityListAdapter.getItemByPosition(position));
+                        dialog.dismiss();
+                    }
+                })
+        );
+
+        if (nationalities != null && nationalities.size() > 0){
+            nationalityListAdapter.addResults(nationalities, currentNationality);
+            nationalityListAdapter.notifyDataSetChanged();
+        }
+
+        ImageView backImageView = (ImageView) dialog.findViewById(R.id.back_imageView);
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        EditText searchEditText = (EditText) dialog.findViewById(R.id.search_editText);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                //seq = cs;
+                /*if (!TextUtils.isEmpty(cs.toString())){
+                    countryListAdapter.searchResults(cs.toString());
+                } else {
+                    countryListAdapter.setResults(countryCodes);
+                }*/
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                //new SearchTask().execute(seq.toString().trim());
+                if (!TextUtils.isEmpty(arg0.toString().trim())) {
+                    nationalityListAdapter.searchResults(arg0.toString().trim());
+                } else {
+                    nationalityListAdapter.setResults(nationalities);
+                }
+            }
+
+        });
+
+        dialog.show();
+
+    }
+
+
+
+
+
+
+
+
+    public void showLanguageDialog(final Activity activity, final List<Language> languageList, Language currentLanguage){
+
+        this.listener = (OnDialogFragmentClickListener) activity;
+
+        dialog = new Dialog(activity);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_choose_country);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
+        linearLayout.setMinimumWidth(width);
+        linearLayout.setMinimumHeight(height);
+        //LinearLayout containerLinearLayout = (LinearLayout) dialog.findViewById(R.id.container_linaerLayout);
+
+        final LanguageListAdapter languageListAdapter = new LanguageListAdapter(activity);
+
+        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new SimpleItemDecorator(5));
+        recyclerView.setAdapter(languageListAdapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(activity, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        listener.onChooseListener(languageListAdapter.getItemByPosition(position));
+                        dialog.dismiss();
+                    }
+                })
+        );
+
+        if (languageList != null && languageList.size() > 0){
+            languageListAdapter.addResults(languageList, currentLanguage);
+            languageListAdapter.notifyDataSetChanged();
+        }
+
+        ImageView backImageView = (ImageView) dialog.findViewById(R.id.back_imageView);
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        EditText searchEditText = (EditText) dialog.findViewById(R.id.search_editText);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                //seq = cs;
+                /*if (!TextUtils.isEmpty(cs.toString())){
+                    countryListAdapter.searchResults(cs.toString());
+                } else {
+                    countryListAdapter.setResults(countryCodes);
+                }*/
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                //new SearchTask().execute(seq.toString().trim());
+                if (!TextUtils.isEmpty(arg0.toString().trim())) {
+                    languageListAdapter.searchResults(arg0.toString().trim());
+                } else {
+                    languageListAdapter.setResults(languageList);
+                }
+            }
+
+        });
+
+        dialog.show();
+
+    }
+
 
 
 

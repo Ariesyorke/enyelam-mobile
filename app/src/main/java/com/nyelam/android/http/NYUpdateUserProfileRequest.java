@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.CountryCode;
+import com.nyelam.android.data.Language;
+import com.nyelam.android.data.Nationality;
 import com.nyelam.android.data.Summary;
 import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
@@ -31,9 +34,13 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
     private static String POST_CERTIFICATE_NUMBER = "certificate_number";
     private static String POST_BIRTH_PLACE = "birth_place";
 
+    private static String POST_COUNTRY_ID = "country_id";
+    private static String POST_NATIONALITY_ID = "nationality_id";
+    private static String POST_LANGUAGE_ID = "language_id";
+
     public NYUpdateUserProfileRequest(Context context, String fullname, String username, String countryCode, String phoneNumber,
                                       String gender, String birthDate, String dateCertificate,
-                                      String certificateNumber, String birthPlace) throws Exception {
+                                      String certificateNumber, String birthPlace, CountryCode currentCountryCode, Nationality currentNationality, Language currentLanguage) throws Exception {
         super(Summary.class, context, context.getResources().getString(R.string.api_path_update_profile));
 
         if (NYHelper.isStringNotEmpty(fullname)){
@@ -70,6 +77,23 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
 
         if(NYHelper.isStringNotEmpty(birthPlace)) {
             addQuery(POST_BIRTH_PLACE, birthPlace);
+        }
+
+
+
+
+
+
+        if(currentCountryCode != null && NYHelper.isStringNotEmpty(currentCountryCode.getId())) {
+            addQuery(POST_COUNTRY_ID, currentCountryCode.getId());
+        }
+
+        if(currentNationality != null && NYHelper.isStringNotEmpty(currentNationality.getId())) {
+            addQuery(POST_NATIONALITY_ID, currentNationality.getId());
+        }
+
+        if(currentLanguage != null && NYHelper.isStringNotEmpty(currentLanguage.getId())) {
+            addQuery(POST_LANGUAGE_ID, currentLanguage.getId());
         }
 
     }

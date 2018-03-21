@@ -133,4 +133,6 @@ public class TotalDiverSpinnerAdapter extends BaseAdapter implements SpinnerAdap
     public void setSelectedPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;
     }
+
+
 }

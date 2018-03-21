@@ -28,6 +28,10 @@
     <string name="certificate_number_hint">Certificate Number</string>
     <string name="certificate_date_hint">Certificate Date</string>
     <string name="birth_date_hint">Birth Date</string>
+    <string name="country_hint">Country</string>
+    <string name="nationality_hint">Nationality</string>
+    <string name="language">Language</string>
+    <string name="language_hint">Language</string>
     <string name="gender_hint">Gender</string>
     <string name="phone_number">Phone Number</string>
     <string name="phone_number_hint">Phone Number *</string>

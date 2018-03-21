@@ -38,6 +38,10 @@ public class User implements Parseable {
     private static String KEY_COVER = "cover";
     private static String KEY_COUNTRY_CODE = "country_code";
     private static String KEY_SOCIAL_MEDIA = "social_media";
+    private static String KEY_COUNTRY = "country";
+    private static String KEY_NATIONALITY = "nationality";
+    private static String KEY_LANGUAGE = "language";
+
 
     private String userId, fullname, firstname, lastname,
             phone, email, picture, gender, refferalCode,
@@ -49,6 +53,9 @@ public class User implements Parseable {
     private String username, cover;
     private CountryCode countryCode;
     private Date certificateDate;
+    private CountryCode country;
+    private Nationality nationality;
+    private Language language;
 
     public String getBirthPlace() {
         return birthPlace;
@@ -211,6 +218,30 @@ public class User implements Parseable {
         this.countryCode = countryCode;
     }
 
+    public CountryCode getCountry() {
+        return country;
+    }
+
+    public void setCountry(CountryCode country) {
+        this.country = country;
+    }
+
+    public Nationality getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
     @Override
     public void parse (JSONObject obj) {
 
@@ -363,6 +394,43 @@ public class User implements Parseable {
                 if(o != null && o.length() > 0) {
                     countryCode = new CountryCode();
                     countryCode.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            if(!obj.isNull(KEY_COUNTRY)) {
+                JSONObject o = obj.getJSONObject(KEY_COUNTRY);
+                if(o != null && o.length() > 0) {
+                    country = new CountryCode();
+                    country.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(!obj.isNull(KEY_NATIONALITY)) {
+                JSONObject o = obj.getJSONObject(KEY_NATIONALITY);
+                if(o != null && o.length() > 0) {
+                    nationality = new Nationality();
+                    nationality.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(!obj.isNull(KEY_LANGUAGE)) {
+                JSONObject o = obj.getJSONObject(KEY_LANGUAGE);
+                if(o != null && o.length() > 0) {
+                    language = new Language();
+                    language.parse(o);
                 }
             }
         } catch (JSONException e) {
@@ -541,6 +609,42 @@ public class User implements Parseable {
                 obj.put(KEY_COUNTRY_CODE, objCC);
             } else {
                 obj.put(KEY_COUNTRY_CODE, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+
+
+
+        try{
+            if(getCountry()!=null){
+                JSONObject objCC = new JSONObject(getCountry().toString());
+                obj.put(KEY_COUNTRY, objCC);
+            } else {
+                obj.put(KEY_COUNTRY, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getNationality()!=null){
+                JSONObject objCC = new JSONObject(getNationality().toString());
+                obj.put(KEY_NATIONALITY, objCC);
+            } else {
+                obj.put(KEY_NATIONALITY, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getLanguage()!=null){
+                JSONObject objCC = new JSONObject(getLanguage().toString());
+                obj.put(KEY_LANGUAGE, objCC);
+            } else {
+                obj.put(KEY_LANGUAGE, JSONObject.NULL);
             }
         }catch (JSONException e){
             e.printStackTrace();

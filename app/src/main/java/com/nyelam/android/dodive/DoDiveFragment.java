@@ -168,10 +168,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 }
             }
 
+
             Calendar[] cals = new Calendar[calendars.size()];
             calendars.toArray(cals);
             datePickerDialog.setSelectableDays(cals);
-
 
             /*Calendar[] calsTwo = new Calendar[2];
             calsTwo[0] = Calendar.getInstance();
