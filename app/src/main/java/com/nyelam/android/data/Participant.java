@@ -12,10 +12,19 @@ import org.json.JSONObject;
 public class Participant implements Parseable {
 
     private static String KEY_NAME = "name";
-    private static String KEY_EMAIL = "email_address";
+    private static String KEY_EMAIL_ADDRESS = "email_address";
+    private static String KEY_EMAIL = "email";
 
     private String name;
     private String email;
+
+
+    public Participant(){}
+
+    public Participant(String name, String email){
+        this.name = name;
+        this.email = email;
+    }
 
     public String getName() {
         return name;
@@ -47,6 +56,8 @@ public class Participant implements Parseable {
         try {
             if (!obj.isNull(KEY_EMAIL)) {
                 setEmail(obj.getString(KEY_EMAIL));
+            } else if (!obj.isNull(KEY_EMAIL_ADDRESS)) {
+                setEmail(obj.getString(KEY_EMAIL_ADDRESS));
             }
         } catch (JSONException e) {e.printStackTrace();}
     }

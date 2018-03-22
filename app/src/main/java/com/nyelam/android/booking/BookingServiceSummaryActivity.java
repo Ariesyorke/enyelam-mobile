@@ -559,12 +559,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     progressDialog.dismiss();
                 }
 
-
             }
         };
     }
 
+
     public void payUsingVeritrans() {
+
         SdkUIFlowBuilder.init()
                 .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(this) // context is mandatory

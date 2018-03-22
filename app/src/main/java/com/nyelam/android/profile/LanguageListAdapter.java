@@ -102,6 +102,7 @@ public class LanguageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             }
 
+
             this.languageList = newList;
             this.notifyDataSetChanged();
 
@@ -137,6 +138,8 @@ public class LanguageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 if (NYHelper.isStringNotEmpty(language.getId()) && currentLanguage != null && NYHelper.isStringNotEmpty(currentLanguage.getId()) && language.getId().equals(currentLanguage.getId())){
                     languageLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.ny_grey1));
+                } else {
+                    languageLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
                 }
             }
 
