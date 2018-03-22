@@ -77,9 +77,9 @@ public class Participant implements Parseable {
 
         try {
             if (!TextUtils.isEmpty(getEmail())) {
-                obj.put(KEY_EMAIL, getEmail());
+                obj.put(KEY_EMAIL_ADDRESS, getEmail());
             } else {
-                obj.put(KEY_EMAIL, JSONObject.NULL);
+                obj.put(KEY_EMAIL_ADDRESS, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 
