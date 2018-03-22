@@ -14,24 +14,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/back_imageView"
-                android:src="@drawable/ic_back"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/search_editText"
                 android:hint="Search Country"
-                android:textColor="@color/white"
+                android:textColor="@color/ny_black1"
                 android:textColorHint="@color/ny_grey2"
-                android:background="#000"
                 android:backgroundTint="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/back_imageView"
+                android:layout_toLeftOf="@+id/back_imageView"
                 android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/back_imageView"
+                android:src="@drawable/ic_close_black"
+                android:layout_marginRight="14dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </RelativeLayout>

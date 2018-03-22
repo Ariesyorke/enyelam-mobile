@@ -53,7 +53,7 @@ public class User implements Parseable {
     private String username, cover;
     private CountryCode countryCode;
     private Date certificateDate;
-    private CountryCode country;
+    private Country country;
     private Nationality nationality;
     private Language language;
 
@@ -218,11 +218,11 @@ public class User implements Parseable {
         this.countryCode = countryCode;
     }
 
-    public CountryCode getCountry() {
+    public Country getCountry() {
         return country;
     }
 
-    public void setCountry(CountryCode country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 
@@ -405,7 +405,7 @@ public class User implements Parseable {
             if(!obj.isNull(KEY_COUNTRY)) {
                 JSONObject o = obj.getJSONObject(KEY_COUNTRY);
                 if(o != null && o.length() > 0) {
-                    country = new CountryCode();
+                    country = new Country();
                     country.parse(o);
                 }
             }
@@ -582,6 +582,7 @@ public class User implements Parseable {
             }
         } catch (JSONException e){e.printStackTrace();
         }
+
         try {
             if (getSocialMedia() != null && !getSocialMedia().isEmpty()) {
                 JSONArray array = new JSONArray();

@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
+import com.nyelam.android.data.Country;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
@@ -37,8 +38,8 @@ import java.util.List;
 public class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<CountryCode> countryCodeList;
-    private CountryCode currentCountryCode;
+    private List<CountryCode> countryList;
+    private Country currentCountry;
 
     public CountryListAdapter(Context context) {
         this.context = context;
@@ -55,7 +56,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PromoViewHolder) {
             PromoViewHolder vh = (PromoViewHolder) holder;
-            vh.setModel(countryCodeList.get(position));
+            vh.setModel(countryList.get(position));
         }
     }
 
@@ -67,38 +68,41 @@ public class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemCount() {
         int count = 0;
-        if (countryCodeList != null && !countryCodeList.isEmpty()) {
-            count += countryCodeList.size();
+        if (countryList != null && !countryList.isEmpty()) {
+            count += countryList.size();
         }
         return count;
     }
 
-    public void addResult(CountryCode countryCode) {
-        if (this.countryCodeList == null) {
-            this.countryCodeList = new ArrayList<>();
+    public void addResult(CountryCode country) {
+        if (this.countryList == null) {
+            this.countryList = new ArrayList<>();
         }
-        this.countryCodeList.add(countryCode);
+        this.countryList.add(country);
     }
 
-    public void addResults(List<CountryCode> countryCodeList, CountryCode currentCountryCode) {
-        if (this.countryCodeList == null) {
-            this.countryCodeList = new ArrayList<>();
+    public void addResults(List<CountryCode> countryList, Country currentCountry) {
+        if (this.countryList == null) {
+            this.countryList = new ArrayList<>();
         }
-        this.countryCodeList.addAll(countryCodeList);
-        this.currentCountryCode = currentCountryCode;
+        this.countryList.addAll(countryList);
+        this.currentCountry = currentCountry;
     }
 
-    public void setResults(List<CountryCode> countryCodeList) {
-        if (this.countryCodeList == null) {
-            this.countryCodeList = new ArrayList<>();
+    public void setResults(List<CountryCode> countryList) {
+        if (this.countryList == null) {
+            this.countryList = new ArrayList<>();
         }
-        this.countryCodeList = countryCodeList;
+        this.countryList = countryList;
         this.notifyDataSetChanged();
     }
 
 
-    public CountryCode getItemByPosition(int position) {
-        return countryCodeList.get(position);
+    public Country getItemByPosition(int position) {
+        Country temp = new Country();
+        temp.setId(countryList.get(position).getId());
+        temp.setName(countryList.get(position).getCountryName());
+        return temp;
     }
 
     public void searchResults(String keyword) {
@@ -106,22 +110,22 @@ public class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             List<CountryCode> newList = new ArrayList<>();
 
-            for (CountryCode countryCode : countryCodeList){
+            for (CountryCode country : countryList){
 
-                if (countryCode != null && !TextUtils.isEmpty(countryCode.getCountryName()) && countryCode.getCountryName().toLowerCase().contains(keyword.toLowerCase())){
-                    newList.add(countryCode);
+                if (country != null && !TextUtils.isEmpty(country.getCountryName()) && country.getCountryName().toLowerCase().contains(keyword.toLowerCase())){
+                    newList.add(country);
                 }
 
             }
 
-            this.countryCodeList = newList;
+            this.countryList = newList;
             this.notifyDataSetChanged();
 
         }
     }
 
     public void clear() {
-        this.countryCodeList = new ArrayList<>();
+        this.countryList = new ArrayList<>();
     }
 
 
@@ -130,7 +134,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private LinearLayout countryLinearLayout;
         private TextView countryNameTextView;
         private View itemView;
-        private CountryCode countryCode;
+        private CountryCode country;
 
         public PromoViewHolder(View itemView) {
             super(itemView);
@@ -141,13 +145,13 @@ public class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.itemView = itemView;
         }
 
-        public void setModel(CountryCode countryCode) {
-            this.countryCode = countryCode;
+        public void setModel(CountryCode country) {
+            this.country = country;
 
-            if (countryCode != null){
-                countryNameTextView.setText(countryCode.getCountryName());
+            if (country != null){
+                countryNameTextView.setText(country.getCountryName());
 
-                if (NYHelper.isStringNotEmpty(countryCode.getId()) && currentCountryCode != null && NYHelper.isStringNotEmpty(currentCountryCode.getId()) && countryCode.getId().equals(currentCountryCode.getId())){
+                if (NYHelper.isStringNotEmpty(country.getId()) && currentCountry != null && NYHelper.isStringNotEmpty(currentCountry.getId()) && country.getId().equals(currentCountry.getId())){
                     countryLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.ny_grey1));
                 }
             }

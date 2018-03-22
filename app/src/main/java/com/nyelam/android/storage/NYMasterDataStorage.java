@@ -1,8 +1,6 @@
 package com.nyelam.android.storage;
 
 import android.app.Activity;
-import android.database.sqlite.SQLiteException;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -20,16 +18,11 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYInvalidReturnValueException;
 import com.nyelam.android.http.NYMasterCategoriesRequest;
-import com.nyelam.android.http.NYMasterCountriesRequest;
+import com.nyelam.android.http.NYMasterCountryCodeRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/10/2018.
@@ -104,7 +97,7 @@ public class NYMasterDataStorage {
                 while (!TextUtils.isEmpty(nextPage)) {
                     NYLog.d("start fetch master countries for " + " page " + nextPage);
                     try {
-                        NYMasterCountriesRequest req = new NYMasterCountriesRequest(getContext(), nextPage);
+                        NYMasterCountryCodeRequest req = new NYMasterCountryCodeRequest(getContext(), nextPage);
                         NYPaginationResult<CountryCodeList> result = req.loadDataFromNetwork();
                         if (result != null && result.item != null && result.item.getList() != null && !result.item.getList().isEmpty()) {
                             NYLog.d("+++ countries size = " + result.item.getList().size());

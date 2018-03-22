@@ -348,6 +348,7 @@
                 android:layout_height="match_parent">
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/country_input_layout"
+                    android:gravity="center"
                     android:layout_marginTop="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -364,6 +365,11 @@
                         android:imeOptions="actionNext"
                         android:backgroundTint="@color/selecetor_edittext_line"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <ProgressBar
+                        android:id="@+id/country_progressBar"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
                 <ImageView
@@ -389,6 +395,7 @@
                 android:layout_height="match_parent">
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/nationality_input_layout"
+                    android:gravity="center"
                     android:layout_marginTop="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

@@ -33,6 +33,7 @@ import com.midtrans.sdk.uikit.utilities.RecyclerItemClickListener;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.StarterActivity;
+import com.nyelam.android.data.Country;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.Language;
 import com.nyelam.android.data.Nationality;
@@ -320,7 +321,7 @@ public class NYCustomDialog {
 
 
 
-    public void showCountryDialog(final Activity activity, CountryCode currentCountryCode){
+    public void showCountryDialog(final Activity activity, Country currentCountry){
 
         this.listener = (OnDialogFragmentClickListener) activity;
 
@@ -361,10 +362,10 @@ public class NYCustomDialog {
 
         DaoSession session = ((NYApplication) activity.getApplicationContext()).getDaoSession();
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
-        final List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
-        if (countryCodes != null && countryCodes.size() > 0){
+        final List<CountryCode> countryList = NYHelper.generateList(rawProducts, CountryCode.class);
+        if (countryList != null && countryList.size() > 0){
             countryListAdapter.clear();
-            countryListAdapter.addResults(countryCodes, currentCountryCode);
+            countryListAdapter.addResults(countryList, currentCountry);
             countryListAdapter.notifyDataSetChanged();
         }
 
@@ -395,7 +396,7 @@ public class NYCustomDialog {
                 if (!TextUtils.isEmpty(arg0.toString().trim())) {
                     countryListAdapter.searchResults(arg0.toString().trim());
                 } else {
-                    countryListAdapter.setResults(countryCodes);
+                    countryListAdapter.setResults(countryList);
                 }
             }
 
