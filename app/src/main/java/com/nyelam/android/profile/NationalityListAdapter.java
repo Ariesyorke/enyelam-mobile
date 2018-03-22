@@ -135,6 +135,8 @@ public class NationalityListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 nationalityNameTextView.setText(nationality.getName());
                 if (NYHelper.isStringNotEmpty(nationality.getId()) && currentNationality != null && NYHelper.isStringNotEmpty(currentNationality.getId()) && nationality.getId().equals(currentNationality.getId())){
                     nationalityLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.ny_grey1));
+                } else {
+                    nationalityLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
                 }
             }
 

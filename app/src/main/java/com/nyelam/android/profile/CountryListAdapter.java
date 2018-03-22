@@ -153,6 +153,8 @@ public class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 if (NYHelper.isStringNotEmpty(country.getId()) && currentCountry != null && NYHelper.isStringNotEmpty(currentCountry.getId()) && country.getId().equals(currentCountry.getId())){
                     countryLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.ny_grey1));
+                } else {
+                    countryLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
                 }
             }
 
