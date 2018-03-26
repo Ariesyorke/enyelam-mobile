@@ -1,0 +1,222 @@
+[
+      {
+        "id": "85",
+        "name": "Tulamben Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_e565ca5cb59d1010317da5ed7b51228f.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 6,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1150000",
+        "special_price": "1092500"
+      },
+      {
+        "id": "82",
+        "name": "Padang Bai Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_e198f5a44e60073200857de82ae54b38.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 13,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1250000",
+        "special_price": "1187500"
+      },
+      {
+        "id": "84",
+        "name": "Seraya Secret Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_284140b402ae887b13d3e9d7e1b4e3c5.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 1,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1250000",
+        "special_price": "1187500"
+      },
+      {
+        "id": "86",
+        "name": "Puri Jati Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_f044e428591aedff6907c4743a0a0582.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 1,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1250000",
+        "special_price": "1187500"
+      },
+      {
+        "id": "80",
+        "name": "Sanur Snorkeling Trip (1X)",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_fe02f7d94d701a2d6349cff6dbf519e2.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 1,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1250000",
+        "special_price": "1187500"
+      },
+      {
+        "id": "83",
+        "name": "Amed Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_8630d5084f2850c846c6edee478e823c.jpg",
+        "rating": "0",
+        "total_dives": "1",
+        "total_divespot": 10,
+        "days": "1",
+        "license": "true",
+        "visited": "1",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1300000",
+        "special_price": "1235000"
+      },
+      {
+        "id": "87",
+        "name": "Secret Bay Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_51b1592274906088bdcdf700e37ea1eb.jpg",
+        "rating": "0",
+        "total_dives": "1",
+        "total_divespot": 1,
+        "days": "1",
+        "license": "true",
+        "visited": "1",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1300000",
+        "special_price": "1235000"
+      },
+      {
+        "id": "88",
+        "name": "Gili Tepekong Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_d31f191b207154c9ef47a240593f176a.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 1,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1350000",
+        "special_price": "1282500"
+      },
+      {
+        "id": "147",
+        "name": "Menjangan Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_82a096d1eaf28b5d78d7b701b7b6f9cb.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 1,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1650000",
+        "special_price": "1600500"
+      },
+      {
+        "id": "89",
+        "name": "Nusa Penida Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_0dc8941d2e801cd8c572190ba6d69fb4.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 10,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "1750000",
+        "special_price": "1662500"
+      },
+      {
+        "id": "90",
+        "name": "Manta Point Trip",
+        "featured_image": "http://nyelam-adam.dantech.id/assets/media/uploads/diveservice_22da66986898a1dcc7cc9de8b6e83e02.jpg",
+        "rating": "0",
+        "total_dives": "2",
+        "total_divespot": 1,
+        "days": "1",
+        "license": "true",
+        "visited": "2",
+        "category": [
+          {
+            "id": "10",
+            "name": "Daily Trip"
+          }
+        ],
+        "dive_spot": null,
+        "normal_price": "2050000",
+        "special_price": "1947500"
+      }
+    ]

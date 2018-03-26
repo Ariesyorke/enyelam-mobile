@@ -531,11 +531,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         int m = cal.get(Calendar.MONTH);
         int d = cal.get(Calendar.DAY_OF_MONTH);
 
-        NYLog.e("TIMESTAMP " + cal.getTimeInMillis());
+        //NYLog.e("TIMESTAMP " + cal.getTimeInMillis());
         date = String.valueOf(cal.getTimeInMillis()/1000);
-        NYLog.e("TIMES STAMP " + cal.getTimeInMillis());
+        //NYLog.e("TIMES STAMP " + cal.getTimeInMillis());
         datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
-
     }
 
     public interface OnFragmentInteractionListener {

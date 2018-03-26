@@ -16,10 +16,10 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <string name="host_url">http://nyelam-adam.dantech.id/</string>
+    <!--<string name="host_url">http://nyelam-adam.dantech.id/</string>-->
 
     <!-- STAGING -->
-    <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
+    <string name="host_url">http://nyelam.dantech.id/</string>
 
     <!--&lt;!&ndash; API STAGING AND DEVELOPMENT &ndash;&gt;-->
     <string name="api_path_login">api/user/login</string>
@@ -81,6 +81,8 @@
     <string name="api_path_register">user/register</string>
     <string name="api_path_forgot_password">user/forgotpass</string>
     <string name="api_path_master_country">master/country</string>
+    <string name="api_path_master_nationality">master/nationality</string>
+    <string name="api_path_master_language">master/language</string>
     <string name="api_path_master_category">service/masterCategory</string>
     <string name="api_path_master_dodive_search">master/dodive/search</string>
     <string name="api_path_dodive_search_by_spot">dodive/service/divespot</string>
@@ -109,6 +111,7 @@
     <string name="api_path_dodive_detail_service">service/detail</string>
     <string name="api_path_dodive_book_service_cart">order/bookservicecart</string>
     <string name="api_path_dodive_book_service_voucher_cart"></string>
+    <string name="api_path_dodive_book_get_participants">order/getSavedParticipants</string>
     <string name="api_path_dodive_book_service_order">order/submit</string>
     <string name="api_path_dodive_booking_history">order/orderList</string>
     <string name="api_path_dodive_booking_detail">order/detail</string>

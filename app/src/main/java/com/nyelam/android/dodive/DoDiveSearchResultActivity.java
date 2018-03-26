@@ -1,6 +1,7 @@
 package com.nyelam.android.dodive;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,14 +20,23 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveCenterList;
+import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchDiveCenterRequest;
+import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
+import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +45,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private int mRequestCode = 100;
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
-    private DoDiveSearchDiveCenterAdapter diveCenterAdapter;
+    private DoDiveSearchDiveServiceAdapter diveServiceAdapter;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private TextView titleTextView, labelTextView, noResultTextView;
@@ -102,29 +112,41 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private void initRequest() {
         progressBar.setVisibility(View.VISIBLE);
 
-        String url = "";
-        if (type.equals("1")){
-            url = getResources().getString(R.string.api_path_dodive_search_dive_center_by_spot);
-        } else if (type.equals("2")){
-            url = getResources().getString(R.string.api_path_dodive_search_dive_center_by_category);
-        } else if (type.equals("5")){
-            url = getResources().getString(R.string.api_path_dodive_search_dive_center_by_province);
-        } else {
-            url = getResources().getString(R.string.api_path_dodive_search_dive_center_by_city);
+        String apiPath = getString(R.string.api_path_dodive_service_list);
+
+        if (NYHelper.isStringNotEmpty(type) && type.equals("1")){
+            apiPath = getString(R.string.api_path_dodive_service_list_by_divespot);
+        } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
+            apiPath = getString(R.string.api_path_dodive_service_list_by_category);
+        } else if (NYHelper.isStringNotEmpty(type) && type.equals("5")){
+            apiPath = getString(R.string.api_path_dodive_service_list_by_province);
+        } else if (NYHelper.isStringNotEmpty(type) && type.equals("6")){
+            apiPath = getString(R.string.api_path_dodive_service_list_by_city);
         }
-        NYDoDiveSearchDiveCenterRequest req = null;
+
+        /*if(isEcoTrip()) {
+            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId, "1");
+            spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+        } else {
+            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId);
+            spcMgr.execute(req, onGetServiceByDiveCenterRequest());
+        }*/
+
+        // TODO: tunggu URL dari Adam
+        /*NYDoDiveSearchServiceResultRequest req = null;
 
         if(getIntent().hasExtra(NYHelper.ECO_TRIP)) {
             int ecoTrip = getIntent().getIntExtra(NYHelper.ECO_TRIP, 1);
             ecotrip = true;
-            req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
-                    url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType), categories, String.valueOf(ecoTrip));
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), null, null, String.valueOf(ecoTrip));
         } else {
-            req = new NYDoDiveSearchDiveCenterRequest(DoDiveSearchResultActivity.this,
-                    url, String.valueOf(page), diverId, type, certificate, diver, date, String.valueOf(sortingType), categories);
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), null, null, String.valueOf(0));
         }
 
-        spcMgr.execute(req, onSearchServiceRequest());
+        spcMgr.execute(req, onSearchServiceRequest());*/
+
+        loadJSONAsset();
+
     }
 
     private void initExtra() {
@@ -161,8 +183,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        diveCenterAdapter = new DoDiveSearchDiveCenterAdapter(this, diver, date, certificate, type, diverId);
-        recyclerView.setAdapter(diveCenterAdapter);
+        diveServiceAdapter = new DoDiveSearchDiveServiceAdapter(this, diver, date, certificate, type, diverId);
+        recyclerView.setAdapter(diveServiceAdapter);
     }
 
     private void initView() {
@@ -176,33 +198,33 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         filterImageView = (ImageView) findViewById(R.id.filter_imageView);
     }
 
-    private RequestListener<DiveCenterList> onSearchServiceRequest() {
-        return new RequestListener<DiveCenterList>() {
+    private RequestListener<DiveServiceList> onSearchServiceRequest() {
+        return new RequestListener<DiveServiceList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                diveCenterAdapter.clear();
-                diveCenterAdapter.notifyDataSetChanged();
+                diveServiceAdapter.clear();
+                diveServiceAdapter.notifyDataSetChanged();
                 noResultTextView.setVisibility(View.VISIBLE);
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
             }
 
             @Override
-            public void onRequestSuccess(DiveCenterList results) {
+            public void onRequestSuccess(DiveServiceList results) {
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
 
                 if (results != null){
                     noResultTextView.setVisibility(View.GONE);
-                    diveCenterAdapter.clear();
-                    diveCenterAdapter.addResults(results.getList());
-                    diveCenterAdapter.notifyDataSetChanged();
+                    diveServiceAdapter.clear();
+                    diveServiceAdapter.addResults(results.getList());
+                    diveServiceAdapter.notifyDataSetChanged();
                 } else {
-                    diveCenterAdapter.clear();
-                    diveCenterAdapter.notifyDataSetChanged();
+                    diveServiceAdapter.clear();
+                    diveServiceAdapter.notifyDataSetChanged();
                     noResultTextView.setVisibility(View.VISIBLE);
                 }
 
@@ -248,6 +270,66 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     @Override
     public void doUpdateVersion(String link) {
 
+    }
+
+
+    public void loadJSONAsset(){
+
+        try {
+
+            Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
+
+            //JSONObject obj = new JSONObject(loadJSONFromAsset(this));
+            JSONArray array = new JSONArray(loadJSONFromAsset(this));
+
+            DiveServiceList results = new DiveServiceList();
+            results.parse(array);
+
+            if (results != null){
+                noResultTextView.setVisibility(View.GONE);
+                diveServiceAdapter.clear();
+                diveServiceAdapter.addResults(results.getList());
+                diveServiceAdapter.notifyDataSetChanged();
+            } else {
+                diveServiceAdapter.clear();
+                diveServiceAdapter.notifyDataSetChanged();
+                noResultTextView.setVisibility(View.VISIBLE);
+            }
+
+            Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        /*String myJson=inputStreamToString(getResources().openRawResource(R.raw.my_json));
+        JSONObject jsonobject = new JSONObject(myJson);
+        JSONArray jarray = (JSONArray) jsonobject.getJSONArray("formules");
+        for (int i = 0; i < jarray.length(); i++){
+
+        }*/
+    }
+
+
+    public String loadJSONFromAsset( Context context ) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open("list_service_result.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
 
