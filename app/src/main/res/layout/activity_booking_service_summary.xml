@@ -406,14 +406,14 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:id="@+id/payment_midtrans_linearLayout"
+                        android:id="@+id/payment_virtual_account_linearLayout"
                         android:layout_marginTop="@dimen/padding"
                         android:layout_marginBottom="@dimen/activity_vertical_margin"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <RadioButton
-                            android:id="@+id/midtransRadioButton"
+                            android:id="@+id/virtualAccountRadioButton"
                             android:checked="true"
                             android:layout_gravity="center"
                             android:layout_width="wrap_content"
@@ -424,24 +424,68 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <me.relex.circleindicator.CircleIndicator
-                                android:id="@+id/midtrans"
+                                android:id="@+id/virtual_account"
                                 android:background="@color/ny_blue6"
                                 android:layout_centerVertical="true"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp" />
                             <TextView
-                                android:id="@+id/midtrans_label"
-                                android:text="@string/virtual_account_or_credit_card"
+                                android:id="@+id/virtual_account_label"
+                                android:text="@string/virtual_account"
                                 android:textColor="@color/ny_black1"
                                 android:textSize="16sp"
                                 android:layout_marginLeft="@dimen/padding"
-                                android:layout_toRightOf="@+id/midtrans"
+                                android:layout_toRightOf="@+id/virtual_account"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
                             <TextView
-                                android:layout_below="@+id/midtrans_label"
-                                android:layout_toRightOf="@+id/midtrans"
-                                android:text="@string/virtual_account_or_credit_card_label"
+                                android:layout_below="@+id/virtual_account_label"
+                                android:layout_toRightOf="@+id/virtual_account"
+                                android:text="@string/virtual_account_label"
+                                android:textColor="@color/ny_grey4"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/payment_credit_card_linearLayout"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:id="@+id/creditCardRadioButton"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <RelativeLayout
+                            android:layout_marginLeft="@dimen/padding"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <me.relex.circleindicator.CircleIndicator
+                                android:id="@+id/creditcard"
+                                android:background="@color/ny_blue6"
+                                android:layout_centerVertical="true"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp" />
+                            <TextView
+                                android:id="@+id/credit_card_label"
+                                android:text="@string/credit_card"
+                                android:textColor="@color/ny_black1"
+                                android:textSize="16sp"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_toRightOf="@+id/creditcard"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <TextView
+                                android:layout_below="@+id/credit_card_label"
+                                android:layout_toRightOf="@+id/creditcard"
+                                android:text="@string/credit_card_label"
                                 android:textColor="@color/ny_grey4"
                                 android:textSize="14sp"
                                 android:layout_marginLeft="@dimen/padding"

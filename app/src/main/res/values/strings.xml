@@ -62,6 +62,10 @@
     <string name="bank_transfer_label">Pay from ATM Transfer</string>
     <string name="virtual_account_or_credit_card">Virtual Account/Credit Card</string>
     <string name="virtual_account_or_credit_card_label">Pay using Midtrans payment gateway</string>
+    <string name="virtual_account">Virtual Account</string>
+    <string name="virtual_account_label">Pay using Virtual Account</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="credit_card_label">Pay using Credit Card</string>
     <string name="open_map">Open Map</string>
 
     <string name="book_eco_trip">Book Your Eco-Trip</string>

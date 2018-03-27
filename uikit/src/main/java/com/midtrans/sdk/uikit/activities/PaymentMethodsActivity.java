@@ -56,6 +56,7 @@ import com.midtrans.sdk.uikit.adapters.PaymentMethodsAdapter;
 import com.midtrans.sdk.uikit.models.EnabledPayments;
 import com.midtrans.sdk.uikit.models.ItemViewDetails;
 import com.midtrans.sdk.uikit.models.MessageInfo;
+import com.midtrans.sdk.uikit.storage.PaymentMethodStorage;
 import com.midtrans.sdk.uikit.utilities.DeviceUtils;
 import com.midtrans.sdk.uikit.utilities.MessageUtil;
 import com.midtrans.sdk.uikit.utilities.SdkUIFlowUtil;
@@ -144,6 +145,15 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         setContentView(R.layout.activity_payments_method);
         isCreditCardOnly = getIntent().getBooleanExtra(UserDetailsActivity.CREDIT_CARD_ONLY, false);
         isBankTransferOnly = getIntent().getBooleanExtra(UserDetailsActivity.BANK_TRANSFER_ONLY, false);
+
+        // TODO: cek storage is payment method
+        PaymentMethodStorage paymentMethodStorage = new PaymentMethodStorage(this);
+        if (paymentMethodStorage.paymentMethod.equals("1")){
+            isBankTransferOnly = true;
+        } else if (paymentMethodStorage.paymentMethod.equals("2")){
+            isCreditCardOnly = true;
+        }
+
         isGopay = getIntent().getBooleanExtra(UserDetailsActivity.GO_PAY, false);
         isBCAKlikpay = getIntent().getBooleanExtra(UserDetailsActivity.BCA_KLIKPAY, false);
         isKlikBCA = getIntent().getBooleanExtra(UserDetailsActivity.KLIK_BCA, false);

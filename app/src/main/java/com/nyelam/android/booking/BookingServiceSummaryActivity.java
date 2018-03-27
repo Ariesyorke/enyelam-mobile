@@ -29,6 +29,7 @@ import com.midtrans.sdk.corekit.models.ItemDetails;
 import com.midtrans.sdk.corekit.models.UserDetail;
 import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
+import com.midtrans.sdk.uikit.storage.PaymentMethodStorage;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
@@ -74,6 +75,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private String schedule = "0";
     private String certificate = "0";
     private String paymentType = "2";
+    private String paymentMethod = "1"; // 1 = virtual account dan 2 = credit card
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -88,8 +90,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private RatingBar ratingBar;
     private DiveCenter center;
     private RadioGroup radioGroup;
-    private RadioButton bankTransferRadioButton, midtransRadioButton;
-    private LinearLayout bankTransferLinearLayout, midtransLinearLayout;
+    private RadioButton bankTransferRadioButton, virtualAccountRadioButton, creditCardRadioButton;
+    private LinearLayout bankTransferLinearLayout, virtualAccountLinearLayout, creditCardLinearLayout;
     private DiveCenter diveCenter;
     private String veritransToken;
     private TextView expiredDateTextView;
@@ -127,12 +129,26 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
         });
 
-        midtransRadioButton.setOnClickListener(new View.OnClickListener() {
+        virtualAccountRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (midtransRadioButton.isChecked()){
+                if (virtualAccountRadioButton.isChecked()){
+                    creditCardRadioButton.setChecked(false);
                     bankTransferRadioButton.setChecked(false);
                     paymentType = "2";
+                    paymentMethod = "1";
+                }
+            }
+        });
+
+        creditCardRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (creditCardRadioButton.isChecked()){
+                    virtualAccountRadioButton.setChecked(false);
+                    bankTransferRadioButton.setChecked(false);
+                    paymentType = "2";
+                    paymentMethod = "2";
                 }
             }
         });
@@ -141,18 +157,33 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             @Override
             public void onClick(View v) {
                 if (bankTransferRadioButton.isChecked()){
-                    midtransRadioButton.setChecked(false);
+                    virtualAccountRadioButton.setChecked(false);
+                    creditCardRadioButton.setChecked(false);
                     paymentType = "1";
+                    paymentMethod = null;
                 }
             }
         });
 
-        midtransLinearLayout.setOnClickListener(new View.OnClickListener() {
+        virtualAccountLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                midtransRadioButton.setChecked(true);
+                virtualAccountRadioButton.setChecked(true);
+                creditCardRadioButton.setChecked(false);
                 bankTransferRadioButton.setChecked(false);
                 paymentType = "2";
+                paymentMethod = "1";
+            }
+        });
+
+        creditCardLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creditCardRadioButton.setChecked(true);
+                virtualAccountRadioButton.setChecked(false);
+                bankTransferRadioButton.setChecked(false);
+                paymentType = "2";
+                paymentMethod = "2";
             }
         });
 
@@ -160,8 +191,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             @Override
             public void onClick(View v) {
                 bankTransferRadioButton.setChecked(true);
-                midtransRadioButton.setChecked(false);
+                virtualAccountRadioButton.setChecked(false);
+                creditCardRadioButton.setChecked(false);
                 paymentType = "1";
+                paymentMethod = null;
             }
         });
 
@@ -383,10 +416,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
-        midtransRadioButton = (RadioButton) findViewById(R.id.midtransRadioButton);
+        virtualAccountRadioButton = (RadioButton) findViewById(R.id.virtualAccountRadioButton);
+        creditCardRadioButton = (RadioButton) findViewById(R.id.creditCardRadioButton);
 
         bankTransferLinearLayout = (LinearLayout) findViewById(R.id.payment_bank_transfer_linearLayout);
-        midtransLinearLayout = (LinearLayout) findViewById(R.id.payment_midtrans_linearLayout);
+        virtualAccountLinearLayout = (LinearLayout) findViewById(R.id.payment_virtual_account_linearLayout);
+        creditCardLinearLayout = (LinearLayout) findViewById(R.id.payment_credit_card_linearLayout);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -574,6 +609,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
+
+
+        PaymentMethodStorage paymentMethodStorage = new PaymentMethodStorage(this);
+        paymentMethodStorage.paymentMethod = paymentMethod;
+        paymentMethodStorage.save();
 
         VeritransStorage veritransStorage = new VeritransStorage(this);
         Contact contact = veritransStorage.contact;
@@ -787,7 +827,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             // TODO: jika transaksi gagal
             orderReturn = null;
             isTranssactionFailed = true;
-            midtransLinearLayout.setVisibility(View.VISIBLE);
+            virtualAccountLinearLayout.setVisibility(View.VISIBLE);
             bankTransferLinearLayout.setVisibility(View.VISIBLE);
 
         } else {
