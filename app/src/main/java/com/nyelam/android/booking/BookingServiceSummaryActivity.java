@@ -76,6 +76,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private String certificate = "0";
     private String paymentType = "2";
     private String paymentMethod = "1"; // 1 = virtual account dan 2 = credit card
+    private String note;
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -585,7 +586,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (result != null){
                     NYDoDiveServiceOrderRequest req = null;
                     try {
-                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType);
+                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
                         spcMgr.execute(req, onCreateOrderServiceRequest());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -766,7 +767,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             progressDialog.show();
             NYDoDiveServiceOrderRequest req = null;
             try {
-                req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType);
+                req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
                 spcMgr.execute(req, onCreateOrderServiceRequest());
             } catch (Exception e) {
                 e.printStackTrace();

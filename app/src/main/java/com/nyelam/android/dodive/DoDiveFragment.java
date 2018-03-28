@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -22,14 +25,25 @@ import android.widget.Toast;
 
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveCenter;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
+import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.view.NYCustomDialog;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,8 +55,11 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import static com.nyelam.android.R.id.recyclerView;
+
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private SearchResult searchResult;
     private TextView certificateTextView, datetimeTextView, searchTextView;
     public TextView diverTextView;
@@ -56,6 +73,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
     private NYApplication application;
 //    private Calendar c;
+
+    private DoDiveDiveServiceSuggestionAdapter diveServiceSuggestionAdapter;
+    private RecyclerView suggestionRecyclerView;
+    private LinearLayout suggestionLinearLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -96,6 +117,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         initExtra();
         initControl();
         initAdapter();
+        getSuggetionRequest();
     }
 
     private void initAdapter() {
@@ -109,6 +131,40 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         diverAdapter.addDivers(divers);
         diverAdapter.notifyDataSetChanged();
 
+
+
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        suggestionRecyclerView.setLayoutManager(layoutManager);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+        suggestionRecyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
+
+        diveServiceSuggestionAdapter = new DoDiveDiveServiceSuggestionAdapter(getActivity());
+        suggestionRecyclerView.setAdapter(diveServiceSuggestionAdapter);
+
+
+
+        suggestionRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), suggestionRecyclerView, new DoDiveDiveServiceSuggestionAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                DiveService diveService = diveServiceSuggestionAdapter.getDiveService(position);
+                diverId = diveService.getId();
+                keyword = diveService.getName();
+                type = "4";
+                keywordTextView.setText(keyword);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                DiveService diveService = diveServiceSuggestionAdapter.getDiveService(position);
+                diverId = diveService.getId();
+                keyword = diveService.getName();
+                type = "4";
+                searchTextView.setText(keyword);
+            }
+        }));
     }
 
 
@@ -294,7 +350,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         //TODO HARCODE ECOTRIP!!
         DoDiveActivity activity = (DoDiveActivity) getActivity();
         if(activity.isEcoTrip()) {
-            keywordTextView.setText("Save Our Small Island");
+            keyword = "Save Our Small Island";
+            keywordTextView.setText(keyword);
             type = "3";
             diverId = "23";
         }
@@ -371,7 +428,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     // TODO: ganti fragment yg dulu activity & yg dulu EXTRA sekarang BUNDLE
                     Intent intent;
                     if (type.equals("3")){
-                        intent = new Intent(getActivity(), DiveCenterDetailActivity.class);
+                        intent = new Intent(getActivity(), DoDiveSearchResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
                         intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
@@ -385,7 +442,31 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                             intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
                         startActivity(intent);
-                    } else if (type.equals("4") || type.equals("5") || type.equals("6")){
+                    } else if (type.equals("4") ){
+
+                        intent = new Intent(getActivity(), DetailServiceActivity.class);
+
+                        DiveCenter diveCenter = new DiveCenter();
+                        diveCenter.setId(diverId);
+                        intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+
+                        DiveService diveService = new DiveService();
+                        diveService.setId(diverId);
+                        intent.putExtra(NYHelper.SERVICE, diveService.toString());
+
+
+                        intent.putExtra(NYHelper.KEYWORD, keyword);
+                        intent.putExtra(NYHelper.ID_DIVER, diverId);
+                        intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                        intent.putExtra(NYHelper.SCHEDULE, date);
+                        intent.putExtra(NYHelper.DIVER, diver);
+                        intent.putExtra(NYHelper.TYPE, type);
+                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                            intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+                        }
+                        startActivity(intent);
+
+                    } else if (type.equals("5") || type.equals("6")){
 
                         intent = new Intent(getActivity(), DoDiveSearchResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
@@ -462,6 +543,46 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         });
     }
 
+
+    private void getSuggetionRequest() {
+
+        NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getActivity());
+        spcMgr.execute(req, onSearchServiceRequest());
+
+        // TODO: load data dummy, to test and waitting for API request
+        //loadJSONAsset();
+    }
+
+    private RequestListener<DiveServiceList> onSearchServiceRequest() {
+        return new RequestListener<DiveServiceList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                diveServiceSuggestionAdapter.clear();
+                diveServiceSuggestionAdapter.notifyDataSetChanged();
+                suggestionLinearLayout.setVisibility(View.GONE);
+                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(DiveServiceList results) {
+                if (results != null){
+                    suggestionLinearLayout.setVisibility(View.VISIBLE);
+                    diveServiceSuggestionAdapter.clear();
+                    diveServiceSuggestionAdapter.addResults(results.getList());
+                    diveServiceSuggestionAdapter.notifyDataSetChanged();
+                } else {
+                    diveServiceSuggestionAdapter.clear();
+                    diveServiceSuggestionAdapter.notifyDataSetChanged();
+                    suggestionLinearLayout.setVisibility(View.GONE);
+                }
+
+            }
+        };
+    }
+
+
+
+
     private void initView(View v) {
         keywordTextView = (com.nyelam.android.view.font.NYTextView) v.findViewById(R.id.keyword_textView);
         //diverTextView = (TextView) v.findViewById(R.id.diver_textView);
@@ -474,6 +595,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         diverLinearLayout = (LinearLayout) v.findViewById(R.id.diver_linearLayout);
         datetimeLinearLayout = (LinearLayout) v.findViewById(R.id.datetime_linearLayout);
         licenseLinearLayout = (LinearLayout) v.findViewById(R.id.license_linearLayout);
+
+        suggestionRecyclerView = (RecyclerView) v.findViewById(R.id.suggestion_recyclerView);
+        suggestionLinearLayout = (LinearLayout) v.findViewById(R.id.suggestion_linearLayout);
+
     }
 
 
@@ -543,5 +668,16 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         this.diver = diver;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        spcMgr.start(getActivity());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
 
 }

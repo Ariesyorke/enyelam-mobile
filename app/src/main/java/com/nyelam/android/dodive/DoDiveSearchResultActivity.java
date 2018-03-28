@@ -135,12 +135,12 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         // TODO: tunggu URL dari Adam
         NYDoDiveSearchServiceResultRequest req = null;
 
-        if(getIntent().hasExtra(NYHelper.ECO_TRIP)) {
-            int ecoTrip = getIntent().getIntExtra(NYHelper.ECO_TRIP, 1);
+        if(getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+            int ecoTrip = getIntent().getIntExtra(NYHelper.IS_ECO_TRIP, 1);
             ecotrip = true;
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), null, null, String.valueOf(ecoTrip));
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), categories, null, null, String.valueOf(ecoTrip));
         } else {
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), null, null, String.valueOf(0));
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), categories, null, null, String.valueOf(0));
         }
 
         spcMgr.execute(req, onSearchServiceRequest());
@@ -156,7 +156,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if(!extras.getString(NYHelper.KEYWORD).equals(null)){
+            if(intent.hasExtra(NYHelper.KEYWORD) && !extras.getString(NYHelper.KEYWORD).equals(null)){
                 keyword = extras.getString(NYHelper.KEYWORD);
                 titleTextView.setText(keyword);
             }

@@ -1,13 +1,17 @@
 package com.nyelam.android.dodive;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -16,11 +20,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
-import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.Location;
-import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
@@ -32,30 +32,20 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private DoDiveSearchResultActivity activity;
+    private Activity activity;
     private List<DiveService> diveServiceList;
-    private String diver;
-    private String date;
-    private String certificate;
-    private String type;
-    private String diverId;
 
-    public DoDiveSearchDiveServiceAdapter(DoDiveSearchResultActivity activity, String diver, String date, String certificate, String type, String diverId) {
+    public DoDiveDiveServiceSuggestionAdapter(Activity activity) {
         this.activity = activity;
-        this.diver = diver;
-        this.date = date;
-        this.certificate = certificate;
-        this.type = type;
-        this.diverId = diverId;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_dive_service, parent, false);
-        return new DoDiveSearchDiveServiceAdapter.PromoViewHolder(v);
+        return new DoDiveDiveServiceSuggestionAdapter.PromoViewHolder(v);
     }
 
     @Override
@@ -98,8 +88,13 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
         this.diveServiceList = new ArrayList<>();
     }
 
+    public DiveService getDiveService(int position){
+        return diveServiceList.get(position);
+    }
+
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        private CardView cardView;
         private ImageView featuredImageView;
         private TextView diveCenterNameTextView;
         private TextView serviceNameTextView;
@@ -117,6 +112,7 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
         public PromoViewHolder(View itemView) {
             super(itemView);
 
+            cardView = (CardView) itemView.findViewById(R.id.cardView);
             featuredImageView = (ImageView) itemView.findViewById(R.id.featured_imageView);
             serviceNameTextView = (TextView) itemView.findViewById(R.id.service_name_textView);
             diveCenterNameTextView = (TextView) itemView.findViewById(R.id.dive_center_name_textView);
@@ -128,6 +124,15 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
             ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
             visitedTextView = (TextView) itemView.findViewById(R.id.visitor_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int width = displayMetrics.widthPixels;
+
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
+                    cardView.getLayoutParams();
+            layoutParams.width = width*3/4;
+            layoutParams.height = width*2/4;
 
             this.itemView = itemView;
         }
@@ -250,16 +255,7 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
 
         @Override
         public void onClick(View v) {
-            // TODO: intent ke detail service
-            Intent intent = new Intent(activity, DetailServiceActivity.class);
-            if (diveService != null ) intent.putExtra(NYHelper.SERVICE, diveService.toString());
-            intent.putExtra(NYHelper.DIVER, diver);
-            intent.putExtra(NYHelper.SCHEDULE, date);
-            intent.putExtra(NYHelper.CERTIFICATE, certificate);
-            if (diveService != null && diveService.getDiveCenter() != null) {
-                intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
-            }
-            activity.startActivity(intent);
+            // TODO: fill filed in search box
         }
     }
 
@@ -283,6 +279,11 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
 
         diveServiceList.addAll(temp);
 
+    }
+
+    public interface RecyclerViewClickListener {
+        void onClick(View view, int position);
+        void onLongClick(View view, int position);
     }
 
 }

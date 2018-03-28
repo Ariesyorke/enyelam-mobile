@@ -79,6 +79,10 @@ public class DoDiveSearchActivity extends AppCompatActivity {
                 diver = intent.getStringExtra(NYHelper.DIVER);
             }
 
+            /*if (intent.hasExtra(NYHelper.IS_ECO_TRIP)){
+                diver = intent.getStringExtra(NYHelper.IS_ECO_TRIP);
+            }*/
+
         }
 
     }

@@ -94,10 +94,6 @@
 
 
 
-
-
-
-
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/padding_double"
@@ -273,6 +269,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/suggestion_linearLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="medium"
+                    android:text="Suggetions"
+                    android:textColor="@color/white"
+                    android:layout_margin="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/suggestion_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    android:layout_margin="8dp"
+                    />
+            </LinearLayout>
 
 
         </LinearLayout>

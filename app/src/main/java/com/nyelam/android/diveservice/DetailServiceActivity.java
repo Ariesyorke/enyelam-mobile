@@ -199,14 +199,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
 
     private void initRequest() {
         if (diveService != null && !TextUtils.isEmpty(diveService.getId())){
-            NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, diveService.getId());
+            NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, diveService.getId(), diver, certificate, schedule);
             spcMgr.execute(req, onGetDetailServiceRequest());
         }
     }

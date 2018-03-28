@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content" />
                 <com.nyelam.android.view.font.NYTextView
                     app:fontTextStyle="reguler"
-                    android:text=" / "
+                    android:text=" | "
                     android:textSize="14sp"
                     android:textColor="@color/ny_black1"
                     android:layout_marginTop="@dimen/padding_half"

@@ -46,7 +46,7 @@
     <string name="api_path_dodive_search_service_by_city">api/dodive/search/city</string>
     <string name="api_path_dodive_search_service_by_divecenter">api/dodive/search/divecenter</string>
 
-    <string name="api_path_dodive_suggestion_service"></string>
+    <string name="api_path_dodive_suggestion_service">api/dodive/sugestion</string>
 
     <string name="api_path_dodive_search_dive_center_by_category">api/dodive/center/category</string>
     <string name="api_path_dodive_search_dive_center_by_spot">api/dodive/center/divespot</string>
