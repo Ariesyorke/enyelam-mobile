@@ -178,8 +178,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             calsTwo[0].set(2018, 4, 12);
             datePickerDialog.setDisabledDays(calsTwo);*/
 
-            NYLog.e("CEK CALE final : "+cals.length);
-
         } else {
             datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
             datePickerDialog.setMinDate(c);
@@ -215,13 +213,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     certificateCheckBox.setClickable(true);
                 }
 
-                //Toast.makeText(this, "Type : "+type, Toast.LENGTH_SHORT).show();
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            // and get whatever type user account id is
+
         }
 
         if (extras != null){

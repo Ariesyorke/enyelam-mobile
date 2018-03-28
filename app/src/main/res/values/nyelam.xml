@@ -16,10 +16,10 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <!--<string name="host_url">http://nyelam-adam.dantech.id/</string>-->
+    <string name="host_url">http://nyelam-adam.dantech.id/</string>
 
     <!-- STAGING -->
-    <string name="host_url">http://nyelam.dantech.id/</string>
+    <!--<string name="host_url">http://nyelam.dantech.id/</string>-->
 
     <!--&lt;!&ndash; API STAGING AND DEVELOPMENT &ndash;&gt;-->
     <string name="api_path_login">api/user/login</string>
@@ -32,12 +32,21 @@
     <string name="api_path_master_language">api/master/language</string>
     <string name="api_path_master_category">api/service/masterCategory</string>
     <string name="api_path_master_dodive_search">api/master/dodive/search</string>
+
     <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>
     <string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>
     <string name="api_path_dodive_search_by_country">api/dodive/service/country</string>
     <string name="api_path_dodive_search_by_province">api/dodive/service/province</string>
     <string name="api_path_dodive_search_by_city">api/dodive/service/city</string>
 
+    <!--SEARCH RESULT LIST DIVE SERVICE-->
+    <string name="api_path_dodive_search_service_by_category">api/dodive/search/category</string>
+    <string name="api_path_dodive_search_service_by_divespot">api/dodive/search/divespot</string>
+    <string name="api_path_dodive_search_service_by_province">api/dodive/search/province</string>
+    <string name="api_path_dodive_search_service_by_city">api/dodive/search/city</string>
+    <string name="api_path_dodive_search_service_by_divecenter">api/dodive/search/divecenter</string>
+
+    <string name="api_path_dodive_suggestion_service"></string>
 
     <string name="api_path_dodive_search_dive_center_by_category">api/dodive/center/category</string>
     <string name="api_path_dodive_search_dive_center_by_spot">api/dodive/center/divespot</string>
@@ -52,6 +61,11 @@
     <string name="api_path_dodive_service_list_by_category">api/service/serviceCategoryList</string>
     <string name="api_path_dodive_service_list_by_province">api/service/serviceProvinceList</string>
     <string name="api_path_dodive_service_list_by_city">api/service/serviceCityList</string>
+
+
+
+
+
 
     <string name="api_path_homepage_modules">api/master/homepage</string>
     <string name="api_path_dodive_detail_service">api/service/detail</string>

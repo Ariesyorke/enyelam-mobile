@@ -115,13 +115,13 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         String apiPath = getString(R.string.api_path_dodive_service_list);
 
         if (NYHelper.isStringNotEmpty(type) && type.equals("1")){
-            apiPath = getString(R.string.api_path_dodive_service_list_by_divespot);
+            apiPath = getString(R.string.api_path_dodive_search_service_by_divespot);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
-            apiPath = getString(R.string.api_path_dodive_service_list_by_category);
+            apiPath = getString(R.string.api_path_dodive_search_service_by_category);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("5")){
-            apiPath = getString(R.string.api_path_dodive_service_list_by_province);
+            apiPath = getString(R.string.api_path_dodive_search_service_by_province);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("6")){
-            apiPath = getString(R.string.api_path_dodive_service_list_by_city);
+            apiPath = getString(R.string.api_path_dodive_search_service_by_city);
         }
 
         /*if(isEcoTrip()) {
@@ -133,7 +133,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         }*/
 
         // TODO: tunggu URL dari Adam
-        /*NYDoDiveSearchServiceResultRequest req = null;
+        NYDoDiveSearchServiceResultRequest req = null;
 
         if(getIntent().hasExtra(NYHelper.ECO_TRIP)) {
             int ecoTrip = getIntent().getIntExtra(NYHelper.ECO_TRIP, 1);
@@ -143,9 +143,10 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), null, null, String.valueOf(0));
         }
 
-        spcMgr.execute(req, onSearchServiceRequest());*/
+        spcMgr.execute(req, onSearchServiceRequest());
 
-        loadJSONAsset();
+        // TODO: load data dummy, to test and waitting for API request
+        //loadJSONAsset();
 
     }
 
