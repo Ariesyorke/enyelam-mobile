@@ -132,7 +132,6 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
                     cardView.getLayoutParams();
             layoutParams.width = width*3/4;
-            layoutParams.height = width*2/4;
 
             this.itemView = itemView;
         }
@@ -147,6 +146,20 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
                 ratingTextView.setText(String.valueOf(diveService.getRating()));
 
                 if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
+
+
+                double normalPrice = Double.valueOf(diveService.getNormalPrice());
+                double specialPrice = Double.valueOf(diveService.getSpecialPrice());
+
+                if (specialPrice < normalPrice && specialPrice > 0){
+                    priceTextView.setText(NYHelper.priceFormatter(specialPrice));
+                    priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
+                    priceStrikethroughTextView.setVisibility(View.VISIBLE);
+                } else {
+                    priceTextView.setText(NYHelper.priceFormatter(normalPrice));
+                    priceStrikethroughTextView.setVisibility(View.GONE);
+                }
+
 
                 if (diveService.getTotalDives() > 1){
                     totalDiveTextView.setText(String.valueOf(diveService.getTotalDives())+" Dives");
@@ -167,7 +180,6 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
                 }
 
                 visitedTextView.setText(" / "+String.valueOf(diveService.getVisited())+" Visited");
-
 
                 if (diveService.getDiveCenter() != null){
 
@@ -190,20 +202,7 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
                         totalDiveTextView.setText(dives);
                     }
 
-                    if (NYHelper.isStringNotEmpty(diveService.getDiveCenter().getStartFromPrice()) && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getStartFromSpecialPrice())){
 
-                        double normalPrice = Double.valueOf(diveService.getDiveCenter().getStartFromPrice());
-                        double specialPrice = Double.valueOf(diveService.getDiveCenter().getStartFromSpecialPrice());
-
-                        if (specialPrice < normalPrice && specialPrice > 0){
-                            priceTextView.setText(NYHelper.priceFormatter(specialPrice));
-                            priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
-                            priceStrikethroughTextView.setVisibility(View.VISIBLE);
-                        } else {
-                            priceTextView.setText(NYHelper.priceFormatter(normalPrice));
-                            priceStrikethroughTextView.setVisibility(View.GONE);
-                        }
-                    }
 
                 }
 

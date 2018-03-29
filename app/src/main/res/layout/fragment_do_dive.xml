@@ -273,6 +273,7 @@
                 android:visibility="gone"
                 android:id="@+id/suggestion_linearLayout"
                 android:orientation="vertical"
+                android:layout_marginBottom="@dimen/padding_double"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.nyelam.android.view.font.NYTextView

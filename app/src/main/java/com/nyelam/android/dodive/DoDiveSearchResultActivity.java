@@ -102,6 +102,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.TYPE, type);
+                intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
                 intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);
                 //startActivity(intent);
                 startActivityForResult(intent, mRequestCode);
@@ -118,6 +119,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             apiPath = getString(R.string.api_path_dodive_search_service_by_divespot);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
             apiPath = getString(R.string.api_path_dodive_search_service_by_category);
+        } else if (NYHelper.isStringNotEmpty(type) && type.equals("3")){
+            apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("5")){
             apiPath = getString(R.string.api_path_dodive_search_service_by_province);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("6")){

@@ -2,6 +2,7 @@ package com.nyelam.android.dodive;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ProviderInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -38,6 +39,7 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
     private boolean isSelf = false;
     private ArrayList<String> categories;
     protected String keyword, diverId, diver, certificate, date, type;
+    private boolean ecotrip;
     private TextView doneTextView;
     private List<Category> items;
 
@@ -74,6 +76,7 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
 
                 Intent intent = new Intent(FilterListDiveCenterActivity.this, DoDiveSearchResultActivity.class);
                 intent.putExtra(NYHelper.KEYWORD, keyword);
+                intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
                 intent.putExtra(NYHelper.ID_DIVER, diverId);
                 intent.putExtra(NYHelper.DIVER, diver);
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
@@ -112,10 +115,8 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if(!extras.getString(NYHelper.KEYWORD).equals(null)){
-                keyword = extras.getString(NYHelper.KEYWORD);
-            }
-
+            if(intent.hasExtra(NYHelper.KEYWORD) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.KEYWORD))) keyword = extras.getString(NYHelper.KEYWORD);
+            if(intent.hasExtra(NYHelper.IS_ECO_TRIP)) ecotrip = extras.getBoolean(NYHelper.IS_ECO_TRIP);
             if(intent.hasExtra(NYHelper.ID_DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_DIVER))) diverId = extras.getString(NYHelper.ID_DIVER);
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))) diver = extras.getString(NYHelper.DIVER);
             if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))) certificate = extras.getString(NYHelper.CERTIFICATE);

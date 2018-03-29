@@ -117,7 +117,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         initExtra();
         initControl();
         initAdapter();
-        getSuggetionRequest();
+
+        DoDiveActivity activity = (DoDiveActivity)getActivity();
+        if(!activity.isEcoTrip()) getSuggetionRequest();
     }
 
     private void initAdapter() {
@@ -132,19 +134,15 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         diverAdapter.notifyDataSetChanged();
 
 
-
-
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         suggestionRecyclerView.setLayoutManager(layoutManager);
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
-        suggestionRecyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
+        suggestionRecyclerView.addItemDecoration(new NYSpacesItemDecoration(0,0,spacingInPixels,0));
 
         diveServiceSuggestionAdapter = new DoDiveDiveServiceSuggestionAdapter(getActivity());
         suggestionRecyclerView.setAdapter(diveServiceSuggestionAdapter);
-
-
 
         suggestionRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), suggestionRecyclerView, new DoDiveDiveServiceSuggestionAdapter.RecyclerViewClickListener() {
             @Override
@@ -162,7 +160,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 diverId = diveService.getId();
                 keyword = diveService.getName();
                 type = "4";
-                searchTextView.setText(keyword);
+                keywordTextView.setText(keyword);
             }
         }));
     }

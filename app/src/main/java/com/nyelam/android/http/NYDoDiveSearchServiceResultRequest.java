@@ -50,6 +50,8 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<DiveServi
                 addQuery(POST_DIVE_SPOT_ID, diverId);
             } else if (!TextUtils.isEmpty(type) && type.equals("2")){
                 addQuery(POST_CATEGORY_ID, diverId);
+            } else if (!TextUtils.isEmpty(type) && type.equals("3")){
+                addQuery(POST_DIVE_CENTER_ID, diverId);
             } else if (!TextUtils.isEmpty(type) && type.equals("5")){
                 addQuery(POST_PROVINCE_ID, diverId);
             } else if (!TextUtils.isEmpty(type) && type.equals("6")){
