@@ -98,7 +98,6 @@ public class BookingServiceActivity extends BasicActivity {
                 boolean isContactEmpty = false;
                 boolean isParticipantEmpty = false;
 
-
                 if (bookingContact != null){
                     if (!NYHelper.isStringNotEmpty(bookingContact.getName())){
                         isContactEmpty = true;

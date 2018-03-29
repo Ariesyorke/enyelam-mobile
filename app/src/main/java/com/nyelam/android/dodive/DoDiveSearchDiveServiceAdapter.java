@@ -143,6 +143,18 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
 
                 if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
 
+                double normalPrice = Double.valueOf(diveService.getNormalPrice());
+                double specialPrice = Double.valueOf(diveService.getSpecialPrice());
+
+                if (specialPrice < normalPrice && specialPrice > 0){
+                    priceTextView.setText(NYHelper.priceFormatter(specialPrice));
+                    priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
+                    priceStrikethroughTextView.setVisibility(View.VISIBLE);
+                } else {
+                    priceTextView.setText(NYHelper.priceFormatter(normalPrice));
+                    priceStrikethroughTextView.setVisibility(View.GONE);
+                }
+
                 if (diveService.getTotalDives() > 1){
                     totalDiveTextView.setText(String.valueOf(diveService.getTotalDives())+" Dives");
                 } else {
@@ -185,20 +197,6 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
                         totalDiveTextView.setText(dives);
                     }
 
-                    if (NYHelper.isStringNotEmpty(diveService.getDiveCenter().getStartFromPrice()) && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getStartFromSpecialPrice())){
-
-                        double normalPrice = Double.valueOf(diveService.getDiveCenter().getStartFromPrice());
-                        double specialPrice = Double.valueOf(diveService.getDiveCenter().getStartFromSpecialPrice());
-
-                        if (specialPrice < normalPrice && specialPrice > 0){
-                            priceTextView.setText(NYHelper.priceFormatter(specialPrice));
-                            priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));
-                            priceStrikethroughTextView.setVisibility(View.VISIBLE);
-                        } else {
-                            priceTextView.setText(NYHelper.priceFormatter(normalPrice));
-                            priceStrikethroughTextView.setVisibility(View.GONE);
-                        }
-                    }
 
                 }
 

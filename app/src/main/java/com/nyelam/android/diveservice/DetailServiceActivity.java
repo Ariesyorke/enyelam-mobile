@@ -24,7 +24,7 @@ import android.widget.TextView;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.booking.BookingServiceActivity;
+import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.CartReturn;
@@ -287,7 +287,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     progressDialog.dismiss();
                 }
 
-                Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
+                //Intent intent = new Intent(DetailServiceActivity.this, BookingServiceActivity.class);
+                Intent intent = new Intent(DetailServiceActivity.this, BookingServiceSummaryActivity.class);
                 //intent.putExtra(NYHelper.CART_TOKEN, cartReturn.getCartToken());
                 intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
                 intent.putExtra(NYHelper.SERVICE, newDiveService.toString());

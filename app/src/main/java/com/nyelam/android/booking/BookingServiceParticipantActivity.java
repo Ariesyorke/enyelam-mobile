@@ -158,7 +158,8 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
                     bundle.putString(NYHelper.PARTICIPANT, participants.toString());
                     bundle.putBoolean(NYHelper.IS_NOT_NEW, true);
 
-                    Intent intent = new Intent(BookingServiceParticipantActivity.this, BookingServiceActivity.class);
+                    //Intent intent = new Intent(BookingServiceParticipantActivity.this, BookingServiceActivity.class);
+                    Intent intent = new Intent(BookingServiceParticipantActivity.this, BookingServiceSummaryActivity.class);
                     intent.putExtras(bundle);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);

@@ -8,10 +8,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,6 +45,7 @@ import com.nyelam.android.data.BookingContact;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
@@ -86,11 +93,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, diveCenterNameTextView, locationTextView;
-    private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView;
+    private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
     private TextView detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
     private RatingBar ratingBar;
     private DiveCenter center;
     private RadioGroup radioGroup;
+    private LinearLayout addNoteLinearLayout;
+    private EditText noteEditText;
     private RadioButton bankTransferRadioButton, virtualAccountRadioButton, creditCardRadioButton;
     private LinearLayout bankTransferLinearLayout, virtualAccountLinearLayout, creditCardLinearLayout;
     private DiveCenter diveCenter;
@@ -111,22 +120,63 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
     private void initControl() {
+
+        changeContactTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BookingServiceSummaryActivity.this, BookingServiceContactActivity.class);
+                intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
+                intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
+                intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
+                intent.putExtra(NYHelper.SCHEDULE, schedule);
+                intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
+                intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                startActivity(intent);
+            }
+        });
+
         orderLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (NYHelper.isStringNotEmpty(cartToken)){
-                    Toast.makeText(BookingServiceSummaryActivity.this, cartToken, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(BookingServiceSummaryActivity.this, "cartToken null", Toast.LENGTH_SHORT).show();
-                }*/
-                if (orderReturn == null && isTranssactionFailed){
-                    // TODO: request ulang cart token atau cart return
-                    new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
-                } else if (orderReturn == null){
-                    new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
-                } else {
-                    payUsingVeritrans();
+
+                boolean isContactEmpty = false;
+                boolean isParticipantEmpty = false;
+
+                if (bookingContact != null){
+                    if (!NYHelper.isStringNotEmpty(bookingContact.getName())){
+                        isContactEmpty = true;
+                    } else if (!isContactEmpty && !NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())){
+                        isContactEmpty = true;
+                    } else if (!isContactEmpty && !NYHelper.isStringNotEmpty(bookingContact.getEmail())){
+                        isContactEmpty = true;
+                    } else if (!isParticipantEmpty){
+                        for (Participant p : participantList){
+                            if (p == null || !NYHelper.isStringNotEmpty(p.getName()) || !NYHelper.isStringNotEmpty(p.getEmail())){
+                                isParticipantEmpty = true;
+                                break;
+                            }
+                        }
+                    }
                 }
+
+                if (isContactEmpty){
+                    Toast.makeText(BookingServiceSummaryActivity.this, getString(R.string.warn_field_contact_details_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                } else if (isParticipantEmpty){
+                    Toast.makeText(BookingServiceSummaryActivity.this, getString(R.string.warn_field_participant_details_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                } else {
+                    if (orderReturn == null && isTranssactionFailed){
+                        // TODO: request ulang cart token atau cart return
+                        new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
+                    } else if (orderReturn == null){
+                        new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
+                    } else {
+                        payUsingVeritrans();
+                    }
+                }
+
             }
         });
 
@@ -199,8 +249,65 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
         });
 
-    }
+        addNoteLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteLinearLayout.setVisibility(View.GONE);
+                noteEditText.setVisibility(View.VISIBLE);
+            }
+        });
 
+        noteEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    //check if the right key was pressed
+                    if (keyCode == KeyEvent.KEYCODE_BACK)
+                    {
+                        if (noteEditText.getText().toString().isEmpty()){
+                            noteEditText.setVisibility(View.GONE);
+                            addNoteLinearLayout.setVisibility(View.VISIBLE);
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        /*noteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+
+                    Toast.makeText(BookingServiceSummaryActivity.this, "hilang", Toast.LENGTH_SHORT).show();
+                    // code to execute when EditText loses focus
+
+                } else {
+                    Toast.makeText(BookingServiceSummaryActivity.this, "ada", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });*/
+
+
+        /*noteEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+                    if (noteEditText.getText().toString().isEmpty()){
+                        noteEditText.setVisibility(View.GONE);
+                        addNoteLinearLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                return false;
+            }
+        });*/
+
+    }
 
     private void initData() {
 
@@ -371,8 +478,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     bookingContact = new BookingContact();
                     bookingContact.parse(obj);
 
-                    if (NYHelper.isStringNotEmpty(bookingContact.getName()))contactNameTextView.setText(bookingContact.getName());
-                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber()))contactPhoneNumberTextView.setText("+"+bookingContact.getCountryCode().getCountryNumber() + bookingContact.getPhoneNumber());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getName())){
+                        contactNameTextView.setText(bookingContact.getName());
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
+                    } else {
+                        contactNameTextView.setText(getString(R.string.full_name));
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
+                    }
+
+                    if (bookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(bookingContact.getCountryCode().getCountryNumber()) && NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())) contactPhoneNumberTextView.setText("+"+bookingContact.getCountryCode().getCountryNumber()+bookingContact.getPhoneNumber());
                     if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -383,10 +497,22 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (storage.isUserLogin() && storage.user != null){
                     bookingContact = new BookingContact();
                     bookingContact.setName(storage.user.getFullname());
-                    bookingContact.setPhoneNumber(storage.user.getPhone());
+                    if(storage.user.getCountryCode() != null) {
+                        CountryCode c = storage.user.getCountryCode();
+                        bookingContact.setPhoneNumber(storage.user.getPhone());
+                        bookingContact.setCountryCode(c);
+                        contactPhoneNumberTextView.setText("+" + c.getCountryNumber() + storage.user.getPhone());
+                    }
+
                     bookingContact.setEmail(storage.user.getEmail());
-                    if (NYHelper.isStringNotEmpty(storage.user.getFullname()))contactNameTextView.setText(storage.user.getFullname());
-                    if (NYHelper.isStringNotEmpty(storage.user.getPhone()))contactPhoneNumberTextView.setText(storage.user.getPhone());
+                    if (NYHelper.isStringNotEmpty(storage.user.getFullname())){
+                        contactNameTextView.setText(storage.user.getFullname());
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
+                    } else {
+                        contactNameTextView.setText(getString(R.string.full_name));
+                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
+                    }
+
                     if (NYHelper.isStringNotEmpty(storage.user.getEmail()))contactEmailTextView.setText(storage.user.getEmail());
                 }
             }
@@ -409,11 +535,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         contactNameTextView = (TextView) findViewById(R.id.contact_name_textView);
         contactPhoneNumberTextView = (TextView) findViewById(R.id.contact_phone_number_textView);
         contactEmailTextView = (TextView) findViewById(R.id.contact_email_textView);
+        changeContactTextView = (TextView) findViewById(R.id.change_contact_textView);
         orderLinearLayout = (LinearLayout) findViewById(R.id.order_linearLayout);
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingTextView = (TextView) findViewById(R.id.rating_textView);
         visitedTextView = (TextView) findViewById(R.id.visited_textView);
+
+        addNoteLinearLayout = (LinearLayout) findViewById(R.id.add_note_linearLayout);
+        noteEditText = (EditText) findViewById(R.id.note_editText);
 
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
@@ -449,27 +579,58 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
             LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
-            if (participant != null) {
-                if (NYHelper.isStringNotEmpty(participant.getName())){
-                    nameTextView.setText(participant.getName());
-                }  else{
-                    nameTextView.setText("Participant "+String.valueOf(position+1));
-                }
-
-                if (NYHelper.isStringNotEmpty(participant.getEmail())){
-                    emailTextView.setText(participant.getEmail());
-                } else {
-                    emailTextView.setText("-");
-                }
-
-                changeTextView.setVisibility(View.GONE);
-                fillLinearLayout.setVisibility(View.GONE);
+            if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
+                if (NYHelper.isStringNotEmpty(participant.getName())) nameTextView.setText(participant.getName());
+                changeTextView.setVisibility(View.VISIBLE);
             } else {
                 nameTextView.setText("Participant "+String.valueOf(position+1));
-                emailTextView.setText("-");
-                changeTextView.setVisibility(View.GONE);
-                fillLinearLayout.setVisibility(View.GONE);
+                fillLinearLayout.setVisibility(View.VISIBLE);
             }
+
+            if (participant != null && NYHelper.isStringNotEmpty(participant.getEmail())) {
+                if (NYHelper.isStringNotEmpty(participant.getEmail())) emailTextView.setText(participant.getEmail());
+            } else {
+                emailTextView.setText("Email");
+            }
+
+            changeTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(BookingServiceActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(BookingServiceSummaryActivity.this, BookingServiceParticipantActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
+                    intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
+                    intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
+                    intent.putExtra(NYHelper.POSITION, position);
+                    intent.putExtra(NYHelper.SCHEDULE, schedule);
+                    intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
+                    intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                    intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    startActivity(intent);
+                }
+            });
+
+
+            fillLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(BookingServiceSummaryActivity.this, BookingServiceParticipantActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    //intent.putExtra(NYHelper.CART_TOKEN, cartToken);
+                    intent.putExtra(NYHelper.CART_RETURN, cartReturn.toString());
+                    intent.putExtra(NYHelper.PARTICIPANT, participantList.toString());
+                    intent.putExtra(NYHelper.CONTACT, bookingContact.toString());
+                    intent.putExtra(NYHelper.POSITION, position);
+                    intent.putExtra(NYHelper.SCHEDULE, schedule);
+                    intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
+                    intent.putExtra(NYHelper.CERTIFICATE, certificate);
+                    intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    startActivity(intent);
+                }
+            });
 
             pos++;
             particpantContainerLinearLayout.addView(myParticipantsView);
@@ -586,6 +747,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (result != null){
                     NYDoDiveServiceOrderRequest req = null;
                     try {
+                        note = noteEditText.getText().toString();
                         req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
                         spcMgr.execute(req, onCreateOrderServiceRequest());
                     } catch (Exception e) {
@@ -669,38 +831,29 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     @Override
     public void onBackPressed() {
 
-        if (orderReturn != null){
+        AlertDialog.Builder builder = new AlertDialog.Builder(BookingServiceSummaryActivity.this);
+        builder.setCancelable(false);
+        builder.setTitle(null);
+        builder.setMessage(getString(R.string.warn_cancel_booking));
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+                dialog.dismiss();
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
 
-            //Toast.makeText(this, orderReturn.toString(), Toast.LENGTH_SHORT).show();
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(BookingServiceSummaryActivity.this);
-            builder.setCancelable(false);
-            builder.setTitle(null);
-            builder.setMessage("Are you sure want to cancel your bookings? Any changes to your bookings will be lost.");
-            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing but close the dialog
-                    dialog.dismiss();
-                    setResult(Activity.RESULT_OK);
-                    finish();
-                }
-            });
-
-            builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog alert = builder.create();
-            alert.show();
-
-        } else {
-            //Toast.makeText(this, "orderReturn : NULL", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        AlertDialog alert = builder.create();
+        alert.show();
 
     }
 
@@ -765,9 +918,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             requestCartToken();
         } else {
             progressDialog.show();
-            NYDoDiveServiceOrderRequest req = null;
+            note = noteEditText.getText().toString();
             try {
-                req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
+                NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
                 spcMgr.execute(req, onCreateOrderServiceRequest());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -842,6 +995,38 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     }
 
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View v = getCurrentFocus();
+
+        if (v != null &&
+                (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) &&
+                v instanceof EditText &&
+                !v.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            v.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + v.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + v.getTop() - scrcoords[1];
+
+            if (x < v.getLeft() || x > v.getRight() || y < v.getTop() || y > v.getBottom()){
+                hideKeyboard(this);
+                if (noteEditText.getText().toString().isEmpty()){
+                    noteEditText.setVisibility(View.GONE);
+                    addNoteLinearLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
 
 
 }

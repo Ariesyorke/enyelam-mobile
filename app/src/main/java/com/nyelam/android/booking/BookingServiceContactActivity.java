@@ -84,7 +84,8 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
                     extras.putString(NYHelper.CONTACT, bookingContact.toString());
                     extras.putBoolean(NYHelper.IS_NOT_NEW, true);
 
-                    Intent intent = new Intent(BookingServiceContactActivity.this, BookingServiceActivity.class);
+                    //Intent intent = new Intent(BookingServiceContactActivity.this, BookingServiceActivity.class);
+                    Intent intent = new Intent(BookingServiceContactActivity.this, BookingServiceSummaryActivity.class);
                     intent.putExtras(extras);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
