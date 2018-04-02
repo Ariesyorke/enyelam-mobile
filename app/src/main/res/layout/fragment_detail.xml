@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_gravity="center"
@@ -122,6 +121,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/availability_stock_textView"
+                        app:fontTextStyle="reguler"
+                        android:text="Availability Stock : -"
+                        android:textColor="@color/ny_black1"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
 
 
@@ -136,6 +145,7 @@
                     android:layout_marginTop="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"

@@ -37,6 +37,7 @@ public class DetailServiceFragment extends Fragment {
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView;
     private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
+    private TextView availabilityStockTextView;
 
     public DetailServiceFragment() {
         // Required empty public constructor
@@ -93,6 +94,7 @@ public class DetailServiceFragment extends Fragment {
         descriptionTextView = (TextView) v.findViewById(R.id.description_textView);
         licenseTextView = (TextView) v.findViewById(R.id.license_textView);
         categoryTextView = (TextView) v.findViewById(R.id.category_textView);
+        availabilityStockTextView = (TextView) v.findViewById(R.id.availability_stock_textView);
 
         icDiveGuideImageView = (ImageView) v.findViewById(R.id.icon_dive_guide_imageView);
         icEquipmentImageView = (ImageView) v.findViewById(R.id.icon_equipment_imageView);
@@ -191,6 +193,10 @@ public class DetailServiceFragment extends Fragment {
                     categoryTextView.setText(service.getCategories().get(0).getName());
                 } else {
                     categoryTextView.setText("-");
+                }
+
+                if (service.getAvailabilityStock() > 0){
+                    availabilityStockTextView.setText("Availability Stock : "+String.valueOf(service.getAvailabilityStock()));
                 }
 
                 if (service.getSpecialPrice() < service.getNormalPrice() && service.getSpecialPrice() > 0){

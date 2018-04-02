@@ -18,8 +18,8 @@ import org.json.JSONObject;
 public class NYDoDiveDetailServiceRequest extends NYBasicRequest<DiveService> {
 
     private static final String KEY_SERVICE = "service";
-    private static final String POST_SERVICE_ID = "service_id";
 
+    private static final String POST_SERVICE_ID = "service_id";
     private static final String POST_DIVER = "diver";
     private static final String POST_CERTIFICATE = "certificate";
     private static final String POST_DATE = "date";

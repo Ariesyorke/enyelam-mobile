@@ -20,6 +20,7 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
@@ -92,6 +93,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
     //private View viewTabManager;
     private boolean triggerBook;
 
+    private int availabilityStock = 0;
+    private TextView diverTextView;
+    private ImageView minusImageView, plusImageView;
+
     // TODO: diveSpotID and Type is not used in Cart 
     private String diveSpotId;
 
@@ -134,6 +139,28 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        minusImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int diverTemp = Integer.valueOf(diver) - 1;
+                if (diverTemp >= 1){
+                    diver = String.valueOf(diverTemp);
+                    diverTextView.setText(diver);
+                }
+            }
+        });
+
+        plusImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int diverTemp = Integer.valueOf(diver) + 1;
+                if (diverTemp <= availabilityStock){
+                    diver = String.valueOf(diverTemp);
+                    diverTextView.setText(diver);
+                }
+            }
+        });
     }
 
     private void doBook() {
@@ -161,8 +188,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     e.printStackTrace();
                 }
             }
+
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))){
                 diver = extras.getString(NYHelper.DIVER);
+                diverTextView.setText(diver);
             }
 
             if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))){
@@ -235,6 +264,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     if (diveService == null) diveService = new DiveService();
                     newDiveService = results;
                     diveService = newDiveService;
+
+                    availabilityStock = diveService.getAvailabilityStock();
+                    //Toast.makeText(DetailServiceActivity.this, String.valueOf(availabilityStock), Toast.LENGTH_SHORT).show();
 
                     List<DiveSpot> diveSpots = newDiveService.getDiveSpots();
 
@@ -313,6 +345,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
         titleTextView = (TextView) findViewById(R.id.title_textView);
         bookingTextView = (TextView) findViewById(R.id.booking_textView);
+
+        diverTextView = (TextView) findViewById(R.id.diver_textView);
+        minusImageView = (ImageView) findViewById(R.id.minus_imageView);
+        plusImageView = (ImageView) findViewById(R.id.plus_imageView);
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentAdapter);

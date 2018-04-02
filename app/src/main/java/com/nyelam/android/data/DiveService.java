@@ -20,6 +20,7 @@ public class DiveService implements Parseable {
     private static String KEY_NAME = "name";
     private static String KEY_RATING = "rating";
     private static String KEY_RATING_COUNT = "rating_count";
+    private static String KEY_AVAILABILITY_STOCK = "availability_stock";
     private static String KEY_CATEGORY = "category";
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_DIVE_SPOTS = "dive_spot";
@@ -43,6 +44,7 @@ public class DiveService implements Parseable {
     private String name;
     private int rating;
     private int ratingCount;
+    private int availabilityStock;
     private List<Category> categories;
     private String featuredImage;
     private List<DiveSpot> diveSpots;
@@ -108,6 +110,14 @@ public class DiveService implements Parseable {
 
     public void setRatingCount(int ratingCount) {
         this.ratingCount = ratingCount;
+    }
+
+    public int getAvailabilityStock() {
+        return availabilityStock;
+    }
+
+    public void setAvailabilityStock(int availabilityStock) {
+        this.availabilityStock = availabilityStock;
     }
 
     public List<Category> getCategories() {
@@ -268,6 +278,12 @@ public class DiveService implements Parseable {
         try {
             if (!obj.isNull(KEY_RATING_COUNT)) {
                 setRatingCount(obj.getInt(KEY_RATING_COUNT));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_AVAILABILITY_STOCK)) {
+                setAvailabilityStock(obj.getInt(KEY_AVAILABILITY_STOCK));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -495,6 +511,12 @@ public class DiveService implements Parseable {
 
         try {
             obj.put(KEY_RATING_COUNT, getRatingCount());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_AVAILABILITY_STOCK, getAvailabilityStock());
         } catch (JSONException e) {
             e.printStackTrace();
         }

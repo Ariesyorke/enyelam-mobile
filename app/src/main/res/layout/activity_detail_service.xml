@@ -214,9 +214,35 @@
         android:paddingTop="5dp">
 
         <LinearLayout
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_half"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/minus_imageView"
+                android:src="@drawable/ic_minus"
+                android:background="@drawable/ny_circle_blue"
+                android:padding="7dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+            <TextView
+                android:id="@+id/diver_textView"
+                android:text="0"
+                android:textSize="22sp"
+                android:textColor="@color/ny_grey2"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/plus_imageView"
+                android:src="@drawable/ic_plus"
+                android:background="@drawable/ny_circle_blue"
+                android:padding="7dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+        </LinearLayout>
         <TextView
             android:id="@+id/booking_textView"
             android:text="@string/book_now"
