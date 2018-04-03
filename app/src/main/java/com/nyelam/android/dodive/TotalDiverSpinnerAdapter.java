@@ -86,6 +86,7 @@ public class TotalDiverSpinnerAdapter extends BaseAdapter implements SpinnerAdap
         }
         TextView diverTextView = (TextView) view.findViewById(R.id.country_number_textView);
         diverTextView.setText(diverList.get(position));
+        //diverTextView.setText(diverList.get(position)+" Diver(s)");
         //countryNumberTextView.setTextColor(color);
         diverTextView.setGravity(Gravity.CENTER);
         diverTextView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));

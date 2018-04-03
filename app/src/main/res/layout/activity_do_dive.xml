@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ca1a60ab">
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/background_imageView"
@@ -19,6 +19,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:background="#0071BC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/title_textView"
-                    android:text="Title"
+                    android:text="Search"
                     android:textSize="16sp"
                     android:textColor="@color/colorWhite"
                     android:layout_gravity="center"
@@ -52,12 +53,10 @@
 
         </android.support.v7.widget.Toolbar>
 
-
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
 
     </LinearLayout>
 

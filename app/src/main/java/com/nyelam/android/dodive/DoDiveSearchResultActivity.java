@@ -161,7 +161,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         if (extras != null) {
             if(intent.hasExtra(NYHelper.KEYWORD) && !extras.getString(NYHelper.KEYWORD).equals(null)){
                 keyword = extras.getString(NYHelper.KEYWORD);
-                titleTextView.setText(keyword);
+                //titleTextView.setText(keyword);
             }
             if(intent.hasExtra(NYHelper.ID_DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_DIVER))) diverId = extras.getString(NYHelper.ID_DIVER);
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))) diver = extras.getString(NYHelper.DIVER);
@@ -174,6 +174,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             if(intent.hasExtra(NYHelper.CATEGORIES) && !extras.get(NYHelper.CATEGORIES).equals(null)){
                 categories = extras.getStringArrayList(NYHelper.CATEGORIES);
             }
+
+            titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(date))+", "+diver+" pax (s)");
 
         }
 

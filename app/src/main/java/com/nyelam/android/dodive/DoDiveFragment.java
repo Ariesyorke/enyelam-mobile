@@ -133,13 +133,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         diverAdapter.addDivers(divers);
         diverAdapter.notifyDataSetChanged();
 
-
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         suggestionRecyclerView.setLayoutManager(layoutManager);
 
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
-        suggestionRecyclerView.addItemDecoration(new NYSpacesItemDecoration(0,0,spacingInPixels,0));
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+        suggestionRecyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels,0,spacingInPixels,spacingInPixels));
 
         diveServiceSuggestionAdapter = new DoDiveDiveServiceSuggestionAdapter(getActivity());
         suggestionRecyclerView.setAdapter(diveServiceSuggestionAdapter);
@@ -338,7 +336,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             }
 
             if (intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.DIVER))){
-                diverTextView.setText(intent.getStringExtra(NYHelper.DIVER));
+                diverTextView.setText(intent.getStringExtra(NYHelper.DIVER)+" Diver(s)");
                 diver = intent.getStringExtra(NYHelper.DIVER);
             }
 
@@ -635,7 +633,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         if (getActivity() instanceof DoDiveActivity && ((DoDiveActivity) getActivity()).isEcoTrip()){
             ((DoDiveActivity)getActivity()).setTitle(getString(R.string.eco_trip), true, false);
         } else {
-            ((DoDiveActivity)getActivity()).setTitle(getString(R.string.do_dive), true, false);
+            ((DoDiveActivity)getActivity()).setTitle(getString(R.string.search), true, false);
         }
     }
 
@@ -662,7 +660,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     public void setDiver(String diver){
-        diverTextView.setText(diver);
+        diverTextView.setText(diver+" Diver(s)");
         this.diver = diver;
     }
 

@@ -1,10 +1,13 @@
 package com.nyelam.android.diveservice;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,21 +19,40 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Facilities;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.dodive.DoDiveDiveServiceSuggestionAdapter;
+import com.nyelam.android.dodive.RecyclerViewTouchListener;
+import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetailServiceFragment extends Fragment {
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private OnFragmentInteractionListener mListener;
     private LinearLayout mainLinearLayout;
     private ProgressBar progressBar;
     private RatingBar ratingBar;
-    private TextView titleTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
+    private ImageView diveCenterImageView;
+    private TextView titleTextView, diveCenterNameTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
     private TextView ratingTextView, visitedTextView, categoryTextView;
     private TextView addressTextView, phoneNumberTextView;
     private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView;
@@ -38,6 +60,10 @@ public class DetailServiceFragment extends Fragment {
     private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
     private TextView availabilityStockTextView;
+
+    private DoDiveDiveServiceSuggestionAdapter relatedDiveServiceAdapter;
+    private RecyclerView relatedPostRecyclerView;
+    private LinearLayout relatedPostLinearLayout;
 
     public DetailServiceFragment() {
         // Required empty public constructor
@@ -70,14 +96,18 @@ public class DetailServiceFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        initAdapter();
+        getRelatedServiceRequest();
     }
 
     private void initView(View v) {
         mainLinearLayout = (LinearLayout) v.findViewById(R.id.main_linearLayout);
         progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         ratingBar = (RatingBar) v.findViewById(R.id.ratingBar);
+        diveCenterImageView = (ImageView) v.findViewById(R.id.dive_center_imageView);
 
         titleTextView = (TextView) v.findViewById(R.id.title_textView);
+        diveCenterNameTextView = (TextView) v.findViewById(R.id.dive_center_name_textView);
         diveSpotsTextView = (TextView) v.findViewById(R.id.dive_spots_textView);
         ratingTextView = (TextView) v.findViewById(R.id.rating_textView);
         visitedTextView = (TextView) v.findViewById(R.id.visited_textView);
@@ -109,6 +139,8 @@ public class DetailServiceFragment extends Fragment {
         towelLinearLayout = (LinearLayout) v.findViewById(R.id.towel_linearLayout);
         licenseLinearLayout = (LinearLayout) v.findViewById(R.id.license_linearLayout);
 
+        relatedPostLinearLayout = (LinearLayout) v.findViewById(R.id.related_service_linearLayout);
+        relatedPostRecyclerView = (RecyclerView) v.findViewById(R.id.related_service_recyclerView);
     }
 
     public void setContent(){
@@ -163,7 +195,7 @@ public class DetailServiceFragment extends Fragment {
                 tripDurationsTextView.setText(": "+String.valueOf(service.getDays())+" Day");
             }
 
-            if (service.getDiveCenter() != null && service.getDiveCenter().getContact() != null){
+            if (service.getDiveCenter() != null && service.getDiveCenter().getContact() !=  null){
                 if (NYHelper.isStringNotEmpty(service.getDiveCenter().getContact().getPhoneNumber()))phoneNumberTextView.setText(service.getDiveCenter().getContact().getPhoneNumber());
                 if (service.getDiveCenter().getContact().getLocation() != null){
                     Location location = service.getDiveCenter().getContact().getLocation();
@@ -172,6 +204,44 @@ public class DetailServiceFragment extends Fragment {
                     if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName())) locationText=locationText+", "+location.getCity().getName();
                     if (location.getCountry() != null && NYHelper.isStringNotEmpty(location.getCountry())) locationText=locationText+", "+location.getCountry();
                     addressTextView.setText(locationText);
+                }
+            }
+
+            if (service.getDiveCenter() != null){
+                if (NYHelper.isStringNotEmpty(service.getDiveCenter().getName()))diveCenterNameTextView.setText(service.getDiveCenter().getName());
+                if (NYHelper.isStringNotEmpty(service.getDiveCenter().getImageLogo())){
+                    //SET IMAGE
+                    ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
+                    if (NYHelper.isStringNotEmpty(service.getDiveCenter().getImageLogo())) {
+                        ImageLoader.getInstance().loadImage(service.getDiveCenter().getImageLogo(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                //featuredImageView.setImageResource(R.drawable.bg_placeholder);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                diveCenterImageView.setImageBitmap(loadedImage);
+                                //activity.getCache().put(imageUri, loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                //featuredImageView.setImageResource(R.drawable.bg_placeholder);
+                            }
+                        });
+
+                        ImageLoader.getInstance().displayImage(service.getDiveCenter().getImageLogo(), diveCenterImageView, NYHelper.getOption());
+
+                    } else {
+                        diveCenterImageView.setImageResource(R.drawable.bg_placeholder);
+                    }
+
                 }
             }
 
@@ -259,6 +329,67 @@ public class DetailServiceFragment extends Fragment {
     }
 
 
+
+    private void initAdapter() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        relatedPostRecyclerView.setLayoutManager(layoutManager);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding_half);
+        relatedPostRecyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels,0,spacingInPixels,0));
+
+        relatedDiveServiceAdapter = new DoDiveDiveServiceSuggestionAdapter(getActivity());
+        relatedPostRecyclerView.setAdapter(relatedDiveServiceAdapter);
+
+        relatedPostRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(),relatedPostRecyclerView, new DoDiveDiveServiceSuggestionAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                DiveService diveService = relatedDiveServiceAdapter.getDiveService(position);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                DiveService diveService = relatedDiveServiceAdapter.getDiveService(position);
+            }
+        }));
+    }
+
+
+    private void getRelatedServiceRequest() {
+        NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getActivity());
+        spcMgr.execute(req, onSearchServiceRequest());
+
+        // TODO: load data dummy, to test and waitting for API request
+        //loadJSONAsset();
+    }
+
+    private RequestListener<DiveServiceList> onSearchServiceRequest() {
+        return new RequestListener<DiveServiceList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                relatedDiveServiceAdapter.clear();
+                relatedDiveServiceAdapter.notifyDataSetChanged();
+                relatedPostLinearLayout.setVisibility(View.GONE);
+                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(DiveServiceList results) {
+                if (results != null){
+                    relatedPostLinearLayout.setVisibility(View.VISIBLE);
+                    relatedDiveServiceAdapter.clear();
+                    relatedDiveServiceAdapter.addResults(results.getList());
+                    relatedDiveServiceAdapter.notifyDataSetChanged();
+                } else {
+                    relatedDiveServiceAdapter.clear();
+                    relatedDiveServiceAdapter.notifyDataSetChanged();
+                    relatedPostLinearLayout.setVisibility(View.GONE);
+                }
+
+            }
+        };
+    }
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -275,6 +406,20 @@ public class DetailServiceFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        spcMgr.start(getActivity());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

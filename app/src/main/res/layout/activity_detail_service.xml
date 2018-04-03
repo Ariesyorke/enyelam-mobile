@@ -204,6 +204,7 @@
     <!--</LinearLayout>-->
     <LinearLayout
         android:id="@+id/book_now_container"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -216,32 +217,43 @@
         <LinearLayout
             android:gravity="center_vertical"
             android:padding="@dimen/padding_half"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/minus_imageView"
-                android:src="@drawable/ic_minus"
-                android:background="@drawable/ny_circle_blue"
-                android:padding="7dp"
-                android:layout_width="28dp"
-                android:layout_height="28dp" />
+                android:src="@drawable/ic_minus_blue"
+                android:padding="5dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
             <TextView
                 android:id="@+id/diver_textView"
                 android:text="0"
-                android:textSize="22sp"
-                android:textColor="@color/ny_grey2"
+                android:textSize="18sp"
+                android:textColor="@color/ny_black1"
+                android:background="@drawable/ny_rectangle_white_border_grey"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_vertical_margin"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
                 android:layout_marginRight="@dimen/activity_vertical_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageView
                 android:id="@+id/plus_imageView"
-                android:src="@drawable/ic_plus"
-                android:background="@drawable/ny_circle_blue"
-                android:padding="7dp"
-                android:layout_width="28dp"
-                android:layout_height="28dp" />
+                android:src="@drawable/ic_plus_blue"
+                android:padding="5dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+            <TextView
+                android:text="Diver"
+                android:textSize="18sp"
+                android:textColor="@color/ny_black1"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <TextView
             android:id="@+id/booking_textView"
@@ -253,13 +265,13 @@
             android:background="@drawable/ny_book_disable"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/padding"
             android:paddingBottom="@dimen/padding"
-            android:paddingLeft="@dimen/padding_triple"
-            android:paddingRight="@dimen/padding_triple" />
+            android:paddingLeft="@dimen/padding_double"
+            android:paddingRight="@dimen/padding_double" />
 
     </LinearLayout>
 </RelativeLayout>

@@ -125,13 +125,13 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
             visitedTextView = (TextView) itemView.findViewById(R.id.visitor_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
 
-            DisplayMetrics displayMetrics = new DisplayMetrics();
+            /*DisplayMetrics displayMetrics = new DisplayMetrics();
             activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int width = displayMetrics.widthPixels;
 
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
                     cardView.getLayoutParams();
-            layoutParams.width = width*3/4;
+            layoutParams.width = width*3/4;*/
 
             this.itemView = itemView;
         }
