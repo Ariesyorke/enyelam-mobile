@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:descendantFocusability="beforeDescendants"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/book_now_container">
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <com.nyelam.android.view.NYCustomViewPager
             android:id="@+id/view_pager"
-            android:descendantFocusability="blocksDescendants"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:background="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -35,10 +32,13 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:titleEnabled="false">
 
+
                 <RelativeLayout
                     android:id="@+id/banner_relativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/toolbar"
+                    android:layout_marginTop="?attr/actionBarSize"
                     android:fitsSystemWindows="true">
 
                     <ProgressBar
@@ -52,9 +52,9 @@
 
                     <com.nyelam.android.view.NYBannerViewPager
                         android:id="@+id/promotion_view_pager"
-                        android:background="@color/ny_blue2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        android:background="@color/ny_blue2" />
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/circle_indicator"
@@ -63,7 +63,7 @@
                         android:layout_alignBottom="@+id/promotion_view_pager"
                         android:layout_centerHorizontal="true"
                         app:ci_drawable="@drawable/ny_circle_white"
-                        app:ci_orientation="horizontal"/>
+                        app:ci_orientation="horizontal" />
 
                 </RelativeLayout>
 
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="48dp"
-                    android:background="@color/ny_dark_transparent"
+                    android:background="#0071BC"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark"
                     app:layout_collapseMode="pin">
 
@@ -89,14 +89,43 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             app:fontTextStyle="reguler"
+                            android:maxLines="1"
+                            android:ellipsize="end"
                             android:text="14 February 2018, 2 pax(s)"
                             android:textColor="@color/colorWhite"
-                            android:textSize="16sp" />
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
 
                 </android.support.v7.widget.Toolbar>
+
+
+                <!--<android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorPrimary"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                    app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/title_textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="14 February 2018, 2 pax(s)"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="16sp"
+                            app:fontTextStyle="reguler" />
+                    </LinearLayout>
+                </android.support.v7.widget.Toolbar>-->
 
                 <LinearLayout
                     android:id="@+id/tab_manager"
@@ -104,6 +133,7 @@
                     android:layout_height="50dp"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom"
+                    android:layout_marginTop="?attr/actionBarSize"
                     android:background="@color/ny_dark_transparent"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -161,6 +191,7 @@
 
                 </LinearLayout>
 
+
             </android.support.design.widget.CollapsingToolbarLayout>
 
         </android.support.design.widget.AppBarLayout>
@@ -194,86 +225,95 @@
 
     </android.support.design.widget.CoordinatorLayout>
     <!--<LinearLayout-->
-        <!--android:id="@+id/book_now_container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal">-->
-
+    <!--android:id="@+id/book_now_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="horizontal">-->
     <!--</LinearLayout>-->
+
     <LinearLayout
         android:id="@+id/book_now_container"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="2dp"
         android:background="@color/colorWhite"
-        android:padding="@dimen/padding"
-        android:layout_alignParentBottom="true"
         android:elevation="3dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/padding"
         android:paddingTop="5dp">
 
         <LinearLayout
-            android:gravity="center_vertical"
-            android:padding="@dimen/padding_half"
-            android:layout_weight="3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_half">
+
             <ImageView
                 android:id="@+id/minus_imageView"
-                android:src="@drawable/ic_minus_blue"
-                android:padding="5dp"
                 android:layout_width="24dp"
-                android:layout_height="24dp" />
+                android:layout_height="24dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_minus_blue" />
+
             <TextView
                 android:id="@+id/diver_textView"
-                android:text="0"
-                android:textSize="18sp"
-                android:textColor="@color/ny_black1"
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
                 android:background="@drawable/ny_rectangle_white_border_grey"
-                android:paddingTop="8dp"
+                android:gravity="center"
                 android:paddingBottom="8dp"
                 android:paddingLeft="@dimen/activity_vertical_margin"
                 android:paddingRight="@dimen/activity_vertical_margin"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:paddingTop="8dp"
+                android:text="0"
+                android:textColor="@color/ny_black1"
+                android:textSize="18sp" />
+
             <ImageView
                 android:id="@+id/plus_imageView"
-                android:src="@drawable/ic_plus_blue"
-                android:padding="5dp"
                 android:layout_width="24dp"
-                android:layout_height="24dp" />
+                android:layout_height="24dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_plus_blue" />
+
             <TextView
-                android:text="Diver"
-                android:textSize="18sp"
-                android:textColor="@color/ny_black1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
                 android:layout_marginRight="@dimen/padding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="Diver"
+                android:textColor="@color/ny_black1"
+                android:textSize="18sp" />
         </LinearLayout>
-        <TextView
+
+        <com.nyelam.android.view.font.NYTextView
             android:id="@+id/booking_textView"
-            android:text="@string/book_now"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:background="@drawable/ny_book_disable"
-            android:gravity="center"
-            android:layout_centerInParent="true"
-            android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/padding"
+            android:layout_centerInParent="true"
+            android:layout_weight="2"
+            android:background="@drawable/ny_book_disable"
+            android:gravity="center"
             android:paddingBottom="@dimen/padding"
             android:paddingLeft="@dimen/padding_double"
-            android:paddingRight="@dimen/padding_double" />
+            android:paddingRight="@dimen/padding_double"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/book_now"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:fontTextStyle="semiBold" />
 
     </LinearLayout>
+
+
 </RelativeLayout>
 
 

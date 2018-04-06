@@ -117,7 +117,7 @@
                         android:layout_weight="1"
                         app:tabItemPosition="transaction"
                         app:tabItemText="Transaction"
-                        app:tabSrcIcon="@drawable/ic_cart_normal"/>
+                        app:tabSrcIcon="@drawable/ic_my_booking_normal"/>
 
                     <!--<com.nyelam.android.view.NYHomepageTabItemView-->
                         <!--android:id="@+id/socialmedia_tab"-->

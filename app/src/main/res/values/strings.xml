@@ -57,6 +57,7 @@
     <string name="area">Area</string>
     <string name="save">Save</string>
     <string name="change">Change</string>
+    <string name="fill_in">Fill in</string>
     <string name="change_password">Change Password</string>
     <string name="next">Next</string>
     <string name="bank_transfer">Bank Transfer</string>
@@ -65,6 +66,7 @@
     <string name="virtual_account_or_credit_card_label">Pay using Midtrans payment gateway</string>
     <string name="virtual_account">Virtual Account</string>
     <string name="virtual_account_label">Pay using Virtual Account</string>
+    <string name="pay_with_midtrans">Pay using Midtrans payments gateway</string>
     <string name="credit_card">Credit Card</string>
     <string name="credit_card_label">Pay using Credit Card</string>
     <string name="open_map">Open Map</string>
@@ -82,6 +84,8 @@
     <string name="voucher">Voucher</string>
     <string name="total">Total</string>
     <string name="total_price">Total Price </string>
+    <string name="admin_fee">Admin Fee</string>
+    <string name="service_fee">Service fee</string>
     <string name="check_your_booking">Check your booking is write correctly</string>
     <string name="review_your_booking">Review and  fill a detailed booking</string>
     <string name="your_booking">Your Booking</string>
@@ -100,6 +104,7 @@
     <string name="booking_details">Booking Details</string>
     <string name="price_details">Price Details</string>
     <string name="payment_method">Payment Method</string>
+    <string name="payment_options">Payment Options</string>
     <string name="choose_file">Choose File</string>
     <string name="confirm">Confirm</string>
     <string name="pay_now">Pay Now</string>
@@ -196,7 +201,7 @@
     <string name="food">Food</string>
     <string name="transportation">Transportation</string>
     <string name="towel">Towel</string>
-
+    <string name="accomodation">Accomodation</string>
 
     <string-array name="menu_tab">
         <item>Home</item>

@@ -101,6 +101,7 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView featuredImageView;
+        private ImageView divingLicenseImageView;
         private TextView diveCenterNameTextView;
         private TextView serviceNameTextView;
         private TextView ratingTextView;
@@ -116,8 +117,8 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
 
         public PromoViewHolder(View itemView) {
             super(itemView);
-
             featuredImageView = (ImageView) itemView.findViewById(R.id.featured_imageView);
+            divingLicenseImageView = (ImageView) itemView.findViewById(R.id.diving_license_imageView);
             serviceNameTextView = (TextView) itemView.findViewById(R.id.service_name_textView);
             diveCenterNameTextView = (TextView) itemView.findViewById(R.id.dive_center_name_textView);
             priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
@@ -145,6 +146,12 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
 
                 double normalPrice = Double.valueOf(diveService.getNormalPrice());
                 double specialPrice = Double.valueOf(diveService.getSpecialPrice());
+
+                if (diveService.isLicense()){
+                    divingLicenseImageView.setVisibility(View.VISIBLE);
+                } else {
+                    divingLicenseImageView.setVisibility(View.GONE);
+                }
 
                 if (specialPrice < normalPrice && specialPrice > 0){
                     priceTextView.setText(NYHelper.priceFormatter(specialPrice));

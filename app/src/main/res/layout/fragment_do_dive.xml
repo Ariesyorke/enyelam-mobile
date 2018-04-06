@@ -72,16 +72,16 @@
                     android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/keyword_imageView"
-                        android:src="@drawable/ic_pin_map"
+                        android:src="@drawable/ic_search_place"
                         android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
                     <LinearLayout
                         android:id="@+id/keyword_linearLayout"
                         android:layout_toRightOf="@id/keyword_imageView"
                         android:orientation="vertical"
                         android:paddingTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <com.nyelam.android.view.font.NYTextView
@@ -119,16 +119,16 @@
                     android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/datetime_imageView"
-                        android:src="@drawable/ic_pin_map"
+                        android:src="@drawable/ic_search_date"
                         android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
                     <LinearLayout
                         android:id="@+id/datetime_linearLayout"
                         android:layout_toRightOf="@id/datetime_imageView"
                         android:orientation="vertical"
                         android:paddingTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <com.nyelam.android.view.font.NYTextView
@@ -169,16 +169,16 @@
                     android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/diver_imageView"
-                        android:src="@drawable/ic_pin_map"
+                        android:src="@drawable/ic_search_diver"
                         android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
                     <LinearLayout
                         android:id="@+id/diver_linearLayout"
                         android:layout_toRightOf="@id/diver_imageView"
                         android:orientation="vertical"
                         android:paddingTop="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <com.nyelam.android.view.font.NYTextView
@@ -224,58 +224,88 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-                <LinearLayout
-                    android:id="@+id/license_linearLayout"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/padding_double"
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/padding_half"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                    <!--<Switch
-                        android:id="@+id/certificate_switch"
-                        android:theme="@style/NYSwitchTheme"
-                        android:layout_marginRight="@dimen/padding"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true" />-->
-
-                    <CheckBox
-                        android:id="@+id/certificate_checkBox"
-                        style="@style/CheckBoxCustomStyle"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/certificate_textView"
-                        android:text="@string/diving_license"
-                        android:textSize="15sp"
-                        android:textColor="@color/ny_grey2"
-                        android:textStyle="bold"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding"
+                    <ImageView
+                        android:id="@+id/diving_license_imageView"
+                        android:src="@drawable/ic_search_diving_license"
+                        android:layout_centerVertical="true"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
+                    <LinearLayout
+                        android:id="@+id/diving_license_linearLayout"
+                        android:layout_toRightOf="@id/diving_license_imageView"
+                        android:orientation="vertical"
                         android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:text="Diving License"
+                            android:textSize="12sp"
+                            android:textColor="@color/ny_grey2"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <com.nyelam.android.view.font.NYTextView
+                                android:hint="Do you have diving license? "
+                                android:textSize="16sp"
+                                android:textColor="@color/ny_grey4"
+                                android:textColorHint="@color/ny_grey4"
+                                android:singleLine="true"
+                                android:maxLines="1"
+                                android:paddingBottom="@dimen/padding_half"
+                                android:layout_marginTop="3dp"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content" />
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/diving_license_textView"
+                                android:hint="No"
+                                android:textSize="16sp"
+                                android:textColor="@color/ny_grey4"
+                                android:textColorHint="@color/ny_grey4"
+                                android:singleLine="true"
+                                android:maxLines="1"
+                                android:paddingBottom="@dimen/padding_half"
+                                android:layout_marginTop="3dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <Switch
+                                android:id="@+id/diving_license_switch"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
 
-                </LinearLayout>
+                        <View
+                            android:background="@color/ny_grey4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                        <!--<Spinner
+                            android:visibility="gone"
+                            android:id="@+id/diver_spinner"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/padding"
+                            android:paddingTop="@dimen/padding"
+                            android:paddingBottom="@dimen/padding"
+                            android:backgroundTint="@android:color/transparent"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"/>-->
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
 
                 <!--<LinearLayout
                     android:background="@drawable/ny_rectangle_transparant_white_border"
@@ -328,7 +358,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.nyelam.android.view.font.NYTextView
-                    app:fontTextStyle="reguler"
+                    app:fontTextStyle="light"
                     android:text="Our Recommended Services"
                     android:textSize="18sp"
                     android:textColor="@color/ny_grey4"
@@ -344,6 +374,41 @@
                     android:layout_margin="8dp"
                     />
             </LinearLayout>
+
+
+
+
+
+
+
+
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/banner_relativeLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/eco_trip_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </android.support.v4.view.ViewPager>
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/circle_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/padding_double"
+                    app:ci_drawable="@drawable/ny_circle_white"
+                    app:ci_orientation="horizontal">
+                </me.relex.circleindicator.CircleIndicator>
+
+            </RelativeLayout>
+
 
 
         </LinearLayout>

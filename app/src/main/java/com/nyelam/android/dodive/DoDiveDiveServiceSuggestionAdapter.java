@@ -106,6 +106,7 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
         private TextView totalDiveSpotTextView;
         private TextView totalDayTextView;
         private TextView visitedTextView;
+        private ImageView divingLicenseImageView;
         private View itemView;
         private DiveService diveService;
 
@@ -114,6 +115,7 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
 
             cardView = (CardView) itemView.findViewById(R.id.cardView);
             featuredImageView = (ImageView) itemView.findViewById(R.id.featured_imageView);
+            divingLicenseImageView = (ImageView) itemView.findViewById(R.id.diving_license_imageView);
             serviceNameTextView = (TextView) itemView.findViewById(R.id.service_name_textView);
             diveCenterNameTextView = (TextView) itemView.findViewById(R.id.dive_center_name_textView);
             priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
@@ -147,9 +149,14 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
 
                 if (NYHelper.isStringNotEmpty(diveService.getName())) serviceNameTextView.setText(diveService.getName());
 
-
                 double normalPrice = Double.valueOf(diveService.getNormalPrice());
                 double specialPrice = Double.valueOf(diveService.getSpecialPrice());
+
+                if (diveService.isLicense()){
+                    divingLicenseImageView.setVisibility(View.VISIBLE);
+                } else {
+                    divingLicenseImageView.setVisibility(View.GONE);
+                }
 
                 if (specialPrice < normalPrice && specialPrice > 0){
                     priceTextView.setText(NYHelper.priceFormatter(specialPrice));

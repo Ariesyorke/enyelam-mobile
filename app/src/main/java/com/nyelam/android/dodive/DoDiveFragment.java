@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.diveservice.DetailServiceActivity;
+import com.nyelam.android.ecotrip.EcoTripViewPagerAdapter;
 import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
@@ -47,6 +50,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,28 +59,39 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import me.relex.circleindicator.CircleIndicator;
+
 import static com.nyelam.android.R.id.recyclerView;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private SearchResult searchResult;
-    private TextView certificateTextView, datetimeTextView, searchTextView;
+    private TextView datetimeTextView, searchTextView;
     public TextView diverTextView;
     private Spinner diverSpinner;
     private com.nyelam.android.view.font.NYTextView keywordTextView;
-    private CheckBox certificateCheckBox;
     private DatePickerDialog datePickerDialog;
     private String keyword, diverId, type, date, diver = null;
     private SearchService searchService;
     private TotalDiverSpinnerAdapter diverAdapter;
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
     private NYApplication application;
+    private Switch divingLicenseSwitch;
+    private TextView divingLicenseTextView;
+    private LinearLayout divingLicenseLinearLayout;
 //    private Calendar c;
 
+    //suggestion
     private DoDiveDiveServiceSuggestionAdapter diveServiceSuggestionAdapter;
     private RecyclerView suggestionRecyclerView;
     private LinearLayout suggestionLinearLayout;
+
+    //sosis slider
+    private RelativeLayout bannerRelativeLayout;
+    private ViewPager ecoTripViewPager;
+    private EcoTripViewPagerAdapter ecoTripViewPagerAdapter;
+    private CircleIndicator circleIndicator;
 
     private OnFragmentInteractionListener mListener;
 
@@ -117,6 +132,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         initExtra();
         initControl();
         initAdapter();
+        initViewPager();
 
         DoDiveActivity activity = (DoDiveActivity)getActivity();
         if(!activity.isEcoTrip()) getSuggetionRequest();
@@ -161,6 +177,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keywordTextView.setText(keyword);
             }
         }));
+
+
     }
 
 
@@ -258,11 +276,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 if (obj.has("id"))diverId = obj.getString("id");
 
                 if (obj.has("license") && obj.getBoolean("license")){
-                    certificateCheckBox.setChecked(true);
-                    certificateCheckBox.setClickable(false);
+                    setDivingLicense(true);
+                    //divingLicenseSwitch.setChecked(true);
+                    //certificateCheckBox.setClickable(false);
                 } else {
-                    certificateCheckBox.setChecked(false);
-                    certificateCheckBox.setClickable(true);
+                    setDivingLicense(false);
+                    //divingLicenseSwitch.setChecked(false);
+                    //certificateCheckBox.setClickable(true);
                 }
 
             } catch (JSONException e) {
@@ -274,7 +294,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         if (extras != null){
 
             if (intent.hasExtra(NYHelper.CERTIFICATE)){
-                certificateCheckBox.setChecked(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
+                //certificateCheckBox.setChecked(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
+                //divingLicenseSwitch.setChecked(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
+                setDivingLicense(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
             }
 
             if (intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.SCHEDULE))){
@@ -355,13 +377,20 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
     private void initControl() {
 
+        divingLicenseSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDivingLicense(divingLicenseSwitch.isChecked());
+            }
+        });
+
         keywordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DoDiveActivity activity = (DoDiveActivity) getActivity();
                 if(!activity.isEcoTrip()) {
                     Intent intent = new Intent(getActivity(), DoDiveSearchActivity.class);
-                    intent.putExtra(NYHelper.CERTIFICATE, certificateCheckBox.isChecked());
+                    intent.putExtra(NYHelper.CERTIFICATE, divingLicenseSwitch.isChecked());
                     intent.putExtra(NYHelper.SCHEDULE, date);
                     intent.putExtra(NYHelper.DIVER, diver);
                     if (activity.isEcoTrip()) {
@@ -373,11 +402,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             }
         });
 
-
-        licenseLinearLayout.setOnClickListener(new View.OnClickListener() {
+        divingLicenseLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                certificateCheckBox.setChecked(!certificateCheckBox.isChecked());
+                //divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
+                setDivingLicense(!divingLicenseSwitch.isChecked());
             }
         });
 
@@ -385,7 +414,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
-
             }
         });
 
@@ -404,7 +432,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 // TODO: get diver count
                 //String diver = diverTextView.getText().toString();
                 String certificate = "0";
-                if (certificateCheckBox.isChecked()){
+                if (divingLicenseSwitch.isChecked()){
                     certificate = "1";
                 } else {
                     certificate = "0";
@@ -537,6 +565,28 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 }
             }
         });
+
+        ecoTripViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 4) {
+                    circleIndicator.setVisibility(View.GONE);
+                } else {
+                    circleIndicator.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
 
@@ -576,25 +626,34 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         };
     }
 
-
-
-
     private void initView(View v) {
         keywordTextView = (com.nyelam.android.view.font.NYTextView) v.findViewById(R.id.keyword_textView);
         //diverTextView = (TextView) v.findViewById(R.id.diver_textView);
         diverSpinner = (Spinner) v.findViewById(R.id.diver_spinner);
         datetimeTextView = (TextView)v.findViewById(R.id.datetime_textView);
-        certificateTextView = (TextView) v.findViewById(R.id.certificate_textView);
         diverTextView = (TextView) v.findViewById(R.id.diver_textView);
         searchTextView = (TextView) v.findViewById(R.id.search_textView);
-        certificateCheckBox = (CheckBox) v.findViewById(R.id.certificate_checkBox);
+        //certificateCheckBox = (CheckBox) v.findViewById(R.id.certificate_checkBox);
         diverLinearLayout = (LinearLayout) v.findViewById(R.id.diver_linearLayout);
         datetimeLinearLayout = (LinearLayout) v.findViewById(R.id.datetime_linearLayout);
         licenseLinearLayout = (LinearLayout) v.findViewById(R.id.license_linearLayout);
 
         suggestionRecyclerView = (RecyclerView) v.findViewById(R.id.suggestion_recyclerView);
         suggestionLinearLayout = (LinearLayout) v.findViewById(R.id.suggestion_linearLayout);
+        divingLicenseLinearLayout = (LinearLayout) v.findViewById(R.id.diving_license_linearLayout);
+        divingLicenseTextView = (TextView) v.findViewById(R.id.diving_license_textView);
+        divingLicenseSwitch = (Switch) v.findViewById(R.id.diving_license_switch);
 
+        bannerRelativeLayout = (RelativeLayout) v.findViewById(R.id.banner_relativeLayout);
+        ecoTripViewPager = (ViewPager) v.findViewById(R.id.eco_trip_view_pager);
+        circleIndicator = (CircleIndicator) v.findViewById(R.id.circle_indicator);
+    }
+
+    private void initViewPager() {
+        ecoTripViewPagerAdapter = new EcoTripViewPagerAdapter(getChildFragmentManager(), true);
+        ecoTripViewPager.setAdapter(ecoTripViewPagerAdapter);
+        circleIndicator.setViewPager(ecoTripViewPager);
+        circleIndicator.setViewPager(ecoTripViewPager);
     }
 
 
@@ -632,6 +691,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
         if (getActivity() instanceof DoDiveActivity && ((DoDiveActivity) getActivity()).isEcoTrip()){
             ((DoDiveActivity)getActivity()).setTitle(getString(R.string.eco_trip), true, false);
+            bannerRelativeLayout.setVisibility(View.VISIBLE);
         } else {
             ((DoDiveActivity)getActivity()).setTitle(getString(R.string.search), true, false);
         }
@@ -674,6 +734,16 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     public void onStop() {
         super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
+
+    public void setDivingLicense(boolean isTrue){
+        if (isTrue){
+            divingLicenseTextView.setText(getString(R.string.yes));
+            divingLicenseSwitch.setChecked(true);
+        } else {
+            divingLicenseTextView.setText(getString(R.string.no));
+            divingLicenseSwitch.setChecked(false);
+        }
     }
 
 }

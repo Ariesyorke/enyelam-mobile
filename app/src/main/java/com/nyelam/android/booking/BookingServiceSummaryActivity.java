@@ -81,8 +81,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private int diver = 0;
     private String schedule = "0";
     private String certificate = "0";
-    private String paymentType = "2";
-    private String paymentMethod = "1"; // 1 = virtual account dan 2 = credit card
+    private String paymentType = "1"; // 1= bank transfer 2 = midtrans
+    private String paymentMethod = null; // 1 = virtual account dan 2 = credit card
     private String note;
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
@@ -249,15 +249,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
         });
 
-        addNoteLinearLayout.setOnClickListener(new View.OnClickListener() {
+        /*addNoteLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addNoteLinearLayout.setVisibility(View.GONE);
                 noteEditText.setVisibility(View.VISIBLE);
             }
-        });
+        });*/
 
-        noteEditText.setOnKeyListener(new View.OnKeyListener()
+        /*noteEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
             {
@@ -275,7 +275,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
                 return false;
             }
-        });
+        });*/
 
         /*noteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -355,6 +355,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
             if (intent.hasExtra(NYHelper.CERTIFICATE) && extras.get(NYHelper.CERTIFICATE) != null){
                 certificate = intent.getStringExtra(NYHelper.CERTIFICATE);
+            }
+
+            if (intent.hasExtra(NYHelper.NOTE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.NOTE))){
+                noteEditText.setText(intent.getStringExtra(NYHelper.NOTE));
             }
 
             if (intent.hasExtra(NYHelper.CART_RETURN)){
@@ -577,6 +581,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
             TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
             TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
+            TextView wordingTextView = (TextView) myParticipantsView.findViewById(R.id.wording_textView  );
             LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
             if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
@@ -593,6 +598,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 emailTextView.setText("Email");
             }
 
+            if (participant != null){
+                wordingTextView.setText(getString(R.string.change));
+            } else {
+                wordingTextView.setText(getString(R.string.fill_in));
+            }
             changeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -609,6 +619,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
                     startActivity(intent);
                 }
             });
@@ -628,6 +639,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
                     startActivity(intent);
                 }
             });
@@ -996,7 +1008,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
 
-    @Override
+    /*@Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         View v = getCurrentFocus();
 
@@ -1019,7 +1031,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         }
         return super.dispatchTouchEvent(ev);
-    }
+    }*/
 
     public static void hideKeyboard(Activity activity) {
         if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {

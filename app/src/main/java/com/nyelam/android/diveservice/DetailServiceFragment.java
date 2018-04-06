@@ -35,6 +35,7 @@ import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 import com.octo.android.robospice.SpiceManager;
@@ -56,7 +57,7 @@ public class DetailServiceFragment extends Fragment {
     private TextView ratingTextView, visitedTextView, categoryTextView;
     private TextView addressTextView, phoneNumberTextView;
     private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView;
-    private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView;
+    private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView, icAccomodationImageView;
     private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
     private TextView availabilityStockTextView;
@@ -131,6 +132,7 @@ public class DetailServiceFragment extends Fragment {
         icFoodImageView = (ImageView) v.findViewById(R.id.icon_food_imageView);
         icTransportationImageView = (ImageView) v.findViewById(R.id.icon_transportation_imageView);
         icTowelImageView = (ImageView) v.findViewById(R.id.icon_towel_imageView);
+        icAccomodationImageView = (ImageView) v.findViewById(R.id.icon_accomodation_imageView);
 
         diveGuideLinearLayout = (LinearLayout) v.findViewById(R.id.dive_guide_linearLayout);
         equipmentLinearLayout = (LinearLayout) v.findViewById(R.id.equipment_linearLayout);
@@ -266,7 +268,7 @@ public class DetailServiceFragment extends Fragment {
                 }
 
                 if (service.getAvailabilityStock() > 0){
-                    availabilityStockTextView.setText("Availability Stock : "+String.valueOf(service.getAvailabilityStock()));
+                    availabilityStockTextView.setText(String.valueOf(service.getAvailabilityStock()));
                 }
 
                 if (service.getSpecialPrice() < service.getNormalPrice() && service.getSpecialPrice() > 0){
@@ -285,31 +287,37 @@ public class DetailServiceFragment extends Fragment {
                     }
 
                     if (fac.getDiveGuide() != null && fac.getDiveGuide()){
-                        NYHelper.setFacilities(fac.getDiveGuide(), icDiveGuideImageView);
+                        NYHelper.setFacilities(fac.getDiveGuide(), R.drawable.ic_dive_guide_active, R.drawable.ic_dive_guide_unactive, icDiveGuideImageView);
                     } else {
                         //diveGuideLinearLayout.setVisibility(View.GONE);
                     }
 
                     if (fac.getDiveEquipment() != null && fac.getDiveEquipment()){
-                        NYHelper.setFacilities(fac.getDiveEquipment(), icEquipmentImageView);
+                        NYHelper.setFacilities(fac.getDiveEquipment(), R.drawable.ic_equipment_active, R.drawable.ic_equipment_unactive, icEquipmentImageView);
                     } else {
                         //equipmentLinearLayout.setVisibility(View.GONE);
                     }
 
                     if (fac.getFood() != null && fac.getFood()){
-                        NYHelper.setFacilities(fac.getFood(), icFoodImageView);
+                        NYHelper.setFacilities(fac.getFood(), R.drawable.ic_food_and_drink_active, R.drawable.ic_food_and_drink_unactive, icFoodImageView);
                     } else {
                         //foodLinearLayout.setVisibility(View.GONE);
                     }
 
                     if (fac.getTransportation() != null && fac.getTransportation()){
-                        NYHelper.setFacilities(fac.getTransportation(), icTransportationImageView);
+                        NYHelper.setFacilities(fac.getTransportation(), R.drawable.ic_transportation_active, R.drawable.ic_transportation_unactive, icTransportationImageView);
                     } else {
                         //diveGuideLinearLayout.setVisibility(View.GONE);
                     }
 
                     if (fac.getTowel() != null && fac.getTowel()){
-                        NYHelper.setFacilities(fac.getTowel(), icTowelImageView);
+                        NYHelper.setFacilities(fac.getTowel(), R.drawable.ic_towel_active, R.drawable.ic_towel_unactive, icTowelImageView);
+                    } else {
+                        //towelLinearLayout.setVisibility(View.GONE);
+                    }
+
+                    if (fac.getAccomodation() != null && fac.getAccomodation()){
+                        NYHelper.setFacilities(fac.getTowel(), R.drawable.ic_accomodation_active, R.drawable.ic_accomodation_unactive, icAccomodationImageView);
                     } else {
                         //towelLinearLayout.setVisibility(View.GONE);
                     }
@@ -355,11 +363,22 @@ public class DetailServiceFragment extends Fragment {
 
 
     private void getRelatedServiceRequest() {
-        NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getActivity());
-        spcMgr.execute(req, onSearchServiceRequest());
 
-        // TODO: load data dummy, to test and waitting for API request
-        //loadJSONAsset();
+
+        if (((DetailServiceActivity)getActivity()).newDiveService != null){
+            DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
+            DiveService diveService = ((DetailServiceActivity)getActivity()).newDiveService;
+
+            String apiPath = getString(R.string.api_path_dodive_service_list);
+            apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
+
+            NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, String.valueOf(0));
+            //NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getActivity());
+            spcMgr.execute(req, onSearchServiceRequest());
+
+            // TODO: load data dummy, to test and waitting for API request
+            //loadJSONAsset();
+        }
     }
 
     private RequestListener<DiveServiceList> onSearchServiceRequest() {
@@ -375,9 +394,22 @@ public class DetailServiceFragment extends Fragment {
             @Override
             public void onRequestSuccess(DiveServiceList results) {
                 if (results != null){
+
+                    DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
+                    List<DiveService> temp = new ArrayList<>();
+
+                    int total = 0;
+                    for (DiveService diveService : results.getList()){
+                        if (total >= 3) break;
+                        if (!diveService.getId().equals(activity.diveService.getId())){
+                            temp.add(diveService);
+                            total++;
+                        }
+                    }
+
                     relatedPostLinearLayout.setVisibility(View.VISIBLE);
                     relatedDiveServiceAdapter.clear();
-                    relatedDiveServiceAdapter.addResults(results.getList());
+                    relatedDiveServiceAdapter.addResults(temp);
                     relatedDiveServiceAdapter.notifyDataSetChanged();
                 } else {
                     relatedDiveServiceAdapter.clear();

@@ -23,6 +23,7 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
     public static final int STATUS_FAILED = 2;
     public static final int STATUS_INVALID_TOKEN = 3;
     public static final String CODE_CART_EXPIRED = "1014";
+    public static final String CODE_OUT_OF_STOCK = "1006";
 
     public static final String KEY_STATUS = "status";
     public static final String KEY_DATA = "data";

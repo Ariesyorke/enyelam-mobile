@@ -19,6 +19,7 @@ public class Facilities implements Parseable {
     private static String KEY_DIVE_EQUIPMENT = "dive_equipment";
     private static String KEY_LICENSE = "license";
     private static String KEY_TRANSPORTATION = "transportation";
+    private static String KEY_ACCOMODATION = "accomodation";
 
     private Boolean diveGuide;
     private Boolean food;
@@ -26,6 +27,7 @@ public class Facilities implements Parseable {
     private Boolean diveEquipment;
     private Boolean license;
     private Boolean transportation;
+    private Boolean accomodation;
 
     public Boolean getDiveGuide() {
         return diveGuide;
@@ -75,6 +77,14 @@ public class Facilities implements Parseable {
         this.transportation = transportation;
     }
 
+    public Boolean getAccomodation() {
+        return accomodation;
+    }
+
+    public void setAccomodation(Boolean accomodation) {
+        this.accomodation = accomodation;
+    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -115,6 +125,12 @@ public class Facilities implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+        try {
+            if (!obj.isNull(KEY_ACCOMODATION)) {
+                setTransportation(obj.getBoolean(KEY_ACCOMODATION));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
     }
 
 
@@ -144,6 +160,10 @@ public class Facilities implements Parseable {
 
         try {
             obj.put(KEY_TRANSPORTATION, getTransportation());
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            obj.put(KEY_ACCOMODATION, getAccomodation());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {

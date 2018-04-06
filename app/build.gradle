@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         multiDexEnabled = true
-        versionCode 30
-        versionName '0.0.30'
+        versionCode 32
+        versionName '0.0.32'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,8 +40,8 @@ dependencies {
     // For u sing the Veritrans Sandbox
 
     /*compile ('com.midtrans:scancard:1.15.0'){
-                                                            exclude module: 'uikit'
-                                                        }*/
+                                                                    exclude module: 'uikit'
+                                                                }*/
 
     // For using the Veritrans Production
 
@@ -84,6 +84,7 @@ dependencies {
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
     compile 'org.sufficientlysecure:html-textview:3.5'
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
+    compile 'com.nex3z:flow-layout:1.2.2'
     //compile 'com.wdullaer:materialdatetimepicker:3.5.1'
     testCompile 'junit:junit:4.12'
     compile project(':materialdatetimepicker')

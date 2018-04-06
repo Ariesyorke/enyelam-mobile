@@ -11,6 +11,10 @@ import com.nyelam.android.R;
  */
 
 public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
+
+    //private boolean isHiddenGetStarted;
+    private int count = 5;
+
     private int[] backgroundDrawables = {
             R.drawable.eco_trip_1_bg,
             R.drawable.eco_trip_2_bg,
@@ -24,8 +28,12 @@ public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
             R.drawable.eco_trip_4
     };
 
-    public EcoTripViewPagerAdapter(FragmentManager fm) {
+    public EcoTripViewPagerAdapter(FragmentManager fm, boolean isHiddenGetStarted) {
         super(fm);
+        //this.isHiddenGetStarted = isHiddenGetStarted;
+        if (isHiddenGetStarted){
+            count = 4;
+        }
     }
 
     @Override
@@ -39,7 +47,7 @@ public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return count;
     }
 
     @Override

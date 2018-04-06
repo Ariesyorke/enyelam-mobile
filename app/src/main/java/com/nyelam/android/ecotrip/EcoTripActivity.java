@@ -25,7 +25,7 @@ public class EcoTripActivity extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        ecoTripViewPagerAdapter = new EcoTripViewPagerAdapter(getSupportFragmentManager());
+        ecoTripViewPagerAdapter = new EcoTripViewPagerAdapter(getSupportFragmentManager(), false);
         ecoTripViewPager.setAdapter(ecoTripViewPagerAdapter);
         circleIndicator.setViewPager(ecoTripViewPager);
         circleIndicator.setViewPager(ecoTripViewPager);

@@ -14,15 +14,10 @@ import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.DiveSpot;
-import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.data.Participant;
 import com.nyelam.android.data.ParticipantList;
-import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveGetParticipantsRequest;
-import com.nyelam.android.http.NYHomepageModuleRequest;
-import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.storage.ParticipantsStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;

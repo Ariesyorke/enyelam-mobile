@@ -8,43 +8,6 @@
     tools:context="com.nyelam.android.home.HomeFragment">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:background="@drawable/ny_gradient_right_left"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/padding"
-                android:src="@drawable/logo_nyelam_white" />
-
-            <ImageView
-                android:id="@+id/menu_item_imageView"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_vertical"
-                android:padding="@dimen/padding"
-                android:src="@drawable/ic_navigation_drawer" />
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-
-
     <android.support.v4.widget.NestedScrollView
         android:layout_below="@+id/toolbar"
         android:id="@+id/nestedScrollView"
@@ -63,6 +26,8 @@
                 android:background="@color/colorPrimary"
                 android:fitsSystemWindows="true">
 
+
+
                 <ProgressBar
                     android:id="@+id/banner_progress_bar"
                     android:layout_width="wrap_content"
@@ -77,16 +42,63 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <me.relex.circleindicator.CircleIndicator
+                <!--<me.relex.circleindicator.CircleIndicator
                     android:id="@+id/circle_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_alignBottom="@+id/promotion_view_pager"
                     android:layout_centerHorizontal="true"
                     app:ci_drawable="@drawable/ny_circle_white"
-                    app:ci_orientation="horizontal"/>
+                    app:ci_orientation="horizontal"/>-->
+
+
+
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:background="@android:color/transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true">
+
+                        <ImageView
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_header_nyelam_white" />
+
+                        <ImageView
+                            android:id="@+id/menu_item_imageView"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical"
+                            android:padding="@dimen/padding"
+                            android:src="@drawable/ic_navigation_drawer" />
+                    </RelativeLayout>
+
+                </android.support.v7.widget.Toolbar>
+
 
             </RelativeLayout>
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/circle_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                app:ci_drawable_unselected="@drawable/ny_circle_grey"
+                app:ci_drawable="@drawable/ny_circle_blue"
+                app:ci_orientation="horizontal"/>
 
 
             <LinearLayout

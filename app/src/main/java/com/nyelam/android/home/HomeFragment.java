@@ -67,7 +67,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
 
-
     public HomeFragment() {
         // Required empty public constructor
     }

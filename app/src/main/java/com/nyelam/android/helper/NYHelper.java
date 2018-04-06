@@ -73,6 +73,7 @@ public class NYHelper {
     public static final String ID_SERVICE = "id_service";
     public static final String SERVICE = "id_service";
     public static final String DIVER = "diver";
+    public static final String NOTE = "note";
     public static final String DIVE_CENTER = "dive_center";
     public static final String SCHEDULE = "schedule";
     public static final String DIVE_SPOT = "dive_spot";
@@ -151,7 +152,7 @@ public class NYHelper {
 
     public static String priceFormatter(double price) {
         DecimalFormat formatter = new DecimalFormat("#,###");
-        return "Rp "+String.valueOf(formatter.format(price));
+        return "Rp "+String.valueOf(formatter.format(price).replaceAll(",",".")+",-");
     }
 
     public static String priceFormatter(String currency, double price) {
@@ -162,9 +163,8 @@ public class NYHelper {
             return "Rp "+format.format(price);
         } else {
             DecimalFormat formatter = new DecimalFormat("#,###");
-            return "Rp "+String.valueOf(formatter.format(price));
+            return "Rp "+String.valueOf(formatter.format(price).replaceAll(",",".")+",-");
         }
-
     }
 
     public static String getDevice() {
@@ -457,11 +457,11 @@ public class NYHelper {
         return sb.toString();
     }
 
-    public static void setFacilities(boolean isTrue, ImageView icImageView) {
+    public static void setFacilities(boolean isTrue, int active, int unactive, ImageView icImageView) {
         if (isTrue){
-            icImageView.setImageResource(R.drawable.ic_boat_active);
+            icImageView.setImageResource(active);
         } else {
-            icImageView.setImageResource(R.drawable.ic_boat_disable);
+            icImageView.setImageResource(unactive);
         }
     }
 

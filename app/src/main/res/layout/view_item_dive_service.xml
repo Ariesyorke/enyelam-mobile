@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     card_view:cardElevation="4dp"
     card_view:cardMaxElevation="4dp"
-    app:cardCornerRadius="10dp"
+    card_view:cardCornerRadius="@dimen/padding_half"
     android:layout_height="wrap_content"
     app:ignore="NamespaceTypo">
 
@@ -18,7 +18,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="135dp">
+            android:layout_height="200dp">
 
             <ImageView
                 android:id="@+id/featured_imageView"
@@ -27,18 +27,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <TextView
+            <com.nyelam.android.view.font.NYTextView
+                card_view:fontTextStyle="semiBold"
                 android:id="@+id/service_name_textView"
                 android:layout_above="@+id/dive_center_name_textView"
                 android:text="Service Name"
-                android:textSize="18sp"
-                android:textStyle="bold|italic"
+                android:textSize="24sp"
+                android:textStyle="bold"
                 android:textColor="@color/colorWhite"
-                android:layout_marginLeft="@dimen/padding"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/dive_center_name_textView"
                 android:text="by Dive Center"
                 android:textSize="14sp"
@@ -52,9 +55,8 @@
         </RelativeLayout>
 
 
-
         <LinearLayout
-            android:layout_margin="@dimen/padding"
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -78,39 +80,44 @@
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_textView"
                     android:text="0 Dive"
                     android:textSize="14dp"
-                    android:textColor="@color/ny_black1"
+                    android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
                     android:text=" | "
-                    android:textSize="14dp"
-                    android:textColor="@color/ny_black1"
+                    android:textSize="16dp"
+                    android:textColor="@color/ny_black2"
                     android:layout_margin="@dimen/padding_half"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_spot_textView"
                     android:text="0 Spot"
-                    android:textSize="14dp"
-                    android:textColor="@color/ny_black1"
+                    android:textSize="16dp"
+                    android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
                     android:text=" | "
-                    android:textSize="14dp"
-                    android:textColor="@color/ny_black1"
+                    android:textSize="16dp"
+                    android:textColor="@color/ny_black2"
                     android:layout_margin="@dimen/padding_half"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
                     android:id="@+id/total_day_textView"
                     android:text="0 Day"
-                    android:textSize="14dp"
-                    android:textColor="@color/ny_black1"
+                    android:textSize="16dp"
+                    android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -133,6 +140,7 @@
                     android:layout_gravity="start" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/rating_textView"
                     android:text="5.0"
                     android:textSize="14sp"
@@ -142,6 +150,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/visitor_textView"
                     android:text=" | 0 visited"
                     android:textSize="14dp"
@@ -150,9 +159,6 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
-
-
-
 
             <TextView
                 android:visibility="gone"
@@ -168,34 +174,43 @@
                 android:id="@+id/price_strikethrough_textView"
                 android:text="Rp 123.456"
                 android:textSize="14sp"
-                android:textColor="@color/ny_black1"
+                android:textColor="@color/ny_black2"
                 android:layout_marginTop="@dimen/padding_half"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <LinearLayout
+            <RelativeLayout
                 android:layout_marginTop="@dimen/padding_half"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="semiBold"
                     android:id="@+id/price_textView"
                     android:text="Rp 123.456"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:textSize="24sp"
                     android:textColor="@color/ny_orange"
+                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <TextView
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_toRightOf="@+id/price_textView"
                     android:text=" / pax"
-                    android:textSize="14sp"
-                    android:textColor="@color/ny_black1"
+                    card_view:fontTextStyle="light"
+                    android:textSize="16sp"
+                    android:textColor="@color/ny_black2"
+                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
-
-
-
-
+                <ImageView
+                    android:id="@+id/diving_license_imageView"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_license_orange"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
 
             <!--<com.iarcuschin.simpleratingbar.SimpleRatingBar
                 android:layout_marginTop="@dimen/padding_half"
@@ -209,8 +224,6 @@
                 app:srb_stepSize="0.5"
                 app:srb_borderColor="@color/blue"
                 app:srb_fillColor="@color/light_blue" />-->
-
-
 
         </LinearLayout>
 
