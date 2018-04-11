@@ -63,6 +63,15 @@
     <string name="api_path_dodive_service_list_by_city">api/service/serviceCityList</string>
 
 
+    <string name="api_path_dotrip_detail_service">api/dotrip/detail</string>
+    <string name="api_path_dotrip_service_list">api/service/serviceList</string>
+    <string name="api_path_dotrip_service_list_by_divecenter">api/dotrip/search/divecenter</string>
+    <string name="api_path_dotrip_service_list_by_divespot">api/dotrip/search/divespot</string>
+    <string name="api_path_dotrip_service_list_by_category">api/dotrip/search/category</string>
+    <string name="api_path_dotrip_service_list_by_province">api/dotrip/search/province</string>
+    <string name="api_path_dotrip_service_list_by_city">api/dotrip/search/city</string>
+
+
 
 
 

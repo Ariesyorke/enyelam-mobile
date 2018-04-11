@@ -1,5 +1,6 @@
 package com.nyelam.android.dodive;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,8 @@ import com.nyelam.android.data.SearchDiveCenter;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.data.SearchSpot;
+import com.nyelam.android.dotrip.DoTripActivity;
+import com.nyelam.android.dotrip.DoTripKeywordActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.KeywordHistoryStorage;
 
@@ -36,12 +39,12 @@ import java.util.List;
 
 public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
+    private Activity context;
     private List<SearchResult> searchResults;
     private String date, diver;
     private boolean certificate;
 
-    public DoDiveSearchAdapter(Context context, String date, String diver, boolean certificate) {
+    public DoDiveSearchAdapter(Activity context, String date, String diver, boolean certificate) {
         this.context = context;
         this.date = date;
         this.diver = diver;
@@ -222,19 +225,24 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             keywordHistoryStorage.setSearchResults(searchResults);
             keywordHistoryStorage.save();
 
-
             Intent intent = new Intent(context, DoDiveActivity.class);
+
+            if (context instanceof DoDiveSearchActivity){
+                intent = new Intent(context, DoDiveActivity.class);
+            } else if (context instanceof DoTripKeywordActivity){
+                intent = new Intent(context, DoTripActivity.class);
+            }
+
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.DIVER, diver);
 
-            DoDiveSearchActivity activity = (DoDiveSearchActivity)context;
+            Activity activity = (Activity)context;
             if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
                 intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
             }
-
 
             if (searchResult.getType().equals("1")){
                 intent.putExtra(NYHelper.DIVE_SPOT, searchResult.toString());

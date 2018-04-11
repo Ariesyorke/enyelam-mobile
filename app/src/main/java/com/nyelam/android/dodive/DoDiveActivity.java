@@ -131,7 +131,7 @@ public class DoDiveActivity extends BasicActivity implements
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
                 String myStr=data.getStringExtra("MyData");
-                Toast.makeText(this, myStr, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, myStr, Toast.LENGTH_SHORT).show();
                 //mTextView.setText(myStr);
             }
         }

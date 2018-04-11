@@ -27,6 +27,12 @@ android {
 }
 
 
+
+
+
+
+
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -55,6 +61,8 @@ dependencies {
 
     //    compile ('com.midtrans:scancard:1.0.1'){
     compile project(':uikit')
+    //compile 'com.wdullaer:materialdatetimepicker:3.5.1'
+    compile project(':materialdatetimepicker')
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:animated-vector-drawable:26.1.0'
     compile 'com.android.support:mediarouter-v7:26.1.0'
@@ -85,7 +93,6 @@ dependencies {
     compile 'org.sufficientlysecure:html-textview:3.5'
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
     compile 'com.nex3z:flow-layout:1.2.2'
-    //compile 'com.wdullaer:materialdatetimepicker:3.5.1'
+    compile 'com.whiteelephant:monthandyearpicker:1.2.0'
     testCompile 'junit:junit:4.12'
-    compile project(':materialdatetimepicker')
 }

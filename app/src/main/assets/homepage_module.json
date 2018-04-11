@@ -49,6 +49,27 @@
           "rating": 5,
           "normal_price": 10000,
           "special_price": 10000
+        },
+        {
+          "id": "1",
+          "name": "Dive Service Two",
+          "featured_image": "http://image.com",
+          "total_dives": 10,
+          "category": [
+            {
+              "id": "1",
+              "name": "Daily Trip"
+            }
+          ],
+          "dive_spot": [
+            {
+              "id": "1",
+              "name": "Dive Spot"
+            }
+          ],
+          "rating": 5,
+          "normal_price": 10000,
+          "special_price": 9000
         }
       ]
     },

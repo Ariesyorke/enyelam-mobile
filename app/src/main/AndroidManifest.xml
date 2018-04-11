@@ -22,14 +22,14 @@
     <application
         android:name=".NYApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher_rounded"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:largeHeap="true"
-        android:hardwareAccelerated="false"
         android:theme="@style/AppTheme"
-        tools:replace="android:theme, android:allowBackup">
+        tools:replace="android:icon, android:theme, android:allowBackup">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_public_api_key" />
@@ -130,8 +130,16 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".home.TermsAndConditionActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".home.TermsAndConditionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dotrip.DoTripActivity"
+            android:screenOrientation="portrait" />
+        />
+        <activity android:name=".dotrip.DoTripKeywordActivity" />
+        <activity android:name=".dotrip.DoTripResultActivity" />
+        <activity android:name=".dotrip.DoTripDetailActivity"></activity>
     </application>
 
 </manifest>

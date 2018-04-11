@@ -1,15 +1,19 @@
 package com.nyelam.android.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +33,8 @@ import com.nyelam.android.data.ModuleService;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveActivity;
+import com.nyelam.android.dotrip.DoTripActivity;
+import com.nyelam.android.dotrip.DoTripDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 
@@ -47,11 +53,11 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int VIEW_TYPE_HOT_OFFER = 3;
     public static final int View_TYPE_DIVE_SPOT = 4;
 
-    private Context context;
+    private Activity context;
     private List<Module> modules;
     private HomeFragment fragment;
 
-    public HomePageAdapter(Context context, HomeFragment fragment) {
+    public HomePageAdapter(Activity context, HomeFragment fragment) {
         this.context = context;
         this.fragment = fragment;
     }
@@ -115,7 +121,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (holder instanceof HotOffersItemViewHolder) {
             HotOffersItemViewHolder hotOffersItem = ((HotOffersItemViewHolder) holder);
             ModuleService moduleService = (ModuleService) item;
-            hotOffersItem.setModel(moduleService.getDiveServices());
+            if (moduleService != null)hotOffersItem.setModel(moduleService.getDiveServices());
         } else if (holder instanceof PopularItemViewHolder) {
             PopularItemViewHolder popularViewHolder = (PopularItemViewHolder) holder;
             ModuleDiveSpot moduleDiveSpot = (ModuleDiveSpot)item;
@@ -202,7 +208,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TextView tvTitle;
         public TextView tvSeeAll;
 
-        public SectionHeader(final Context context, ViewGroup parent) {
+        public SectionHeader(final Context context, final ViewGroup parent) {
             super(LayoutInflater.from(context).inflate(R.layout.section_header, parent, false));
 
             tvTitle = itemView.findViewById(R.id.header_textView);
@@ -211,9 +217,12 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvSeeAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon), null);
+                    //NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon)+" "+String.valueOf(parent.getClass().getName()), null);
+                    Intent intent = new Intent(context, DoTripActivity.class);
+                    context.startActivity(intent);
                 }
             });
+
         }
     }
 
@@ -362,10 +371,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class HotOffersItemViewHolder extends RecyclerView.ViewHolder {
         public TwoWayView twoWayView;
-        Context context;
+        Activity context;
         HotOffersAdapter adapter;
 
-        public HotOffersItemViewHolder(Context context, ViewGroup parent) {
+        public HotOffersItemViewHolder(Activity context, ViewGroup parent) {
             super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
 
             twoWayView = itemView.findViewById(R.id.two_way_view);
@@ -375,19 +384,30 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             twoWayView.setAdapter(adapter);
         }
 
-        public void setModel(List<DiveService> diveServices) {
+        public void setModel(final List<DiveService> diveServices) {
             adapter.clear();
-            adapter.addDiveServices(diveServices);
+            //adapter.
+            adapter.addDiveServices(context, diveServices);
             adapter.notifyDataSetChanged();
             twoWayView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon), null);
+                    DiveService diveService = diveServices.get(i);
+                    /*SearchService searchService = new SearchService();
+                    searchService.setName(diveService.getName());
+                    searchService.setId(diveService.getId());
+                    searchService.setLicense(diveService.isLicense());
+                    searchService.setType(4);*/
+
+                    Intent intent = new Intent(context, DoTripDetailActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    context.startActivity(intent);
                 }
             });
         }
 
         public class HotOffersAdapter extends BaseAdapter {
+            private Activity activity;
             private List<DiveService> diveServices;
 
             public void addDiveService(DiveService diveService) {
@@ -397,7 +417,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 this.diveServices.add(diveService);
             }
 
-            public void addDiveServices(List<DiveService> diveServices) {
+            public void addDiveServices(Activity activity, List<DiveService> diveServices) {
+                this.activity = activity;
                 if (this.diveServices == null) {
                     this.diveServices = new ArrayList<>();
                 }
@@ -432,19 +453,53 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
                 if (view == null) {
-                    view = View.inflate(context, R.layout.view_item_modul_hot_offers, null);
+                    view = View.inflate(context, R.layout.view_item_modul_do_trip, null);
                 }
+
                 DiveService diveService = diveServices.get(i);
-                final ImageView eventImageView = (ImageView) view.findViewById(R.id.service_imageView);
-                TextView nameTextView = (TextView) view.findViewById(R.id.name_textView);
-                TextView locationTextView = (TextView) view.findViewById(R.id.location_textView);
+                CardView cardView = (CardView) view.findViewById(R.id.cardView);
+                LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linearLayout);
+                final ImageView featuredImageView = (ImageView) view.findViewById(R.id.featured_imageView);
+                TextView serviceNameTextView = (TextView) view.findViewById(R.id.service_name_textView);
                 NYStrikethroughTextView priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
                 TextView priceTextView = (TextView) view.findViewById(R.id.price_textView);
-                TextView dateTextView = (TextView) view.findViewById(R.id.date_textView);
+                TextView scheduleTextView = (TextView) view.findViewById(R.id.shedule_textView);
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int width = displayMetrics.widthPixels;
+
+                /*CardView.LayoutParams layoutParams = (CardView.LayoutParams)
+                        cardView.getLayoutParams();
+                layoutParams.width = width*3/4;*/
+
+                TwoWayView.LayoutParams param = new TwoWayView.LayoutParams(
+                   width*3/4,
+                   ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                cardView.setLayoutParams(param);
+
+
+                /*FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(
+                        width*3/4,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                param.setMargins(0,0,NYHelper.integerToDP(context, 10),0);
+                linearLayout.setLayoutParams(param);*/
+
+
+                /*FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(
+                   *//*width*//* width*3/4,
+                   *//*height*//* FrameLayout.LayoutParams.WRAP_CONTENT
+                );
+                param.setMargins(0,0,NYHelper.integerToDP(context, 10),0);
+                cardView.setLayoutParams(param);*/
+
+
                 if (diveService != null) {
 
                     if (NYHelper.isStringNotEmpty(diveService.getName()))
-                        nameTextView.setText(diveService.getName());
+                        serviceNameTextView.setText(diveService.getName());
 
                     if (diveService.getDiveSpots().get(0) != null && diveService.getDiveSpots().get(0).getLocation() != null) {
 
@@ -455,12 +510,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         if (location.getProvince() != null && NYHelper.isStringNotEmpty(location.getProvince().getName()))
                             locString += ", " + location.getProvince().getName();
                         //if (NYHelper.isStringNotEmpty(location.getCountry())) locString += ", "+location.getCountry();
-                        locationTextView.setText(locString);
                     }
 
-
                     if (diveService.getSchedule() != null) {
-                        dateTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()));
+                        scheduleTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()));
                     }
 
                     double normalPrice = Double.valueOf(diveService.getNormalPrice());
@@ -485,27 +538,26 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                             @Override
                             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                eventImageView.setImageResource(R.drawable.example_pic);
+                                featuredImageView.setImageResource(R.drawable.example_pic);
                             }
 
                             @Override
                             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                eventImageView.setImageBitmap(loadedImage);
+                                featuredImageView.setImageBitmap(loadedImage);
                                 //activity.getCache().put(imageUri, loadedImage);
                             }
 
                             @Override
                             public void onLoadingCancelled(String imageUri, View view) {
-                                eventImageView.setImageResource(R.drawable.example_pic);
+                                featuredImageView.setImageResource(R.drawable.example_pic);
                             }
                         });
 
-                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), eventImageView, NYHelper.getOption());
+                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), featuredImageView, NYHelper.getOption());
 
                     } else {
-                        eventImageView.setImageResource(R.drawable.example_pic);
+                        featuredImageView.setImageResource(R.drawable.example_pic);
                     }
-
 
                 }
                 return view;

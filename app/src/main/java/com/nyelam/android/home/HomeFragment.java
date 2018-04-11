@@ -22,6 +22,7 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Event;
 import com.nyelam.android.data.Module;
@@ -35,6 +36,7 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYHomepageModuleRequest;
 import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.view.NYBannerViewPager;
@@ -46,6 +48,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -66,6 +70,8 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
+
+    private DoTripRecyclerViewAdapter doTripAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -96,27 +102,29 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new HomePageAdapter(getContext(), this);
+        adapter = new HomePageAdapter(getActivity(), this);
         initView(view);
         initBanner();
         initControl();
         initAdapter();
         initCacheModule();
-        getListData();
+        //getHomepageModule();
     }
 
     private void initAdapter() {
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(verticalLayoutManager);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,0,spacingInPixels,0));
         recyclerView.setAdapter(adapter);
     }
 
-    private void getListData() {
+    private void getHomepageModule() {
         NYHomepageModuleRequest req = new NYHomepageModuleRequest(getActivity());
-        spcMgr.execute(req, onGetDetailDiveCenterRequest());
+        spcMgr.execute(req, onGetModulesHomepageRequest());
     }
 
-    private RequestListener<ModuleList> onGetDetailDiveCenterRequest() {
+    private RequestListener<ModuleList> onGetModulesHomepageRequest() {
         return new RequestListener<ModuleList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -270,6 +278,76 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        loadDoTrip();
     }
+
+
+    public void loadDoTrip(){
+
+        doTripAdapter = new DoTripRecyclerViewAdapter(getActivity());
+
+        try {
+
+            Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
+
+            //JSONObject obj = new JSONObject(loadJSONFromAsset(this));
+            JSONObject obj = new JSONObject(loadJSONFromAsset(getActivity()));
+            JSONArray array = obj.getJSONArray("modules");
+
+            ModuleList moduleList = new ModuleList();
+            moduleList.parse(array);
+
+
+            //DiveServiceList results = new DiveServiceList();
+            //results.parse(array);
+
+            if (moduleList != null && moduleList.getList() != null && moduleList.getList().size() > 0){
+                //noResultTextView.setVisibility(View.GONE);
+                /*doTripAdapter.clear();
+                doTripAdapter.addResults(results.getList());
+                doTripAdapter.notifyDataSetChanged();*/
+
+                NYLog.e("CEK INI list : "+moduleList.getList().toString());
+
+                adapter.clear();
+                adapter.addModules(moduleList.getList());
+                adapter.notifyDataSetChanged();
+
+                Toast.makeText(getActivity(), "exist", Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+
+                /*doTripAdapter.clear();
+                doTripAdapter.notifyDataSetChanged();*/
+                //noResultTextView.setVisibility(View.VISIBLE);
+            }
+
+        } catch (JSONException e) {
+            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+            NYLog.e("cek error : "+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    public String loadJSONFromAsset( Context context ) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open("homepage_module.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+
 
 }

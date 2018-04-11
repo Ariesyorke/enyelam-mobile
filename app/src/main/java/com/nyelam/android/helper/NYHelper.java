@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,6 +50,7 @@ import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -386,11 +388,6 @@ public class NYHelper {
     }
 
 
-
-
-
-
-
     public static final void handlePopupMessage(Context context, String message, boolean isCancelable , DialogInterface.OnClickListener listener, String okButton) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message)
@@ -577,6 +574,13 @@ public class NYHelper {
         } catch (Exception e) {
             Log.e(TAG, "printHashKey()", e);
         }
+    }
+
+    public static String formatMonthYearToString(int month, int year) {
+        final Calendar c = Calendar.getInstance();
+        c.set(year, month, 1);
+        String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        return (monthString+" "+ String.valueOf(year));
     }
 
 

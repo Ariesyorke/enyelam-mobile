@@ -23,7 +23,6 @@ public abstract class Module implements Parseable {
 
     protected String name;
 
-
     public String getName() {
         return name;
     }
@@ -31,7 +30,6 @@ public abstract class Module implements Parseable {
     public void setName(String name) {
         this.name = name;
     }
-
 
     @Override
     public void parse(JSONObject obj) {
@@ -43,8 +41,6 @@ public abstract class Module implements Parseable {
                 setName(obj.getString(KEY_MODULES_NAME));
             }
         } catch (JSONException e){e.printStackTrace();}
-
-
 
     }
 

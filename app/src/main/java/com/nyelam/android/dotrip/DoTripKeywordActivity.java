@@ -1,4 +1,4 @@
-package com.nyelam.android.dodive;
+package com.nyelam.android.dotrip;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,14 +13,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchResultList;
+import com.nyelam.android.dodive.DoDiveSearchActivity;
+import com.nyelam.android.dodive.DoDiveSearchAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.nyelam.android.storage.KeywordHistoryStorage;
@@ -29,14 +29,11 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DoDiveSearchActivity extends BasicActivity {
+public class DoTripKeywordActivity extends AppCompatActivity {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoDiveSearchAdapter doDiveSearchAdapter;
@@ -50,7 +47,7 @@ public class DoDiveSearchActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_do_dive_search);
+        setContentView(R.layout.activity_do_trip_keyword);
         initGetExtras();
         initView();
         initControl();
@@ -100,7 +97,7 @@ public class DoDiveSearchActivity extends BasicActivity {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    View view = DoDiveSearchActivity.this.getCurrentFocus();
+                    View view = DoTripKeywordActivity.this.getCurrentFocus();
                     if (view != null) {
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -138,9 +135,9 @@ public class DoDiveSearchActivity extends BasicActivity {
                     labelTextView.setText(getResources().getString(R.string.search_results));
                     NYDoDiveSearchTypeRequest req = null;
                     if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword, "1");
+                        req = new NYDoDiveSearchTypeRequest(DoTripKeywordActivity.this, keyword, "1");
                     } else {
-                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
+                        req = new NYDoDiveSearchTypeRequest(DoTripKeywordActivity.this, keyword);
                     }
                     spcMgr.execute(req, "search_result", DurationInMillis.NEVER, onSearchKeywordRequest());
 //                    spcMgr.execute(req, onSearchKeywordRequest());
@@ -153,7 +150,7 @@ public class DoDiveSearchActivity extends BasicActivity {
 
     private void loadHistoryCache() {
         doDiveSearchAdapter.clear();
-        KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(DoDiveSearchActivity.this);
+        KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(DoTripKeywordActivity.this);
         if (keywordHistoryStorage.getSearchResults() != null && keywordHistoryStorage.getSearchResults().size() > 0){
             noResultTextView.setVisibility(View.GONE);
             doDiveSearchAdapter.clear();
@@ -214,7 +211,6 @@ public class DoDiveSearchActivity extends BasicActivity {
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -226,6 +222,5 @@ public class DoDiveSearchActivity extends BasicActivity {
         super.onStart();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
-
 
 }
