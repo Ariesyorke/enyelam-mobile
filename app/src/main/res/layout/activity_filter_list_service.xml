@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context="com.nyelam.android.dodive.FilterListDiveCenterActivity">
+    tools:context="com.nyelam.android.dodive.FilterListServiceActivity">
 
     <RelativeLayout
         android:background="#0071BC"
@@ -29,6 +29,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="18sp" />
         <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/reset_textView"
             app:fontTextStyle="reguler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +76,7 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/bankTransferRadioButton"
+                            android:id="@+id/lowerPriceRadioButton"
                             android:checked="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -111,7 +112,7 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/virtualAccountRadioButton"
+                            android:id="@+id/highestPriceRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center" />
@@ -139,6 +140,71 @@
                 </RadioGroup>
             </LinearLayout>
 
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F7F7F7"
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="Price Range"
+                android:textSize="16sp"
+                android:textColor="@color/ny_black3"
+                app:fontTextStyle="light" />
+
+            <LinearLayout
+                android:padding="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                    android:id="@+id/price_range_seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:layout_marginBottom="@dimen/padding_half"
+                    app:corner_radius="10"
+                    app:min_value="0"
+                    app:max_value="10000000"
+                    app:bar_color="#B1B1B1"
+                    app:bar_highlight_color="#0071BC"
+                    app:left_thumb_color="#EFEFEF"
+                    app:right_thumb_color="#EFEFEF"
+                    app:left_thumb_color_pressed="#EFEFEF"
+                    app:right_thumb_color_pressed="#EFEFEF"
+                    app:data_type="_integer"/>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/price_min_textView"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Rp xx.xxx.xxx,-"
+                        android:textSize="16sp"
+                        android:textColor="@color/ny_black3"
+                        android:gravity="left"
+                        app:fontTextStyle="light" />
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/price_max_textView"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Rp xx.xxx.xxx,-"
+                        android:textSize="16sp"
+                        android:textColor="@color/ny_black3"
+                        android:gravity="right"
+                        app:fontTextStyle="light" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
             <com.nyelam.android.view.font.NYTextView
                 android:id="@+id/NYTextView2"
                 android:layout_width="match_parent"
@@ -162,27 +228,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_vertical_margin"
-                    android:onClick="onCheckboxClicked"
+                    android:layout_marginStart="@dimen/activity_vertical_margin"
                     android:text="1x" />
-
                 <CheckBox android:id="@+id/checkbox_two"
                     android:layout_marginLeft="@dimen/padding_double"
+                    android:layout_marginStart="@dimen/padding_double"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2x"
-                    android:onClick="onCheckboxClicked"/>
+                    android:text="2x" />
                 <CheckBox android:id="@+id/checkbox_three"
                     android:layout_marginLeft="@dimen/padding_double"
+                    android:layout_marginStart="@dimen/padding_double"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3x"
-                    android:onClick="onCheckboxClicked"/>
+                    android:text="3x" />
                 <CheckBox android:id="@+id/checkbox_more_four"
                     android:layout_marginLeft="@dimen/padding_double"
+                    android:layout_marginStart="@dimen/padding_double"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=">4"
-                    android:onClick="onCheckboxClicked"/>
+                    android:text=">4" />
             </LinearLayout>
 
             <com.nyelam.android.view.font.NYTextView

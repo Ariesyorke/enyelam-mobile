@@ -1,6 +1,5 @@
 package com.nyelam.android.dodive;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,23 +7,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.DiveCenterList;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
-import com.nyelam.android.http.NYDoDiveSearchDiveCenterRequest;
-import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
@@ -33,12 +26,10 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DoDiveSearchResultActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener {
 
@@ -95,7 +86,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListDiveCenterActivity.class);
+                Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListServiceActivity.class);
+                intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
                 intent.putExtra(NYHelper.KEYWORD, keyword);
                 intent.putExtra(NYHelper.ID_DIVER, diverId);
                 intent.putExtra(NYHelper.DIVER, diver);

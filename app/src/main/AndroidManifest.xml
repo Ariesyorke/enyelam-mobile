@@ -104,7 +104,7 @@
             android:name=".dodive.DoDiveSearchResultDiveSpotActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dodive.FilterListDiveCenterActivity"
+            android:name=".dodive.FilterListServiceActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ecotrip.EcoTripActivity"

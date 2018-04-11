@@ -2,53 +2,54 @@ package com.nyelam.android.dodive;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ProviderInfo;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.nex3z.flowlayout.FlowLayout;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
-import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.Facilities;
-import com.nyelam.android.data.Participant;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.dotrip.DoTripResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.NYMasterDataStorage;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.midtrans.sdk.corekit.utilities.Utils.dpToPx;
 
-public class FilterListDiveCenterActivity extends BasicActivity implements NYMasterDataStorage.LoadDataListener<Category> {
+public class FilterListServiceActivity extends BasicActivity implements NYMasterDataStorage.LoadDataListener<Category>, CompoundButton.OnCheckedChangeListener {
 
     private NYMasterDataStorage storage;
     private LinearLayout categoriesLinearLayout;
     private boolean isSelf = false;
     private ArrayList<String> categories;
-    protected String keyword, diverId, diver, certificate, date, type;
+    protected String keyword, diverId, diver, certificate, date, type, activityName;
+    private int sortBy = 0;
+    private double minPrice, maxPrice;
     private boolean ecotrip;
-    private TextView doneTextView;
+    private List<String> totalDives;
     private List<Category> items;
     private List<Category> categoryChooseList;
     private List<Facilities> facilitiesChooseList;
+    private TextView doneTextView;
     private FlowLayout categoryFlowLayout;
     private FlowLayout facilitiesFlowLayout;
     private ImageView closeImageView;
@@ -58,7 +59,7 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter_list_dive_center);
+        setContentView(R.layout.activity_filter_list_service);
         storage = new NYMasterDataStorage(this);
         initExtra();
         initView();
@@ -68,6 +69,76 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
     }
 
     private void initControl() {
+
+        final RadioButton rbLowerPrice = (RadioButton) findViewById(R.id.lowerPriceRadioButton);
+        final RadioButton rbHighestPrice = (RadioButton) findViewById(R.id.highestPriceRadioButton);
+        rbLowerPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    sortBy = 0;
+                    rbHighestPrice.setChecked(false);
+                }
+            }
+        });
+
+        rbHighestPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    sortBy = 1;
+                    rbLowerPrice.setChecked(false);
+                }
+            }
+        });
+
+
+
+
+
+        /*RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroup.check(sortBy);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                View radioButton = group.findViewById(checkedId);
+                int index = group.indexOfChild(radioButton);
+                sortBy = index;
+                Toast.makeText(FilterListServiceActivity.this, String.valueOf(sortBy), Toast.LENGTH_SHORT).show();
+            }
+
+        });*/
+
+        // get seekbar from view
+        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.price_range_seekBar);
+
+        // get min and max text view
+        final TextView tvMin = (TextView) findViewById(R.id.price_min_textView);
+        final TextView tvMax = (TextView) findViewById(R.id.price_max_textView);
+
+        // set listener
+        rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                minPrice = minValue.doubleValue();
+                maxPrice = maxValue.doubleValue();
+                tvMin.setText(NYHelper.priceFormatter(minValue.doubleValue()));
+                tvMax.setText(NYHelper.priceFormatter(maxValue.doubleValue()));
+            }
+        });
+
+        // set final value listener
+        rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(Number minValue, Number maxValue) {
+                minPrice = minValue.doubleValue();
+                maxPrice = maxValue.doubleValue();
+                tvMin.setText(NYHelper.priceFormatter(minValue.doubleValue()));
+                tvMax.setText(NYHelper.priceFormatter(maxValue.doubleValue()));
+            }
+        });
+
         doneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +157,10 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
                     }
                 }
 
-                Intent intent = new Intent(FilterListDiveCenterActivity.this, DoDiveSearchResultActivity.class);
+                Intent intent = new Intent(FilterListServiceActivity.this, DoDiveSearchResultActivity.class);
+                if (NYHelper.isStringNotEmpty(activityName) && activityName.equals(NYHelper.DOTRIP))
+                    intent = new Intent(FilterListServiceActivity.this, DoTripResultActivity.class);
+                intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
                 intent.putExtra(NYHelper.KEYWORD, keyword);
                 intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
                 intent.putExtra(NYHelper.ID_DIVER, diverId);
@@ -109,6 +183,15 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
                 onBackPressed();
             }
         });
+
+        TextView tvReset = (TextView) findViewById(R.id.reset_textView);
+        tvReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetFilter();
+            }
+        });
+
     }
 
     private void getCategories() {
@@ -125,15 +208,30 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
         doneTextView = (TextView) findViewById(R.id.done_textView);
         categoryFlowLayout = (FlowLayout) findViewById(R.id.category_flowLayout);
         facilitiesFlowLayout = (FlowLayout) findViewById(R.id.facilities_flowLayout);
-    }
 
+        CheckBox check1 = findViewById(R.id.checkbox_one);
+        CheckBox check2 = findViewById(R.id.checkbox_two);
+        CheckBox check3 = findViewById(R.id.checkbox_three);
+        CheckBox check4 = findViewById(R.id.checkbox_more_four);
+
+        check1.setOnCheckedChangeListener(this);
+        check2.setOnCheckedChangeListener(this);
+        check3.setOnCheckedChangeListener(this);
+        check4.setOnCheckedChangeListener(this);
+    }
 
     private void initExtra() {
         categories = new ArrayList<>();
+        totalDives = new ArrayList<>();
+        facilitiesChooseList = new ArrayList<>();
 
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            if(intent.hasExtra(NYHelper.ACTIVITY) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ACTIVITY))){
+                activityName = extras.getString(NYHelper.ACTIVITY);
+                Toast.makeText(this, activityName, Toast.LENGTH_SHORT).show();
+            }
             if(intent.hasExtra(NYHelper.KEYWORD) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.KEYWORD))) keyword = extras.getString(NYHelper.KEYWORD);
             if(intent.hasExtra(NYHelper.IS_ECO_TRIP)) ecotrip = extras.getBoolean(NYHelper.IS_ECO_TRIP);
             if(intent.hasExtra(NYHelper.ID_DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_DIVER))) diverId = extras.getString(NYHelper.ID_DIVER);
@@ -173,7 +271,6 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
         if (items != null & items.size() > 0){
             this.items = new ArrayList<>();
             this.items = items;
-
 
             NYLog.e("Check Category : "+items.toString());
 
@@ -241,10 +338,6 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
                 LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
 
-                /*LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(this, 10));
-                myParticipantsView.setLayoutParams(layoutParamsAddons);*/
-
                 ImageView categoryImageView = (ImageView) myParticipantsView.findViewById(R.id.category_imageView);
                 TextView categoryNameTextView = (TextView) myParticipantsView.findViewById(R.id.category_name_textView);
                 AppCompatCheckBox categoryCheckBox = (AppCompatCheckBox) myParticipantsView.findViewById(R.id.category_appCompatCheckBox);
@@ -292,20 +385,13 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
             NYLog.e("Check Category : NULL");
         }
 
-
         facilitiesTexts = new String[]{"Dive Guide", "Food & Drinks", "Towel", "Equipment", "Transportation", "Accomodation"};
         facilitiesDrawable = new int[]{R.drawable.ic_dive_guide_white, R.drawable.ic_food_and_drink_white, R.drawable.ic_towel_white, R.drawable.ic_equipment_white, R.drawable.ic_transportation_white, R.drawable.ic_accomodation_white};
 
         for (int i = 0; i < facilitiesTexts.length; i++) {
-            //TextView textView = buildLabel(text);
-            //facilitiesFlowLayout.addView(textView);
             buildLabel(i);
         }
     }
-
-
-
-
 
 
     private void buildLabel(int pos) {
@@ -328,16 +414,6 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
         facilitiesFlowLayout.addView(myParticipantsView);
     }
 
-    /*private TextView buildLabel(int pos) {
-        TextView textView = new TextView(this);
-        textView.setText(text);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        textView.setPadding((int)dpToPx(16), (int)dpToPx(8), (int)dpToPx(16), (int)dpToPx(8));
-        textView.setBackgroundResource(R.drawable.ny_rectangle_orange);
-        return textView;
-    }*/
-
-
     private void setViewCategory(boolean isChecked, LinearLayout ll, ImageView iv, TextView tv){
         if (isChecked){
             ll.setBackground(ContextCompat.getDrawable(this, R.drawable.ny_rectangle_orange));
@@ -350,7 +426,6 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
         }
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -360,5 +435,42 @@ public class FilterListDiveCenterActivity extends BasicActivity implements NYMas
         setResult(RESULT_OK, intent);
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch(buttonView.getId()){
+            case R.id.checkbox_one:
+                setCheckBoxDives("1", isChecked);
+                break;
+            case R.id.checkbox_two:
+                setCheckBoxDives("2", isChecked);
+                break;
+            case R.id.checkbox_three:
+                setCheckBoxDives("3", isChecked);
+                break;
+            case R.id.checkbox_more_four:
+                setCheckBoxDives(">4", isChecked);
+                break;
+        }
+    }
+
+    public void setCheckBoxDives(String pos, boolean isChecked){
+        boolean isExist = false;
+        for (int i=0; i<totalDives.size();i++){
+            if (pos.equals(totalDives.get(i))) isExist = true;
+        }
+
+        if (isExist && !isChecked){
+            totalDives.remove(pos);
+        } else if (!isExist && isChecked){
+            totalDives.add(pos);
+        }
+
+        if (totalDives != null && totalDives.size() > 0) NYLog.e("cek total dives : "+totalDives.toString());
+    }
+
+
+    public  void resetFilter(){
+
+    }
 
 }

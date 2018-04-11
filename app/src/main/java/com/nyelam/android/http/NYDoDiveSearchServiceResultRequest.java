@@ -24,15 +24,15 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<DiveServi
 
     private static final String POST_PAGE = "page";
 
-    private static final String POST_DIVER_CATEGORY_ID = "dive_category_id[]";
-
     private static final String POST_DIVER = "diver";
     private static final String POST_CERTIFICATE = "certificate";
     private static final String POST_DATE = "date";
     private static final String POST_SORT_BY = "sort_by";
     private static final String POST_PRICE_MIN = "price_min";
     private static final String POST_PRICE_MAX = "price_max";
-    private static final String POST_CATEGORY = "dive_category_id[]";
+    private static final String POST_DIVE_CATEGORY_ID = "dive_category_id[]";
+    private static final String POST_TOTAL_DIVES = "total_dives[]";
+    private static final String POST_FACILITIES = "facilities[]";
 
     private static final String POST_DIVE_SPOT_ID = "dive_spot_id";
     private static final String POST_DIVE_CENTER_ID = "dive_center_id";
@@ -85,9 +85,21 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<DiveServi
 
         if (categories != null && categories.size() > 0){
             for (String st : categories){
-                addQuery(POST_CATEGORY, st);
+                addQuery(POST_DIVE_CATEGORY_ID, st);
             }
         }
+
+        /*if (categories != null && categories.size() > 0){
+            for (String st : categories){
+                addQuery(POST_TOTAL_DIVES, st);
+            }
+        }
+
+        if (categories != null && categories.size() > 0){
+            for (String st : categories){
+                addQuery(POST_FACILITIES, st);
+            }
+        }*/
 
         addQuery(POST_ECO_TRIP, isEcoTrip);
 

@@ -3,7 +3,6 @@ package com.nyelam.android.dotrip;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,10 +16,7 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveServiceList;
-import com.nyelam.android.dodive.DoDiveActivity;
-import com.nyelam.android.dodive.DoDiveSearchDiveServiceAdapter;
-import com.nyelam.android.dodive.DoDiveSearchResultActivity;
-import com.nyelam.android.dodive.FilterListDiveCenterActivity;
+import com.nyelam.android.dodive.FilterListServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
@@ -41,19 +37,16 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
     private int mRequestCode = 100;
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    protected String keyword, diverId, diver, certificate, date, type;
     private DoTripDiveServiceAdapter diveServiceAdapter;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private TextView titleTextView, labelTextView, noResultTextView;
-    protected String keyword, diverId, diver, certificate, date, type;
     private FloatingActionButton sortFloatingButton;
-    //protected String diveSpotId;
-    private ImageView filterImageView;
-    private ImageView searchImageView;
+    private ImageView filterImageView, searchImageView;
     private int page = 1;
     private int sortingType = 1;
     private ArrayList<String> categories;
-    private boolean ecotrip = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +80,14 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoTripResultActivity.this, FilterListDiveCenterActivity.class);
+                Intent intent = new Intent(DoTripResultActivity.this, FilterListServiceActivity.class);
+                intent.putExtra(NYHelper.ACTIVITY, NYHelper.DOTRIP);
                 intent.putExtra(NYHelper.KEYWORD, keyword);
                 intent.putExtra(NYHelper.ID_DIVER, diverId);
                 intent.putExtra(NYHelper.DIVER, diver);
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.TYPE, type);
-                intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
                 intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);
                 //startActivity(intent);
                 startActivityForResult(intent, mRequestCode);
@@ -105,6 +98,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
     private void initRequest() {
         progressBar.setVisibility(View.VISIBLE);
 
+        // TODO: buat service request dan ganti URL untuk DoTrip
         String apiPath = getString(R.string.api_path_dodive_service_list);
 
         if (NYHelper.isStringNotEmpty(type) && type.equals("1")){
@@ -119,30 +113,12 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
             apiPath = getString(R.string.api_path_dodive_search_service_by_city);
         }
 
-        /*if(isEcoTrip()) {
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId, "1");
-            spcMgr.execute(req, onGetServiceByDiveCenterRequest());
-        } else {
-            NYDoDiveSearchServiceRequest req = new NYDoDiveSearchServiceRequest(this, apiPath, String.valueOf(page), diveCenter.getId(), certificate, diver, schedule, type, diverId);
-            spcMgr.execute(req, onGetServiceByDiveCenterRequest());
-        }*/
-
         // TODO: tunggu URL dari Adam
-        NYDoDiveSearchServiceResultRequest req = null;
-
-        if(getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-            int ecoTrip = getIntent().getIntExtra(NYHelper.IS_ECO_TRIP, 1);
-            ecotrip = true;
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), categories, null, null, String.valueOf(ecoTrip));
-        } else {
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), categories, null, null, String.valueOf(0));
-        }
-
+        NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), categories, null, null, String.valueOf(0));
         spcMgr.execute(req, onSearchServiceRequest());
 
         // TODO: load data dummy, to test and waitting for API request
         //loadJSONAsset();
-
     }
 
     private void initExtra() {
@@ -153,7 +129,6 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         if (extras != null) {
             if(intent.hasExtra(NYHelper.KEYWORD) && !extras.getString(NYHelper.KEYWORD).equals(null)){
                 keyword = extras.getString(NYHelper.KEYWORD);
-                //titleTextView.setText(keyword);
             }
             if(intent.hasExtra(NYHelper.ID_DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_DIVER))) diverId = extras.getString(NYHelper.ID_DIVER);
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))) diver = extras.getString(NYHelper.DIVER);

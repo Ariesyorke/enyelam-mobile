@@ -68,6 +68,9 @@ public class NYHelper {
     public static final String GK_SOCMED_TYPE_FACEBOOK = "facebook";
     public static final String GK_SOCMED_TYPE_GOOGLE = "google";
 
+    public static final String ACTIVITY = "activity";
+    public static final String DODIVE = "dodive";
+    public static final String DOTRIP = "dotrip";
     public static final String ASC = "asc";
     public static final String SEARCH_RESULT = "search_result";
     public static final String KEYWORD = "keyword";

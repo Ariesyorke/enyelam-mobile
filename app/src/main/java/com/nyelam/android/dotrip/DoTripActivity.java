@@ -87,7 +87,7 @@ public class DoTripActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_trip);
         initView();
-        initDatePicker();
+        //initDatePicker();
         initExtra();
         initControl();
         initAdapter();
@@ -137,80 +137,6 @@ public class DoTripActivity extends AppCompatActivity implements
 
     }
 
-
-    private void initDatePicker() {
-        //final Calendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
-        //c.setTime(new Date());
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        /*Calendar mcurrentDate=Calendar.getInstance();
-        year=mcurrentDate.get(Calendar.YEAR);
-        month=mcurrentDate.get(Calendar.MONTH);
-        day=mcurrentDate.get(Calendar.DAY_OF_MONTH);*/
-
-        //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-//        if (Build.VERSION.SDK_INT <= 21) {
-//            //this is where the crash happens
-//            datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
-//        } else {
-//            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-//        }
-
-        // TODO Hide Future Date Here
-        //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-        // TODO Hide Past Date Here
-        //datePickerDialog.show();
-        if(isDoTripBanner) {
-            List<Calendar> calendars = new ArrayList<>();
-            //List<Calendar> calendarsTwo = new ArrayList<>();
-            int divider = 12 - month;
-
-            for(int i = 0; i < divider; i++) {
-                Calendar a = Calendar.getInstance();
-                a.setTime(new Date());
-                a.add(Calendar.MONTH, i);
-                a.set(Calendar.DAY_OF_WEEK, a.getFirstDayOfWeek());
-                a.set(Calendar.WEEK_OF_MONTH, 3);
-                for(int j = 0; j < 7; j++) {
-                    if(a.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                        calendars.add(a);
-                        break;
-                    } else {
-                        a.add(Calendar.DAY_OF_WEEK, 1);
-                    }
-                }
-                if(i == 0) {
-                    int eYear = a.get(Calendar.YEAR);
-                    int eMonth = a.get(Calendar.MONTH);
-                    int eDay = a.get(Calendar.DAY_OF_MONTH);
-                    date = String.valueOf(a.getTimeInMillis()/1000);
-                    datePickerDialog = DatePickerDialog.newInstance(this, eYear, eMonth, eDay);
-                    datePickerDialog.setMinDate(a);
-                    datetimeTextView.setText(String.valueOf(eDay) + "/" + String.valueOf(eMonth+1) + "/" + String.valueOf(eYear));
-                }
-            }
-
-
-            Calendar[] cals = new Calendar[calendars.size()];
-            calendars.toArray(cals);
-            datePickerDialog.setSelectableDays(cals);
-
-            /*Calendar[] calsTwo = new Calendar[2];
-            calsTwo[0] = Calendar.getInstance();
-            calsTwo[0].set(2018, 4, 12);
-            datePickerDialog.setDisabledDays(calsTwo);*/
-
-        } else {
-            datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
-            datePickerDialog.setMinDate(c);
-            date = String.valueOf(c.getTimeInMillis()/1000);
-            datetimeTextView.setText(String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year));
-        }
-
-    }
 
 
     private void initExtra() {
@@ -560,12 +486,13 @@ public class DoTripActivity extends AppCompatActivity implements
         int year = Calendar.getInstance().get(Calendar.YEAR);
         int month = Calendar.getInstance().get(Calendar.MONTH);
 
-        MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(DoTripActivity.this, new MonthPickerDialog.OnDateSetListener() {
+        final MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(DoTripActivity.this, new MonthPickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(int selectedMonth, int selectedYear) {
                 //NYLog.d("selectedMonth : " + selectedMonth + " selectedYear : " + selectedYear);
                 //Toast.makeText(DoTripActivity.this, "Date set with month" + selectedMonth + " year " + selectedYear, Toast.LENGTH_SHORT).show();
                 datetimeTextView.setText(NYHelper.formatMonthYearToString(selectedMonth, selectedYear));
+                setScheduleTime(selectedMonth, selectedYear);
             }
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -578,21 +505,26 @@ public class DoTripActivity extends AppCompatActivity implements
                 .setMonthRange(Calendar.JANUARY, Calendar.DECEMBER)
                 // .setMaxMonth(Calendar.OCTOBER)
                 // .setYearRange(1890, 1890)
-                // .setMonthAndYearRange(Calendar.FEBRUARY, Calendar.OCTOBER, 1890, 1890)
-                //.showMonthOnly()
-                // .showYearOnly()
+                //.setMonthAndYearRange(Calendar.FEBRUARY, Calendar.DECEMBER, 2018, 2020)
                 .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
                     @Override
                     public void onMonthChanged(int selectedMonth) {
                         //Log.d(TAG, "Selected month : " + selectedMonth);
-                        // Toast.makeText(MainActivity.this, " Selected month : " + selectedMonth, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DoTripActivity.this, " Selected month : " + selectedMonth, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
                     @Override
                     public void onYearChanged(int selectedYear) {
                         //Log.d(TAG, "Selected year : " + selectedYear);
-                        // Toast.makeText(MainActivity.this, " Selected year : " + selectedYear, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DoTripActivity.this, " Selected year : " + selectedYear, Toast.LENGTH_SHORT).show();
+                        if (selectedYear == 2018){
+                            builder.setMonthRange(Calendar.APRIL, Calendar.DECEMBER);
+                            builder.build();
+                        } else {
+                            builder.setMonthRange(Calendar.JANUARY, Calendar.DECEMBER);
+                            builder.build();
+                        }
                     }
                 })
                 .build()
@@ -611,6 +543,8 @@ public class DoTripActivity extends AppCompatActivity implements
 
         date = String.valueOf(cal.getTimeInMillis()/1000);
         datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
+
+        Toast.makeText(application, "my date : "+date, Toast.LENGTH_SHORT).show();
     }
 
     public void setDivingLicense(boolean isTrue){
@@ -641,6 +575,26 @@ public class DoTripActivity extends AppCompatActivity implements
 
     @Override
     public void doUpdateVersion(String link) {
+
+    }
+
+    public void setScheduleTime(int selectedMonth, int selectedYear){
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
+        int yearNow = today.get(Calendar.YEAR);
+        int monthNow = today.get(Calendar.MONTH);
+        int dateNow = today.get(Calendar.DAY_OF_MONTH);
+
+        if (monthNow == selectedMonth && yearNow == selectedYear){
+            Calendar c = Calendar.getInstance();
+            c.set(selectedYear, selectedMonth,dateNow);
+            date = String.valueOf(c.getTimeInMillis());
+        } else {
+            Calendar c = Calendar.getInstance();
+            c.set(selectedYear, selectedMonth,1);
+            date = String.valueOf(c.getTimeInMillis());
+        }
+
+        if (date != null)NYLog.e("CEK SCHEDULE : "+date);
 
     }
 }
