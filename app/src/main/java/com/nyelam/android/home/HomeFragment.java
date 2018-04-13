@@ -107,15 +107,14 @@ public class HomeFragment extends Fragment {
         initBanner();
         initControl();
         initAdapter();
-        initCacheModule();
+       // initCacheModule();
         //getHomepageModule();
     }
 
     private void initAdapter() {
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(verticalLayoutManager);
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
-        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,0,spacingInPixels,0));
+        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,0,0,0));
         recyclerView.setAdapter(adapter);
     }
 
@@ -142,13 +141,11 @@ public class HomeFragment extends Fragment {
                     adapter.addModules(results.getList());
                     adapter.notifyDataSetChanged();
 
-                    //Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
                     ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
                     modulStorage.setModuleList(results);
                     modulStorage.save();
 
-                    //NYLog.e("CEK MODUL INI "+results.toString());
                 }
 
             }
@@ -285,50 +282,45 @@ public class HomeFragment extends Fragment {
     public void loadDoTrip(){
 
         doTripAdapter = new DoTripRecyclerViewAdapter(getActivity());
-
-        try {
-
-            Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
-
-            //JSONObject obj = new JSONObject(loadJSONFromAsset(this));
-            JSONObject obj = new JSONObject(loadJSONFromAsset(getActivity()));
-            JSONArray array = obj.getJSONArray("modules");
-
-            ModuleList moduleList = new ModuleList();
-            moduleList.parse(array);
-
-
-            //DiveServiceList results = new DiveServiceList();
-            //results.parse(array);
-
-            if (moduleList != null && moduleList.getList() != null && moduleList.getList().size() > 0){
-                //noResultTextView.setVisibility(View.GONE);
-                /*doTripAdapter.clear();
-                doTripAdapter.addResults(results.getList());
-                doTripAdapter.notifyDataSetChanged();*/
-
-                NYLog.e("CEK INI list : "+moduleList.getList().toString());
-
-                adapter.clear();
-                adapter.addModules(moduleList.getList());
-                adapter.notifyDataSetChanged();
-
-                Toast.makeText(getActivity(), "exist", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
-
-                /*doTripAdapter.clear();
-                doTripAdapter.notifyDataSetChanged();*/
-                //noResultTextView.setVisibility(View.VISIBLE);
-            }
-
-        } catch (JSONException e) {
-            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
-            NYLog.e("cek error : "+e.getMessage());
-            e.printStackTrace();
-        }
+        NYHomepageModuleRequest req = new NYHomepageModuleRequest(getActivity());
+        spcMgr.execute(req, onGetModulesHomepageRequest());
+//        try {
+//
+//
+//            //JSONObject obj = new JSONObject(loadJSONFromAsset(this));
+//            JSONObject obj = new JSONObject(loadJSONFromAsset(getActivity()));
+//            JSONArray array = obj.getJSONArray("modules");
+//
+//            ModuleList moduleList = new ModuleList();
+//            moduleList.parse(array);
+//
+//
+//            //DiveServiceList results = new DiveServiceList();
+//            //results.parse(array);
+//
+//            if (moduleList != null && moduleList.getList() != null && moduleList.getList().size() > 0){
+//                //noResultTextView.setVisibility(View.GONE);
+//                /*doTripAdapter.clear();
+//                doTripAdapter.addResults(results.getList());
+//                doTripAdapter.notifyDataSetChanged();*/
+//
+//
+//                adapter.clear();
+//                adapter.addModules(moduleList.getList());
+//                adapter.notifyDataSetChanged();
+//
+//
+//            } else {
+//
+//                /*doTripAdapter.clear();
+//                doTripAdapter.notifyDataSetChanged();*/
+//                //noResultTextView.setVisibility(View.VISIBLE);
+//            }
+//
+//        } catch (JSONException e) {
+//            NYLog.e("cek error : "+e.getMessage());
+//            e.printStackTrace();
+//        }
     }
 
 

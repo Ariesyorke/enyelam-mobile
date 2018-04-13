@@ -7,6 +7,8 @@
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardPreventCornerOverlap="false"
     card_view:cardMaxElevation="4dp"
     card_view:cardCornerRadius="@dimen/padding_half"
     android:layout_height="wrap_content"
