@@ -15,7 +15,12 @@ import android.widget.Toast;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.Category;
+import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.StateFacility;
+import com.nyelam.android.data.StateFacilityList;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
@@ -30,6 +35,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DoDiveSearchResultActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener {
 
@@ -46,9 +52,14 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private ImageView filterImageView;
     private ImageView searchImageView;
     private int page = 1;
-    private int sortingType = 1;
-    private ArrayList<String> categories;
     private boolean ecotrip = false;
+    private int sortingType = 1;
+    private Double minPrice;
+    private Double maxPrice;
+    //private ArrayList<String> categories;
+    private List<String> totalDives;
+    private CategoryList categoryList;
+    private StateFacilityList stateFacilityList;
 
     public boolean isEcotrip() {
         return ecotrip;
@@ -87,7 +98,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListServiceActivity.class);
-                intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
+                /*intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
                 intent.putExtra(NYHelper.KEYWORD, keyword);
                 intent.putExtra(NYHelper.ID_DIVER, diverId);
                 intent.putExtra(NYHelper.DIVER, diver);
@@ -95,8 +106,15 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.TYPE, type);
                 intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
-                intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);
+                intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);*/
                 //startActivity(intent);
+                // TODO: kirim parameter ke filter
+                intent.putExtra(NYHelper.CATEGORIES, categoryList.toString());
+                intent.putExtra(NYHelper.FACILITIES, stateFacilityList.toString());
+                intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+                intent.putExtra(NYHelper.SORT_BY, sortingType);
+                intent.putExtra(NYHelper.MIN_PRICE, minPrice);
+                intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
                 startActivityForResult(intent, mRequestCode);
             }
         });
@@ -127,26 +145,30 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             spcMgr.execute(req, onGetServiceByDiveCenterRequest());
         }*/
 
+        List<Category> lsCategory = categoryList.getList();
+        List<StateFacility> lsFacilities = stateFacilityList.getList();
+
         // TODO: tunggu URL dari Adam
         NYDoDiveSearchServiceResultRequest req = null;
-
         if(getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
             int ecoTrip = getIntent().getIntExtra(NYHelper.IS_ECO_TRIP, 1);
             ecotrip = true;
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), categories, null, null, String.valueOf(ecoTrip));
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, String.valueOf(minPrice), String.valueOf(maxPrice), String.valueOf(ecoTrip));
         } else {
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), categories, null, null, String.valueOf(0));
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, String.valueOf(minPrice), String.valueOf(maxPrice), String.valueOf(0));
         }
 
         spcMgr.execute(req, onSearchServiceRequest());
 
         // TODO: load data dummy, to test and waitting for API request
         //loadJSONAsset();
-
     }
 
     private void initExtra() {
-        categories = new ArrayList<>();
+        totalDives = new ArrayList<String>();
+        categoryList = new CategoryList();
+        stateFacilityList = new StateFacilityList();
+        stateFacilityList = new StateFacilityList();
 
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
@@ -163,12 +185,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 type = extras.getString(NYHelper.TYPE);
             }
 
-            if(intent.hasExtra(NYHelper.CATEGORIES) && !extras.get(NYHelper.CATEGORIES).equals(null)){
-                categories = extras.getStringArrayList(NYHelper.CATEGORIES);
-            }
-
             titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(date))+", "+diver+" pax (s)");
-
         }
 
     }
@@ -330,5 +347,62 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         return json;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            // update the contact list
+            Bundle b = data.getExtras();
+
+            if (data.hasExtra(NYHelper.SORT_BY))sortingType = b.getInt(NYHelper.SORT_BY);
+            if (data.hasExtra(NYHelper.MIN_PRICE))minPrice = b.getDouble(NYHelper.MIN_PRICE);
+            if (data.hasExtra(NYHelper.MAX_PRICE))maxPrice = b.getDouble(NYHelper.MAX_PRICE);
+
+            NYLog.e("onresult sortBy : "+sortingType);
+            NYLog.e("onresult minPrice : "+minPrice);
+            NYLog.e("onresult maxPrice : "+maxPrice);
+
+            if (data.hasExtra(NYHelper.TOTAL_DIVES)){
+                try {
+                    JSONArray arrayTotalDives = new JSONArray(b.getString(NYHelper.TOTAL_DIVES));
+                    for (int i=0; i<arrayTotalDives.length(); i++) {
+                        totalDives.add(arrayTotalDives.getString(i));
+                    }
+                    NYLog.e("onresult totalDives : "+totalDives.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            NYLog.e("onresult categories : "+b.getString(NYHelper.CATEGORIES));
+            NYLog.e("onresult facilities : "+b.getString(NYHelper.FACILITIES));
+
+            if (data.hasExtra(NYHelper.CATEGORIES)){
+                try {
+                    JSONArray arrayCat = new JSONArray(b.getString(NYHelper.CATEGORIES));
+                    categoryList = new CategoryList();
+                    categoryList.parse(arrayCat);
+                    NYLog.e("onresult categories final : "+categoryList.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (data.hasExtra(NYHelper.FACILITIES)){
+                try {
+                    JSONArray arrayFac = new JSONArray(b.getString(NYHelper.FACILITIES));
+                    stateFacilityList = new StateFacilityList();
+                    stateFacilityList.parse(arrayFac);
+                    NYLog.e("onresult facilities final : "+stateFacilityList.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            initRequest();
+
+        }
+    }
 
 }

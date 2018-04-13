@@ -34,8 +34,6 @@ public class BannerViewPagerAdapter extends FragmentPagerAdapter {
         return super.getItemPosition(object);
     }
 
-
-
     public void setBannerList(BannerList bannerList) {
         if (this.bannerList == null) this.bannerList = new BannerList();
         this.bannerList = bannerList;
@@ -55,6 +53,5 @@ public class BannerViewPagerAdapter extends FragmentPagerAdapter {
     public void clear() {
         bannerList = new BannerList();
     }
-
 
 }

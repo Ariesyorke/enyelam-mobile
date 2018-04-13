@@ -364,7 +364,6 @@ public class DetailServiceFragment extends Fragment {
 
     private void getRelatedServiceRequest() {
 
-
         if (((DetailServiceActivity)getActivity()).newDiveService != null){
             DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
             DiveService diveService = ((DetailServiceActivity)getActivity()).newDiveService;
@@ -372,7 +371,8 @@ public class DetailServiceFragment extends Fragment {
             String apiPath = getString(R.string.api_path_dodive_service_list);
             apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
 
-            NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, String.valueOf(0));
+            // TODO: realted service belum 
+            NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, null, null, String.valueOf(0));
             //NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getActivity());
             spcMgr.execute(req, onSearchServiceRequest());
 

@@ -25,6 +25,8 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.Facilities;
+import com.nyelam.android.data.StateCategory;
+import com.nyelam.android.data.StateFacility;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dotrip.DoTripResultActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -32,6 +34,8 @@ import com.nyelam.android.storage.NYMasterDataStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.midtrans.sdk.corekit.utilities.Utils.dpToPx;
 
@@ -48,13 +52,12 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private List<String> totalDives;
     private List<Category> items;
     private List<Category> categoryChooseList;
-    private List<Facilities> facilitiesChooseList;
+    private List<StateFacility> facilitiesItems;
+    private List<StateFacility> facilitiesChooseList;
     private TextView doneTextView;
     private FlowLayout categoryFlowLayout;
     private FlowLayout facilitiesFlowLayout;
     private ImageView closeImageView;
-    private String[] facilitiesTexts;
-    private int[] facilitiesDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +226,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private void initExtra() {
         categories = new ArrayList<>();
         totalDives = new ArrayList<>();
+        categoryChooseList = new ArrayList<>();
         facilitiesChooseList = new ArrayList<>();
+        facilitiesItems = new ArrayList<>();
 
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
@@ -268,45 +273,19 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     @Override
     public void onDataLoaded(List<Category> items) {
 
-        if (items != null & items.size() > 0){
+        /*if (items != null & items.size() > 0){
             this.items = new ArrayList<>();
             this.items = items;
 
-            NYLog.e("Check Category : "+items.toString());
+            if (items != null)NYLog.e("Check Category : "+items.toString());
 
             categoriesLinearLayout.removeAllViews();
 
             LayoutInflater allInflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View allCategoryView = allInflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
 
-            LinearLayout.LayoutParams allLayoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            allLayoutParamsAddons.setMargins(0, 0, NYHelper.integerToDP(this, 10), 0);
-            allCategoryView.setLayoutParams(allLayoutParamsAddons);
-
-            ImageView allCategoryImageView = (ImageView) allCategoryView.findViewById(R.id.category_imageView);
-            TextView allCategoryNameTextView = (TextView) allCategoryView.findViewById(R.id.category_name_textView);
-            final AppCompatCheckBox allCategoryCheckBox = (AppCompatCheckBox) allCategoryView.findViewById(R.id.category_appCompatCheckBox);
-            allCategoryNameTextView.setText("All");
-
-            allCategoryCheckBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    for (int i = 1; i < categoriesLinearLayout.getChildCount(); i++) {
-                        LinearLayout view = (LinearLayout) categoriesLinearLayout.getChildAt(i);
-
-                        ImageView imageView = (ImageView) view.getChildAt(0);
-                        TextView textView = (TextView) view.getChildAt(1);
-                        AppCompatCheckBox checkBox = (AppCompatCheckBox) view.getChildAt(2);
-
-                        if (allCategoryCheckBox.isChecked()){
-                            checkBox.setChecked(true);
-                        } else {
-                            checkBox.setChecked(false);
-                        }
-
-                    }
-                }
-            });
+            FancyButton categoryFancyButton = (FancyButton) allCategoryView.findViewById(R.id.btn_category);
+            categoryFancyButton.setText("All");
 
             // TODO: cek apakah filter semua, jika yaa cehcklist ALL 
             boolean isAll = true;
@@ -325,9 +304,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 }
             }
 
-            if (isAll) allCategoryCheckBox.setChecked(true);
-
-            //categoriesLinearLayout.addView(allCategoryView);
+            if (isAll) categoryFancyButton.setTag(new StateCategory("0", true));
             categoryFlowLayout.addView(allCategoryView);
 
             int pos = 1;
@@ -338,81 +315,158 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
 
-                ImageView categoryImageView = (ImageView) myParticipantsView.findViewById(R.id.category_imageView);
-                TextView categoryNameTextView = (TextView) myParticipantsView.findViewById(R.id.category_name_textView);
-                AppCompatCheckBox categoryCheckBox = (AppCompatCheckBox) myParticipantsView.findViewById(R.id.category_appCompatCheckBox);
-
-                categoryCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!isChecked){
-                            LinearLayout view = (LinearLayout) categoriesLinearLayout.getChildAt(0);
-                            AppCompatCheckBox checkBox = (AppCompatCheckBox) view.getChildAt(2);
-                            isSelf = false;
-                            checkBox.setChecked(false);
-                        }
-                    }
-                });
-
-                if (category.getIconImage() != null){
-                    categoryImageView.setImageBitmap(category.getIconImage());
-                } else {
-
-                }
+                FancyButton catFancyButton = (FancyButton) myParticipantsView.findViewById(R.id.btn_category);
 
                 if (NYHelper.isStringNotEmpty(category.getName())){
-                    categoryNameTextView.setText(category.getName());
-                    NYLog.e("Check Category Name : "+category.getName());
+                    catFancyButton.setText(category.getName());
                 }
-
-                categoryCheckBox.setTag(category.getId());
 
                 for (String catId : categories){
                     if (catId.equals(category.getId())){
-                        categoryCheckBox.setChecked(true);
+                        catFancyButton.setTag(new StateCategory(category.getId(), true));
                         break;
                     }
                 }
 
                 pos++;
-                //categoriesLinearLayout.addView(myParticipantsView);
                 categoryFlowLayout.addView(myParticipantsView);
-                NYLog.e("Check Category : ADDED");
-
             }
 
         } else {
             NYLog.e("Check Category : NULL");
+        }*/
+
+
+        if (items != null & items.size() > 0) {
+            this.items = new ArrayList<>();
+            this.items = items;
+
+            categoriesLinearLayout.removeAllViews();
+
+            /*LayoutInflater allInflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View allCategoryView = allInflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
+
+            FancyButton categoryFancyButton = (FancyButton) allCategoryView.findViewById(R.id.btn_category);
+            categoryFancyButton.setText("All");*/
+
+            buildLabelCategory(new Category("0","All"));
+
+            for (Category cat : items) {
+                buildLabelCategory(cat);
+            }
+
         }
 
-        facilitiesTexts = new String[]{"Dive Guide", "Food & Drinks", "Towel", "Equipment", "Transportation", "Accomodation"};
-        facilitiesDrawable = new int[]{R.drawable.ic_dive_guide_white, R.drawable.ic_food_and_drink_white, R.drawable.ic_towel_white, R.drawable.ic_equipment_white, R.drawable.ic_transportation_white, R.drawable.ic_accomodation_white};
 
-        for (int i = 0; i < facilitiesTexts.length; i++) {
-            buildLabel(i);
+        if (facilitiesItems == null) facilitiesItems = new ArrayList<>();
+        facilitiesItems.add(new StateFacility("dive_guide", "Dive Guide", false, R.drawable.ic_dive_guide_white, R.drawable.ic_dive_guide_unactive));
+        facilitiesItems.add(new StateFacility("food", "Food", false, R.drawable.ic_food_and_drink_white, R.drawable.ic_food_and_drink_unactive));
+        facilitiesItems.add(new StateFacility("towel", "Towel", false, R.drawable.ic_towel_white, R.drawable.ic_towel_unactive));
+        facilitiesItems.add(new StateFacility("dive_equipment", "Dive Equipment", false, R.drawable.ic_equipment_white, R.drawable.ic_equipment_unactive));
+        facilitiesItems.add(new StateFacility("transportation", "Transportation", false, R.drawable.ic_transportation_white, R.drawable.ic_transportation_unactive));
+        facilitiesItems.add(new StateFacility("accomodation", "Accomodation", false, R.drawable.ic_accomodation_white, R.drawable.ic_accomodation_unactive));
+
+        for (StateFacility fac : facilitiesItems) {
+            buildLabelFacility(fac);
         }
     }
 
 
-    private void buildLabel(int pos) {
-        LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
+    private void buildLabelCategory(Category category) {
 
-        LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.linearLayout);
-        ImageView categoryImageView = (ImageView) myParticipantsView.findViewById(R.id.category_imageView);
-        TextView categoryNameTextView = (TextView) myParticipantsView.findViewById(R.id.category_name_textView);
-        AppCompatCheckBox categoryCheckBox = (AppCompatCheckBox) myParticipantsView.findViewById(R.id.category_appCompatCheckBox);
+        if (category != null && NYHelper.isStringNotEmpty(category.getName())){
+            LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
 
-        linearLayout.setBackground(ContextCompat.getDrawable(this,R.drawable.ny_rectangle_orange));
-        linearLayout.setPadding((int)dpToPx(10),(int)dpToPx(10),(int)dpToPx(10),(int)dpToPx(10));
-        categoryImageView.setImageResource(facilitiesDrawable[pos]);
+            final FancyButton fbCategory = (FancyButton) myParticipantsView.findViewById(R.id.btn_category);
 
-        if (NYHelper.isStringNotEmpty(facilitiesTexts[pos])){
-            categoryNameTextView.setText(facilitiesTexts[pos]);
+            fbCategory.setText(category.getName());
+            //fbFacility.setTag(facility);
+
+            // TODO: init state facilities yang sudah dipilih
+            setViewCategory(true, category, fbCategory);
+
+            fbCategory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Category ct = (Category) fbCategory.getTag();
+                    if (ct.getId().equals("0")){
+                        //reset or select All
+
+                    } else {
+                        setViewCategory(false, null, fbCategory);
+                    }
+
+                }
+            });
+
+            categoryFlowLayout.addView(myParticipantsView);
         }
 
-        facilitiesFlowLayout.addView(myParticipantsView);
     }
+
+
+    private void setViewCategory(boolean isInit, Category category, FancyButton fancyButton){
+        Category state = new Category();
+        boolean isExist = false;
+        if (isInit == false){
+            state = (Category) fancyButton.getTag();
+            // TODO: cek dengan yang facilities yg sudah dipilih
+            for (Category cat : categoryChooseList){
+                if (cat.getId().equals(state.getId())){
+                    state = cat;
+                    isExist = true;
+                    break;
+                }
+            }
+        } else {
+            // TODO: cek dengan yang facilities yg sudah dipilih
+            for (Category cat : categoryChooseList){
+                if (cat.getId().equals(category.getId())){
+                    state = cat;
+                    isExist = true;
+                    break;
+                }
+            }
+            if(!isExist) state = category;
+        }
+
+        if ((isInit && !isExist) || isExist){
+            // TODO: state unactive
+            fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
+            fancyButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            fancyButton.setIconResource(R.drawable.ic_transportation_unactive);
+            fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
+            fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
+        } else if ((isInit && isExist) || !isExist){
+            // TODO: state active
+            fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            fancyButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
+            fancyButton.setIconResource(R.drawable.ic_transportation_white);
+            fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
+            fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey6));
+        }
+        fancyButton.setTag(state);
+
+        // TODO: isInit == false -> setOnClick
+        if(isInit == false){
+            // TODO: hilangkan di list jika isCheked = false dan tambahkan jika isCheked = true
+            if (isExist){
+                categoryChooseList.remove(state);
+            } else {
+                categoryChooseList.add(state);
+            }
+        }
+
+        // TODO: cek data di list
+        if (categoryChooseList != null && categoryChooseList.size() > 0){
+            NYLog.e("cek categories : "+categoryChooseList.toString());
+        } else{
+            NYLog.e("cek categories : NULL");
+        }
+    }
+
+
 
     private void setViewCategory(boolean isChecked, LinearLayout ll, ImageView iv, TextView tv){
         if (isChecked){
@@ -426,13 +480,104 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         }
     }
 
+    private void buildLabelFacility(StateFacility facility) {
+
+        if (facility != null && NYHelper.isStringNotEmpty(facility.getName())){
+            LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
+
+            final FancyButton fbFacility = (FancyButton) myParticipantsView.findViewById(R.id.btn_category);
+
+            fbFacility.setText(facility.getName());
+            //fbFacility.setTag(facility);
+
+            // TODO: init state facilities yang sudah dipilih
+            setViewFacility(true, facility, fbFacility);
+
+            fbFacility.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setViewFacility(false, null, fbFacility);
+                }
+            });
+
+            facilitiesFlowLayout.addView(myParticipantsView);
+        }
+
+    }
+
+    private void setViewFacility(boolean isInit, StateFacility facility, FancyButton fancyButton){
+        StateFacility state = new StateFacility();
+        if (isInit == false){
+             state = (StateFacility) fancyButton.getTag();
+        } else {
+            // TODO: cek dengan yang facilities yg sudah dipilih
+            boolean isExist = false;
+            for (StateFacility f : facilitiesChooseList){
+                if (f.getTag().equals(facility.getTag())){
+                    state = f;
+                    isExist = true;
+                    break;
+                }
+            }
+            if(!isExist) state = facility;
+        }
+
+        if ((isInit && !state.isChecked()) || state.isChecked()){
+            if (facility == null)state.setChecked(false);
+            // TODO: state unactive 
+            fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
+            fancyButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            fancyButton.setIconResource(ContextCompat.getDrawable(this, state.getUnactiveDrawable()));
+            fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
+            fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
+        } else if ((isInit && state.isChecked()) || !state.isChecked()){
+            if (facility == null)state.setChecked(true);
+            // TODO: state active 
+            fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            fancyButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
+            fancyButton.setIconResource(ContextCompat.getDrawable(this, state.getActiveDrawable()));
+            fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
+            fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey6));
+        }
+        fancyButton.setTag(state);
+
+        // TODO: isInit == false -> setOnClick
+        if(isInit == false){
+            // TODO: hilangkan di list jika isCheked = false dan tambahkan jika isCheked = true
+            boolean isExist = false;
+            for (StateFacility fac : facilitiesChooseList){
+                if (fac.getTag().equals(state.getTag())) isExist = true;
+            }
+
+            if (isExist && !state.isChecked()){
+                facilitiesChooseList.remove(state);
+            } else if (!isExist && state.isChecked()){
+                facilitiesChooseList.add(state);
+            }
+        }
+
+        // TODO: cek data di list
+        if (facilitiesChooseList != null && facilitiesChooseList.size() > 0){
+            NYLog.e("cek facilities : "+facilitiesChooseList.toString());
+        } else{
+            NYLog.e("cek facilities : NULL");
+        }
+    }
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        String data = "tes data";
+
         Intent intent = new Intent();
-        intent.putExtra("MyData", data);
+        intent.putExtra(NYHelper.SORT_BY, sortBy);
+        intent.putExtra(NYHelper.MIN_PRICE, minPrice);
+        intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
+        intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+        intent.putExtra(NYHelper.CATEGORIES, categoryChooseList.toString());
+        intent.putExtra(NYHelper.FACILITIES, facilitiesChooseList.toString());
+
         setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 
     @Override
@@ -471,6 +616,21 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
     public  void resetFilter(){
 
+        categoryFlowLayout.removeAllViews();
+        categoryChooseList = new ArrayList<>();
+
+        if (items != null & items.size() > 0) {
+            buildLabelCategory(new Category("0","All"));
+            for (Category cat : items) {
+                buildLabelCategory(cat);
+            }
+        }
+
+        facilitiesFlowLayout.removeAllViews();
+        facilitiesChooseList = new ArrayList<>();
+        for (StateFacility fac : facilitiesItems) {
+            buildLabelFacility(fac);
+        }
     }
 
 }

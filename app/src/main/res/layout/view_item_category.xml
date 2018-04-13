@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<mehdi.sakout.fancybuttons.FancyButton
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btn_category"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    fancy:fb_textGravity="center"
+    fancy:fb_iconResource="@drawable/ic_header_nyelam_white"
+    fancy:fb_borderColor="@color/ny_grey2"
+    fancy:fb_borderWidth="0.5dp"
+    fancy:fb_defaultColor="@color/white"
+    fancy:fb_focusColor="#FFB21A"
+    fancy:fb_iconPosition="left"
+    fancy:fb_radius="5dp"
+    fancy:fb_text="Category"
+    fancy:fb_textColor="@color/ny_grey2"
+    />
+
+
+<!--
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayout"
@@ -36,4 +60,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-</LinearLayout>
+</LinearLayout>-->

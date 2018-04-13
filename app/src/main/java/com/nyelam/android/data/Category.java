@@ -27,6 +27,14 @@ public class Category implements Parseable, DAODataBridge<NYCategory> {
     private String iconUrl;
     private Bitmap iconImage;
 
+    public Category (){
+    }
+
+    public Category (String id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }

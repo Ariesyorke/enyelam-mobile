@@ -6,7 +6,12 @@ import android.text.TextUtils;
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.Category;
+import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.Facilities;
+import com.nyelam.android.data.StateFacility;
+import com.nyelam.android.data.StateFacilityList;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONArray;
@@ -42,7 +47,8 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<DiveServi
     private static final String POST_CATEGORY_ID = "category_id";
     private static final String POST_ECO_TRIP = "eco_trip";
 
-    public NYDoDiveSearchServiceResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<String> categories, String priceMin, String priceMax, String isEcoTrip) {
+
+    public NYDoDiveSearchServiceResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, List<String> totalDives, String priceMin, String priceMax, String isEcoTrip) {
         super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(diverId) && !TextUtils.isEmpty(type)) {
@@ -84,8 +90,20 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<DiveServi
         }
 
         if (categories != null && categories.size() > 0){
-            for (String st : categories){
-                addQuery(POST_DIVE_CATEGORY_ID, st);
+            for (Category cat : categories){
+                if (cat != null && NYHelper.isStringNotEmpty(cat.getId()))addQuery(POST_DIVE_CATEGORY_ID, cat.getId());
+            }
+        }
+
+        if (facilityList != null && facilityList.size() > 0){
+            for (StateFacility fac : facilityList){
+                if (fac != null && NYHelper.isStringNotEmpty(fac.getTag()))addQuery(POST_FACILITIES, fac.getTag());
+            }
+        }
+
+        if (totalDives != null && totalDives.size() > 0){
+            for (String st : totalDives){
+                if (NYHelper.isStringNotEmpty(st))addQuery(POST_TOTAL_DIVES, st);
             }
         }
 

@@ -112,6 +112,7 @@ public class NYHelper {
     public static final String ORDER = "order";
     public static final String ORDER_HELPER = "order_id";
     public static final String CATEGORIES = "categories";
+    public static final String FACILITIES = "facilities";
     public static final int REQ_LOGIN = 41;
     public static final int REQ_CART_EXPIRED = 1405;
     public static final String TRANSACTION_RESPONSE = "transaction_response";
@@ -123,6 +124,11 @@ public class NYHelper {
     public static final String ACCESS_TOKEN = "access_token";
     public static final String PROFILE_PICTURE = "profile_picture";
     public static final String RESULT = "result";
+
+    public static final String SORT_BY = "sort_by";
+    public static final String MIN_PRICE = "min_price";
+    public static final String MAX_PRICE = "max_price";
+    public static final String TOTAL_DIVES = "total_dives";
 
 
     public static boolean isStringNotEmpty(String string) {
