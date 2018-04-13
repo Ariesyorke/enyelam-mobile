@@ -96,17 +96,10 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DoTripResultActivity.this, FilterListServiceActivity.class);
-                /*intent.putExtra(NYHelper.ACTIVITY, NYHelper.DOTRIP);
-                intent.putExtra(NYHelper.KEYWORD, keyword);
-                intent.putExtra(NYHelper.ID_DIVER, diverId);
-                intent.putExtra(NYHelper.DIVER, diver);
-                intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                intent.putExtra(NYHelper.SCHEDULE, date);
-                intent.putExtra(NYHelper.TYPE, type);*/
                 // TODO: kirim parameter ke filter
-                intent.putExtra(NYHelper.CATEGORIES, categoryList.toString());
-                intent.putExtra(NYHelper.FACILITIES, stateFacilityList.toString());
-                intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+                if (categoryList != null && categoryList.getList() != null && categoryList.getList().size() > 0)intent.putExtra(NYHelper.CATEGORIES, categoryList.getList().toString());
+                if (stateFacilityList != null && stateFacilityList.getList() != null && stateFacilityList.getList().size() > 0)intent.putExtra(NYHelper.FACILITIES, stateFacilityList.getList().toString());
+                if (totalDives != null && totalDives.size() > 0)intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
                 intent.putExtra(NYHelper.SORT_BY, sortingType);
                 intent.putExtra(NYHelper.MIN_PRICE, minPrice);
                 intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
@@ -136,7 +129,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         // TODO: tunggu URL dari Adam
         List<Category> lsCategory = categoryList.getList();
         List<StateFacility> lsFacilities = stateFacilityList.getList();
-        NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, String.valueOf(minPrice), String.valueOf(maxPrice), String.valueOf(0));
+        NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(0));
         spcMgr.execute(req, onSearchServiceRequest());
 
         // TODO: load data dummy, to test and waitting for API request

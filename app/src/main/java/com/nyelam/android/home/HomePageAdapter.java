@@ -32,6 +32,7 @@ import com.nyelam.android.data.ModuleEvent;
 import com.nyelam.android.data.ModuleService;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.dotrip.DoTripActivity;
 import com.nyelam.android.dotrip.DoTripDetailActivity;
@@ -399,8 +400,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     searchService.setLicense(diveService.isLicense());
                     searchService.setType(4);*/
 
-                    Intent intent = new Intent(context, DoTripDetailActivity.class);
+                    //Intent intent = new Intent(context, DoTripDetailActivity.class);
+                    Intent intent = new Intent(context, DetailServiceActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    intent.putExtra(NYHelper.IS_DO_TRIP, true);
                     context.startActivity(intent);
                 }
             });

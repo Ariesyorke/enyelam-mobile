@@ -99,6 +99,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
     // TODO: diveSpotID and Type is not used in Cart 
     private String diveSpotId;
+    protected boolean isDoTrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,6 +229,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (intent.hasExtra(NYHelper.IS_DO_TRIP)){
+                isDoTrip = extras.getBoolean(NYHelper.IS_DO_TRIP);
             }
         }
     }

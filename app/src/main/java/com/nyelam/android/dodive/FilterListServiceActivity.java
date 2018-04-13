@@ -24,13 +24,18 @@ import com.nex3z.flowlayout.FlowLayout;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Category;
+import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.Facilities;
 import com.nyelam.android.data.StateCategory;
 import com.nyelam.android.data.StateFacility;
+import com.nyelam.android.data.StateFacilityList;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dotrip.DoTripResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.storage.NYMasterDataStorage;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +49,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private NYMasterDataStorage storage;
     private LinearLayout categoriesLinearLayout;
     private boolean isSelf = false;
-    private ArrayList<String> categories;
-    protected String keyword, diverId, diver, certificate, date, type, activityName;
     private int sortBy = 0;
     private double minPrice, maxPrice;
     private boolean ecotrip;
@@ -69,10 +72,10 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         //initToolbar(false);
         getCategories();
         initControl();
+        Toast.makeText(this, "dua", Toast.LENGTH_SHORT).show();
     }
 
     private void initControl() {
-
         final RadioButton rbLowerPrice = (RadioButton) findViewById(R.id.lowerPriceRadioButton);
         final RadioButton rbHighestPrice = (RadioButton) findViewById(R.id.highestPriceRadioButton);
         rbLowerPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -94,24 +97,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 }
             }
         });
-
-
-
-
-
-        /*RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        radioGroup.check(sortBy);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                View radioButton = group.findViewById(checkedId);
-                int index = group.indexOfChild(radioButton);
-                sortBy = index;
-                Toast.makeText(FilterListServiceActivity.this, String.valueOf(sortBy), Toast.LENGTH_SHORT).show();
-            }
-
-        });*/
 
         // get seekbar from view
         final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.price_range_seekBar);
@@ -145,37 +130,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         doneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                categories = new ArrayList<String>();
-                // TODO: get id checkbox
-                for (int i = 1; i < categoriesLinearLayout.getChildCount(); i++) {
-                    LinearLayout view = (LinearLayout) categoriesLinearLayout.getChildAt(i);
-
-                    ImageView imageView = (ImageView) view.getChildAt(0);
-                    TextView textView = (TextView) view.getChildAt(1);
-                    AppCompatCheckBox checkBox = (AppCompatCheckBox) view.getChildAt(2);
-
-                    if (checkBox.isChecked()){
-                        categories.add((String) checkBox.getTag());
-                    }
-                }
-
-                Intent intent = new Intent(FilterListServiceActivity.this, DoDiveSearchResultActivity.class);
-                if (NYHelper.isStringNotEmpty(activityName) && activityName.equals(NYHelper.DOTRIP))
-                    intent = new Intent(FilterListServiceActivity.this, DoTripResultActivity.class);
-                intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
-                intent.putExtra(NYHelper.KEYWORD, keyword);
-                intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
-                intent.putExtra(NYHelper.ID_DIVER, diverId);
-                intent.putExtra(NYHelper.DIVER, diver);
-                intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                intent.putExtra(NYHelper.SCHEDULE, date);
-                intent.putExtra(NYHelper.TYPE, type);
-                intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
 
             }
         });
@@ -224,7 +178,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     }
 
     private void initExtra() {
-        categories = new ArrayList<>();
         totalDives = new ArrayList<>();
         categoryChooseList = new ArrayList<>();
         facilitiesChooseList = new ArrayList<>();
@@ -233,22 +186,52 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if(intent.hasExtra(NYHelper.ACTIVITY) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ACTIVITY))){
-                activityName = extras.getString(NYHelper.ACTIVITY);
-                Toast.makeText(this, activityName, Toast.LENGTH_SHORT).show();
-            }
-            if(intent.hasExtra(NYHelper.KEYWORD) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.KEYWORD))) keyword = extras.getString(NYHelper.KEYWORD);
-            if(intent.hasExtra(NYHelper.IS_ECO_TRIP)) ecotrip = extras.getBoolean(NYHelper.IS_ECO_TRIP);
-            if(intent.hasExtra(NYHelper.ID_DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_DIVER))) diverId = extras.getString(NYHelper.ID_DIVER);
-            if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))) diver = extras.getString(NYHelper.DIVER);
-            if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))) certificate = extras.getString(NYHelper.CERTIFICATE);
-            if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))) date = extras.getString(NYHelper.SCHEDULE);
-            if(intent.hasExtra(NYHelper.TYPE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.TYPE))){
-                type = extras.getString(NYHelper.TYPE);
+
+            if (intent.hasExtra(NYHelper.SORT_BY))sortBy = extras.getInt(NYHelper.SORT_BY);
+            if (intent.hasExtra(NYHelper.MIN_PRICE))minPrice = extras.getDouble(NYHelper.MIN_PRICE);
+            if (intent.hasExtra(NYHelper.MAX_PRICE))maxPrice = extras.getDouble(NYHelper.MAX_PRICE);
+
+            NYLog.e("filterextras sortBy : "+sortBy);
+            NYLog.e("filterextras minPrice : "+minPrice);
+            NYLog.e("filterextras maxPrice : "+maxPrice);
+
+            if (intent.hasExtra(NYHelper.TOTAL_DIVES)){
+                try {
+                    JSONArray arrayTotalDives = new JSONArray(extras.getString(NYHelper.TOTAL_DIVES));
+                    for (int i=0; i<arrayTotalDives.length(); i++) {
+                        totalDives.add(arrayTotalDives.getString(i));
+                    }
+                    NYLog.e("filterextras totalDives : "+totalDives.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
-            if(intent.hasExtra(NYHelper.CATEGORIES) && !extras.get(NYHelper.CATEGORIES).equals(null)){
-                categories = extras.getStringArrayList(NYHelper.CATEGORIES);
+            NYLog.e("filterextras categories : "+extras.getString(NYHelper.CATEGORIES));
+            NYLog.e("filterextras facilities : "+extras.getString(NYHelper.FACILITIES));
+
+            if (intent.hasExtra(NYHelper.CATEGORIES)){
+                try {
+                    JSONArray arrayCat = new JSONArray(extras.getString(NYHelper.CATEGORIES));
+                    CategoryList categoryList = new CategoryList();
+                    categoryList.parse(arrayCat);
+                    categoryChooseList = categoryList.getList();
+                    NYLog.e("filterextras categories final : "+categoryList.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (intent.hasExtra(NYHelper.FACILITIES)){
+                try {
+                    JSONArray arrayFac = new JSONArray(extras.getString(NYHelper.FACILITIES));
+                    StateFacilityList stateFacilityList = new StateFacilityList();
+                    stateFacilityList.parse(arrayFac);
+                    facilitiesChooseList = stateFacilityList.getList();
+                    NYLog.e("filterextras facilities final : "+stateFacilityList.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -272,74 +255,14 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
     @Override
     public void onDataLoaded(List<Category> items) {
+        this.items = new ArrayList<>();
+        this.items = items;
+        refreshData();
+        Toast.makeText(this, "satu", Toast.LENGTH_SHORT).show();
+    }
 
-        /*if (items != null & items.size() > 0){
-            this.items = new ArrayList<>();
-            this.items = items;
-
-            if (items != null)NYLog.e("Check Category : "+items.toString());
-
-            categoriesLinearLayout.removeAllViews();
-
-            LayoutInflater allInflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View allCategoryView = allInflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
-
-            FancyButton categoryFancyButton = (FancyButton) allCategoryView.findViewById(R.id.btn_category);
-            categoryFancyButton.setText("All");
-
-            // TODO: cek apakah filter semua, jika yaa cehcklist ALL 
-            boolean isAll = true;
-            for (Category cat : items){
-                boolean isSama = false;
-                for (String st : categories){
-                    if (cat.getId().equals(st)){
-                        isSama = true;
-                        break;
-                    }
-                }
-
-                if (!isSama){
-                    isAll = false;
-                    break;
-                }
-            }
-
-            if (isAll) categoryFancyButton.setTag(new StateCategory("0", true));
-            categoryFlowLayout.addView(allCategoryView);
-
-            int pos = 1;
-            for (Category category : items) {
-
-                int position = pos;
-
-                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
-
-                FancyButton catFancyButton = (FancyButton) myParticipantsView.findViewById(R.id.btn_category);
-
-                if (NYHelper.isStringNotEmpty(category.getName())){
-                    catFancyButton.setText(category.getName());
-                }
-
-                for (String catId : categories){
-                    if (catId.equals(category.getId())){
-                        catFancyButton.setTag(new StateCategory(category.getId(), true));
-                        break;
-                    }
-                }
-
-                pos++;
-                categoryFlowLayout.addView(myParticipantsView);
-            }
-
-        } else {
-            NYLog.e("Check Category : NULL");
-        }*/
-
-
+    public void refreshData(){
         if (items != null & items.size() > 0) {
-            this.items = new ArrayList<>();
-            this.items = items;
 
             categoriesLinearLayout.removeAllViews();
 
@@ -357,7 +280,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
         }
 
-
         if (facilitiesItems == null) facilitiesItems = new ArrayList<>();
         facilitiesItems.add(new StateFacility("dive_guide", "Dive Guide", false, R.drawable.ic_dive_guide_white, R.drawable.ic_dive_guide_unactive));
         facilitiesItems.add(new StateFacility("food", "Food", false, R.drawable.ic_food_and_drink_white, R.drawable.ic_food_and_drink_unactive));
@@ -370,7 +292,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             buildLabelFacility(fac);
         }
     }
-
 
     private void buildLabelCategory(Category category) {
 
@@ -392,11 +313,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     Category ct = (Category) fbCategory.getTag();
                     if (ct.getId().equals("0")){
                         //reset or select All
-
                     } else {
                         setViewCategory(false, null, fbCategory);
                     }
-
                 }
             });
 
@@ -463,20 +382,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             NYLog.e("cek categories : "+categoryChooseList.toString());
         } else{
             NYLog.e("cek categories : NULL");
-        }
-    }
-
-
-
-    private void setViewCategory(boolean isChecked, LinearLayout ll, ImageView iv, TextView tv){
-        if (isChecked){
-            ll.setBackground(ContextCompat.getDrawable(this, R.drawable.ny_rectangle_orange));
-            iv.setImageResource(R.drawable.ic_header_nyelam_white);
-            tv.setTextColor(ContextCompat.getColor(this, R.color.colorWhite));
-        } else {
-            ll.setBackground(ContextCompat.getDrawable(this, R.drawable.ny_rectangle_transparant_grey_border));
-            iv.setImageResource(R.drawable.ic_header_nyelam_white);
-            tv.setTextColor(ContextCompat.getColor(this, R.color.ny_grey8));
         }
     }
 
