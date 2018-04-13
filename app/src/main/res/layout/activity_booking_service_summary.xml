@@ -223,8 +223,8 @@
                         android:layout_weight="1"
                         android:text="@string/service_name"
                         android:textColor="@color/ny_black1"
-                        android:textSize="22sp"
-                        app:fontTextStyle="mediumItalic" />
+                        android:textSize="24sp"
+                        app:fontTextStyle="medium" />
                 </LinearLayout>
 
 
@@ -339,7 +339,7 @@
                         android:text="@string/customer_name"
                         android:textColor="@color/ny_black1"
                         android:textSize="16sp"
-                        app:fontTextStyle="mediumItalic" />
+                        app:fontTextStyle="medium" />
 
                     <com.nyelam.android.view.font.NYTextView
                         android:id="@+id/change_contact_textView"

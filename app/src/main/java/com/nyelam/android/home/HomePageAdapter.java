@@ -405,6 +405,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     Intent intent = new Intent(context, DetailServiceActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     intent.putExtra(NYHelper.IS_DO_TRIP, true);
+
+                    if (diveService != null ) intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    intent.putExtra(NYHelper.DIVER, "1");
+                    if (diveService.getSchedule() != null)intent.putExtra(NYHelper.SCHEDULE, String.valueOf(diveService.getSchedule().getStartDate()));
+                    intent.putExtra(NYHelper.CERTIFICATE, diveService.isLicense());
+                    if (diveService.getDiveCenter() != null) {
+                        intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
+                    }
+
                     context.startActivity(intent);
                 }
             });

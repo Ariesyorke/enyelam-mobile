@@ -593,22 +593,29 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
             TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
-            TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
+            LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
             TextView wordingTextView = (TextView) myParticipantsView.findViewById(R.id.wording_textView  );
             LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
             if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
-                if (NYHelper.isStringNotEmpty(participant.getName())) nameTextView.setText(participant.getName());
-                changeTextView.setVisibility(View.VISIBLE);
+                if (NYHelper.isStringNotEmpty(participant.getName())){
+                    nameTextView.setText(participant.getName());
+                    wordingTextView.setText(getResources().getString(R.string.change));
+                } else {
+                    nameTextView.setText("Diver "+String.valueOf(position+1));
+                    wordingTextView.setText(getResources().getString(R.string.fill_in));
+                }
+                linearLayout.setVisibility(View.VISIBLE);
             } else {
-                nameTextView.setText("Participant "+String.valueOf(position+1));
+                nameTextView.setText("Diver "+String.valueOf(position+1));
+                wordingTextView.setText(getResources().getString(R.string.fill_in));
                 fillLinearLayout.setVisibility(View.VISIBLE);
             }
 
             if (participant != null && NYHelper.isStringNotEmpty(participant.getEmail())) {
                 if (NYHelper.isStringNotEmpty(participant.getEmail())) emailTextView.setText(participant.getEmail());
             } else {
-                emailTextView.setText("Email");
+                emailTextView.setText("diver"+String.valueOf(position+1)+"@email.com");
             }
 
             if (participant != null){
@@ -616,7 +623,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             } else {
                 wordingTextView.setText(getString(R.string.fill_in));
             }
-            changeTextView.setOnClickListener(new View.OnClickListener() {
+
+            linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(BookingServiceActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();

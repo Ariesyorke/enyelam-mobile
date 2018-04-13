@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -80,6 +81,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private Switch divingLicenseSwitch;
     private TextView divingLicenseTextView;
     private LinearLayout divingLicenseLinearLayout;
+    private ScrollView scrollView;
 //    private Calendar c;
 
     //suggestion
@@ -166,6 +168,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
             @Override
@@ -175,6 +178,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
         }));
 
@@ -627,6 +631,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     private void initView(View v) {
+
+        scrollView = (ScrollView) v.findViewById(R.id.scrollView);
         keywordTextView = (com.nyelam.android.view.font.NYTextView) v.findViewById(R.id.keyword_textView);
         //diverTextView = (TextView) v.findViewById(R.id.diver_textView);
         diverSpinner = (Spinner) v.findViewById(R.id.diver_spinner);

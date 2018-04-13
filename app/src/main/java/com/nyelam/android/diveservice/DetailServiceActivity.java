@@ -38,6 +38,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
 import com.nyelam.android.http.NYDoDiveServiceCartRequest;
+import com.nyelam.android.http.NYDoTripDetailServiceRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
@@ -83,7 +84,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
     private boolean mProtectFromPagerChange = false;
     private String serviceId;
     protected DiveService diveService, newDiveService;
-    //protected DiveSpot diveSpot;
     protected String diver;
     protected String schedule;
     protected String certificate;
@@ -180,6 +180,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
+
+            if (intent.hasExtra(NYHelper.IS_DO_TRIP)){
+                isDoTrip = extras.getBoolean(NYHelper.IS_DO_TRIP);
+            }
+
             if (intent.hasExtra(NYHelper.DIVE_CENTER)) {
                 try {
                     JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.DIVE_CENTER));
@@ -209,11 +214,18 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
             // TODO: title (tanggal + jumlah)
             if (NYHelper.isStringNotEmpty(diver) && NYHelper.isStringNotEmpty(schedule)){
-                if (Integer.valueOf(diver) > 1){
-                    titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax(s)");
-                } else {
-                    titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax");
+
+                if (isDoTrip){
+                    titleTextView.setText(getResources().getString(R.string.do_trip));
+                } else{
+                    if (Integer.valueOf(diver) > 1){
+                        titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax(s)");
+                    } else {
+                        titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax");
+                    }
                 }
+
+
                 int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
                 toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
             }
@@ -231,16 +243,19 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 }
             }
 
-            if (intent.hasExtra(NYHelper.IS_DO_TRIP)){
-                isDoTrip = extras.getBoolean(NYHelper.IS_DO_TRIP);
-            }
         }
     }
 
     private void initRequest() {
         if (diveService != null && !TextUtils.isEmpty(diveService.getId())){
-            NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, diveService.getId(), diver, certificate, schedule);
-            spcMgr.execute(req, onGetDetailServiceRequest());
+            if (isDoTrip){
+                NYDoTripDetailServiceRequest req = new NYDoTripDetailServiceRequest(DetailServiceActivity.this, diveService.getId(), diver, certificate, schedule);
+                spcMgr.execute(req, onGetDetailServiceRequest());
+            } else {
+                NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, diveService.getId(), diver, certificate, schedule);
+                spcMgr.execute(req, onGetDetailServiceRequest());
+            }
+
         }
     }
 

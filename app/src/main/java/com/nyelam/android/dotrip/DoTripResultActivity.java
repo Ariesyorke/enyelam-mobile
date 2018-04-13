@@ -112,18 +112,18 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         progressBar.setVisibility(View.VISIBLE);
 
         // TODO: buat service request dan ganti URL untuk DoTrip
-        String apiPath = getString(R.string.api_path_dodive_service_list);
+        String apiPath = getString(R.string.api_path_dotrip_service_list);
 
         if (NYHelper.isStringNotEmpty(type) && type.equals("1")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_divespot);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_divespot);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_category);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_category);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("3")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_divecenter);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("5")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_province);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_province);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("6")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_city);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_city);
         }
 
         // TODO: tunggu URL dari Adam

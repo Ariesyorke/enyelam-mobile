@@ -93,7 +93,6 @@ public class DoTripActivity extends AppCompatActivity implements
         initAdapter();
     }
 
-
     private void initAdapter() {
         List<String> divers = new ArrayList<>();
         for (int i=1; i <= 10; i++){
