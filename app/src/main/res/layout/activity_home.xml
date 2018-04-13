@@ -128,14 +128,14 @@
                         <!--app:tabItemText="Search"-->
                         <!--app:tabSrcIcon="@drawable/ic_social_normal"/>-->
 
-                    <!--<com.nyelam.android.view.NYHomepageTabItemView-->
-                        <!--android:id="@+id/my_account_tab"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_weight="1"-->
-                        <!--app:tabItemPosition="my_account"-->
-                        <!--app:tabItemText="Profile"-->
-                        <!--app:tabSrcIcon="@drawable/ic_user_normal"/>-->
+                    <com.nyelam.android.view.NYHomepageTabItemView
+                        android:id="@+id/my_account_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="my_account"
+                        app:tabItemText="Profile"
+                        app:tabSrcIcon="@drawable/ic_user_normal"/>
 
                 </LinearLayout>
 
