@@ -56,6 +56,19 @@
                                 android:textSize="24sp"
                                 app:fontTextStyle="semiBold" />
 
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:visibility="gone"
+                                android:id="@+id/schedule_textView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/padding_half"
+                                android:text="-"
+                                android:textColor="@color/ny_black2"
+                                android:textSize="18sp"
+                                app:fontTextStyle="reguler" />
+
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

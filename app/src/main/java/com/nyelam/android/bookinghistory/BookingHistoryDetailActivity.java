@@ -407,14 +407,14 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
                         TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
                         TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
-                        TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
+                        LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
                         LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
                         if (participant != null) {
                             if (NYHelper.isStringNotEmpty(participant.getName())) {
                                 nameTextView.setText(participant.getName());
                             } else {
-                                nameTextView.setText("Participant " + String.valueOf(position + 1));
+                                nameTextView.setText("Diver " + String.valueOf(position + 1));
                             }
 
                             if (NYHelper.isStringNotEmpty(participant.getEmail())) {
@@ -423,12 +423,12 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                                 emailTextView.setText("-");
                             }
 
-                            changeTextView.setVisibility(View.GONE);
+                            linearLayout.setVisibility(View.GONE);
                             fillLinearLayout.setVisibility(View.GONE);
                         } else {
-                            nameTextView.setText("Participant " + String.valueOf(position + 1));
+                            nameTextView.setText("Diver " + String.valueOf(position + 1));
                             emailTextView.setText("-");
-                            changeTextView.setVisibility(View.GONE);
+                            linearLayout.setVisibility(View.GONE);
                             fillLinearLayout.setVisibility(View.GONE);
                         }
 

@@ -180,6 +180,7 @@
 
     <!--MENU-->
     <string name="do_dive">Do Dive</string>
+    <string name="do_trip">Do Trip</string>
     <string name="do_course">Do Course</string>
     <string name="do_shop">Do Shop</string>
     <string name="do_together">Do Together</string>

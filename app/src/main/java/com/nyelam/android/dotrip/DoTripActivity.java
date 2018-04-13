@@ -93,7 +93,6 @@ public class DoTripActivity extends AppCompatActivity implements
         initAdapter();
     }
 
-
     private void initAdapter() {
         List<String> divers = new ArrayList<>();
         for (int i=1; i <= 10; i++){
@@ -339,7 +338,8 @@ public class DoTripActivity extends AppCompatActivity implements
                         startActivity(intent);
                     } else if (type.equals("4") ){
 
-                        intent = new Intent(getApplicationContext(), DoTripDetailActivity.class);
+                        intent = new Intent(getApplicationContext(), DetailServiceActivity.class);
+                        //intent = new Intent(getApplicationContext(), DoTripDetailActivity.class);
 
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);

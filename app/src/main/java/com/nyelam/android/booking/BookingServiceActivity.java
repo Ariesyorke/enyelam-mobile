@@ -412,28 +412,26 @@ public class BookingServiceActivity extends BasicActivity {
 
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
             TextView emailTextView = (TextView) myParticipantsView.findViewById(R.id.email_textView);
-            TextView changeTextView = (TextView) myParticipantsView.findViewById(R.id.change_textView);
+            LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
             LinearLayout fillLinearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.fill_linearLayout);
 
             if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
                 if (NYHelper.isStringNotEmpty(participant.getName())) nameTextView.setText(participant.getName());
-                changeTextView.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
             } else {
-                nameTextView.setText("Participant "+String.valueOf(position+1));
-                fillLinearLayout.setVisibility(View.VISIBLE);
+                nameTextView.setText("Diver "+String.valueOf(position+1));
+                linearLayout.setVisibility(View.VISIBLE);
             }
 
             if (participant != null && NYHelper.isStringNotEmpty(participant.getEmail())) {
                 if (NYHelper.isStringNotEmpty(participant.getEmail())) emailTextView.setText(participant.getEmail());
             } else {
-                emailTextView.setText("Email");
+                emailTextView.setText("diver"+String.valueOf(position+1)+"@email.com");
             }
 
-            changeTextView.setOnClickListener(new View.OnClickListener() {
+            linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    //Toast.makeText(BookingServiceActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(BookingServiceActivity.this, BookingServiceParticipantActivity.class);
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());

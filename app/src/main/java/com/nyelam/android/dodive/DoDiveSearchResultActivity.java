@@ -153,9 +153,9 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         if(getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
             int ecoTrip = getIntent().getIntExtra(NYHelper.IS_ECO_TRIP, 1);
             ecotrip = true;
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, String.valueOf(minPrice), String.valueOf(maxPrice), String.valueOf(ecoTrip));
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(ecoTrip));
         } else {
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, String.valueOf(minPrice), String.valueOf(maxPrice), String.valueOf(0));
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(0));
         }
 
         spcMgr.execute(req, onSearchServiceRequest());

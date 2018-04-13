@@ -30,6 +30,7 @@ import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Facilities;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.data.Schedule;
 import com.nyelam.android.dodive.DoDiveDiveServiceSuggestionAdapter;
 import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
@@ -53,7 +54,7 @@ public class DetailServiceFragment extends Fragment {
     private ProgressBar progressBar;
     private RatingBar ratingBar;
     private ImageView diveCenterImageView;
-    private TextView titleTextView, diveCenterNameTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
+    private TextView titleTextView, scheduleTextView, diveCenterNameTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
     private TextView ratingTextView, visitedTextView, categoryTextView;
     private TextView addressTextView, phoneNumberTextView;
     private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView;
@@ -108,6 +109,7 @@ public class DetailServiceFragment extends Fragment {
         diveCenterImageView = (ImageView) v.findViewById(R.id.dive_center_imageView);
 
         titleTextView = (TextView) v.findViewById(R.id.title_textView);
+        scheduleTextView = (TextView) v.findViewById(R.id.schedule_textView);
         diveCenterNameTextView = (TextView) v.findViewById(R.id.dive_center_name_textView);
         diveSpotsTextView = (TextView) v.findViewById(R.id.dive_spots_textView);
         ratingTextView = (TextView) v.findViewById(R.id.rating_textView);
@@ -163,6 +165,14 @@ public class DetailServiceFragment extends Fragment {
                 titleTextView.setText(service.getName()+" / "+String.valueOf(service.getDays())+days);
             }
 
+            if (service.getSchedule() != null){
+                Schedule schedule = service.getSchedule();
+                String fromDate = NYHelper.setMillisToDateMonth(schedule.getStartDate());
+                String endDate = NYHelper.setMillisToDateMonth(schedule.getEndDate());
+                scheduleTextView.setText(fromDate+" - "+endDate);
+                scheduleTextView.setVisibility(View.VISIBLE);
+            }
+
             if (service.getDiveSpots() != null && service.getDiveSpots().size() > 0 ){
                 String diveSpotsText = "";
                 int pos = 1;
@@ -185,7 +195,6 @@ public class DetailServiceFragment extends Fragment {
 
             totalDivesTextView.setText(": "+String.valueOf(service.getTotalDives()));
             //totalDiveSpotsTextView.setText(": "+String.valueOf(service.getTotalDiveSpots()));
-
 
             totalDiveSpotsTextView.setText(": 0");
             if (service.getDiveSpots() != null)totalDiveSpotsTextView.setText(": "+String.valueOf(service.getDiveSpots().size()));

@@ -43,6 +43,7 @@
         android:layout_height="1dp"/>-->
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:isScrollContainer="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

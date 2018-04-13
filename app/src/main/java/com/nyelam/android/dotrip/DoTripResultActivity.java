@@ -96,17 +96,10 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DoTripResultActivity.this, FilterListServiceActivity.class);
-                /*intent.putExtra(NYHelper.ACTIVITY, NYHelper.DOTRIP);
-                intent.putExtra(NYHelper.KEYWORD, keyword);
-                intent.putExtra(NYHelper.ID_DIVER, diverId);
-                intent.putExtra(NYHelper.DIVER, diver);
-                intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                intent.putExtra(NYHelper.SCHEDULE, date);
-                intent.putExtra(NYHelper.TYPE, type);*/
                 // TODO: kirim parameter ke filter
-                intent.putExtra(NYHelper.CATEGORIES, categoryList.toString());
-                intent.putExtra(NYHelper.FACILITIES, stateFacilityList.toString());
-                intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+                if (categoryList != null && categoryList.getList() != null && categoryList.getList().size() > 0)intent.putExtra(NYHelper.CATEGORIES, categoryList.getList().toString());
+                if (stateFacilityList != null && stateFacilityList.getList() != null && stateFacilityList.getList().size() > 0)intent.putExtra(NYHelper.FACILITIES, stateFacilityList.getList().toString());
+                if (totalDives != null && totalDives.size() > 0)intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
                 intent.putExtra(NYHelper.SORT_BY, sortingType);
                 intent.putExtra(NYHelper.MIN_PRICE, minPrice);
                 intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
@@ -119,24 +112,24 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         progressBar.setVisibility(View.VISIBLE);
 
         // TODO: buat service request dan ganti URL untuk DoTrip
-        String apiPath = getString(R.string.api_path_dodive_service_list);
+        String apiPath = getString(R.string.api_path_dotrip_service_list);
 
         if (NYHelper.isStringNotEmpty(type) && type.equals("1")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_divespot);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_divespot);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("2")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_category);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_category);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("3")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_divecenter);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("5")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_province);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_province);
         } else if (NYHelper.isStringNotEmpty(type) && type.equals("6")){
-            apiPath = getString(R.string.api_path_dodive_search_service_by_city);
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_city);
         }
 
         // TODO: tunggu URL dari Adam
         List<Category> lsCategory = categoryList.getList();
         List<StateFacility> lsFacilities = stateFacilityList.getList();
-        NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, String.valueOf(minPrice), String.valueOf(maxPrice), String.valueOf(0));
+        NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(0));
         spcMgr.execute(req, onSearchServiceRequest());
 
         // TODO: load data dummy, to test and waitting for API request
