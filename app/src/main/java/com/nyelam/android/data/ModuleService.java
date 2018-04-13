@@ -13,6 +13,7 @@ import java.util.List;
  */
 
 public class ModuleService extends Module implements Parseable {
+    private static final String KEY_TRIPS = "trips";
     protected List<DiveService> diveServices;
 
 
@@ -37,9 +38,9 @@ public class ModuleService extends Module implements Parseable {
         } catch (JSONException e){e.printStackTrace();}
 
         try {
-            if(!obj.isNull(KEY_DIVE_SERVICES)) {
+            if(!obj.isNull(KEY_TRIPS)) {
                 diveServices = new ArrayList<>();
-                JSONArray array = obj.getJSONArray(KEY_DIVE_SERVICES);
+                JSONArray array = obj.getJSONArray(KEY_TRIPS);
                 for(int i = 0; i < array.length(); i++) {
                     JSONObject o = array.getJSONObject(i);
                     DiveService diveService = new DiveService();
@@ -74,9 +75,9 @@ public class ModuleService extends Module implements Parseable {
                     JSONObject o = new JSONObject(a.toString());
                     array.put(o);
                 }
-                obj.put(KEY_DIVE_SERVICES, array);
+                obj.put(KEY_TRIPS, array);
             } else  {
-                obj.put(KEY_DIVE_SERVICES, JSONObject.NULL);
+                obj.put(KEY_TRIPS, JSONObject.NULL);
             }
         } catch (JSONException e){e.printStackTrace();}
 

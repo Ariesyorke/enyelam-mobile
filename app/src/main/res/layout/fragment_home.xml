@@ -147,16 +147,17 @@
                                     android:src="@drawable/ic_home_menu_do_dive" />
                             </LinearLayout>
 
-                            <TextView
+                            <com.nyelam.android.view.font.NYTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/padding_half"
                                 android:gravity="center"
                                 android:text="@string/do_dive"
-                                android:textColor="@color/ny_grey2"
+                                android:textColor="@color/ny_black2"
                                 android:textSize="16sp"
-                                android:textStyle="italic|bold" />
+                                android:textStyle="bold"
+                                app:fontTextStyle="semiBold"/>
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
@@ -197,16 +198,16 @@
                                     android:src="@drawable/ic_home_menu_ecotrip" />
                             </LinearLayout>
 
-                            <TextView
+                            <com.nyelam.android.view.font.NYTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/padding_half"
                                 android:gravity="center"
                                 android:text="@string/eco_trip"
-                                android:textColor="@color/ny_grey2"
+                                android:textColor="@color/ny_black2"
                                 android:textSize="16sp"
-                                android:textStyle="italic|bold" />
+                                app:fontTextStyle="semiBold" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
@@ -248,7 +249,8 @@
                                 android:layout_width="45dp"
                                 android:layout_height="45dp"
                                 android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
+                                android:gravity="center"
+                                android:paddingTop="3dp">
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -256,16 +258,16 @@
                                     android:src="@drawable/ic_home_menu_do_shop" />
                             </LinearLayout>
 
-                            <TextView
+                            <com.nyelam.android.view.font.NYTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/padding_half"
                                 android:gravity="center"
                                 android:text="@string/do_shop"
-                                android:textColor="@color/ny_grey2"
+                                android:textColor="@color/ny_black2"
                                 android:textSize="16sp"
-                                android:textStyle="italic|bold" />
+                                app:fontTextStyle="semiBold" />
                         </LinearLayout>
 
                         <RelativeLayout
@@ -313,16 +315,16 @@
                                     android:src="@drawable/ic_home_menu_do_course" />
                             </LinearLayout>
 
-                            <TextView
+                            <com.nyelam.android.view.font.NYTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/padding_half"
                                 android:gravity="center"
                                 android:text="@string/do_course"
-                                android:textColor="@color/ny_grey2"
+                                android:textColor="@color/ny_black2"
                                 android:textSize="16sp"
-                                android:textStyle="italic|bold" />
+                                app:fontTextStyle="semiBold" />
                         </LinearLayout>
 
                         <RelativeLayout

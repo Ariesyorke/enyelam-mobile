@@ -24,7 +24,6 @@ public class VeritransNotificationRequest extends DJSONRequest<Boolean> {
     @Override
     protected Boolean onProcessData(byte[] data) throws Exception {
         String response = new String(data);
-        NYLog.e("RESPONSE : "+ response);
         return true;
     }
 

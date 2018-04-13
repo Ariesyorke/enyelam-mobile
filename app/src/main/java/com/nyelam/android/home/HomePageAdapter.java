@@ -378,6 +378,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
 
             twoWayView = itemView.findViewById(R.id.two_way_view);
+            twoWayView.setItemMargin(20);
             twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
             this.context = context;
             adapter = new HotOffersAdapter();
@@ -671,8 +672,6 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         containerLinaerLayout.setBackgroundDrawable(gd);
                     } else {
-                        NYLog.e("CONTAINER LAYOUT " + containerLinaerLayout);
-                        NYLog.e("GRADIEND " + gd);
                         containerLinaerLayout.setBackground(gd);
                     }
 

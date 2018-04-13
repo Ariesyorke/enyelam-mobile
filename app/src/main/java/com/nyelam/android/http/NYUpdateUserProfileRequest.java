@@ -84,7 +84,6 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
 
 
 
-
         if(currentCountry != null && NYHelper.isStringNotEmpty(currentCountry.getId())) {
             addQuery(POST_COUNTRY_ID, currentCountry.getId());
         }
