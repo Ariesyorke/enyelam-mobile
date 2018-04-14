@@ -75,6 +75,8 @@ public class DoTripActivity extends AppCompatActivity implements
     private Switch divingLicenseSwitch;
     private TextView divingLicenseTextView;
     private LinearLayout divingLicenseLinearLayout;
+    private  int pickedMonth = -1;
+    private  int pickedYear = -1;
     //private Calendar c;
 
     //suggestion
@@ -179,6 +181,11 @@ public class DoTripActivity extends AppCompatActivity implements
                 setDivingLicense(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
             }
 
+            if (intent.hasExtra(NYHelper.PICKED_YEAR)) {
+                pickedYear = intent.getIntExtra(NYHelper.PICKED_YEAR, -1);
+            } else if (intent.hasExtra(NYHelper.PICKED_MONTH)) {
+                pickedMonth = intent.getIntExtra(NYHelper.PICKED_MONTH, -1);
+            }
             if (intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.SCHEDULE))){
                 Calendar c = Calendar.getInstance();
                 date = intent.getStringExtra(NYHelper.SCHEDULE);
@@ -321,10 +328,12 @@ public class DoTripActivity extends AppCompatActivity implements
 
                     // TODO: ganti fragment yg dulu activity & yg dulu EXTRA sekarang BUNDLE
                     Intent intent;
-                    if (type.equals("3")){
+                    if (type.equals("3")) {
                         intent = new Intent(getApplicationContext(), DoTripResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
+                        intent.putExtra(NYHelper.PICKED_MONTH, pickedMonth);
+                        intent.putExtra(NYHelper.PICKED_YEAR, pickedYear);
                         intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                         intent.putExtra(NYHelper.KEYWORD, keyword);
                         intent.putExtra(NYHelper.ID_DIVER, diverId);
@@ -347,6 +356,8 @@ public class DoTripActivity extends AppCompatActivity implements
 
                         DiveService diveService = new DiveService();
                         diveService.setId(diverId);
+                        intent.putExtra(NYHelper.PICKED_MONTH, pickedMonth);
+                        intent.putExtra(NYHelper.PICKED_YEAR, pickedYear);
                         intent.putExtra(NYHelper.SERVICE, diveService.toString());
                         intent.putExtra(NYHelper.KEYWORD, keyword);
                         intent.putExtra(NYHelper.ID_DIVER, diverId);
@@ -364,6 +375,8 @@ public class DoTripActivity extends AppCompatActivity implements
                         intent = new Intent(getApplicationContext(), DoTripResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
+                        intent.putExtra(NYHelper.PICKED_MONTH, pickedMonth);
+                        intent.putExtra(NYHelper.PICKED_YEAR, pickedYear);
                         intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                         intent.putExtra(NYHelper.KEYWORD, keyword);
                         intent.putExtra(NYHelper.ID_DIVER, diverId);
@@ -380,6 +393,8 @@ public class DoTripActivity extends AppCompatActivity implements
                         intent = new Intent(getApplicationContext(), DoTripResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
+                        intent.putExtra(NYHelper.PICKED_MONTH, pickedMonth);
+                        intent.putExtra(NYHelper.PICKED_YEAR, pickedYear);
                         intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                         intent.putExtra(NYHelper.KEYWORD, keyword);
                         intent.putExtra(NYHelper.ID_DIVER, diverId);
@@ -496,35 +511,30 @@ public class DoTripActivity extends AppCompatActivity implements
             }
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
-        builder.setActivatedMonth(Calendar.JULY)
-                .setMinYear(year)
-                .setActivatedYear(year)
+        if (pickedMonth < 0 && pickedYear < 0) {
+
+            Calendar calendar = Calendar.getInstance();
+            int m = calendar.get(Calendar.MONTH);
+            builder.setActivatedMonth(NYHelper.getMonth(m));
+            builder.setActivatedYear(year);
+        } else {
+            builder.setActivatedMonth(pickedMonth);
+            builder.setActivatedYear(pickedYear);
+        }
+        builder.setMinYear(year)
                 .setMaxYear(year+2)
                 .setMinMonth(month+1)
                 .setTitle("Select Schedule")
                 .setMonthRange(Calendar.JANUARY, Calendar.DECEMBER)
-                // .setMaxMonth(Calendar.OCTOBER)
-                // .setYearRange(1890, 1890)
-                //.setMonthAndYearRange(Calendar.FEBRUARY, Calendar.DECEMBER, 2018, 2020)
+
                 .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
                     @Override
                     public void onMonthChanged(int selectedMonth) {
-                        //Log.d(TAG, "Selected month : " + selectedMonth);
-                        Toast.makeText(DoTripActivity.this, " Selected month : " + selectedMonth, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
                     @Override
                     public void onYearChanged(int selectedYear) {
-                        //Log.d(TAG, "Selected year : " + selectedYear);
-                        Toast.makeText(DoTripActivity.this, " Selected year : " + selectedYear, Toast.LENGTH_SHORT).show();
-                        if (selectedYear == 2018){
-                            builder.setMonthRange(Calendar.APRIL, Calendar.DECEMBER);
-                            builder.build();
-                        } else {
-                            builder.setMonthRange(Calendar.JANUARY, Calendar.DECEMBER);
-                            builder.build();
-                        }
                     }
                 })
                 .build()
@@ -540,11 +550,8 @@ public class DoTripActivity extends AppCompatActivity implements
         int y = cal.get(Calendar.YEAR);
         int m = cal.get(Calendar.MONTH);
         int d = cal.get(Calendar.DAY_OF_MONTH);
-
         date = String.valueOf(cal.getTimeInMillis()/1000);
         datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
-
-        Toast.makeText(application, "my date : "+date, Toast.LENGTH_SHORT).show();
     }
 
     public void setDivingLicense(boolean isTrue){
@@ -583,15 +590,16 @@ public class DoTripActivity extends AppCompatActivity implements
         int yearNow = today.get(Calendar.YEAR);
         int monthNow = today.get(Calendar.MONTH);
         int dateNow = today.get(Calendar.DAY_OF_MONTH);
-
+        pickedMonth = selectedMonth;
+        pickedYear = selectedYear;
         if (monthNow == selectedMonth && yearNow == selectedYear){
-            Calendar c = Calendar.getInstance();
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
             c.set(selectedYear, selectedMonth,dateNow);
-            date = String.valueOf(c.getTimeInMillis());
+            date = String.valueOf(c.getTimeInMillis()/1000);
         } else {
-            Calendar c = Calendar.getInstance();
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
             c.set(selectedYear, selectedMonth,1);
-            date = String.valueOf(c.getTimeInMillis());
+            date = String.valueOf(c.getTimeInMillis()/1000);
         }
 
         if (date != null)NYLog.e("CEK SCHEDULE : "+date);

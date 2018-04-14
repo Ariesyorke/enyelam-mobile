@@ -104,6 +104,8 @@ public class NYHelper {
     public static final String ORDER_RETURN = "order_return";
     public static final String BANK_TRANSFER = "bank_transfer";
     public static final String MIDTRANS = "midtrans";
+    public static final String PICKED_MONTH = "picked_month";
+    public static final String PICKED_YEAR = "picked_year";
 
     public static final String NY_ACCEPT_FRAUD_STATUS = "accept";
     public static final String NY_CHALLENGE_FRAUD_STATUS = "challenge";
@@ -564,6 +566,36 @@ public class NYHelper {
     }
 
 
+    public static int getMonth(int month) {
+        switch (month) {
+            case 0:
+                return Calendar.JANUARY;
+            case 1:
+                return Calendar.FEBRUARY;
+            case 2:
+                return Calendar.MARCH;
+            case 3:
+                return Calendar.APRIL;
+            case 4:
+                return Calendar.MAY;
+            case 5:
+                return Calendar.JUNE;
+            case 6:
+                return Calendar.JULY;
+            case 7:
+                return Calendar.AUGUST;
+            case 8:
+                return Calendar.SEPTEMBER;
+            case 9:
+                return Calendar.OCTOBER;
+            case 10:
+                return Calendar.NOVEMBER;
+            case 11:
+                return Calendar.DECEMBER;
+            default:
+                return Calendar.JANUARY;
+        }
+    }
     public static Bitmap stringToBitmap(String previouslyEncodedImage){
         byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
