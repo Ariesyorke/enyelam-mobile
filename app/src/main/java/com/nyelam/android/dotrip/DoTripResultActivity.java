@@ -27,6 +27,7 @@ import com.nyelam.android.dodive.FilterListServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
+import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
@@ -129,7 +130,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         // TODO: tunggu URL dari Adam
         List<Category> lsCategory = categoryList.getList();
         List<StateFacility> lsFacilities = stateFacilityList.getList();
-        NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(0));
+        NYDoTripSearchServiceResultRequest req = new NYDoTripSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice);
         spcMgr.execute(req, onSearchServiceRequest());
 
         // TODO: load data dummy, to test and waitting for API request

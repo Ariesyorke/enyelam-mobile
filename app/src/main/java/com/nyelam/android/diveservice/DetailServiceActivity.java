@@ -113,10 +113,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
         initControl();
     }
 
-    public DiveService getDiveService() {
-        return newDiveService;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == NYHelper.LOGIN_REQ) {
@@ -168,7 +164,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
         try {
-            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, diveCenter.getId());
+            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId());
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -244,6 +240,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
             }
 
         }
+
+        //Toast.makeText(this, diveService.getId()+" - "+diveCenter.getId(), Toast.LENGTH_SHORT).show();
     }
 
     private void initRequest() {
@@ -655,4 +653,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
         DiveSpotPickerFragment fragment = DiveSpotPickerFragment.newInstance();
         fragment.show(getSupportFragmentManager().beginTransaction(), fragment.getTag());
     }
+
+    protected DiveService getDiveService(){
+        if (newDiveService != null){
+            return newDiveService;
+        } else {
+            return diveService;
+        }
+    }
+
 }

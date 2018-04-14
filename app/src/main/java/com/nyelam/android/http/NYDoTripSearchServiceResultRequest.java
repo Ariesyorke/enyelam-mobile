@@ -5,7 +5,10 @@ import android.text.TextUtils;
 
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.Category;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.StateFacility;
+import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,7 +21,7 @@ import java.util.List;
 
 public class NYDoTripSearchServiceResultRequest extends NYBasicRequest<DiveServiceList> {
 
-    private static final String KEY_DIVE_SERVICE = "dive_services";
+    private static final String KEY_DIVE_SERVICE = "trips";
 
     private static final String POST_PAGE = "page";
 
@@ -40,7 +43,7 @@ public class NYDoTripSearchServiceResultRequest extends NYBasicRequest<DiveServi
     private static final String POST_CATEGORY_ID = "category_id";
     private static final String POST_ECO_TRIP = "eco_trip";
 
-    public NYDoTripSearchServiceResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<String> categories, String priceMin, String priceMax, String isEcoTrip) {
+    public NYDoTripSearchServiceResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, List<String> totalDives, Double priceMin, Double priceMax) {
         super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(diverId) && !TextUtils.isEmpty(type)) {
@@ -73,21 +76,43 @@ public class NYDoTripSearchServiceResultRequest extends NYBasicRequest<DiveServi
             addQuery(POST_DATE, date);
         }
 
-        if(!TextUtils.isEmpty(priceMin)) {
-            addQuery(POST_PRICE_MIN, priceMin);
+        if(priceMin != null) {
+            addQuery(POST_PRICE_MIN, String.valueOf(priceMin));
         }
 
-        if(!TextUtils.isEmpty(priceMax)) {
-            addQuery(POST_PRICE_MAX, priceMax);
+        if(priceMax != null) {
+            addQuery(POST_PRICE_MAX, String.valueOf(priceMax));
+        }
+
+        if (categories != null && categories.size() > 0){
+            for (Category cat : categories){
+                if (cat != null && NYHelper.isStringNotEmpty(cat.getId()))addQuery(POST_DIVE_CATEGORY_ID, cat.getId());
+            }
+        }
+
+        if (facilityList != null && facilityList.size() > 0){
+            for (StateFacility fac : facilityList){
+                if (fac != null && NYHelper.isStringNotEmpty(fac.getTag()))addQuery(POST_FACILITIES, fac.getTag());
+            }
+        }
+
+        if (totalDives != null && totalDives.size() > 0){
+            for (String st : totalDives){
+                if (NYHelper.isStringNotEmpty(st))addQuery(POST_TOTAL_DIVES, st);
+            }
+        }
+
+        /*if (categories != null && categories.size() > 0){
+            for (String st : categories){
+                addQuery(POST_TOTAL_DIVES, st);
+            }
         }
 
         if (categories != null && categories.size() > 0){
             for (String st : categories){
-                addQuery(POST_DIVE_CATEGORY_ID, st);
+                addQuery(POST_FACILITIES, st);
             }
-        }
-
-        addQuery(POST_ECO_TRIP, isEcoTrip);
+        }*/
 
     }
 

@@ -173,10 +173,11 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
                     totalDiveTextView.setText(String.valueOf(diveService.getTotalDives())+" Dive");
                 }
 
-                if (diveService.getTotalDiveSpots() > 1){
-                    totalDiveSpotTextView.setText(String.valueOf(diveService.getTotalDiveSpots())+" Dive Spot Options");
-                } else {
-                    totalDiveSpotTextView.setText(String.valueOf(diveService.getTotalDiveSpots())+" Dive Spot Option");
+                // TODO: nggak kepakai ->  diveService.getTotalDiveSpots(), diganti array divespot
+                if (diveService.getDiveSpots() != null && diveService.getDiveSpots().size() > 1){
+                    totalDiveSpotTextView.setText(String.valueOf(diveService.getDiveSpots().size())+" Dive Spot Options");
+                } else if (diveService.getDiveSpots() != null && diveService.getDiveSpots().size() <= 1){
+                    totalDiveSpotTextView.setText(String.valueOf(diveService.getDiveSpots().size())+" Dive Spot Option");
                 }
 
                 if (diveService.getDays() > 1){
@@ -264,17 +265,9 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
-            NYLog.e("BEFORE DIVE CENTER " + diveCenter);
             if (diveCenter != null) {
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
             }
-            /*intent.putExtra(NYHelper.DIVER, ((DoDiveSearchResultActivity)activity).diver);
-            intent.putExtra(NYHelper.SCHEDULE, ((DoDiveSearchResultActivity)activity).date);
-
-            if (((DoDiveSearchResultActivity)activity).type.equals("1")){
-                intent.putExtra(NYHelper.DIVE_SPOT_ID, ((DoDiveSearchResultActivity)activity).diverId);
-            }*/
-
             activity.startActivity(intent);
         }
     }

@@ -442,7 +442,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     certificate = "0";
                 }
 
-
                 if (!NYHelper.isStringNotEmpty(type)){
                     Toast.makeText(getActivity(), getString(R.string.warn_empty_keyword), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(diver)) {
@@ -476,15 +475,15 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
-                        intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
 
+                        //intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                         DiveService diveService = new DiveService();
                         diveService.setId(diverId);
                         intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                        intent.putExtra(NYHelper.ID_DIVER, diverId);
 
 
                         intent.putExtra(NYHelper.KEYWORD, keyword);
-                        intent.putExtra(NYHelper.ID_DIVER, diverId);
                         intent.putExtra(NYHelper.CERTIFICATE, certificate);
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);

@@ -168,10 +168,11 @@ public class DoDiveSearchDiveServiceAdapter extends RecyclerView.Adapter<Recycle
                     totalDiveTextView.setText(String.valueOf(diveService.getTotalDives())+" Dive");
                 }
 
-                if (diveService.getTotalDiveSpots() > 1){
-                    totalDiveSpotTextView.setText(String.valueOf(diveService.getTotalDiveSpots())+" Dive Spot Options");
-                } else {
-                    totalDiveSpotTextView.setText(String.valueOf(diveService.getTotalDiveSpots())+" Dive Spot Option");
+                // TODO: nggak kepakai ->  diveService.getTotalDiveSpots(), diganti array divespot
+                if (diveService.getDiveSpots() != null && diveService.getDiveSpots().size() > 1){
+                    totalDiveSpotTextView.setText(String.valueOf(diveService.getDiveSpots().size())+" Dive Spot Options");
+                } else if (diveService.getDiveSpots() != null && diveService.getDiveSpots().size() <= 1){
+                    totalDiveSpotTextView.setText(String.valueOf(diveService.getDiveSpots().size())+" Dive Spot Option");
                 }
 
                 if (diveService.getDays() > 1){

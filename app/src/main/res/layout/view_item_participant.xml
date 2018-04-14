@@ -66,8 +66,8 @@
             android:src="@drawable/ic_arrow"
             android:layout_marginLeft="@dimen/padding"
             android:layout_marginStart="@dimen/padding"
-            android:layout_width="22dp"
-            android:layout_height="22dp" />
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
     </LinearLayout>
 
 </LinearLayout>

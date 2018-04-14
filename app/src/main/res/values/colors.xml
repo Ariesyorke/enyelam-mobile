@@ -26,6 +26,7 @@
     <color name="ny_grey7">#BBBBBB</color>
     <color name="ny_grey8">#7F7F7F</color>
     <color name="ny_grey9">#F7F7F7</color>
+    <color name="ny_grey10">#B4B4B4</color>
     <color name="ny_blue1">#005673</color>
     <color name="ny_blue2">#00ACE3</color>
     <color name="ny_blue4">#0B335A</color>
@@ -42,5 +43,6 @@
 
     <color name="demo_dark_transparent">#24000000</color>
     <color name="ny_dark_transparent">#64000000</color>
+    <color name="ny_dark_transparent_list">#3b000000</color>
 
 </resources>

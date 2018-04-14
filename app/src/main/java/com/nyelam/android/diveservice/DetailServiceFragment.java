@@ -1,6 +1,7 @@
 package com.nyelam.android.diveservice;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -31,6 +33,7 @@ import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Facilities;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Schedule;
+import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.dodive.DoDiveDiveServiceSuggestionAdapter;
 import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
@@ -49,6 +52,7 @@ import java.util.List;
 public class DetailServiceFragment extends Fragment {
 
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    private DetailServiceActivity activity;
     private OnFragmentInteractionListener mListener;
     private LinearLayout mainLinearLayout;
     private ProgressBar progressBar;
@@ -59,7 +63,7 @@ public class DetailServiceFragment extends Fragment {
     private TextView addressTextView, phoneNumberTextView;
     private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView, icAccomodationImageView;
-    private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout;
+    private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout, diveCenterLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
     private TextView availabilityStockTextView;
 
@@ -97,9 +101,31 @@ public class DetailServiceFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        activity = (DetailServiceActivity)getActivity();
         initView(view);
         initAdapter();
-        getRelatedServiceRequest();
+        initControl();
+    }
+
+    private void initControl() {
+        diveCenterLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DiveService diveService = activity.getDiveService();
+
+                if (diveService != null && diveService.getDiveCenter() != null){
+                    Intent intent = new Intent(getActivity(), DiveCenterDetailActivity.class);
+                    if (diveService != null)intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
+                    intent.putExtra(NYHelper.CERTIFICATE, activity.certificate);
+                    intent.putExtra(NYHelper.DIVER, String.valueOf(activity.diver));
+                    intent.putExtra(NYHelper.SCHEDULE, activity.schedule);
+                    if (activity.diveService != null)intent.putExtra(NYHelper.SERVICE, activity.diveService.toString());
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
     private void initView(View v) {
@@ -136,6 +162,7 @@ public class DetailServiceFragment extends Fragment {
         icTowelImageView = (ImageView) v.findViewById(R.id.icon_towel_imageView);
         icAccomodationImageView = (ImageView) v.findViewById(R.id.icon_accomodation_imageView);
 
+        diveCenterLinearLayout = (LinearLayout) v.findViewById(R.id.dive_center_linearLayout);
         diveGuideLinearLayout = (LinearLayout) v.findViewById(R.id.dive_guide_linearLayout);
         equipmentLinearLayout = (LinearLayout) v.findViewById(R.id.equipment_linearLayout);
         foodLinearLayout = (LinearLayout) v.findViewById(R.id.food_linearLayout);
@@ -149,15 +176,22 @@ public class DetailServiceFragment extends Fragment {
 
     public void setContent(){
 
-        if (((DetailServiceActivity)getActivity()).newDiveService != null){
+        getRelatedServiceRequest();
 
-            DiveService service = ((DetailServiceActivity)getActivity()).newDiveService;
+        if (activity.isDoTrip){
+            scheduleTextView.setVisibility(View.VISIBLE);
+        } else{
+            scheduleTextView.setVisibility(View.GONE);
+        }
+
+        if (activity.newDiveService != null){
+
+            DiveService service = activity.getDiveService();
             if(!TextUtils.isEmpty(service.getDescription())) {
                 descriptionTextView.setText(Html.fromHtml(service.getDescription()));
             } else {
                 descriptionTextView.setText("-");
             }
-            DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
 
             if (NYHelper.isStringNotEmpty(service.getName())){
                 String days = " Day";
@@ -169,8 +203,9 @@ public class DetailServiceFragment extends Fragment {
                 Schedule schedule = service.getSchedule();
                 String fromDate = NYHelper.setMillisToDateMonth(schedule.getStartDate());
                 String endDate = NYHelper.setMillisToDateMonth(schedule.getEndDate());
-                scheduleTextView.setText(fromDate+" - "+endDate);
-                scheduleTextView.setVisibility(View.VISIBLE);
+                if (activity.isDoTrip){
+                    scheduleTextView.setText(fromDate+" - "+endDate);
+                }
             }
 
             if (service.getDiveSpots() != null && service.getDiveSpots().size() > 0 ){
@@ -361,6 +396,16 @@ public class DetailServiceFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 DiveService diveService = relatedDiveServiceAdapter.getDiveService(position);
+                if (diveService != null && diveService.getDiveCenter() != null){
+                    Intent intent = new Intent(activity, DetailServiceActivity.class);
+                    intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    intent.putExtra(NYHelper.DIVER, activity.diver);
+                    intent.putExtra(NYHelper.SCHEDULE, activity.schedule);
+                    intent.putExtra(NYHelper.CERTIFICATE, activity.certificate);
+                    intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
+                    activity.startActivity(intent);
+                }
+
             }
 
             @Override
@@ -372,19 +417,13 @@ public class DetailServiceFragment extends Fragment {
 
 
     private void getRelatedServiceRequest() {
+        DiveService diveService = activity.getDiveService();
+        String apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
 
-        if (((DetailServiceActivity)getActivity()).newDiveService != null){
-            DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
-            DiveService diveService = ((DetailServiceActivity)getActivity()).newDiveService;
-
-            String apiPath = getString(R.string.api_path_dodive_service_list);
-            apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
-
-            // TODO: realted service belum 
+        if (diveService != null && diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getId())){
+            // TODO: realted service belum
             NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, null, null, String.valueOf(0));
-            //NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getActivity());
             spcMgr.execute(req, onSearchServiceRequest());
-
             // TODO: load data dummy, to test and waitting for API request
             //loadJSONAsset();
         }
@@ -404,7 +443,6 @@ public class DetailServiceFragment extends Fragment {
             public void onRequestSuccess(DiveServiceList results) {
                 if (results != null){
 
-                    DetailServiceActivity activity = ((DetailServiceActivity)getActivity());
                     List<DiveService> temp = new ArrayList<>();
 
                     int total = 0;
@@ -415,7 +453,6 @@ public class DetailServiceFragment extends Fragment {
                             total++;
                         }
                     }
-
                     relatedPostLinearLayout.setVisibility(View.VISIBLE);
                     relatedDiveServiceAdapter.clear();
                     relatedDiveServiceAdapter.addResults(temp);

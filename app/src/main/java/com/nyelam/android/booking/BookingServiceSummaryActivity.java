@@ -67,11 +67,18 @@ import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalItem;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +90,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private int diver = 0;
     private String schedule = "0";
     private String certificate = "0";
-    private String paymentType = "1"; // 1= bank transfer 2 = midtrans
+    private String paymentType = "1"; // 1= bank transfer 2 = midtrans (credit), 3 (VA), 4 paypal
     private String paymentMethod = null; // 1 = virtual account dan 2 = credit card
     private String note;
     private List<Participant> participantList = new ArrayList<>();
@@ -102,12 +109,19 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private RadioGroup radioGroup;
     private LinearLayout addNoteLinearLayout;
     private EditText noteEditText;
-    private RadioButton bankTransferRadioButton, virtualAccountRadioButton, creditCardRadioButton;
-    private LinearLayout bankTransferLinearLayout, virtualAccountLinearLayout, creditCardLinearLayout;
+    private RadioButton bankTransferRadioButton, virtualAccountRadioButton, creditCardRadioButton, paypalRadioButton;
+    private LinearLayout bankTransferLinearLayout, virtualAccountLinearLayout, creditCardLinearLayout, paypalLinearLayout;
     private DiveCenter diveCenter;
     private String veritransToken;
     private TextView expiredDateTextView;
     private CountDownTimer countDownTimer;
+
+
+    private PayPalConfiguration payPalConfiguration;
+    //Client ID Paypal
+    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
+    private Intent paypalIntent;
+    private int paypalRequestCode = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +202,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (virtualAccountRadioButton.isChecked()){
                     creditCardRadioButton.setChecked(false);
                     bankTransferRadioButton.setChecked(false);
-                    paymentType = "2";
+                    paypalRadioButton.setChecked(false);
+                    paymentType = "3";
                     paymentMethod = "1";
                     requestChangePaymentMethod();
                 }
@@ -201,6 +216,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (creditCardRadioButton.isChecked()){
                     virtualAccountRadioButton.setChecked(false);
                     bankTransferRadioButton.setChecked(false);
+                    paypalRadioButton.setChecked(false);
                     paymentType = "2";
                     paymentMethod = "2";
                     requestChangePaymentMethod();
@@ -214,6 +230,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (bankTransferRadioButton.isChecked()){
                     virtualAccountRadioButton.setChecked(false);
                     creditCardRadioButton.setChecked(false);
+                    paypalRadioButton.setChecked(false);
                     paymentType = "1";
                     paymentMethod = null;
                     requestChangePaymentMethod();
@@ -227,7 +244,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 virtualAccountRadioButton.setChecked(true);
                 creditCardRadioButton.setChecked(false);
                 bankTransferRadioButton.setChecked(false);
-                paymentType = "2";
+                paypalRadioButton.setChecked(false);
+                paymentType = "3";
                 paymentMethod = "1";
                 requestChangePaymentMethod();
             }
@@ -239,6 +257,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 creditCardRadioButton.setChecked(true);
                 virtualAccountRadioButton.setChecked(false);
                 bankTransferRadioButton.setChecked(false);
+                paypalRadioButton.setChecked(false);
                 paymentType = "2";
                 paymentMethod = "2";
                 requestChangePaymentMethod();
@@ -251,7 +270,38 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 bankTransferRadioButton.setChecked(true);
                 virtualAccountRadioButton.setChecked(false);
                 creditCardRadioButton.setChecked(false);
+                paypalRadioButton.setChecked(false);
                 paymentType = "1";
+                paymentMethod = null;
+                requestChangePaymentMethod();
+            }
+        });
+
+
+
+        paypalRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (paypalRadioButton.isChecked()){
+                    paypalRadioButton.setChecked(true);
+                    bankTransferRadioButton.setChecked(false);
+                    virtualAccountRadioButton.setChecked(false);
+                    creditCardRadioButton.setChecked(false);
+                    paymentType = "4";
+                    paymentMethod = null;
+                    requestChangePaymentMethod();
+                }
+            }
+        });
+
+        paypalLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paypalRadioButton.setChecked(true);
+                bankTransferRadioButton.setChecked(false);
+                virtualAccountRadioButton.setChecked(false);
+                creditCardRadioButton.setChecked(false);
+                paymentType = "4";
                 paymentMethod = null;
                 requestChangePaymentMethod();
             }
@@ -454,7 +504,19 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
             if (extras.get(NYHelper.PARTICIPANT) == null){
                 for (int i = 0; i < diver; i++){
-                    participantList.add(i, new Participant());
+                    if (i == 0){
+
+                        LoginStorage storage = new LoginStorage(this);
+                        if (storage.isUserLogin() && storage.user != null){
+                            Participant p = new Participant();
+                            if (NYHelper.isStringNotEmpty(storage.user.getFullname()))p.setName(storage.user.getFullname());
+                            if (NYHelper.isStringNotEmpty(storage.user.getEmail()))p.setEmail(storage.user.getEmail());
+                            participantList.add(i, p);
+                        }
+
+                    } else {
+                        participantList.add(i, new Participant());
+                    }
                 }
             } else {
 
@@ -554,6 +616,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         changeContactTextView = (TextView) findViewById(R.id.change_contact_textView);
         orderLinearLayout = (LinearLayout) findViewById(R.id.order_linearLayout);
         serviceFeeLinearLayout = (LinearLayout) findViewById(R.id.service_fee_linearLayout);
+        paypalLinearLayout = (LinearLayout) findViewById(R.id.payment_paypal_linearLayout);
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingTextView = (TextView) findViewById(R.id.rating_textView);
@@ -566,6 +629,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
         virtualAccountRadioButton = (RadioButton) findViewById(R.id.virtualAccountRadioButton);
         creditCardRadioButton = (RadioButton) findViewById(R.id.creditCardRadioButton);
+        paypalRadioButton = (RadioButton) findViewById(R.id.paypalRadioButton);
 
         bankTransferLinearLayout = (LinearLayout) findViewById(R.id.payment_bank_transfer_linearLayout);
         virtualAccountLinearLayout = (LinearLayout) findViewById(R.id.payment_virtual_account_linearLayout);
@@ -600,14 +664,17 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
                 if (NYHelper.isStringNotEmpty(participant.getName())){
                     nameTextView.setText(participant.getName());
+                    nameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
                     wordingTextView.setText(getResources().getString(R.string.change));
                 } else {
                     nameTextView.setText("Diver "+String.valueOf(position+1));
+                    nameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey10));
                     wordingTextView.setText(getResources().getString(R.string.fill_in));
                 }
                 linearLayout.setVisibility(View.VISIBLE);
             } else {
                 nameTextView.setText("Diver "+String.valueOf(position+1));
+                nameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey10));
                 wordingTextView.setText(getResources().getString(R.string.fill_in));
                 fillLinearLayout.setVisibility(View.VISIBLE);
             }
@@ -616,12 +683,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (NYHelper.isStringNotEmpty(participant.getEmail())) emailTextView.setText(participant.getEmail());
             } else {
                 emailTextView.setText("diver"+String.valueOf(position+1)+"@email.com");
-            }
-
-            if (participant != null){
-                wordingTextView.setText(getString(R.string.change));
-            } else {
-                wordingTextView.setText(getString(R.string.fill_in));
             }
 
             linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -715,22 +776,24 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
 
                 orderReturn = result;
-                if (paymentType.equals("2") && result != null && result.getVeritransToken() != null){
-                    //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
 
-                    VeritransStorage veritransStorage = new VeritransStorage(BookingServiceSummaryActivity.this);
-                    veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
-                    veritransStorage.contact = result.getSummary().getContact();
-                    veritransStorage.cart = result.getSummary().getOrder().getCart();
-                    veritransStorage.order = result.getSummary().getOrder();
-                    veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
-                    veritransStorage.save();
+                if (orderReturn != null){
+                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
 
-                    payUsingVeritrans();
+                        //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
+                        VeritransStorage veritransStorage = new VeritransStorage(BookingServiceSummaryActivity.this);
+                        veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
+                        veritransStorage.contact = result.getSummary().getContact();
+                        veritransStorage.cart = result.getSummary().getOrder().getCart();
+                        veritransStorage.order = result.getSummary().getOrder();
+                        veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
+                        veritransStorage.save();
 
-                } else if (paymentType.equals("1")){
-                    //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
-                    NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
+                        payUsingVeritrans();
+
+                    } else if (paymentType.equals("1")){
+                        //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
+                        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -741,13 +804,17 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                                         startActivity(intent);
                                     }
                                 }, getResources().getString(R.string.check_order));
+                    } else if (paymentType.equals("4")){
+                        //TODO DISINI HANDLE KALO TRANSAKSI DI PAYPAL SUKSES
+                        payUsingPaypal();
+                    }
+
                 }
+
+
             }
         };
     }
-
-
-
 
     public void requestCartToken(){
         progressDialog.show();
@@ -806,7 +873,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
 
-
         PaymentMethodStorage paymentMethodStorage = new PaymentMethodStorage(this);
         paymentMethodStorage.paymentMethod = paymentMethod;
         paymentMethodStorage.save();
@@ -857,6 +923,46 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             //MidtransSDK.getInstance().startPaymentUiFlow(this, "eba5b676-abea-4b6d-8f88-3ad1517f2e2e");
         }
 
+    }
+
+
+
+
+    public void payUsingPaypal() {
+
+        //CONFIGURASI PAYPAL
+        payPalConfiguration = new PayPalConfiguration()
+                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+                .clientId(paypalClientId);
+        paypalIntent = new Intent(BookingServiceSummaryActivity.this, PayPalService.class);
+        paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
+        startService(paypalIntent);
+
+
+        if (orderReturn != null && orderReturn.getPaypalCurrency() != null
+                && NYHelper.isStringNotEmpty(orderReturn.getPaypalCurrency().getCurrency())
+                && orderReturn.getPaypalCurrency().getAmount() != null
+                && orderReturn.getSummary() != null && orderReturn.getSummary().getOrder() != null
+                && NYHelper.isStringNotEmpty(orderReturn.getSummary().getOrder().getOrderId())
+                && orderReturn.getSummary().getOrder().getCart() != null){
+
+            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getSummary().getOrder().getCart().getTotal()), "USD", orderReturn.getSummary().getOrder().getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
+            PayPalItem item = new PayPalItem(diveService.getName(), 1, new BigDecimal(orderReturn.getSummary().getOrder().getCart().getTotal()), "USD", PayPalPayment.PAYMENT_INTENT_SALE);
+            payPalPayment.items(new PayPalItem[]{item});
+            Intent intent = new Intent(BookingServiceSummaryActivity.this, PaymentActivity.class);
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
+            intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
+            startActivityForResult(intent, paypalRequestCode);
+
+        } else {
+            NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.warn_paymet_using_paypal_failed), false,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }, getResources().getString(R.string.ok));
+        }
     }
 
 
@@ -1061,13 +1167,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
 
-
-
-
     public void requestChangePaymentMethod(){
         progressDialog.show();
         try {
-            NYChangePaymentMethodRequest req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, veritransToken, paymentType);
+            NYChangePaymentMethodRequest req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), paymentType);
             spcMgr.execute(req, onChangePaymentMethodRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -1084,7 +1187,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
 
             @Override
-            public void onRequestSuccess(final CartReturn result) {
+            public void onRequestSuccess(CartReturn result) {
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
@@ -1092,6 +1195,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 // TODO: refresh order detail
                 // 1 = bank 2 = cc 3 = virtual 4 = paypal
                 cartReturn = result;
+                serviceFeeLinearLayout.removeAllViews();
                 if (cartReturn != null && cartReturn.getCart() != null){
                     Cart cart = cartReturn.getCart();
                     if (cart != null){
@@ -1108,8 +1212,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
 
     public void addAditonalView(List<Additional> additionalList) {
+
+        NYLog.d("TES ADDITIONALS INIT");
         serviceFeeLinearLayout.removeAllViews();
         for (Additional additional : additionalList) {
+
+            NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
 
             LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
@@ -1123,6 +1231,22 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
 
             serviceFeeLinearLayout.addView(additionalView);
+        }
+    }
+
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == paypalRequestCode) {
+            if (resultCode == RESULT_OK) {
+                PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                NYLog.e("PAYPAL PAYMENT ENVIRONTMENT " + confirmation.getEnvironment());
+                NYLog.e("PAYPAL PAYMENT JSON OBJECT " + confirmation.toJSONObject());
+            }
         }
     }
 

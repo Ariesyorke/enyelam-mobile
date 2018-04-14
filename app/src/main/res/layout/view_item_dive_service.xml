@@ -27,6 +27,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <View
+                android:background="@color/ny_dark_transparent_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
             <com.nyelam.android.view.font.NYTextView
                 card_view:fontTextStyle="semiBold"
                 android:id="@+id/service_name_textView"
@@ -99,7 +104,7 @@
                 <com.nyelam.android.view.font.NYTextView
                     card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_spot_textView"
-                    android:text="0 Spot"
+                    android:text="0 Dive Spot Option"
                     android:textSize="16dp"
                     android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"

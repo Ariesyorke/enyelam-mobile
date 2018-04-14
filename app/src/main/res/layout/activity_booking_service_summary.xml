@@ -597,6 +597,54 @@
                     </LinearLayout>
 
 
+                    <LinearLayout
+                        android:id="@+id/payment_paypal_linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/paypalRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:orientation="horizontal">
+
+                            <me.relex.circleindicator.CircleIndicator
+                                android:id="@+id/paypal"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_centerVertical="true"
+                                android:background="@color/ny_blue6" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/paypal_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_toRightOf="@+id/paypal"
+                                android:text="@string/paypal"
+                                android:textColor="@color/ny_black1"
+                                android:textSize="16sp"
+                                android:layout_alignParentTop="true" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/paypal_label"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_toRightOf="@+id/paypal"
+                                android:text="@string/paypal_label"
+                                android:textColor="@color/ny_grey4"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
                 </RadioGroup>
             </LinearLayout>
 

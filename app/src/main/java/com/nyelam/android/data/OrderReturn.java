@@ -13,9 +13,11 @@ public class OrderReturn {
 
     private static String KEY_SUMMARY = "summary";
     private static String KEY_VERITRANS_TOKEN = "veritrans_token";
+    private static String KEY_PAYPAL_CURRENCY = "paypal_currency";
 
     private Summary summary;
     private VeritransToken veritransToken;
+    private PaypalCurrency paypalCurrency;
 
     public Summary getSummary() {
         return summary;
@@ -31,6 +33,14 @@ public class OrderReturn {
 
     public void setVeritransToken(VeritransToken veritransToken) {
         this.veritransToken = veritransToken;
+    }
+
+    public PaypalCurrency getPaypalCurrency() {
+        return paypalCurrency;
+    }
+
+    public void setPaypalCurrency(PaypalCurrency paypalCurrency) {
+        this.paypalCurrency = paypalCurrency;
     }
 
     public void parse(JSONObject obj){
@@ -61,6 +71,18 @@ public class OrderReturn {
             }
         }
 
+        if(!obj.isNull(KEY_PAYPAL_CURRENCY)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_PAYPAL_CURRENCY);
+                if(o != null) {
+                    paypalCurrency = new PaypalCurrency();
+                    paypalCurrency.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override
@@ -85,6 +107,17 @@ public class OrderReturn {
                 obj.put(KEY_VERITRANS_TOKEN, objVeritrans);
             } else {
                 obj.put(KEY_VERITRANS_TOKEN, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getSummary()!=null){
+                JSONObject objPaypal = new JSONObject(getPaypalCurrency().toString());
+                obj.put(KEY_PAYPAL_CURRENCY, objPaypal);
+            } else {
+                obj.put(KEY_PAYPAL_CURRENCY, JSONObject.NULL);
             }
         }catch (JSONException e){
             e.printStackTrace();

@@ -2,6 +2,8 @@ package com.nyelam.android.data;
 
 import android.text.TextUtils;
 
+import com.nyelam.android.helper.NYHelper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,7 +66,7 @@ public class Additional implements Parseable {
         }
 
         try {
-            if (!TextUtils.isEmpty(getTitle())) {
+            if (NYHelper.isStringNotEmpty(getTitle())) {
                 obj.put(KEY_TITLE, getTitle());
             } else {
                 obj.put(KEY_TITLE, JSONObject.NULL);
