@@ -205,7 +205,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     }
 
     public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 2;
+        private static final int FRAGMENT_COUNT = 3;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 
@@ -265,9 +265,10 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
 
     public void movePagerToTabItemPosition(int tabItemPosition) {
+        NYLog.e("TAB ITEM POSITION : " + tabItemPosition);
         setCheckedId(tabItemPosition);
         LoginStorage loginStorage = new LoginStorage(getApplicationContext());
-        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2 || tabItemPosition == 3)) {
+        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2)) {
             Intent intent = new Intent(this, AuthActivity.class);
             startActivityForResult(intent, NYHelper.REQ_LOGIN);
         } else {
@@ -295,7 +296,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 if (child == view) {
 
                     LoginStorage storage = new LoginStorage(this);
-                    if (!storage.isUserLogin() && (i == 1 || i == 3)) checked = false;
+                    if (!storage.isUserLogin() && (i == 1 || i == 2)) checked = false;
 
                     setCheckedStateForTab(child.getId(), checked);
                     checkedTabItemPosition = ((NYHomepageTabItemView) child).getTabItemPosition();
@@ -437,9 +438,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
             @Override
             public void onPageSelected(int position) {
-                //KTLog.e("CEK 3");
 
-                //Toast.makeText(HomeActivity.this, "hallo", Toast.LENGTH_SHORT).show();
 
                 fragses.add(tags.get(position));
 
@@ -494,6 +493,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             onCheckedChanged(view, true);
             movePagerToTabItemPosition(0);
         } else {
+            NYLog.e("CHECKED ID " + checkedId);
             NYHomepageTabItemView view = (NYHomepageTabItemView) tabManager.getChildAt(checkedId);
             onCheckedChanged(view, true);
             movePagerToTabItemPosition(checkedId);

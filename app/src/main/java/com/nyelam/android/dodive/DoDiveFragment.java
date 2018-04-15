@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -159,7 +160,16 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
         diveServiceSuggestionAdapter = new DoDiveDiveServiceSuggestionAdapter(getActivity());
         suggestionRecyclerView.setAdapter(diveServiceSuggestionAdapter);
-
+        divingLicenseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(!TextUtils.isEmpty(type) && type.equals("4")) {
+                    divingLicenseSwitch.setChecked(true);
+                } else {
+                    divingLicenseSwitch.setChecked(b);
+                }
+            }
+        });
         suggestionRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), suggestionRecyclerView, new DoDiveDiveServiceSuggestionAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -167,7 +177,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 diverId = diveService.getId();
                 keyword = diveService.getName();
                 type = "4";
+                NYLog.e("DIVE SERVICE LICENSE :" + diveService.isLicense());
+                setDivingLicense(diveService.isLicense());
                 keywordTextView.setText(keyword);
+
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
@@ -178,6 +191,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
+                setDivingLicense(diveService.isLicense());
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
         }));
@@ -276,10 +290,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     keyword = obj.getString("name");
                     keywordTextView.setText(obj.getString("name"));
                 }
-                if (obj.has("type"))type = obj.getString("type");
+
+                if (obj.has("type")) {
+                    type = obj.getString("type");
+                }
                 if (obj.has("id"))diverId = obj.getString("id");
 
-                if (obj.has("license") && obj.getBoolean("license")){
+                if (obj.has("license") && obj.getBoolean("license")) {
                     setDivingLicense(true);
                     //divingLicenseSwitch.setChecked(true);
                     //certificateCheckBox.setClickable(false);
@@ -288,6 +305,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     //divingLicenseSwitch.setChecked(false);
                     //certificateCheckBox.setClickable(true);
                 }
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
