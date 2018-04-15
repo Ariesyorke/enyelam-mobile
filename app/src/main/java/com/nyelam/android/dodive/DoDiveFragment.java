@@ -167,7 +167,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 diverId = diveService.getId();
                 keyword = diveService.getName();
                 type = "4";
+                divingLicenseSwitch.setEnabled(false);
+                NYLog.e("DIVE SERVICE LICENSE :" + diveService.isLicense());
+                setDivingLicense(diveService.isLicense());
                 keywordTextView.setText(keyword);
+
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
@@ -178,6 +182,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
+                divingLicenseSwitch.setEnabled(false);
+                setDivingLicense(diveService.isLicense());
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
         }));
@@ -276,10 +282,18 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     keyword = obj.getString("name");
                     keywordTextView.setText(obj.getString("name"));
                 }
-                if (obj.has("type"))type = obj.getString("type");
+
+                if (obj.has("type")) {
+                    type = obj.getString("type");
+                    if (type.equals("4")) {
+                        divingLicenseSwitch.setEnabled(false);
+                    } else {
+                        divingLicenseSwitch.setEnabled(true);
+                    }
+                }
                 if (obj.has("id"))diverId = obj.getString("id");
 
-                if (obj.has("license") && obj.getBoolean("license")){
+                if (obj.has("license") && obj.getBoolean("license")) {
                     setDivingLicense(true);
                     //divingLicenseSwitch.setChecked(true);
                     //certificateCheckBox.setClickable(false);
@@ -288,6 +302,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     //divingLicenseSwitch.setChecked(false);
                     //certificateCheckBox.setClickable(true);
                 }
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
