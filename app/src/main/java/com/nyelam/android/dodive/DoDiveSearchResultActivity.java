@@ -53,7 +53,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private ImageView searchImageView;
     private int page = 1;
     private boolean ecotrip = false;
-    private int sortingType = 1;
+    private int sortingType = 0;
     private Double minPrice;
     private Double maxPrice;
     //private ArrayList<String> categories;

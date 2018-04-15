@@ -76,15 +76,14 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         storage = new NYMasterDataStorage(this);
         initExtra();
         initView();
+        initControl();
         initState();
         //initToolbar(false);
         getCategories();
-        initControl();
         Toast.makeText(this, "dua", Toast.LENGTH_SHORT).show();
     }
 
     private void initState() {
-
         //sort by
         if (sortBy == 0){
             rbLowerPrice.setChecked(true);
@@ -448,6 +447,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     }
 
     private void setViewFacility(boolean isInit, StateFacility facility, FancyButton fancyButton){
+
+        //true, facility, fbFacility);
+
         StateFacility state = new StateFacility();
         if (isInit == false){
              state = (StateFacility) fancyButton.getTag();
@@ -462,9 +464,10 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 }
             }
             if(!isExist) state = facility;
+            state.setChecked(isExist);
         }
 
-        if ((isInit && !state.isChecked()) || state.isChecked()){
+        if ((isInit && !state.isChecked()) || (!isInit && state.isChecked())){
             if (facility == null)state.setChecked(false);
             // TODO: state unactive 
             fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
@@ -472,7 +475,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             fancyButton.setIconResource(ContextCompat.getDrawable(this, state.getUnactiveDrawable()));
             fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
             fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
-        } else if ((isInit && state.isChecked()) || !state.isChecked()){
+        } else if ((isInit && state.isChecked()) || (!isInit && !state.isChecked())){
             if (facility == null)state.setChecked(true);
             // TODO: state active 
             fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));

@@ -56,7 +56,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
     private ImageView filterImageView, searchImageView;
     private int page = 1;
 
-    private int sortingType = 1;
+    private int sortingType = 0;
     private Double minPrice;
     private Double maxPrice;
     //private ArrayList<String> categories;
@@ -319,6 +319,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         }
         return json;
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
