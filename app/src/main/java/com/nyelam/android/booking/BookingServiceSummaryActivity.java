@@ -61,6 +61,7 @@ import com.nyelam.android.http.NYCartExpiredException;
 import com.nyelam.android.http.NYChangePaymentMethodRequest;
 import com.nyelam.android.http.NYDoDiveServiceCartRequest;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
+import com.nyelam.android.http.NYPaypalNotificationRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
 import com.nyelam.android.view.NYCustomDialog;
@@ -938,7 +939,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
         startService(paypalIntent);
 
-
         if (orderReturn != null && orderReturn.getPaypalCurrency() != null
                 && NYHelper.isStringNotEmpty(orderReturn.getPaypalCurrency().getCurrency())
                 && orderReturn.getPaypalCurrency().getAmount() != null
@@ -946,9 +946,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 && NYHelper.isStringNotEmpty(orderReturn.getSummary().getOrder().getOrderId())
                 && orderReturn.getSummary().getOrder().getCart() != null){
 
-            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getSummary().getOrder().getCart().getTotal()), "USD", orderReturn.getSummary().getOrder().getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
-            PayPalItem item = new PayPalItem(diveService.getName(), 1, new BigDecimal(orderReturn.getSummary().getOrder().getCart().getTotal()), "USD", PayPalPayment.PAYMENT_INTENT_SALE);
-            payPalPayment.items(new PayPalItem[]{item});
+            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), "#"+orderReturn.getSummary().getOrder().getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
+            //PayPalItem item = new PayPalItem(diveService.getName(), 1, new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), PayPalPayment.PAYMENT_INTENT_SALE);
+//            payPalPayment.items(new PayPalItem[]{item});
             Intent intent = new Intent(BookingServiceSummaryActivity.this, PaymentActivity.class);
             intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
             intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
@@ -1213,11 +1213,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     public void addAditonalView(List<Additional> additionalList) {
 
-        NYLog.d("TES ADDITIONALS INIT");
+        //NYLog.d("TES ADDITIONALS INIT");
         serviceFeeLinearLayout.removeAllViews();
         for (Additional additional : additionalList) {
 
-            NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
+            //NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
 
             LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
@@ -1235,8 +1235,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1244,11 +1242,75 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         if (requestCode == paypalRequestCode) {
             if (resultCode == RESULT_OK) {
                 PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                NYLog.e("PAYPAL PAYMENT ENVIRONTMENT " + confirmation.getEnvironment());
-                NYLog.e("PAYPAL PAYMENT JSON OBJECT " + confirmation.toJSONObject());
+                NYLog.e("PAYPAL PAYMENT JSON OBJECT PAY ID : " + confirmation.getProofOfPayment().getPaymentId());
+                try {
+                    progressDialog.show();
+                    note = noteEditText.getText().toString();
+                    NYPaypalNotificationRequest req = new NYPaypalNotificationRequest(BookingServiceSummaryActivity.this, confirmation.getProofOfPayment().getPaymentId());
+                    spcMgr.execute(req, onPaypalNotificationRequest());
+                } catch (Exception e) {
+                    progressDialog.dismiss();
+                    e.printStackTrace();
+                }
+
             }
         }
     }
+
+
+    private RequestListener<Boolean> onPaypalNotificationRequest() {
+        return new RequestListener<Boolean>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                if(spiceException != null) {
+                    if (spiceException.getCause() instanceof NYCartExpiredException) {
+                        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                setResult(Activity.RESULT_OK);
+                                finish();
+                            }
+                        });
+                    } else {
+                        NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestSuccess(Boolean result) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+
+                if (result) {
+                    //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
+                    NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                                    intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                    intent.putExtra(NYHelper.ID_ORDER, orderReturn.getSummary().getOrder().getOrderId());
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                }
+                            }, getResources().getString(R.string.check_order));
+                }
+
+            }
+        };
+    }
+
+
 
 
 }

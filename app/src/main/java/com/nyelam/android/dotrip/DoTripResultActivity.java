@@ -153,6 +153,10 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
             if(intent.hasExtra(NYHelper.DIVER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVER))) diver = extras.getString(NYHelper.DIVER);
             if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))) certificate = extras.getString(NYHelper.CERTIFICATE);
             if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SCHEDULE))) date = extras.getString(NYHelper.SCHEDULE);
+
+            if(intent.hasExtra(NYHelper.MIN_PRICE)) minPrice = extras.getDouble(NYHelper.MIN_PRICE);
+            if(intent.hasExtra(NYHelper.MAX_PRICE)) maxPrice = extras.getDouble(NYHelper.MAX_PRICE);
+
             if(intent.hasExtra(NYHelper.TYPE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.TYPE))){
                 type = extras.getString(NYHelper.TYPE);
             }

@@ -345,9 +345,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.DIVER, diver);
                 intent.putExtra(NYHelper.SCHEDULE, schedule);
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                intent.putExtra(NYHelper.DIVE_CENTER, newDiveService.getDiveCenter().toString());
                 startActivity(intent);
-
             }
         };
     }

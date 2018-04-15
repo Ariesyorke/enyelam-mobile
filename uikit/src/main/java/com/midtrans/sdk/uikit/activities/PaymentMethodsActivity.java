@@ -148,11 +148,14 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
 
         // TODO: cek storage is payment method
         PaymentMethodStorage paymentMethodStorage = new PaymentMethodStorage(this);
-        if (paymentMethodStorage.paymentMethod.equals("1")){
-            isBankTransferOnly = true;
-        } else if (paymentMethodStorage.paymentMethod.equals("2")){
-            isCreditCardOnly = true;
+        if (paymentMethodStorage != null && !TextUtils.isEmpty(paymentMethodStorage.paymentMethod)){
+            if ( paymentMethodStorage.paymentMethod.equals("1")){
+                isBankTransferOnly = true;
+            } else if (paymentMethodStorage.paymentMethod.equals("2")){
+                isCreditCardOnly = true;
+            }
         }
+
 
         isGopay = getIntent().getBooleanExtra(UserDetailsActivity.GO_PAY, false);
         isBCAKlikpay = getIntent().getBooleanExtra(UserDetailsActivity.BCA_KLIKPAY, false);

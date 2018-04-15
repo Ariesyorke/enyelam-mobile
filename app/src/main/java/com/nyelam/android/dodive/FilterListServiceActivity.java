@@ -62,6 +62,13 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private FlowLayout facilitiesFlowLayout;
     private ImageView closeImageView;
 
+    private RadioButton rbLowerPrice;
+    private RadioButton rbHighestPrice;
+    private CrystalRangeSeekbar rangeSeekbar;
+    private TextView tvMinPrice;
+    private TextView tvMaxPrice;
+    private CheckBox check1, check2, check3, check4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,15 +76,41 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         storage = new NYMasterDataStorage(this);
         initExtra();
         initView();
+        initState();
         //initToolbar(false);
         getCategories();
         initControl();
         Toast.makeText(this, "dua", Toast.LENGTH_SHORT).show();
     }
 
+    private void initState() {
+
+        //sort by
+        if (sortBy == 0){
+            rbLowerPrice.setChecked(true);
+            rbHighestPrice.setChecked(false);
+        } else {
+            rbLowerPrice.setChecked(false);
+            rbHighestPrice.setChecked(true);
+        }
+
+        tvMinPrice.setText(NYHelper.priceFormatter(minPrice));
+        tvMaxPrice.setText(NYHelper.priceFormatter(maxPrice));
+
+        for (String st : totalDives){
+            if (st.equals("1")){
+                check1.setChecked(true);
+            } else if (st.equals("2")){
+                check2.setChecked(true);
+            } else if (st.equals("3")){
+                check3.setChecked(true);
+            } else if (st.equals("<4")){
+                check4.setChecked(true);
+            }
+        }
+    }
+
     private void initControl() {
-        final RadioButton rbLowerPrice = (RadioButton) findViewById(R.id.lowerPriceRadioButton);
-        final RadioButton rbHighestPrice = (RadioButton) findViewById(R.id.highestPriceRadioButton);
         rbLowerPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -98,21 +131,14 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             }
         });
 
-        // get seekbar from view
-        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.price_range_seekBar);
-
-        // get min and max text view
-        final TextView tvMin = (TextView) findViewById(R.id.price_min_textView);
-        final TextView tvMax = (TextView) findViewById(R.id.price_max_textView);
-
         // set listener
         rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
             public void valueChanged(Number minValue, Number maxValue) {
                 minPrice = minValue.doubleValue();
                 maxPrice = maxValue.doubleValue();
-                tvMin.setText(NYHelper.priceFormatter(minValue.doubleValue()));
-                tvMax.setText(NYHelper.priceFormatter(maxValue.doubleValue()));
+                tvMinPrice.setText(NYHelper.priceFormatter(minValue.doubleValue()));
+                tvMaxPrice.setText(NYHelper.priceFormatter(maxValue.doubleValue()));
             }
         });
 
@@ -122,8 +148,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             public void finalValue(Number minValue, Number maxValue) {
                 minPrice = minValue.doubleValue();
                 maxPrice = maxValue.doubleValue();
-                tvMin.setText(NYHelper.priceFormatter(minValue.doubleValue()));
-                tvMax.setText(NYHelper.priceFormatter(maxValue.doubleValue()));
+                tvMinPrice.setText(NYHelper.priceFormatter(minValue.doubleValue()));
+                tvMaxPrice.setText(NYHelper.priceFormatter(maxValue.doubleValue()));
             }
         });
 
@@ -166,10 +192,20 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         categoryFlowLayout = (FlowLayout) findViewById(R.id.category_flowLayout);
         facilitiesFlowLayout = (FlowLayout) findViewById(R.id.facilities_flowLayout);
 
-        CheckBox check1 = findViewById(R.id.checkbox_one);
-        CheckBox check2 = findViewById(R.id.checkbox_two);
-        CheckBox check3 = findViewById(R.id.checkbox_three);
-        CheckBox check4 = findViewById(R.id.checkbox_more_four);
+        check1 = findViewById(R.id.checkbox_one);
+        check2 = findViewById(R.id.checkbox_two);
+        check3 = findViewById(R.id.checkbox_three);
+        check4 = findViewById(R.id.checkbox_more_four);
+
+        rbLowerPrice = (RadioButton) findViewById(R.id.lowerPriceRadioButton);
+        rbHighestPrice = (RadioButton) findViewById(R.id.highestPriceRadioButton);
+
+        // get seekbar from view
+        rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.price_range_seekBar);
+
+        // get min and max text view
+        tvMinPrice = (TextView) findViewById(R.id.price_min_textView);
+        tvMaxPrice = (TextView) findViewById(R.id.price_max_textView);
 
         check1.setOnCheckedChangeListener(this);
         check2.setOnCheckedChangeListener(this);
@@ -187,7 +223,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
-            if (intent.hasExtra(NYHelper.SORT_BY))sortBy = extras.getInt(NYHelper.SORT_BY);
+            if (intent.hasExtra(NYHelper.SORT_BY)) sortBy = extras.getInt(NYHelper.SORT_BY);
             if (intent.hasExtra(NYHelper.MIN_PRICE))minPrice = extras.getDouble(NYHelper.MIN_PRICE);
             if (intent.hasExtra(NYHelper.MAX_PRICE))maxPrice = extras.getDouble(NYHelper.MAX_PRICE);
 
