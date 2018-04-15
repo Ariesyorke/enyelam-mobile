@@ -260,6 +260,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.CERTIFICATE, certificate);
+            intent.putExtra(NYHelper.IS_DO_TRIP, true);
             if (diveService != null && diveService.getDiveCenter() != null) {
                 intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
             }

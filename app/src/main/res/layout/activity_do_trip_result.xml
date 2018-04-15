@@ -13,7 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="#0071BC"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:paddingTop="@dimen/padding"
             android:paddingBottom="@dimen/padding"
@@ -24,14 +24,14 @@
                 app:fontTextStyle="reguler"
                 android:id="@+id/title_textView"
                 android:text="Title"
+                android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@color/colorWhite"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
             <ImageView
                 android:visibility="gone"
                 android:id="@+id/search_imageView"
@@ -41,13 +41,14 @@
                 android:layout_height="wrap_content" />
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/filter_imageView"
                 android:src="@drawable/ic_sort"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
 
@@ -84,12 +85,36 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="none"
         app:behavior_overlapTop="78dp"
         android:layout_margin="8dp"
         android:background="@android:color/transparent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/filter_relativeLayout"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/filter_textView"
+            app:fontTextStyle="medium"
+            android:text="@string/filter"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="@drawable/ny_rectangle_blue"
+            android:paddingTop="@dimen/padding_half"
+            android:paddingBottom="@dimen/padding_half"
+            android:paddingRight="@dimen/padding_triple"
+            android:paddingLeft="@dimen/padding_triple"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </LinearLayout>

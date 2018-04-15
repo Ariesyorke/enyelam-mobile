@@ -130,7 +130,9 @@ public class NYHelper {
 
     public static final String SORT_BY = "sort_by";
     public static final String MIN_PRICE = "min_price";
+    public static final String MIN_PRICE_DEAFULT = "min_price_deafult";
     public static final String MAX_PRICE = "max_price";
+    public static final String MAX_PRICE_DEFAULT = "max_price_deafult";
     public static final String TOTAL_DIVES = "total_dives";
 
 

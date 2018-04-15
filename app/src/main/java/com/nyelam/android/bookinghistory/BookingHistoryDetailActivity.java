@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.danzoye.lib.util.GalleryCameraInvoker;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.Additional;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DiveCenter;
@@ -84,6 +85,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private LinearLayout participantContainerLinearLayout;
     private LinearLayout paymentLinearLayout;
     private LinearLayout confirmLinearLayout;
+    private LinearLayout additionalLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +95,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         initView();
         initControl();
         initExtra();
-
         //Toast.makeText(this, idOrder, Toast.LENGTH_SHORT).show();
     }
 
@@ -169,6 +170,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         mainLinearLayout = (LinearLayout) findViewById(R.id.main_linearLayout);
         paymentLinearLayout = (LinearLayout) findViewById(R.id.payment_linearLayout);
         confirmLinearLayout = (LinearLayout) findViewById(R.id.confirm_linearLayout);
+        additionalLinearLayout = (LinearLayout) findViewById(R.id.additional_linearLayout);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -345,6 +347,32 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     contactPhoneNumberTextView.setText(contact.getPhoneNumber());
                 if (NYHelper.isStringNotEmpty(contact.getEmailAddress()))
                     contactEmailTextView.setText(contact.getEmailAddress());
+            }
+
+
+
+            if (summary != null && summary.getOrder() != null
+                    && summary.getOrder().getAdditionals() != null
+                    && summary.getOrder().getAdditionals().size() > 0){
+
+                additionalLinearLayout.removeAllViews();
+
+                for (Additional additional : summary.getOrder().getAdditionals()){
+                    //NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
+
+                    LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                    TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                    TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                    if (additional != null) {
+                        if (NYHelper.isStringNotEmpty(additional.getTitle())) additionalLabelTextView.setText(additional.getTitle());
+                        additionalValueTextView.setText(NYHelper.priceFormatter(additional.getValue()));
+                    }
+
+                    additionalLinearLayout.addView(additionalView);
+                }
             }
 
             if (summary.getDiveService() != null) {

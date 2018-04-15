@@ -102,7 +102,7 @@
                     card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_textView"
                     android:text="0 Dive"
-                    android:textSize="14dp"
+                    android:textSize="16dp"
                     android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

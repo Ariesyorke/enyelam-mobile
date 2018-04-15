@@ -38,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -48,10 +49,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
     private NYMasterDataStorage storage;
     private LinearLayout categoriesLinearLayout;
-    private boolean isSelf = false;
-    private int sortBy = 0;
-    private double minPrice, maxPrice;
-    private boolean ecotrip;
+    private int sortBy = 2;
+    private double minPrice, maxPrice ;
+    private double minPriceDefault, maxPriceDefault;
     private List<String> totalDives;
     private List<Category> items;
     private List<Category> categoryChooseList;
@@ -76,16 +76,16 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         storage = new NYMasterDataStorage(this);
         initExtra();
         initView();
-        initControl();
         initState();
+        initControl();
         //initToolbar(false);
         getCategories();
-        Toast.makeText(this, "dua", Toast.LENGTH_SHORT).show();
     }
+
 
     private void initState() {
         //sort by
-        if (sortBy == 0){
+        if (sortBy == 2){
             rbLowerPrice.setChecked(true);
             rbHighestPrice.setChecked(false);
         } else {
@@ -95,6 +95,25 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
         tvMinPrice.setText(NYHelper.priceFormatter(minPrice));
         tvMaxPrice.setText(NYHelper.priceFormatter(maxPrice));
+
+        rangeSeekbar.setMinValue((float) minPriceDefault);
+        rangeSeekbar.setMaxValue((float) maxPriceDefault);
+        rangeSeekbar.apply();
+
+        if (minPrice < 0 ){
+            rangeSeekbar.setMinStartValue(Float.valueOf(String.valueOf(minPriceDefault)));
+        } else {
+            rangeSeekbar.setMinStartValue(Float.valueOf(String.valueOf(minPrice)));
+        }
+
+        if (maxPrice < 0){
+            Toast.makeText(this, "max price 1 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
+            rangeSeekbar.setMaxStartValue((float)maxPriceDefault);
+        } else {
+            Toast.makeText(this, "max price 2 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
+            rangeSeekbar.setMaxStartValue((float)maxPrice);
+        }
+        rangeSeekbar.apply();
 
         for (String st : totalDives){
             if (st.equals("1")){
@@ -114,7 +133,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    sortBy = 0;
+                    sortBy = 2;
                     rbHighestPrice.setChecked(false);
                 }
             }
@@ -141,7 +160,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             }
         });
 
-        // set final value listener
+        /*// set final value listener
         rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
             public void finalValue(Number minValue, Number maxValue) {
@@ -150,7 +169,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 tvMinPrice.setText(NYHelper.priceFormatter(minValue.doubleValue()));
                 tvMaxPrice.setText(NYHelper.priceFormatter(maxValue.doubleValue()));
             }
-        });
+        });*/
 
         doneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,12 +243,15 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
             if (intent.hasExtra(NYHelper.SORT_BY)) sortBy = extras.getInt(NYHelper.SORT_BY);
             if (intent.hasExtra(NYHelper.MIN_PRICE))minPrice = extras.getDouble(NYHelper.MIN_PRICE);
+            if (intent.hasExtra(NYHelper.MIN_PRICE_DEAFULT))minPriceDefault = extras.getDouble(NYHelper.MIN_PRICE_DEAFULT);
             if (intent.hasExtra(NYHelper.MAX_PRICE))maxPrice = extras.getDouble(NYHelper.MAX_PRICE);
+            if (intent.hasExtra(NYHelper.MAX_PRICE_DEFAULT))maxPriceDefault = extras.getDouble(NYHelper.MAX_PRICE_DEFAULT);
 
             NYLog.e("filterextras sortBy : "+sortBy);
             NYLog.e("filterextras minPrice : "+minPrice);
             NYLog.e("filterextras maxPrice : "+maxPrice);
 
+            totalDives = new ArrayList<>();
             if (intent.hasExtra(NYHelper.TOTAL_DIVES)){
                 try {
                     JSONArray arrayTotalDives = new JSONArray(extras.getString(NYHelper.TOTAL_DIVES));
@@ -292,8 +314,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     public void onDataLoaded(List<Category> items) {
         this.items = new ArrayList<>();
         this.items = items;
+        this.items.add(0,new Category("0","All"));
         refreshData();
-        Toast.makeText(this, "satu", Toast.LENGTH_SHORT).show();
     }
 
     public void refreshData(){
@@ -307,7 +329,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             FancyButton categoryFancyButton = (FancyButton) allCategoryView.findViewById(R.id.btn_category);
             categoryFancyButton.setText("All");*/
 
-            buildLabelCategory(new Category("0","All"));
+            //buildLabelCategory(new Category("0","All"));
 
             for (Category cat : items) {
                 buildLabelCategory(cat);
@@ -328,7 +350,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         }
     }
 
-    private void buildLabelCategory(Category category) {
+    private void buildLabelCategory(final Category category) {
 
         if (category != null && NYHelper.isStringNotEmpty(category.getName())){
             LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -348,6 +370,30 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     Category ct = (Category) fbCategory.getTag();
                     if (ct.getId().equals("0")){
                         //reset or select All
+                        boolean isExist = false;
+                        for (Category cat : categoryChooseList){
+                            if (ct.getId().equals(cat.getId())){
+                                NYLog.e("PANGGIL 5");
+                                isExist = true;
+                                break;
+                            }
+                        }
+
+                        if (isExist){
+                            categoryChooseList = new ArrayList<Category>();
+                        } else {
+                            //categoryChooseList.add(new Category("0","All"));
+                            categoryChooseList = items;
+                        }
+
+                        //setViewCategory(false, null, fbCategory);
+                        categoryFlowLayout.removeAllViews();
+                        //buildLabelCategory(new Category("0","All"));
+                        NYLog.e("ITEMS " + items);
+                        for (Category cat : items) {
+                            buildLabelCategory(cat);
+                        }
+
                     } else {
                         setViewCategory(false, null, fbCategory);
                     }
@@ -363,7 +409,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private void setViewCategory(boolean isInit, Category category, FancyButton fancyButton){
         Category state = new Category();
         boolean isExist = false;
+        NYLog.e("IS INIT " + isInit);
         if (isInit == false){
+
             state = (Category) fancyButton.getTag();
             // TODO: cek dengan yang facilities yg sudah dipilih
             for (Category cat : categoryChooseList){
@@ -374,7 +422,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 }
             }
         } else {
-            // TODO: cek dengan yang facilities yg sudah dipilih
             for (Category cat : categoryChooseList){
                 if (cat.getId().equals(category.getId())){
                     state = cat;
@@ -385,18 +432,21 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             if(!isExist) state = category;
         }
 
-        if ((isInit && !isExist) || isExist){
+        NYLog.e("CATEGORY INIT AFTER  " + isInit);
+        NYLog.e("CATEGORY EXIST AFTER + " + isExist);
+        if ((isInit && !isExist) || (!isInit && isExist)){
             // TODO: state unactive
             fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
             fancyButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-            fancyButton.setIconResource(R.drawable.ic_transportation_unactive);
+            fancyButton.setIconResource(R.drawable.ic_ferry_inactive);
             fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
             fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
-        } else if ((isInit && isExist) || !isExist){
+        } else if ((isInit && isExist) || (!isInit && !isExist)){
             // TODO: state active
+            //NYLog.e("PANGGIL " + category.getName());
             fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
             fancyButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
-            fancyButton.setIconResource(R.drawable.ic_transportation_white);
+            fancyButton.setIconResource(R.drawable.ic_ferry);
             fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
             fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey6));
         }
@@ -529,15 +579,19 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         switch(buttonView.getId()){
             case R.id.checkbox_one:
                 setCheckBoxDives("1", isChecked);
+                Toast.makeText(this, "1 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_two:
                 setCheckBoxDives("2", isChecked);
+                Toast.makeText(this, "2 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_three:
                 setCheckBoxDives("3", isChecked);
+                Toast.makeText(this, "3 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_more_four:
                 setCheckBoxDives(">4", isChecked);
+                Toast.makeText(this, "4 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -545,11 +599,26 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     public void setCheckBoxDives(String pos, boolean isChecked){
         boolean isExist = false;
         for (int i=0; i<totalDives.size();i++){
-            if (pos.equals(totalDives.get(i))) isExist = true;
+            if (pos.equals(totalDives.get(i))){
+                isExist = true;
+                break;
+            }
         }
 
         if (isExist && !isChecked){
-            totalDives.remove(pos);
+
+            /*List<String> totalDivesTemp = totalDives;
+            for (String st : totalDivesTemp){
+                if (st.equals(pos))totalDives.remove(st);
+            }*/
+
+            for (Iterator<String> iterator = totalDives.iterator(); iterator.hasNext(); ) {
+                String value = iterator.next();
+                if (value.equals(pos)) {
+                    iterator.remove();
+                }
+            }
+
         } else if (!isExist && isChecked){
             totalDives.add(pos);
         }
@@ -564,7 +633,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         categoryChooseList = new ArrayList<>();
 
         if (items != null & items.size() > 0) {
-            buildLabelCategory(new Category("0","All"));
             for (Category cat : items) {
                 buildLabelCategory(cat);
             }

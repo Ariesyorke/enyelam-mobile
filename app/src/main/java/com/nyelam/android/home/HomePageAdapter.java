@@ -484,6 +484,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 TextView priceTextView = (TextView) view.findViewById(R.id.price_textView);
                 TextView scheduleTextView = (TextView) view.findViewById(R.id.shedule_textView);
 
+                TextView totalDiveTextView = (TextView) view.findViewById(R.id.total_dive_textView);
+                TextView totalDiveSpot_textView = (TextView) view.findViewById(R.id.total_dive_spot_textView);
+                TextView totalDayTextView = (TextView) view.findViewById(R.id.total_day_textView);
+
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
@@ -534,6 +538,17 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (diveService.getSchedule() != null) {
                         scheduleTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()));
                     }
+
+                    if (diveService.getDiveSpots() != null
+                            && diveService.getDiveSpots().size() > 0){
+                        totalDiveSpot_textView.setText(String.valueOf(diveService.getDiveSpots().size())+" Spot(s)");
+                    } else {
+                        totalDiveSpot_textView.setText("0 Spot(s)");
+                    }
+
+                    totalDayTextView.setText(String.valueOf(diveService.getDays())+" Day(s)");
+
+                    totalDiveTextView.setText(String.valueOf(diveService.getTotalDives())+" Dive(s)");
 
                     double normalPrice = Double.valueOf(diveService.getNormalPrice());
                     double specialPrice = Double.valueOf(diveService.getSpecialPrice());

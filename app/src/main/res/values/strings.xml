@@ -58,6 +58,7 @@
     <string name="save">Save</string>
     <string name="change">Change</string>
     <string name="fill_in">Fill in</string>
+    <string name="filter">Filter</string>
     <string name="change_password">Change Password</string>
     <string name="next">Next</string>
     <string name="bank_transfer">Bank Transfer</string>

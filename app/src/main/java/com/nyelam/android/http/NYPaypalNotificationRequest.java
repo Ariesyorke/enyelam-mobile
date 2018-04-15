@@ -9,8 +9,9 @@ import com.danzoye.lib.http.DBaseRequest;
  */
 
 public class NYPaypalNotificationRequest extends DBaseRequest<Boolean> {
-    private static final String HOST_URL = "https://nyelam.dantech.id/notification/paypal";
-//    private static final String HOST_URL = "https://e-nyelam.com/notification/veritrans";
+    /*private static final String HOST_URL = "https://nyelam-adam.dantech.id/notification/paypal";*/
+    /*private static final String HOST_URL = "https://nyelam.dantech.id/notification/paypal";*/
+    private static final String HOST_URL = "https://e-nyelam.com/notification/paypal";
     private static final String POST_PAYPAL_ID = "paypal_id";
 
     public NYPaypalNotificationRequest(Context context, String paypalId) {

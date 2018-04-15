@@ -142,7 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <com.nyelam.android.view.font.NYTextView
-                            app:fontTextStyle="mediumItalic"
+                            app:fontTextStyle="medium"
                             android:id="@+id/service_name_textView"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -233,7 +233,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <com.nyelam.android.view.font.NYTextView
-                            app:fontTextStyle="reguler"
+                            app:fontTextStyle="light"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
@@ -251,8 +251,9 @@
                             android:layout_marginStart="@dimen/padding"
                             android:textSize="16sp"
                             android:text="Rp 0"
-                            android:textColor="@color/ny_orange" />
+                            android:textColor="@color/ny_grey4" />
                     </LinearLayout>
+
 
 
                     <LinearLayout
@@ -282,6 +283,13 @@
                             android:textColor="@color/ny_orange" />
                     </LinearLayout>
 
+
+
+                    <LinearLayout
+                        android:id="@+id/additional_linearLayout"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -314,7 +322,7 @@
 
 
                 <com.nyelam.android.view.font.NYTextView
-                    app:fontTextStyle="mediumItalic"
+                    app:fontTextStyle="medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/ny_blue7"

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ import com.nyelam.android.ecotrip.EcoTripViewPagerAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
+import com.nyelam.android.http.NYDoTripSuggestionServiceRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -78,11 +80,13 @@ public class DoTripActivity extends AppCompatActivity implements
     private  int pickedMonth = -1;
     private  int pickedYear = -1;
     //private Calendar c;
+    private ScrollView scrollView;
 
     //suggestion
     private DoDiveDiveServiceSuggestionAdapter diveServiceSuggestionAdapter;
     private RecyclerView suggestionRecyclerView;
     private LinearLayout suggestionLinearLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,15 +127,19 @@ public class DoTripActivity extends AppCompatActivity implements
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
+                divingLicenseSwitch.setChecked(diveService.isLicense());
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                DiveService diveService = diveServiceSuggestionAdapter.getDiveService(position);
+                /*DiveService diveService = diveServiceSuggestionAdapter.getDiveService(position);
                 diverId = diveService.getId();
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
+                divingLicenseSwitch.setChecked(diveService.isLicense());
+                scrollView.fullScroll(ScrollView.FOCUS_UP);*/
             }
         }));
 
@@ -344,6 +352,7 @@ public class DoTripActivity extends AppCompatActivity implements
                         if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
                             intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
+                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
                         startActivity(intent);
                     } else if (type.equals("4") ){
 
@@ -368,6 +377,7 @@ public class DoTripActivity extends AppCompatActivity implements
                         if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
                             intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
+                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
                         startActivity(intent);
 
                     } else if (type.equals("5") || type.equals("6")){
@@ -387,6 +397,7 @@ public class DoTripActivity extends AppCompatActivity implements
                         if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
                             intent.putExtra(NYHelper.ECO_TRIP, 1);
                         }
+                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
                         startActivity(intent);
 
                     } else {
@@ -405,6 +416,7 @@ public class DoTripActivity extends AppCompatActivity implements
                         if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
                             intent.putExtra(NYHelper.ECO_TRIP, 1);
                         }
+                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
                         startActivity(intent);
                     }
 
@@ -415,7 +427,7 @@ public class DoTripActivity extends AppCompatActivity implements
 
 
     private void getSuggetionRequest() {
-        NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getApplicationContext());
+        NYDoTripSuggestionServiceRequest req = new NYDoTripSuggestionServiceRequest(getApplicationContext());
         spcMgr.execute(req, onSearchServiceRequest());
 
         // TODO: load data dummy, to test and waitting for API request
@@ -457,6 +469,7 @@ public class DoTripActivity extends AppCompatActivity implements
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
 
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
         keywordTextView = (com.nyelam.android.view.font.NYTextView) findViewById(R.id.keyword_textView);
         diverSpinner = (Spinner) findViewById(R.id.diver_spinner);
         datetimeTextView = (TextView) findViewById(R.id.datetime_textView);
@@ -495,6 +508,11 @@ public class DoTripActivity extends AppCompatActivity implements
         if(spcMgr.isStarted())spcMgr.shouldStop();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSuggetionRequest();
+    }
 
     public void openSchedule(){
         final Calendar today = Calendar.getInstance();

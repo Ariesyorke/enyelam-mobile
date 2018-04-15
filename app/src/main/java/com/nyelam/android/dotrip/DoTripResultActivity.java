@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.Facilities;
+import com.nyelam.android.data.Price;
 import com.nyelam.android.data.StateFacility;
 import com.nyelam.android.data.StateFacilityList;
 import com.nyelam.android.dev.NYLog;
@@ -28,6 +30,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
+import com.nyelam.android.http.NYGetMinMaxPriceRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
@@ -53,16 +56,19 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
     private RecyclerView recyclerView;
     private TextView titleTextView, labelTextView, noResultTextView;
     private FloatingActionButton sortFloatingButton;
-    private ImageView filterImageView, searchImageView;
+    //private ImageView filterImageView;
+    private ImageView searchImageView;
     private int page = 1;
 
-    private int sortingType = 0;
-    private Double minPrice;
-    private Double maxPrice;
+    private int sortingType = 2;
+    private double minPrice=-1, minPriceDefault;
+    private double maxPrice=-1, maxPriceDefault;
     //private ArrayList<String> categories;
     private List<String> totalDives;
     private CategoryList categoryList;
     private StateFacilityList stateFacilityList;
+    private TextView filterTextView;
+    private RelativeLayout filterRelativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +77,15 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         initView();
         initExtra();
         initAdapter();
-        initRequest();
+        requestPriceRange();
+        /*initRequest();*/
         //initToolbar();
         initControl();
         initToolbar(true);
     }
 
     private void initControl() {
+
         sortFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +101,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
             }
         });
 
-        filterImageView.setOnClickListener(new View.OnClickListener() {
+        /*filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DoTripResultActivity.this, FilterListServiceActivity.class);
@@ -102,12 +110,32 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                 if (stateFacilityList != null && stateFacilityList.getList() != null && stateFacilityList.getList().size() > 0)intent.putExtra(NYHelper.FACILITIES, stateFacilityList.getList().toString());
                 if (totalDives != null && totalDives.size() > 0)intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
                 intent.putExtra(NYHelper.SORT_BY, sortingType);
+                intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, minPriceDefault);
                 intent.putExtra(NYHelper.MIN_PRICE, minPrice);
+                intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, maxPriceDefault);
+                intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
+                startActivityForResult(intent, mRequestCode);
+            }
+        });*/
+
+        filterTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoTripResultActivity.this, FilterListServiceActivity.class);
+                // TODO: kirim parameter ke filter
+                if (categoryList != null && categoryList.getList() != null && categoryList.getList().size() > 0)intent.putExtra(NYHelper.CATEGORIES, categoryList.getList().toString());
+                if (stateFacilityList != null && stateFacilityList.getList() != null && stateFacilityList.getList().size() > 0)intent.putExtra(NYHelper.FACILITIES, stateFacilityList.getList().toString());
+                if (totalDives != null && totalDives.size() > 0)intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+                intent.putExtra(NYHelper.SORT_BY, sortingType);
+                intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, minPriceDefault);
+                intent.putExtra(NYHelper.MIN_PRICE, minPrice);
+                intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, maxPriceDefault);
                 intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
                 startActivityForResult(intent, mRequestCode);
             }
         });
     }
+
 
     private void initRequest() {
         progressBar.setVisibility(View.VISIBLE);
@@ -191,7 +219,9 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         sortFloatingButton = (FloatingActionButton) findViewById(R.id.sort_floatingButton);
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
-        filterImageView = (ImageView) findViewById(R.id.filter_imageView);
+        //filterImageView = (ImageView) findViewById(R.id.filter_imageView);
+        filterTextView = (TextView) findViewById(R.id.filter_textView);
+        filterRelativeLayout = (RelativeLayout) findViewById(R.id.filter_relativeLayout);
     }
 
     private RequestListener<DiveServiceList> onSearchServiceRequest() {
@@ -204,6 +234,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                 diveServiceAdapter.clear();
                 diveServiceAdapter.notifyDataSetChanged();
                 noResultTextView.setVisibility(View.VISIBLE);
+                //filterRelativeLayout.setVisibility(View.GONE);
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
             }
 
@@ -214,15 +245,18 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                 }
 
                 if (results != null){
-                    noResultTextView.setVisibility(View.GONE);
-                    diveServiceAdapter.clear();
                     diveServiceAdapter.addResults(results.getList());
                     diveServiceAdapter.notifyDataSetChanged();
-                } else {
-                    diveServiceAdapter.clear();
-                    diveServiceAdapter.notifyDataSetChanged();
-                    noResultTextView.setVisibility(View.VISIBLE);
                 }
+
+                if (diveServiceAdapter.getItemCount() > 0){
+                    noResultTextView.setVisibility(View.GONE);
+                    filterRelativeLayout.setVisibility(View.VISIBLE);
+                } else {
+                    noResultTextView.setVisibility(View.VISIBLE);
+                    //filterRelativeLayout.setVisibility(View.GONE);
+                }
+
 
             }
         };
@@ -267,7 +301,6 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
     public void doUpdateVersion(String link) {
 
     }
-
 
     public void loadJSONAsset(){
 
@@ -336,6 +369,8 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
             NYLog.e("onresult minPrice : "+minPrice);
             NYLog.e("onresult maxPrice : "+maxPrice);
 
+            totalDives = new ArrayList<>();
+
             if (data.hasExtra(NYHelper.TOTAL_DIVES)){
                 try {
                     JSONArray arrayTotalDives = new JSONArray(b.getString(NYHelper.TOTAL_DIVES));
@@ -373,10 +408,54 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                 }
             }
 
+            diveServiceAdapter.clear();
+            diveServiceAdapter.notifyDataSetChanged();
+            page=1;
+
             initRequest();
 
         }
     }
+
+
+
+    public void requestPriceRange(){
+        progressBar.setVisibility(View.VISIBLE);
+        NYGetMinMaxPriceRequest req = null;
+        try {
+            req = new NYGetMinMaxPriceRequest(this, "2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onGetMinMaxPriceRequest());
+    }
+
+    private RequestListener<Price> onGetMinMaxPriceRequest() {
+        return new RequestListener<Price>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+                //filterRelativeLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onRequestSuccess(Price results) {
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                if (results != null){
+                    minPriceDefault = results.getLowestPrice();
+                    maxPriceDefault = results.getHighestPrice();
+                    initRequest();
+                }
+            }
+        };
+    }
+
+
 
 }
 

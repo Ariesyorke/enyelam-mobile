@@ -19,11 +19,13 @@ public class Order implements Parseable {
     private static String KEY_STATUS = "status";
     private static String KEY_SCHEDULE = "schedule";
     private static String KEY_CART = "cart";
+    private static String KEY_ADDITIONAL = "additional";
 
     private String orderId;
     private String status;
     private long schedule;
     private Cart cart;
+    private List<Additional> additionals;
 
     public String getOrderId() {
         return orderId;
@@ -55,6 +57,14 @@ public class Order implements Parseable {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public List<Additional> getAdditionals() {
+        return additionals;
+    }
+
+    public void setAdditionals(List<Additional> additionals) {
+        this.additionals = additionals;
     }
 
     @Override
@@ -93,6 +103,21 @@ public class Order implements Parseable {
             }
         }
 
+        if (!obj.isNull(KEY_ADDITIONAL)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_ADDITIONAL);
+                if (array != null && array.length() > 0) {
+                    additionals = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        Additional a = new Additional();
+                        a.parse(o);
+                        additionals.add(a);
+                    }
+                }
+            } catch (JSONException e) {e.printStackTrace();}
+        }
+
     }
 
     @Override
@@ -129,6 +154,19 @@ public class Order implements Parseable {
             }
         }catch (JSONException e){
             e.printStackTrace();
+        }
+
+        if(additionals != null && !additionals.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(Additional a : additionals) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_ADDITIONAL, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         try {

@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/ny_blue2</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back_button_white</item>
     </style>
 
     <style name="Fullscreen" parent="AppTheme">
@@ -75,5 +76,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 
 </resources>

@@ -90,22 +90,20 @@ public class CartReturn implements Parseable {
         }
 
 
-            if (!obj.isNull(KEY_ADDITIONAL)) {
-                try {
-                    JSONArray array = obj.getJSONArray(KEY_ADDITIONAL);
-                    if (array != null && array.length() > 0) {
-                        additionals = new ArrayList<>();
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject o = array.getJSONObject(i);
-                            Additional a = new Additional();
-                            a.parse(o);
-                            additionals.add(a);
-                        }
+        if (!obj.isNull(KEY_ADDITIONAL)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_ADDITIONAL);
+                if (array != null && array.length() > 0) {
+                    additionals = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        Additional a = new Additional();
+                        a.parse(o);
+                        additionals.add(a);
                     }
-                } catch (JSONException e) {e.printStackTrace();}
-            }
-
-
+                }
+            } catch (JSONException e) {e.printStackTrace();}
+        }
 
     }
 

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +19,15 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.Price;
 import com.nyelam.android.data.StateFacility;
 import com.nyelam.android.data.StateFacilityList;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.dotrip.DoTripResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
+import com.nyelam.android.http.NYGetMinMaxPriceRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -40,7 +44,6 @@ import java.util.List;
 public class DoDiveSearchResultActivity extends BasicActivity implements NYCustomDialog.OnDialogFragmentClickListener {
 
     private int mRequestCode = 100;
-
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoDiveSearchDiveServiceAdapter diveServiceAdapter;
     private ProgressBar progressBar;
@@ -49,17 +52,19 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     protected String keyword, diverId, diver, certificate, date, type;
     private FloatingActionButton sortFloatingButton;
     //protected String diveSpotId;
-    private ImageView filterImageView;
+    //private ImageView filterImageView;
     private ImageView searchImageView;
     private int page = 1;
     private boolean ecotrip = false;
-    private int sortingType = 0;
-    private Double minPrice;
-    private Double maxPrice;
-    //private ArrayList<String> categories;
+    private int sortingType = 2;
+    private double minPrice=-1, maxPrice=-1;
+    private double minPriceDefault, maxPriceDefault;
     private List<String> totalDives;
     private CategoryList categoryList;
     private StateFacilityList stateFacilityList;
+    private TextView filterTextView;
+    private RelativeLayout filterRelativeLayout;
+    private ImageView backImageView;
 
     public boolean isEcotrip() {
         return ecotrip;
@@ -72,7 +77,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         initView();
         initExtra();
         initAdapter();
-        initRequest();
+        //initRequest();
+        requestPriceRange();
         //initToolbar();
         initControl();
         initToolbar(true);
@@ -94,11 +100,11 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             }
         });
 
-        filterImageView.setOnClickListener(new View.OnClickListener() {
+        /*filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListServiceActivity.class);
-                /*intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
+                *//*intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
                 intent.putExtra(NYHelper.KEYWORD, keyword);
                 intent.putExtra(NYHelper.ID_DIVER, diverId);
                 intent.putExtra(NYHelper.DIVER, diver);
@@ -106,7 +112,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.TYPE, type);
                 intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
-                intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);*/
+                intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);*//*
                 //startActivity(intent);
                 // TODO: kirim parameter ke filter
                 intent.putExtra(NYHelper.CATEGORIES, categoryList.toString());
@@ -114,7 +120,31 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
                 intent.putExtra(NYHelper.SORT_BY, sortingType);
                 intent.putExtra(NYHelper.MIN_PRICE, minPrice);
+                intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, minPriceDefault);
                 intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
+                intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, maxPriceDefault);
+                startActivityForResult(intent, mRequestCode);
+            }
+        });*/
+
+        filterTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListServiceActivity.class);
+                // TODO: kirim parameter ke filter
+                // TODO: kirim parameter ke filter
+                if(categoryList != null && categoryList.getList() != null && !categoryList.getList().isEmpty()) {
+                    intent.putExtra(NYHelper.CATEGORIES, categoryList.getList().toString());
+                }
+                if(stateFacilityList != null && stateFacilityList.getList() != null && !stateFacilityList.getList().isEmpty()) {
+                    intent.putExtra(NYHelper.FACILITIES, stateFacilityList.getList().toString());
+                }
+                intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+                intent.putExtra(NYHelper.SORT_BY, sortingType);
+                intent.putExtra(NYHelper.MIN_PRICE, minPrice);
+                intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, minPriceDefault);
+                intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
+                intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, maxPriceDefault);
                 startActivityForResult(intent, mRequestCode);
             }
         });
@@ -210,7 +240,10 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         sortFloatingButton = (FloatingActionButton) findViewById(R.id.sort_floatingButton);
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
-        filterImageView = (ImageView) findViewById(R.id.filter_imageView);
+        //filterImageView = (ImageView) findViewById(R.id.filter_imageView);
+        filterTextView = (TextView) findViewById(R.id.filter_textView);
+        filterRelativeLayout = (RelativeLayout) findViewById(R.id.filter_relativeLayout);
+        backImageView = (ImageView) findViewById(R.id.back_imageView);
     }
 
     private RequestListener<DiveServiceList> onSearchServiceRequest() {
@@ -233,14 +266,16 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 }
 
                 if (results != null){
-                    noResultTextView.setVisibility(View.GONE);
-                    diveServiceAdapter.clear();
                     diveServiceAdapter.addResults(results.getList());
                     diveServiceAdapter.notifyDataSetChanged();
+                }
+
+                if (diveServiceAdapter.getItemCount() > 0){
+                    noResultTextView.setVisibility(View.GONE);
+                    filterRelativeLayout.setVisibility(View.VISIBLE);
                 } else {
-                    diveServiceAdapter.clear();
-                    diveServiceAdapter.notifyDataSetChanged();
                     noResultTextView.setVisibility(View.VISIBLE);
+                    //filterRelativeLayout.setVisibility(View.GONE);
                 }
 
             }
@@ -269,7 +304,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     public void onChooseListener(Object position) {
         sortingType = (Integer) position;
         //Toast.makeText(this, String.valueOf(sortingType), Toast.LENGTH_SHORT).show();
-        initRequest();
+        //initRequest();
     }
 
     @Override
@@ -400,9 +435,54 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 }
             }
 
-            initRequest();
+            diveServiceAdapter.clear();
+            diveServiceAdapter.notifyDataSetChanged();
+            page=1;
+            //initRequest();
+            requestPriceRange();
 
         }
     }
+
+
+
+    public void requestPriceRange(){
+        progressBar.setVisibility(View.VISIBLE);
+        NYGetMinMaxPriceRequest req = null;
+        try {
+            req = new NYGetMinMaxPriceRequest(this, "2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onGetMinMaxPriceRequest());
+    }
+
+    private RequestListener<Price> onGetMinMaxPriceRequest() {
+        return new RequestListener<Price>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+                //filterRelativeLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onRequestSuccess(Price results) {
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                if (results != null){
+                    minPriceDefault = results.getLowestPrice();
+                    maxPriceDefault = results.getHighestPrice();
+                    initRequest();
+                }
+            }
+        };
+    }
+
+
+
 
 }

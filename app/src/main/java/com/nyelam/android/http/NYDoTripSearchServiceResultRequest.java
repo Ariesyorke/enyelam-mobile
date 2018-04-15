@@ -43,7 +43,7 @@ public class NYDoTripSearchServiceResultRequest extends NYBasicRequest<DiveServi
     private static final String POST_CATEGORY_ID = "category_id";
     private static final String POST_ECO_TRIP = "eco_trip";
 
-    public NYDoTripSearchServiceResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, List<String> totalDives, Double priceMin, Double priceMax) {
+    public NYDoTripSearchServiceResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, List<String> totalDives, double priceMin, double priceMax) {
         super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(diverId) && !TextUtils.isEmpty(type)) {
@@ -76,11 +76,11 @@ public class NYDoTripSearchServiceResultRequest extends NYBasicRequest<DiveServi
             addQuery(POST_DATE, date);
         }
 
-        if(priceMin != null) {
+        if(priceMin >= 0) {
             addQuery(POST_PRICE_MIN, String.valueOf(priceMin));
         }
 
-        if(priceMax != null) {
+        if(priceMax >= 0) {
             addQuery(POST_PRICE_MAX, String.valueOf(priceMax));
         }
 

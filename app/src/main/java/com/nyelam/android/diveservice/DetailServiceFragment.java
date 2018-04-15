@@ -41,6 +41,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
+import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -121,6 +122,7 @@ public class DetailServiceFragment extends Fragment {
                     intent.putExtra(NYHelper.DIVER, String.valueOf(activity.diver));
                     intent.putExtra(NYHelper.SCHEDULE, activity.schedule);
                     if (activity.diveService != null)intent.putExtra(NYHelper.SERVICE, activity.diveService.toString());
+                    intent.putExtra(NYHelper.IS_DO_TRIP, activity.isDoTrip);
                     startActivity(intent);
                 }
 
@@ -403,6 +405,7 @@ public class DetailServiceFragment extends Fragment {
                     intent.putExtra(NYHelper.SCHEDULE, activity.schedule);
                     intent.putExtra(NYHelper.CERTIFICATE, activity.certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
+                    intent.putExtra(NYHelper.IS_DO_TRIP, activity.isDoTrip);
                     activity.startActivity(intent);
                 }
 
@@ -419,14 +422,25 @@ public class DetailServiceFragment extends Fragment {
     private void getRelatedServiceRequest() {
         DiveService diveService = activity.getDiveService();
         String apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
-
-        if (diveService != null && diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getId())){
-            // TODO: realted service belum
-            NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, null, null, String.valueOf(0));
-            spcMgr.execute(req, onSearchServiceRequest());
-            // TODO: load data dummy, to test and waitting for API request
-            //loadJSONAsset();
+        if (activity.isDoTrip){
+            apiPath = getString(R.string.api_path_dotrip_service_list_by_divecenter);
+            if (diveService != null && diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getId())){
+                // TODO: realted service belum
+                NYDoTripSearchServiceResultRequest req = new NYDoTripSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, String.valueOf(2), null, null, null, -1, -1);
+                spcMgr.execute(req, onSearchServiceRequest());
+                // TODO: load data dummy, to test and waitting for API request
+                //loadJSONAsset();
+            }
+        } else {
+            if (diveService != null && diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getId())){
+                // TODO: realted service belum
+                NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, -1, -1, String.valueOf(0));
+                spcMgr.execute(req, onSearchServiceRequest());
+                // TODO: load data dummy, to test and waitting for API request
+                //loadJSONAsset();
+            }
         }
+
     }
 
     private RequestListener<DiveServiceList> onSearchServiceRequest() {

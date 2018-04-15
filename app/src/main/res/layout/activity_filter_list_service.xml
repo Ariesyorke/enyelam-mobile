@@ -164,8 +164,6 @@
                     android:layout_marginTop="@dimen/padding_half"
                     android:layout_marginBottom="@dimen/padding_half"
                     app:corner_radius="10"
-                    app:min_value="0"
-                    app:max_value="10000000"
                     app:bar_color="#B1B1B1"
                     app:bar_highlight_color="#0071BC"
                     app:left_thumb_color="#EFEFEF"
@@ -270,7 +268,7 @@
                 android:paddingTop="@dimen/padding"
                 android:paddingBottom="@dimen/padding"
                 app:flChildSpacing="auto"
-                app:flChildSpacingForLastRow="auto"
+                app:flChildSpacingForLastRow="align"
                 app:flMinChildSpacing="@dimen/padding_half"
                 app:flRowSpacing="8dp"/>
 
