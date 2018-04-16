@@ -9,6 +9,7 @@
     tools:context="com.nyelam.android.dodive.FilterListServiceActivity">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:background="#0071BC"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -29,6 +30,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="18sp" />
         <com.nyelam.android.view.font.NYTextView
+            android:visibility="gone"
             android:id="@+id/reset_textView"
             app:fontTextStyle="reguler"
             android:layout_width="wrap_content"
@@ -41,10 +43,10 @@
     </RelativeLayout>
 
 
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_weight="1"
+        android:layout_height="0dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -413,5 +415,47 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <View
+        android:background="@color/ny_grey1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <LinearLayout
+        android:layout_below="@+id/scrollView"
+        android:id="@+id/filter_linearLayout"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/apply_textView"
+            android:text="Apply"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/ny_rectangle_blue"
+            android:padding="@dimen/padding"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginEnd="@dimen/padding_half"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/clear_textView"
+            android:text="Clear"
+            android:textSize="16sp"
+            android:textColor="@color/ny_grey4"
+            android:background="@drawable/ny_rectangle_white_border_grey"
+            android:padding="@dimen/padding"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:layout_marginStart="@dimen/padding_half"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>

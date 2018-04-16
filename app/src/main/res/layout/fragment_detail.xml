@@ -23,9 +23,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/padding_triple" />
 
-
             <LinearLayout
-                android:visibility="gone"
+
                 android:id="@+id/main_linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +67,6 @@
                                 android:textSize="18sp"
                                 app:fontTextStyle="reguler" />
 
-
                             <LinearLayout
                                 android:id="@+id/dive_center_linearLayout"
                                 android:layout_width="match_parent"
@@ -92,6 +90,7 @@
                                     android:text="Dive Center"
                                     android:textColor="@color/ny_black3"
                                     android:textSize="16sp" />
+
                             </LinearLayout>
 
                             <com.nyelam.android.view.font.NYTextView

@@ -62,6 +62,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private FlowLayout facilitiesFlowLayout;
     private ImageView closeImageView;
 
+    private boolean isApply = false;
+    private TextView applyTextView, clearTextView;
     private RadioButton rbLowerPrice;
     private RadioButton rbHighestPrice;
     private CrystalRangeSeekbar rangeSeekbar;
@@ -107,10 +109,10 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         }
 
         if (maxPrice < 0){
-            Toast.makeText(this, "max price 1 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "max price 1 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
             rangeSeekbar.setMaxStartValue((float)maxPriceDefault);
         } else {
-            Toast.makeText(this, "max price 2 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "max price 2 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
             rangeSeekbar.setMaxStartValue((float)maxPrice);
         }
         rangeSeekbar.apply();
@@ -193,6 +195,20 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             }
         });
 
+        applyTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isApply = true;
+                onBackPressed();
+            }
+        });
+
+        clearTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetFilter();
+            }
+        });
     }
 
     private void getCategories() {
@@ -229,6 +245,10 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         check2.setOnCheckedChangeListener(this);
         check3.setOnCheckedChangeListener(this);
         check4.setOnCheckedChangeListener(this);
+
+        // get min and max text view
+        clearTextView = (TextView) findViewById(R.id.clear_textView);
+        applyTextView = (TextView) findViewById(R.id.apply_textView);
     }
 
     private void initExtra() {
@@ -562,15 +582,18 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     @Override
     public void onBackPressed() {
 
-        Intent intent = new Intent();
-        intent.putExtra(NYHelper.SORT_BY, sortBy);
-        intent.putExtra(NYHelper.MIN_PRICE, minPrice);
-        intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
-        intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
-        intent.putExtra(NYHelper.CATEGORIES, categoryChooseList.toString());
-        intent.putExtra(NYHelper.FACILITIES, facilitiesChooseList.toString());
+        if (isApply){
+            Intent intent = new Intent();
+            intent.putExtra(NYHelper.SORT_BY, sortBy);
+            intent.putExtra(NYHelper.MIN_PRICE, minPrice);
+            intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
+            intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+            intent.putExtra(NYHelper.CATEGORIES, categoryChooseList.toString());
+            intent.putExtra(NYHelper.FACILITIES, facilitiesChooseList.toString());
 
-        setResult(RESULT_OK, intent);
+            setResult(RESULT_OK, intent);
+        }
+
         super.onBackPressed();
     }
 
@@ -629,15 +652,37 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
     public  void resetFilter(){
 
+        //reset radio button
+        sortBy = 2;
+        rbLowerPrice.setChecked(true);
+        rbHighestPrice.setChecked(false);
+
+        //reset price range
+        minPrice = minPriceDefault;
+        maxPrice = maxPriceDefault;
+        tvMinPrice.setText(NYHelper.priceFormatter(minPriceDefault));
+        tvMaxPrice.setText(NYHelper.priceFormatter(maxPriceDefault));
+        rangeSeekbar.setMinStartValue((float)minPriceDefault);
+        rangeSeekbar.setMaxStartValue((float)maxPriceDefault);
+        rangeSeekbar.apply();
+
+        //total dives
+        totalDives = new ArrayList<>();
+        check1.setChecked(false);
+        check2.setChecked(false);
+        check3.setChecked(false);
+        check4.setChecked(false);
+
+        //reset categories
         categoryFlowLayout.removeAllViews();
         categoryChooseList = new ArrayList<>();
-
         if (items != null & items.size() > 0) {
             for (Category cat : items) {
                 buildLabelCategory(cat);
             }
         }
 
+        //reset facilities
         facilitiesFlowLayout.removeAllViews();
         facilitiesChooseList = new ArrayList<>();
         for (StateFacility fac : facilitiesItems) {

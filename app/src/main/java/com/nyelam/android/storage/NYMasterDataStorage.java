@@ -113,7 +113,6 @@ public class NYMasterDataStorage {
                             NYLog.d("+++ countries size = 0");
                         }
 
-
                         NYLog.d("+++ countries size : result = "+result.toString());
 
                         if (result == null || result.next < 1 || result.item == null || result.item.getList() == null || result.item.getList().isEmpty()) {
@@ -140,8 +139,6 @@ public class NYMasterDataStorage {
         new Thread(runnable).start();
     }
 
-
-
     public void loadCategories(@NonNull LoadDataListener<Category> listener, boolean clearOnSuccess) {
         loadCategoriesInternal(listener, false, clearOnSuccess);
     }
@@ -149,7 +146,6 @@ public class NYMasterDataStorage {
     public void loadCategoriesUseCacheIfAvailable(@NonNull LoadDataListener<Category> listener, boolean clearOnSuccess) {
         loadCategoriesInternal(listener, true, clearOnSuccess);
     }
-
 
     private List<Category> loadCategoriesFromCacheInternal(DaoSession session) {
         List<NYCategory> rawInterests = session.getNYCategoryDao().queryBuilder().list();
@@ -216,7 +212,6 @@ public class NYMasterDataStorage {
                             NYLog.d("+++ categories size = 0");
                         }
 
-
                         NYLog.d("+++ categories size : result = "+result.toString());
 
                         if (result == null || result.next < 1 || result.item == null || result.item.getList() == null || result.item.getList().isEmpty()) {
@@ -242,9 +237,6 @@ public class NYMasterDataStorage {
         };
         new Thread(runnable).start();
     }
-
-
-
 
     public interface LoadDataListener<MODEL> {
         void onLoadFailed(Exception e);
