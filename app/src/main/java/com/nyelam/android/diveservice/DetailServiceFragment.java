@@ -287,7 +287,7 @@ public class DetailServiceFragment extends Fragment {
                         ImageLoader.getInstance().displayImage(service.getDiveCenter().getImageLogo(), diveCenterImageView, NYHelper.getOption());
 
                     } else {
-                        diveCenterImageView.setImageResource(R.drawable.bg_placeholder);
+                        diveCenterImageView.setImageResource(R.drawable.logo_nyelam);
                     }
 
                 }

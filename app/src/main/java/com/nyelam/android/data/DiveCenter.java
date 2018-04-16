@@ -46,7 +46,6 @@ public class DiveCenter implements Parseable {
     private Membership membership;
     private int status;
     private Location location;
-
     private List<Category> categories;
     private String featuredImage;
     private String startFromPrice;

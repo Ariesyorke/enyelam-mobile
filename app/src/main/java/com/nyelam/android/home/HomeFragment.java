@@ -188,7 +188,8 @@ public class HomeFragment extends Fragment {
         ecoTripCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DoDiveActivity.class);
+                //Intent intent = new Intent(getActivity(), DoDiveActivity.class);
+                Intent intent = new Intent(getActivity(), EcoTripActivity.class);
                 intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                 startActivity(intent);
             }

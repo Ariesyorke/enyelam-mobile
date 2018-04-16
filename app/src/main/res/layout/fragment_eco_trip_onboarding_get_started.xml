@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/ny_blue1"
     tools:context="com.nyelam.android.ecotrip.EcoTripOnboardingGetStartedFragment">
+
     <ImageView
         android:id="@+id/background_imageView"
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_weight="11"
             android:orientation="horizontal">
             <View
                 android:layout_width="0dp"
@@ -32,14 +33,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:layout_weight="4">
+                android:layout_weight="10">
                 <ImageView
                     android:id="@+id/icon_imageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/eco_trip_5"
-                    android:scaleType="centerInside"/>
+                    android:src="@drawable/eco_trip_6"
+                    android:scaleType="centerCrop"/>
                 <View
                     android:id="@+id/our_activities_button"
                     android:layout_width="match_parent"
@@ -57,11 +58,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="2">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/ny_blue7"
+                android:background="@drawable/ny_rectangle_green"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/padding_half"
                 android:orientation="vertical"
@@ -74,10 +75,18 @@
                     android:paddingLeft="@dimen/padding"
                     android:paddingRight="@dimen/padding"
                     android:textSize="20sp"
-                    android:text="@string/book_eco_trip"
+                    android:text="@string/book_eco_trip_now"
                     android:textColor="@color/white"
-                    app:fontTextStyle="mediumItalic"/>
+                    app:fontTextStyle="medium"/>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/back_imageView"
+        android:src="@drawable/ic_back_button_white"
+        android:layout_margin="@dimen/padding_double"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

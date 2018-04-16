@@ -30,15 +30,15 @@ import com.nyelam.android.helper.NYHelper;
 
 public class EcoTripOnboardingGetStartedFragment extends Fragment {
     private View bookNowButton;
-    private int backgroundResource = R.drawable.eco_trip_5_bg;
+    private int backgroundResource = R.drawable.eco_trip_6_bg;
     private ImageView backgroundImageView;
+    private ImageView backImageView;
     private View activitiesButton;
     private Bitmap bitmap;
 
     public EcoTripOnboardingGetStartedFragment() {
         // Required empty public constructor
     }
-
 
     public static EcoTripOnboardingGetStartedFragment newInstance() {
         EcoTripOnboardingGetStartedFragment fragment = new EcoTripOnboardingGetStartedFragment();
@@ -66,7 +66,7 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
         activitiesButton = view.findViewById(R.id.our_activities_button);
         backgroundImageView = (ImageView)view.findViewById(R.id.background_imageView);
         bookNowButton = view.findViewById(R.id.book_eco_trip_button);
-        String imageUri = "drawable://" + R.drawable.eco_trip_5_bg;
+        String imageUri = "drawable://" + R.drawable.eco_trip_6_bg;
         final NYApplication application = (NYApplication) getActivity().getApplication();
         activitiesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +77,15 @@ public class EcoTripOnboardingGetStartedFragment extends Fragment {
                 startActivity(i);
             }
         });
+
+        backImageView = (ImageView) view.findViewById(R.id.back_imageView);
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
         /*if(application.getCache(imageUri) != null) {
             Bitmap bitmap = application.getCache(imageUri);
             backgroundImageView.setImageBitmap(bitmap);

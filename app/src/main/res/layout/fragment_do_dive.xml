@@ -332,7 +332,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>-->
 
-
             </LinearLayout>
 
             <TextView
@@ -375,12 +374,6 @@
                     android:layout_margin="8dp"
                     />
             </LinearLayout>
-
-
-
-
-
-
 
 
 

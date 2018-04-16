@@ -2,11 +2,13 @@ package com.nyelam.android.dodive;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -138,7 +140,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         initViewPager();
 
         DoDiveActivity activity = (DoDiveActivity)getActivity();
-        if(!activity.isEcoTrip()) getSuggetionRequest();
+        if(activity.isEcoTrip()){
+            searchTextView.setBackgroundResource(R.drawable.ny_rectangle_green);
+        } else {
+            getSuggetionRequest();
+        }
     }
 
     private void initAdapter() {
@@ -388,6 +394,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 setDivingLicense(divingLicenseSwitch.isChecked());
+                if (divingLicenseSwitch.isChecked()) {
+                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
+                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
+                } else {
+                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
+                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+                }
             }
         });
 
@@ -699,7 +712,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
         if (getActivity() instanceof DoDiveActivity && ((DoDiveActivity) getActivity()).isEcoTrip()){
             ((DoDiveActivity)getActivity()).setTitle(getString(R.string.eco_trip), true, false);
-            bannerRelativeLayout.setVisibility(View.VISIBLE);
+            bannerRelativeLayout.setVisibility(View.GONE);
         } else {
             ((DoDiveActivity)getActivity()).setTitle(getString(R.string.search), true, false);
         }

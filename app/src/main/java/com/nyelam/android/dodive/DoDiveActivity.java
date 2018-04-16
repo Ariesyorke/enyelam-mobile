@@ -27,6 +27,7 @@ public class DoDiveActivity extends BasicActivity implements
         DoDiveResultDiveSpotsFragment.OnFragmentInteractionListener,
         NYCustomDialog.OnDialogFragmentClickListener{
 
+    private Toolbar toolbar;
     private DoDiveFragment fragment;
     private TextView titleTextView;
     private ImageView searchImageView;
@@ -45,10 +46,13 @@ public class DoDiveActivity extends BasicActivity implements
         setContentView(R.layout.activity_do_dive);
         initView();
         initFragment();
+        if (isEcoTrip()){
+            toolbar.setBackgroundColor(getResources().getColor(R.color.ny_green3));
+        }
     }
 
     private void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();

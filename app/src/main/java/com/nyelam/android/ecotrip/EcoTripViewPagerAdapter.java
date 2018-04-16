@@ -13,7 +13,7 @@ import com.nyelam.android.R;
 public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
 
     //private boolean isHiddenGetStarted;
-    private int count = 5;
+    private int count = 1;
 
     private int[] backgroundDrawables = {
             R.drawable.eco_trip_1_bg,
@@ -32,14 +32,15 @@ public class EcoTripViewPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         //this.isHiddenGetStarted = isHiddenGetStarted;
         if (isHiddenGetStarted){
-            count = 4;
+            count = 1;
         }
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position != 4) {
-            return EcoTripOnboardingFragment.newInstance(backgroundDrawables[position], iconDrawables[position], position);
+            //return EcoTripOnboardingFragment.newInstance(backgroundDrawables[position], iconDrawables[position], position);
+            return EcoTripOnboardingGetStartedFragment.newInstance();
         } else {
             return EcoTripOnboardingGetStartedFragment.newInstance();
         }
