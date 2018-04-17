@@ -124,7 +124,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 check2.setChecked(true);
             } else if (st.equals("3")){
                 check3.setChecked(true);
-            } else if (st.equals("<4")){
+            } else if (st.equals(">4")){
                 check4.setChecked(true);
             }
         }
@@ -283,6 +283,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     e.printStackTrace();
                 }
             }
+
+            if (totalDives != null && totalDives.size() > 0) NYLog.e("cek total dives INTENT : "+totalDives.toString());
 
             NYLog.e("filterextras categories : "+extras.getString(NYHelper.CATEGORIES));
             NYLog.e("filterextras facilities : "+extras.getString(NYHelper.FACILITIES));
@@ -602,19 +604,19 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         switch(buttonView.getId()){
             case R.id.checkbox_one:
                 setCheckBoxDives("1", isChecked);
-                Toast.makeText(this, "1 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "1 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_two:
                 setCheckBoxDives("2", isChecked);
-                Toast.makeText(this, "2 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "2 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_three:
                 setCheckBoxDives("3", isChecked);
-                Toast.makeText(this, "3 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "3 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_more_four:
                 setCheckBoxDives(">4", isChecked);
-                Toast.makeText(this, "4 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "4 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -646,7 +648,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             totalDives.add(pos);
         }
 
-        if (totalDives != null && totalDives.size() > 0) NYLog.e("cek total dives : "+totalDives.toString());
+        if (totalDives != null && totalDives.size() > 0) NYLog.e("cek total dives ONCLICK: "+totalDives.toString());
     }
 
 

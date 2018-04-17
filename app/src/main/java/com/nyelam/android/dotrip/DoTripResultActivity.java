@@ -370,7 +370,6 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
             NYLog.e("onresult maxPrice : "+maxPrice);
 
             totalDives = new ArrayList<>();
-
             if (data.hasExtra(NYHelper.TOTAL_DIVES)){
                 try {
                     JSONArray arrayTotalDives = new JSONArray(b.getString(NYHelper.TOTAL_DIVES));
@@ -418,11 +417,11 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
     }
 
 
-
     public void requestPriceRange(){
         progressBar.setVisibility(View.VISIBLE);
         NYGetMinMaxPriceRequest req = null;
         try {
+            //1 = do dive, 2 = do trip
             req = new NYGetMinMaxPriceRequest(this, "2");
         } catch (Exception e) {
             e.printStackTrace();

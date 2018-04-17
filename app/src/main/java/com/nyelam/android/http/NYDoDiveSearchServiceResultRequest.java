@@ -65,6 +65,10 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<DiveServi
             }
         }
 
+        if(!TextUtils.isEmpty(sortingBy)) {
+            addQuery(POST_SORT_BY, sortingBy);
+        }
+
         if(!TextUtils.isEmpty(page)) {
             addQuery(POST_PAGE, page);
         }

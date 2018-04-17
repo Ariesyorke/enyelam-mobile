@@ -151,6 +151,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     }
 
     private void initRequest() {
+        noResultTextView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
         String apiPath = getString(R.string.api_path_dodive_service_list);
@@ -398,6 +399,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             NYLog.e("onresult minPrice : "+minPrice);
             NYLog.e("onresult maxPrice : "+maxPrice);
 
+            totalDives = new ArrayList<>();
             if (data.hasExtra(NYHelper.TOTAL_DIVES)){
                 try {
                     JSONArray arrayTotalDives = new JSONArray(b.getString(NYHelper.TOTAL_DIVES));
@@ -409,6 +411,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                     e.printStackTrace();
                 }
             }
+
+            if (totalDives != null && totalDives.size() > 0) NYLog.e("cek total dives RESULT: "+totalDives.toString());
 
             NYLog.e("onresult categories : "+b.getString(NYHelper.CATEGORIES));
             NYLog.e("onresult facilities : "+b.getString(NYHelper.FACILITIES));
@@ -450,7 +454,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         progressBar.setVisibility(View.VISIBLE);
         NYGetMinMaxPriceRequest req = null;
         try {
-            req = new NYGetMinMaxPriceRequest(this, "2");
+            //1 = do dive, 2 = do trip
+            req = new NYGetMinMaxPriceRequest(this, "1");
         } catch (Exception e) {
             e.printStackTrace();
         }

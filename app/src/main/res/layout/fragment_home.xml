@@ -115,6 +115,8 @@
                         android:layout_marginRight="8dp"
                         android:layout_weight="1"
                         android:elevation="0dp"
+                        android:clipChildren="true"
+                        android:clipToPadding="true"
                         app:cardElevation="0dp"
                         app:cardCornerRadius="8dp"
                         app:cardPreventCornerOverlap="false">
@@ -125,7 +127,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/padding"
-                                android:background="@drawable/ny_gradient_right_left" />
+                                android:background="@drawable/bg_menu_top" />
                             <android.support.v7.widget.CardView
                                 android:layout_marginTop="4dp"
                                 android:layout_width="match_parent"
@@ -177,6 +179,8 @@
                         android:layout_marginLeft="8dp"
                         android:layout_weight="1"
                         android:elevation="5dp"
+                        android:clipChildren="true"
+                        android:clipToPadding="true"
                         app:cardCornerRadius="8dp"
                         app:cardElevation="5dp"
                         app:cardPreventCornerOverlap="false">
@@ -187,7 +191,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/padding"
-                                android:background="@drawable/ny_gradient_right_left" />
+                                android:background="@drawable/bg_menu_top" />
                             <android.support.v7.widget.CardView
                                 android:layout_marginTop="4dp"
                                 android:layout_width="match_parent"
@@ -246,6 +250,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
                         android:layout_weight="1"
+                        android:clipChildren="true"
+                        android:clipToPadding="true"
                         app:cardCornerRadius="8dp"
                         app:cardPreventCornerOverlap="false">
 
@@ -256,7 +262,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/padding"
-                                android:background="@drawable/ny_gradient_right_left" />
+                                android:background="@drawable/bg_menu_top" />
                             <android.support.v7.widget.CardView
                                 android:layout_marginTop="4dp"
                                 android:layout_width="match_parent"
@@ -313,6 +319,8 @@
                         android:layout_marginBottom="@dimen/padding"
                         android:layout_marginLeft="8dp"
                         android:layout_weight="1"
+                        android:clipChildren="true"
+                        android:clipToPadding="true"
                         app:cardCornerRadius="8dp"
                         app:cardPreventCornerOverlap="false">
 
@@ -323,7 +331,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/padding"
-                                android:background="@drawable/ny_gradient_right_left" />
+                                android:background="@drawable/bg_menu_top" />
                             <android.support.v7.widget.CardView
                                 android:layout_marginTop="4dp"
                                 android:layout_width="match_parent"

@@ -24,7 +24,7 @@
                 android:layout_marginTop="@dimen/padding_triple" />
 
             <LinearLayout
-
+                android:visibility="gone"
                 android:id="@+id/main_linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
