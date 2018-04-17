@@ -25,7 +25,11 @@ public abstract class BasicActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back_button_white);
         setSupportActionBar(toolbar);
-        if (isHomeBackEnable)getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (isHomeBackEnable){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+            toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+        }
     }
 
     protected void backEnable(){

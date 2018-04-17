@@ -142,15 +142,14 @@ public class DoDiveSearchResultDiveSpotActivity extends BasicActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         spcMgr.start(this);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onStop() {
+        super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
-
 }

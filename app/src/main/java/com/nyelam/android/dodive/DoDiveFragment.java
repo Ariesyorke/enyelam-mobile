@@ -69,6 +69,7 @@ import static com.nyelam.android.R.id.recyclerView;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
+    private DoDiveActivity activity;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private SearchResult searchResult;
     private TextView datetimeTextView, searchTextView;
@@ -131,6 +132,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         application = (NYApplication)getActivity().getApplication();
+        activity = (DoDiveActivity)getActivity();
 //        c = application.calendar;
         initView(view);
         initDatePicker();
@@ -138,8 +140,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         initControl();
         initAdapter();
         initViewPager();
-
-        DoDiveActivity activity = (DoDiveActivity)getActivity();
         if(activity.isEcoTrip()){
             searchTextView.setBackgroundResource(R.drawable.ny_rectangle_green);
         } else {
@@ -394,12 +394,14 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 setDivingLicense(divingLicenseSwitch.isChecked());
-                if (divingLicenseSwitch.isChecked()) {
-                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
-                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
-                } else {
-                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
-                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+                if (activity.isEcoTrip()){
+                    if (divingLicenseSwitch.isChecked()) {
+                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
+                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
+                    } else {
+                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
+                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+                    }
                 }
             }
         });

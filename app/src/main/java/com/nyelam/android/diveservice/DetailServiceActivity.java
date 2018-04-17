@@ -630,7 +630,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        spcMgr.start(this);
         if(triggerBook) {
             triggerBook = false;
             doBook();
@@ -640,6 +639,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        spcMgr.start(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
