@@ -107,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <com.nyelam.android.view.font.NYTextView
+                    android:visibility="gone"
                     card_view:fontTextStyle="light"
                     android:text=" | "
                     android:textSize="16dp"
@@ -115,6 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <com.nyelam.android.view.font.NYTextView
+                    android:visibility="gone"
                     card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_spot_textView"
                     android:text="0 Spot"

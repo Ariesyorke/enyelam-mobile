@@ -97,13 +97,11 @@
                 app:ci_drawable_unselected="@drawable/ny_circle_grey"
                 app:ci_orientation="horizontal" />
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/padding">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -116,49 +114,60 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
                         android:layout_weight="1"
-                        android:elevation="5dp"
+                        android:elevation="0dp"
+                        app:cardElevation="0dp"
                         app:cardCornerRadius="8dp"
-                        app:cardElevation="5dp"
                         app:cardPreventCornerOverlap="false">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp"
-                            android:background="@drawable/ny_gradient_right_left" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/padding"
-                            android:gravity="center"
+                        <RelativeLayout
                             android:orientation="vertical"
-                            android:padding="@dimen/padding_half">
-
-                            <LinearLayout
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/padding"
+                                android:background="@drawable/ny_gradient_right_left" />
+                            <android.support.v7.widget.CardView
+                                android:layout_marginTop="4dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="8dp"
+                                app:cardPreventCornerOverlap="false">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_home_menu_do_dive" />
-                            </LinearLayout>
+                                    android:layout_gravity="center"
+                                    android:layout_margin="@dimen/padding"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/padding_half">
 
-                            <com.nyelam.android.view.font.NYTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/padding_half"
-                                android:gravity="center"
-                                android:text="@string/do_dive"
-                                android:textColor="@color/ny_black2"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:fontTextStyle="semiBold"/>
-                        </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:background="@drawable/ny_circle_white"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_home_menu_do_dive" />
+                                    </LinearLayout>
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="@dimen/padding_half"
+                                        android:gravity="center"
+                                        android:text="@string/do_dive"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold"/>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </RelativeLayout>
+
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
@@ -171,44 +180,55 @@
                         app:cardCornerRadius="8dp"
                         app:cardElevation="5dp"
                         app:cardPreventCornerOverlap="false">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp"
-                            android:background="@drawable/ny_gradient_right_left" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/padding"
-                            android:gravity="center"
+                        <RelativeLayout
                             android:orientation="vertical"
-                            android:padding="@dimen/padding_half">
-
-                            <LinearLayout
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/padding"
+                                android:background="@drawable/ny_gradient_right_left" />
+                            <android.support.v7.widget.CardView
+                                android:layout_marginTop="4dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="8dp"
+                                app:cardPreventCornerOverlap="false">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_home_menu_ecotrip" />
-                            </LinearLayout>
+                                    android:layout_gravity="center"
+                                    android:layout_margin="@dimen/padding"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/padding_half">
 
-                            <com.nyelam.android.view.font.NYTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/padding_half"
-                                android:gravity="center"
-                                android:text="@string/eco_trip"
-                                android:textColor="@color/ny_black2"
-                                android:textSize="16sp"
-                                app:fontTextStyle="semiBold" />
-                        </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:background="@drawable/ny_circle_white"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_home_menu_ecotrip" />
+                                    </LinearLayout>
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="@dimen/padding_half"
+                                        android:gravity="center"
+                                        android:text="@string/eco_trip"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold"/>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </RelativeLayout>
                     </android.support.v7.widget.CardView>
 
                 </LinearLayout>
@@ -226,49 +246,58 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
                         android:layout_weight="1"
-                        android:elevation="5dp"
                         app:cardCornerRadius="8dp"
-                        app:cardElevation="5dp"
                         app:cardPreventCornerOverlap="false">
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp"
-                            android:background="@drawable/ny_gradient_right_left" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/padding"
-                            android:gravity="center"
+                        <RelativeLayout
                             android:orientation="vertical"
-                            android:padding="@dimen/padding_half">
-
-                            <LinearLayout
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center"
-                                android:paddingTop="3dp">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/padding"
+                                android:background="@drawable/ny_gradient_right_left" />
+                            <android.support.v7.widget.CardView
+                                android:layout_marginTop="4dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="8dp"
+                                app:cardPreventCornerOverlap="false">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_home_menu_do_shop" />
-                            </LinearLayout>
+                                    android:layout_gravity="center"
+                                    android:layout_margin="@dimen/padding"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/padding_half">
 
-                            <com.nyelam.android.view.font.NYTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/padding_half"
-                                android:gravity="center"
-                                android:text="@string/do_shop"
-                                android:textColor="@color/ny_black2"
-                                android:textSize="16sp"
-                                app:fontTextStyle="semiBold" />
-                        </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:background="@drawable/ny_circle_white"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_home_menu_do_shop" />
+                                    </LinearLayout>
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="@dimen/padding_half"
+                                        android:gravity="center"
+                                        android:text="@string/do_shop"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold"/>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </RelativeLayout>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -284,48 +313,58 @@
                         android:layout_marginBottom="@dimen/padding"
                         android:layout_marginLeft="8dp"
                         android:layout_weight="1"
-                        android:elevation="5dp"
                         app:cardCornerRadius="8dp"
-                        app:cardElevation="5dp"
                         app:cardPreventCornerOverlap="false">
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp"
-                            android:background="@drawable/ny_gradient_right_left" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/padding"
-                            android:gravity="center"
+                        <RelativeLayout
                             android:orientation="vertical"
-                            android:padding="@dimen/padding_half">
-
-                            <LinearLayout
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/padding"
+                                android:background="@drawable/ny_gradient_right_left" />
+                            <android.support.v7.widget.CardView
+                                android:layout_marginTop="4dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="8dp"
+                                app:cardPreventCornerOverlap="false">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_home_menu_do_course" />
-                            </LinearLayout>
+                                    android:layout_gravity="center"
+                                    android:layout_margin="@dimen/padding"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/padding_half">
 
-                            <com.nyelam.android.view.font.NYTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/padding_half"
-                                android:gravity="center"
-                                android:text="@string/do_course"
-                                android:textColor="@color/ny_black2"
-                                android:textSize="16sp"
-                                app:fontTextStyle="semiBold" />
-                        </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:background="@drawable/ny_circle_white"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_home_menu_do_course" />
+                                    </LinearLayout>
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="@dimen/padding_half"
+                                        android:gravity="center"
+                                        android:text="@string/do_course"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold"/>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </RelativeLayout>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
