@@ -272,7 +272,7 @@
                 app:flChildSpacing="auto"
                 app:flChildSpacingForLastRow="align"
                 app:flMinChildSpacing="@dimen/padding_half"
-                app:flRowSpacing="8dp"/>
+                app:flRowSpacing="@dimen/padding"/>
 
             <!--<TextView
                 android:layout_width="wrap_content"
@@ -304,15 +304,14 @@
             <!--</com.nex3z.flowlayout.FlowLayout>-->
 
             <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="light"
                 android:text="Facilities"
                 android:textSize="16sp"
                 android:textColor="@color/ny_black3"
-                app:fontTextStyle="light"
                 android:background="#F7F7F7"
                 android:padding="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
 
             <com.nex3z.flowlayout.FlowLayout
                 android:id="@+id/facilities_flowLayout"
@@ -326,7 +325,7 @@
                 app:flChildSpacing="auto"
                 app:flChildSpacingForLastRow="align"
                 app:flMinChildSpacing="@dimen/padding_half"
-                app:flRowSpacing="8dp">
+                app:flRowSpacing="@dimen/padding">
 
                 <!--<TextView
                     android:layout_width="wrap_content"

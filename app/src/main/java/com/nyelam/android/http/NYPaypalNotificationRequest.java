@@ -23,4 +23,5 @@ public class NYPaypalNotificationRequest extends DBaseRequest<Boolean> {
     protected Boolean onProcessData(byte[] data) throws Exception {
         return true;
     }
+
 }

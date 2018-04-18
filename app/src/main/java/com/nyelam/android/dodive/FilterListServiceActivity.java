@@ -38,6 +38,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -71,6 +74,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private TextView tvMaxPrice;
     private CheckBox check1, check2, check3, check4;
 
+    private HashMap<String, Boolean> idCatMap=new HashMap<String, Boolean>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +87,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         initControl();
         //initToolbar(false);
         getCategories();
-    }
 
+        //Toast.makeText(this, "A", Toast.LENGTH_SHORT).show();
+    }
 
     private void initState() {
         //sort by
@@ -218,7 +224,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         }
     }
 
-
     private void initView() {
         closeImageView = (ImageView) findViewById(R.id.close_imageView);
         categoriesLinearLayout = (LinearLayout) findViewById(R.id.categories_linearLayout);
@@ -296,6 +301,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     categoryList.parse(arrayCat);
                     categoryChooseList = categoryList.getList();
                     NYLog.e("filterextras categories final : "+categoryList.toString());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -335,27 +341,43 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     @Override
     public void onDataLoaded(List<Category> items) {
         this.items = new ArrayList<>();
+        //this.items.addAll(items);
         this.items = items;
         this.items.add(0,new Category("0","All"));
+
+        for (Category ct : items){
+            if(ct != null && NYHelper.isStringNotEmpty(ct.getId())) idCatMap.put(ct.getId(), false);
+        }
+
+        //cek state
+        for (Category cat : categoryChooseList){
+            idCatMap.put(cat.getId(), idCatMap.containsKey(cat.getId()) ? true : false);
+        }
+
+        Iterator myOwnIterator = idCatMap.keySet().iterator();
+        while(myOwnIterator.hasNext()) {
+            String key=(String)myOwnIterator.next();
+            Boolean value=(Boolean)idCatMap.get(key);
+            NYLog.e("cek button new init : "+key+" - "+value);
+            //buildLabelCategory(key);
+            //Toast.makeText(this, "Key: "+key+" Value: "+value, Toast.LENGTH_LONG).show();
+        }
+
         refreshData();
     }
 
+
     public void refreshData(){
+
         if (items != null & items.size() > 0) {
 
-            categoriesLinearLayout.removeAllViews();
-
-            /*LayoutInflater allInflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View allCategoryView = allInflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
-
-            FancyButton categoryFancyButton = (FancyButton) allCategoryView.findViewById(R.id.btn_category);
-            categoryFancyButton.setText("All");*/
-
-            //buildLabelCategory(new Category("0","All"));
-
-            for (Category cat : items) {
+            categoryFlowLayout.removeAllViews();
+            for (Category cat :  items) {
                 buildLabelCategory(cat);
             }
+
+            categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+            categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
 
         }
 
@@ -381,44 +403,47 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             final FancyButton fbCategory = (FancyButton) myParticipantsView.findViewById(R.id.btn_category);
 
             fbCategory.setText(category.getName());
-            //fbFacility.setTag(facility);
 
             // TODO: init state facilities yang sudah dipilih
-            setViewCategory(true, category, fbCategory);
+            setViewCategory(category, fbCategory);
 
             fbCategory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Category ct = (Category) fbCategory.getTag();
                     if (ct.getId().equals("0")){
-                        //reset or select All
-                        boolean isExist = false;
-                        for (Category cat : categoryChooseList){
-                            if (ct.getId().equals(cat.getId())){
-                                NYLog.e("PANGGIL 5");
-                                isExist = true;
-                                break;
+
+                        if (idCatMap.get(ct.getId())){
+                            idCatMap.put(ct.getId(), false);
+                            for (String key : idCatMap.keySet()) {
+                                idCatMap.put(key, false);
+                            }
+                        } else {
+                            idCatMap.put(ct.getId(), true);
+                            for (String key : idCatMap.keySet()) {
+                                idCatMap.put(key, true);
                             }
                         }
 
-                        if (isExist){
-                            categoryChooseList = new ArrayList<Category>();
-                        } else {
-                            //categoryChooseList.add(new Category("0","All"));
-                            categoryChooseList = items;
-                        }
-
-                        //setViewCategory(false, null, fbCategory);
-                        categoryFlowLayout.removeAllViews();
-                        //buildLabelCategory(new Category("0","All"));
-                        NYLog.e("ITEMS " + items);
-                        for (Category cat : items) {
-                            buildLabelCategory(cat);
-                        }
-
                     } else {
-                        setViewCategory(false, null, fbCategory);
+
+                        if (idCatMap.get(ct.getId())){
+                            idCatMap.put(ct.getId(), false);
+                        } else {
+                            idCatMap.put(ct.getId(), true);
+                        }
+
+                        //setViewCategory(ct, fbCategory);
                     }
+
+                    //refresh category
+                    categoryFlowLayout.removeAllViews();
+                    for (Category cat : items) {
+                        buildLabelCategory(cat);
+                    }
+                    categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+                    categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+
                 }
             });
 
@@ -428,42 +453,16 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     }
 
 
-    private void setViewCategory(boolean isInit, Category category, FancyButton fancyButton){
-        Category state = new Category();
-        boolean isExist = false;
-        NYLog.e("IS INIT " + isInit);
-        if (isInit == false){
+    private void setViewCategory(Category category, FancyButton fancyButton){
 
-            state = (Category) fancyButton.getTag();
-            // TODO: cek dengan yang facilities yg sudah dipilih
-            for (Category cat : categoryChooseList){
-                if (cat.getId().equals(state.getId())){
-                    state = cat;
-                    isExist = true;
-                    break;
-                }
-            }
-        } else {
-            for (Category cat : categoryChooseList){
-                if (cat.getId().equals(category.getId())){
-                    state = cat;
-                    isExist = true;
-                    break;
-                }
-            }
-            if(!isExist) state = category;
-        }
-
-        NYLog.e("CATEGORY INIT AFTER  " + isInit);
-        NYLog.e("CATEGORY EXIST AFTER + " + isExist);
-        if ((isInit && !isExist) || (!isInit && isExist)){
+        if (!idCatMap.get(category.getId())){
             // TODO: state unactive
             fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
             fancyButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
             fancyButton.setIconResource(R.drawable.ic_ferry_inactive);
             fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
             fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
-        } else if ((isInit && isExist) || (!isInit && !isExist)){
+        } else {
             // TODO: state active
             //NYLog.e("PANGGIL " + category.getName());
             fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
@@ -472,17 +471,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             fancyButton.setBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_orange2));
             fancyButton.setFocusBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey6));
         }
-        fancyButton.setTag(state);
 
-        // TODO: isInit == false -> setOnClick
-        if(isInit == false){
-            // TODO: hilangkan di list jika isCheked = false dan tambahkan jika isCheked = true
-            if (isExist){
-                categoryChooseList.remove(state);
-            } else {
-                categoryChooseList.add(state);
-            }
-        }
+        fancyButton.setTag(category);
 
         // TODO: cek data di list
         if (categoryChooseList != null && categoryChooseList.size() > 0){
@@ -585,6 +575,12 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     public void onBackPressed() {
 
         if (isApply){
+
+            categoryChooseList = new ArrayList<>();
+            for (String key : idCatMap.keySet()) {
+                if (idCatMap.get(key) == true)categoryChooseList.add(new Category(key,""));
+            }
+
             Intent intent = new Intent();
             intent.putExtra(NYHelper.SORT_BY, sortBy);
             intent.putExtra(NYHelper.MIN_PRICE, minPrice);
@@ -632,11 +628,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
         if (isExist && !isChecked){
 
-            /*List<String> totalDivesTemp = totalDives;
-            for (String st : totalDivesTemp){
-                if (st.equals(pos))totalDives.remove(st);
-            }*/
-
             for (Iterator<String> iterator = totalDives.iterator(); iterator.hasNext(); ) {
                 String value = iterator.next();
                 if (value.equals(pos)) {
@@ -676,13 +667,18 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         check4.setChecked(false);
 
         //reset categories
-        categoryFlowLayout.removeAllViews();
-        categoryChooseList = new ArrayList<>();
-        if (items != null & items.size() > 0) {
-            for (Category cat : items) {
-                buildLabelCategory(cat);
-            }
+        for (String key : idCatMap.keySet()) {
+            idCatMap.put(key, false);
         }
+
+        //refresh category
+        categoryFlowLayout.removeAllViews();
+        for (Category cat : items) {
+            buildLabelCategory(cat);
+        }
+        categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+        categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+
 
         //reset facilities
         facilitiesFlowLayout.removeAllViews();
@@ -690,6 +686,23 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         for (StateFacility fac : facilitiesItems) {
             buildLabelFacility(fac);
         }
+
+        facilitiesFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+        facilitiesFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
     }
+
+
+    /*public List<Category> sortingCategory() {
+        // not yet sorted
+        List<Category> sortedCategory = new ArrayList<Category>(meMap.keySet());
+        Collections.sort(sortedCategory, new Comparator<Category>() {
+
+            public int compare(Category o1, Category o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+        return sortedCategory;
+    }*/
+
 
 }
