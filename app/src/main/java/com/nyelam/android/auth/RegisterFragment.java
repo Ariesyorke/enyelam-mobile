@@ -149,6 +149,13 @@ public class RegisterFragment extends Fragment implements AdapterView.OnItemSele
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(countryCodeSpinner.getWindowToken(), 0);
+
                 String email = emailEditText.getText().toString();
                 String phoneNumber = phoneNumberEditText.getText().toString();
                 String password = passwordEditText.getText().toString();

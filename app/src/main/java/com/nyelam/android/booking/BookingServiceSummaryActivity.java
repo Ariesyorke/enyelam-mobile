@@ -117,7 +117,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private TextView expiredDateTextView;
     private CountDownTimer countDownTimer;
 
-
     private PayPalConfiguration payPalConfiguration;
     //Client ID Paypal
     //development
@@ -311,6 +310,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
         });
 
+
+
         /*addNoteLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -406,6 +407,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
 
             }
+
+            if (intent.hasExtra(NYHelper.PAYMENT_TYPE)) paymentType = intent.getStringExtra(NYHelper.PAYMENT_TYPE);
+
+            if (intent.hasExtra(NYHelper.PAYMENT_METHOD)) paymentMethod = intent.getStringExtra(NYHelper.PAYMENT_METHOD);
 
             if (intent.hasExtra(NYHelper.DIVER)){
                 diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
@@ -708,6 +713,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
+                    intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
+                    intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
                     startActivity(intent);
                 }
             });
@@ -728,6 +735,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
+                    intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
+                    intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
                     startActivity(intent);
                 }
             });
@@ -784,6 +793,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 orderReturn = result;
 
                 if (orderReturn != null){
+                    NYLog.e("payment Type : " + paymentType);
+
                     if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
 
                         //TODO KALO TYPE PEMBAYARANNYA MIDTRANS

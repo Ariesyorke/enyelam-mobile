@@ -135,6 +135,9 @@ public class NYHelper {
     public static final String MAX_PRICE_DEFAULT = "max_price_deafult";
     public static final String TOTAL_DIVES = "total_dives";
 
+    public static final String PAYMENT_TYPE = "payment_type";
+    public static final String PAYMENT_METHOD = "payment_method";
+
 
     public static boolean isStringNotEmpty(String string) {
         return (string != null && !TextUtils.isEmpty(string));

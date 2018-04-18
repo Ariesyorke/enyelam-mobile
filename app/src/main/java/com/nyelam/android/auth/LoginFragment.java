@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +40,7 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYLoginRequest;
 import com.nyelam.android.http.NYLoginSocmedRequest;
+import com.nyelam.android.profile.EditProfileActivity;
 import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
@@ -145,6 +147,11 @@ public class LoginFragment extends AuthBaseFragment implements
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
