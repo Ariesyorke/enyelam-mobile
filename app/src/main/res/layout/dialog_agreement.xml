@@ -23,6 +23,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/close_imageView"
             android:src="@drawable/ic_dialog_close_dark"
@@ -67,6 +68,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="italic"
+                android:text="Diver Ethics Provided by"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/ny_grey2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:src="@drawable/logo_dca"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:layout_width="150dp"
+                android:layout_height="150dp" />
 
         </LinearLayout>
     </ScrollView>

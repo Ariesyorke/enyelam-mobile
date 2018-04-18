@@ -154,24 +154,16 @@ public class NYCustomDialog {
         TextView acceptTextView = (TextView) dialog.findViewById(R.id.accept_textView);
 
         String agreementText = "<ol type=\"a\">\n" +
-                " <br/> <li>Jangan buang sampah sembarangan.</li>\n" +
-                " <br/> <li>Hindari menggunakan kemasan kecil seperti sabun sachet.</li>\n" +
-                " <br/> <li>Gunakan krim kulit, Sunblock, dan semprotan anti-serangga yang alami dan tidak beracun.</li>\n" +
-                " <br/> <li>Membawa botol isi ulang.</li>\n" +
-                " <br/> <li>Membawa tas yang dapat digunakan kembali.</li>\n" +
-                " <br/> <li>Kurangi pemakaian material yang sekali pakai.</li>\n" +
-                " <br/> <li>Jangan memakan spesies yang terancam, hampir punah atau yang dilindungi.</li>\n" +
-                " <br/> <li>Hindari membawa dan memakai produk yang mengandung microbeads (seperti sabun yang mengandung scrubs).</li>\n" +
-                " <br/> <li>Melatih keseimbangan untuk mencegah menabrak karang.</li>\n" +
-                " <br/> <li>Jangan menginjak atau menyentuh karang.</li>\n" +
-                " <br/> <li>Hindari mengaduk sedimen/pasir.</li>\n" +
-                " <br/> <li>Yakinkan semua peralatan menyelam aman dan tidak terseret.</li>\n" +
-                " <br/> <li>Jangan memberi makan, menangkap, menyentuh, mengganggu atau menangkap biota laut.</li>\n" +
-                " <br/> <li>Jangan mengoleksi biota laut apapun, bisa saja itu ilegal.</li>\n" +
-                " <br/> <li>Laporkan aktivitas ilegal/tidak sepantasnya terhadap lingkungan kepada otoritas setempat.</li>\n" +
-                " <br/> <li>Dukung wisata ramah lingkungan.</li>\n" +
-                " <br/> <li>Jangan ambil sampah laut yang telah ditumbuhi karang.</li>\n" +
-                " <br/> <li>Jangan ragu untuk mengedukasi atau menegur orang lain terkait pelanggaran etika ini.</li>\n" +
+                " <br/> <li>Do not litter.</li>\n" +
+                " <br/> <li>Avoid using items with small packagings, e.g. sachet soap.</li>\n" +
+                " <br/> <li>Use skin creams, sunscreen/sunblock, and bug sprays/insect repellents that are natural and non-toxic.</li>\n" +
+                " <br/> <li>Bring a refillable drinking bottle.</li>\n" +
+                " <br/> <li>Bring a bag that can be reused.</li>\n" +
+                " <br/> <li>Reduce the usage of single-used materials.</li>\n" +
+                " <br/> <li>Do not consume or eat species that are endangered, almost extinct, or protected.</li>\n" +
+                " <br/> <li>Avoid bringing and using products containing microbeads, e.g. soaps containing scrubs.</li>\n" +
+                " <br/> <li>Practice your balance to avoid bumping to coral reefs.</li>\n" +
+                " <br/> <li>Do not step on or touch coral reefs.</li>\n" +
                 "</ol>";
 
 
