@@ -13,7 +13,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="@drawable/ny_gradient_right_left"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -36,7 +36,7 @@
                     android:background="@android:color/transparent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:text="@string/booking_details"/>
 
@@ -161,7 +161,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/ny_blue7"
+                android:background="@color/colorAccent"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/padding"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -310,7 +310,7 @@
             <com.nyelam.android.view.font.NYTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/ny_blue7"
+                android:background="@color/colorAccent"
                 android:paddingBottom="@dimen/padding"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/padding"
@@ -407,7 +407,7 @@
             <com.nyelam.android.view.font.NYTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/ny_blue7"
+                android:background="@color/colorAccent"
                 android:paddingBottom="@dimen/padding"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/padding"
@@ -427,7 +427,7 @@
             <com.nyelam.android.view.font.NYTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/ny_blue7"
+                android:background="@color/colorAccent"
                 android:paddingBottom="@dimen/padding"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/padding"
@@ -468,6 +468,7 @@
                             android:orientation="horizontal">
 
                             <me.relex.circleindicator.CircleIndicator
+                                android:visibility="gone"
                                 android:id="@+id/bank_transfer"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
@@ -519,6 +520,7 @@
                             android:orientation="horizontal">
 
                             <me.relex.circleindicator.CircleIndicator
+                                android:visibility="gone"
                                 android:id="@+id/virtual_account"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
@@ -568,6 +570,7 @@
                             android:orientation="horizontal">
 
                             <me.relex.circleindicator.CircleIndicator
+                                android:visibility="gone"
                                 android:id="@+id/creditcard"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
@@ -616,6 +619,7 @@
                             android:orientation="horizontal">
 
                             <me.relex.circleindicator.CircleIndicator
+                                android:visibility="gone"
                                 android:id="@+id/paypal"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
@@ -800,7 +804,7 @@
                         android:focusableInTouchMode="true"
                         android:hint="Type your additionals needs here"
                         android:textColor="@color/ny_black2"
-                        android:textColorHint="@color/ny_black2"
+                        android:textColorHint="@color/ny_grey4"
                         android:textSize="16sp" />
                 </LinearLayout>
 

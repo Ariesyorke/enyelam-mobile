@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1675CF</color>
-    <color name="colorPrimaryDark">#1675CF</color>
+    <color name="colorPrimary">#0071BC</color>
+    <color name="colorPrimaryDark">#0071BC</color>
     <color name="colorGradationLeft">#25A2DB</color>
     <color name="colorGradationRight">#1B76BB</color>
     <color name="colorGradationMenuLeft">#239BD6</color>
@@ -10,7 +10,7 @@
     <color name="colorGradationSoftRight">#60A0D0</color>
     <color name="colorTabMenuLeft">#007DC4</color>
     <color name="colorTabMenuRight">#00A9E2</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#29ABE2</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
 
