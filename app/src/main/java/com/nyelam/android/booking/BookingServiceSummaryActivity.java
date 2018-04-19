@@ -712,7 +712,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
-                    intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
+                    intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString().trim());
                     intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
                     intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
                     startActivity(intent);
@@ -1261,7 +1261,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 NYLog.e("PAYPAL PAYMENT JSON OBJECT PAY ID : " + confirmation.getProofOfPayment().getPaymentId());
                 try {
                     progressDialog.show();
-                    note = noteEditText.getText().toString();
+                    note = noteEditText.getText().toString().trim();
                     NYPaypalNotificationRequest req = new NYPaypalNotificationRequest(BookingServiceSummaryActivity.this, confirmation.getProofOfPayment().getPaymentId());
                     spcMgr.execute(req, onPaypalNotificationRequest());
                 } catch (Exception e) {

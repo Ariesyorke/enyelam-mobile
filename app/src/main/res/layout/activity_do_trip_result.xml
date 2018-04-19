@@ -107,7 +107,7 @@
             android:text="@string/filter"
             android:textSize="20sp"
             android:textColor="@color/white"
-            android:background="@drawable/ny_rectangle_blue"
+            android:background="@drawable/ny_rectangle_blue_soft"
             android:paddingTop="@dimen/padding_half"
             android:paddingBottom="@dimen/padding_half"
             android:paddingRight="@dimen/padding_triple"

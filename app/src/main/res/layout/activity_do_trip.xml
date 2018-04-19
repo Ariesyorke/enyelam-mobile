@@ -104,9 +104,9 @@
                             android:layout_height="wrap_content" />
                         <com.nyelam.android.view.font.NYTextView
                             android:id="@+id/keyword_textView"
-                            android:text="Province, Area, Spot, Dive Center"
+                            android:hint="Province, Area, Spot, Dive Center"
                             android:textSize="16sp"
-                            android:textColor="@color/ny_grey4"
+                            android:textColor="@color/ny_black2"
                             android:textColorHint="@color/ny_grey4"
                             android:singleLine="true"
                             android:maxLines="1"
@@ -153,7 +153,7 @@
                             android:id="@+id/datetime_textView"
                             android:hint="Day, Month Year"
                             android:textSize="16sp"
-                            android:textColor="@color/ny_grey4"
+                            android:textColor="@color/ny_black2"
                             android:textColorHint="@color/ny_grey4"
                             android:singleLine="true"
                             android:maxLines="1"
@@ -203,7 +203,7 @@
                             android:id="@+id/diver_textView"
                             android:hint="Choose total diver(s)"
                             android:textSize="16sp"
-                            android:textColor="@color/ny_grey4"
+                            android:textColor="@color/ny_black2"
                             android:textColorHint="@color/ny_grey4"
                             android:singleLine="true"
                             android:maxLines="1"
@@ -265,9 +265,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <com.nyelam.android.view.font.NYTextView
-                                android:hint="Do you have diving license? "
+                                android:hint="Diving license ?"
+                                android:text="Diving license ?"
                                 android:textSize="16sp"
-                                android:textColor="@color/ny_grey4"
+                                android:textColor="@color/ny_black2"
                                 android:textColorHint="@color/ny_grey4"
                                 android:singleLine="true"
                                 android:maxLines="1"
@@ -279,8 +280,9 @@
                             <com.nyelam.android.view.font.NYTextView
                                 android:id="@+id/diving_license_textView"
                                 android:hint="No"
+                                android:text="@string/no"
                                 android:textSize="16sp"
-                                android:textColor="@color/ny_grey4"
+                                android:textColor="@color/ny_black2"
                                 android:textColorHint="@color/ny_grey4"
                                 android:singleLine="true"
                                 android:maxLines="1"

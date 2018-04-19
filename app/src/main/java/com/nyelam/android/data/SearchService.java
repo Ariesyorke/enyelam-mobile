@@ -84,7 +84,15 @@ public class SearchService extends SearchResult {
 
         try {
             if (!obj.isNull(KEY_LICENSE)) {
-                setLicense(obj.getBoolean(KEY_LICENSE));
+                if (obj.get(KEY_LICENSE) instanceof Integer){
+                    if (obj.getInt(KEY_LICENSE) > 0){
+                        setLicense(true);
+                    } else {
+                        setLicense(false);
+                    }
+                } else if (obj.get(KEY_LICENSE) instanceof  Boolean){
+                    setLicense(obj.getBoolean(KEY_LICENSE));
+                }
             }
         } catch (JSONException e) {e.printStackTrace();}
     }

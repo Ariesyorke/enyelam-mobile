@@ -170,7 +170,7 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     labelTextView.setText(diveCenter.getProvince());
 
                 } else if (searchResult.getType() == 4){
-
+                    typeTextView.setText("Dive Service");
                     iconImageView.setImageResource(R.drawable.ic_search_dive_service);
                     nameTextView.setText(searchResult.getName());
                     ratingTextView.setText(searchResult.getRating());;

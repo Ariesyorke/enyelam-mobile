@@ -65,7 +65,6 @@ import java.util.TimeZone;
 
 import me.relex.circleindicator.CircleIndicator;
 
-import static com.nyelam.android.R.id.recyclerView;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
@@ -144,6 +143,24 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             searchTextView.setBackgroundResource(R.drawable.ny_rectangle_green);
         } else {
             getSuggetionRequest();
+        }
+
+        if (activity.isEcoTrip()){
+            if (divingLicenseSwitch.isChecked()) {
+                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
+            } else {
+                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+            }
+        } else{
+            if (divingLicenseSwitch.isChecked()) {
+                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue5), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue8), PorterDuff.Mode.SRC_IN);
+            } else {
+                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+            }
         }
     }
 
@@ -287,7 +304,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 }
                 if (obj.has("type"))type = obj.getString("type");
                 if (obj.has("id"))diverId = obj.getString("id");
-
                 if (obj.has("license") && obj.getBoolean("license")){
                     setDivingLicense(true);
                     //divingLicenseSwitch.setChecked(true);
@@ -297,7 +313,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     //divingLicenseSwitch.setChecked(false);
                     //certificateCheckBox.setClickable(true);
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
