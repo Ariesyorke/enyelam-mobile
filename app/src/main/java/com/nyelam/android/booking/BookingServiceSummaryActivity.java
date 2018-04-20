@@ -159,6 +159,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             @Override
             public void onClick(View v) {
 
+                Toast.makeText(BookingServiceSummaryActivity.this, "Payment Tpe : "+paymentType, Toast.LENGTH_SHORT).show();
+
                 boolean isContactEmpty = false;
                 boolean isParticipantEmpty = false;
 
@@ -854,6 +856,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
+
+                Toast.makeText(BookingServiceSummaryActivity.this, "cancel failed", Toast.LENGTH_SHORT).show();
+
                 if(spiceException != null) {
                     if (spiceException.getCause() instanceof NYCartExpiredException) {
                         NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
@@ -874,16 +879,18 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
             }
 
-
             @Override
             public void onRequestSuccess(final OrderReturn result) {
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
 
+                Toast.makeText(BookingServiceSummaryActivity.this, "cancel success", Toast.LENGTH_SHORT).show();
+
                 orderReturn = result;
 
                 if (orderReturn != null){
+
                     NYLog.e("payment Type : " + paymentType);
 
                     if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){

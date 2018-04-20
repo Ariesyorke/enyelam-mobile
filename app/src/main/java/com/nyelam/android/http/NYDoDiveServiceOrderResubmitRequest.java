@@ -22,7 +22,7 @@ public class NYDoDiveServiceOrderResubmitRequest extends NYBasicAuthRequest<Orde
     private static final String POST_PAYMENT_TYPE = "payment_type";
 
     public NYDoDiveServiceOrderResubmitRequest(Context context, String orderId, String paymentType) throws Exception {
-        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_order_cancel));
+        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_order_resubmit));
 
         if(!TextUtils.isEmpty(orderId)) {
             addQuery(POST_ORDER_ID, orderId);
@@ -41,9 +41,8 @@ public class NYDoDiveServiceOrderResubmitRequest extends NYBasicAuthRequest<Orde
 
     @Override
     protected OrderReturn onProcessSuccessData(JSONObject obj) throws Exception {
-
         OrderReturn orderReturn = new OrderReturn();
-        orderReturn.parse(obj);
+        orderReturn.parse(obj.getJSONObject(KEY_SUMMARY));
         return  orderReturn;
     }
 

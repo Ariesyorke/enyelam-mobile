@@ -59,7 +59,6 @@
 
         </RelativeLayout>
 
-
         <LinearLayout
             android:layout_margin="@dimen/activity_vertical_margin"
             android:orientation="vertical"
@@ -80,6 +79,16 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>-->
 
+            <com.nyelam.android.view.font.NYTextView
+                android:visibility="gone"
+                android:id="@+id/schedule_textView"
+                android:text="-"
+                android:textSize="16dp"
+                android:textColor="@color/ny_black2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:fontTextStyle="light"/>
+
             <LinearLayout
                 android:layout_marginTop="@dimen/padding_half"
                 android:gravity="center_vertical"
@@ -89,7 +98,7 @@
                     card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_textView"
                     android:text="0 Dive"
-                    android:textSize="14dp"
+                    android:textSize="16dp"
                     android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

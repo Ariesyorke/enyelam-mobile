@@ -536,7 +536,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
 
                     if (diveService.getSchedule() != null) {
-                        scheduleTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()));
+                        scheduleTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getEndDate()));
                     }
 
                     if (diveService.getDiveSpots() != null

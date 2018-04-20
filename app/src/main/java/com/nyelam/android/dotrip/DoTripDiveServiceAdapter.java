@@ -110,6 +110,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView totalDiveSpotTextView;
         private TextView totalDayTextView;
         private TextView visitedTextView;
+        private TextView scheduleTextView;
         private View itemView;
         private DiveService diveService;
 
@@ -126,6 +127,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
             totalDayTextView = (TextView) itemView.findViewById(R.id.total_day_textView);
             ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
             visitedTextView = (TextView) itemView.findViewById(R.id.visitor_textView);
+            scheduleTextView = (TextView) itemView.findViewById(R.id.schedule_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
 
             this.itemView = itemView;
@@ -144,6 +146,11 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 double normalPrice = Double.valueOf(diveService.getNormalPrice());
                 double specialPrice = Double.valueOf(diveService.getSpecialPrice());
+
+                scheduleTextView.setVisibility(View.VISIBLE);
+                if (diveService.getSchedule() != null) {
+                    scheduleTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getEndDate()));
+                }
 
                 if (diveService.isLicense()){
                     divingLicenseImageView.setVisibility(View.VISIBLE);
