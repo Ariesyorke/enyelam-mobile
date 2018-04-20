@@ -256,6 +256,7 @@
                             android:layout_height="wrap_content">
                             <com.nyelam.android.view.font.NYTextView
                                 android:hint="Diving license? "
+                                android:text="Diving license? "
                                 android:textSize="16sp"
                                 android:textColor="@color/ny_black2"
                                 android:textColorHint="@color/ny_grey4"

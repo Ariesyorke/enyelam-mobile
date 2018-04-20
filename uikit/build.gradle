@@ -34,8 +34,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:design:26.1.0'
     compile 'com.android.support:cardview-v7:26.1.0'
-    /*compile 'com.midtrans:corekit:1.15.0-SANDBOX'*/
-    compile 'com.midtrans:corekit:1.15.0'
+    compile 'com.midtrans:corekit:1.15.0-SANDBOX'
+    /*compile 'com.midtrans:corekit:1.15.0'*/
 
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'ru.rambler.android:swipe-layout:1.0.14'

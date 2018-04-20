@@ -1,6 +1,7 @@
 package com.nyelam.android.dotrip;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -31,10 +32,12 @@ import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
 import com.nyelam.android.http.NYDoDiveServiceCartRequest;
+import com.nyelam.android.http.NYServiceOutOfStockException;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
@@ -239,10 +242,30 @@ public class DoTripDetailActivity extends AppCompatActivity implements
                 /*if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }*/
-                NYHelper.handleAPIException(DoTripDetailActivity.this, spiceException, null);
 
                 bookingTextView.setEnabled(false);
                 bookingTextView.setBackgroundResource(R.drawable.ny_book_disable);
+
+                //NYHelper.handleAPIException(DoTripDetailActivity.this, spiceException, null);
+                if(spiceException != null) {
+                    if (spiceException.getCause() instanceof NYServiceOutOfStockException) {
+                        NYHelper.handlePopupMessage(DoTripDetailActivity.this, "Sorry, Schedule not available or out of stock", false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        });
+                    } else {
+                        NYHelper.handleAPIException(DoTripDetailActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                    }
+                }
+
+
 
             }
 
@@ -339,6 +362,9 @@ public class DoTripDetailActivity extends AppCompatActivity implements
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));
+
+        bookingTextView.setEnabled(false);
+        bookingTextView.setBackgroundResource(R.drawable.ny_book_disable);
     }
 
     private void initBanner() {

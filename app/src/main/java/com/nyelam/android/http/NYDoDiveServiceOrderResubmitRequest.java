@@ -42,7 +42,7 @@ public class NYDoDiveServiceOrderResubmitRequest extends NYBasicAuthRequest<Orde
     @Override
     protected OrderReturn onProcessSuccessData(JSONObject obj) throws Exception {
         OrderReturn orderReturn = new OrderReturn();
-        orderReturn.parse(obj.getJSONObject(KEY_SUMMARY));
+        orderReturn.parse(obj);
         return  orderReturn;
     }
 

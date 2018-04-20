@@ -113,7 +113,7 @@ public class OrderReturn {
         }
 
         try{
-            if(getSummary()!=null){
+            if(getPaypalCurrency() != null){
                 JSONObject objPaypal = new JSONObject(getPaypalCurrency().toString());
                 obj.put(KEY_PAYPAL_CURRENCY, objPaypal);
             } else {

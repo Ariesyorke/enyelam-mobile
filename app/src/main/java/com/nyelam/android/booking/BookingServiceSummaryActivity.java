@@ -159,7 +159,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(BookingServiceSummaryActivity.this, "Payment Tpe : "+paymentType, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BookingServiceSummaryActivity.this, "Payment Tpe : "+paymentType, Toast.LENGTH_SHORT).show();
 
                 boolean isContactEmpty = false;
                 boolean isParticipantEmpty = false;
@@ -452,6 +452,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                             subTotalPriceTextView.setText(NYHelper.priceFormatter(cart.getSubTotal()));
                             totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
                         }
+
+
+                        if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
                     }
 
                     if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
@@ -471,7 +474,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
                 if (cartReturn != null && cartReturn.getCart() != null){
                     subTotalPriceTextView.setText(NYHelper.priceFormatter(cartReturn.getCart().getCurrency(), cartReturn.getCart().getSubTotal()));
@@ -857,7 +859,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     progressDialog.dismiss();
                 }
 
-                Toast.makeText(BookingServiceSummaryActivity.this, "cancel failed", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BookingServiceSummaryActivity.this, "cancel failed", Toast.LENGTH_SHORT).show();
 
                 if(spiceException != null) {
                     if (spiceException.getCause() instanceof NYCartExpiredException) {
@@ -885,15 +887,19 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     progressDialog.dismiss();
                 }
 
-                Toast.makeText(BookingServiceSummaryActivity.this, "cancel success", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BookingServiceSummaryActivity.this, "cancel success", Toast.LENGTH_SHORT).show();
 
                 orderReturn = result;
+
+                NYLog.e("re-submit order : "+orderReturn.toString());
 
                 if (orderReturn != null){
 
                     NYLog.e("payment Type : " + paymentType);
 
-                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
+                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null && NYHelper.isStringNotEmpty(result.getVeritransToken().getTokenId())){
+
+                        //Toast.makeText(BookingServiceSummaryActivity.this, "success veritrans", Toast.LENGTH_SHORT).show();
 
                         //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
                         VeritransStorage veritransStorage = new VeritransStorage(BookingServiceSummaryActivity.this);
@@ -907,6 +913,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         payUsingVeritrans();
 
                     } else if (paymentType.equals("1")){
+
+                        //Toast.makeText(BookingServiceSummaryActivity.this, "success bank transfer", Toast.LENGTH_SHORT).show();
+
                         //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
                         NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
                                 new DialogInterface.OnClickListener() {
@@ -920,8 +929,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                                     }
                                 }, getResources().getString(R.string.check_order));
                     } else if (paymentType.equals("4")){
+
+                        //Toast.makeText(BookingServiceSummaryActivity.this, "success paypal", Toast.LENGTH_SHORT).show();
+
                         //TODO DISINI HANDLE KALO TRANSAKSI DI PAYPAL SUKSES
                         payUsingPaypal();
+                    } else {
+                        //Toast.makeText(BookingServiceSummaryActivity.this, "success else", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -980,10 +994,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void payUsingVeritrans() {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(this) // context is mandatory
                 .setTransactionFinishedCallback(this)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -1047,7 +1061,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         //CONFIGURASI PAYPAL
         payPalConfiguration = new PayPalConfiguration()
-                .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .clientId(paypalClientId);
         paypalIntent = new Intent(BookingServiceSummaryActivity.this, PayPalService.class);
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
@@ -1284,7 +1298,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void requestChangePaymentMethod(){
         progressDialog.show();
         try {
-            NYChangePaymentMethodRequest req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), paymentType);
+            NYChangePaymentMethodRequest req = null;
+            if (orderReturn != null && orderReturn.getSummary() != null && orderReturn.getSummary().getOrder() != null && NYHelper.isStringNotEmpty(orderReturn.getSummary().getOrder().getOrderId())){
+                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, orderReturn.getSummary().getOrder().getOrderId(), paymentType);
+            } else if (cartReturn != null && NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
+                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), paymentType);
+            }
             spcMgr.execute(req, onChangePaymentMethodRequest());
         } catch (Exception e) {
             e.printStackTrace();

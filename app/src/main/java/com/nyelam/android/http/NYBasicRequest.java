@@ -202,7 +202,6 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
                 errorMessage = "unknown error";
             }
 
-
             String code = "unknown code";
             String error = "unknown error";
 
@@ -219,6 +218,11 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
 
             if (code.equals(CODE_CART_EXPIRED)) {
                 NYCartExpiredException e = new NYCartExpiredException();
+                e.setCode(code);
+                e.setError(error);
+                throw e;
+            } else if (code.equals(CODE_OUT_OF_STOCK)) {
+                NYServiceOutOfStockException e = new NYServiceOutOfStockException();
                 e.setCode(code);
                 e.setError(error);
                 throw e;

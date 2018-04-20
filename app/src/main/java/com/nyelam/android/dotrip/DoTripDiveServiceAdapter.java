@@ -99,7 +99,6 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView featuredImageView;
-        private ImageView divingLicenseImageView;
         private TextView diveCenterNameTextView;
         private TextView serviceNameTextView;
         private TextView ratingTextView;
@@ -111,6 +110,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView totalDayTextView;
         private TextView visitedTextView;
         private TextView scheduleTextView;
+        private ImageView divingLicenseImageView;
         private View itemView;
         private DiveService diveService;
 

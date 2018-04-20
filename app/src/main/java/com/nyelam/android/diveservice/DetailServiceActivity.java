@@ -1,6 +1,8 @@
 package com.nyelam.android.diveservice;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -36,9 +38,11 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DiveCenterDetailFragment;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
+import com.nyelam.android.http.NYCartExpiredException;
 import com.nyelam.android.http.NYDoDiveDetailServiceRequest;
 import com.nyelam.android.http.NYDoDiveServiceCartRequest;
 import com.nyelam.android.http.NYDoTripDetailServiceRequest;
+import com.nyelam.android.http.NYServiceOutOfStockException;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYCustomViewPager;
@@ -261,18 +265,39 @@ public class DetailServiceActivity extends AppCompatActivity implements
         return new RequestListener<DiveService>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                /*if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }*/
-                NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, null);
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
 
                 bookingTextView.setEnabled(false);
                 bookingTextView.setBackgroundResource(R.drawable.ny_book_disable);
+
+                if(spiceException != null) {
+                    if (spiceException.getCause() instanceof NYServiceOutOfStockException) {
+                        NYHelper.handlePopupMessage(DetailServiceActivity.this, "Sorry, Schedule not available or out of stock", false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        });
+                    } else {
+                        NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                    }
+                }
 
             }
 
             @Override
             public void onRequestSuccess(DiveService results) {
+
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
 
                 if (results != null){
 
@@ -373,6 +398,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));
+
+        bookingTextView.setEnabled(false);
+        bookingTextView.setBackgroundResource(R.drawable.ny_book_disable);
     }
 
     private void initBanner() {

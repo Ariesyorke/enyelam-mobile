@@ -150,16 +150,16 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
                 divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
             } else {
-                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
-                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
             }
         } else{
             if (divingLicenseSwitch.isChecked()) {
                 divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue5), PorterDuff.Mode.SRC_IN);
                 divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue8), PorterDuff.Mode.SRC_IN);
             } else {
-                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
-                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
+                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
             }
         }
     }
@@ -414,8 +414,16 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
                         divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
                     } else {
-                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey2), PorterDuff.Mode.SRC_IN);
-                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey1), PorterDuff.Mode.SRC_IN);
+                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
+                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
+                    }
+                } else{
+                    if (divingLicenseSwitch.isChecked()) {
+                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue5), PorterDuff.Mode.SRC_IN);
+                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue8), PorterDuff.Mode.SRC_IN);
+                    } else {
+                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
+                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
                     }
                 }
             }
