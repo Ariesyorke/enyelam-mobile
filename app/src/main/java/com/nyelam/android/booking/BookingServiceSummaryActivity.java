@@ -10,11 +10,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -51,6 +48,7 @@ import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.NTransactionResult;
+import com.nyelam.android.http.NYDoDiveServiceOrderResubmitRequest;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
@@ -69,7 +67,6 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
-import com.paypal.android.sdk.payments.PayPalItem;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
@@ -100,6 +97,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private CartReturn cartReturn;
     private OrderReturn orderReturn;
     private boolean isTranssactionFailed = false;
+    private boolean isTranssactionCanceled = false;
 
     private LinearLayout particpantContainerLinearLayout, orderLinearLayout, serviceFeeLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, diveCenterNameTextView, locationTextView;
@@ -186,7 +184,19 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 } else if (isParticipantEmpty){
                     Toast.makeText(BookingServiceSummaryActivity.this, getString(R.string.warn_field_participant_details_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else {
-                    if (orderReturn == null && isTranssactionFailed){
+
+                    if (isTranssactionCanceled){
+
+                        progressDialog.show();
+                        note = noteEditText.getText().toString();
+                        try {
+                            NYDoDiveServiceOrderResubmitRequest req = new NYDoDiveServiceOrderResubmitRequest(BookingServiceSummaryActivity.this, orderReturn.getSummary().getOrder().getOrderId(),  paymentType);
+                            spcMgr.execute(req, onCancelOrderServiceRequest());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    } else if (orderReturn == null && isTranssactionFailed){
                         // TODO: request ulang cart token atau cart return
                         new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
                     } else if (orderReturn == null){
@@ -757,6 +767,87 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
     private RequestListener<OrderReturn> onCreateOrderServiceRequest() {
+        return new RequestListener<OrderReturn>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                if(spiceException != null) {
+                    if (spiceException.getCause() instanceof NYCartExpiredException) {
+                        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                setResult(Activity.RESULT_OK);
+                                finish();
+                            }
+                        });
+                    } else {
+                        NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+
+            @Override
+            public void onRequestSuccess(final OrderReturn result) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+
+                //kasih flag jika nanti setelah masuk payment dibatalkan
+                isTranssactionCanceled = true;
+
+                orderReturn = result;
+
+                if (orderReturn != null){
+                    NYLog.e("payment Type : " + paymentType);
+
+                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
+
+                        //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
+                        VeritransStorage veritransStorage = new VeritransStorage(BookingServiceSummaryActivity.this);
+                        veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
+                        veritransStorage.contact = result.getSummary().getContact();
+                        veritransStorage.cart = result.getSummary().getOrder().getCart();
+                        veritransStorage.order = result.getSummary().getOrder();
+                        veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
+                        veritransStorage.save();
+
+                        payUsingVeritrans();
+
+                    } else if (paymentType.equals("1")){
+                        //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
+                        NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                                        intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                        intent.putExtra(NYHelper.ID_ORDER, orderReturn.getSummary().getOrder().getOrderId());
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                }, getResources().getString(R.string.check_order));
+                    } else if (paymentType.equals("4")){
+                        //TODO DISINI HANDLE KALO TRANSAKSI DI PAYPAL SUKSES
+                        payUsingPaypal();
+                    }
+
+                }
+
+
+            }
+        };
+    }
+
+
+    private RequestListener<OrderReturn> onCancelOrderServiceRequest() {
         return new RequestListener<OrderReturn>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {

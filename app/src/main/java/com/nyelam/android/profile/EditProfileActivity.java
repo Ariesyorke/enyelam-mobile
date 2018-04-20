@@ -147,10 +147,10 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                 if (user.getLanguage() != null && NYHelper.isStringNotEmpty(user.getLanguage().getName()) ){
                     currentLanguage = user.getLanguage();
                     languageEditText.setText(currentLanguage.getName());
+                    //Toast.makeText(this, currentLanguage.getName(), Toast.LENGTH_SHORT).show();
                 }
 
             }
-
 
             countryCodeAdapter = new CountryCodeAdapter(this);
 
@@ -572,13 +572,24 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
                 languageList = result;
 
-                if (languageList != null && languageList.getList() != null && languageList.getList().size() > 0){
+                if (languageList != null && languageList.getList() != null && languageList.getList().size() > 0 && currentLanguage != null){
+                    if (currentLanguage != null && NYHelper.isStringNotEmpty(currentLanguage.getName()))languageEditText.setText(currentLanguage.getName());
+                } else if (languageList != null && languageList.getList() != null && languageList.getList().size() > 0){
                     currentLanguage = languageList.getList().get(0);
                     if (currentLanguage != null && NYHelper.isStringNotEmpty(currentLanguage.getName()))languageEditText.setText(currentLanguage.getName());
                 } else {
                     currentLanguage = null;
                     languageEditText.setText("");
                 }
+
+
+                /*if (languageList != null && languageList.getList() != null && languageList.getList().size() > 0){
+                    currentLanguage = languageList.getList().get(0);
+                    if (currentLanguage != null && NYHelper.isStringNotEmpty(currentLanguage.getName()))languageEditText.setText(currentLanguage.getName());
+                } else {
+                    currentLanguage = null;
+                    languageEditText.setText("");
+                }*/
 
             }
         };

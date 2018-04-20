@@ -20,8 +20,7 @@ public class NYDoTripSuggestionServiceRequest extends NYBasicRequest<DiveService
     private static final String POST_PAGE = "page";
 
     public NYDoTripSuggestionServiceRequest(Context context) {
-        super(AuthReturn.class, context, context.getString(R.string.api_path_dodive_suggestion_service));
-
+        super(AuthReturn.class, context, context.getString(R.string.api_path_dotrip_suggestion_service));
     }
 
     @Override
