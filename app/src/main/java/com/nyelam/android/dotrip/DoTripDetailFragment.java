@@ -35,6 +35,7 @@ import com.nyelam.android.dodive.DoDiveDiveServiceSuggestionAdapter;
 import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYDoDiveRelatedServiceRequest;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 import com.octo.android.robospice.SpiceManager;
@@ -370,7 +371,7 @@ public class DoTripDetailFragment extends Fragment {
             String apiPath = getString(R.string.api_path_dodive_service_list);
             apiPath = getString(R.string.api_path_dodive_search_service_by_divecenter);
 
-            NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null,  null, null, -1, -1, String.valueOf(0));
+            NYDoDiveRelatedServiceRequest req = new NYDoDiveRelatedServiceRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null,  null, null, -1, -1, String.valueOf(0));
             //NYDoDiveSuggestionServiceRequest req = new NYDoDiveSuggestionServiceRequest(getActivity());
             spcMgr.execute(req, onSearchServiceRequest());
 

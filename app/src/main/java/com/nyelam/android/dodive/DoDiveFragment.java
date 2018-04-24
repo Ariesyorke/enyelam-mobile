@@ -38,28 +38,22 @@ import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.ecotrip.EcoTripViewPagerAdapter;
-import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
-import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 

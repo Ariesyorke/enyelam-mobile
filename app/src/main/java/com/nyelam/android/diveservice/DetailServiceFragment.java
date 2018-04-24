@@ -39,6 +39,7 @@ import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYDoDiveRelatedServiceRequest;
 import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
@@ -434,7 +435,7 @@ public class DetailServiceFragment extends Fragment {
         } else {
             if (diveService != null && diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getId())){
                 // TODO: realted service belum
-                NYDoDiveSearchServiceResultRequest req = new NYDoDiveSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, -1, -1, String.valueOf(0));
+                NYDoDiveRelatedServiceRequest req = new NYDoDiveRelatedServiceRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, -1, -1, String.valueOf(0));
                 spcMgr.execute(req, onSearchServiceRequest());
                 // TODO: load data dummy, to test and waitting for API request
                 //loadJSONAsset();

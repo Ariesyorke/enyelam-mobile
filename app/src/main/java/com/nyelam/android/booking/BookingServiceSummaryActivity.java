@@ -810,6 +810,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 orderReturn = result;
 
                 if (orderReturn != null){
+
                     NYLog.e("payment Type : " + paymentType);
 
                     if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){

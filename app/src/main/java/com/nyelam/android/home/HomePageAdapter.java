@@ -36,6 +36,7 @@ import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.dotrip.DoTripActivity;
 import com.nyelam.android.dotrip.DoTripDetailActivity;
+import com.nyelam.android.dotrip.DoTripListActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 
@@ -219,7 +220,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     //NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon)+" "+String.valueOf(parent.getClass().getName()), null);
-                    Intent intent = new Intent(context, DoTripActivity.class);
+                    Intent intent = new Intent(context, DoTripListActivity.class);
                     context.startActivity(intent);
                 }
             });

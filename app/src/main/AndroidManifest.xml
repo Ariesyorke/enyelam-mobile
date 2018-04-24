@@ -139,7 +139,8 @@
         />
         <activity android:name=".dotrip.DoTripKeywordActivity" />
         <activity android:name=".dotrip.DoTripResultActivity" />
-        <activity android:name=".dotrip.DoTripDetailActivity"></activity>
+        <activity android:name=".dotrip.DoTripDetailActivity" />
+        <activity android:name=".dotrip.DoTripListActivity"></activity>
     </application>
 
 </manifest>

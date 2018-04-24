@@ -11,20 +11,20 @@ public class NYLog {
         if(obj == null){
             obj = "null";
         }
-        //Log.e("Nyelam", obj.toString());
+        Log.e("Nyelam", obj.toString());
     }
 
     public static void d(Object obj){
         if(obj == null){
             obj = "null";
         }
-        //Log.d("Nyelam", obj.toString());
+        Log.d("Nyelam", obj.toString());
     }
 
     public static void w(Object obj){
         if(obj == null){
             obj = "null";
         }
-        //Log.w("Nyelam", obj.toString());
+        Log.w("Nyelam", obj.toString());
     }
 }

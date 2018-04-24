@@ -4,15 +4,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.danzoye.lib.http.DHTTPConnectionHelper;
-import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.Category;
-import com.nyelam.android.data.CategoryList;
-import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
-import com.nyelam.android.data.Facilities;
 import com.nyelam.android.data.StateFacility;
-import com.nyelam.android.data.StateFacilityList;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.result.NYPaginationResult;
 
@@ -25,7 +20,7 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<NYPaginationResult<DiveServiceList>> {
+public class NYDoDiveRelatedServiceRequest extends NYBasicRequest<DiveServiceList> {
 
     private static final String KEY_DIVE_SERVICE = "dive_services";
 
@@ -50,7 +45,7 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<NYPaginat
     private static final String POST_ECO_TRIP = "eco_trip";
 
 
-    public NYDoDiveSearchServiceResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, List<String> totalDives, double priceMin, double priceMax, String isEcoTrip) {
+    public NYDoDiveRelatedServiceRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, List<String> totalDives, double priceMin, double priceMax, String isEcoTrip) {
         super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(diverId) && !TextUtils.isEmpty(type)) {
@@ -170,15 +165,15 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<NYPaginat
     }
 
     @Override
-    protected NYPaginationResult<DiveServiceList> onProcessSuccessData(JSONObject obj) throws Exception {
-        NYPaginationResult<DiveServiceList> temp = new NYPaginationResult<DiveServiceList>(DiveServiceList.class) {
-            @Override
-            protected String getListKey() {
-                return KEY_DIVE_SERVICE;
-            }
-        };
-        temp.parse(obj);
-        return temp;
+    protected DiveServiceList onProcessSuccessData(JSONObject obj) throws Exception {
+
+        if(obj.get(KEY_DIVE_SERVICE) instanceof JSONArray) {
+            DiveServiceList serviceList = new DiveServiceList();
+            serviceList.parse(obj.getJSONArray(KEY_DIVE_SERVICE));
+            if (serviceList != null && serviceList.getList() != null && serviceList.getList().size() > 0) return serviceList;
+        }
+
+        return null;
     }
 
 
