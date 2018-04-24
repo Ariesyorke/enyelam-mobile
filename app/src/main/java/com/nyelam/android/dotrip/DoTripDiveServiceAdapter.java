@@ -16,21 +16,25 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.NYApplication;
+import com.nyelam.android.NYPagingBridge;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.diveservice.DetailServiceActivity;
+import com.nyelam.android.dodive.DoDiveSearchDiveServiceAdapter;
 import com.nyelam.android.dodive.DoDiveSearchResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements NYPagingBridge<DiveService> {
 
     private Activity activity;
     private List<DiveService> diveServiceList;
@@ -39,6 +43,21 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
     private String certificate;
     private String type;
     private String diverId;
+    private int sortType = 2;
+
+    private int visibility = View.GONE;
+
+    public void setSortType(int sortType){
+        this.sortType = sortType;
+    }
+
+    public void changeVisibility(int visibility) {
+        this.visibility = visibility;
+    }
+
+    public void sortData(){
+        Collections.sort(diveServiceList, new StudentDateComparator());
+    }
 
     public DoTripDiveServiceAdapter(Activity activity, String diver, String date, String certificate, String type, String diverId) {
         this.activity = activity;
@@ -92,8 +111,82 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         removeTheDuplicates(diveServiceList);
     }
 
+    public void addServices(List<DiveService> events, boolean isLatest) {
+        if(this.diveServiceList == null) {
+            this.diveServiceList = new ArrayList<>();
+        }
+        List<DiveService> temp = removeSameDatas(events);
+        if(temp != null && !temp.isEmpty()) {
+            if (isLatest) {
+                if(!this.diveServiceList.isEmpty()) {
+                    addListIntoTop(temp);
+                } else {
+                    this.diveServiceList.addAll(temp);
+                }
+            } else {
+                addListIntoBottom(temp);
+            }
+        }
+    }
+
     public void clear() {
         this.diveServiceList = new ArrayList<>();
+    }
+
+    @Override
+    public void addItemIntoTop(DiveService item) {
+
+    }
+
+    @Override
+    public void addItemIntoBottom(DiveService item) {
+
+    }
+
+    @Override
+    public void addListIntoTop(List<DiveService> list) {
+        Collections.reverse(diveServiceList);
+        diveServiceList.addAll(list);
+        Collections.reverse(diveServiceList);
+    }
+
+    @Override
+    public void addListIntoBottom(List<DiveService> list) {
+        diveServiceList.addAll(list);
+    }
+
+    @Override
+    public List<DiveService> removeSameDatas(List<DiveService> latest) {
+        if(latest == null || latest.isEmpty()) {
+            return null;
+        }
+
+        List<DiveService> temp = latest;
+        if(diveServiceList != null && !diveServiceList.isEmpty() && diveServiceList.size() > 0){
+            for(int i = 0; i < diveServiceList.size(); i++) {
+                for(int j = 0; j < temp.size(); j++) {
+                    if(diveServiceList.get(i).getId().equals(temp.get(j).getId())) {
+                        temp.remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return temp;
+    }
+
+    @Override
+    public boolean isDataSame(DiveService item) {
+        if(item == null) {
+            return true;
+        }
+        for(DiveService diveService : diveServiceList) {
+            if(diveService.getId().equals(item.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -213,7 +306,6 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 }
 
-
                 //SET IMAGE
                 NYApplication application = (NYApplication) activity.getApplication();
                 Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
@@ -294,7 +386,17 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         diveServiceList.addAll(temp);
+    }
 
+
+    class StudentDateComparator implements Comparator<DiveService> {
+        public int compare(DiveService s1, DiveService s2) {
+            if (sortType == 2){
+                return Double.compare(s1.getSpecialPrice(), s2.getSpecialPrice());
+            } else {
+                return Double.compare(s2.getSpecialPrice(), s1.getSpecialPrice());
+            }
+        }
     }
 
 }

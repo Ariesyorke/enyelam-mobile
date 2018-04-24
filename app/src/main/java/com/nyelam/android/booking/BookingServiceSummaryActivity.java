@@ -118,9 +118,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private PayPalConfiguration payPalConfiguration;
     //Client ID Paypal
     //development
-    /*private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";*/
+    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
     //production
-    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
+    /*private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";*/
     private Intent paypalIntent;
     private int paypalRequestCode = 999;
 

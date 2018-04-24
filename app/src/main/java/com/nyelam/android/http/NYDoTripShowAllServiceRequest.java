@@ -10,6 +10,7 @@ import com.nyelam.android.data.Category;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.StateFacility;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.result.NYPaginationResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class NYDoTripShowAllServiceRequest extends NYBasicRequest<DiveServiceList> {
+public class NYDoTripShowAllServiceRequest extends NYBasicRequest<NYPaginationResult<DiveServiceList>> {
 
     private static final String KEY_DIVE_SERVICE = "trips";
 
@@ -40,9 +41,9 @@ public class NYDoTripShowAllServiceRequest extends NYBasicRequest<DiveServiceLis
     public NYDoTripShowAllServiceRequest(Context context, String page, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, List<String> totalDives, double priceMin, double priceMax,  String rating,  String eco_trip) {
         super(AuthReturn.class, context, context.getString(R.string.api_path_dotrip_show_all_service));
 
-        /*if(!TextUtils.isEmpty(sortingBy)) {
+        if(!TextUtils.isEmpty(sortingBy)) {
             addQuery(POST_SORT_BY, sortingBy);
-        }*/
+        }
 
         if(!TextUtils.isEmpty(page)) {
             addQuery(POST_PAGE, page);
@@ -60,7 +61,7 @@ public class NYDoTripShowAllServiceRequest extends NYBasicRequest<DiveServiceLis
             addQuery(POST_DATE, date);
         }
 
-        /*if(priceMin >= 0) {
+        if(priceMin >= 0) {
             addQuery(POST_PRICE_MIN, String.valueOf(priceMin));
         }
 
@@ -86,11 +87,11 @@ public class NYDoTripShowAllServiceRequest extends NYBasicRequest<DiveServiceLis
             }
         }
 
-        if(!TextUtils.isEmpty(rating)) {
+        /*if(!TextUtils.isEmpty(rating)) {
             addQuery(POST_RATING, rating);
-        }
+        }*/
 
-        if(!TextUtils.isEmpty(eco_trip)) {
+        /*if(!TextUtils.isEmpty(eco_trip)) {
             addQuery(POST_ECO_TRIP, eco_trip);
         }*/
 
@@ -102,15 +103,15 @@ public class NYDoTripShowAllServiceRequest extends NYBasicRequest<DiveServiceLis
     }
 
     @Override
-    protected DiveServiceList onProcessSuccessData(JSONObject obj) throws Exception {
-
-        if(obj.get(KEY_DIVE_SERVICE) instanceof JSONArray) {
-            DiveServiceList serviceList = new DiveServiceList();
-            serviceList.parse(obj.getJSONArray(KEY_DIVE_SERVICE));
-            if (serviceList != null && serviceList.getList() != null && serviceList.getList().size() > 0) return serviceList;
-        }
-
-        return null;
+    protected NYPaginationResult<DiveServiceList> onProcessSuccessData(JSONObject obj) throws Exception {
+        NYPaginationResult<DiveServiceList> temp = new NYPaginationResult<DiveServiceList>(DiveServiceList.class) {
+            @Override
+            protected String getListKey() {
+                return KEY_DIVE_SERVICE;
+            }
+        };
+        temp.parse(obj);
+        return temp;
     }
 
 

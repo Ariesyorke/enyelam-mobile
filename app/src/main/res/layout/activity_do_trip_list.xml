@@ -83,39 +83,53 @@
         android:layout_height="wrap_content" />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="none"
-        app:behavior_overlapTop="78dp"
-        android:layout_margin="8dp"
-        android:background="@android:color/transparent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
+        android:layout_weight="1">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/filter_relativeLayout"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.nyelam.android.view.font.NYTextView
-            android:id="@+id/filter_textView"
-            app:fontTextStyle="medium"
-            android:text="@string/filter"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:background="@drawable/ny_rectangle_blue_soft"
-            android:paddingTop="@dimen/padding_half"
-            android:paddingBottom="@dimen/padding_half"
-            android:paddingRight="@dimen/padding_quad"
-            android:paddingLeft="@dimen/padding_quad"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="none"
+                app:behavior_overlapTop="78dp"
+                android:layout_margin="8dp"
+                android:background="@android:color/transparent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                />
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/filter_relativeLayout"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/filter_textView"
+                    app:fontTextStyle="medium"
+                    android:text="@string/filter"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/ny_rectangle_blue_soft"
+                    android:paddingTop="@dimen/padding_half"
+                    android:paddingBottom="@dimen/padding_half"
+                    android:paddingRight="@dimen/padding_quad"
+                    android:paddingLeft="@dimen/padding_quad"
+                    android:layout_margin="@dimen/activity_vertical_margin"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

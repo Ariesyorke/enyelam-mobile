@@ -139,6 +139,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             getSuggetionRequest();
         }
 
+        setSwitchState();
+    }
+
+    private void setSwitchState() {
         if (activity.isEcoTrip()){
             if (divingLicenseSwitch.isChecked()) {
                 divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
@@ -156,6 +160,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
             }
         }
+
+        if (divingLicenseSwitch.isChecked()){
+            divingLicenseTextView.setText(R.string.yes);
+        } else {
+            divingLicenseTextView.setText(R.string.no);
+        }
+
     }
 
     private void initAdapter() {
@@ -187,6 +198,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 type = "4";
                 keywordTextView.setText(keyword);
                 divingLicenseSwitch.setChecked(diveService.isLicense());
+                setSwitchState();
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
@@ -299,11 +311,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 if (obj.has("type"))type = obj.getString("type");
                 if (obj.has("id"))diverId = obj.getString("id");
                 if (obj.has("license") && obj.getBoolean("license")){
-                    setDivingLicense(true);
+                    divingLicenseSwitch.setChecked(true);
+                    //setDivingLicense(true);
                     //divingLicenseSwitch.setChecked(true);
                     //certificateCheckBox.setClickable(false);
                 } else {
-                    setDivingLicense(false);
+                    divingLicenseSwitch.setChecked(false);
+                    //setDivingLicense(false);
                     //divingLicenseSwitch.setChecked(false);
                     //certificateCheckBox.setClickable(true);
                 }
@@ -318,7 +332,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             if (intent.hasExtra(NYHelper.CERTIFICATE)){
                 //certificateCheckBox.setChecked(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
                 //divingLicenseSwitch.setChecked(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
-                setDivingLicense(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
+                //setDivingLicense(intent.getBooleanExtra(NYHelper.CERTIFICATE,false));
+                divingLicenseSwitch.setChecked(intent.getBooleanExtra(NYHelper.CERTIFICATE, false));
             }
 
             if (intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.SCHEDULE))){
@@ -402,24 +417,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         divingLicenseSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setDivingLicense(divingLicenseSwitch.isChecked());
-                if (activity.isEcoTrip()){
-                    if (divingLicenseSwitch.isChecked()) {
-                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
-                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
-                    } else {
-                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
-                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
-                    }
-                } else{
-                    if (divingLicenseSwitch.isChecked()) {
-                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue5), PorterDuff.Mode.SRC_IN);
-                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue8), PorterDuff.Mode.SRC_IN);
-                    } else {
-                        divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
-                        divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
-                    }
-                }
+                setSwitchState();
             }
         });
 
@@ -445,7 +443,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 //divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
-                setDivingLicense(!divingLicenseSwitch.isChecked());
+                //setDivingLicense(!divingLicenseSwitch.isChecked());
+                boolean isTrue = divingLicenseSwitch.isChecked();
+                divingLicenseSwitch.setChecked(!isTrue);
+                setSwitchState();
             }
         });
 
@@ -776,7 +777,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
-    public void setDivingLicense(boolean isTrue){
+    /*public void setDivingLicense(boolean isTrue){
         if (isTrue){
             divingLicenseTextView.setText(getString(R.string.yes));
             divingLicenseSwitch.setChecked(true);
@@ -784,6 +785,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             divingLicenseTextView.setText(getString(R.string.no));
             divingLicenseSwitch.setChecked(false);
         }
-    }
+    }*/
 
 }

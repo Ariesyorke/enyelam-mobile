@@ -3,6 +3,7 @@ package com.nyelam.android.dotrip;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
 import com.nyelam.android.http.NYDoTripShowAllServiceRequest;
 import com.nyelam.android.http.NYGetMinMaxPriceRequest;
+import com.nyelam.android.http.result.NYPaginationResult;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -66,6 +68,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
     private StateFacilityList stateFacilityList;
     private TextView filterTextView;
     private RelativeLayout filterRelativeLayout;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +142,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
 
     private void initRequest() {
         progressBar.setVisibility(View.VISIBLE);
+        noResultTextView.setVisibility(View.GONE);
 
         // TODO: tunggu URL dari Adam
         List<Category> lsCategory = categoryList.getList();
@@ -207,33 +211,38 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
         //filterImageView = (ImageView) findViewById(R.id.filter_imageView);
         filterTextView = (TextView) findViewById(R.id.filter_textView);
         filterRelativeLayout = (RelativeLayout) findViewById(R.id.filter_relativeLayout);
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
     }
 
-    private RequestListener<DiveServiceList> onSearchServiceRequest() {
-        return new RequestListener<DiveServiceList>() {
+    private RequestListener<NYPaginationResult<DiveServiceList>> onSearchServiceRequest() {
+        return new RequestListener<NYPaginationResult<DiveServiceList>>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                diveServiceAdapter.clear();
-                diveServiceAdapter.notifyDataSetChanged();
-                noResultTextView.setVisibility(View.VISIBLE);
-                if(diveServiceAdapter.getItemCount() > 0) {
+                //diveServiceAdapter.clear();
+                //diveServiceAdapter.notifyDataSetChanged();
+                if (diveServiceAdapter.getItemCount() > 0){
+                    noResultTextView.setVisibility(View.GONE);
+                } else {
+                    noResultTextView.setVisibility(View.VISIBLE);
+                }
+                /*if(diveServiceAdapter.getItemCount() > 0) {
                     filterRelativeLayout.setVisibility(View.VISIBLE);
                 } else {
                     filterRelativeLayout.setVisibility(View.GONE);
-                }
+                }*/
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
             }
 
             @Override
-            public void onRequestSuccess(DiveServiceList results) {
+            public void onRequestSuccess(NYPaginationResult<DiveServiceList> result) {
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
 
-                if (results != null){
+                /*if (results != null){
                     diveServiceAdapter.addResults(results.getList());
                     diveServiceAdapter.notifyDataSetChanged();
                 }
@@ -244,9 +253,38 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 } else {
                     noResultTextView.setVisibility(View.VISIBLE);
                     filterRelativeLayout.setVisibility(View.GONE);
+                }*/
+
+
+                if (diveServiceAdapter.getItemCount() <= 0)noResultTextView.setVisibility(View.VISIBLE);
+
+                //adapter.clear();
+                if(progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+                if(swipeLayout != null) {
+                    swipeLayout.setRefreshing(false);
+                }
+                if(recyclerView != null) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+                if(result != null && result.item != null && result.item.getList() != null && !result.item.getList().isEmpty()) {
+                    if (diveServiceAdapter != null) {
+                        progressBar.setVisibility(View.GONE);
+                        diveServiceAdapter.addServices(result.item.getList(), true);
+                        diveServiceAdapter.setSortType(sortingType);
+                        diveServiceAdapter.sortData();
+                        page++;
+                    }
                 }
 
+                diveServiceAdapter.notifyDataSetChanged();
 
+                if (diveServiceAdapter.getItemCount() > 0){
+                    noResultTextView.setVisibility(View.GONE);
+                } else {
+                    noResultTextView.setVisibility(View.VISIBLE);
+                }
 
             }
         };
@@ -426,7 +464,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                //filterRelativeLayout.setVisibility(View.GONE);
+                filterRelativeLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -434,6 +472,8 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
+
+                filterRelativeLayout.setVisibility(View.VISIBLE);
 
                 if (results != null){
                     minPriceDefault = results.getLowestPrice();
