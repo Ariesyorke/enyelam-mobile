@@ -25,7 +25,7 @@
                 android:id="@+id/title_textView"
                 android:text="Title"
                 android:gravity="center"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="@color/colorWhite"
                 android:singleLine="true"
                 android:maxLines="1"

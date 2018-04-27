@@ -256,10 +256,9 @@
 
             <ImageView
                 android:id="@+id/minus_imageView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_minus_blue" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_minus" />
 
             <TextView
                 android:id="@+id/diver_textView"
@@ -279,10 +278,9 @@
 
             <ImageView
                 android:id="@+id/plus_imageView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_plus_blue" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_plus" />
 
             <TextView
                 android:layout_width="wrap_content"

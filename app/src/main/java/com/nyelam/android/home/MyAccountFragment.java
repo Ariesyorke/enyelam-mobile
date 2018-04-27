@@ -106,7 +106,7 @@ public class MyAccountFragment extends Fragment implements
         LoginStorage loginStorage = new LoginStorage(getActivity());
         if (loginStorage != null && loginStorage.isUserLogin()){
 
-            NYLog.e("CEK USER : "+loginStorage.user.toString());
+            //NYLog.e("CEK USER : "+loginStorage.user.toString());
 
             User user = loginStorage.user;
 
@@ -114,7 +114,7 @@ public class MyAccountFragment extends Fragment implements
 
             // foto profile
             if (user.getPicture() == null || TextUtils.isEmpty(user.getPicture())) {
-                photoProfileImageView.setImageResource(R.mipmap.ic_launcher);
+                photoProfileImageView.setImageResource(R.drawable.logo_nyelam);
             } else {
                 ImageLoader.getInstance().loadImage(user.getPicture(), NYHelper.getOption(), new ImageLoadingListener() {
                     @Override
@@ -124,7 +124,7 @@ public class MyAccountFragment extends Fragment implements
 
                     @Override
                     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        photoProfileImageView.setImageResource(R.mipmap.ic_launcher);
+                        photoProfileImageView.setImageResource(R.drawable.logo_nyelam);
                     }
 
                     @Override
@@ -138,7 +138,7 @@ public class MyAccountFragment extends Fragment implements
 
                     @Override
                     public void onLoadingCancelled(String imageUri, View view) {
-                        photoProfileImageView.setImageResource(R.mipmap.ic_launcher);
+                        photoProfileImageView.setImageResource(R.drawable.logo_nyelam);
                     }
                 });
 
@@ -627,6 +627,12 @@ public class MyAccountFragment extends Fragment implements
     public void onStart() {
         super.onStart();
         spcMgr.start(getActivity());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!spcMgr.isStarted()) spcMgr.start(getActivity());
 
         try{
             LoginStorage cacheImageStorage = new LoginStorage(getActivity());
@@ -640,13 +646,13 @@ public class MyAccountFragment extends Fragment implements
                     //NYLog.e("CEK IMAGE CACHE cover : "+cacheImageStorage.cover.toString());
                     coverImageView.setImageBitmap(NYHelper.stringToBitmap(cacheImageStorage.cover));
                 }
+            } else {
+                initPhoto();
             }
         } catch (Exception e){
             e.printStackTrace();
         }
-
     }
-
 
     @Override
     public void onStop() {

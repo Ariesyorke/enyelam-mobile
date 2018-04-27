@@ -36,7 +36,6 @@ import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveRelatedServiceRequest;
-import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;

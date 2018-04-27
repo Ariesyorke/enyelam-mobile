@@ -40,7 +40,6 @@ import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveRelatedServiceRequest;
-import com.nyelam.android.http.NYDoDiveSearchServiceResultRequest;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
 import com.nyelam.android.view.font.NYStrikethroughTextView;

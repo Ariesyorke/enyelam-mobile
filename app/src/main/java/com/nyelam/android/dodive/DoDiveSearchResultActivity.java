@@ -488,6 +488,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             // update the contact list
+            page = 1;
+
             Bundle b = data.getExtras();
 
             if (data.hasExtra(NYHelper.SORT_BY))sortingType = b.getInt(NYHelper.SORT_BY);

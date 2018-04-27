@@ -46,7 +46,6 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
     private List<Participant> dataList;
     private ParticipantsSearchAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
