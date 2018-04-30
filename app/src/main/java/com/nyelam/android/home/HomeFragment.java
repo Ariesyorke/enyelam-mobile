@@ -33,6 +33,7 @@ import com.nyelam.android.data.NYHotOffersModule;
 import com.nyelam.android.data.NYModule;
 import com.nyelam.android.data.NYPopularDiveSpotModule;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.docourse.DoCourseActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -170,6 +171,8 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 //Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
                 NYHelper.handlePopupMessage(getActivity(), getResources().getString(R.string.coming_soon), null);
+                /*Intent intent = new Intent(getActivity(), DoCourseActivity.class);
+                startActivity(intent);*/
             }
         });
 

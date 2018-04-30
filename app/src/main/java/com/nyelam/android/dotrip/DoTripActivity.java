@@ -18,6 +18,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nyelam.android.BasicActivity;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -57,7 +58,7 @@ import java.util.TimeZone;
 
 import me.relex.circleindicator.CircleIndicator;
 
-public class DoTripActivity extends AppCompatActivity implements
+public class DoTripActivity extends BasicActivity implements
         DatePickerDialog.OnDateSetListener,
         NYCustomDialog.OnDialogFragmentClickListener{
 
