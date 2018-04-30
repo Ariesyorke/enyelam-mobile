@@ -67,10 +67,8 @@ public class HomeFragment extends Fragment {
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
     private CardView doDiveCardView, doCourseCardView, doShopCardView, ecoTripCardView;
-
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
-
     private DoTripRecyclerViewAdapter doTripAdapter;
 
     public HomeFragment() {
@@ -141,13 +139,10 @@ public class HomeFragment extends Fragment {
                     adapter.addModules(results.getList());
                     adapter.notifyDataSetChanged();
 
-
                     ModulHomepageStorage modulStorage = new ModulHomepageStorage(getActivity());
                     modulStorage.setModuleList(results);
                     modulStorage.save();
-
                 }
-
             }
         };
     }

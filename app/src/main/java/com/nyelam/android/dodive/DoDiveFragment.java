@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -79,6 +80,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private TextView divingLicenseTextView;
     private LinearLayout divingLicenseLinearLayout;
     private ScrollView scrollView;
+    private boolean isSwitchEnable = true;
 //    private Calendar c;
 
     //suggestion
@@ -143,28 +145,31 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     private void setSwitchState() {
-        if (activity.isEcoTrip()){
-            if (divingLicenseSwitch.isChecked()) {
-                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
-                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
-            } else {
-                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
-                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
-            }
-        } else{
-            if (divingLicenseSwitch.isChecked()) {
-                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue5), PorterDuff.Mode.SRC_IN);
-                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue8), PorterDuff.Mode.SRC_IN);
-            } else {
-                divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
-                divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
-            }
-        }
 
-        if (divingLicenseSwitch.isChecked()){
-            divingLicenseTextView.setText(R.string.yes);
-        } else {
-            divingLicenseTextView.setText(R.string.no);
+        if (isSwitchEnable){
+            if (activity.isEcoTrip()){
+                if (divingLicenseSwitch.isChecked()) {
+                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green3), PorterDuff.Mode.SRC_IN);
+                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_green2), PorterDuff.Mode.SRC_IN);
+                } else {
+                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
+                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
+                }
+            } else{
+                if (divingLicenseSwitch.isChecked()) {
+                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue5), PorterDuff.Mode.SRC_IN);
+                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_blue8), PorterDuff.Mode.SRC_IN);
+                } else {
+                    divingLicenseSwitch.getThumbDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey8), PorterDuff.Mode.SRC_IN);
+                    divingLicenseSwitch.getTrackDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.ny_grey7), PorterDuff.Mode.SRC_IN);
+                }
+            }
+
+            if (divingLicenseSwitch.isChecked()){
+                divingLicenseTextView.setText(R.string.yes);
+            } else {
+                divingLicenseTextView.setText(R.string.no);
+            }
         }
 
     }
@@ -200,6 +205,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 divingLicenseSwitch.setChecked(diveService.isLicense());
                 setSwitchState();
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
+                isSwitchEnable = false;
             }
 
             @Override
@@ -297,11 +303,19 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private void initExtra() {
         Intent intent = getActivity().getIntent();
         Bundle extras = getActivity().getIntent().getExtras();
+
+        isSwitchEnable = true;
+
         if (extras != null && intent.hasExtra(NYHelper.SEARCH_RESULT) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SEARCH_RESULT))) {
             try {
+
+                NYLog.e("cek search service 1 : "+extras.getString(NYHelper.SEARCH_RESULT));
+
                 JSONObject obj = new JSONObject(extras.getString(NYHelper.SEARCH_RESULT));
                 searchService = new SearchService();
                 searchService.parse(obj);
+
+                if (searchService != null) NYLog.e("cek search service : "+searchService.toString());
 
                 // TODO: sekarang pakai class object
                 if (obj.has("name")){
@@ -321,6 +335,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     //divingLicenseSwitch.setChecked(false);
                     //certificateCheckBox.setClickable(true);
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -398,8 +413,12 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 diverTextView.setText(intent.getStringExtra(NYHelper.DIVER)+" Diver(s)");
                 diver = intent.getStringExtra(NYHelper.DIVER);
             }
+        }
 
-
+        if (searchService != null &&  searchService.getType() == 4){
+            divingLicenseSwitch.setChecked(searchService.isLicense());
+            setSwitchState();
+            isSwitchEnable = false;
         }
 
         //TODO HARCODE ECOTRIP!!
@@ -417,6 +436,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         divingLicenseSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isSwitchEnable) divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
                 setSwitchState();
             }
         });
@@ -518,7 +538,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SERVICE, diveService.toString());
                         intent.putExtra(NYHelper.ID_DIVER, diverId);
 
-
                         intent.putExtra(NYHelper.KEYWORD, keyword);
                         intent.putExtra(NYHelper.CERTIFICATE, certificate);
                         intent.putExtra(NYHelper.SCHEDULE, date);
@@ -528,6 +547,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                             intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
                         startActivity(intent);
+
 
                     } else if (type.equals("5") || type.equals("6")){
 

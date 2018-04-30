@@ -33,7 +33,6 @@ public class DoDiveActivity extends BasicActivity implements
     private ImageView searchImageView;
     private ImageView backgroundImageView;
     private boolean ecoTrip = false;
-
     public boolean isEcoTrip() {
         return ecoTrip;
     }

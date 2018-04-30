@@ -15,12 +15,14 @@ public abstract class SearchResult implements Parseable {
     protected static String KEY_RATING = "rating";
     protected static String KEY_TYPE = "type";
     protected static String KEY_COUNT = "count";
+    protected static String KEY_LICENSE = "license";
 
     protected String id;
     protected String name;
     protected String rating;
     protected Integer type;
     protected Integer count;
+    protected boolean license;
 
     public SearchResult(){}
 
@@ -64,6 +66,14 @@ public abstract class SearchResult implements Parseable {
         this.count = count;
     }
 
+    public boolean isLicense() {
+        return license;
+    }
+
+    public void setLicense(boolean license) {
+        this.license = license;
+    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -97,6 +107,27 @@ public abstract class SearchResult implements Parseable {
                 setCount(obj.getInt(KEY_COUNT));
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_LICENSE)) {
+                if (obj.get(KEY_LICENSE) instanceof Integer){
+                    if (obj.getInt(KEY_LICENSE) > 0){
+                        setLicense(true);
+                    } else {
+                        setLicense(false);
+                    }
+                } else if (obj.get(KEY_LICENSE) instanceof  Boolean){
+                    setLicense(obj.getBoolean(KEY_LICENSE));
+                } else if (obj.get(KEY_LICENSE) instanceof String){
+                    if (obj.getString(KEY_LICENSE).equals("1")){
+                        setLicense(true);
+                    } else {
+                        setLicense(false);
+                    }
+                }
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
     }
 
     @Override
@@ -145,13 +176,15 @@ public abstract class SearchResult implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
+            obj.put(KEY_LICENSE, isLicense());
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
             return obj.toString(3);
         } catch (JSONException e) {e.printStackTrace();}
 
 
         return super.toString();
     }
-
-
 
 }

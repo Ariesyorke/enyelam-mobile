@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.nyelam.android.dodive.DoDiveActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:background="#0071BC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding"
+            android:paddingBottom="@dimen/padding"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/title_textView"
+                android:text="@string/search"
+                android:textSize="18sp"
+                android:textColor="@color/colorWhite"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/search_imageView"
+                android:src="@drawable/ic_sort"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <!--<View
+        android:id="@+id/view"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/colorGradationSoftLeft"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>-->
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:isScrollContainer="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/padding_double"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/keyword_imageView"
+                        android:src="@drawable/ic_search_place"
+                        android:layout_centerVertical="true"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
+                    <LinearLayout
+                        android:id="@+id/keyword_linearLayout"
+                        android:layout_toRightOf="@id/keyword_imageView"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:text="Dive Destination"
+                            android:textSize="12sp"
+                            android:textColor="@color/ny_grey2"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/keyword_textView"
+                            android:hint="Province, Area, Spot, Dive Center"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black2"
+                            android:textColorHint="@color/ny_grey4"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/padding_half"
+                            android:layout_marginTop="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:background="@color/ny_grey4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/association_imageView"
+                        android:src="@drawable/ic_search_association"
+                        android:layout_centerVertical="true"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
+                    <LinearLayout
+                        android:id="@+id/association_linearLayout"
+                        android:layout_toRightOf="@id/association_imageView"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:text="Association"
+                            android:textSize="12sp"
+                            android:textColor="@color/ny_grey2"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/association_textView"
+                            android:hint="CMAS, NAUI, PADI, RAID, SSI"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black2"
+                            android:textColorHint="@color/ny_grey4"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/padding_half"
+                            android:layout_marginTop="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:background="@color/ny_grey4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                        <Spinner
+                            android:visibility="gone"
+                            android:id="@+id/association_spinner"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/padding"
+                            android:paddingTop="@dimen/padding"
+                            android:paddingBottom="@dimen/padding"
+                            android:backgroundTint="@android:color/transparent"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/diving_license_imageView"
+                        android:src="@drawable/ic_search_diving_license"
+                        android:layout_centerVertical="true"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
+                    <LinearLayout
+                        android:id="@+id/diving_license_linearLayout"
+                        android:layout_toRightOf="@id/diving_license_imageView"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:text="License Type"
+                            android:textSize="12sp"
+                            android:textColor="@color/ny_grey2"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <com.nyelam.android.view.font.NYTextView
+                                android:hint="OW, AOW, Rescue, etc"
+                                android:textSize="16sp"
+                                android:textColor="@color/ny_black2"
+                                android:textColorHint="@color/ny_grey4"
+                                android:singleLine="true"
+                                android:maxLines="1"
+                                android:paddingBottom="@dimen/padding_half"
+                                android:layout_marginTop="3dp"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <View
+                            android:background="@color/ny_grey4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                        <!--<Spinner
+                            android:visibility="gone"
+                            android:id="@+id/diver_spinner"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/padding"
+                            android:paddingTop="@dimen/padding"
+                            android:paddingBottom="@dimen/padding"
+                            android:backgroundTint="@android:color/transparent"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"/>-->
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/datetime_imageView"
+                        android:src="@drawable/ic_search_date"
+                        android:layout_centerVertical="true"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
+                    <LinearLayout
+                        android:id="@+id/datetime_linearLayout"
+                        android:layout_toRightOf="@id/datetime_imageView"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:text="Course Schedule"
+                            android:textSize="12sp"
+                            android:textColor="@color/ny_grey2"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/datetime_textView"
+                            android:hint="Month Year"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black2"
+                            android:textColorHint="@color/ny_grey4"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/padding_half"
+                            android:layout_marginTop="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:background="@color/ny_grey4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/diver_imageView"
+                        android:src="@drawable/ic_search_diver"
+                        android:layout_centerVertical="true"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
+                    <LinearLayout
+                        android:id="@+id/diver_linearLayout"
+                        android:layout_toRightOf="@id/diver_imageView"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:text="Diver(s)"
+                            android:textSize="12sp"
+                            android:textColor="@color/ny_grey2"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/diver_textView"
+                            android:hint="Choose total diver(s)"
+                            android:textSize="16sp"
+                            android:textColor="@color/ny_black2"
+                            android:textColorHint="@color/ny_grey4"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/padding_half"
+                            android:layout_marginTop="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:background="@color/ny_grey4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                        <Spinner
+                            android:visibility="gone"
+                            android:id="@+id/diver_spinner"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/padding"
+                            android:paddingTop="@dimen/padding"
+                            android:paddingBottom="@dimen/padding"
+                            android:backgroundTint="@android:color/transparent"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+                <!--<LinearLayout
+                    android:background="@drawable/ny_rectangle_transparant_white_border"
+                    android:padding="@dimen/padding"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/dive_center__editText"
+                        android:hint="@string/dive_center"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/ny_grey2"
+                        android:background="@drawable/ny_rectangle_white"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:inputType="textPassword"
+                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingRight="@dimen/padding"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>-->
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/search_textView"
+                android:text="@string/get_certified_now"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/ny_rectangle_orange"
+                android:gravity="center"
+                android:padding="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_triple"
+                android:layout_marginRight="@dimen/padding_triple"
+                android:layout_marginBottom="@dimen/padding_triple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/suggestion_linearLayout"
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/padding_double"
+                android:background="#F7F7F7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="light"
+                    android:text="Our Recommended Course"
+                    android:textSize="18sp"
+                    android:textColor="@color/ny_grey4"
+                    android:layout_margin="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/suggestion_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="none"
+                    android:layout_margin="8dp"
+                    />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/banner_relativeLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/eco_trip_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </android.support.v4.view.ViewPager>
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/circle_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/padding_double"
+                    app:ci_drawable="@drawable/ny_circle_white"
+                    app:ci_orientation="horizontal">
+                </me.relex.circleindicator.CircleIndicator>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -92,6 +92,12 @@ public class SearchService extends SearchResult {
                     }
                 } else if (obj.get(KEY_LICENSE) instanceof  Boolean){
                     setLicense(obj.getBoolean(KEY_LICENSE));
+                } else if (obj.get(KEY_LICENSE) instanceof String){
+                    if (obj.getString(KEY_LICENSE).equals("1")){
+                        setLicense(true);
+                    } else {
+                        setLicense(false);
+                    }
                 }
             }
         } catch (JSONException e) {e.printStackTrace();}
@@ -150,11 +156,9 @@ public class SearchService extends SearchResult {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-
         try {
             obj.put(KEY_LICENSE, isLicense());
         } catch (JSONException e){e.printStackTrace();}
-
 
         try {
             return obj.toString(3);
@@ -162,6 +166,5 @@ public class SearchService extends SearchResult {
 
         return super.toString();
     }
-
 
 }

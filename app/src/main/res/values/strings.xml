@@ -128,6 +128,7 @@
     <string name="search">Search</string>
     <string name="dive_now">Dive Now</string>
     <string name="trip_now">Trip Now</string>
+    <string name="get_certified_now">Get Certified Now</string>
     <string name="recent_searches">Recent searches</string>
     <string name="search_results">Search results</string>
     <string name="warn_server_error">Internal Server Error</string>
