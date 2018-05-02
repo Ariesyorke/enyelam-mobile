@@ -18,12 +18,8 @@ import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.SearchResultList;
 import com.nyelam.android.data.SummaryList;
-import com.nyelam.android.dodive.DoDiveSearchActivity;
-import com.nyelam.android.dodive.DoDiveSearchAdapter;
 import com.nyelam.android.http.NYDoDiveBookingHistoryRequest;
-import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;

@@ -4,11 +4,13 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,10 +18,17 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
+import com.nyelam.android.data.LicenseType;
+import com.nyelam.android.data.Organization;
+import com.nyelam.android.data.SearchResult;
+import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DoDiveActivity extends BasicActivity implements
         DoDiveFragment.OnFragmentInteractionListener,
@@ -127,18 +136,34 @@ public class DoDiveActivity extends BasicActivity implements
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                String myStr=data.getStringExtra("MyData");
-                //Toast.makeText(this, myStr, Toast.LENGTH_SHORT).show();
-                //mTextView.setText(myStr);
+        if (resultCode == RESULT_OK) {
+
+            Bundle b = data.getExtras();
+
+            if (data.hasExtra(NYHelper.SEARCH_RESULT)){
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(data.getStringExtra(NYHelper.SEARCH_RESULT));
+                    SearchService searchService = new SearchService();
+                    searchService.parse(obj);
+
+                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.container);
+                    if(f instanceof DoDiveFragment){
+                        //Toast.makeText(this, "hello 1", Toast.LENGTH_SHORT).show();
+                        ((DoDiveFragment) f).setSearchResult(searchService);
+                    }
+
+                    //Toast.makeText(this, "hello 2", Toast.LENGTH_SHORT).show();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+
         }
     }
-
 
 }

@@ -63,6 +63,8 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
+    private static int mRequestCode = 100;
+
     private DoDiveActivity activity;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private SearchResult searchResult;
@@ -453,8 +455,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     if (activity.isEcoTrip()) {
                         intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                     }
-
-                    startActivity(intent);
+                    startActivityForResult(intent, mRequestCode);
                 }
             }
         });
@@ -806,5 +807,24 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             divingLicenseSwitch.setChecked(false);
         }
     }*/
+
+
+    public void setSearchResult(SearchService searchService){
+        this.searchService = searchService;
+        diverId = searchService.getId();
+        keyword = searchService.getName();
+        type = String.valueOf(searchService.getType());
+        keywordTextView.setText(keyword);
+
+        if (searchService != null &&  searchService.getType() == 4){
+            divingLicenseSwitch.setChecked(searchService.isLicense());
+            setSwitchState();
+            isSwitchEnable = false;
+        } else {
+            isSwitchEnable = true;
+        }
+
+        scrollView.fullScroll(ScrollView.FOCUS_UP);
+    }
 
 }

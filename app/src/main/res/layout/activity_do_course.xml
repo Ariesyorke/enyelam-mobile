@@ -213,6 +213,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/diving_license_textView"
                                 android:hint="OW, AOW, Rescue, etc"
                                 android:textSize="16sp"
                                 android:textColor="@color/ny_black2"

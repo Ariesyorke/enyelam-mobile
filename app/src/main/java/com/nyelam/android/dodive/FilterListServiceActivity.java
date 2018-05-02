@@ -575,7 +575,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     public void onBackPressed() {
 
         if (isApply){
-
             categoryChooseList = new ArrayList<>();
             for (String key : idCatMap.keySet()) {
                 if (idCatMap.get(key) == true)categoryChooseList.add(new Category(key,""));

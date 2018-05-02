@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.Category;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchResultList;
 import com.nyelam.android.helper.NYHelper;
@@ -46,6 +47,8 @@ public class DoDiveSearchActivity extends BasicActivity {
     private TextView noResultTextView;
     private String date, diver;
     private boolean certificate;
+    private boolean isApply;
+    private SearchResult searchResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +140,7 @@ public class DoDiveSearchActivity extends BasicActivity {
                     noResultTextView.setVisibility(View.GONE);
                     labelTextView.setText(getResources().getString(R.string.search_results));
                     NYDoDiveSearchTypeRequest req = null;
-                    if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                    if (getIntent().hasExtra(NYHelper.IS_DO_COURSE)) {
                         req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword, "1");
                     } else {
                         req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
@@ -225,5 +228,35 @@ public class DoDiveSearchActivity extends BasicActivity {
         super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
+
+
+
+
+
+
+    @Override
+    public void onBackPressed() {
+
+        if (isApply){
+            Intent intent = new Intent();
+            intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
+            setResult(RESULT_OK, intent);
+        }
+        super.onBackPressed();
+    }
+
+    public void setSearchResult(SearchResult searchResult){
+
+        isApply = true;
+
+        /*Intent intent = new Intent();
+        intent.putExtra(NYHelper.SEARCH_RESULT, searchResult.toString());
+        setResult(RESULT_OK, intent);*/
+
+        this.searchResult = searchResult;
+
+        onBackPressed();
+    }
+
 
 }

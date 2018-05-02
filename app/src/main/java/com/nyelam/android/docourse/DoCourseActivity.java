@@ -19,14 +19,22 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.booking.BookingServiceSummaryActivity;
+import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.LicenseType;
+import com.nyelam.android.data.LicenseTypeList;
+import com.nyelam.android.data.Organization;
+import com.nyelam.android.data.OrganizationList;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
+import com.nyelam.android.data.StateFacilityList;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveDiveServiceSuggestionAdapter;
+import com.nyelam.android.dodive.DoDiveSearchActivity;
 import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
 import com.nyelam.android.dotrip.DoTripKeywordActivity;
@@ -34,13 +42,19 @@ import com.nyelam.android.dotrip.DoTripResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoTripSuggestionServiceRequest;
+import com.nyelam.android.http.NYMasterLicenseTypeRequest;
+import com.nyelam.android.http.NYMasterOrganizationRequest;
+import com.nyelam.android.http.NYPaypalNotificationRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,11 +68,13 @@ public class DoCourseActivity extends BasicActivity implements
         DatePickerDialog.OnDateSetListener,
         NYCustomDialog.OnDialogFragmentClickListener{
 
+    private static int mRequestCode = 100;
+
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private boolean isDoTripBanner;
     private SearchResult searchResult;
     private TextView datetimeTextView, searchTextView;
-    public TextView diverTextView;
+    public TextView associationTextView, diverTextView;
     private Spinner diverSpinner;
     private com.nyelam.android.view.font.NYTextView keywordTextView;
     private DatePickerDialog datePickerDialog;
@@ -68,7 +84,7 @@ public class DoCourseActivity extends BasicActivity implements
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
     private NYApplication application;
     private TextView divingLicenseTextView;
-    private LinearLayout divingLicenseLinearLayout;
+    private LinearLayout divingLicenseLinearLayout, associationLinearLayout;
     private  int pickedMonth = -1;
     private  int pickedYear = -1;
     private ScrollView scrollView;
@@ -77,6 +93,11 @@ public class DoCourseActivity extends BasicActivity implements
     private DoDiveDiveServiceSuggestionAdapter diveServiceSuggestionAdapter;
     private RecyclerView suggestionRecyclerView;
     private LinearLayout suggestionLinearLayout;
+
+    private OrganizationList organizations;
+    private LicenseTypeList licenseTypes;
+    private Organization organization;
+    private LicenseType licenseType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,13 +267,30 @@ public class DoCourseActivity extends BasicActivity implements
         keywordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoCourseActivity.this, DoTripKeywordActivity.class);
+                Intent intent = new Intent(DoCourseActivity.this, DoDiveSearchActivity.class);
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.DIVER, diver);
+                intent.putExtra(NYHelper.IS_DO_COURSE, 1);
                 if (isDoTripBanner) {
                     intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                 }
-                startActivity(intent);
+                startActivityForResult(intent, mRequestCode);
+            }
+        });
+
+        associationLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
+                //setDivingLicense(!divingLicenseSwitch.isChecked());
+                NYCustomDialog dialog = new NYCustomDialog();
+
+                /*Organization organization = new Organization();
+                organization.setId("1");
+                organization.setName("CMAS");
+                organizations.add(organization);*/
+
+                dialog.showAssocitaionDialog(DoCourseActivity.this, organizations.getList());
             }
         });
 
@@ -261,6 +299,14 @@ public class DoCourseActivity extends BasicActivity implements
             public void onClick(View v) {
                 //divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
                 //setDivingLicense(!divingLicenseSwitch.isChecked());
+                NYCustomDialog dialog = new NYCustomDialog();
+
+                /*LicenseType licenseType = new LicenseType();
+                licenseType.setId("1");
+                licenseType.setName("CMAS");
+                licenseTypes.add(licenseType);*/
+
+                dialog.showLicenseTypeDialog(DoCourseActivity.this, licenseTypes.getList());
             }
         });
 
@@ -386,6 +432,64 @@ public class DoCourseActivity extends BasicActivity implements
     }
 
 
+
+    private void getOrganizationRequest() {
+        NYMasterOrganizationRequest req = new NYMasterOrganizationRequest(getApplicationContext());
+        spcMgr.execute(req, onOrganizationRequest());
+    }
+
+    private RequestListener<OrganizationList> onOrganizationRequest() {
+        return new RequestListener<OrganizationList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*diveServiceSuggestionAdapter.clear();
+                diveServiceSuggestionAdapter.notifyDataSetChanged();
+                suggestionLinearLayout.setVisibility(View.GONE);*/
+                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(OrganizationList results) {
+                organizations = results;
+                organization = organizations.getList().get(0);
+
+                if (organization != null && NYHelper.isStringNotEmpty(organization.getName()))
+                    associationTextView.setText(organization.getName());
+
+                getLicenseTypeRequest();
+            }
+        };
+    }
+
+
+    private void getLicenseTypeRequest() {
+        NYMasterLicenseTypeRequest req = new NYMasterLicenseTypeRequest(getApplicationContext(), organization.getId());
+        spcMgr.execute(req, onLicenseTypeRequest());
+    }
+
+    private RequestListener<LicenseTypeList> onLicenseTypeRequest() {
+        return new RequestListener<LicenseTypeList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*diveServiceSuggestionAdapter.clear();
+                diveServiceSuggestionAdapter.notifyDataSetChanged();
+                suggestionLinearLayout.setVisibility(View.GONE);*/
+                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(LicenseTypeList results) {
+                licenseTypes = results;
+                licenseType = licenseTypes.getList().get(0);
+
+                if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
+                    divingLicenseTextView.setText(licenseType.getName());
+            }
+        };
+    }
+
+
+
     private void getSuggetionRequest() {
         NYDoTripSuggestionServiceRequest req = new NYDoTripSuggestionServiceRequest(getApplicationContext());
         spcMgr.execute(req, onSearchServiceRequest());
@@ -434,6 +538,7 @@ public class DoCourseActivity extends BasicActivity implements
         diverSpinner = (Spinner) findViewById(R.id.diver_spinner);
         datetimeTextView = (TextView) findViewById(R.id.datetime_textView);
         diverTextView = (TextView) findViewById(R.id.diver_textView);
+        associationTextView = (TextView) findViewById(R.id.association_textView);
         searchTextView = (TextView) findViewById(R.id.search_textView);
         //certificateCheckBox = (CheckBox) v.findViewById(R.id.certificate_checkBox);
         diverLinearLayout = (LinearLayout) findViewById(R.id.diver_linearLayout);
@@ -443,7 +548,11 @@ public class DoCourseActivity extends BasicActivity implements
         suggestionRecyclerView = (RecyclerView) findViewById(R.id.suggestion_recyclerView);
         suggestionLinearLayout = (LinearLayout) findViewById(R.id.suggestion_linearLayout);
         divingLicenseLinearLayout = (LinearLayout) findViewById(R.id.diving_license_linearLayout);
+        associationLinearLayout = (LinearLayout) findViewById(R.id.association_linearLayout);
         divingLicenseTextView = (TextView) findViewById(R.id.diving_license_textView);
+
+        organizations = new OrganizationList();
+        licenseTypes = new LicenseTypeList();
     }
 
     @Override
@@ -459,7 +568,9 @@ public class DoCourseActivity extends BasicActivity implements
     protected void onStart() {
         super.onStart();
         spcMgr.start(getApplicationContext());
+        getOrganizationRequest();
     }
+
 
     @Override
     protected void onStop() {
@@ -530,9 +641,18 @@ public class DoCourseActivity extends BasicActivity implements
     }
 
     @Override
-    public void onChooseListener(Object position) {
-        diverTextView.setText((String) position+" Diver(s)");
-        this.diver = (String) position;
+    public void onChooseListener(Object object) {
+
+        if (object instanceof String){
+            diverTextView.setText((String) object+" Diver(s)");
+            this.diver = (String) object;
+        } else if (object instanceof Organization){
+            associationTextView.setText(((Organization) object).getName());
+            this.organization = (Organization) object;
+        } else if (object instanceof LicenseType){
+            if (((LicenseType) object) != null && NYHelper.isStringNotEmpty(((LicenseType) object).getName())) divingLicenseTextView.setText(((LicenseType) object).getName());
+            this.licenseType = (LicenseType) object;
+        }
     }
 
     @Override
@@ -570,4 +690,36 @@ public class DoCourseActivity extends BasicActivity implements
         if (date != null) NYLog.e("CEK SCHEDULE : "+date);
 
     }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+
+            Bundle b = data.getExtras();
+
+            if (data.hasExtra(NYHelper.SEARCH_RESULT)){
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(data.getStringExtra(NYHelper.SEARCH_RESULT));
+                    searchService = new SearchService();
+                    searchService.parse(obj);
+
+                    diverId = searchService.getId();
+                    keyword = searchService.getName();
+                    type = String.valueOf(searchService.getType());
+                    keywordTextView.setText(keyword);
+                    scrollView.fullScroll(ScrollView.FOCUS_UP);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+
 }

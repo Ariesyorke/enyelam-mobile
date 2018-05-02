@@ -23,6 +23,7 @@ public class NYDoDiveSearchTypeRequest extends NYBasicRequest<SearchResultList> 
     private static final String KEY_SEARCH_RESULTS = "search_results";
     private static final String POST_KEYWORD = "keyword";
     private static final String POST_ECO_TRIP = "eco_trip";
+    private static final String POST_TYPE = "type";
 
     public NYDoDiveSearchTypeRequest(Context context, String keyword) {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_master_dodive_search));
@@ -33,15 +34,15 @@ public class NYDoDiveSearchTypeRequest extends NYBasicRequest<SearchResultList> 
 
     }
 
-    public NYDoDiveSearchTypeRequest(Context context, String keyword, String ecoTrip) {
+    public NYDoDiveSearchTypeRequest(Context context, String keyword, String type) {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_master_dodive_search));
 
         if(!TextUtils.isEmpty(keyword)) {
             addQuery(POST_KEYWORD, keyword);
         }
 
-        if(!TextUtils.isEmpty(ecoTrip)) {
-            addQuery(POST_ECO_TRIP, ecoTrip);
+        if(!TextUtils.isEmpty(type)) {
+            addQuery(POST_TYPE, type);
         }
 
     }

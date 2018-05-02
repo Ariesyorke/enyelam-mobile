@@ -96,6 +96,7 @@ public class NYHelper {
     public static final String IS_NOT_NEW = "is_not_new";
     public static final String IS_MAIN_ACTIVITY = "is_main_activity";
     public static final String IS_ECO_TRIP = "is_eco_trip";
+    public static final String IS_DO_COURSE = "is_do_course";
     public static final String DIVE_SPOT_ID = "dive_spot_id";
     public static final String CART_RETURN = "cart_return";
     public static final int LOGIN_REQ = 101;

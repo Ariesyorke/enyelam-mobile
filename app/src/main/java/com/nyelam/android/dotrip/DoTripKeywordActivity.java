@@ -135,7 +135,7 @@ public class DoTripKeywordActivity extends AppCompatActivity {
                     labelTextView.setText(getResources().getString(R.string.search_results));
                     NYDoDiveSearchTypeRequest req = null;
                     if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                        req = new NYDoDiveSearchTypeRequest(DoTripKeywordActivity.this, keyword, "1");
+                        req = new NYDoDiveSearchTypeRequest(DoTripKeywordActivity.this, keyword, null);
                     } else {
                         req = new NYDoDiveSearchTypeRequest(DoTripKeywordActivity.this, keyword);
                     }

@@ -25,6 +25,8 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.LicenseType;
+import com.nyelam.android.data.Organization;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.dev.NYLog;

@@ -7,49 +7,61 @@
 
     <ImageView
         android:id="@+id/icon_imageView"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/ic_search_diver"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <RelativeLayout
-        android:layout_marginLeft="@dimen/padding"
+
+    <LinearLayout
         android:orientation="vertical"
+        android:layout_marginLeft="@dimen/padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/name_textView"
-            android:text="Keyword"
-            android:textSize="18sp"
-            android:textColor="@color/ny_black1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/rating_textView"
-            android:text="*0"
-            android:textSize="18sp"
-            android:textColor="@color/colorPrimary"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/type_textView"
-            android:layout_below="@+id/name_textView"
-            android:text="Type"
-            android:textSize="15sp"
-            android:textColor="@color/ny_grey4"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/name_textView"
+                android:text="Keyword"
+                android:textSize="18sp"
+                android:textColor="@color/ny_black1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/rating_textView"
+                android:text="*0"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_marginTop="@dimen/padding_half"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/label_textView"
-            android:layout_below="@+id/rating_textView"
-            android:text=""
-            android:textSize="15sp"
-            android:textColor="@color/ny_grey4"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/padding_half"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/type_textView"
+                android:text="Type"
+                android:textSize="15sp"
+                android:textColor="@color/ny_grey4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/label_textView"
+                android:text=""
+                android:textSize="15sp"
+                android:textColor="@color/ny_grey4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+
 
 </LinearLayout>

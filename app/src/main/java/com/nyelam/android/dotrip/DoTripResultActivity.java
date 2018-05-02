@@ -435,7 +435,8 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                //filterRelativeLayout.setVisibility(View.GONE);
+
+                filterRelativeLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -443,6 +444,8 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
+
+                filterRelativeLayout.setVisibility(View.VISIBLE);
 
                 if (results != null){
                     minPriceDefault = results.getLowestPrice();

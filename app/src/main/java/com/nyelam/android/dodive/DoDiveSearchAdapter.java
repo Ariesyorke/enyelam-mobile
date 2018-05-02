@@ -173,7 +173,6 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     typeTextView.setText("Dive Service");
                     iconImageView.setImageResource(R.drawable.ic_search_dive_service);
                     nameTextView.setText(searchResult.getName());
-                    ratingTextView.setText(searchResult.getRating());;
                     labelTextView.setVisibility(View.GONE);
 
                 } else {
@@ -211,21 +210,20 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (searchResults == null) searchResults = new ArrayList<>();
 
             // TODO: cehck if object didnt exist add to storage
-            boolean isExist = false;
             for (SearchResult s : searchResults) {
                 if (s != null && NYHelper.isStringNotEmpty(s.getId()) && searchResult != null && NYHelper.isStringNotEmpty(searchResult.getId()) && s.getId().equals(searchResult.getId()) && s.getType().equals(searchResult.getType())){
-                    isExist = true;
+                    searchResults.remove(s);
                     break;
                 }
             }
-            if (!isExist) {
-                if (searchResults.size() > 5) searchResults.remove(4);
-                searchResults.add(searchResult);
-            }
+
+            if (searchResults.size() > 5) searchResults.remove(4);
+            searchResults.add(searchResult);
+
             keywordHistoryStorage.setSearchResults(searchResults);
             keywordHistoryStorage.save();
 
-            Intent intent = new Intent(context, DoDiveActivity.class);
+            /*Intent intent = new Intent(context, DoDiveActivity.class);
 
             if (context instanceof DoDiveSearchActivity){
                 intent = new Intent(context, DoDiveActivity.class);
@@ -248,8 +246,15 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 intent.putExtra(NYHelper.DIVE_SPOT, searchResult.toString());
             }
 
-            context.startActivity(intent);
+            context.startActivity(intent);*/
+
+            if (context instanceof DoDiveSearchActivity){
+                ((DoDiveSearchActivity)context).setSearchResult(searchResult);
+            }
+
         }
     }
+
+
 
 }

@@ -21,6 +21,8 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.LicenseType;
+import com.nyelam.android.data.Organization;
 import com.nyelam.android.data.Price;
 import com.nyelam.android.data.StateFacility;
 import com.nyelam.android.data.StateFacilityList;

@@ -370,11 +370,11 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 }
                 adapter.notifyDataSetChanged();
 
-                if(adapter.getItemCount() > 0) {
+                /*if(adapter.getItemCount() > 0) {
                     filterRelativeLayout.setVisibility(View.VISIBLE);
                 } else {
                     filterRelativeLayout.setVisibility(View.GONE);
-                }
+                }*/
 
                 //Toast.makeText(DoDiveSearchResultActivity.this, String.valueOf(adapter.getItemCount()), Toast.LENGTH_SHORT).show();
 
@@ -568,7 +568,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                //filterRelativeLayout.setVisibility(View.GONE);
+
+                filterRelativeLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -576,6 +577,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
+
+                filterRelativeLayout.setVisibility(View.VISIBLE);
 
                 if (results != null){
                     minPriceDefault = results.getLowestPrice();

@@ -2,6 +2,7 @@ package com.nyelam.android.view;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.companion.AssociationRequest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +37,9 @@ import com.nyelam.android.StarterActivity;
 import com.nyelam.android.data.Country;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.Language;
+import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Nationality;
+import com.nyelam.android.data.Organization;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
 import com.nyelam.android.dev.NYLog;
@@ -63,11 +66,11 @@ public class NYCustomDialog {
     private OnDialogFragmentClickListener listener;
 
     // interface to handle the dialog click back to the Activity
-    public interface OnDialogFragmentClickListener {
-        void onChooseListener(Object position);
-        void onAcceptAgreementListener();
-        void onCancelUpdate();
-        void doUpdateVersion(String link);
+    public abstract interface OnDialogFragmentClickListener {
+        abstract void onChooseListener(Object object);
+        abstract void onAcceptAgreementListener();
+        abstract void onCancelUpdate();
+        abstract void doUpdateVersion(String link);
     }
 
     public void showSortingDialog(final Activity activity, int currentPosition){
@@ -309,10 +312,6 @@ public class NYCustomDialog {
 
 
 
-
-
-
-
     public void showCountryDialog(final Activity activity, Country currentCountry){
 
         this.listener = (OnDialogFragmentClickListener) activity;
@@ -491,11 +490,6 @@ public class NYCustomDialog {
 
 
 
-
-
-
-
-
     public void showLanguageDialog(final Activity activity, final List<Language> languageList, Language currentLanguage){
 
         this.listener = (OnDialogFragmentClickListener) activity;
@@ -583,6 +577,118 @@ public class NYCustomDialog {
     }
 
 
+    public void showAssocitaionDialog(final Activity activity, List<Organization> organizations){
 
+        this.listener = (OnDialogFragmentClickListener) activity;
+
+        dialog = new Dialog(activity);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_choose_association);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
+        linearLayout.setMinimumWidth(width*3/4);
+
+        LinearLayout containerLinearLayout = (LinearLayout) dialog.findViewById(R.id.container_linaerLayout);
+
+        if (organizations != null && !organizations.isEmpty()){
+
+            for (final Organization organization : organizations){
+
+                LayoutInflater inflaterAddons = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View diverView = inflaterAddons.inflate(R.layout.view_drop_down_country_code, null); //here item is the the layout you want to inflate
+
+                LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParamsAddons.setMargins(0, NYHelper.integerToDP(activity, 5), 0, NYHelper.integerToDP(activity, 5));
+                diverView.setLayoutParams(layoutParamsAddons);
+
+                LinearLayout mainLinearLayout = (LinearLayout) diverView.findViewById(R.id.main_linearLayout);
+                TextView diverTextView = (TextView) diverView.findViewById(R.id.country_code_textView);
+                View lineView = (View) diverView.findViewById(R.id.line_view);
+
+                lineView.setVisibility(View.VISIBLE);
+                diverTextView.setGravity(Gravity.CENTER);
+
+                if (organization != null && NYHelper.isStringNotEmpty(organization.getName())) diverTextView.setText(organization.getName());
+
+                mainLinearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onChooseListener(organization);
+                        dialog.dismiss();
+                    }
+                });
+
+                containerLinearLayout.addView(diverView);
+            }
+
+        }
+
+        dialog.show();
+    }
+
+
+
+    public void showLicenseTypeDialog(final Activity activity, List<LicenseType> licenseTypes){
+
+        this.listener = (OnDialogFragmentClickListener) activity;
+
+        dialog = new Dialog(activity);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_choose_license_type);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
+        linearLayout.setMinimumWidth(width*3/4);
+
+        LinearLayout containerLinearLayout = (LinearLayout) dialog.findViewById(R.id.container_linaerLayout);
+
+        if (licenseTypes != null && !licenseTypes.isEmpty()){
+
+            for (final LicenseType licenseType : licenseTypes){
+
+                LayoutInflater inflaterAddons = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View diverView = inflaterAddons.inflate(R.layout.view_drop_down_country_code, null); //here item is the the layout you want to inflate
+
+                LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParamsAddons.setMargins(0, NYHelper.integerToDP(activity, 5), 0, NYHelper.integerToDP(activity, 5));
+                diverView.setLayoutParams(layoutParamsAddons);
+
+                LinearLayout mainLinearLayout = (LinearLayout) diverView.findViewById(R.id.main_linearLayout);
+                TextView diverTextView = (TextView) diverView.findViewById(R.id.country_code_textView);
+                View lineView = (View) diverView.findViewById(R.id.line_view);
+
+                lineView.setVisibility(View.VISIBLE);
+                diverTextView.setGravity(Gravity.CENTER);
+
+                if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName())) diverTextView.setText(licenseType.getName());
+
+                mainLinearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onChooseListener(licenseType);
+                        dialog.dismiss();
+                    }
+                });
+
+                containerLinearLayout.addView(diverView);
+            }
+
+        }
+
+        dialog.show();
+    }
 
 }
