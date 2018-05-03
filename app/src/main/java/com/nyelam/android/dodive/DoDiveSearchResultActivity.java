@@ -57,8 +57,6 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private TextView titleTextView, labelTextView, noResultTextView;
     protected String keyword, diverId, diver, certificate, date, type;
     private FloatingActionButton sortFloatingButton;
-    //protected String diveSpotId;
-    //private ImageView filterImageView;
     private ImageView searchImageView;
     private int page = 1;
     private boolean ecotrip = false;
@@ -102,6 +100,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
+
+                // TODO: load more ada bug !
 
                 initRequest(false);
                 /*if (loading) {
@@ -554,7 +554,9 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         NYGetMinMaxPriceRequest req = null;
         try {
             //1 = do dive, 2 = do trip
-            req = new NYGetMinMaxPriceRequest(this, "1");
+            //req = new NYGetMinMaxPriceRequest(this, "1");
+            req = new NYGetMinMaxPriceRequest(this, "1", categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
