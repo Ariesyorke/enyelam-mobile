@@ -146,34 +146,49 @@
                             android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                        <com.nyelam.android.view.font.NYTextView
-                            android:id="@+id/association_textView"
-                            android:hint="CMAS, NAUI, PADI, RAID, SSI"
-                            android:textSize="16sp"
-                            android:textColor="@color/ny_black2"
-                            android:textColorHint="@color/ny_grey4"
-                            android:singleLine="true"
-                            android:maxLines="1"
-                            android:paddingBottom="@dimen/padding_half"
-                            android:layout_marginTop="3dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                        <View
-                            android:background="@color/ny_grey4"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
-                        <Spinner
+
+                        <ProgressBar
+                            android:id="@+id/association_progressBar"
                             android:visibility="gone"
-                            android:id="@+id/association_spinner"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/activity_horizontal_margin"
-                            android:paddingRight="@dimen/padding"
-                            android:paddingTop="@dimen/padding"
-                            android:paddingBottom="@dimen/padding"
-                            android:backgroundTint="@android:color/transparent"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="2"
-                            android:layout_height="match_parent"/>
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+
+                        <LinearLayout
+                            android:id="@+id/association_container_linearLayout"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/association_textView"
+                                android:hint="CMAS, NAUI, PADI, RAID, SSI"
+                                android:textSize="16sp"
+                                android:textColor="@color/ny_black2"
+                                android:textColorHint="@color/ny_grey4"
+                                android:singleLine="true"
+                                android:maxLines="1"
+                                android:paddingBottom="@dimen/padding_half"
+                                android:layout_marginTop="3dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                            <View
+                                android:background="@color/ny_grey4"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+                            <Spinner
+                                android:visibility="gone"
+                                android:id="@+id/association_spinner"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="@dimen/activity_horizontal_margin"
+                                android:paddingRight="@dimen/padding"
+                                android:paddingTop="@dimen/padding"
+                                android:paddingBottom="@dimen/padding"
+                                android:backgroundTint="@android:color/transparent"
+                                android:layout_width="wrap_content"
+                                android:layout_weight="2"
+                                android:layout_height="match_parent"/>
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
@@ -208,7 +223,16 @@
                             android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
+
+                        <ProgressBar
+                            android:id="@+id/diving_license_progressBar"
+                            android:visibility="gone"
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+
                         <LinearLayout
+                            android:id="@+id/diving_license_container_linearLayout"
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">

@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -88,6 +89,9 @@ public class DoCourseActivity extends BasicActivity implements
     private  int pickedMonth = -1;
     private  int pickedYear = -1;
     private ScrollView scrollView;
+
+    private LinearLayout associationContainerLinearLayout, divingLicenseContainerLinearLayout;
+    private ProgressBar associationProgressBar, divingLicenseProgressBar;
 
     //suggestion
     private DoDiveDiveServiceSuggestionAdapter diveServiceSuggestionAdapter;
@@ -551,6 +555,11 @@ public class DoCourseActivity extends BasicActivity implements
         associationLinearLayout = (LinearLayout) findViewById(R.id.association_linearLayout);
         divingLicenseTextView = (TextView) findViewById(R.id.diving_license_textView);
 
+        associationContainerLinearLayout = (LinearLayout) findViewById(R.id.association_container_linearLayout);
+        divingLicenseContainerLinearLayout = (LinearLayout) findViewById(R.id.diving_license_container_linearLayout);
+        associationProgressBar = (ProgressBar) findViewById(R.id.association_progressBar);
+        divingLicenseProgressBar = (ProgressBar) findViewById(R.id.diving_license_progressBar);
+
         organizations = new OrganizationList();
         licenseTypes = new LicenseTypeList();
     }
@@ -721,5 +730,24 @@ public class DoCourseActivity extends BasicActivity implements
         }
     }
 
+    private void setAssociationProgressBar(boolean isShow){
+        if (isShow){
+            associationProgressBar.setVisibility(View.VISIBLE);
+            associationContainerLinearLayout.setVisibility(View.GONE);
+        } else {
+            associationProgressBar.setVisibility(View.GONE);
+            associationContainerLinearLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setDivingLicenseProgressBar (boolean isShow){
+        if (isShow){
+            divingLicenseProgressBar.setVisibility(View.VISIBLE);
+            divingLicenseContainerLinearLayout.setVisibility(View.GONE);
+        } else {
+            divingLicenseProgressBar.setVisibility(View.GONE);
+            divingLicenseContainerLinearLayout.setVisibility(View.VISIBLE);
+        }
+    }
 
 }
