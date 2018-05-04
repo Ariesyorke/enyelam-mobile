@@ -389,9 +389,10 @@ public class DetailServiceFragment extends Fragment {
         relatedPostRecyclerView.setLayoutManager(layoutManager);
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding_half);
-        relatedPostRecyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels,0,spacingInPixels,0));
+        int spacing2InPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+        relatedPostRecyclerView.addItemDecoration(new NYSpacesItemDecoration(spacing2InPixels,0,spacingInPixels,0));
 
-        relatedDiveServiceAdapter = new DoDiveDiveServiceSuggestionAdapter(getActivity());
+        relatedDiveServiceAdapter = new DoDiveDiveServiceSuggestionAdapter(getActivity(), true);
         relatedPostRecyclerView.setAdapter(relatedDiveServiceAdapter);
 
         relatedPostRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(),relatedPostRecyclerView, new DoDiveDiveServiceSuggestionAdapter.RecyclerViewClickListener() {

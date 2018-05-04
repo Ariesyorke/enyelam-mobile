@@ -677,19 +677,36 @@
                 </LinearLayout>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/related_service_linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#F7F7F7"
-                    android:orientation="vertical"
-                    android:padding="@dimen/padding_double"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <com.nyelam.android.view.font.NYTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/padding"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginBottom="@dimen/padding"
+                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingRight="@dimen/padding_double"
                         android:text="You may like these"
                         android:textColor="@color/ny_grey4"
                         android:textSize="18sp"
@@ -699,7 +716,8 @@
                         android:id="@+id/related_service_recyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:nestedScrollingEnabled="false"
                         android:scrollbars="none" />
                 </LinearLayout>

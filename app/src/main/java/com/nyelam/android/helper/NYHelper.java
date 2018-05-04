@@ -152,7 +152,17 @@ public class NYHelper {
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        //String monthname=(String)android.text.format.DateFormat.format("MMMM", new Date());
         String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+
+
+        /*try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM");
+            simpleDateFormat.setCalendar(c);
+            monthString = simpleDateFormat.format(c.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
 
         return (String.valueOf(day) + " " + monthString + " " + String.valueOf(year));
     }

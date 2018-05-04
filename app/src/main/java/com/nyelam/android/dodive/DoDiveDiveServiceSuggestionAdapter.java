@@ -36,9 +36,15 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
 
     private Activity activity;
     private List<DiveService> diveServiceList;
+    private boolean isHorizontal;
 
     public DoDiveDiveServiceSuggestionAdapter(Activity activity) {
         this.activity = activity;
+    }
+
+    public DoDiveDiveServiceSuggestionAdapter(Activity activity, boolean isHorizontal) {
+        this.activity = activity;
+        this.isHorizontal = isHorizontal;
     }
 
     @Override
@@ -129,13 +135,15 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
             visitedTextView = (TextView) itemView.findViewById(R.id.visitor_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
 
-            /*DisplayMetrics displayMetrics = new DisplayMetrics();
-            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int width = displayMetrics.widthPixels;
+            if (isHorizontal){
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int width = displayMetrics.widthPixels;
 
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
-                    cardView.getLayoutParams();
-            layoutParams.width = width*3/4;*/
+                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
+                        cardView.getLayoutParams();
+                layoutParams.width = width*3/4;
+            }
 
             this.itemView = itemView;
         }
