@@ -438,6 +438,7 @@ public class DoCourseActivity extends BasicActivity implements
 
 
     private void getOrganizationRequest() {
+        setAssociationProgressBar(true);
         NYMasterOrganizationRequest req = new NYMasterOrganizationRequest(getApplicationContext());
         spcMgr.execute(req, onOrganizationRequest());
     }
@@ -450,12 +451,15 @@ public class DoCourseActivity extends BasicActivity implements
                 diveServiceSuggestionAdapter.notifyDataSetChanged();
                 suggestionLinearLayout.setVisibility(View.GONE);*/
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+                setAssociationProgressBar(false);
             }
 
             @Override
             public void onRequestSuccess(OrganizationList results) {
                 organizations = results;
                 organization = organizations.getList().get(0);
+
+                setAssociationProgressBar(false);
 
                 if (organization != null && NYHelper.isStringNotEmpty(organization.getName()))
                     associationTextView.setText(organization.getName());
@@ -467,6 +471,7 @@ public class DoCourseActivity extends BasicActivity implements
 
 
     private void getLicenseTypeRequest() {
+        setDivingLicenseProgressBar(true);
         NYMasterLicenseTypeRequest req = new NYMasterLicenseTypeRequest(getApplicationContext(), organization.getId());
         spcMgr.execute(req, onLicenseTypeRequest());
     }
@@ -479,12 +484,15 @@ public class DoCourseActivity extends BasicActivity implements
                 diveServiceSuggestionAdapter.notifyDataSetChanged();
                 suggestionLinearLayout.setVisibility(View.GONE);*/
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+                setDivingLicenseProgressBar(false);
             }
 
             @Override
             public void onRequestSuccess(LicenseTypeList results) {
                 licenseTypes = results;
                 licenseType = licenseTypes.getList().get(0);
+
+                setDivingLicenseProgressBar(false);
 
                 if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
                     divingLicenseTextView.setText(licenseType.getName());
@@ -658,6 +666,7 @@ public class DoCourseActivity extends BasicActivity implements
         } else if (object instanceof Organization){
             associationTextView.setText(((Organization) object).getName());
             this.organization = (Organization) object;
+            getLicenseTypeRequest();
         } else if (object instanceof LicenseType){
             if (((LicenseType) object) != null && NYHelper.isStringNotEmpty(((LicenseType) object).getName())) divingLicenseTextView.setText(((LicenseType) object).getName());
             this.licenseType = (LicenseType) object;

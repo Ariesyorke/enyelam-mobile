@@ -42,5 +42,4 @@ public class NYDoDiveSuggestionServiceRequest extends NYBasicRequest<DiveService
         return null;
     }
 
-
 }

@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="@drawable/ny_gradient_right_left"
+        android:background="#0071BC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -23,18 +23,18 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:src="@drawable/ic_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="18dp"
+                android:layout_height="18dp" />
             <EditText
                 android:id="@+id/search_editText"
-                android:hint="@string/enter_a_dive_spot"
+                android:hint="@string/enter_keywords"
                 android:textSize="14sp"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/ny_grey4"
                 android:background="@android:color/transparent"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_marginLeft="@dimen/padding_double"
+                android:layout_marginLeft="@dimen/padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

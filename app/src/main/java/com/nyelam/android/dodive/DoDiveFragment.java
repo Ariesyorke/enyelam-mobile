@@ -73,7 +73,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private Spinner diverSpinner;
     private com.nyelam.android.view.font.NYTextView keywordTextView;
     private DatePickerDialog datePickerDialog;
-    private String keyword, diverId, type, date, diver = null;
+    private String keyword, diverId, type, date, diver = "1";
     private SearchService searchService;
     private TotalDiverSpinnerAdapter diverAdapter;
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
@@ -221,6 +221,30 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 scrollView.fullScroll(ScrollView.FOCUS_UP);*/
             }
         }));
+
+
+        /*suggestionRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                int action = e.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_MOVE:
+                        rv.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });*/
 
 
     }
@@ -672,6 +696,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onRequestSuccess(DiveServiceList results) {
                 if (results != null){
+
+                    //Toast.makeText(activity, "size : " + String.valueOf(results.getList().size()), Toast.LENGTH_SHORT).show();
+
                     suggestionLinearLayout.setVisibility(View.VISIBLE);
                     diveServiceSuggestionAdapter.clear();
                     diveServiceSuggestionAdapter.addResults(results.getList());
@@ -681,6 +708,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     diveServiceSuggestionAdapter.notifyDataSetChanged();
                     suggestionLinearLayout.setVisibility(View.GONE);
                 }
+
+
+                //Toast.makeText(activity, "size adapter : " + String.valueOf(diveServiceSuggestionAdapter.getItemCount()), Toast.LENGTH_SHORT).show();
 
             }
         };

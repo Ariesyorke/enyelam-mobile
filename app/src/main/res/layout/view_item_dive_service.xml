@@ -25,19 +25,19 @@
                 android:src="@drawable/bg_placeholder"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="200dp" />
 
             <View
                 android:background="@color/ny_dark_transparent_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="200dp"/>
 
             <com.nyelam.android.view.font.NYTextView
                 card_view:fontTextStyle="semiBold"
                 android:id="@+id/service_name_textView"
                 android:layout_above="@+id/dive_center_name_textView"
                 android:text="Service Name"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorWhite"
                 android:layout_alignParentBottom="true"
@@ -60,7 +60,7 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_margin="@dimen/padding"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -90,7 +90,6 @@
                 card_view:fontTextStyle="light"/>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/padding_half"
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -98,7 +97,7 @@
                     card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_textView"
                     android:text="0 Dive"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -106,7 +105,7 @@
                     android:visibility="gone"
                     card_view:fontTextStyle="light"
                     android:text=" | "
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textColor="@color/ny_black2"
                     android:layout_margin="@dimen/padding_half"
                     android:layout_width="wrap_content"
@@ -116,14 +115,14 @@
                     card_view:fontTextStyle="light"
                     android:id="@+id/total_dive_spot_textView"
                     android:text="0 Dive Spot Option"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <com.nyelam.android.view.font.NYTextView
                     card_view:fontTextStyle="light"
                     android:text=" | "
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textColor="@color/ny_black2"
                     android:layout_margin="@dimen/padding_half"
                     android:layout_width="wrap_content"
@@ -132,7 +131,7 @@
                     card_view:fontTextStyle="light"
                     android:id="@+id/total_day_textView"
                     android:text="0 Day"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -141,7 +140,6 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingTop="@dimen/padding_half"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RatingBar
@@ -195,7 +193,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <RelativeLayout
-                android:layout_marginTop="@dimen/padding_half"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -203,7 +200,7 @@
                     card_view:fontTextStyle="semiBold"
                     android:id="@+id/price_textView"
                     android:text="Rp 0,-"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textColor="@color/ny_orange"
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
@@ -212,7 +209,7 @@
                     android:layout_toRightOf="@+id/price_textView"
                     android:text=" / pax"
                     card_view:fontTextStyle="light"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="@color/ny_black2"
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"

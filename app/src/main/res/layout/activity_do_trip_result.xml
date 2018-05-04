@@ -60,7 +60,6 @@
         android:layout_width="35dp"
         android:layout_height="35dp" />
 
-
     <TextView
         android:visibility="gone"
         android:id="@+id/no_result_textView"
@@ -82,40 +81,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="none"
-        app:behavior_overlapTop="78dp"
-        android:layout_margin="8dp"
-        android:background="@android:color/transparent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
-
     <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/filter_relativeLayout"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.nyelam.android.view.font.NYTextView
-            android:id="@+id/filter_textView"
-            app:fontTextStyle="medium"
-            android:text="@string/filter"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:background="@drawable/ny_rectangle_blue_soft"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            app:behavior_overlapTop="78dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@android:color/transparent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/filter_linearLayout"
+            android:background="@drawable/ny_rectangle_blue_soft_elipse"
             android:paddingTop="@dimen/padding_half"
             android:paddingBottom="@dimen/padding_half"
             android:paddingRight="@dimen/padding_quad"
             android:paddingLeft="@dimen/padding_quad"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_license"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/filter_textView"
+                app:fontTextStyle="medium"
+                android:text="@string/filter"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </RelativeLayout>
+
+
 
 </LinearLayout>

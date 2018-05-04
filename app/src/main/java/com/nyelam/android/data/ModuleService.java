@@ -32,7 +32,9 @@ public class ModuleService extends Module implements Parseable {
         if (obj == null) return;
 
         try {
-            if (!obj.isNull(KEY_MODULES_NAME)) {
+            if (!obj.isNull(KEY_MODULES_NAME) && obj.getString(KEY_MODULES_NAME).equals("Do Trips")) {
+                setName("Do Trip");
+            } else if (!obj.isNull(KEY_MODULES_NAME)) {
                 setName(obj.getString(KEY_MODULES_NAME));
             }
         } catch (JSONException e){e.printStackTrace();}

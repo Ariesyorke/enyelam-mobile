@@ -68,7 +68,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     private boolean mProtectFromPagerChange = false;
     private String[] tabMenu;
     private TextView title;
-    private View viewTabManager;
+    //private View viewTabManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +139,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         viewPager = (NYCustomViewPager) findViewById(R.id.view_pager);
         title = (TextView) findViewById(R.id.title);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        viewTabManager = (View) findViewById(R.id.view_tab_manager);
+        //viewTabManager = (View) findViewById(R.id.view_tab_manager);
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
     }
 
@@ -156,7 +156,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 startActivity(intent);
             }
         }, 300);
-
     }
 
     @Override
@@ -410,7 +409,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
     private void initTab() {
         tabMenu = getResources().getStringArray(R.array.menu_tab);
-        viewTabManager.setAlpha(0.5f);
+        //viewTabManager.setAlpha(0.5f);
         //NavDrawer
         setSupportActionBar(toolbar);
 

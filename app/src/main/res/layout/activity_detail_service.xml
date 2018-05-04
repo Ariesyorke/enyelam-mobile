@@ -62,7 +62,7 @@
                         android:id="@+id/circle_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
-                        android:layout_alignBottom="@+id/promotion_view_pager"
+                        android:layout_alignTop="@+id/promotion_view_pager"
                         android:layout_centerHorizontal="true"
                         app:ci_drawable="@drawable/ny_circle_white"
                         app:ci_orientation="horizontal" />

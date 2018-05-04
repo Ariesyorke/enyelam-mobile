@@ -82,6 +82,7 @@
     <string name="api_path_dotrip_service_list_by_city">api/dotrip/search/city</string>
     <string name="api_path_dotrip_suggestion_service">api/dotrip/sugestion</string>
     <string name="api_path_get_min_max_price">api/service/minMaxPrice</string>
+    <string name="api_path_get_min_max_price_list">api/service/minMaxPriceList</string>
 
     <string name="api_path_homepage_modules">api/master/homepage</string>
     <!--<string name="api_path_dodive_detail_service">api/service/detail</string>-->
@@ -185,6 +186,7 @@
     <string name="api_path_dotrip_service_list_by_province">dotrip/search/province</string>
     <string name="api_path_dotrip_service_list_by_city">dotrip/search/city</string>
     <string name="api_path_dotrip_suggestion_service">dotrip/sugestion</string>
-    <string name="api_path_get_min_max_price">service/minMaxPrice</string>-->
+    <string name="api_path_get_min_max_price">service/minMaxPrice</string>
+    <string name="api_path_get_min_max_price_list">service/minMaxPriceList</string>-->
 
 </resources>

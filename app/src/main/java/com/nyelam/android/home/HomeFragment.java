@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +68,7 @@ public class HomeFragment extends Fragment {
     private NYBannerViewPager bannerViewPager;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CircleIndicator circleIndicator;
-    private CardView doDiveCardView, doCourseCardView, doShopCardView, ecoTripCardView;
+    private RelativeLayout doDiveRelativeLayout, doCourseRelativeLayout, doShopRelativeLayout, ecoTripRelativeLayout;
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
     private DoTripRecyclerViewAdapter doTripAdapter;
@@ -158,7 +159,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        doDiveCardView.setOnClickListener(new View.OnClickListener() {
+        doDiveRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DoDiveActivity.class);
@@ -166,7 +167,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        doCourseCardView.setOnClickListener(new View.OnClickListener() {
+        doCourseRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
@@ -176,14 +177,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        doShopCardView.setOnClickListener(new View.OnClickListener() {
+        doShopRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
             }
         });
 
-        ecoTripCardView.setOnClickListener(new View.OnClickListener() {
+        ecoTripRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(getActivity(), DoDiveActivity.class);
@@ -220,10 +221,10 @@ public class HomeFragment extends Fragment {
         menuItemImageView = (ImageView) view.findViewById(R.id.menu_item_imageView);
         bannerViewPager = (NYBannerViewPager) view.findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) view.findViewById(R.id.circle_indicator);
-        doDiveCardView = (CardView) view.findViewById(R.id.do_dive_cardView);
-        doCourseCardView = (CardView) view.findViewById(R.id.do_course_cardView);
-        doShopCardView = (CardView) view.findViewById(R.id.do_shop_cardView);
-        ecoTripCardView = (CardView)view.findViewById(R.id.eco_trip_cardView);
+        doDiveRelativeLayout = (RelativeLayout) view.findViewById(R.id.do_dive_relativeLayout);
+        doCourseRelativeLayout = (RelativeLayout) view.findViewById(R.id.do_course_relativeLayout);
+        doShopRelativeLayout = (RelativeLayout) view.findViewById(R.id.do_shop_relativeLayout);
+        ecoTripRelativeLayout = (RelativeLayout)view.findViewById(R.id.eco_trip_relativeLayout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
     }
 

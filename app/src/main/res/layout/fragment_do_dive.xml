@@ -46,11 +46,11 @@
         android:id="@+id/scrollView"
         android:isScrollContainer="false"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <!--<ImageView
                 android:visibility="gone"
@@ -63,7 +63,7 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/padding"
                 android:padding="@dimen/padding_double"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -161,10 +161,8 @@
 
 
 
-
-
-
                 <RelativeLayout
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/padding_half"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -344,14 +342,14 @@
                 android:background="@drawable/ny_rectangle_orange"
                 android:gravity="center"
                 android:padding="@dimen/padding"
-                android:layout_marginLeft="@dimen/padding_triple"
-                android:layout_marginRight="@dimen/padding_triple"
+                android:layout_marginLeft="@dimen/padding_double"
+                android:layout_marginRight="@dimen/padding_double"
                 android:layout_marginBottom="@dimen/padding_triple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:visibility="gone"
+
                 android:id="@+id/suggestion_linearLayout"
                 android:orientation="vertical"
                 android:layout_marginBottom="@dimen/padding_double"
@@ -363,18 +361,24 @@
                     android:text="Our Recommended Services"
                     android:textSize="18sp"
                     android:textColor="@color/ny_grey4"
-                    android:layout_margin="@dimen/padding"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_marginLeft="@dimen/padding_double"
+                    android:layout_marginRight="@dimen/padding_double"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/suggestion_recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_double"
+                    android:layout_marginRight="@dimen/padding_double"
                     android:nestedScrollingEnabled="false"
                     android:scrollbars="none"
                     android:layout_margin="8dp"
                     />
-            </LinearLayout>
+            </LinearLayout
+                >
 
 
 
@@ -403,8 +407,6 @@
                 </me.relex.circleindicator.CircleIndicator>
 
             </RelativeLayout>
-
-
 
         </LinearLayout>
     </ScrollView>

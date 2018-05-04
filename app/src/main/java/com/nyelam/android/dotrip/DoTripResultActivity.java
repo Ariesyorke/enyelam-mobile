@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -67,7 +68,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
     private CategoryList categoryList;
     private StateFacilityList stateFacilityList;
     private TextView filterTextView;
-    private RelativeLayout filterRelativeLayout;
+    private LinearLayout filterLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,7 +221,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
         //filterImageView = (ImageView) findViewById(R.id.filter_imageView);
         filterTextView = (TextView) findViewById(R.id.filter_textView);
-        filterRelativeLayout = (RelativeLayout) findViewById(R.id.filter_relativeLayout);
+        filterLinearLayout = (LinearLayout) findViewById(R.id.filter_linearLayout);
     }
 
     private RequestListener<DiveServiceList> onSearchServiceRequest() {
@@ -250,7 +251,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
 
                 if (diveServiceAdapter.getItemCount() > 0){
                     noResultTextView.setVisibility(View.GONE);
-                    filterRelativeLayout.setVisibility(View.VISIBLE);
+                    filterLinearLayout.setVisibility(View.VISIBLE);
                 } else {
                     noResultTextView.setVisibility(View.VISIBLE);
                     //filterRelativeLayout.setVisibility(View.GONE);
@@ -422,7 +423,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         try {
             //1 = do dive, 2 = do trip
             //req = new NYGetMinMaxPriceRequest(this, "2");
-            req = new NYGetMinMaxPriceRequest(this, "2", categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
+            req = new NYGetMinMaxPriceRequest(this, "2", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -437,7 +438,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                     progressBar.setVisibility(View.GONE);
                 }
 
-                filterRelativeLayout.setVisibility(View.GONE);
+                filterLinearLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -446,7 +447,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
                     progressBar.setVisibility(View.GONE);
                 }
 
-                filterRelativeLayout.setVisibility(View.VISIBLE);
+                filterLinearLayout.setVisibility(View.VISIBLE);
 
                 if (results != null){
                     minPriceDefault = results.getLowestPrice();

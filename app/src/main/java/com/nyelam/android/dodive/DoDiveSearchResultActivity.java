@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -68,7 +69,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private StateFacilityList stateFacilityList;
     private SwipeRefreshLayout swipeLayout;
     private TextView filterTextView;
-    private RelativeLayout filterRelativeLayout;
+    private LinearLayout filterLinearLayout;
     private ImageView backImageView;
     //private boolean isRefresh = true;
 
@@ -293,7 +294,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
         //filterImageView = (ImageView) findViewById(R.id.filter_imageView);
         filterTextView = (TextView) findViewById(R.id.filter_textView);
-        filterRelativeLayout = (RelativeLayout) findViewById(R.id.filter_relativeLayout);
+        filterLinearLayout = (LinearLayout) findViewById(R.id.filter_linearLayout);
         backImageView = (ImageView) findViewById(R.id.back_imageView);
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
     }
@@ -550,12 +551,13 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
 
     public void requestPriceRange(boolean isRefresh){
+
         if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
         NYGetMinMaxPriceRequest req = null;
         try {
             //1 = do dive, 2 = do trip
             //req = new NYGetMinMaxPriceRequest(this, "1");
-            req = new NYGetMinMaxPriceRequest(this, "1", categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
+            req = new NYGetMinMaxPriceRequest(this, "1", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -571,7 +573,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                     progressBar.setVisibility(View.GONE);
                 }
 
-                filterRelativeLayout.setVisibility(View.GONE);
+                filterLinearLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -580,7 +582,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                     progressBar.setVisibility(View.GONE);
                 }
 
-                filterRelativeLayout.setVisibility(View.VISIBLE);
+                filterLinearLayout.setVisibility(View.VISIBLE);
 
                 if (results != null){
                     minPriceDefault = results.getLowestPrice();

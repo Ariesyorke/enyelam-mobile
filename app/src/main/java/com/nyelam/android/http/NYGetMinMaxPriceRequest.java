@@ -27,17 +27,38 @@ public class NYGetMinMaxPriceRequest extends NYBasicRequest<Price> {
     private static final String POST_DATE = "date";
     private static final String POST_SORT_BY = "sort_by";
 
+    private static final String POST_DIVE_SPOT_ID = "dive_spot_id";
+    private static final String POST_DIVE_CENTER_ID = "dive_center_id";
+    private static final String POST_COUNTRY_ID = "country_id";
+    private static final String POST_PROVINCE_ID = "province_id";
+    private static final String POST_CITY_ID = "city_id";
+    private static final String POST_CATEGORY_ID = "category_id";
+
     public NYGetMinMaxPriceRequest(Context context, String type) throws Exception {
-        super(String.class, context, context.getResources().getString(R.string.api_path_get_min_max_price));
+        super(String.class, context, context.getResources().getString(R.string.api_path_get_min_max_price_list));
         if(!TextUtils.isEmpty(type)) {
             addQuery(POST_TYPE, type);
         }
     }
 
-    public NYGetMinMaxPriceRequest(Context context, String type, List<Category> categories, String diver, String certificate, String date, String sortBy) throws Exception {
-        super(String.class, context, context.getResources().getString(R.string.api_path_get_min_max_price));
+    public NYGetMinMaxPriceRequest(Context context, String type, String diverIdType, String diverId, List<Category> categories, String diver, String certificate, String date, String sortBy) throws Exception {
+        super(String.class, context, context.getResources().getString(R.string.api_path_get_min_max_price_list));
         if(!TextUtils.isEmpty(type)) {
             addQuery(POST_TYPE, type);
+        }
+
+        if(!TextUtils.isEmpty(diverId) && !TextUtils.isEmpty(diverIdType)) {
+            if(diverIdType.equals("1")) {
+                addQuery(POST_DIVE_SPOT_ID, diverId);
+            } else if ( diverIdType.equals("2")){
+                addQuery(POST_CATEGORY_ID, diverId);
+            } else if (diverIdType.equals("3")){
+                addQuery(POST_DIVE_CENTER_ID, diverId);
+            } else if (diverIdType.equals("5")){
+                addQuery(POST_PROVINCE_ID, diverId);
+            } else if (diverIdType.equals("6")){
+                addQuery(POST_CITY_ID, diverId);
+            }
         }
 
         if(categories != null && !categories.isEmpty()) {

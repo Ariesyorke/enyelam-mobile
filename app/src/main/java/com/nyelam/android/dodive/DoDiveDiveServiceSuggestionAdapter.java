@@ -81,7 +81,9 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
         if (this.diveServiceList == null) {
             this.diveServiceList = new ArrayList<>();
         }
-        removeTheDuplicates(diveServiceList);
+
+        this.diveServiceList.addAll(diveServiceList);
+        //removeTheDuplicates(diveServiceList);
     }
 
     public void clear() {
@@ -187,9 +189,10 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
                     totalDayTextView.setText(String.valueOf(diveService.getDays())+" Day");
                 }
 
+
                 visitedTextView.setText(" / "+String.valueOf(diveService.getVisited())+" Visited");
 
-                if (diveService.getDiveCenter() != null){
+                /*if (diveService.getDiveCenter() != null){
 
                     if (NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText("by "+diveService.getDiveCenter().getName());
 
@@ -212,7 +215,7 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
 
 
 
-                }
+                }*/
 
 
                 //SET IMAGE
@@ -285,7 +288,6 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
         }
 
         diveServiceList.addAll(temp);
-
     }
 
     public interface RecyclerViewClickListener {

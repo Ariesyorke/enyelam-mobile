@@ -34,7 +34,7 @@
                     app:fontTextStyle="reguler"
                     android:id="@+id/title_textView"
                     android:text="Search"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@color/colorWhite"
                     android:layout_gravity="center"
                     android:gravity="center"
