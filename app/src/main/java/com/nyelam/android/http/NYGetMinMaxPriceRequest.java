@@ -26,6 +26,7 @@ public class NYGetMinMaxPriceRequest extends NYBasicRequest<Price> {
     private static final String POST_CERTIFICATE = "certificate";
     private static final String POST_DATE = "date";
     private static final String POST_SORT_BY = "sort_by";
+    private static final String POST_ECO_TRIP = "eco_trip";
 
     private static final String POST_DIVE_SPOT_ID = "dive_spot_id";
     private static final String POST_DIVE_CENTER_ID = "dive_center_id";
@@ -41,7 +42,7 @@ public class NYGetMinMaxPriceRequest extends NYBasicRequest<Price> {
         }
     }
 
-    public NYGetMinMaxPriceRequest(Context context, String type, String diverIdType, String diverId, List<Category> categories, String diver, String certificate, String date, String sortBy) throws Exception {
+    public NYGetMinMaxPriceRequest(Context context, String type, String diverIdType, String diverId, List<Category> categories, String diver, String certificate, String date, String sortBy, boolean isEcoTrip) throws Exception {
         super(String.class, context, context.getResources().getString(R.string.api_path_get_min_max_price_list));
         if(!TextUtils.isEmpty(type)) {
             addQuery(POST_TYPE, type);
@@ -82,8 +83,11 @@ public class NYGetMinMaxPriceRequest extends NYBasicRequest<Price> {
             addQuery(POST_SORT_BY, sortBy);
         }
 
-    }
+        if(isEcoTrip) {
+            addQuery(POST_ECO_TRIP, "1");
+        }
 
+    }
 
     @Override
     protected Price onProcessSuccessData(JSONObject obj) throws Exception {

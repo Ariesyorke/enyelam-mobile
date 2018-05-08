@@ -7,7 +7,9 @@ import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.Country;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.Language;
+import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Nationality;
+import com.nyelam.android.data.Organization;
 import com.nyelam.android.data.Summary;
 import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
@@ -39,9 +41,13 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
     private static String POST_NATIONALITY_ID = "nationality_id";
     private static String POST_LANGUAGE_ID = "language_id";
 
+    private static String POST_CERTIFICATE_DIVER = "certificate_diver";
+    private static String POST_CERTIFICATE_ORGANIZATION = "certificate_organization";
+
     public NYUpdateUserProfileRequest(Context context, String fullname, String username, String countryCode, String phoneNumber,
                                       String gender, String birthDate, String dateCertificate,
-                                      String certificateNumber, String birthPlace, Country currentCountry, Nationality currentNationality, Language currentLanguage) throws Exception {
+                                      String certificateNumber, String birthPlace, Country currentCountry, Nationality currentNationality, Language currentLanguage,
+                                      Organization organization, LicenseType licenseType) throws Exception {
         super(Summary.class, context, context.getResources().getString(R.string.api_path_update_profile));
 
         if (NYHelper.isStringNotEmpty(fullname)){
@@ -80,10 +86,6 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
             addQuery(POST_BIRTH_PLACE, birthPlace);
         }
 
-
-
-
-
         if(currentCountry != null && NYHelper.isStringNotEmpty(currentCountry.getId())) {
             addQuery(POST_COUNTRY_ID, currentCountry.getId());
         }
@@ -94,6 +96,14 @@ public class NYUpdateUserProfileRequest extends NYBasicAuthRequest<AuthReturn> {
 
         if(currentLanguage != null && NYHelper.isStringNotEmpty(currentLanguage.getId())) {
             addQuery(POST_LANGUAGE_ID, currentLanguage.getId());
+        }
+
+        if(organization != null && NYHelper.isStringNotEmpty(organization.getId())) {
+            addQuery(POST_CERTIFICATE_ORGANIZATION, organization.getId());
+        }
+
+        if(licenseType != null && NYHelper.isStringNotEmpty(licenseType.getId())) {
+            addQuery(POST_CERTIFICATE_DIVER, licenseType.getId());
         }
 
     }

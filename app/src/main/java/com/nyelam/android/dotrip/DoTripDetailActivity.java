@@ -21,6 +21,7 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
@@ -100,6 +101,7 @@ public class DoTripDetailActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_trip_detail);
+        //Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
         initView();
         initToolbar();
         initExtra();
@@ -194,9 +196,13 @@ public class DoTripDetailActivity extends AppCompatActivity implements
                 schedule = extras.getString(NYHelper.SCHEDULE);
             }
 
+            //Toast.makeText(this, "cert init : "+certificate, Toast.LENGTH_SHORT).show();
+
             if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))){
                 certificate = extras.getString(NYHelper.CERTIFICATE);
+                //Toast.makeText(this, "cert fix : "+certificate, Toast.LENGTH_SHORT).show();
             }
+
 
             if(intent.hasExtra(NYHelper.DIVE_SPOT_ID) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVE_SPOT_ID))){
                 diveSpotId = extras.getString(NYHelper.DIVE_SPOT_ID);

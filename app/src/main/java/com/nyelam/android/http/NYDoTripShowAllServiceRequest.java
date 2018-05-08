@@ -114,5 +114,4 @@ public class NYDoTripShowAllServiceRequest extends NYBasicRequest<NYPaginationRe
         return temp;
     }
 
-
 }

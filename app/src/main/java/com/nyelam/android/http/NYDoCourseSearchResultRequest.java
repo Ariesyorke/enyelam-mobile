@@ -21,7 +21,7 @@ import java.util.List;
 
 public class NYDoCourseSearchResultRequest extends NYBasicRequest<NYPaginationResult<DiveServiceList>> {
 
-    private static final String KEY_DIVE_SERVICE = "dive_services";
+    private static final String KEY_DIVE_SERVICE = "course";
 
     private static final String POST_PAGE = "page";
     private static final String POST_DIVER = "diver";
@@ -42,7 +42,7 @@ public class NYDoCourseSearchResultRequest extends NYBasicRequest<NYPaginationRe
     private static final String POST_CATEGORY_ID = "category_id";
 
 
-    public NYDoCourseSearchResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, double priceMin, double priceMax, String organizationId, String licenseTypeId, String rating, String openWater ) {
+    public NYDoCourseSearchResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, double priceMin, double priceMax, String organizationId, String licenseTypeId, String rating, String openWater) {
         super(AuthReturn.class, context, apiPath);
 
         if(!TextUtils.isEmpty(diverId) && !TextUtils.isEmpty(type)) {

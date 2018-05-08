@@ -41,7 +41,8 @@ public class User implements Parseable {
     private static String KEY_COUNTRY = "country";
     private static String KEY_NATIONALITY = "nationality";
     private static String KEY_LANGUAGE = "language";
-
+    private static String KEY_CERTIFICATE_DIVER = "certificate_diver";
+    private static String KEY_CERTIFICATE_ORGANIZATION = "certificate_organization";
 
     private String userId, fullname, firstname, lastname,
             phone, email, picture, gender, refferalCode,
@@ -56,6 +57,8 @@ public class User implements Parseable {
     private Country country;
     private Nationality nationality;
     private Language language;
+    private Organization organization;
+    private LicenseType licenseType;
 
     public String getBirthPlace() {
         return birthPlace;
@@ -240,6 +243,22 @@ public class User implements Parseable {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 
     @Override
@@ -438,6 +457,33 @@ public class User implements Parseable {
         }
 
 
+
+
+
+
+        try {
+            if(!obj.isNull(KEY_CERTIFICATE_ORGANIZATION)) {
+                JSONObject o = obj.getJSONObject(KEY_CERTIFICATE_ORGANIZATION);
+                if(o != null && o.length() > 0) {
+                    organization = new Organization();
+                    organization.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(!obj.isNull(KEY_CERTIFICATE_DIVER)) {
+                JSONObject o = obj.getJSONObject(KEY_CERTIFICATE_DIVER);
+                if(o != null && o.length() > 0) {
+                    licenseType = new LicenseType();
+                    licenseType.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -615,9 +661,6 @@ public class User implements Parseable {
             e.printStackTrace();
         }
 
-
-
-
         try{
             if(getCountry()!=null){
                 JSONObject objCC = new JSONObject(getCountry().toString());
@@ -646,6 +689,31 @@ public class User implements Parseable {
                 obj.put(KEY_LANGUAGE, objCC);
             } else {
                 obj.put(KEY_LANGUAGE, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+
+
+
+        try{
+            if(getOrganization()!=null){
+                JSONObject objCC = new JSONObject(getOrganization().toString());
+                obj.put(KEY_CERTIFICATE_ORGANIZATION, objCC);
+            } else {
+                obj.put(KEY_CERTIFICATE_ORGANIZATION, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getLicenseType()!=null){
+                JSONObject objCC = new JSONObject(getLicenseType().toString());
+                obj.put(KEY_CERTIFICATE_DIVER, objCC);
+            } else {
+                obj.put(KEY_CERTIFICATE_DIVER, JSONObject.NULL);
             }
         }catch (JSONException e){
             e.printStackTrace();

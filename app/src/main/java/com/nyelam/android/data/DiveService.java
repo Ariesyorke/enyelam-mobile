@@ -319,8 +319,16 @@ public class DiveService implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_LICENSE)) {
+            if (!obj.isNull(KEY_LICENSE) && obj.get(KEY_LICENSE) instanceof Boolean) {
                 setLicense(obj.getBoolean(KEY_LICENSE));
+            } else {
+                if (!obj.isNull(KEY_LICENSE) && obj.get(KEY_LICENSE) instanceof String) {
+                    if (obj.getString(KEY_LICENSE).equals("1") || obj.getString(KEY_LICENSE).equals("true")){
+                        setLicense(true);
+                    } else {
+                        setLicense(false);
+                    }
+                }
             }
         } catch (JSONException e) {e.printStackTrace();}
 

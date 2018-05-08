@@ -99,23 +99,24 @@
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/filter_linearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
             android:background="@drawable/ny_rectangle_blue_soft_elipse"
             android:paddingTop="@dimen/padding_half"
             android:paddingBottom="@dimen/padding_half"
             android:paddingRight="@dimen/padding_quad"
             android:paddingLeft="@dimen/padding_quad"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/padding"
+            android:gravity="center_vertical"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/ic_license"
+                android:src="@drawable/ic_filter"
                 android:layout_marginRight="@dimen/padding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="16dp"
+                android:layout_height="16dp" />
 
             <com.nyelam.android.view.font.NYTextView
                 android:id="@+id/filter_textView"
@@ -127,6 +128,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+
     </RelativeLayout>
 
 

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -81,9 +82,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private Switch divingLicenseSwitch;
     private TextView divingLicenseTextView;
     private LinearLayout divingLicenseLinearLayout;
-    private ScrollView scrollView;
+    private NestedScrollView scrollView;
     private boolean isSwitchEnable = true;
-//    private Calendar c;
+    //private Calendar c;
 
     //suggestion
     private DoDiveDiveServiceSuggestionAdapter diveServiceSuggestionAdapter;
@@ -546,7 +547,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                        if (activity.isEcoTrip()) {
                             intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
                         startActivity(intent);
@@ -568,7 +569,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                        if (activity.isEcoTrip()) {
                             intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                         }
                         startActivity(intent);
@@ -586,7 +587,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                        if (activity.isEcoTrip()) {
                             intent.putExtra(NYHelper.ECO_TRIP, 1);
                         }
                         startActivity(intent);
@@ -621,7 +622,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (activity.getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
+                        if (activity.isEcoTrip()) {
                             intent.putExtra(NYHelper.ECO_TRIP, 1);
                         }
                         startActivity(intent);
@@ -717,8 +718,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     private void initView(View v) {
-
-        scrollView = (ScrollView) v.findViewById(R.id.scrollView);
+        scrollView = (NestedScrollView) v.findViewById(R.id.scrollView);
         keywordTextView = (com.nyelam.android.view.font.NYTextView) v.findViewById(R.id.keyword_textView);
         //diverTextView = (TextView) v.findViewById(R.id.diver_textView);
         diverSpinner = (Spinner) v.findViewById(R.id.diver_spinner);

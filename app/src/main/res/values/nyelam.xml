@@ -51,11 +51,11 @@
 
     <!--SEARCH RESULT LIST DO COURSE-->
     <string name="api_path_docourse_search_service_by_category">api/docourse/search/category</string>
-    <string name="api_path_docourse_search_service_by_divespot">api/dodive/search/divespot</string>
-    <string name="api_path_docourse_search_service_by_province">api/dodive/search/province</string>
-    <string name="api_path_docourse_search_service_by_city">api/dodive/search/city</string>
-    <string name="api_path_docourse_search_service_by_divecenter">api/dodive/search/divecenter</string>
-    <string name="api_path_docourse_suggestion_service">api/dodive/sugestion</string>
+    <string name="api_path_docourse_search_service_by_divespot">api/docourse/search/divespot</string>
+    <string name="api_path_docourse_search_service_by_province">api/docourse/search/province</string>
+    <string name="api_path_docourse_search_service_by_city">api/docourse/search/city</string>
+    <string name="api_path_docourse_search_service_by_divecenter">api/docourse/search/divecenter</string>
+    <string name="api_path_docourse_suggestion_service">api/docourse/sugestion</string>
 
     <string name="api_path_dodive_search_dive_center_by_category">api/dodive/center/category</string>
     <string name="api_path_dodive_search_dive_center_by_spot">api/dodive/center/divespot</string>
@@ -171,11 +171,11 @@
 
     &lt;!&ndash;SEARCH RESULT LIST DO COURSE&ndash;&gt;
     <string name="api_path_docourse_search_service_by_category">docourse/search/category</string>
-    <string name="api_path_docourse_search_service_by_divespot">dodive/search/divespot</string>
-    <string name="api_path_docourse_search_service_by_province">dodive/search/province</string>
-    <string name="api_path_docourse_search_service_by_city">dodive/search/city</string>
-    <string name="api_path_docourse_search_service_by_divecenter">dodive/search/divecenter</string>
-    <string name="api_path_docourse_suggestion_service">dodive/sugestion</string>
+    <string name="api_path_docourse_search_service_by_divespot">docourse/search/divespot</string>
+    <string name="api_path_docourse_search_service_by_province">docourse/search/province</string>
+    <string name="api_path_docourse_search_service_by_city">docourse/search/city</string>
+    <string name="api_path_docourse_search_service_by_divecenter">docourse/search/divecenter</string>
+    <string name="api_path_docourse_suggestion_service">docourse/sugestion</string>
 
     <string name="api_path_dotrip_show_all_service">dotrip/seeAll</string>
     <string name="api_path_dotrip_detail_service">dotrip/detail</string>
@@ -188,5 +188,7 @@
     <string name="api_path_dotrip_suggestion_service">dotrip/sugestion</string>
     <string name="api_path_get_min_max_price">service/minMaxPrice</string>
     <string name="api_path_get_min_max_price_list">service/minMaxPriceList</string>-->
+
+
 
 </resources>

@@ -32,6 +32,10 @@
     <string name="nationality_hint">Nationality</string>
     <string name="language">Language</string>
     <string name="language_hint">Language</string>
+    <string name="organization">Organization</string>
+    <string name="organization_hint">Organization</string>
+    <string name="license_type">License Type</string>
+    <string name="license_type_hint">License Type</string>
     <string name="gender_hint">Gender</string>
     <string name="phone_number">Phone Number</string>
     <string name="phone_number_hint">Phone Number *</string>
@@ -145,6 +149,9 @@
     <string name="warn_email_not_valid">Please, input valid email address</string>
     <string name="warn_file_not_found">Please, upload image first !</string>
     <string name="warn_empty_keyword">Keyword cannot be empty</string>
+    <string name="warn_empty_association">Please, choose association</string>
+    <string name="warn_empty_license_type">Please, choose license type</string>
+    <string name="warn_empty_schedule">Please, choose schedule</string>
     <string name="warn_total_diver">Please, choose total Diver</string>
     <string name="warn_field_email_cannot_be_empty">Email cannot be empty</string>
     <string name="warn_field_phone_cannot_be_empty">Phone number cannot be empty</string>

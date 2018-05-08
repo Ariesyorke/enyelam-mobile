@@ -423,7 +423,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         try {
             //1 = do dive, 2 = do trip
             //req = new NYGetMinMaxPriceRequest(this, "2");
-            req = new NYGetMinMaxPriceRequest(this, "2", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
+            req = new NYGetMinMaxPriceRequest(this, "2", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType), false);
         } catch (Exception e) {
             e.printStackTrace();
         }

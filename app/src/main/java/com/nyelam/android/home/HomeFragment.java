@@ -171,9 +171,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
-                //NYHelper.handlePopupMessage(getActivity(), getResources().getString(R.string.coming_soon), null);
-                Intent intent = new Intent(getActivity(), DoCourseActivity.class);
-                startActivity(intent);
+                NYHelper.handlePopupMessage(getActivity(), getResources().getString(R.string.coming_soon), null);
+                /*Intent intent = new Intent(getActivity(), DoCourseActivity.class);
+                startActivity(intent);*/
             }
         });
 

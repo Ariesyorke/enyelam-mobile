@@ -80,12 +80,16 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
 
         Calendar time = Calendar.getInstance();
         long millis = time.getTimeInMillis();
-        date = String.valueOf(millis);
+        date = String.valueOf(millis/1000);
 
         initView();
         initExtra();
         initAdapter();
-        requestPriceRange();
+
+        // TODO: sementara price range di hide dulu
+        requestPriceRange(false);
+        //initRequest();
+
         initControl();
         initToolbar(true);
     }
@@ -104,6 +108,18 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
             public void onClick(View v) {
                 Intent intent = new Intent(DoTripListActivity.this, DoTripActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //endlessScroll.resetValue();
+                //checkNewEvents();
+                page=1;
+                diveServiceAdapter.clear();
+                diveServiceAdapter.notifyDataSetChanged();
+                requestPriceRange(true);
             }
         });
 
@@ -143,8 +159,8 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
     }
 
 
-    private void initRequest() {
-        progressBar.setVisibility(View.VISIBLE);
+    private void initRequest(boolean isRefresh) {
+        if (!isRefresh) progressBar.setVisibility(View.VISIBLE);
         noResultTextView.setVisibility(View.GONE);
 
         // TODO: tunggu URL dari Adam
@@ -226,10 +242,10 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 }
                 //diveServiceAdapter.clear();
                 //diveServiceAdapter.notifyDataSetChanged();
-                if (diveServiceAdapter.getItemCount() > 0){
-                    noResultTextView.setVisibility(View.GONE);
-                } else {
+                if (diveServiceAdapter.getItemCount() <= 0){
                     noResultTextView.setVisibility(View.VISIBLE);
+                } else {
+                    noResultTextView.setVisibility(View.GONE);
                 }
                 /*if(diveServiceAdapter.getItemCount() > 0) {
                     filterRelativeLayout.setVisibility(View.VISIBLE);
@@ -259,18 +275,6 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 }*/
 
 
-                if (diveServiceAdapter.getItemCount() <= 0)noResultTextView.setVisibility(View.VISIBLE);
-
-                //adapter.clear();
-                if(progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }
-                if(swipeLayout != null) {
-                    swipeLayout.setRefreshing(false);
-                }
-                if(recyclerView != null) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
                 if(result != null && result.item != null && result.item.getList() != null && !result.item.getList().isEmpty()) {
                     if (diveServiceAdapter != null) {
                         progressBar.setVisibility(View.GONE);
@@ -287,6 +291,18 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                     noResultTextView.setVisibility(View.GONE);
                 } else {
                     noResultTextView.setVisibility(View.VISIBLE);
+                }
+
+
+                //adapter.clear();
+                if(progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+                if(swipeLayout != null) {
+                    swipeLayout.setRefreshing(false);
+                }
+                if(recyclerView != null) {
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -315,7 +331,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
     public void onChooseListener(Object position) {
         sortingType = (Integer) position;
         //Toast.makeText(this, String.valueOf(sortingType), Toast.LENGTH_SHORT).show();
-        initRequest();
+        initRequest(false);
     }
 
     @Override
@@ -442,26 +458,27 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
             diveServiceAdapter.notifyDataSetChanged();
             page=1;
 
-            initRequest();
+            initRequest(false);
 
         }
     }
 
 
-    public void requestPriceRange(){
-        progressBar.setVisibility(View.VISIBLE);
+    public void requestPriceRange(boolean isRefesh){
+        if (!isRefesh) progressBar.setVisibility(View.VISIBLE);
+
         NYGetMinMaxPriceRequest req = null;
         try {
             //1 = do dive, 2 = do trip
             //req = new NYGetMinMaxPriceRequest(this, "2");
-            req = new NYGetMinMaxPriceRequest(this, "2", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
+            req = new NYGetMinMaxPriceRequest(this, "2", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType), false);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spcMgr.execute(req, onGetMinMaxPriceRequest());
+        spcMgr.execute(req, onGetMinMaxPriceRequest(isRefesh));
     }
 
-    private RequestListener<Price> onGetMinMaxPriceRequest() {
+    private RequestListener<Price> onGetMinMaxPriceRequest(final boolean isRefresh) {
         return new RequestListener<Price>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -469,6 +486,15 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                     progressBar.setVisibility(View.GONE);
                 }
                 filterLinearLayout.setVisibility(View.GONE);
+
+                if (diveServiceAdapter.getItemCount() <= 0)noResultTextView.setVisibility(View.VISIBLE);
+
+                if(swipeLayout != null) {
+                    swipeLayout.setRefreshing(false);
+                }
+                if(recyclerView != null) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -482,7 +508,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 if (results != null){
                     minPriceDefault = results.getLowestPrice();
                     maxPriceDefault = results.getHighestPrice();
-                    initRequest();
+                    initRequest(isRefresh);
                 }
             }
         };

@@ -491,6 +491,108 @@
 
 
 
+
+
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/organization_input_layout"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/organization_editText"
+                        android:hint="@string/organization_hint"
+                        android:textSize="16sp"
+                        android:textColor="@color/ny_black2"
+                        android:textColorHint="@color/ny_grey4"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:inputType="none"
+                        android:imeOptions="actionNext"
+                        android:backgroundTint="@color/selecetor_edittext_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <ProgressBar
+                        android:id="@+id/organization_progressBar"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:src="@drawable/ic_down_arrow_black"
+                    android:layout_height="12dp"
+                    android:layout_width="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/license_type_input_layout"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/license_type_editText"
+                        android:hint="@string/license_type_hint"
+                        android:textSize="16sp"
+                        android:textColor="@color/ny_black2"
+                        android:textColorHint="@color/ny_grey4"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:inputType="none"
+                        android:imeOptions="actionNext"
+                        android:backgroundTint="@color/selecetor_edittext_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <ProgressBar
+                        android:id="@+id/license_type_progressBar"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:src="@drawable/ic_down_arrow_black"
+                    android:layout_height="12dp"
+                    android:layout_width="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+
+
+
+
+
             <android.support.design.widget.TextInputLayout
                 android:layout_marginTop="@dimen/padding"
                 android:layout_width="match_parent"

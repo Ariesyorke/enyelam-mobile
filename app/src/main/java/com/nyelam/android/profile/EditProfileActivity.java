@@ -34,18 +34,25 @@ import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.CountryList;
 import com.nyelam.android.data.Language;
 import com.nyelam.android.data.LanguageList;
+import com.nyelam.android.data.LicenseType;
+import com.nyelam.android.data.LicenseTypeList;
 import com.nyelam.android.data.Nationality;
 import com.nyelam.android.data.NationalityList;
+import com.nyelam.android.data.Organization;
+import com.nyelam.android.data.OrganizationList;
 import com.nyelam.android.data.User;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.docourse.DoCourseActivity;
 import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYLoginRequest;
 import com.nyelam.android.http.NYMasterCountryRequest;
 import com.nyelam.android.http.NYMasterLanguageRequest;
+import com.nyelam.android.http.NYMasterLicenseTypeRequest;
 import com.nyelam.android.http.NYMasterNationalityRequest;
+import com.nyelam.android.http.NYMasterOrganizationRequest;
 import com.nyelam.android.http.NYUpdateUserProfileRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCountryDialogFragment;
@@ -69,7 +76,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     private ProgressDialog progressDialog;
     private EditText firstNameEditText, lastNameEditText, usernameEditText, emailEditText,
             phoneNumberEditText, birthPlaceEditText, birthDateEditText,
-            certificateNumberEditText, certificateDateEditText, genderEditText;
+            certificateNumberEditText, certificateDateEditText, genderEditText, organizationEditText, licenseTypeEditText;
     private TextView updateTextView, countryCodeTextView;
     private View birthDateButton, certificateDateButton;
     private NYSpinner countryCodeSpinner, genderSpinner;
@@ -78,18 +85,22 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     private CountryCodeAdapter countryCodeAdapter;
     private Date certificateDate, dateBirth;
 
-    private TextInputLayout countryInputLayout, nationalityInputLayout, languageInputLayout;
+    private TextInputLayout countryInputLayout, nationalityInputLayout, languageInputLayout, organizationInputLayout, licenseTypeInputLayout;
     private EditText countryEditText, nationalityEditText, languageEditText;
     private CountryCode country;
     //private Nationality nationality;
-    private ProgressBar countryProgressBar, nationalityProgressBar, languageProgressBar;
+    private ProgressBar countryProgressBar, nationalityProgressBar, languageProgressBar, organizationProgressBar, licenseTypeProgressBar;
     //private CountryList countryList;
     private Country currentCountry;
     private NationalityList nationalityList;
     private Nationality currentNationality;
     private LanguageList languageList;
     private Language currentLanguage;
-
+    private OrganizationList organizationList;
+    private Organization organization;
+    private LicenseTypeList licenseTypeList;
+    private LicenseType licenseType;
+    private boolean isFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +144,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     countryCodeTextView.setText("+ "+user.getCountryCode().getCountryNumber());
                 }
 
-
                 if (user.getCountry() != null && NYHelper.isStringNotEmpty(user.getCountry().getName()) ){
                     currentCountry = user.getCountry();
                     countryEditText.setText(currentCountry.getName());
@@ -148,6 +158,14 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     currentLanguage = user.getLanguage();
                     languageEditText.setText(currentLanguage.getName());
                     //Toast.makeText(this, currentLanguage.getName(), Toast.LENGTH_SHORT).show();
+                }
+
+                if (user.getOrganization() != null){
+                       organization = user.getOrganization();
+                }
+
+                if (user.getLicenseType() != null){
+                    licenseType = user.getLicenseType();
                 }
 
             }
@@ -220,6 +238,46 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
 
     private void initControl() {
+
+        organizationInputLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (organizationList != null && organizationList.getList().size() > 0){
+                    NYCustomDialog dialog = new NYCustomDialog();
+                    dialog.showAssocitaionDialog(EditProfileActivity.this, organizationList.getList(), organization);
+                }
+            }
+        });
+
+        organizationEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (organizationList != null && organizationList.getList().size() > 0){
+                    NYCustomDialog dialog = new NYCustomDialog();
+                    dialog.showAssocitaionDialog(EditProfileActivity.this, organizationList.getList(), organization);
+                }
+            }
+        });
+
+        licenseTypeInputLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (licenseTypeList != null && licenseTypeList.getList().size() > 0){
+                    NYCustomDialog dialog = new NYCustomDialog();
+                    dialog.showLicenseTypeDialog(EditProfileActivity.this, licenseTypeList.getList(), licenseType);
+                }
+            }
+        });
+
+        licenseTypeEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (licenseTypeList != null && licenseTypeList.getList().size() > 0){
+                    NYCustomDialog dialog = new NYCustomDialog();
+                    dialog.showLicenseTypeDialog(EditProfileActivity.this, licenseTypeList.getList(), licenseType);
+                }
+            }
+        });
 
         countryInputLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -375,7 +433,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     private void updateProfile(String fullname, String username, String countryCodeId, String phoneNumber, String gender, String birthDate, String dateCertificate, String certificateNumber, String birthPlace, Country currentCountry, Nationality currentNationality, Language currentLanguage){
         try {
             progressDialog.show();
-            NYUpdateUserProfileRequest req = new NYUpdateUserProfileRequest(this, fullname, username, countryCodeId, phoneNumber, gender, birthDate, dateCertificate, certificateNumber, birthPlace, currentCountry, currentNationality, currentLanguage);
+            NYUpdateUserProfileRequest req = new NYUpdateUserProfileRequest(this, fullname, username, countryCodeId, phoneNumber, gender, birthDate, dateCertificate, certificateNumber, birthPlace, currentCountry, currentNationality, currentLanguage, organization, licenseType);
             spcMgr.execute(req, onUpdateProfileRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -472,7 +530,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
 
 
-
     private void getNationality(String countryId){
         try {
             //progressDialog.show();
@@ -526,9 +583,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             }
         };
     }
-
-
-
 
 
     private void getLanguage(){
@@ -598,6 +652,100 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
 
 
+
+
+    private void getOrganizationRequest() {
+        setAssociationProgressBar(true);
+        NYMasterOrganizationRequest req = new NYMasterOrganizationRequest(getApplicationContext());
+        spcMgr.execute(req, onOrganizationRequest());
+    }
+
+    private RequestListener<OrganizationList> onOrganizationRequest() {
+        return new RequestListener<OrganizationList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*diveServiceSuggestionAdapter.clear();
+                diveServiceSuggestionAdapter.notifyDataSetChanged();
+                suggestionLinearLayout.setVisibility(View.GONE);*/
+                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+                setAssociationProgressBar(false);
+            }
+
+            @Override
+            public void onRequestSuccess(OrganizationList results) {
+                organizationList = results;
+
+                if (!isFirst || (isFirst && organization == null)){
+                    organization = organizationList.getList().get(0);
+                }
+
+                setAssociationProgressBar(false);
+
+                if (organization != null && NYHelper.isStringNotEmpty(organization.getName()))
+                    organizationEditText.setText(organization.getName());
+
+                getLicenseTypeRequest();
+            }
+        };
+    }
+
+
+    private void getLicenseTypeRequest() {
+        setDivingLicenseProgressBar(true);
+        NYMasterLicenseTypeRequest req = new NYMasterLicenseTypeRequest(getApplicationContext(), organization.getId());
+        spcMgr.execute(req, onLicenseTypeRequest());
+    }
+
+    private RequestListener<LicenseTypeList> onLicenseTypeRequest() {
+        return new RequestListener<LicenseTypeList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*diveServiceSuggestionAdapter.clear();
+                diveServiceSuggestionAdapter.notifyDataSetChanged();
+                suggestionLinearLayout.setVisibility(View.GONE);*/
+                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
+                setDivingLicenseProgressBar(false);
+            }
+
+            @Override
+            public void onRequestSuccess(LicenseTypeList results) {
+                licenseTypeList = results;
+
+                if (!isFirst || (isFirst && licenseType == null)){
+                    licenseType = licenseTypeList.getList().get(0);
+                }
+
+                isFirst = false;
+
+                setDivingLicenseProgressBar(false);
+
+                if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
+                    licenseTypeEditText.setText(licenseType.getName());
+            }
+        };
+    }
+
+
+    private void setAssociationProgressBar(boolean isShow){
+        if (isShow){
+            organizationProgressBar.setVisibility(View.VISIBLE);
+            organizationInputLayout.setVisibility(View.GONE);
+        } else {
+            organizationProgressBar.setVisibility(View.GONE);
+            organizationInputLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setDivingLicenseProgressBar (boolean isShow){
+        if (isShow){
+            licenseTypeProgressBar.setVisibility(View.VISIBLE);
+            licenseTypeInputLayout.setVisibility(View.GONE);
+        } else {
+            licenseTypeProgressBar.setVisibility(View.GONE);
+            licenseTypeInputLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         //make title center
@@ -624,18 +772,27 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         countryInputLayout = (TextInputLayout) findViewById(R.id.country_input_layout);
         nationalityInputLayout = (TextInputLayout) findViewById(R.id.nationality_input_layout);
         languageInputLayout = (TextInputLayout) findViewById(R.id.language_input_layout);
+        organizationInputLayout = (TextInputLayout) findViewById(R.id.organization_input_layout);
+        licenseTypeInputLayout = (TextInputLayout) findViewById(R.id.license_type_input_layout);
+
         countryEditText = (EditText) findViewById(R.id.country_editText);
         nationalityEditText = (EditText) findViewById(R.id.nationality_editText);
         languageEditText = (EditText) findViewById(R.id.language_editText);
+        organizationEditText = (EditText) findViewById(R.id.organization_editText);
+        licenseTypeEditText = (EditText) findViewById(R.id.license_type_editText);
 
         nationalityProgressBar = (ProgressBar) findViewById(R.id.nationality_progressBar);
         languageProgressBar = (ProgressBar) findViewById(R.id.language_progressBar);
         countryProgressBar = (ProgressBar) findViewById(R.id.country_progressBar);
+        organizationProgressBar = (ProgressBar) findViewById(R.id.country_progressBar);
+        licenseTypeProgressBar = (ProgressBar) findViewById(R.id.license_type_progressBar);
 
         emailEditText.setKeyListener(null);
         countryEditText.setKeyListener(null);
         nationalityEditText.setKeyListener(null);
         languageEditText.setKeyListener(null);
+        organizationEditText.setKeyListener(null);
+        licenseTypeEditText.setKeyListener(null);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
@@ -782,6 +939,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         super.onStart();
         spcMgr.start(this);
         getLanguage();
+        getOrganizationRequest();
     }
 
     @Override
@@ -831,6 +989,13 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             if (currentLanguage != null && !TextUtils.isEmpty(currentLanguage.getName())){
                 languageEditText.setText(currentLanguage.getName());
             }
+        } else if (object instanceof Organization){
+            organizationEditText.setText(((Organization) object).getName());
+            this.organization = (Organization) object;
+            getLicenseTypeRequest();
+        } else if (object instanceof LicenseType){
+            if (((LicenseType) object) != null && NYHelper.isStringNotEmpty(((LicenseType) object).getName())) licenseTypeEditText.setText(((LicenseType) object).getName());
+            this.licenseType = (LicenseType) object;
         }
 
     }

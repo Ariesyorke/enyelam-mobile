@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"/>-->
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:isScrollContainer="false"
         android:layout_width="match_parent"
@@ -349,7 +349,7 @@
                 android:layout_height="wrap_content" />
 
             <LinearLayout
-
+                android:visibility="gone"
                 android:id="@+id/suggestion_linearLayout"
                 android:orientation="vertical"
                 android:layout_marginBottom="@dimen/padding_double"
@@ -409,7 +409,7 @@
             </RelativeLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </LinearLayout>

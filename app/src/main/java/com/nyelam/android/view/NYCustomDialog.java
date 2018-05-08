@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -401,7 +402,6 @@ public class NYCustomDialog {
 
 
 
-
     public void showNationalityDialog(final Activity activity, final List<Nationality> nationalities, Nationality currentNationality){
 
         this.listener = (OnDialogFragmentClickListener) activity;
@@ -577,7 +577,7 @@ public class NYCustomDialog {
     }
 
 
-    public void showAssocitaionDialog(final Activity activity, List<Organization> organizations){
+    public void showAssocitaionDialog(final Activity activity, List<Organization> organizations, Organization currentOrganization){
 
         this.listener = (OnDialogFragmentClickListener) activity;
 
@@ -617,6 +617,15 @@ public class NYCustomDialog {
 
                 if (organization != null && NYHelper.isStringNotEmpty(organization.getName())) diverTextView.setText(organization.getName());
 
+
+                if (currentOrganization != null && NYHelper.isStringNotEmpty(currentOrganization.getId())
+                        && organization != null && NYHelper.isStringNotEmpty(organization.getId())
+                        && organization.equals(currentOrganization)){
+                    mainLinearLayout.setBackgroundColor(ContextCompat.getColor(activity, R.color.ny_grey1));
+                } else {
+                    mainLinearLayout.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWhite));
+                }
+
                 mainLinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -635,7 +644,7 @@ public class NYCustomDialog {
 
 
 
-    public void showLicenseTypeDialog(final Activity activity, List<LicenseType> licenseTypes){
+    public void showLicenseTypeDialog(final Activity activity, List<LicenseType> licenseTypes, LicenseType currentLicenseType){
 
         this.listener = (OnDialogFragmentClickListener) activity;
 
@@ -660,7 +669,7 @@ public class NYCustomDialog {
             for (final LicenseType licenseType : licenseTypes){
 
                 LayoutInflater inflaterAddons = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View diverView = inflaterAddons.inflate(R.layout.view_drop_down_country_code, null); //here item is the the layout you want to inflate
+                View diverView = inflaterAddons.inflate(R.layout.view_drop_down_country_code, null);
 
                 LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParamsAddons.setMargins(0, NYHelper.integerToDP(activity, 5), 0, NYHelper.integerToDP(activity, 5));
@@ -674,6 +683,14 @@ public class NYCustomDialog {
                 diverTextView.setGravity(Gravity.CENTER);
 
                 if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName())) diverTextView.setText(licenseType.getName());
+
+                if (currentLicenseType != null && NYHelper.isStringNotEmpty(currentLicenseType.getId())
+                        && licenseType != null && NYHelper.isStringNotEmpty(licenseType.getId())
+                        && licenseType.equals(currentLicenseType)){
+                    mainLinearLayout.setBackgroundColor(ContextCompat.getColor(activity, R.color.ny_grey1));
+                } else {
+                    mainLinearLayout.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWhite));
+                }
 
                 mainLinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override

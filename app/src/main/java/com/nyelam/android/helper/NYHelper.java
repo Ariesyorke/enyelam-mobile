@@ -87,6 +87,8 @@ public class NYHelper {
     public static final String EVENT = "event";
     public static final String DATE = "date";
     public static final String TYPE = "type";
+    public static final String ORGANIZATION = "organization";
+    public static final String LICENSE_TYPE = "license_type";
     public static final String ECO_TRIP = "eco_trip";
     public static final String CERTIFICATE = "certificate";
     public static final String CONTACT = "contact";

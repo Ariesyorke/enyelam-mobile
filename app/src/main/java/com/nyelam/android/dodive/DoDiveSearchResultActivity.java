@@ -89,6 +89,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         //initToolbar();
         initControl();
         initToolbar(true);
+        //Toast.makeText(this, "eco trip : "+String.valueOf(isEcotrip()), Toast.LENGTH_SHORT).show();
     }
 
     private void initControl() {
@@ -232,10 +233,8 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
         // TODO: tunggu URL dari Adam
         NYDoDiveSearchServiceResultRequest req = null;
-        if(getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-            int ecoTrip = getIntent().getIntExtra(NYHelper.IS_ECO_TRIP, 1);
-            ecotrip = true;
-            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(ecoTrip));
+        if(ecotrip) {
+            req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(1));
         } else {
             req = new NYDoDiveSearchServiceResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, totalDives, minPrice, maxPrice, String.valueOf(0));
         }
@@ -254,7 +253,12 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
+
+        //Toast.makeText(this, "eco trip init : "+String.valueOf(intent.hasExtra(NYHelper.IS_ECO_TRIP)), Toast.LENGTH_SHORT).show();
+
+
         if (extras != null) {
+
             if(intent.hasExtra(NYHelper.KEYWORD) && !extras.getString(NYHelper.KEYWORD).equals(null)){
                 keyword = extras.getString(NYHelper.KEYWORD);
                 //titleTextView.setText(keyword);
@@ -267,7 +271,15 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 type = extras.getString(NYHelper.TYPE);
             }
 
+            if (intent.hasExtra(NYHelper.IS_ECO_TRIP) && intent.getIntExtra(NYHelper.IS_ECO_TRIP, 0) == 1){
+                ecotrip = true;
+            } else {
+                ecotrip = false;
+            }
+
             titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(date))+", "+diver+" pax (s)");
+
+
         }
 
     }
@@ -555,10 +567,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
         if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
         NYGetMinMaxPriceRequest req = null;
         try {
-            //1 = do dive, 2 = do trip
-            //req = new NYGetMinMaxPriceRequest(this, "1");
-            req = new NYGetMinMaxPriceRequest(this, "1", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType));
-
+            req = new NYGetMinMaxPriceRequest(this, "1", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType), ecotrip);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -574,6 +583,15 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 }
 
                 filterLinearLayout.setVisibility(View.GONE);
+
+                if (adapter.getItemCount() <= 0)noResultTextView.setVisibility(View.VISIBLE);
+
+                if(swipeLayout != null) {
+                    swipeLayout.setRefreshing(false);
+                }
+                if(recyclerView != null) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

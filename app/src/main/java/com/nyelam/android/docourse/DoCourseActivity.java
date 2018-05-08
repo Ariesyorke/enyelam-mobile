@@ -79,7 +79,7 @@ public class DoCourseActivity extends BasicActivity implements
     private Spinner diverSpinner;
     private com.nyelam.android.view.font.NYTextView keywordTextView;
     private DatePickerDialog datePickerDialog;
-    private String keyword, diverId, type, date, diver = null;
+    private String keyword, diverId, type, date, diver = "1";
     private SearchService searchService;
     private TotalDiverSpinnerAdapter diverAdapter;
     private LinearLayout diverLinearLayout, datetimeLinearLayout, licenseLinearLayout;
@@ -294,7 +294,7 @@ public class DoCourseActivity extends BasicActivity implements
                 organization.setName("CMAS");
                 organizations.add(organization);*/
 
-                dialog.showAssocitaionDialog(DoCourseActivity.this, organizations.getList());
+                dialog.showAssocitaionDialog(DoCourseActivity.this, organizations.getList(), organization);
             }
         });
 
@@ -310,7 +310,7 @@ public class DoCourseActivity extends BasicActivity implements
                 licenseType.setName("CMAS");
                 licenseTypes.add(licenseType);*/
 
-                dialog.showLicenseTypeDialog(DoCourseActivity.this, licenseTypes.getList());
+                dialog.showLicenseTypeDialog(DoCourseActivity.this, licenseTypes.getList(), licenseType);
             }
         });
 
@@ -340,6 +340,12 @@ public class DoCourseActivity extends BasicActivity implements
 
                 if (!NYHelper.isStringNotEmpty(type)){
                     Toast.makeText(getApplicationContext(), getString(R.string.warn_empty_keyword), Toast.LENGTH_SHORT).show();
+                } else if (organization == null || !NYHelper.isStringNotEmpty(organization.getId())){
+                    Toast.makeText(getApplicationContext(), getString(R.string.warn_empty_association), Toast.LENGTH_SHORT).show();
+                } else if (licenseType == null || !NYHelper.isStringNotEmpty(licenseType.getId())){
+                    Toast.makeText(getApplicationContext(), getString(R.string.warn_empty_license_type), Toast.LENGTH_SHORT).show();
+                } else if (!NYHelper.isStringNotEmpty(date)){
+                    Toast.makeText(getApplicationContext(), getString(R.string.warn_empty_schedule), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(diver)) {
                     Toast.makeText(getApplicationContext(), getString(R.string.warn_total_diver), Toast.LENGTH_SHORT).show();
                 } else {
@@ -347,7 +353,7 @@ public class DoCourseActivity extends BasicActivity implements
                     // TODO: ganti fragment yg dulu activity & yg dulu EXTRA sekarang BUNDLE
                     Intent intent;
                     if (type.equals("3")) {
-                        intent = new Intent(getApplicationContext(), DoTripResultActivity.class);
+                        intent = new Intent(getApplicationContext(), DoCourseResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
                         intent.putExtra(NYHelper.PICKED_MONTH, pickedMonth);
@@ -359,10 +365,8 @@ public class DoCourseActivity extends BasicActivity implements
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                            intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
-                        }
-                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
+                        intent.putExtra(NYHelper.ORGANIZATION, organization.toString());
+                        intent.putExtra(NYHelper.LICENSE_TYPE, licenseType.toString());
                         startActivity(intent);
                     } else if (type.equals("4") ){
 
@@ -384,15 +388,13 @@ public class DoCourseActivity extends BasicActivity implements
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                            intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
-                        }
-                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
+                        intent.putExtra(NYHelper.ORGANIZATION, organization.toString());
+                        intent.putExtra(NYHelper.LICENSE_TYPE, licenseType.toString());
                         startActivity(intent);
 
                     } else if (type.equals("5") || type.equals("6")){
 
-                        intent = new Intent(getApplicationContext(), DoTripResultActivity.class);
+                        intent = new Intent(getApplicationContext(), DoCourseResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
                         intent.putExtra(NYHelper.PICKED_MONTH, pickedMonth);
@@ -404,14 +406,12 @@ public class DoCourseActivity extends BasicActivity implements
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                            intent.putExtra(NYHelper.ECO_TRIP, 1);
-                        }
-                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
+                        intent.putExtra(NYHelper.ORGANIZATION, organization.toString());
+                        intent.putExtra(NYHelper.LICENSE_TYPE, licenseType.toString());
                         startActivity(intent);
 
                     } else {
-                        intent = new Intent(getApplicationContext(), DoTripResultActivity.class);
+                        intent = new Intent(getApplicationContext(), DoCourseResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
                         intent.putExtra(NYHelper.PICKED_MONTH, pickedMonth);
@@ -423,10 +423,8 @@ public class DoCourseActivity extends BasicActivity implements
                         intent.putExtra(NYHelper.SCHEDULE, date);
                         intent.putExtra(NYHelper.DIVER, diver);
                         intent.putExtra(NYHelper.TYPE, type);
-                        if (getIntent().hasExtra(NYHelper.IS_ECO_TRIP)) {
-                            intent.putExtra(NYHelper.ECO_TRIP, 1);
-                        }
-                        intent.putExtra(NYHelper.IS_DO_TRIP, true);
+                        intent.putExtra(NYHelper.ORGANIZATION, organization.toString());
+                        intent.putExtra(NYHelper.LICENSE_TYPE, licenseType.toString());
                         startActivity(intent);
                     }
 
@@ -656,6 +654,7 @@ public class DoCourseActivity extends BasicActivity implements
         date = String.valueOf(cal.getTimeInMillis()/1000);
         datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
     }
+
 
     @Override
     public void onChooseListener(Object object) {

@@ -1,6 +1,5 @@
-package com.nyelam.android.dotrip;
+package com.nyelam.android.docourse;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import com.nyelam.android.NYPagingBridge;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.diveservice.DetailServiceActivity;
-import com.nyelam.android.dodive.DoDiveSearchDiveServiceAdapter;
 import com.nyelam.android.dodive.DoDiveSearchResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
@@ -34,9 +32,9 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
  */
 
-public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements NYPagingBridge<DiveService> {
+public class DoCourseSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements NYPagingBridge<DiveService> {
 
-    private Activity activity;
+    private DoCourseResultActivity activity;
     private List<DiveService> diveServiceList;
     private String diver;
     private String date;
@@ -47,19 +45,11 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private int visibility = View.GONE;
 
-    public void setSortType(int sortType){
-        this.sortType = sortType;
-    }
-
     public void changeVisibility(int visibility) {
         this.visibility = visibility;
     }
 
-    public void sortData(){
-        Collections.sort(diveServiceList, new StudentDateComparator());
-    }
-
-    public DoTripDiveServiceAdapter(Activity activity, String diver, String date, String certificate, String type, String diverId) {
+    public DoCourseSearchAdapter(DoCourseResultActivity activity, String diver, String date, String certificate, String type, String diverId) {
         this.activity = activity;
         this.diver = diver;
         this.date = date;
@@ -72,7 +62,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_dive_service, parent, false);
-        return new DoTripDiveServiceAdapter.PromoViewHolder(v);
+        return new DoCourseSearchAdapter.PromoViewHolder(v);
     }
 
     @Override
@@ -83,32 +73,23 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
+
     @Override
-    public int getItemViewType(int position) {
-        return position;
+    public long getItemId(int position) {
+        return 0;
     }
 
     @Override
     public int getItemCount() {
-        int count = 0;
-        if (diveServiceList != null && !diveServiceList.isEmpty()) {
-            count += diveServiceList.size();
+        if (diveServiceList != null){
+            return diveServiceList.size();
         }
-        return count;
+        return 0;
     }
 
-    public void addResult(DiveService diveService) {
-        if (this.diveServiceList == null) {
-            this.diveServiceList = new ArrayList<>();
-        }
-        this.diveServiceList.add(diveService);
-    }
-
-    public void addResults(List<DiveService> diveServiceList) {
-        if (this.diveServiceList == null) {
-            this.diveServiceList = new ArrayList<>();
-        }
-        removeTheDuplicates(diveServiceList);
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public void addServices(List<DiveService> events, boolean isLatest) {
@@ -129,69 +110,37 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
+
+    public void addResult(DiveService diveService) {
+        if (this.diveServiceList == null) {
+            this.diveServiceList = new ArrayList<>();
+        }
+        this.diveServiceList.add(diveService);
+    }
+
+    public void addResults(List<DiveService> diveServiceList) {
+        if (this.diveServiceList == null) {
+            this.diveServiceList = new ArrayList<>();
+        }
+        removeTheDuplicates(diveServiceList);
+    }
+
+    public void setSortType(int sortType){
+        this.sortType = sortType;
+    }
+
+    public void sortData(){
+        Collections.sort(diveServiceList, new StudentDateComparator());
+    }
+
     public void clear() {
         this.diveServiceList = new ArrayList<>();
-    }
-
-    @Override
-    public void addItemIntoTop(DiveService item) {
-
-    }
-
-    @Override
-    public void addItemIntoBottom(DiveService item) {
-
-    }
-
-    @Override
-    public void addListIntoTop(List<DiveService> list) {
-        Collections.reverse(diveServiceList);
-        diveServiceList.addAll(list);
-        Collections.reverse(diveServiceList);
-    }
-
-    @Override
-    public void addListIntoBottom(List<DiveService> list) {
-        diveServiceList.addAll(list);
-    }
-
-    @Override
-    public List<DiveService> removeSameDatas(List<DiveService> latest) {
-        if(latest == null || latest.isEmpty()) {
-            return null;
-        }
-
-        List<DiveService> temp = latest;
-        if(diveServiceList != null && !diveServiceList.isEmpty() && diveServiceList.size() > 0){
-            for(int i = 0; i < diveServiceList.size(); i++) {
-                for(int j = 0; j < temp.size(); j++) {
-                    if(diveServiceList.get(i).getId().equals(temp.get(j).getId())) {
-                        temp.remove(j);
-                        break;
-                    }
-                }
-            }
-        }
-
-        return temp;
-    }
-
-    @Override
-    public boolean isDataSame(DiveService item) {
-        if(item == null) {
-            return true;
-        }
-        for(DiveService diveService : diveServiceList) {
-            if(diveService.getId().equals(item.getId())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     class PromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView featuredImageView;
+        private ImageView divingLicenseImageView;
         private TextView diveCenterNameTextView;
         private TextView serviceNameTextView;
         private TextView ratingTextView;
@@ -202,8 +151,6 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView totalDiveSpotTextView;
         private TextView totalDayTextView;
         private TextView visitedTextView;
-        private TextView scheduleTextView;
-        private ImageView divingLicenseImageView;
         private View itemView;
         private DiveService diveService;
 
@@ -220,7 +167,6 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
             totalDayTextView = (TextView) itemView.findViewById(R.id.total_day_textView);
             ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
             visitedTextView = (TextView) itemView.findViewById(R.id.visitor_textView);
-            scheduleTextView = (TextView) itemView.findViewById(R.id.schedule_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
 
             this.itemView = itemView;
@@ -239,11 +185,6 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 double normalPrice = Double.valueOf(diveService.getNormalPrice());
                 double specialPrice = Double.valueOf(diveService.getSpecialPrice());
-
-                scheduleTextView.setVisibility(View.VISIBLE);
-                if (diveService.getSchedule() != null) {
-                    scheduleTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getEndDate()));
-                }
 
                 if (diveService.isLicense()){
                     divingLicenseImageView.setVisibility(View.VISIBLE);
@@ -306,6 +247,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 }
 
+
                 //SET IMAGE
                 NYApplication application = (NYApplication) activity.getApplication();
                 Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
@@ -358,12 +300,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
             if (diveService != null ) intent.putExtra(NYHelper.SERVICE, diveService.toString());
             intent.putExtra(NYHelper.DIVER, diver);
             intent.putExtra(NYHelper.SCHEDULE, date);
-            if (diveService.isLicense()){
-                intent.putExtra(NYHelper.CERTIFICATE, "1");
-            } else {
-                intent.putExtra(NYHelper.CERTIFICATE, "0");
-            }
-            intent.putExtra(NYHelper.IS_DO_TRIP, true);
+            intent.putExtra(NYHelper.CERTIFICATE, certificate);
             if (diveService != null && diveService.getDiveCenter() != null) {
                 intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
             }
@@ -390,8 +327,92 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         diveServiceList.addAll(temp);
+
     }
 
+    private View onCreateLoadingView(View view) {
+        if(view == null) {
+            view = View.inflate(activity, R.layout.view_loading, null);
+        }
+        view.setVisibility(visibility);
+        return view;
+    }
+
+    @Override
+    public void addItemIntoTop(DiveService item) {
+
+    }
+
+    @Override
+    public void addItemIntoBottom(DiveService item) {
+
+    }
+
+    @Override
+    public void addListIntoTop(List<DiveService> list) {
+        Collections.reverse(diveServiceList);
+        diveServiceList.addAll(list);
+        Collections.reverse(diveServiceList);
+    }
+
+    @Override
+    public void addListIntoBottom(List<DiveService> list) {
+        diveServiceList.addAll(list);
+    }
+
+    @Override
+    public List<DiveService> removeSameDatas(List<DiveService> latest) {
+        if(latest == null || latest.isEmpty()) {
+            return null;
+        }
+
+        List<DiveService> temp = latest;
+        if(diveServiceList != null && !diveServiceList.isEmpty() && diveServiceList.size() > 0){
+            for(int i = 0; i < diveServiceList.size(); i++) {
+                for(int j = 0; j < temp.size(); j++) {
+                    if(diveServiceList.get(i).getId().equals(temp.get(j).getId())) {
+                        temp.remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return temp;
+    }
+
+    @Override
+    public boolean isDataSame(DiveService item) {
+        if(item == null) {
+            return true;
+        }
+        for(DiveService diveService : diveServiceList) {
+            if(diveService.getId().equals(item.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*@Override
+    public List<Event> removeSameDatas(List<Event> latest) {
+        if(latest == null || latest.isEmpty()) {
+            return null;
+        }
+        List<Event> temp = latest;
+        if(events != null && !events.isEmpty() && events.size() > 0){
+            for(int i = 0; i < events.size(); i++) {
+                for(int j = 0; j < temp.size(); j++) {
+                    if(events.get(i).getId().equals(temp.get(j).getId())) {
+                        temp.remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return temp;
+    }*/
 
     class StudentDateComparator implements Comparator<DiveService> {
         public int compare(DiveService s1, DiveService s2) {

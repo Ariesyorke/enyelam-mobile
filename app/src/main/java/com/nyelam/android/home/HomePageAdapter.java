@@ -421,6 +421,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
                     }
 
+                    if (diveService.getSchedule() != null) {
+                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(diveService.getSchedule().getStartDate()));
+                    }
+
                     context.startActivity(intent);
                 }
             });
