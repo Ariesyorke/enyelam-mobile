@@ -49,6 +49,7 @@ public class DoDiveSearchActivity extends BasicActivity {
     private boolean certificate;
     private boolean isApply;
     private SearchResult searchResult;
+    private boolean isDoCourse = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class DoDiveSearchActivity extends BasicActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        doDiveSearchAdapter = new DoDiveSearchAdapter(this, date, diver, certificate);
+        doDiveSearchAdapter = new DoDiveSearchAdapter(this, date, diver, certificate, isDoCourse);
         recyclerView.setAdapter(doDiveSearchAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -141,9 +142,9 @@ public class DoDiveSearchActivity extends BasicActivity {
                     labelTextView.setText(getResources().getString(R.string.search_results));
                     NYDoDiveSearchTypeRequest req = null;
                     if (getIntent().hasExtra(NYHelper.IS_DO_COURSE)) {
-                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword, "1");
+                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword, "3");
                     } else {
-                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword);
+                        req = new NYDoDiveSearchTypeRequest(DoDiveSearchActivity.this, keyword, "1");
                     }
                     spcMgr.execute(req, "search_result", DurationInMillis.NEVER, onSearchKeywordRequest());
 //                    spcMgr.execute(req, onSearchKeywordRequest());
@@ -157,7 +158,18 @@ public class DoDiveSearchActivity extends BasicActivity {
     private void loadHistoryCache() {
         doDiveSearchAdapter.clear();
         KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(DoDiveSearchActivity.this);
-        if (keywordHistoryStorage.getSearchResults() != null && keywordHistoryStorage.getSearchResults().size() > 0){
+
+        if (isDoCourse && keywordHistoryStorage.getDoCourseSearchResults() != null && keywordHistoryStorage.getDoCourseSearchResults().size() > 0){
+            noResultTextView.setVisibility(View.GONE);
+            doDiveSearchAdapter.clear();
+
+            List<SearchResult> searchList = new ArrayList<>();
+            searchList = keywordHistoryStorage.getDoCourseSearchResults();
+            Collections.reverse(searchList);
+            doDiveSearchAdapter.addResults(searchList);
+            doDiveSearchAdapter.notifyDataSetChanged();
+
+        } else if (!isDoCourse && keywordHistoryStorage.getSearchResults() != null && keywordHistoryStorage.getSearchResults().size() > 0){
             noResultTextView.setVisibility(View.GONE);
             doDiveSearchAdapter.clear();
 

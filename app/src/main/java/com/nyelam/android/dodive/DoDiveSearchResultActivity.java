@@ -152,6 +152,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
             }
         });
 
+
         /*filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

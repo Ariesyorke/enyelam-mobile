@@ -43,12 +43,21 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<SearchResult> searchResults;
     private String date, diver;
     private boolean certificate;
+    private boolean isDoCourse;
 
     public DoDiveSearchAdapter(Activity context, String date, String diver, boolean certificate) {
         this.context = context;
         this.date = date;
         this.diver = diver;
         this.certificate = certificate;
+    }
+
+    public DoDiveSearchAdapter(Activity context, String date, String diver, boolean certificate, boolean isDoCourse) {
+        this.context = context;
+        this.date = date;
+        this.diver = diver;
+        this.certificate = certificate;
+        this.isDoCourse = isDoCourse;
     }
 
     @Override
@@ -204,24 +213,59 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void onClick(View v) {
 
-            // TODO: ini cache storage
-            KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(context);
-            List<SearchResult> searchResults = keywordHistoryStorage.getSearchResults();
-            if (searchResults == null) searchResults = new ArrayList<>();
+            if (isDoCourse){
 
-            // TODO: cehck if object didnt exist add to storage
-            for (SearchResult s : searchResults) {
-                if (s != null && NYHelper.isStringNotEmpty(s.getId()) && searchResult != null && NYHelper.isStringNotEmpty(searchResult.getId()) && s.getId().equals(searchResult.getId()) && s.getType().equals(searchResult.getType())){
-                    searchResults.remove(s);
-                    break;
+                // TODO: ini cache storage
+                KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(context);
+                List<SearchResult> doCourseSearchResults = keywordHistoryStorage.getDoCourseSearchResults();
+                if (searchResults == null) searchResults = new ArrayList<>();
+
+                // TODO: cehck if object didnt exist add to storage
+                for (SearchResult s : searchResults) {
+                    if (s != null && NYHelper.isStringNotEmpty(s.getId()) && searchResult != null && NYHelper.isStringNotEmpty(searchResult.getId()) && s.getId().equals(searchResult.getId()) && s.getType().equals(searchResult.getType())){
+                        searchResults.remove(s);
+                        break;
+                    }
                 }
+
+                if (searchResults.size() > 5) searchResults.remove(4);
+                searchResults.add(searchResult);
+
+                keywordHistoryStorage.setDoCourseSearchResults(doCourseSearchResults);
+
+                List<SearchResult> searchResults = keywordHistoryStorage.getSearchResults();
+                keywordHistoryStorage.setSearchResults(searchResults);
+
+                keywordHistoryStorage.save();
+
+
+            } else {
+
+                // TODO: ini cache storage
+                KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(context);
+                List<SearchResult> searchResults = keywordHistoryStorage.getSearchResults();
+                if (searchResults == null) searchResults = new ArrayList<>();
+
+                // TODO: cehck if object didnt exist add to storage
+                for (SearchResult s : searchResults) {
+                    if (s != null && NYHelper.isStringNotEmpty(s.getId()) && searchResult != null && NYHelper.isStringNotEmpty(searchResult.getId()) && s.getId().equals(searchResult.getId()) && s.getType().equals(searchResult.getType())){
+                        searchResults.remove(s);
+                        break;
+                    }
+                }
+
+                if (searchResults.size() > 5) searchResults.remove(4);
+                searchResults.add(searchResult);
+
+                keywordHistoryStorage.setSearchResults(searchResults);
+
+                List<SearchResult> doCourseSearchResults = keywordHistoryStorage.getDoCourseSearchResults();
+                keywordHistoryStorage.setDoCourseSearchResults(doCourseSearchResults);
+
+                keywordHistoryStorage.save();
             }
 
-            if (searchResults.size() > 5) searchResults.remove(4);
-            searchResults.add(searchResult);
 
-            keywordHistoryStorage.setSearchResults(searchResults);
-            keywordHistoryStorage.save();
 
             /*Intent intent = new Intent(context, DoDiveActivity.class);
 
