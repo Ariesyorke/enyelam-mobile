@@ -41,6 +41,8 @@ public class DiveService implements Parseable {
     private static String KEY_DIVE_CENTER = "dive_center";
     private static String KEY_IMAGES = "images";
     private static String KEY_DESCRIPTION = "description";
+    private static String KEY_ORGANIZATION= "organization";
+    private static String KEY_LICENSE_TYPE = "license";
 
     private String id;
     private String name;
@@ -65,6 +67,8 @@ public class DiveService implements Parseable {
     private double specialPrice;
     private DiveCenter diveCenter;
     private String description;
+    private Organization organization;
+    private LicenseType licenseType;
 
     public String getDescription() {
         return description;
@@ -258,6 +262,22 @@ public class DiveService implements Parseable {
 
     public void setDiveCenter(DiveCenter diveCenter) {
         this.diveCenter = diveCenter;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 
     @Override
@@ -506,6 +526,30 @@ public class DiveService implements Parseable {
             }
         }
 
+
+        if(!obj.isNull(KEY_ORGANIZATION)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_ORGANIZATION);
+                if(o != null && o.length() > 0) {
+                    organization = new Organization();
+                    organization.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(!obj.isNull(KEY_LICENSE_TYPE)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_LICENSE_TYPE);
+                if(o != null && o.length() > 0) {
+                    licenseType = new LicenseType();
+                    licenseType.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -700,6 +744,28 @@ public class DiveService implements Parseable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        try{
+            if(getOrganization()!=null){
+                JSONObject objOrgan = new JSONObject(getOrganization().toString());
+                obj.put(KEY_ORGANIZATION, objOrgan);
+            } else {
+                obj.put(KEY_ORGANIZATION, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getLicenseType()!=null){
+                JSONObject objLicenseType = new JSONObject(getLicenseType().toString());
+                obj.put(KEY_LICENSE_TYPE, objLicenseType);
+            } else {
+                obj.put(KEY_LICENSE_TYPE, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
         }
 
         try {

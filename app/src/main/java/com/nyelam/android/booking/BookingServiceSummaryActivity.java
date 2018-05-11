@@ -50,6 +50,7 @@ import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.NTransactionResult;
 import com.nyelam.android.data.Organization;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.http.NYDoDiveServiceOrderResubmitRequest;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
@@ -116,6 +117,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private String veritransToken;
     private TextView expiredDateTextView;
     private CountDownTimer countDownTimer;
+    private boolean isDoCourse;
 
     private PayPalConfiguration payPalConfiguration;
     //Client ID Paypal
@@ -440,6 +442,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
             if (intent.hasExtra(NYHelper.NOTE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.NOTE))){
                 noteEditText.setText(intent.getStringExtra(NYHelper.NOTE));
+            }
+
+            if (intent.hasExtra(NYHelper.IS_DO_COURSE)){
+                isDoCourse = intent.getBooleanExtra(NYHelper.IS_DO_COURSE, false);
             }
 
             if (intent.hasExtra(NYHelper.CART_RETURN)){
@@ -951,7 +957,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void requestCartToken(){
         progressDialog.show();
         try {
-            NYDoDiveServiceCartRequest req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId());
+            NYDoDiveServiceCartRequest req = null;
+            if (!isDoCourse){
+                req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId());
+            } else if (isDoCourse && diveService.getOrganization() != null && NYHelper.isStringNotEmpty(diveService.getOrganization().getId())
+                    && diveService.getLicenseType() != null && NYHelper.isStringNotEmpty(diveService.getLicenseType().getId())) {
+                req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId(), diveService.getOrganization().getId(), diveService.getLicenseType().getId());
+            }
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();

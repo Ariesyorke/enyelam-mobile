@@ -169,7 +169,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
         try {
-            req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId());
+            if (!isDoCourse){
+                req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId());
+            } else if (isDoCourse && newDiveService.getOrganization() != null && NYHelper.isStringNotEmpty(newDiveService.getOrganization().getId())
+                    && newDiveService.getLicenseType() != null && NYHelper.isStringNotEmpty(newDiveService.getLicenseType().getId())) {
+                    req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId(), newDiveService.getOrganization().getId(), newDiveService.getLicenseType().getId());
+            }
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -388,6 +393,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.SCHEDULE, schedule);
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.DIVE_CENTER, newDiveService.getDiveCenter().toString());
+                intent.putExtra(NYHelper.IS_DO_COURSE, isDoCourse);
                 startActivity(intent);
             }
         };
