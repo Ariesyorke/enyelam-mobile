@@ -42,6 +42,7 @@ import com.nyelam.android.dotrip.DoTripKeywordActivity;
 import com.nyelam.android.dotrip.DoTripResultActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYDoCourseSuggestionServiceRequest;
 import com.nyelam.android.http.NYDoTripSuggestionServiceRequest;
 import com.nyelam.android.http.NYMasterLicenseTypeRequest;
 import com.nyelam.android.http.NYMasterOrganizationRequest;
@@ -94,7 +95,7 @@ public class DoCourseActivity extends BasicActivity implements
     private ProgressBar associationProgressBar, divingLicenseProgressBar;
 
     //suggestion
-    private DoDiveDiveServiceSuggestionAdapter diveServiceSuggestionAdapter;
+    private DoCourseSuggestionAdapter doCourseSuggestionAdapter;
     private RecyclerView suggestionRecyclerView;
     private LinearLayout suggestionLinearLayout;
 
@@ -112,6 +113,7 @@ public class DoCourseActivity extends BasicActivity implements
         initExtra();
         initControl();
         initAdapter();
+        getOrganizationRequest();
     }
 
     private void initAdapter() {
@@ -131,13 +133,13 @@ public class DoCourseActivity extends BasicActivity implements
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
         suggestionRecyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels,0,spacingInPixels,spacingInPixels));
 
-        diveServiceSuggestionAdapter = new DoDiveDiveServiceSuggestionAdapter(DoCourseActivity.this);
-        suggestionRecyclerView.setAdapter(diveServiceSuggestionAdapter);
+        doCourseSuggestionAdapter = new DoCourseSuggestionAdapter(DoCourseActivity.this);
+        suggestionRecyclerView.setAdapter(doCourseSuggestionAdapter);
 
         suggestionRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(DoCourseActivity.this, suggestionRecyclerView, new DoDiveDiveServiceSuggestionAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
-                DiveService diveService = diveServiceSuggestionAdapter.getDiveService(position);
+                DiveService diveService = doCourseSuggestionAdapter.getDiveService(position);
                 diverId = diveService.getId();
                 keyword = diveService.getName();
                 type = "4";
@@ -274,7 +276,7 @@ public class DoCourseActivity extends BasicActivity implements
                 Intent intent = new Intent(DoCourseActivity.this, DoDiveSearchActivity.class);
                 intent.putExtra(NYHelper.SCHEDULE, date);
                 intent.putExtra(NYHelper.DIVER, diver);
-                intent.putExtra(NYHelper.IS_DO_COURSE, 1);
+                intent.putExtra(NYHelper.IS_DO_COURSE, true);
                 if (isDoTripBanner) {
                     intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
                 }
@@ -390,6 +392,7 @@ public class DoCourseActivity extends BasicActivity implements
                         intent.putExtra(NYHelper.TYPE, type);
                         intent.putExtra(NYHelper.ORGANIZATION, organization.toString());
                         intent.putExtra(NYHelper.LICENSE_TYPE, licenseType.toString());
+                        intent.putExtra(NYHelper.IS_DO_COURSE, true);
                         startActivity(intent);
 
                     } else if (type.equals("5") || type.equals("6")){
@@ -501,7 +504,7 @@ public class DoCourseActivity extends BasicActivity implements
 
 
     private void getSuggetionRequest() {
-        NYDoTripSuggestionServiceRequest req = new NYDoTripSuggestionServiceRequest(getApplicationContext());
+        NYDoCourseSuggestionServiceRequest req = new NYDoCourseSuggestionServiceRequest(getApplicationContext());
         spcMgr.execute(req, onSearchServiceRequest());
 
         // TODO: load data dummy, to test and waitting for API request
@@ -512,8 +515,8 @@ public class DoCourseActivity extends BasicActivity implements
         return new RequestListener<DiveServiceList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                diveServiceSuggestionAdapter.clear();
-                diveServiceSuggestionAdapter.notifyDataSetChanged();
+                doCourseSuggestionAdapter.clear();
+                doCourseSuggestionAdapter.notifyDataSetChanged();
                 suggestionLinearLayout.setVisibility(View.GONE);
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
             }
@@ -522,12 +525,12 @@ public class DoCourseActivity extends BasicActivity implements
             public void onRequestSuccess(DiveServiceList results) {
                 if (results != null){
                     suggestionLinearLayout.setVisibility(View.VISIBLE);
-                    diveServiceSuggestionAdapter.clear();
-                    diveServiceSuggestionAdapter.addResults(results.getList());
-                    diveServiceSuggestionAdapter.notifyDataSetChanged();
+                    doCourseSuggestionAdapter.clear();
+                    doCourseSuggestionAdapter.addResults(results.getList());
+                    doCourseSuggestionAdapter.notifyDataSetChanged();
                 } else {
-                    diveServiceSuggestionAdapter.clear();
-                    diveServiceSuggestionAdapter.notifyDataSetChanged();
+                    doCourseSuggestionAdapter.clear();
+                    doCourseSuggestionAdapter.notifyDataSetChanged();
                     suggestionLinearLayout.setVisibility(View.GONE);
                 }
 
@@ -583,9 +586,8 @@ public class DoCourseActivity extends BasicActivity implements
     protected void onStart() {
         super.onStart();
         spcMgr.start(getApplicationContext());
-        getOrganizationRequest();
+        getSuggetionRequest();
     }
-
 
     @Override
     protected void onStop() {
@@ -596,7 +598,6 @@ public class DoCourseActivity extends BasicActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        getSuggetionRequest();
     }
 
     public void openSchedule(){

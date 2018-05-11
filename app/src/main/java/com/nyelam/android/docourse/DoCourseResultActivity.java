@@ -81,12 +81,12 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_course_result);
-        Toast.makeText(this, "DoCourse 1", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "DoCourse 1", Toast.LENGTH_SHORT).show();
         initView();
         initExtra();
         initAdapter();
         //initRequest();
-        Toast.makeText(this, "DoCourse 2", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "DoCourse 2", Toast.LENGTH_SHORT).show();
         // TODO: hapus ini
         //requestPriceRange(false);
         initRequest(false);
@@ -422,7 +422,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
 
         try {
 
-            Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 
             if (progressBar != null) {
                 progressBar.setVisibility(View.GONE);
@@ -445,7 +445,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                 noResultTextView.setVisibility(View.VISIBLE);
             }
 
-            Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
 
 
         } catch (JSONException e) {
@@ -548,7 +548,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
 
     public void requestPriceRange(boolean isRefresh){
 
-        Toast.makeText(this, "DoCourse 3 price range", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "DoCourse 3 price range", Toast.LENGTH_SHORT).show();
 
 
         if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
@@ -560,7 +560,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
             req = new NYGetMinMaxPriceRequest(this, "1", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType), false);
 
         } catch (Exception e) {
-            Toast.makeText(this, "DoCourse 3 error", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "DoCourse 3 error", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         spcMgr.execute(req, onGetMinMaxPriceRequest(isRefresh));

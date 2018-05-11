@@ -62,7 +62,7 @@ public class DetailServiceFragment extends Fragment {
     private TextView titleTextView, scheduleTextView, diveCenterNameTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
     private TextView ratingTextView, visitedTextView, categoryTextView;
     private TextView addressTextView, phoneNumberTextView;
-    private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView;
+    private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView, openWaterTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView, icAccomodationImageView;
     private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout, diveCenterLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
@@ -70,7 +70,7 @@ public class DetailServiceFragment extends Fragment {
 
     private DoDiveDiveServiceSuggestionAdapter relatedDiveServiceAdapter;
     private RecyclerView relatedPostRecyclerView;
-    private LinearLayout relatedPostLinearLayout;
+    private LinearLayout relatedPostLinearLayout, totalDiveLinearLayout, tripDurationsLinearLayout, totalDiveSpotLinearLayout, openWaterLinearLayout, bannerLinearLayout;
 
     public DetailServiceFragment() {
         // Required empty public constructor
@@ -106,6 +106,17 @@ public class DetailServiceFragment extends Fragment {
         initView(view);
         initAdapter();
         initControl();
+        initStateDoCourse();
+    }
+
+    private void initStateDoCourse() {
+        if (activity.isDoCourse){
+            diveSpotsTextView.setVisibility(View.GONE);
+            totalDiveSpotLinearLayout.setVisibility(View.GONE);
+            totalDiveLinearLayout.setVisibility(View.GONE);
+            openWaterLinearLayout.setVisibility(View.VISIBLE);
+            bannerLinearLayout.setVisibility(View.GONE);
+        }
     }
 
     private void initControl() {
@@ -146,6 +157,7 @@ public class DetailServiceFragment extends Fragment {
         totalDivesTextView = (TextView) v.findViewById(R.id.total_dive_textView);
         tripDurationsTextView = (TextView) v.findViewById(R.id.trip_durations_textView);
         totalDiveSpotsTextView = (TextView) v.findViewById(R.id.total_dive_spot_textView);
+        openWaterTextView = (TextView) v.findViewById(R.id.open_water_textView);
 
         addressTextView = (TextView) v.findViewById(R.id.address_textView);
         phoneNumberTextView = (TextView) v.findViewById(R.id.phone_number_textView);
@@ -174,6 +186,12 @@ public class DetailServiceFragment extends Fragment {
 
         relatedPostLinearLayout = (LinearLayout) v.findViewById(R.id.related_service_linearLayout);
         relatedPostRecyclerView = (RecyclerView) v.findViewById(R.id.related_service_recyclerView);
+
+        totalDiveLinearLayout = (LinearLayout) v.findViewById(R.id.total_dive_linearLayout);
+        tripDurationsLinearLayout = (LinearLayout) v.findViewById(R.id.trip_durations_linearLayout);
+        totalDiveSpotLinearLayout = (LinearLayout) v.findViewById(R.id.total_dive_spot_linearLayout);
+        openWaterLinearLayout = (LinearLayout) v.findViewById(R.id.open_water_linearLayout);
+        bannerLinearLayout = (LinearLayout) v.findViewById(R.id.banner_linearLayout);
     }
 
     public void setContent(){
@@ -242,6 +260,14 @@ public class DetailServiceFragment extends Fragment {
             } else {
                 tripDurationsTextView.setText(": "+String.valueOf(service.getDays())+" Day");
             }
+
+
+            if (service.isOpenWater()){
+                openWaterTextView.setText(": "+getString(R.string.yes));
+            } else {
+                openWaterTextView.setText(": "+getString(R.string.no));
+            }
+
 
             if (service.getDiveCenter() != null && service.getDiveCenter().getContact() !=  null){
                 if (NYHelper.isStringNotEmpty(service.getDiveCenter().getContact().getPhoneNumber()))phoneNumberTextView.setText(service.getDiveCenter().getContact().getPhoneNumber());

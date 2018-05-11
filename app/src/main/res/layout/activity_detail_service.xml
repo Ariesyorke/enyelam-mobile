@@ -34,7 +34,6 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:titleEnabled="false">
 
-
                 <RelativeLayout
                     android:id="@+id/banner_relativeLayout"
                     android:layout_width="match_parent"

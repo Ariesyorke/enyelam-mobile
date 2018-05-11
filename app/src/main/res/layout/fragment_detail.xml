@@ -222,6 +222,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/total_dive_linearLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/padding_half"
@@ -249,6 +250,7 @@
 
 
                                 <LinearLayout
+                                    android:id="@+id/trip_durations_linearLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="3dp"
@@ -276,6 +278,7 @@
 
 
                                 <LinearLayout
+                                    android:id="@+id/total_dive_spot_linearLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="3dp">
@@ -291,6 +294,34 @@
 
                                     <com.nyelam.android.view.font.NYTextView
                                         android:id="@+id/total_dive_spot_textView"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text=": 0"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/ny_grey8"
+                                        app:fontTextStyle="light" />
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:id="@+id/open_water_linearLayout"
+                                    android:visibility="gone"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp">
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Open Water"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/ny_grey8"
+                                        app:fontTextStyle="light" />
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:id="@+id/open_water_textView"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
@@ -367,6 +398,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/banner_linearLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/padding_double"

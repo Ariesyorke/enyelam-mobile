@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    card_view:cardElevation="4dp"
+    card_view:cardMaxElevation="4dp"
+    card_view:cardCornerRadius="@dimen/padding_half"
+    android:layout_height="wrap_content"
+    app:ignore="NamespaceTypo">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/featured_imageView"
+                android:src="@drawable/bg_placeholder"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <View
+                android:background="@color/ny_dark_transparent_list"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+
+            <com.nyelam.android.view.font.NYTextView
+                card_view:fontTextStyle="semiBold"
+                android:id="@+id/service_name_textView"
+                android:layout_above="@+id/dive_center_name_textView"
+                android:text="Service Name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/dive_center_name_textView"
+                android:text="by Dive Center"
+                android:textSize="14sp"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginBottom="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_margin="@dimen/padding"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--<LinearLayout
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/padding_half"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/total_dive_textView"
+                    android:text="1 Dive 1 Day"
+                    android:textSize="14dp"
+                    android:textColor="@color/ny_black1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>-->
+
+            <com.nyelam.android.view.font.NYTextView
+                android:visibility="gone"
+                android:id="@+id/schedule_textView"
+                android:text="-"
+                android:textSize="16dp"
+                android:textColor="@color/ny_black2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:fontTextStyle="light"/>
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
+                    android:id="@+id/day_class_textView"
+                    android:text="0 Day(s) class"
+                    android:textSize="14dp"
+                    android:textColor="@color/ny_black2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
+                    android:text=" | "
+                    android:textSize="14dp"
+                    android:textColor="@color/ny_black2"
+                    android:layout_margin="@dimen/padding_half"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="light"
+                    android:id="@+id/day_onsite_textView"
+                    android:text="0 Day(s) on-site"
+                    android:textSize="14dp"
+                    android:textColor="@color/ny_black2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="@style/StarRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:rating="0"
+                    android:stepSize="1.0"
+                    android:layout_gravity="start" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/rating_textView"
+                    android:text="5.0"
+                    android:textSize="14sp"
+                    android:textColor="@color/ny_black1"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <TextView
+                android:visibility="gone"
+                android:text="Start from"
+                android:textSize="16sp"
+                android:textColor="@color/ny_black1"
+                android:layout_marginTop="@dimen/padding_half"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.nyelam.android.view.font.NYStrikethroughTextView
+                android:visibility="gone"
+                android:id="@+id/price_strikethrough_textView"
+                android:text="Rp 123.456"
+                android:textSize="14sp"
+                android:textColor="@color/ny_black2"
+                android:layout_marginTop="@dimen/padding_half"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    card_view:fontTextStyle="semiBold"
+                    android:id="@+id/price_textView"
+                    android:text="Rp 0,-"
+                    android:textSize="18sp"
+                    android:textColor="@color/ny_orange"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_toRightOf="@+id/price_textView"
+                    android:text=" / pax"
+                    card_view:fontTextStyle="light"
+                    android:textSize="14sp"
+                    android:textColor="@color/ny_black2"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/diving_license_imageView"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_license_orange"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <!--<com.iarcuschin.simpleratingbar.SimpleRatingBar
+                android:layout_marginTop="@dimen/padding_half"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_gravity="start"
+                card_view:srb_gravity="left"
+                app:srb_starSize="14dp"
+                app:srb_numberOfStars="5"
+                app:srb_rating="3"
+                app:srb_stepSize="0.5"
+                app:srb_borderColor="@color/blue"
+                app:srb_fillColor="@color/light_blue" />-->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

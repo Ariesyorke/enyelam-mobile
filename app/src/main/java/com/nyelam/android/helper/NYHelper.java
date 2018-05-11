@@ -155,18 +155,24 @@ public class NYHelper {
 
         //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
         //String monthname=(String)android.text.format.DateFormat.format("MMMM", new Date());
-        String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
-
-        /*try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM");
-            simpleDateFormat.setCalendar(c);
-            monthString = simpleDateFormat.format(c.getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+        String monthString = (String)android.text.format.DateFormat.format("MMM", c.getTime());
 
         return (String.valueOf(day) + " " + monthString + " " + String.valueOf(year));
+    }
+
+
+    public static String setMillisToMonthAndYear(long millis) {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(millis*1000);
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+
+        //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        String monthString = (String)android.text.format.DateFormat.format("MMM", c.getTime());
+
+        return (monthString + " " + String.valueOf(year));
     }
 
     public static String setMillisToDateMonth(long millis) {
@@ -177,7 +183,9 @@ public class NYHelper {
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-        String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        //String monthString = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+
+        String monthString = (String)android.text.format.DateFormat.format("MMM", c.getTime());
 
         return (monthString + " " + String.valueOf(day) + ", " + String.valueOf(year));
     }

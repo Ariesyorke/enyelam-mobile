@@ -75,8 +75,6 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-
-
     @Override
     public int getItemViewType(int position) {
         return position;
@@ -218,18 +216,18 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 // TODO: ini cache storage
                 KeywordHistoryStorage keywordHistoryStorage = new KeywordHistoryStorage(context);
                 List<SearchResult> doCourseSearchResults = keywordHistoryStorage.getDoCourseSearchResults();
-                if (searchResults == null) searchResults = new ArrayList<>();
+                if (doCourseSearchResults == null) doCourseSearchResults = new ArrayList<>();
 
                 // TODO: cehck if object didnt exist add to storage
-                for (SearchResult s : searchResults) {
+                for (SearchResult s : doCourseSearchResults) {
                     if (s != null && NYHelper.isStringNotEmpty(s.getId()) && searchResult != null && NYHelper.isStringNotEmpty(searchResult.getId()) && s.getId().equals(searchResult.getId()) && s.getType().equals(searchResult.getType())){
-                        searchResults.remove(s);
+                        doCourseSearchResults.remove(s);
                         break;
                     }
                 }
 
-                if (searchResults.size() > 5) searchResults.remove(4);
-                searchResults.add(searchResult);
+                if (doCourseSearchResults.size() > 5) doCourseSearchResults.remove(4);
+                doCourseSearchResults.add(searchResult);
 
                 keywordHistoryStorage.setDoCourseSearchResults(doCourseSearchResults);
 

@@ -25,11 +25,13 @@ public class DiveService implements Parseable {
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_DIVE_SPOTS = "dive_spot";
     private static String KEY_DAYS = "days";
+    private static String KEY_DAY_ON_SITE = "day_on_site";
     private static String KEY_TOTAL_DIVES = "total_dives";
     private static String KEY_TOTAL_DAY = "total_day";
     private static String KEY_TOTAL_DIVE_SPOTS = "total_divespot";
     private static String KEY_VISITED = "visited";
     private static String KEY_LICENSE = "license";
+    private static String KEY_OPEN_WATER = "open_water";
     private static String KEY_MIN_PERSON = "min_person";
     private static String KEY_MAX_PERSON = "max_person";
     private static String KEY_SCHEDULE = "schedule";
@@ -49,8 +51,10 @@ public class DiveService implements Parseable {
     private String featuredImage;
     private List<DiveSpot> diveSpots;
     private int days;
+    private int dayOnSite;
     private int totalDives;
     private int totalDiveSpots;
+    private boolean openWater;
     private int visited;
     private boolean license;
     private int minPerson;
@@ -152,6 +156,14 @@ public class DiveService implements Parseable {
         this.days = days;
     }
 
+    public int getDayOnSite() {
+        return dayOnSite;
+    }
+
+    public void setDayOnSite(int dayOnSite) {
+        this.dayOnSite = dayOnSite;
+    }
+
     public int getTotalDives() {
         return totalDives;
     }
@@ -166,6 +178,14 @@ public class DiveService implements Parseable {
 
     public void setTotalDiveSpots(int totalDiveSpots) {
         this.totalDiveSpots = totalDiveSpots;
+    }
+
+    public boolean isOpenWater() {
+        return openWater;
+    }
+
+    public void setOpenWater(boolean openWater) {
+        this.openWater = openWater;
     }
 
     public int getVisited() {
@@ -294,9 +314,16 @@ public class DiveService implements Parseable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         try {
             if (!obj.isNull(KEY_DAYS)) {
                 setDays(obj.getInt(KEY_DAYS));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_DAY_ON_SITE)) {
+                setDayOnSite(obj.getInt(KEY_DAY_ON_SITE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -311,6 +338,15 @@ public class DiveService implements Parseable {
                 setTotalDiveSpots(obj.getInt(KEY_TOTAL_DIVE_SPOTS));
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+
+
+        try {
+            if (!obj.isNull(KEY_OPEN_WATER) && obj.get(KEY_OPEN_WATER) instanceof Boolean) {
+                setOpenWater(obj.getBoolean(KEY_OPEN_WATER));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
 
         try {
             if (!obj.isNull(KEY_VISITED)) {
@@ -536,6 +572,12 @@ public class DiveService implements Parseable {
         }
 
         try {
+            obj.put(KEY_DAY_ON_SITE, getDayOnSite());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
             obj.put(KEY_TOTAL_DIVES, getTotalDives());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -553,8 +595,15 @@ public class DiveService implements Parseable {
             e.printStackTrace();
         }
 
+
         try {
             obj.put(KEY_LICENSE, isLicense());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_OPEN_WATER, isOpenWater());
         } catch (JSONException e) {
             e.printStackTrace();
         }

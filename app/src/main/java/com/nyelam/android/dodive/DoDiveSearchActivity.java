@@ -15,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
@@ -22,11 +23,13 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchResultList;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveSearchTypeRequest;
 import com.nyelam.android.storage.KeywordHistoryStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.binary.InFileBigInputStreamObjectPersister;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -60,6 +63,32 @@ public class DoDiveSearchActivity extends BasicActivity {
         initControl();
         initAdapter();
         initFirstData();
+        //Toast.makeText(this, "hello "+String.valueOf(isDoCourse), Toast.LENGTH_SHORT).show();
+        //debugStorage();
+    }
+
+    private void debugStorage() {
+        KeywordHistoryStorage keywordStorage = new KeywordHistoryStorage(this);
+
+        if (keywordStorage.getSearchResults() != null){
+            NYLog.e("Search Result DoDive size : "+keywordStorage.getSearchResults().size());
+            if (keywordStorage.getSearchResults().size() > 0){
+                NYLog.e("Search Result DoDive Values : "+keywordStorage.getSearchResults().toString());
+            }
+        } else {
+            NYLog.e("Search Result DoDive Values : NULL");
+        }
+
+
+        if (keywordStorage.getDoCourseSearchResults() != null){
+            NYLog.e("Search Result DoCourse size : "+keywordStorage.getDoCourseSearchResults().size());
+            if (keywordStorage.getDoCourseSearchResults().size() > 0){
+                NYLog.e("Search Result DoCourse Values : "+keywordStorage.getDoCourseSearchResults().toString());
+            }
+        } else {
+            NYLog.e("Search Result DoCourse Values : NULL");
+        }
+
     }
 
     private void initFirstData() {
@@ -82,6 +111,10 @@ public class DoDiveSearchActivity extends BasicActivity {
 
             if (intent.hasExtra(NYHelper.DIVER)){
                 diver = intent.getStringExtra(NYHelper.DIVER);
+            }
+
+            if (intent.hasExtra(NYHelper.IS_DO_COURSE)){
+                isDoCourse = intent.getBooleanExtra(NYHelper.IS_DO_COURSE, false);
             }
 
             /*if (intent.hasExtra(NYHelper.IS_ECO_TRIP)){

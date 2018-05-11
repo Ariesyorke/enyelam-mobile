@@ -104,6 +104,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     // TODO: diveSpotID and Type is not used in Cart 
     private String diveSpotId;
     protected boolean isDoTrip;
+    protected boolean isDoCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +186,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 isDoTrip = extras.getBoolean(NYHelper.IS_DO_TRIP);
             }
 
+            if (intent.hasExtra(NYHelper.IS_DO_COURSE)){
+                isDoCourse = extras.getBoolean(NYHelper.IS_DO_COURSE);
+            }
+
             if (intent.hasExtra(NYHelper.DIVE_CENTER)) {
                 try {
                     JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.DIVE_CENTER));
@@ -218,10 +223,19 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 if (isDoTrip){
                     titleTextView.setText(getResources().getString(R.string.do_trip));
                 } else{
-                    if (Integer.valueOf(diver) > 1){
-                        titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax(s)");
+
+                    String dateString = "";
+
+                    if (isDoCourse){
+                        dateString = NYHelper.setMillisToMonthAndYear(Long.valueOf(schedule));
                     } else {
-                        titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(schedule))+", "+diver+" pax");
+                        dateString = NYHelper.setMillisToDate(Long.valueOf(schedule));
+                    }
+
+                    if (Integer.valueOf(diver) > 1){
+                        titleTextView.setText(dateString+", "+diver+" pax(s)");
+                    } else {
+                        titleTextView.setText(dateString+", "+diver+" pax");
                     }
                 }
 
@@ -250,7 +264,10 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
     private void initRequest() {
         if (diveService != null && !TextUtils.isEmpty(diveService.getId())){
-            if (isDoTrip){
+            if (isDoCourse){
+                NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, getResources().getString(R.string.api_path_docourse_detail_service), diveService.getId(), diver, certificate, schedule);
+                spcMgr.execute(req, onGetDetailServiceRequest());
+            } else if (isDoTrip){
                 NYDoTripDetailServiceRequest req = new NYDoTripDetailServiceRequest(DetailServiceActivity.this, diveService.getId(), diver, certificate, schedule);
                 spcMgr.execute(req, onGetDetailServiceRequest());
             } else {
