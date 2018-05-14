@@ -71,6 +71,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
     private TextView filterTextView;
     private LinearLayout filterLinearLayout;
     private ImageView backImageView;
+
     //private boolean isRefresh = true;
 
     public boolean isEcotrip() {
@@ -192,7 +193,16 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 if(stateFacilityList != null && stateFacilityList.getList() != null && !stateFacilityList.getList().isEmpty()) {
                     intent.putExtra(NYHelper.FACILITIES, stateFacilityList.getList().toString());
                 }
-                intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+
+                if (totalDives != null && totalDives.size() > 0) {
+
+                    JSONArray array = new JSONArray();
+                    for (String st : totalDives){
+                        array.put(st);
+                    }
+                    intent.putExtra(NYHelper.TOTAL_DIVES, array.toString());
+                }
+
                 intent.putExtra(NYHelper.SORT_BY, sortingType);
                 intent.putExtra(NYHelper.MIN_PRICE, minPrice);
                 intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, minPriceDefault);
@@ -441,7 +451,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
         try {
 
-            Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 
             if (progressBar != null) {
                 progressBar.setVisibility(View.GONE);
@@ -464,7 +474,7 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
                 noResultTextView.setVisibility(View.VISIBLE);
             }
 
-            Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
 
 
         } catch (JSONException e) {
@@ -516,13 +526,29 @@ public class DoDiveSearchResultActivity extends BasicActivity implements NYCusto
 
             totalDives = new ArrayList<>();
             if (data.hasExtra(NYHelper.TOTAL_DIVES)){
+
+                //Toast.makeText(this, "ada total dives ", Toast.LENGTH_SHORT).show();
+
+                //NYLog.e("onresult totalDives INIT 1 : "+b.getString(NYHelper.TOTAL_DIVES));
+
                 try {
                     JSONArray arrayTotalDives = new JSONArray(b.getString(NYHelper.TOTAL_DIVES));
+
+                    //NYLog.e("onresult totalDives INIT 2 : "+b.getString(NYHelper.TOTAL_DIVES));
+
                     for (int i=0; i<arrayTotalDives.length(); i++) {
                         totalDives.add(arrayTotalDives.getString(i));
+
+                        //NYLog.e("onresult totalDives INIT 3 : "+b.getString(NYHelper.TOTAL_DIVES));
                     }
-                    NYLog.e("onresult totalDives : "+totalDives.toString());
+
+                    //NYLog.e("onresult totalDives INIT 4 : "+b.getString(NYHelper.TOTAL_DIVES));
+                    //NYLog.e("onresult totalDives : "+totalDives.toString());
+
                 } catch (JSONException e) {
+
+                    //Toast.makeText(this, "ada total dives ERROR", Toast.LENGTH_SHORT).show();
+
                     e.printStackTrace();
                 }
             }

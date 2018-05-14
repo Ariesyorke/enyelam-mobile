@@ -42,7 +42,7 @@ public class DiveService implements Parseable {
     private static String KEY_IMAGES = "images";
     private static String KEY_DESCRIPTION = "description";
     private static String KEY_ORGANIZATION= "organization";
-    private static String KEY_LICENSE_TYPE = "license";
+    private static String KEY_LICENSE_TYPE = "license_type";
 
     private String id;
     private String name;

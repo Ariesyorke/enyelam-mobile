@@ -166,6 +166,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     private void doBook() {
+
+        NYLog.e("CEK BOOKING : DATA -> "+newDiveService.toString());
+
+        NYLog.e("CEK BOOKING : INIT");
+
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
         try {
@@ -173,10 +178,19 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId());
             } else if (isDoCourse && newDiveService.getOrganization() != null && NYHelper.isStringNotEmpty(newDiveService.getOrganization().getId())
                     && newDiveService.getLicenseType() != null && NYHelper.isStringNotEmpty(newDiveService.getLicenseType().getId())) {
-                    req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId(), newDiveService.getOrganization().getId(), newDiveService.getLicenseType().getId());
+
+                NYLog.e("CEK BOOKING : INIT 2");
+
+                req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId(), newDiveService.getOrganization().getId(), newDiveService.getLicenseType().getId());
             }
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
+
+            NYLog.e("CEK BOOKING : ERROR");
+
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
             e.printStackTrace();
         }
     }

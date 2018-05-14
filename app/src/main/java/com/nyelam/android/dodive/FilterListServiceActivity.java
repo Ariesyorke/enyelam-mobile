@@ -124,13 +124,13 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         rangeSeekbar.apply();
 
         for (String st : totalDives){
-            if (st.equals("1")){
+            if (st.equals("=1")){
                 check1.setChecked(true);
-            } else if (st.equals("2")){
+            } else if (st.equals("=2")){
                 check2.setChecked(true);
-            } else if (st.equals("3")){
+            } else if (st.equals("=3")){
                 check3.setChecked(true);
-            } else if (st.equals(">4")){
+            } else if (st.equals(">=4")){
                 check4.setChecked(true);
             }
         }
@@ -584,9 +584,24 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             intent.putExtra(NYHelper.SORT_BY, sortBy);
             intent.putExtra(NYHelper.MIN_PRICE, minPrice);
             intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
-            intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
+
+            if (totalDives != null && totalDives.size() > 0){
+
+                JSONArray array = new JSONArray();
+                for (String st : totalDives){
+                    array.put(st);
+                }
+                intent.putExtra(NYHelper.TOTAL_DIVES, array.toString());
+            }
+
             intent.putExtra(NYHelper.CATEGORIES, categoryChooseList.toString());
             intent.putExtra(NYHelper.FACILITIES, facilitiesChooseList.toString());
+
+            if (totalDives != null && totalDives.size() > 0){
+                NYLog.e("cek total dives ONBACKPRESS : "+totalDives.toString());
+            } else{
+                NYLog.e("cek total dives ONBACKPRESS : null");
+            }
 
             setResult(RESULT_OK, intent);
         }
@@ -598,19 +613,19 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch(buttonView.getId()){
             case R.id.checkbox_one:
-                setCheckBoxDives("1", isChecked);
+                setCheckBoxDives("=1", isChecked);
                 //Toast.makeText(this, "1 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_two:
-                setCheckBoxDives("2", isChecked);
+                setCheckBoxDives("=2", isChecked);
                 //Toast.makeText(this, "2 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_three:
-                setCheckBoxDives("3", isChecked);
+                setCheckBoxDives("=3", isChecked);
                 //Toast.makeText(this, "3 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.checkbox_more_four:
-                setCheckBoxDives(">4", isChecked);
+                setCheckBoxDives(">=4", isChecked);
                 //Toast.makeText(this, "4 - "+String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
                 break;
         }

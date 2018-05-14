@@ -113,11 +113,11 @@ public class NYDoDiveSearchServiceResultRequest extends NYBasicRequest<NYPaginat
             }
         }
 
-        if (categories != null && facilityList.size() > 0){
+        /*if (categories != null && facilityList.size() > 0){
             for (StateFacility st : facilityList){
                 if (st != null && NYHelper.isStringNotEmpty(st.getName())) addQuery(POST_FACILITIES,st.getName());
             }
-        }
+        }*/
 
         //addQuery(POST_ECO_TRIP, isEcoTrip);
 
