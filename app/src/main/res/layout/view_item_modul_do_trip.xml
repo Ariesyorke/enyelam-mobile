@@ -6,6 +6,8 @@
     android:id="@+id/cardView"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
+    android:layout_margin="@dimen/padding"
+    android:background="@android:color/transparent"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true"
     card_view:cardPreventCornerOverlap="false"
@@ -16,25 +18,33 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
+        android:background="@android:color/transparent"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="170dp">
 
-            <ImageView
+            <com.nyelam.android.view.RoundishImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/featured_imageView"
                 android:src="@drawable/bg_placeholder"
-                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:roundedCorners="topLeft|topRight"
+                app:cornerRadius="@dimen/padding_half"
+                />
 
             <View
-                android:background="@color/ny_dark_transparent_list"
+                android:background="@drawable/bg_layer_grey"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                />
 
             <com.nyelam.android.view.font.NYTextView
                 card_view:fontTextStyle="semiBold"

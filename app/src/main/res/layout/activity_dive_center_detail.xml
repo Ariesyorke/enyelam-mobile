@@ -139,6 +139,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <RatingBar
+                            android:visibility="gone"
                             android:id="@+id/ratingBar"
                             style="@style/StarRatingBar"
                             android:layout_width="wrap_content"

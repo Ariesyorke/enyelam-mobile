@@ -20,17 +20,23 @@
             android:layout_width="match_parent"
             android:layout_height="200dp">
 
-            <ImageView
+            <com.nyelam.android.view.RoundishImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/featured_imageView"
                 android:src="@drawable/bg_placeholder"
-                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                app:roundedCorners="topLeft|topRight"
+                app:cornerRadius="@dimen/padding_half"
+                />
 
             <View
-                android:background="@color/ny_dark_transparent_list"
+                android:background="@drawable/bg_layer_grey"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="match_parent"
+                />
 
             <com.nyelam.android.view.font.NYTextView
                 card_view:fontTextStyle="semiBold"
@@ -129,6 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RatingBar
+                    android:visibility="gone"
                     android:id="@+id/ratingBar"
                     style="@style/StarRatingBar"
                     android:layout_width="wrap_content"

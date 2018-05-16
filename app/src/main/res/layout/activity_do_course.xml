@@ -10,6 +10,8 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:background="#0071BC"
         android:layout_width="match_parent"

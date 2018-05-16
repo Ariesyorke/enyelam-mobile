@@ -110,6 +110,7 @@
                                 android:orientation="horizontal">
 
                                 <RatingBar
+                                    android:visibility="gone"
                                     android:id="@+id/ratingBar"
                                     style="@style/StarRatingBar"
                                     android:layout_width="wrap_content"
@@ -267,6 +268,34 @@
 
                                     <com.nyelam.android.view.font.NYTextView
                                         android:id="@+id/trip_durations_textView"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text=": 0"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/ny_grey8"
+                                        app:fontTextStyle="light" />
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:id="@+id/slot_divers_linearLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:orientation="horizontal">
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/slot_divers"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/ny_grey8"
+                                        app:fontTextStyle="light" />
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:id="@+id/slot_divers_textView"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"

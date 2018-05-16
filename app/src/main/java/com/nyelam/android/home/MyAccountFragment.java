@@ -60,7 +60,7 @@ public class MyAccountFragment extends Fragment implements
 
     private OnFragmentInteractionListener mListener;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
-    private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout, changePasswordRelativeLayout;
+    private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout, changePasswordRelativeLayout, termAndConditionsRelativeLayout;
     private File photoProfile, photoCover;
     private ImageView coverImageView, changeCoverImageView;
     private CircleImageView photoProfileImageView;
@@ -246,12 +246,21 @@ public class MyAccountFragment extends Fragment implements
             }
         });
 
+        termAndConditionsRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TermsAndConditionActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initView(View view) {
         editProfileRelativeLayout = (RelativeLayout) view.findViewById(R.id.edit_profile_relativeLayout);
         changePasswordRelativeLayout = (RelativeLayout) view.findViewById(R.id.change_password_relativeLayout);
         logoutRelativeLayout = (RelativeLayout) view.findViewById(R.id.logout_relativeLayout);
+        termAndConditionsRelativeLayout = (RelativeLayout) view.findViewById(R.id.term_and_conditions_relativeLayout);
         coverImageView = (ImageView) view.findViewById(R.id.cover_imageView);
         changeCoverImageView = (ImageView) view.findViewById(R.id.change_cover_imageView);
         photoProfileImageView = (CircleImageView) view.findViewById(R.id.photo_profile_circleImageView);

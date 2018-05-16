@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -474,6 +476,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return 0;
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
                 if (view == null) {
@@ -565,6 +568,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     } else {
                         priceTextView.setText(NYHelper.priceFormatter(normalPrice));
                         //priceStrikethroughTextView.setVisibility(View.GONE);
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        featuredImageView.setClipToOutline(true);
                     }
 
                     //SET IMAGE

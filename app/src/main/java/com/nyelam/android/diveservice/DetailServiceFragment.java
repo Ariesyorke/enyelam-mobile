@@ -61,8 +61,8 @@ public class DetailServiceFragment extends Fragment {
     private ImageView diveCenterImageView;
     private TextView titleTextView, scheduleTextView, diveCenterNameTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
     private TextView ratingTextView, visitedTextView, categoryTextView;
-    private TextView addressTextView, phoneNumberTextView;
-    private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView, openWaterTextView;
+    private TextView addressTextView, phoneNumberTextView, aboutTextView;
+    private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView, openWaterTextView, slotDiversTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView, icAccomodationImageView;
     private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout, diveCenterLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
@@ -70,7 +70,7 @@ public class DetailServiceFragment extends Fragment {
 
     private DoDiveDiveServiceSuggestionAdapter relatedDiveServiceAdapter;
     private RecyclerView relatedPostRecyclerView;
-    private LinearLayout relatedPostLinearLayout, totalDiveLinearLayout, tripDurationsLinearLayout, totalDiveSpotLinearLayout, openWaterLinearLayout, bannerLinearLayout;
+    private LinearLayout relatedPostLinearLayout, totalDiveLinearLayout, tripDurationsLinearLayout, totalDiveSpotLinearLayout, openWaterLinearLayout, bannerLinearLayout, slotDiversLinearLayout;
 
     public DetailServiceFragment() {
         // Required empty public constructor
@@ -116,6 +116,7 @@ public class DetailServiceFragment extends Fragment {
             totalDiveLinearLayout.setVisibility(View.GONE);
             openWaterLinearLayout.setVisibility(View.VISIBLE);
             bannerLinearLayout.setVisibility(View.GONE);
+            aboutTextView.setText(getString(R.string.about_course));
         }
     }
 
@@ -153,11 +154,13 @@ public class DetailServiceFragment extends Fragment {
         diveSpotsTextView = (TextView) v.findViewById(R.id.dive_spots_textView);
         ratingTextView = (TextView) v.findViewById(R.id.rating_textView);
         visitedTextView = (TextView) v.findViewById(R.id.visited_textView);
+        aboutTextView = (TextView) v.findViewById(R.id.about_textView);
 
         totalDivesTextView = (TextView) v.findViewById(R.id.total_dive_textView);
         tripDurationsTextView = (TextView) v.findViewById(R.id.trip_durations_textView);
         totalDiveSpotsTextView = (TextView) v.findViewById(R.id.total_dive_spot_textView);
         openWaterTextView = (TextView) v.findViewById(R.id.open_water_textView);
+        slotDiversTextView = (TextView) v.findViewById(R.id.slot_divers_textView);
 
         addressTextView = (TextView) v.findViewById(R.id.address_textView);
         phoneNumberTextView = (TextView) v.findViewById(R.id.phone_number_textView);
@@ -191,6 +194,7 @@ public class DetailServiceFragment extends Fragment {
         tripDurationsLinearLayout = (LinearLayout) v.findViewById(R.id.trip_durations_linearLayout);
         totalDiveSpotLinearLayout = (LinearLayout) v.findViewById(R.id.total_dive_spot_linearLayout);
         openWaterLinearLayout = (LinearLayout) v.findViewById(R.id.open_water_linearLayout);
+        slotDiversLinearLayout = (LinearLayout) v.findViewById(R.id.slot_divers_linearLayout);
         bannerLinearLayout = (LinearLayout) v.findViewById(R.id.banner_linearLayout);
     }
 
@@ -204,6 +208,9 @@ public class DetailServiceFragment extends Fragment {
             scheduleTextView.setVisibility(View.GONE);
         }
 
+
+
+
         if (activity.newDiveService != null){
 
             DiveService service = activity.getDiveService();
@@ -212,6 +219,8 @@ public class DetailServiceFragment extends Fragment {
             } else {
                 descriptionTextView.setText("-");
             }
+
+            slotDiversTextView.setText(": "+String.valueOf(activity.diveService.getAvailabilityStock()));
 
             if (NYHelper.isStringNotEmpty(service.getName())){
                 String days = " Day";

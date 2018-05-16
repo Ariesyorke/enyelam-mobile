@@ -210,6 +210,7 @@
                     android:orientation="horizontal">
 
                     <RatingBar
+                        android:visibility="gone"
                         android:id="@+id/ratingBar"
                         style="@style/StarRatingBar"
                         android:layout_width="wrap_content"

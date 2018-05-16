@@ -117,7 +117,7 @@ public class DoCourseActivity extends BasicActivity implements
     }
 
     private void initAdapter() {
-        List<String> divers = new ArrayList<>();
+        final List<String> divers = new ArrayList<>();
         for (int i=1; i <= 10; i++){
             divers.add(String.valueOf(i));
         }
@@ -139,12 +139,32 @@ public class DoCourseActivity extends BasicActivity implements
         suggestionRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(DoCourseActivity.this, suggestionRecyclerView, new DoDiveDiveServiceSuggestionAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
-                DiveService diveService = doCourseSuggestionAdapter.getDiveService(position);
+                /*DiveService diveService = doCourseSuggestionAdapter.getDiveService(position);
                 diverId = diveService.getId();
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);*/
+
+                DiveService diveService = doCourseSuggestionAdapter.getDiveService(position);
+
+                if (diveService != null){
+                    Intent intent = new Intent(DoCourseActivity.this, DetailServiceActivity.class);
+                    if (diveService != null ) intent.putExtra(NYHelper.SERVICE, diveService.toString());
+                    intent.putExtra(NYHelper.DIVER, diver);
+                    intent.putExtra(NYHelper.SCHEDULE, date);
+                    if (diveService.isLicense()){
+                        intent.putExtra(NYHelper.CERTIFICATE, "1");
+                    } else {
+                        intent.putExtra(NYHelper.CERTIFICATE, "0");
+                    }
+                    if (diveService != null && diveService.getDiveCenter() != null) {
+                        intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
+                    }
+                    intent.putExtra(NYHelper.IS_DO_COURSE, true);
+                    startActivity(intent);
+                }
+
             }
 
             @Override
@@ -729,7 +749,8 @@ public class DoCourseActivity extends BasicActivity implements
                     keyword = searchService.getName();
                     type = String.valueOf(searchService.getType());
                     keywordTextView.setText(keyword);
-                    scrollView.fullScroll(ScrollView.FOCUS_UP);
+                    //scrollView.fullScroll(ScrollView.FOCUS_UP);
+                    //Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

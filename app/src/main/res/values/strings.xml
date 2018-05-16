@@ -130,6 +130,7 @@
     <string name="our_trips_services">Our Trips Services</string>
     <string name="date">Date</string>
     <string name="diver">Diver</string>
+    <string name="slot_divers">Slot Diver(s)</string>
     <string name="search">Search</string>
     <string name="dive_now">Dive Now</string>
     <string name="trip_now">Trip Now</string>
@@ -212,6 +213,7 @@
 
     <!--facilities-->
     <string name="about_trips">About Trips</string>
+    <string name="about_course">About Course</string>
     <string name="dive_guide">Dive Guide</string>
     <string name="equipment">Equipment</string>
     <string name="food">Food</string>
