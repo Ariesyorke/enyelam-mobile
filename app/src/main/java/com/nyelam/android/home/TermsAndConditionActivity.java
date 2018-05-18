@@ -50,7 +50,23 @@ public class TermsAndConditionActivity extends AppCompatActivity {
                 "\n" +
                 "collected from you or about you. Please send us any and all feedback pertaining to privacy, or any other issue.\n" +
                 "\n" +
-                "Legal Notice\n" +
+                "Legal Notice\n\n" +
+                " <br/><br/> <b><li>CANCELLATION</li></b>\n" +
+                "<ol>"+
+                "<li>When making a reservation through the e-Nyelam Apps, you agree to all terms and conditions provided by diving centers, including their cancellation policies. E-Nyelam is not responsible to any infringement caused by customer’s special requests to the diving centres. Therefore, you need to read all terms and condition carefully.</li>\n\n" +
+                "<li>In terms of customer’s cancellation, E-Nyelam has authority to hold and/or charge your payment as cancellation fees.</li>\n\n" +
+                "</ol>"+
+                " <br/><br/> <b><li>ADDITIONAL COSTS AND REFUND</li></b>\n" +
+                "<ol>"+
+                "<li>All quotations are subject to the terms and conditions stated herein.</li>\n\n" +
+                "<li>All published prices are subject to change without prior notice, depending on the amount of reservation and/or quota in the diving centers.</li>\n" +
+                "<li>All published prices include tax and additional fees; however, in a certain condition, there might be additional cost required by diving centers such as guide tips, personal costs, and/or other services. Therefore, the customer is responsible to verify the total costs and other regulation before making the payment.</li>\n" +
+                "<li>Cost of additional services, including the use of credit card or transfer fees, are charged to the customers. E-Nyelam will notify the customers via phone call or email if there is the lack of payment.</li>\n\n" +
+                "<li>If the customer cancels the booking, all the payment is non-refundable.</li>\n\n" +
+                "<li>E-Nyelam will refund the payment to the customers if cancellation is caused by force majeur. However, we will deduct it due to service fees. If you have a question, need help, or need to report a problem, please call our customer service or you may send email to:info@e-nyelam.com</li>\n\n" +
+                "<li>We do not take any responsibility and we are not liable for any transaction caused by, but not limited to: the lack of payment.</li>\n\n" +
+                "<li>We will annul the transaction caused by payment delays.</li>\n\n" +
+                "</ol>"+
                 "\n" +
                 "</ol><br/><br/><center><b>e-nyelam is a brand by PT Wimiku Indo Digital</b></center>\n" +
                 " <br/><center>Copyright 2018 All Rights Reserved.</center>\n";
