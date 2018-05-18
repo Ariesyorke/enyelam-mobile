@@ -4,9 +4,11 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -56,6 +58,12 @@ public class DoDiveActivity extends BasicActivity implements
         initFragment();
         if (isEcoTrip()){
             toolbar.setBackgroundColor(getResources().getColor(R.color.ny_green3));
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.ny_green3)); // Navigation bar the soft bottom of some phones like nexus and some Samsung note series
+                getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.ny_green3)); //status bar or the time bar at the top
+            }
+
         }
     }
 

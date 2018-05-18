@@ -207,8 +207,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keywordTextView.setText(keyword);
                 divingLicenseSwitch.setChecked(diveService.isLicense());
                 setSwitchState();
-                //activity.toolbar.setFocusable(true);
-                //activity.toolbar.setFocusableInTouchMode(true);
+                activity.toolbar.setFocusable(true);
+                activity.toolbar.setFocusableInTouchMode(true);
                 //scrollView.scrollTo(0, 0);
                 //scrollView.fullScroll(ScrollView.FOCUS_UP);
                 scrollView.fling(0);
@@ -869,7 +869,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             isSwitchEnable = true;
         }
 
+        scrollView.fling(0);
         scrollView.fullScroll(ScrollView.FOCUS_UP);
+
+        activity.toolbar.setFocusable(true);
+        activity.toolbar.setFocusableInTouchMode(true);
     }
 
 }
