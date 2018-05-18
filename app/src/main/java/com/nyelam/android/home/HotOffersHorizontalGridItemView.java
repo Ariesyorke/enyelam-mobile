@@ -1,5 +1,6 @@
 package com.nyelam.android.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -10,8 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Event;
@@ -24,7 +27,7 @@ import com.nyelam.android.helper.NYHelper;
 
 public class HotOffersHorizontalGridItemView extends FrameLayout {
 
-    private Context context;
+    private Activity activity;
     private ImageView imageView;
     private TextView locationTextView;
     private TextView nameTextView;
@@ -99,36 +102,54 @@ public class HotOffersHorizontalGridItemView extends FrameLayout {
                 //priceStrikethroughTextView.setVisibility(View.GONE);
             }
 
+
+
             //SET IMAGE
+            final NYApplication application = (NYApplication) activity.getApplication();
+            Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+            if(b != null) {
+                imageView.setImageBitmap(b);
+            } else {
+                imageView.setImageResource(R.drawable.bg_placeholder);
+            }
+
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
             if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) {
 
-                    }
+                if (application.getCache(diveService.getFeaturedImage()) != null){
+                    imageView.setImageBitmap(application.getCache(diveService.getFeaturedImage()));
+                } else {
 
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        imageView.setImageResource(R.drawable.example_pic);
-                    }
+                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
 
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        imageView.setImageBitmap(loadedImage);
-                        //activity.getCache().put(imageUri, loadedImage);
-                    }
+                        }
 
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                        imageView.setImageResource(R.drawable.example_pic);
-                    }
-                });
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            imageView.setImageResource(R.drawable.example_pic);
+                        }
 
-                ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), imageView, NYHelper.getOption());
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            imageView.setImageBitmap(loadedImage);
+                            application.addCache(imageUri, loadedImage);
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+                            imageView.setImageResource(R.drawable.example_pic);
+                        }
+                    });
+
+                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), imageView, NYHelper.getOption());
+                }
 
             } else {
                 imageView.setImageResource(R.drawable.example_pic);
             }
+
 
         }
 

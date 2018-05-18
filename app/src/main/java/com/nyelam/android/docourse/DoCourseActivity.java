@@ -279,13 +279,13 @@ public class DoCourseActivity extends BasicActivity implements
 
         }
 
-        //TODO HARCODE ECOTRIP!!
-        if(isDoTripBanner) {
-            keyword = "Save Our Small Island";
-            keywordTextView.setText(keyword);
-            type = "3";
-            diverId = "23";
-        }
+        //set date today
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
+        int y = cal.get(Calendar.YEAR);
+        int m = cal.get(Calendar.MONTH);
+        int d = cal.get(Calendar.DAY_OF_MONTH);
+        date = String.valueOf(cal.getTimeInMillis()/1000);
+        datetimeTextView.setText(NYHelper.formatMonthYearToString(m, y));
     }
 
     private void initControl() {

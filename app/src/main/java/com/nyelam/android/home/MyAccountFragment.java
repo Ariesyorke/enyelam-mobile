@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.AuthReturn;
@@ -110,46 +111,61 @@ public class MyAccountFragment extends Fragment implements
 
             User user = loginStorage.user;
 
-            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
 
-            // foto profile
-            if (user.getPicture() == null || TextUtils.isEmpty(user.getPicture())) {
-                photoProfileImageView.setImageResource(R.drawable.logo_nyelam);
+
+            //SET IMAGE
+            final NYApplication application = (NYApplication) getActivity().getApplication();
+            Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+            if(b != null) {
+                photoProfileImageView.setImageBitmap(b);
             } else {
-                ImageLoader.getInstance().loadImage(user.getPicture(), NYHelper.getOption(), new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) {
-
-                    }
-
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        photoProfileImageView.setImageResource(R.drawable.logo_nyelam);
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        photoProfileImageView.setImageBitmap(loadedImage);
-                        LoginStorage cacheImageStorage = new LoginStorage(getActivity());
-                        cacheImageStorage.photo = NYHelper.bitmapToString(loadedImage);
-                        cacheImageStorage.save();
-                        //activity.getCache().put(imageUri, loadedImage);
-                    }
-
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                        photoProfileImageView.setImageResource(R.drawable.logo_nyelam);
-                    }
-                });
-
-                ImageLoader.getInstance().displayImage(user.getPicture(), photoProfileImageView, NYHelper.getOption());
+                photoProfileImageView.setImageResource(R.drawable.bg_placeholder);
             }
+
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
+            if (NYHelper.isStringNotEmpty(user.getPicture())) {
+
+                if (application.getCache(user.getPicture()) != null){
+                    photoProfileImageView.setImageBitmap(application.getCache(user.getPicture()));
+                } else {
+
+                    ImageLoader.getInstance().loadImage(user.getPicture(), NYHelper.getOption(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            photoProfileImageView.setImageResource(R.drawable.example_pic);
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            photoProfileImageView.setImageBitmap(loadedImage);
+                            application.addCache(imageUri, loadedImage);
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+                            photoProfileImageView.setImageResource(R.drawable.example_pic);
+                        }
+                    });
+
+                    ImageLoader.getInstance().displayImage(user.getPicture(), photoProfileImageView, NYHelper.getOption());
+                }
+
+            } else {
+                photoProfileImageView.setImageResource(R.drawable.example_pic);
+            }
+
 
 
             // foto cover
             if (user.getCover() == null || TextUtils.isEmpty(user.getCover())) {
                 coverImageView.setImageResource(R.drawable.example_pic);
             } else {
+
                 ImageLoader.getInstance().loadImage(user.getCover(), NYHelper.getOption(), new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {

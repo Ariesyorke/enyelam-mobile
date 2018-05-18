@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DiveService;
@@ -291,11 +292,25 @@ public class DetailServiceFragment extends Fragment {
             }
 
             if (service.getDiveCenter() != null){
+
                 if (NYHelper.isStringNotEmpty(service.getDiveCenter().getName()))diveCenterNameTextView.setText(service.getDiveCenter().getName());
-                if (NYHelper.isStringNotEmpty(service.getDiveCenter().getImageLogo())){
-                    //SET IMAGE
-                    ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
-                    if (NYHelper.isStringNotEmpty(service.getDiveCenter().getImageLogo())) {
+
+                //SET IMAGE
+                final NYApplication application = (NYApplication) activity.getApplication();
+                Bitmap b = application.getCache("drawable://"+R.drawable.logo_nyelam);
+                if(b != null) {
+                    diveCenterImageView.setImageBitmap(b);
+                } else {
+                    diveCenterImageView.setImageResource(R.drawable.bg_placeholder);
+                }
+
+                ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
+                if (NYHelper.isStringNotEmpty(service.getDiveCenter().getImageLogo())) {
+
+                    if (application.getCache(service.getDiveCenter().getImageLogo()) != null){
+                        diveCenterImageView.setImageBitmap(application.getCache(service.getDiveCenter().getImageLogo()));
+                    } else {
+
                         ImageLoader.getInstance().loadImage(service.getDiveCenter().getImageLogo(), NYHelper.getOption(), new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String imageUri, View view) {
@@ -304,27 +319,26 @@ public class DetailServiceFragment extends Fragment {
 
                             @Override
                             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                //featuredImageView.setImageResource(R.drawable.bg_placeholder);
+                                diveCenterImageView.setImageResource(R.drawable.example_pic);
                             }
 
                             @Override
                             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                                 diveCenterImageView.setImageBitmap(loadedImage);
-                                //activity.getCache().put(imageUri, loadedImage);
+                                application.addCache(imageUri, loadedImage);
                             }
 
                             @Override
                             public void onLoadingCancelled(String imageUri, View view) {
-                                //featuredImageView.setImageResource(R.drawable.bg_placeholder);
+                                diveCenterImageView.setImageResource(R.drawable.example_pic);
                             }
                         });
 
                         ImageLoader.getInstance().displayImage(service.getDiveCenter().getImageLogo(), diveCenterImageView, NYHelper.getOption());
-
-                    } else {
-                        diveCenterImageView.setImageResource(R.drawable.logo_nyelam);
                     }
 
+                } else {
+                    diveCenterImageView.setImageResource(R.drawable.example_pic);
                 }
             }
 

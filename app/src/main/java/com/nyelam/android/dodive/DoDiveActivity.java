@@ -36,7 +36,7 @@ public class DoDiveActivity extends BasicActivity implements
         DoDiveResultDiveSpotsFragment.OnFragmentInteractionListener,
         NYCustomDialog.OnDialogFragmentClickListener{
 
-    private Toolbar toolbar;
+    protected Toolbar toolbar;
     private DoDiveFragment fragment;
     private TextView titleTextView;
     private ImageView searchImageView;

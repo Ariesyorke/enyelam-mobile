@@ -207,6 +207,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keywordTextView.setText(keyword);
                 divingLicenseSwitch.setChecked(diveService.isLicense());
                 setSwitchState();
+                //activity.toolbar.setFocusable(true);
+                //activity.toolbar.setFocusableInTouchMode(true);
+                //scrollView.scrollTo(0, 0);
+                //scrollView.fullScroll(ScrollView.FOCUS_UP);
+                scrollView.fling(0);
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
                 isSwitchEnable = false;
             }
@@ -465,6 +470,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             public void onClick(View v) {
                 if (!isSwitchEnable) divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
                 setSwitchState();
+            }
+        });
+
+        divingLicenseSwitch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return event.getActionMasked() == MotionEvent.ACTION_MOVE;
             }
         });
 
@@ -780,6 +792,9 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     @Override
     public void onResume() {
         super.onResume();
+
+        //activity.toolbar.setFocusable(true);
+        //activity.toolbar.setFocusableInTouchMode(true);
 
         if (getActivity() instanceof DoDiveActivity && ((DoDiveActivity) getActivity()).isEcoTrip()){
             ((DoDiveActivity)getActivity()).setTitle(getString(R.string.eco_trip), true, false);

@@ -213,7 +213,7 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
 
                 //SET IMAGE
-                NYApplication application = (NYApplication) activity.getApplication();
+                final NYApplication application = (NYApplication) activity.getApplication();
                 Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
                 if(b != null) {
                     serviceImageView.setImageBitmap(b);
@@ -223,33 +223,39 @@ public class DoDiveSearchServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                 if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
 
-                        }
+                    if (application.getCache(diveService.getFeaturedImage()) != null){
+                        serviceImageView.setImageBitmap(application.getCache(diveService.getFeaturedImage()));
+                    } else {
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            serviceImageView.setImageBitmap(loadedImage);
-                            //activity.getCache().put(imageUri, loadedImage);
-                        }
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                serviceImageView.setImageResource(R.drawable.example_pic);
+                            }
 
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                serviceImageView.setImageBitmap(loadedImage);
+                                application.addCache(imageUri, loadedImage);
+                            }
 
-                        }
-                    });
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                serviceImageView.setImageResource(R.drawable.example_pic);
+                            }
+                        });
 
-                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+                    }
 
                 } else {
-                    serviceImageView.setImageResource(R.drawable.bg_placeholder);
+                    serviceImageView.setImageResource(R.drawable.example_pic);
                 }
 
             }

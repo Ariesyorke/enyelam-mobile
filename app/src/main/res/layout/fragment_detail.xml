@@ -103,6 +103,7 @@
                                 android:textSize="16sp" />
 
                             <LinearLayout
+                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/padding"
@@ -110,7 +111,6 @@
                                 android:orientation="horizontal">
 
                                 <RatingBar
-                                    android:visibility="gone"
                                     android:id="@+id/ratingBar"
                                     style="@style/StarRatingBar"
                                     android:layout_width="wrap_content"

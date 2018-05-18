@@ -227,7 +227,7 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
 
 
                 //SET IMAGE
-                NYApplication application = (NYApplication) activity.getApplication();
+                final NYApplication application = (NYApplication) activity.getApplication();
                 Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
                 if(b != null) {
                     featuredImageView.setImageBitmap(b);
@@ -235,37 +235,45 @@ public class DoDiveDiveServiceSuggestionAdapter extends RecyclerView.Adapter<Rec
                     featuredImageView.setImageResource(R.drawable.bg_placeholder);
                 }
 
-                //SET IMAGE
+
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                 if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
 
-                        }
+                    if (application.getCache(diveService.getFeaturedImage()) != null){
+                        featuredImageView.setImageBitmap(application.getCache(diveService.getFeaturedImage()));
+                    } else {
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            //featuredImageView.setImageResource(R.drawable.bg_placeholder);
-                        }
+                        ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            featuredImageView.setImageBitmap(loadedImage);
-                            //activity.getCache().put(imageUri, loadedImage);
-                        }
+                            }
 
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
-                            //featuredImageView.setImageResource(R.drawable.bg_placeholder);
-                        }
-                    });
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                featuredImageView.setImageResource(R.drawable.example_pic);
+                            }
 
-                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), featuredImageView, NYHelper.getOption());
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                featuredImageView.setImageBitmap(loadedImage);
+                                application.addCache(imageUri, loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                featuredImageView.setImageResource(R.drawable.example_pic);
+                            }
+                        });
+
+                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), featuredImageView, NYHelper.getOption());
+                    }
 
                 } else {
-                    featuredImageView.setImageResource(R.drawable.bg_placeholder);
+                    featuredImageView.setImageResource(R.drawable.example_pic);
                 }
+
+
             }
 
             itemView.setOnClickListener(this);

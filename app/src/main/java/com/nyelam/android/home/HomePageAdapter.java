@@ -21,8 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
@@ -57,12 +59,12 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int VIEW_TYPE_HOT_OFFER = 3;
     public static final int View_TYPE_DIVE_SPOT = 4;
 
-    private Activity context;
+    private Activity activity;
     private List<Module> modules;
     private HomeFragment fragment;
 
-    public HomePageAdapter(Activity context, HomeFragment fragment) {
-        this.context = context;
+    public HomePageAdapter(Activity activity, HomeFragment fragment) {
+        this.activity = activity;
         this.fragment = fragment;
     }
 
@@ -92,13 +94,13 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         switch (viewType) {
             case VIEW_TYPE_HEADER:
-                return new SectionHeader(context, parent);
+                return new SectionHeader(activity, parent);
             case View_TYPE_DIVE_SPOT:
-                return new PopularItemViewHolder(context, parent);
+                return new PopularItemViewHolder(activity, parent);
             case VIEW_TYPE_HOT_OFFER:
-                return new HotOffersItemViewHolder(context, parent);
+                return new HotOffersItemViewHolder(activity, parent);
             case VIEW_TYPE_EVENT:
-                return new EventsItemViewHolder(context, parent);
+                return new EventsItemViewHolder(activity, parent);
         }
 //
 //        switch (viewType) {
@@ -232,15 +234,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class EventsItemViewHolder extends RecyclerView.ViewHolder {
         public TwoWayView twoWayView;
-        Context context;
+        Activity activity;
         EventAdapter adapter;
-        public EventsItemViewHolder(Context context, ViewGroup parent) {
-            super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
+        public EventsItemViewHolder(Activity activity, ViewGroup parent) {
+            super(LayoutInflater.from(activity).inflate(R.layout.view_module_slide, parent, false));
 
             twoWayView = itemView.findViewById(R.id.two_way_view);
 
             twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
-            this.context = context;
+            this.activity = activity;
             adapter = new EventAdapter();
             twoWayView.setAdapter(adapter);
         }
@@ -252,7 +254,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             twoWayView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    NYHelper.handlePopupMessage(context, context.getString(R.string.coming_soon), null);
+                    NYHelper.handlePopupMessage(activity, activity.getString(R.string.coming_soon), null);
                 }
             });
         }
@@ -297,7 +299,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
                 if(view == null) {
-                    view = View.inflate(context, R.layout.view_item_modul_event, null);
+                    view = View.inflate(activity, R.layout.view_item_modul_event, null);
                 }
                 final ImageView imageView = (ImageView)view.findViewById(R.id.event_imageView);
                 TextView locationTextView = (TextView)view.findViewById(R.id.location_textView);
@@ -335,36 +337,54 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         //priceStrikethroughTextView.setVisibility(View.GONE);
                     }
 
+
+
                     //SET IMAGE
+                    final NYApplication application = (NYApplication) activity.getApplication();
+                    Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+                    if(b != null) {
+                        imageView.setImageBitmap(b);
+                    } else {
+                        imageView.setImageResource(R.drawable.bg_placeholder);
+                    }
+
+                    ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                     if (NYHelper.isStringNotEmpty(event.getFeaturedImage())) {
-                        ImageLoader.getInstance().loadImage(event.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
 
-                            }
+                        if (application.getCache(event.getFeaturedImage()) != null){
+                            imageView.setImageBitmap(application.getCache(event.getFeaturedImage()));
+                        } else {
 
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                imageView.setImageResource(R.drawable.example_pic);
-                            }
+                            ImageLoader.getInstance().loadImage(event.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                                @Override
+                                public void onLoadingStarted(String imageUri, View view) {
 
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                imageView.setImageBitmap(loadedImage);
-                                //activity.getCache().put(imageUri, loadedImage);
-                            }
+                                }
 
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-                                imageView.setImageResource(R.drawable.example_pic);
-                            }
-                        });
+                                @Override
+                                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                    imageView.setImageResource(R.drawable.example_pic);
+                                }
 
-                        ImageLoader.getInstance().displayImage(event.getFeaturedImage(), imageView, NYHelper.getOption());
+                                @Override
+                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                    imageView.setImageBitmap(loadedImage);
+                                    application.addCache(imageUri, loadedImage);
+                                }
+
+                                @Override
+                                public void onLoadingCancelled(String imageUri, View view) {
+                                    imageView.setImageResource(R.drawable.example_pic);
+                                }
+                            });
+
+                            ImageLoader.getInstance().displayImage(event.getFeaturedImage(), imageView, NYHelper.getOption());
+                        }
 
                     } else {
                         imageView.setImageResource(R.drawable.example_pic);
                     }
+
                 }
                 return view;
             }
@@ -574,36 +594,53 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         featuredImageView.setClipToOutline(true);
                     }
 
+
                     //SET IMAGE
+                    final NYApplication application = (NYApplication) activity.getApplication();
+                    Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+                    if(b != null) {
+                        featuredImageView.setImageBitmap(b);
+                    } else {
+                        featuredImageView.setImageResource(R.drawable.bg_placeholder);
+                    }
+
+                    ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                     if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                        ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
 
-                            }
+                        if (application.getCache(diveService.getFeaturedImage()) != null){
+                            featuredImageView.setImageBitmap(application.getCache(diveService.getFeaturedImage()));
+                        } else {
 
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                featuredImageView.setImageResource(R.drawable.example_pic);
-                            }
+                            ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                                @Override
+                                public void onLoadingStarted(String imageUri, View view) {
 
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                featuredImageView.setImageBitmap(loadedImage);
-                                //activity.getCache().put(imageUri, loadedImage);
-                            }
+                                }
 
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-                                featuredImageView.setImageResource(R.drawable.example_pic);
-                            }
-                        });
+                                @Override
+                                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                    featuredImageView.setImageResource(R.drawable.example_pic);
+                                }
 
-                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), featuredImageView, NYHelper.getOption());
+                                @Override
+                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                    featuredImageView.setImageBitmap(loadedImage);
+                                    application.addCache(imageUri, loadedImage);
+                                }
+
+                                @Override
+                                public void onLoadingCancelled(String imageUri, View view) {
+                                    featuredImageView.setImageResource(R.drawable.example_pic);
+                                }
+                            });
+
+                            ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), featuredImageView, NYHelper.getOption());
+                        }
 
                     } else {
                         featuredImageView.setImageResource(R.drawable.example_pic);
                     }
+
 
                 }
                 return view;
@@ -614,15 +651,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class PopularItemViewHolder extends RecyclerView.ViewHolder {
         public TwoWayView twoWayView;
-        Context context;
+        Activity activity;
         DiveSpotAdapter adapter;
 
-        public PopularItemViewHolder(Context context, ViewGroup parent) {
-            super(LayoutInflater.from(context).inflate(R.layout.view_module_slide, parent, false));
+        public PopularItemViewHolder(Activity activity, ViewGroup parent) {
+            super(LayoutInflater.from(activity).inflate(R.layout.view_module_slide, parent, false));
 
             twoWayView = itemView.findViewById(R.id.two_way_view);
             twoWayView.setOrientation(TwoWayView.Orientation.HORIZONTAL);
-            this.context = context;
+            this.activity = activity;
             adapter = new DiveSpotAdapter();
             twoWayView.setAdapter(adapter);
         }
@@ -641,9 +678,9 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     searchService.setLicense(false);
                     searchService.setType(1);
 
-                    Intent intent = new Intent(context, DoDiveActivity.class);
+                    Intent intent = new Intent(activity, DoDiveActivity.class);
                     intent.putExtra(NYHelper.SEARCH_RESULT, searchService.toString());
-                    context.startActivity(intent);
+                    activity.startActivity(intent);
                 }
             });
         }
@@ -690,7 +727,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
                 if (view ==  null) {
-                    view = View.inflate(context, R.layout.view_item_modul_popular_dive_spot, null);
+                    view = View.inflate(activity, R.layout.view_item_modul_popular_dive_spot, null);
                 }
                 final ImageView diveSpotImageView = (ImageView) view.findViewById(R.id.dive_spot_imageView);
                 TextView diveSpotNameTextView = (TextView) view.findViewById(R.id.dive_spot_name_textView);
@@ -723,36 +760,54 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                     if (NYHelper.isStringNotEmpty(diveSpot.getName())) diveSpotNameTextView.setText(diveSpot.getName());
 
+
+
                     //SET IMAGE
+                    final NYApplication application = (NYApplication) activity.getApplication();
+                    Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+                    if(b != null) {
+                        diveSpotImageView.setImageBitmap(b);
+                    } else {
+                        diveSpotImageView.setImageResource(R.drawable.bg_placeholder);
+                    }
+
+                    ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                     if (NYHelper.isStringNotEmpty(diveSpot.getFeaturedImage())) {
-                        ImageLoader.getInstance().loadImage(diveSpot.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
 
-                            }
+                        if (application.getCache(diveSpot.getFeaturedImage()) != null){
+                            diveSpotImageView.setImageBitmap(application.getCache(diveSpot.getFeaturedImage()));
+                        } else {
 
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                diveSpotImageView.setImageResource(R.drawable.example_pic);
-                            }
+                            ImageLoader.getInstance().loadImage(diveSpot.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                                @Override
+                                public void onLoadingStarted(String imageUri, View view) {
 
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                diveSpotImageView.setImageBitmap(loadedImage);
-                                //activity.getCache().put(imageUri, loadedImage);
-                            }
+                                }
 
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-                                diveSpotImageView.setImageResource(R.drawable.example_pic);
-                            }
-                        });
+                                @Override
+                                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                    diveSpotImageView.setImageResource(R.drawable.example_pic);
+                                }
 
-                        ImageLoader.getInstance().displayImage(diveSpot.getFeaturedImage(), diveSpotImageView, NYHelper.getOption());
+                                @Override
+                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                    diveSpotImageView.setImageBitmap(loadedImage);
+                                    application.addCache(imageUri, loadedImage);
+                                }
+
+                                @Override
+                                public void onLoadingCancelled(String imageUri, View view) {
+                                    diveSpotImageView.setImageResource(R.drawable.example_pic);
+                                }
+                            });
+
+                            ImageLoader.getInstance().displayImage(diveSpot.getFeaturedImage(), diveSpotImageView, NYHelper.getOption());
+                        }
 
                     } else {
                         diveSpotImageView.setImageResource(R.drawable.example_pic);
                     }
+
 
 
                 }

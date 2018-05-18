@@ -1,5 +1,6 @@
 package com.nyelam.android.bookinghistory;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
@@ -31,10 +33,10 @@ import java.util.List;
 
 public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
+    private Activity context;
     private List<Summary> summaryList;
 
-    public BookingHistoryListAdapter(Context context) {
+    public BookingHistoryListAdapter(Activity context) {
         this.context = context;
     }
 
@@ -134,37 +136,53 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
                     }
                 }
 
+
+
+
                 //SET IMAGE
+                final NYApplication application = (NYApplication) context.getApplicationContext();
+                Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
+                if(b != null) {
+                    serviceImageView.setImageBitmap(b);
+                } else {
+                    serviceImageView.setImageResource(R.drawable.bg_placeholder);
+                }
+
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+                if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
 
-                if (diveService != null && NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
+                    if (application.getCache(diveService.getFeaturedImage()) != null){
+                        serviceImageView.setImageBitmap(application.getCache(diveService.getFeaturedImage()));
+                    } else {
 
-                        }
+                        ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            serviceImageView.setImageResource(R.drawable.logo_nyelam);
-                        }
+                            }
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            serviceImageView.setImageBitmap(loadedImage);
-                            //activity.getCache().put(imageUri, loadedImage);
-                        }
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                serviceImageView.setImageResource(R.drawable.example_pic);
+                            }
 
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
-                            serviceImageView.setImageResource(R.drawable.logo_nyelam);
-                        }
-                    });
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                serviceImageView.setImageBitmap(loadedImage);
+                                application.addCache(imageUri, loadedImage);
+                            }
 
-                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                serviceImageView.setImageResource(R.drawable.example_pic);
+                            }
+                        });
+
+                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), serviceImageView, NYHelper.getOption());
+                    }
 
                 } else {
-                    serviceImageView.setImageResource(R.drawable.logo_nyelam);
+                    serviceImageView.setImageResource(R.drawable.example_pic);
                 }
 
             }

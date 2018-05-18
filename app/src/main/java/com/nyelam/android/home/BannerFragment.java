@@ -95,7 +95,7 @@ public class BannerFragment extends Fragment {
 
 
         //SET IMAGE
-        NYApplication application = (NYApplication) getActivity().getApplication();
+        final NYApplication application = (NYApplication) getActivity().getApplication();
         Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
         if(b != null) {
             imageView.setImageBitmap(b);
@@ -103,33 +103,41 @@ public class BannerFragment extends Fragment {
             imageView.setImageResource(R.drawable.bg_placeholder);
         }
 
+
         if (banner.getImageUrl() == null || TextUtils.isEmpty(banner.getImageUrl())) {
             imageView.setImageResource(R.drawable.bg_placeholder);
         } else {
-            ImageLoader.getInstance().loadImage(banner.getImageUrl(), NYHelper.getOption(), new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
 
-                }
+            if (application.getCache(banner.getImageUrl()) != null){
+                imageView.setImageBitmap(application.getCache(banner.getImageUrl()));
+            } else {
 
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    //imageView.setImageResource(R.drawable.bg_placeholder);
-                }
+                ImageLoader.getInstance().loadImage(banner.getImageUrl(), NYHelper.getOption(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
 
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    imageView.setImageBitmap(loadedImage);
-                    //activity.getCache().put(imageUri, loadedImage);
-                }
+                    }
 
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-                    //imageView.setImageResource(R.drawable.bg_placeholder);
-                }
-            });
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        imageView.setImageResource(R.drawable.example_pic);
+                    }
 
-            ImageLoader.getInstance().displayImage(banner.getImageUrl(), imageView, NYHelper.getOption());
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        imageView.setImageBitmap(loadedImage);
+                        application.addCache(imageUri, loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        imageView.setImageResource(R.drawable.example_pic);
+                    }
+                });
+
+                ImageLoader.getInstance().displayImage(banner.getImageUrl(), imageView, NYHelper.getOption());
+            }
+
         }
 
     }

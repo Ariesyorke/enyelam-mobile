@@ -13,6 +13,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nyelam.android.BasicActivity;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.Location;
@@ -140,32 +142,40 @@ public class DoTripRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 }
 
                 //SET IMAGE
+                final NYApplication application = (NYApplication) activity.getApplication();
+
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
                 if (NYHelper.isStringNotEmpty(diveService.getFeaturedImage())) {
-                    ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
 
-                        }
+                    if (application.getCache(diveService.getFeaturedImage()) != null){
+                        eventImageView.setImageBitmap(application.getCache(diveService.getFeaturedImage()));
+                    } else {
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            eventImageView.setImageResource(R.drawable.example_pic);
-                        }
+                        ImageLoader.getInstance().loadImage(diveService.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            eventImageView.setImageBitmap(loadedImage);
-                            //activity.getCache().put(imageUri, loadedImage);
-                        }
+                            }
 
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
-                            eventImageView.setImageResource(R.drawable.example_pic);
-                        }
-                    });
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                eventImageView.setImageResource(R.drawable.example_pic);
+                            }
 
-                    ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), eventImageView, NYHelper.getOption());
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                eventImageView.setImageBitmap(loadedImage);
+                                application.addCache(imageUri, loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                eventImageView.setImageResource(R.drawable.example_pic);
+                            }
+                        });
+
+                        ImageLoader.getInstance().displayImage(diveService.getFeaturedImage(), eventImageView, NYHelper.getOption());
+                    }
 
                 } else {
                     eventImageView.setImageResource(R.drawable.example_pic);
