@@ -61,6 +61,8 @@ import java.util.TimeZone;
 
 import me.relex.circleindicator.CircleIndicator;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
@@ -875,5 +877,6 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         activity.toolbar.setFocusable(true);
         activity.toolbar.setFocusableInTouchMode(true);
     }
+
 
 }

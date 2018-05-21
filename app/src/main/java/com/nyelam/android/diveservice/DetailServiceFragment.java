@@ -28,14 +28,19 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.booking.BookingServiceActivity;
+import com.nyelam.android.booking.BookingServiceParticipantActivity;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.DiveSpot;
+import com.nyelam.android.data.EquipmentRent;
 import com.nyelam.android.data.Facilities;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.data.Participant;
 import com.nyelam.android.data.Schedule;
 import com.nyelam.android.divecenter.DiveCenterDetailActivity;
 import com.nyelam.android.dodive.DoDiveDiveServiceSuggestionAdapter;
+import com.nyelam.android.dodive.EquipmentRentActivity;
 import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.dodive.TotalDiverSpinnerAdapter;
 import com.nyelam.android.helper.NYHelper;
@@ -48,8 +53,12 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class DetailServiceFragment extends Fragment {
 
@@ -71,7 +80,7 @@ public class DetailServiceFragment extends Fragment {
 
     private DoDiveDiveServiceSuggestionAdapter relatedDiveServiceAdapter;
     private RecyclerView relatedPostRecyclerView;
-    private LinearLayout relatedPostLinearLayout, totalDiveLinearLayout, tripDurationsLinearLayout, totalDiveSpotLinearLayout, openWaterLinearLayout, bannerLinearLayout, slotDiversLinearLayout;
+    private LinearLayout relatedPostLinearLayout, totalDiveLinearLayout, tripDurationsLinearLayout, totalDiveSpotLinearLayout, openWaterLinearLayout, bannerLinearLayout, slotDiversLinearLayout, equipmenRentContainerLinearLayoutt;
 
     public DetailServiceFragment() {
         // Required empty public constructor
@@ -108,6 +117,7 @@ public class DetailServiceFragment extends Fragment {
         initAdapter();
         initControl();
         initStateDoCourse();
+        setEquipmentRent();
     }
 
     private void initStateDoCourse() {
@@ -197,7 +207,10 @@ public class DetailServiceFragment extends Fragment {
         openWaterLinearLayout = (LinearLayout) v.findViewById(R.id.open_water_linearLayout);
         slotDiversLinearLayout = (LinearLayout) v.findViewById(R.id.slot_divers_linearLayout);
         bannerLinearLayout = (LinearLayout) v.findViewById(R.id.banner_linearLayout);
+        equipmenRentContainerLinearLayoutt = (LinearLayout) v.findViewById(R.id.equipemnt_rent_container_linearLayout);
+
     }
+
 
     public void setContent(){
 
@@ -433,6 +446,56 @@ public class DetailServiceFragment extends Fragment {
 
 
 
+
+    public void setEquipmentRent(){
+
+        final List<EquipmentRent> equipmentRents = new ArrayList<>();
+
+        EquipmentRent equipmentRent1 = new EquipmentRent();
+        equipmentRent1.setId("1");
+        equipmentRent1.setName("BCD Gear x1");
+        equipmentRent1.setNormalPrice(25000);
+        equipmentRent1.setSpecialPrice(10000);
+        equipmentRent1.setAvailabilityStock(3);
+        equipmentRents.add(equipmentRent1);
+
+
+        equipmenRentContainerLinearLayoutt.removeAllViews();
+        int pos = 0;
+        for (final EquipmentRent equipmentRent : equipmentRents) {
+
+            final int position = pos;
+
+            LayoutInflater linflaterAddons = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View myParticipantsView = linflaterAddons.inflate(R.layout.view_item_equipment_rent, null); //here item is the the layout you want to inflate
+
+            LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(getActivity(), 10));
+            myParticipantsView.setLayoutParams(layoutParamsAddons);
+
+            //myViewAddons.setId(0);
+            LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.linearLayout);
+            TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
+
+            if (equipmentRent != null && NYHelper.isStringNotEmpty(equipmentRent.getName())) {
+                nameTextView.setText(equipmentRent.getName());
+            }
+
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), EquipmentRentActivity.class);
+                    if (equipmentRents != null && NYHelper.isStringNotEmpty(equipmentRents.toString()))intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRents.toString());
+                    startActivityForResult(intent, RESULT_OK);
+                }
+            });
+
+            pos++;
+            equipmenRentContainerLinearLayoutt.addView(myParticipantsView);
+
+        }
+    }
+
     private void initAdapter() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         relatedPostRecyclerView.setLayoutManager(layoutManager);
@@ -567,4 +630,31 @@ public class DetailServiceFragment extends Fragment {
         // TODO: Update argument type and name
         //void onFragmentInteraction(Uri uri);
     }
+
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            Bundle b = data.getExtras();
+
+            if (data.hasExtra(NYHelper.EQUIPMENT_RENT)){
+                JSONObject obj = null;
+                /*try {
+                    obj = new JSONObject(data.getStringExtra(NYHelper.SEARCH_RESULT));
+                    searchService = new SearchService();
+                    searchService.parse(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+            }
+
+        }
+
+    }
+
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_double"
+        android:paddingRight="@dimen/padding_double"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/name_textView"
+            app:fontTextStyle="medium"
+            android:text="BCD Gear 1"
+            android:textSize="16sp"
+            android:ellipsize="end"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <com.nyelam.android.view.font.NYTextView
+            app:fontTextStyle="reguler"
+            android:text="change"
+            android:textSize="16sp"
+            android:textColor="@color/ny_grey2"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:src="@drawable/ic_arrow"
+            android:textSize="16sp"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+    </LinearLayout>
+
+
+    <View
+        android:background="@color/ny_grey3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+</LinearLayout>

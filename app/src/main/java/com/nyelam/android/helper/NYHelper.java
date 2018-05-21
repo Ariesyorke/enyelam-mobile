@@ -77,6 +77,7 @@ public class NYHelper {
     public static final String ID_DIVER = "id_diver";
     public static final String ID_SERVICE = "id_service";
     public static final String SERVICE = "id_service";
+    public static final String EQUIPMENT_RENT = "equipment_rent";
     public static final String IS_DO_TRIP = "is_do_trip";
     public static final String DIVER = "diver";
     public static final String NOTE = "note";

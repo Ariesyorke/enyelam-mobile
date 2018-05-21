@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nyelam.android.dodive.EquipmentRentActivity">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/colorGradationLeft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/close_imageView"
+                    android:src="@drawable/ic_close"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/title"
+                    app:fontTextStyle="reguler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:background="@android:color/transparent"
+                    android:layout_centerInParent="true"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Add-on"/>
+
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:visibility="gone"
+                    android:id="@+id/reset_textView"
+                    app:fontTextStyle="reguler"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="@string/reset"
+                    android:layout_margin="@dimen/padding_double"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:id="@+id/equipemnt_rent_container_linearLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_below="@+id/scrollView"
+        android:id="@+id/filter_linearLayout"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/apply_textView"
+            android:text="Apply"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/ny_rectangle_blue"
+            android:padding="@dimen/padding"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginEnd="@dimen/padding_half"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/clear_textView"
+            android:text="Clear"
+            android:textSize="16sp"
+            android:textColor="@color/ny_grey4"
+            android:background="@drawable/ny_rectangle_white_border_grey"
+            android:padding="@dimen/padding"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:layout_marginStart="@dimen/padding_half"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
