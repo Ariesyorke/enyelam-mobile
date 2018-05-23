@@ -46,6 +46,9 @@ import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.EquipmentRent;
+import com.nyelam.android.data.EquipmentRentAdded;
+import com.nyelam.android.data.EquipmentRentAddedList;
 import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.NTransactionResult;
@@ -127,6 +130,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     /*private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";*/
     private Intent paypalIntent;
     private int paypalRequestCode = 999;
+    private List<EquipmentRentAdded> equipmentRentAddedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -627,6 +631,35 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
             }
 
+
+
+
+            if (intent.hasExtra(NYHelper.EQUIPMENT_RENT)){
+
+                NYLog.e("equip extras exist");
+
+                EquipmentRentAddedList equipTemp = null;
+
+                try {
+
+                    NYLog.e("equip extras init JSONArray");
+
+                    JSONArray arrayCat = new JSONArray(extras.getString(NYHelper.EQUIPMENT_RENT));
+                    equipTemp = new EquipmentRentAddedList();
+                    equipTemp.parse(arrayCat);
+
+                    NYLog.e("equip extras parse "+equipTemp.getList());
+
+                    equipmentRentAddedList = equipTemp.getList();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                NYLog.e("equip extras parse NULL");
+            }
+
         }
 
     }
@@ -958,11 +991,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         progressDialog.show();
         try {
             NYDoDiveServiceCartRequest req = null;
+
+            String equipment = null;
+            if (equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) equipment = equipmentRentAddedList.toString();
+
             if (!isDoCourse){
-                req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId());
+                req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId(), equipment);
             } else if (isDoCourse && diveService.getOrganization() != null && NYHelper.isStringNotEmpty(diveService.getOrganization().getId())
                     && diveService.getLicenseType() != null && NYHelper.isStringNotEmpty(diveService.getLicenseType().getId())) {
-                req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId(), diveService.getOrganization().getId(), diveService.getLicenseType().getId());
+                req = new NYDoDiveServiceCartRequest(BookingServiceSummaryActivity.this, diveService.getId(), String.valueOf(diver), schedule, diveCenter.getId(), diveService.getOrganization().getId(), diveService.getLicenseType().getId(), equipment);
             }
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
@@ -1363,24 +1400,55 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         //NYLog.d("TES ADDITIONALS INIT");
         serviceFeeLinearLayout.removeAllViews();
-        for (Additional additional : additionalList) {
 
-            //NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
+        if (additionalList != null && !additionalList.isEmpty()){
+            for (Additional additional : additionalList) {
 
-            LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+                //NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
 
-            TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
-            TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
 
-            if (additional != null) {
-                if (NYHelper.isStringNotEmpty(additional.getTitle())) additionalLabelTextView.setText(additional.getTitle());
-                additionalValueTextView.setText(NYHelper.priceFormatter(additional.getValue()));
+                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                if (additional != null) {
+                    if (NYHelper.isStringNotEmpty(additional.getTitle())) additionalLabelTextView.setText(additional.getTitle());
+                    additionalValueTextView.setText(NYHelper.priceFormatter(additional.getValue()));
+                }
+
+                serviceFeeLinearLayout.addView(additionalView);
             }
-
-            serviceFeeLinearLayout.addView(additionalView);
         }
+
+
+
+        if (cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()){
+            for (EquipmentRent equipmentRent : cartReturn.getEquipmentRents()) {
+
+                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                if (equipmentRent != null) {
+                    if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName()+" x"+String.valueOf(equipmentRent.getQuantity()));
+
+                    if (equipmentRent.getSpecialPrice() < equipmentRent.getNormalPrice() && equipmentRent.getSpecialPrice() > 0){
+                        additionalValueTextView.setText(NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
+                    } else {
+                        additionalValueTextView.setText(NYHelper.priceFormatter(equipmentRent.getNormalPrice()));
+                    }
+                }
+
+                serviceFeeLinearLayout.addView(additionalView);
+            }
+        }
+
+
     }
+
 
 
     @Override

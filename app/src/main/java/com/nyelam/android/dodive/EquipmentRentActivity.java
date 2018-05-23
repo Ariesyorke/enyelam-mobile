@@ -9,13 +9,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.EquipmentRent;
+import com.nyelam.android.data.EquipmentRentAdded;
+import com.nyelam.android.data.EquipmentRentAddedList;
+import com.nyelam.android.data.EquipmentRentList;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,7 +35,7 @@ import java.util.Map;
 public class EquipmentRentActivity extends AppCompatActivity {
 
     private List<EquipmentRent> equipmentRents;
-    private HashMap<String, Integer> equipmentsRentTempList;
+    private List<EquipmentRentAdded> equipmentsRentTempList;
     private TextView applyTextView, clearTextView;
     private ImageView closeImageView;
     private LinearLayout containerLinearLayout;
@@ -37,22 +47,94 @@ public class EquipmentRentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_equipment_rent);
         initView();
         initControl();
+        initExtras();
         initEquipemntRent();
+    }
+
+    private void initExtras() {
+
+        NYLog.e("equip extras init");
+        Intent intent = getIntent();
+
+        Bundle b = intent.getExtras();
+
+        if (intent.hasExtra(NYHelper.EQUIPMENT_RENT)){
+
+            NYLog.e("equip extras exist");
+
+            EquipmentRentAddedList equipTemp = null;
+
+            try {
+
+                NYLog.e("equip extras init JSONArray");
+
+                JSONArray arrayCat = new JSONArray(b.getString(NYHelper.EQUIPMENT_RENT));
+                equipTemp = new EquipmentRentAddedList();
+                equipTemp.parse(arrayCat);
+
+                NYLog.e("equip extras parse "+equipTemp.getList());
+
+                equipmentsRentTempList = equipTemp.getList();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            NYLog.e("equip extras parse NULL");
+        }
     }
 
     public void initEquipemntRent(){
 
-        equipmentsRentTempList = new HashMap<>();
+        if (equipmentsRentTempList == null)equipmentsRentTempList = new ArrayList<>();
 
         equipmentRents = new ArrayList<>();
 
-        EquipmentRent equipmentRent1 = new EquipmentRent();
-        equipmentRent1.setId("1");
-        equipmentRent1.setName("BCD Gear x1");
-        equipmentRent1.setNormalPrice(25000);
-        equipmentRent1.setSpecialPrice(10000);
-        equipmentRent1.setAvailabilityStock(5);
-        equipmentRents.add(equipmentRent1);
+        NYLog.e("cek equipment 1 ");
+
+        try {
+
+            NYLog.e("cek equipment 2 ");
+
+            JSONArray array = new JSONArray(loadJSONFromAsset(this));
+
+            NYLog.e("cek equipment 3 ");
+
+            EquipmentRentList results = new EquipmentRentList();
+            results.parse(array);
+
+            NYLog.e("cek equipment 4 ");
+
+            if (results != null && results.getList() != null){
+
+                NYLog.e("cek equipment 5 ");
+
+                equipmentRents = results.getList();
+
+            } else {
+
+                NYLog.e("cek equipment 6 ");
+
+                /*EquipmentRent equipmentRent1 = new EquipmentRent();
+                equipmentRent1.setId("1");
+                equipmentRent1.setName("BCD Gear x1");
+                equipmentRent1.setNormalPrice(25000);
+                equipmentRent1.setSpecialPrice(10000);
+                equipmentRent1.setAvailabilityStock(5);
+                equipmentRents.add(equipmentRent1);*/
+
+            }
+
+        } catch (JSONException e) {
+
+            NYLog.e("cek equipment 7 ");
+
+            NYLog.e("cek equipment 8 : "+e.getMessage());
+
+            e.printStackTrace();
+        }
+
 
         containerLinearLayout.removeAllViews();
         int pos = 0;
@@ -67,8 +149,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
             layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(EquipmentRentActivity.this, 10));
             myParticipantsView.setLayoutParams(layoutParamsAddons);
 
-            //myViewAddons.setId(0);
-            //LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.linearLayout);
+
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
             TextView priceTextView = (TextView) myParticipantsView.findViewById(R.id.price_textView);
             NYStrikethroughTextView priceStrikeThroughTextView = (NYStrikethroughTextView) myParticipantsView.findViewById(R.id.price_strikethrough_textView);
@@ -83,22 +164,34 @@ public class EquipmentRentActivity extends AppCompatActivity {
                 }
 
                 if (equipmentRent.getSpecialPrice() < equipmentRent.getNormalPrice() && equipmentRent.getSpecialPrice() > 0){
-                    priceTextView.setText("@" + NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
-                    priceStrikeThroughTextView.setText("@" + NYHelper.priceFormatter(equipmentRent.getNormalPrice()));
+                    priceTextView.setText("@ " + NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
+                    priceStrikeThroughTextView.setText("@ " + NYHelper.priceFormatter(equipmentRent.getNormalPrice()));
                     priceStrikeThroughTextView.setVisibility(View.VISIBLE);
                 } else {
-                    priceTextView.setText("@" + NYHelper.priceFormatter(equipmentRent.getNormalPrice()));
+                    priceTextView.setText("@ " + NYHelper.priceFormatter(equipmentRent.getNormalPrice()));
                     priceStrikeThroughTextView.setVisibility(View.GONE);
                 }
 
                 final int[] total = {0};
+
+
+                for (EquipmentRentAdded add : equipmentsRentTempList){
+                    if (add.getId().equals(equipmentRent.getId())){
+                        total[0] = add.getQuantity();
+                        break;
+                    }
+                }
+
+                countTextView.setText(String.valueOf(total[0]));
+
                 plusImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if ((total[0]+1) <= equipmentRent.getAvailabilityStock()){
                             total[0]++;
                             countTextView.setText(String.valueOf(total[0]));
-                            equipmentsRentTempList.put(equipmentRent.getId(), total[0]);
+                            addEquipment(equipmentRent, total[0]);
+                            //equipmentsRentTempList.put(equipmentRent.getId(), total[0]);
 
                             NYLog.e("cek equipment temp 1 : "+equipmentsRentTempList.size());
                             NYLog.e("cek equipment temp 2 : "+equipmentsRentTempList.toString());
@@ -113,7 +206,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
                         if ((total[0] - 1) >= 0){
                             total[0]--;
                             countTextView.setText(String.valueOf(total[0]));
-                            if (total[0] <= 0)equipmentsRentTempList.remove(equipmentRent);
+                            addEquipment(equipmentRent, total[0]);
 
                             NYLog.e("cek equipment temp 1 : "+equipmentsRentTempList.size());
                             NYLog.e("cek equipment temp 2 : "+equipmentsRentTempList.toString());
@@ -143,7 +236,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
         clearTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                equipmentsRentTempList = new HashMap<String, Integer>();
+                equipmentsRentTempList = new ArrayList<EquipmentRentAdded>();
                 initEquipemntRent();
             }
         });
@@ -169,22 +262,81 @@ public class EquipmentRentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (isApply){
-
-
-
-            Iterator it = equipmentsRentTempList.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-
-                //System.out.println(pair.getKey() + " = " + pair.getValue());
-                //it.remove(); // avoids a ConcurrentModificationException
-            }
-
             Intent intent = new Intent();
-            intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentsRentTempList.toString());
+            if (equipmentsRentTempList != null){
+                intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentsRentTempList.toString());
+            }
             setResult(RESULT_OK, intent);
         }
         super.onBackPressed();
+    }
+
+    public String loadJSONFromAsset( Context context ) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open("list_equipment.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+
+
+
+    public void addEquipment(EquipmentRent equipmentRent, int quantity){
+
+        //NYLog.e("cek equipment add 1 : "+equipmentRentId +" - "+ quantity);
+
+        if (equipmentRent != null && NYHelper.isStringNotEmpty(equipmentRent.getId()) ){
+
+
+            boolean isExist = false;
+
+            if (equipmentsRentTempList == null) equipmentsRentTempList = new ArrayList<>();
+
+            for (EquipmentRentAdded rentAdded : equipmentsRentTempList){
+                if (rentAdded != null && NYHelper.isStringNotEmpty(rentAdded.getId()) && equipmentRent.getId().equals(rentAdded.getId())){
+
+                    EquipmentRentAdded newAdd = rentAdded;
+
+                    NYLog.e("cek equipment add 2 : exist");
+
+                    equipmentsRentTempList.remove(rentAdded);
+
+                    if (quantity > 0){
+                        NYLog.e("cek equipment add 3 ");
+                        newAdd.setQuantity(quantity);
+                        newAdd.setEquipmentRent(equipmentRent);
+                        equipmentsRentTempList.add(newAdd);
+                    } else {
+                        NYLog.e("cek equipment add 4 ");
+                    }
+
+                    isExist = true;
+                    break;
+                }
+            }
+
+            if (!isExist){
+                NYLog.e("cek equipment add 4 : not exist");
+                EquipmentRentAdded rentAdded = new EquipmentRentAdded();
+                rentAdded.setId(equipmentRent.getId());
+                rentAdded.setEquipmentRent(equipmentRent);
+                rentAdded.setQuantity(quantity);
+                equipmentsRentTempList.add(rentAdded);
+            }
+
+            NYLog.e("cek equipment data : "+equipmentsRentTempList.toString());
+
+        }
+
     }
 
     @Override
@@ -196,5 +348,6 @@ public class EquipmentRentActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
     }
+
 
 }

@@ -26,7 +26,8 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
     private static final String POST_SCHEDULE = "schedule";
 
     private static final String POST_LICENSE_TYPE = "license_type";
-    private static final String POST_ORGANIZATION_ID= "organization_id";
+    private static final String POST_ORGANIZATION_ID = "organization_id";
+    private static final String POST_EQUIPMENT_RENT = "equipment_rent";
 
     public NYDoDiveServiceCartRequest(Context context, String diveServiceId, String diver, String schedule) throws Exception {
         super(CartReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_cart));
@@ -51,7 +52,7 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
 
     }
 
-    public NYDoDiveServiceCartRequest(Context context, String diveServiceId, String diver, String schedule, String diveCenterId) throws Exception {
+    public NYDoDiveServiceCartRequest(Context context, String diveServiceId, String diver, String schedule, String diveCenterId, String equipmentRent) throws Exception {
         super(CartReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_cart));
 
         if(!TextUtils.isEmpty(diveServiceId)) {
@@ -66,9 +67,9 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
             addQuery(POST_DIVE_CENTER_ID, diveCenterId);
         }
 
-        /*if(!TextUtils.isEmpty(type)) {
-            addQuery(POST_TYPE, type);
-        }*/
+        if(!TextUtils.isEmpty(equipmentRent)) {
+            addQuery(POST_EQUIPMENT_RENT, equipmentRent);
+        }
 
         addQuery(POST_TYPE, "1");
 
@@ -79,7 +80,7 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
     }
 
 
-    public NYDoDiveServiceCartRequest(Context context, String diveServiceId, String diver, String schedule, String diveCenterId, String organizationId, String licenseType) throws Exception {
+    public NYDoDiveServiceCartRequest(Context context, String diveServiceId, String diver, String schedule, String diveCenterId, String organizationId, String licenseType, String equipmentRent) throws Exception {
         super(CartReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_cart));
 
         if(!TextUtils.isEmpty(diveServiceId)) {
@@ -106,6 +107,10 @@ public class NYDoDiveServiceCartRequest extends NYBasicAuthRequest<CartReturn> {
 
         if(!TextUtils.isEmpty(licenseType)) {
             addQuery(POST_LICENSE_TYPE, licenseType);
+        }
+
+        if(!TextUtils.isEmpty(equipmentRent)) {
+            addQuery(POST_EQUIPMENT_RENT, equipmentRent);
         }
 
     }

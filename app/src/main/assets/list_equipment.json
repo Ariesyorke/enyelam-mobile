@@ -1,0 +1,16 @@
+[
+  {
+    "id":"1",
+    "name":"Scuba Gear",
+    "normal_price":100000,
+    "special_price":75000,
+    "availability_stock":8
+  },
+  {
+    "id":"2",
+    "name":"Scuba Gear II",
+    "normal_price":50000,
+    "special_price":35000,
+    "availability_stock":7
+  }
+]

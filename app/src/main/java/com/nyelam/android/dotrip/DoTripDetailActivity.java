@@ -165,7 +165,7 @@ public class DoTripDetailActivity extends AppCompatActivity implements
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
         try {
-            req = new NYDoDiveServiceCartRequest(DoTripDetailActivity.this, diveService.getId(), diver, schedule, diveCenter.getId());
+            req = new NYDoDiveServiceCartRequest(DoTripDetailActivity.this, diveService.getId(), diver, schedule, diveCenter.getId(), null);
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
             e.printStackTrace();

@@ -34,6 +34,7 @@ import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveSpot;
+import com.nyelam.android.data.EquipmentRentAdded;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DiveCenterDetailFragment;
 import com.nyelam.android.helper.NYHelper;
@@ -106,6 +107,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected boolean isDoTrip;
     protected boolean isDoCourse;
 
+    protected List<EquipmentRentAdded> equipmentRentList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +127,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
             if (resultCode == RESULT_OK) {
                 triggerBook = true;
             }
+        } else {
+            Toast.makeText(this, "hallo", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -173,15 +178,19 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
+
+        String equipment = null;
+        if (equipmentRentList != null) equipment = equipmentRentList.toString();
+
         try {
             if (!isDoCourse){
-                req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId());
+                req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId(), equipment);
             } else if (isDoCourse && newDiveService.getOrganization() != null && NYHelper.isStringNotEmpty(newDiveService.getOrganization().getId())
                     && newDiveService.getLicenseType() != null && NYHelper.isStringNotEmpty(newDiveService.getLicenseType().getId())) {
 
                 NYLog.e("CEK BOOKING : INIT 2");
 
-                req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId(), newDiveService.getOrganization().getId(), newDiveService.getLicenseType().getId());
+                req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId(), newDiveService.getOrganization().getId(), newDiveService.getLicenseType().getId(), equipment);
             }
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
@@ -275,6 +284,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     e.printStackTrace();
                 }
             }
+
+
+
+
+
+
 
         }
 
@@ -408,6 +423,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.DIVE_CENTER, newDiveService.getDiveCenter().toString());
                 intent.putExtra(NYHelper.IS_DO_COURSE, isDoCourse);
+                if (equipmentRentList != null && !equipmentRentList.isEmpty()){
+                    intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentList.toString());
+                }
                 startActivity(intent);
             }
         };

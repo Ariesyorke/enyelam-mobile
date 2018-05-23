@@ -17,12 +17,14 @@ public class EquipmentRent implements Parseable {
     private static String KEY_NORMAL_PRICE = "normal_price";
     private static String KEY_SPECIAL_PRICE = "special_price";
     private static String KEY_AVAILABILITY_STOCK = "availability_stock";
+    private static String KEY_QUANTITY = "quantity";
 
     private String id;
     private String name;
     private long normalPrice;
     private long specialPrice;
     private int availabilityStock;
+    private int quantity;
 
 
     public String getId() {
@@ -65,6 +67,13 @@ public class EquipmentRent implements Parseable {
         this.availabilityStock = availabilityStock;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public void parse(JSONObject obj){
 
@@ -110,6 +119,14 @@ public class EquipmentRent implements Parseable {
             }
         }
 
+        if (!obj.isNull(KEY_QUANTITY)){
+            try {
+                setQuantity(obj.getInt(KEY_QUANTITY));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
@@ -148,6 +165,12 @@ public class EquipmentRent implements Parseable {
 
         try {
             obj.put(KEY_AVAILABILITY_STOCK, getAvailabilityStock());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_QUANTITY, getQuantity());
         } catch (JSONException e) {
             e.printStackTrace();
         }

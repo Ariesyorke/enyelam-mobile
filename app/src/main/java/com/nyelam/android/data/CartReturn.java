@@ -22,11 +22,13 @@ public class CartReturn implements Parseable {
     private static String KEY_EXPIRY = "expiry";
     private static String KEY_CART = "cart";
     private static String KEY_ADDITIONAL = "additional";
+    private static String KEY_EQUIPMENT_RENTS = "equipment_rents";
 
     private String cartToken;
     private long expiry;
     private Cart cart;
     private List<Additional> additionals;
+    private List<EquipmentRent> equipmentRents;
 
     public String getCartToken() {
         return cartToken;
@@ -58,6 +60,14 @@ public class CartReturn implements Parseable {
 
     public void setAdditionals(List<Additional> additionals) {
         this.additionals = additionals;
+    }
+
+    public List<EquipmentRent> getEquipmentRents() {
+        return equipmentRents;
+    }
+
+    public void setEquipmentRents(List<EquipmentRent> equipmentRents) {
+        this.equipmentRents = equipmentRents;
     }
 
     @Override
@@ -105,6 +115,23 @@ public class CartReturn implements Parseable {
             } catch (JSONException e) {e.printStackTrace();}
         }
 
+
+
+        if (!obj.isNull(KEY_EQUIPMENT_RENTS)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_EQUIPMENT_RENTS);
+                if (array != null && array.length() > 0) {
+                    equipmentRents = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        EquipmentRent a = new EquipmentRent();
+                        a.parse(o);
+                        equipmentRents.add(a);
+                    }
+                }
+            } catch (JSONException e) {e.printStackTrace();}
+        }
+
     }
 
     @Override
@@ -147,6 +174,21 @@ public class CartReturn implements Parseable {
                 e.printStackTrace();
             }
         }
+
+
+        if(equipmentRents != null && !equipmentRents.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(EquipmentRent a : equipmentRents) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_EQUIPMENT_RENTS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         try {
             return obj.toString(3);
