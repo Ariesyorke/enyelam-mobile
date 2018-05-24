@@ -1,6 +1,7 @@
 package com.nyelam.android.dodive;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,21 +9,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.DiveCenter;
+import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
+import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.EquipmentRent;
 import com.nyelam.android.data.EquipmentRentAdded;
 import com.nyelam.android.data.EquipmentRentAddedList;
 import com.nyelam.android.data.EquipmentRentList;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.diveservice.DetailServiceActivity;
+import com.nyelam.android.diveservice.DetailServiceDiveCenterFragment;
+import com.nyelam.android.diveservice.DetailServiceDiveSpotsFragment;
+import com.nyelam.android.diveservice.DetailServiceFragment;
+import com.nyelam.android.diveservice.DetailServiceReviewFragment;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYDoDiveServiceCartRequest;
+import com.nyelam.android.http.NYEquipmentRentListRequest;
+import com.nyelam.android.http.NYServiceOutOfStockException;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,12 +52,16 @@ import java.util.Map;
 
 public class EquipmentRentActivity extends AppCompatActivity {
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private List<EquipmentRent> equipmentRents;
     private List<EquipmentRentAdded> equipmentsRentTempList;
     private TextView applyTextView, clearTextView;
     private ImageView closeImageView;
     private LinearLayout containerLinearLayout;
     private boolean isApply;
+    private ProgressBar progressBar;
+    private DiveCenter diveCenter;
+    private String schedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,34 +70,23 @@ public class EquipmentRentActivity extends AppCompatActivity {
         initView();
         initControl();
         initExtras();
-        initEquipemntRent();
+        getEquipmentList();
+        //initEquipemntRent();
     }
 
     private void initExtras() {
 
-        NYLog.e("equip extras init");
         Intent intent = getIntent();
-
         Bundle b = intent.getExtras();
 
         if (intent.hasExtra(NYHelper.EQUIPMENT_RENT)){
-
-            NYLog.e("equip extras exist");
-
             EquipmentRentAddedList equipTemp = null;
 
             try {
-
-                NYLog.e("equip extras init JSONArray");
-
                 JSONArray arrayCat = new JSONArray(b.getString(NYHelper.EQUIPMENT_RENT));
                 equipTemp = new EquipmentRentAddedList();
                 equipTemp.parse(arrayCat);
-
-                NYLog.e("equip extras parse "+equipTemp.getList());
-
                 equipmentsRentTempList = equipTemp.getList();
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -83,57 +94,41 @@ public class EquipmentRentActivity extends AppCompatActivity {
         } else {
             NYLog.e("equip extras parse NULL");
         }
+
+
+        if (intent.hasExtra(NYHelper.DIVE_CENTER)) {
+            try {
+                JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.DIVE_CENTER));
+                diveCenter = new DiveCenter();
+                diveCenter.parse(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(intent.hasExtra(NYHelper.SCHEDULE) && NYHelper.isStringNotEmpty(intent.getStringExtra(NYHelper.SCHEDULE))){
+            schedule = intent.getStringExtra(NYHelper.SCHEDULE);
+        }
+
     }
 
     public void initEquipemntRent(){
 
         if (equipmentsRentTempList == null)equipmentsRentTempList = new ArrayList<>();
 
-        equipmentRents = new ArrayList<>();
+        if (equipmentRents == null) equipmentRents = new ArrayList<>();
 
-        NYLog.e("cek equipment 1 ");
-
-        try {
-
-            NYLog.e("cek equipment 2 ");
-
+        /*try {
             JSONArray array = new JSONArray(loadJSONFromAsset(this));
-
-            NYLog.e("cek equipment 3 ");
-
             EquipmentRentList results = new EquipmentRentList();
             results.parse(array);
 
-            NYLog.e("cek equipment 4 ");
-
             if (results != null && results.getList() != null){
-
-                NYLog.e("cek equipment 5 ");
-
                 equipmentRents = results.getList();
-
-            } else {
-
-                NYLog.e("cek equipment 6 ");
-
-                /*EquipmentRent equipmentRent1 = new EquipmentRent();
-                equipmentRent1.setId("1");
-                equipmentRent1.setName("BCD Gear x1");
-                equipmentRent1.setNormalPrice(25000);
-                equipmentRent1.setSpecialPrice(10000);
-                equipmentRent1.setAvailabilityStock(5);
-                equipmentRents.add(equipmentRent1);*/
-
             }
-
         } catch (JSONException e) {
-
-            NYLog.e("cek equipment 7 ");
-
-            NYLog.e("cek equipment 8 : "+e.getMessage());
-
             e.printStackTrace();
-        }
+        }*/
 
 
         containerLinearLayout.removeAllViews();
@@ -148,7 +143,6 @@ public class EquipmentRentActivity extends AppCompatActivity {
             LinearLayout.LayoutParams layoutParamsAddons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(EquipmentRentActivity.this, 10));
             myParticipantsView.setLayoutParams(layoutParamsAddons);
-
 
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
             TextView priceTextView = (TextView) myParticipantsView.findViewById(R.id.price_textView);
@@ -174,7 +168,6 @@ public class EquipmentRentActivity extends AppCompatActivity {
 
                 final int[] total = {0};
 
-
                 for (EquipmentRentAdded add : equipmentsRentTempList){
                     if (add.getId().equals(equipmentRent.getId())){
                         total[0] = add.getQuantity();
@@ -192,10 +185,6 @@ public class EquipmentRentActivity extends AppCompatActivity {
                             countTextView.setText(String.valueOf(total[0]));
                             addEquipment(equipmentRent, total[0]);
                             //equipmentsRentTempList.put(equipmentRent.getId(), total[0]);
-
-                            NYLog.e("cek equipment temp 1 : "+equipmentsRentTempList.size());
-                            NYLog.e("cek equipment temp 2 : "+equipmentsRentTempList.toString());
-
                         }
                     }
                 });
@@ -207,17 +196,12 @@ public class EquipmentRentActivity extends AppCompatActivity {
                             total[0]--;
                             countTextView.setText(String.valueOf(total[0]));
                             addEquipment(equipmentRent, total[0]);
-
-                            NYLog.e("cek equipment temp 1 : "+equipmentsRentTempList.size());
-                            NYLog.e("cek equipment temp 2 : "+equipmentsRentTempList.toString());
                         }
                     }
                 });
 
-
                 pos++;
                 containerLinearLayout.addView(myParticipantsView);
-
             }
 
         }
@@ -255,6 +239,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
         clearTextView = (TextView) findViewById(R.id.reset_textView);
         applyTextView = (TextView) findViewById(R.id.apply_textView);
         closeImageView = (ImageView) findViewById(R.id.close_imageView);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         containerLinearLayout = (LinearLayout) findViewById(R.id.equipemnt_rent_container_linearLayout);
     }
 
@@ -269,6 +254,36 @@ public class EquipmentRentActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
         }
         super.onBackPressed();
+    }
+
+    private void getEquipmentList() {
+        progressBar.setVisibility(View.VISIBLE);
+        try {
+            NYEquipmentRentListRequest req = new NYEquipmentRentListRequest(this, diveCenter.getId(), schedule);
+            spcMgr.execute(req, onGetEquipmentRentRequest());
+        } catch (Exception e) {
+            progressBar.setVisibility(View.GONE);
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<EquipmentRentList> onGetEquipmentRentRequest() {
+        return new RequestListener<EquipmentRentList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                progressBar.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onRequestSuccess(EquipmentRentList results) {
+                progressBar.setVisibility(View.GONE);
+                if (results != null) {
+                    equipmentRents = results.getList();
+                    initEquipemntRent();
+                }
+            }
+        };
     }
 
     public String loadJSONFromAsset( Context context ) {
@@ -342,11 +357,13 @@ public class EquipmentRentActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        spcMgr.start(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 
 

@@ -19,19 +19,14 @@ public class NYEquipmentRentListRequest extends NYBasicAuthRequest<EquipmentRent
 
     private static final String KEY_EQUIPMENT_RENTS = "equipment_rents";
 
-    private static final String POST_DATE = "date";
-    private static final String POST_SERVICE_ID = "service_id";
     private static final String POST_DIVE_CENTER_ID = "divecenter_id";
+    private static final String POST_DATE = "date";
 
-    public NYEquipmentRentListRequest(Context context, String date, String serviceId, String diveCenterId) throws Exception {
-        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_order));
+    public NYEquipmentRentListRequest(Context context, String diveCenterId, String date) throws Exception {
+        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_equipment_rent_list));
 
         if(!TextUtils.isEmpty(date)) {
             addQuery(POST_DATE, date);
-        }
-
-        if(!TextUtils.isEmpty(serviceId)) {
-            addQuery(POST_SERVICE_ID, serviceId);
         }
 
         if(!TextUtils.isEmpty(diveCenterId)) {

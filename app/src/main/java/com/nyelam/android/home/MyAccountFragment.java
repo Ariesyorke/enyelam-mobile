@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -61,7 +62,7 @@ public class MyAccountFragment extends Fragment implements
 
     private OnFragmentInteractionListener mListener;
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
-    private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout, changePasswordRelativeLayout, termAndConditionsRelativeLayout;
+    private RelativeLayout editProfileRelativeLayout, logoutRelativeLayout, changePasswordRelativeLayout, termAndConditionsRelativeLayout, contactUsRelativeLayout;
     private File photoProfile, photoCover;
     private ImageView coverImageView, changeCoverImageView;
     private CircleImageView photoProfileImageView;
@@ -270,6 +271,17 @@ public class MyAccountFragment extends Fragment implements
             }
         });
 
+        contactUsRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","info@e-nyelam.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hi, e-Nyelam!");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            }
+        });
+
     }
 
     private void initView(View view) {
@@ -277,6 +289,7 @@ public class MyAccountFragment extends Fragment implements
         changePasswordRelativeLayout = (RelativeLayout) view.findViewById(R.id.change_password_relativeLayout);
         logoutRelativeLayout = (RelativeLayout) view.findViewById(R.id.logout_relativeLayout);
         termAndConditionsRelativeLayout = (RelativeLayout) view.findViewById(R.id.term_and_conditions_relativeLayout);
+        contactUsRelativeLayout = (RelativeLayout) view.findViewById(R.id.contact_us_relativeLayout);
         coverImageView = (ImageView) view.findViewById(R.id.cover_imageView);
         changeCoverImageView = (ImageView) view.findViewById(R.id.change_cover_imageView);
         photoProfileImageView = (CircleImageView) view.findViewById(R.id.photo_profile_circleImageView);

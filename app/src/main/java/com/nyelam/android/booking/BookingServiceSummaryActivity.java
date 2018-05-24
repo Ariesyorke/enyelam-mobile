@@ -1435,11 +1435,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 if (equipmentRent != null) {
                     if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName()+" x"+String.valueOf(equipmentRent.getQuantity()));
 
-                    if (equipmentRent.getSpecialPrice() < equipmentRent.getNormalPrice() && equipmentRent.getSpecialPrice() > 0){
+                    additionalValueTextView.setText(NYHelper.priceFormatter((equipmentRent.getSpecialPrice()*equipmentRent.getQuantity())));
+
+                    /*if (equipmentRent.getSpecialPrice() < equipmentRent.getNormalPrice() && equipmentRent.getSpecialPrice() > 0){
                         additionalValueTextView.setText(NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
                     } else {
                         additionalValueTextView.setText(NYHelper.priceFormatter(equipmentRent.getNormalPrice()));
-                    }
+                    }*/
                 }
 
                 serviceFeeLinearLayout.addView(additionalView);

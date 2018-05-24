@@ -500,6 +500,8 @@ public class DetailServiceFragment extends Fragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), EquipmentRentActivity.class);
                         if (equipmentRentList != null && equipmentRentList.getList() != null)intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentList.getList().toString());
+                        if (activity.diveService != null && activity.diveService.getDiveCenter() != null)intent.putExtra(NYHelper.DIVE_CENTER, activity.getDiveService().getDiveCenter().toString());
+                        intent.putExtra(NYHelper.SCHEDULE, activity.schedule);
                         startActivityForResult(intent, mRequestCode);
                     }
                 });
@@ -530,6 +532,8 @@ public class DetailServiceFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), EquipmentRentActivity.class);
                     if (equipmentRentList != null && equipmentRentList.getList() != null)intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentList.getList().toString());
+                    if (activity.diveService != null && activity.diveService.getDiveCenter() != null)intent.putExtra(NYHelper.DIVE_CENTER, activity.getDiveService().getDiveCenter().toString());
+                    intent.putExtra(NYHelper.SCHEDULE, activity.schedule);
                     startActivityForResult(intent, mRequestCode);
                 }
             });
@@ -683,19 +687,18 @@ public class DetailServiceFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Toast.makeText(activity, "ada equipment 1 ", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(activity, "ada equipment 1 ", Toast.LENGTH_SHORT).show();
 
         if (resultCode == RESULT_OK) {
 
-            Toast.makeText(activity, "ada equipment 2 ", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity, "ada equipment 2 ", Toast.LENGTH_SHORT).show();
 
             Bundle b = data.getExtras();
 
             if (data.hasExtra(NYHelper.EQUIPMENT_RENT)){
 
-                Toast.makeText(activity, "ada equipment 3 ", Toast.LENGTH_SHORT).show();
-
-                NYLog.e("ada equipment init : "+data.getStringExtra(NYHelper.SEARCH_RESULT));
+                //Toast.makeText(activity, "ada equipment 3 ", Toast.LENGTH_SHORT).show();
+                //NYLog.e("ada equipment init : "+data.getStringExtra(NYHelper.SEARCH_RESULT));
 
                 if (equipmentRentList == null) equipmentRentList = new EquipmentRentAddedList();
 
@@ -703,13 +706,10 @@ public class DetailServiceFragment extends Fragment {
                     JSONArray arrayCat = new JSONArray(b.getString(NYHelper.EQUIPMENT_RENT));
                     equipmentRentList = new EquipmentRentAddedList();
                     equipmentRentList.parse(arrayCat);
-                    NYLog.e("ada equipment data : "+equipmentRentList.toString());
+                    //NYLog.e("ada equipment data : "+equipmentRentList.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-
 
                 /*JSONArray array = null;
                 try {

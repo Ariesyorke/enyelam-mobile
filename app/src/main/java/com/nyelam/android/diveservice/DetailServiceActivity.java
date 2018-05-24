@@ -128,7 +128,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 triggerBook = true;
             }
         } else {
-            Toast.makeText(this, "hallo", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "hallo", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -308,7 +308,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 NYDoDiveDetailServiceRequest req = new NYDoDiveDetailServiceRequest(DetailServiceActivity.this, diveService.getId(), diver, certificate, schedule);
                 spcMgr.execute(req, onGetDetailServiceRequest());
             }
-
         }
     }
 

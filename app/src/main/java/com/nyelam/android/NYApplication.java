@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.SdkCoreFlowBuilder;
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
@@ -41,6 +43,8 @@ import java.util.TimeZone;
 
 public class NYApplication extends MultiDexApplication implements TransactionFinishedCallback {
 
+    private static GoogleAnalytics sAnalytics;
+    private static Tracker sTracker;
     public DaoSession daoSession;
     public DaoSession getDaoSession() {
         return daoSession;
@@ -48,9 +52,14 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
     public LruCache<String, Bitmap> imageCache;
     public Calendar calendar;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sAnalytics = GoogleAnalytics.getInstance(this);
+        Tracker mTracker = getDefaultTracker();
+
         //calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
         calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
 
@@ -128,5 +137,16 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
             return null;
         }
         return imageCache.get(url);
+    }
+
+
+
+    synchronized public Tracker getDefaultTracker() {
+        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+        if (sTracker == null) {
+            sTracker = sAnalytics.newTracker(R.string.ga_trackingId);
+        }
+
+        return sTracker;
     }
 }
