@@ -43,8 +43,7 @@ import java.util.TimeZone;
 
 public class NYApplication extends MultiDexApplication implements TransactionFinishedCallback {
 
-    private static GoogleAnalytics sAnalytics;
-    private static Tracker sTracker;
+    private Tracker mTracker;
     public DaoSession daoSession;
     public DaoSession getDaoSession() {
         return daoSession;
@@ -52,13 +51,14 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
     public LruCache<String, Bitmap> imageCache;
     public Calendar calendar;
 
-
     @Override
     public void onCreate() {
         super.onCreate();
 
-        sAnalytics = GoogleAnalytics.getInstance(this);
-        Tracker mTracker = getDefaultTracker();
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        mTracker = analytics.newTracker(R.string.ga_trackingId);
+        mTracker.enableExceptionReporting(true);
+        mTracker.enableAutoActivityTracking(true);
 
         //calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
         calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
@@ -139,14 +139,4 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         return imageCache.get(url);
     }
 
-
-
-    synchronized public Tracker getDefaultTracker() {
-        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
-        if (sTracker == null) {
-            sTracker = sAnalytics.newTracker(R.string.ga_trackingId);
-        }
-
-        return sTracker;
-    }
 }
