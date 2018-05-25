@@ -1,0 +1,94 @@
+{
+  "project_info": {
+    "project_number": "359054383364",
+    "firebase_url": "https://nyelam-1520422047809.firebaseio.com",
+    "project_id": "nyelam-1520422047809",
+    "storage_bucket": "nyelam-1520422047809.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359054383364:android:61734b60a0493416",
+        "android_client_info": {
+          "package_name": "com.nyelam.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359054383364-8j47hnspk2efv4dol3nlgvf9867gkbau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nyelam.android",
+            "certificate_hash": "83212562dd44f55f331f93c6f4918b6fe7f6a273"
+          }
+        },
+        {
+          "client_id": "359054383364-3sk8tqnmlfkn98blil5fn7fplc7n9or2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nyelam.android",
+            "certificate_hash": "a975272304f83650eb50eaf9fa1ecb3695e7b156"
+          }
+        },
+        {
+          "client_id": "359054383364-l29882rdags3ng0pmm2sbkb3nsl28vkq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "359054383364-s34vft3pvam0ojj3kt42kv5u2kfp5ji2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nyelam.android",
+            "certificate_hash": "fd418a3d0306cbad3cb17372dbfc033f1562f1cf"
+          }
+        },
+        {
+          "client_id": "359054383364-knqg9h7pp2ftva0324sbodoe453ro3q2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nyelam.android",
+            "certificate_hash": "57b3cd83cabb120fe3430faa55ac26d4834fd82a"
+          }
+        },
+        {
+          "client_id": "359054383364-tpklucpomuel73c5ods0kj6klij2f59m.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "359054383364-l29882rdags3ng0pmm2sbkb3nsl28vkq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb_dLJGIra8b3geE19jCLhg3yP0ZloaWM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359054383364-qu2ipqnfu6ues5r6bllc5cbk98rlre80.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.e-nyelam.ios"
+              }
+            },
+            {
+              "client_id": "359054383364-l29882rdags3ng0pmm2sbkb3nsl28vkq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

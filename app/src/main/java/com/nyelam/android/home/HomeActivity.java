@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
+import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
@@ -74,6 +75,10 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        NYApplication application = (NYApplication)getApplication();
+        application.setFirebaseAnalyticsEvent("home_activity");
+
         initExtra();
         initView();
         initTab();

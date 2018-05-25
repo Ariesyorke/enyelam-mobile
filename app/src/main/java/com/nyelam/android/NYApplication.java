@@ -3,6 +3,7 @@ package com.nyelam.android;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LruCache;
@@ -12,6 +13,8 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.SdkCoreFlowBuilder;
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
@@ -43,6 +46,7 @@ import java.util.TimeZone;
 
 public class NYApplication extends MultiDexApplication implements TransactionFinishedCallback {
 
+    private FirebaseAnalytics firebaseAnalytics;
     private Tracker mTracker;
     public DaoSession daoSession;
     public DaoSession getDaoSession() {
@@ -54,11 +58,15 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
     @Override
     public void onCreate() {
         super.onCreate();
+        FirebaseApp.initializeApp(this);
+        // Obtain the Firebase Analytics instance.
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
 
-        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-        mTracker = analytics.newTracker(R.string.ga_trackingId);
-        mTracker.enableExceptionReporting(true);
-        mTracker.enableAutoActivityTracking(true);
+//        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+//        mTracker = analytics.newTracker(R.string.ga_trackingId);
+//        mTracker.enableExceptionReporting(true);
+//        mTracker.enableAutoActivityTracking(true);
 
         //calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT +7"));
         calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
@@ -139,4 +147,10 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         return imageCache.get(url);
     }
 
+
+    public void setFirebaseAnalyticsEvent(String event){
+        Bundle bundle = new Bundle();
+        //bundle.putString("some_key", "some_value");
+        firebaseAnalytics.logEvent(event, bundle);
+    }
 }

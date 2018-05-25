@@ -61,6 +61,10 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NYApplication application = (NYApplication)getApplication();
+        application.setFirebaseAnalyticsEvent("starter_activity");
+
         setContentView(R.layout.activity_starter);
         //initiatePermission();
         getCacheBackground(0);
