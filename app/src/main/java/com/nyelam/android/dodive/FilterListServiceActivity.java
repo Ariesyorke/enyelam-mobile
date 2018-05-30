@@ -398,9 +398,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
         if (category != null && NYHelper.isStringNotEmpty(category.getName())){
             LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
+            View categoryView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
 
-            final FancyButton fbCategory = (FancyButton) myParticipantsView.findViewById(R.id.btn_category);
+            final FancyButton fbCategory = (FancyButton) categoryView.findViewById(R.id.btn_category);
 
             fbCategory.setText(category.getName());
 
@@ -429,6 +429,11 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
                         if (idCatMap.get(ct.getId())){
                             idCatMap.put(ct.getId(), false);
+
+                            for (String key : idCatMap.keySet()) {
+                                if (key.equals("0"))idCatMap.put(key, false);
+                            }
+
                         } else {
                             idCatMap.put(ct.getId(), true);
                         }
@@ -447,7 +452,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 }
             });
 
-            categoryFlowLayout.addView(myParticipantsView);
+            categoryFlowLayout.addView(categoryView);
         }
 
     }
@@ -486,9 +491,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
         if (facility != null && NYHelper.isStringNotEmpty(facility.getName())){
             LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View myParticipantsView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
+            View facilityView = inflaterAddons.inflate(R.layout.view_item_category, null); //here item is the the layout you want to inflate
 
-            final FancyButton fbFacility = (FancyButton) myParticipantsView.findViewById(R.id.btn_category);
+            final FancyButton fbFacility = (FancyButton) facilityView.findViewById(R.id.btn_category);
 
             fbFacility.setText(facility.getName());
             //fbFacility.setTag(facility);
@@ -503,7 +508,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 }
             });
 
-            facilitiesFlowLayout.addView(myParticipantsView);
+            facilitiesFlowLayout.addView(facilityView);
         }
 
     }
