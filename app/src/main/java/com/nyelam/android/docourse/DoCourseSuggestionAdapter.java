@@ -159,6 +159,10 @@ public class DoCourseSuggestionAdapter extends RecyclerView.Adapter<RecyclerView
                     divingLicenseImageView.setVisibility(View.GONE);
                 }
 
+                if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())){
+                    diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
+                }
+
                 if (specialPrice < normalPrice && specialPrice > 0){
                     priceTextView.setText(NYHelper.priceFormatter(specialPrice));
                     priceStrikethroughTextView.setText(NYHelper.priceFormatter(normalPrice));

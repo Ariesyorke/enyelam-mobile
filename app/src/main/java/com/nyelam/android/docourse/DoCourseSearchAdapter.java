@@ -209,10 +209,8 @@ public class DoCourseSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     totalDayOnSiteTextView.setText(String.valueOf(diveService.getDayOnSite())+" Day on-site");
                 }
 
-                if (diveService.getDiveCenter() != null){
-
-                    if (NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText("by "+diveService.getDiveCenter().getName());
-
+                if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())){
+                    diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
                 }
 
                 //SET IMAGE

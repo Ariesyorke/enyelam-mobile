@@ -45,14 +45,19 @@ import com.nyelam.android.ecotrip.EcoTripViewPagerAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
+import com.nyelam.android.http.NYGetEcoTripDateRequest;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -285,7 +290,30 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         //datePickerDialog.show();
         DoDiveActivity activity = (DoDiveActivity)getActivity();
         if(activity.isEcoTrip()) {
+
             List<Calendar> calendars = new ArrayList<>();
+
+            try {
+                JSONArray array = new JSONArray(loadJSONFromAsset(getActivity()));
+
+                for (int i = 0; i < array.length(); i++) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(array.getLong(i)*1000);
+                    calendars.add(cal);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Calendar[] cals = new Calendar[calendars.size()];
+            calendars.toArray(cals);
+
+            datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
+            datePickerDialog.setMinDate(c);
+            datePickerDialog.setSelectableDays(cals);
+
+            /*List<Calendar> calendars = new ArrayList<>();
             //List<Calendar> calendarsTwo = new ArrayList<>();
             int divider = 12 - month;
 
@@ -318,11 +346,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             Calendar[] cals = new Calendar[calendars.size()];
             calendars.toArray(cals);
             datePickerDialog.setSelectableDays(cals);
-
-            /*Calendar[] calsTwo = new Calendar[2];
-            calsTwo[0] = Calendar.getInstance();
-            calsTwo[0].set(2018, 4, 12);
-            datePickerDialog.setDisabledDays(calsTwo);*/
+            */
 
         } else {
             datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
@@ -731,6 +755,28 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         };
     }
 
+
+    private void getEcoTripDateRequest() {
+        try {
+            NYGetEcoTripDateRequest req = new NYGetEcoTripDateRequest(getActivity());
+            spcMgr.execute(req, onEcoTripDateRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<List<Long>> onEcoTripDateRequest() {
+        return new RequestListener<List<Long>>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+            }
+
+            @Override
+            public void onRequestSuccess(List<Long> results) {
+            }
+        };
+    }
+
     private void initView(View v) {
         scrollView = (NestedScrollView) v.findViewById(R.id.scrollView);
         keywordTextView = (com.nyelam.android.view.font.NYTextView) v.findViewById(R.id.keyword_textView);
@@ -876,6 +922,23 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
         activity.toolbar.setFocusable(true);
         activity.toolbar.setFocusableInTouchMode(true);
+    }
+
+
+    public String loadJSONFromAsset( Context context ) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open("list_eco_trip_date.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
 

@@ -55,9 +55,9 @@ public class EquipmentRentActivity extends AppCompatActivity {
     protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private List<EquipmentRent> equipmentRents;
     private List<EquipmentRentAdded> equipmentsRentTempList;
-    private TextView applyTextView, clearTextView;
+    private TextView applyTextView, clearTextView, notFoundTextView;
     private ImageView closeImageView;
-    private LinearLayout containerLinearLayout;
+    private LinearLayout containerLinearLayout, equipmentRentLinearLayout;
     private boolean isApply;
     private ProgressBar progressBar;
     private DiveCenter diveCenter;
@@ -236,11 +236,13 @@ public class EquipmentRentActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        notFoundTextView = (TextView) findViewById(R.id.not_found_textView);
         clearTextView = (TextView) findViewById(R.id.reset_textView);
         applyTextView = (TextView) findViewById(R.id.apply_textView);
         closeImageView = (ImageView) findViewById(R.id.close_imageView);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         containerLinearLayout = (LinearLayout) findViewById(R.id.equipemnt_rent_container_linearLayout);
+        equipmentRentLinearLayout = (LinearLayout) findViewById(R.id.equipment_rent_linearLayout);
     }
 
 
@@ -272,7 +274,9 @@ public class EquipmentRentActivity extends AppCompatActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 progressBar.setVisibility(View.GONE);
-
+                equipmentRentLinearLayout.setVisibility(View.GONE);
+                notFoundTextView.setVisibility(View.VISIBLE);
+                //Toast.makeText(EquipmentRentActivity.this, "nggak ada", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -281,7 +285,16 @@ public class EquipmentRentActivity extends AppCompatActivity {
                 if (results != null) {
                     equipmentRents = results.getList();
                     initEquipemntRent();
+                    equipmentRentLinearLayout.setVisibility(View.VISIBLE);
+                    notFoundTextView.setVisibility(View.GONE);
+                    //Toast.makeText(EquipmentRentActivity.this, "ada 1", Toast.LENGTH_SHORT).show();
+                } else {
+                    equipmentRentLinearLayout.setVisibility(View.GONE);
+                    notFoundTextView.setVisibility(View.VISIBLE);
                 }
+
+                //Toast.makeText(EquipmentRentActivity.this, "ada 2", Toast.LENGTH_SHORT).show();
+
             }
         };
     }

@@ -17,10 +17,10 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <string name="host_url">https://nyelam-adam.dantech.id/</string>
+    <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
 
     <!-- STAGING -->
-    <!--<string name="host_url">https://nyelam.dantech.id/</string>-->
+    <string name="host_url">https://nyelam.dantech.id/</string>
 
     <!--&lt;!&ndash; API STAGING AND DEVELOPMENT &ndash;&gt;-->
     <string name="api_path_login">api/user/login</string>
@@ -35,6 +35,7 @@
     <string name="api_path_master_dodive_search">api/master/dodive/search</string>
     <string name="api_path_master_organization">api/master/organization</string>
     <string name="api_path_master_license_type">api/master/lisence</string>
+    <string name="api_path_get_eco_trip_date">api/ecotrip/date</string>
 
     <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>
     <string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>
@@ -108,7 +109,12 @@
     <string name="api_path_upload_cover">api/user/cover</string>
 
 
-    <!-- PRODUCTION -->
+
+
+
+
+
+    <!--&lt;!&ndash; PRODUCTION &ndash;&gt;-->
     <!--<string name="host_url">https://api.e-nyelam.com/</string>-->
 
     <!-- API PRODUCTION -->
@@ -146,6 +152,7 @@
 
 
     <string name="api_path_homepage_modules">master/homepage</string>
+    <string name="api_path_equipment_rent_list">service/EquipmentRentList</string>
     <string name="api_path_dodive_detail_service">service/detailService</string>
     <string name="api_path_dodive_book_service_cart">order/bookservicecart</string>
     <string name="api_path_dodive_book_service_voucher_cart"></string>

@@ -26,6 +26,7 @@ import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.EquipmentRent;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
@@ -350,12 +351,11 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             }
 
 
+            additionalLinearLayout.removeAllViews();
 
             if (summary != null && summary.getOrder() != null
                     && summary.getOrder().getAdditionals() != null
                     && summary.getOrder().getAdditionals().size() > 0){
-
-                additionalLinearLayout.removeAllViews();
 
                 for (Additional additional : summary.getOrder().getAdditionals()){
                     //NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
@@ -374,6 +374,31 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     additionalLinearLayout.addView(additionalView);
                 }
             }
+
+
+            if (summary != null && summary.getOrder() != null
+                    && summary.getOrder().getEquipmentRents() != null
+                    && summary.getOrder().getEquipmentRents().size() > 0){
+
+                for (EquipmentRent equipmentRent : summary.getOrder().getEquipmentRents()){
+
+                    LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                    TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                    TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                    if (equipmentRent != null) {
+                        if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName());
+                        additionalValueTextView.setText(NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
+                    }
+
+                    additionalLinearLayout.addView(additionalView);
+                }
+
+            }
+
+
 
             if (summary.getDiveService() != null) {
                 DiveCenter diveCenter = summary.getDiveService().getDiveCenter();

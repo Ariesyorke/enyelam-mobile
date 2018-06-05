@@ -284,7 +284,7 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 if (diveService.getDiveCenter() != null){
 
-                    if (NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText("by "+diveService.getDiveCenter().getName());
+                    if (NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName())) diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
 
                     if (NYHelper.isStringNotEmpty(diveService.getDiveCenter().getStartFromTotalDives()) && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getStartFromDays())){
                         String dives = "";

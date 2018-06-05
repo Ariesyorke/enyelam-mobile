@@ -508,6 +508,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linearLayout);
                 final ImageView featuredImageView = (ImageView) view.findViewById(R.id.featured_imageView);
                 TextView serviceNameTextView = (TextView) view.findViewById(R.id.service_name_textView);
+                TextView diveCenterNameTextView = (TextView) view.findViewById(R.id.dive_center_name_textView);
                 NYStrikethroughTextView priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
                 TextView priceTextView = (TextView) view.findViewById(R.id.price_textView);
                 TextView scheduleTextView = (TextView) view.findViewById(R.id.shedule_textView);
@@ -551,6 +552,9 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                     if (NYHelper.isStringNotEmpty(diveService.getName()))
                         serviceNameTextView.setText(diveService.getName());
+
+                    if (diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getName()))
+                        diveCenterNameTextView.setText(diveService.getDiveCenter().getName());
 
                     if (diveService.getDiveSpots().get(0) != null && diveService.getDiveSpots().get(0).getLocation() != null) {
 

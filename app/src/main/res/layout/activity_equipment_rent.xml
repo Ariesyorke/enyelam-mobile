@@ -64,6 +64,7 @@
     </LinearLayout>
 
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_weight="1"
@@ -80,6 +81,18 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp" />
 
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/not_found_textView"
+                android:visibility="gone"
+                app:fontTextStyle="light"
+                android:text="Equipment Rents Not Found"
+                android:textColor="@color/ny_grey2"
+                android:layout_marginTop="@dimen/padding_triple"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:id="@+id/equipemnt_rent_container_linearLayout"
                 android:orientation="vertical"
@@ -89,8 +102,9 @@
     </ScrollView>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_below="@+id/scrollView"
-        android:id="@+id/filter_linearLayout"
+        android:id="@+id/equipment_rent_linearLayout"
         android:orientation="horizontal"
         android:padding="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
