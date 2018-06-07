@@ -156,11 +156,25 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 startActivityForResult(intent, mRequestCode);
             }
         });
+
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                // TODO: load more
+                initRequest(false, true);
+            }
+        });
     }
 
 
-    private void initRequest(boolean isRefresh) {
-        if (!isRefresh) progressBar.setVisibility(View.VISIBLE);
+    private void initRequest(boolean isRefresh, boolean isScroll) {
+        if (!isRefresh && !isScroll) progressBar.setVisibility(View.VISIBLE);
         noResultTextView.setVisibility(View.GONE);
 
         // TODO: tunggu URL dari Adam
@@ -331,7 +345,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
     public void onChooseListener(Object position) {
         sortingType = (Integer) position;
         //Toast.makeText(this, String.valueOf(sortingType), Toast.LENGTH_SHORT).show();
-        initRequest(false);
+        initRequest(false, false);
     }
 
     @Override
@@ -458,7 +472,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
             diveServiceAdapter.notifyDataSetChanged();
             page=1;
 
-            initRequest(false);
+            initRequest(false, false);
 
         }
     }
@@ -508,7 +522,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
                 if (results != null){
                     minPriceDefault = results.getLowestPrice();
                     maxPriceDefault = results.getHighestPrice();
-                    initRequest(isRefresh);
+                    initRequest(isRefresh, false);
                 }
             }
         };

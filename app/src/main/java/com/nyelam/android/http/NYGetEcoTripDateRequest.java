@@ -20,23 +20,19 @@ import java.util.List;
 
 public class NYGetEcoTripDateRequest extends NYBasicRequest<List<Long>> {
 
-    private static final String KEY_DATE = "date";
-    private static final String POST_TYPE = "type";
+    private static final String KEY_SCHEDULE = "schedule";
 
     public NYGetEcoTripDateRequest(Context context) throws Exception {
         super(String.class, context, context.getResources().getString(R.string.api_path_get_eco_trip_date));
-//        if(!TextUtils.isEmpty(type)) {
-//            addQuery(POST_TYPE, type);
-//        }
     }
 
     @Override
     protected List<Long> onProcessSuccessData(JSONObject obj) throws Exception {
         List<Long> result = new ArrayList<>();
 
-        if (obj.has(KEY_DATE) && obj.getJSONArray(KEY_DATE) != null){
+        if (obj.has(KEY_SCHEDULE) && obj.getJSONArray(KEY_SCHEDULE) != null){
 
-            JSONArray array = obj.getJSONArray(KEY_DATE);
+            JSONArray array = obj.getJSONArray(KEY_SCHEDULE);
             for (int i=0;i<array.length();i++){
                 result.add(array.getLong(i));
             }

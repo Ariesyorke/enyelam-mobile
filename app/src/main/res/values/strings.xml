@@ -154,6 +154,7 @@
     <string name="warn_empty_license_type">Please, choose license type</string>
     <string name="warn_empty_schedule">Please, choose schedule</string>
     <string name="warn_total_diver">Please, choose total Diver</string>
+    <string name="warn_schedule_not_available">No times are available on this service</string>
     <string name="warn_field_email_cannot_be_empty">Email cannot be empty</string>
     <string name="warn_field_phone_cannot_be_empty">Phone number cannot be empty</string>
     <string name="warn_field_password_cannot_be_empty">Password cannot be empty</string>
@@ -179,7 +180,7 @@
 
     <string name="confirmation_payment_success">Your confirmation payment has been send, thanks.</string>
     <string name="transaction_success">Thank You, Your Order was Successful</string>
-
+    <string name="not_available">Not available</string>
 
     <!--Booking-->
     <string name="upcoming">Upcoming</string>

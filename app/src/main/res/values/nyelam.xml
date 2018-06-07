@@ -17,10 +17,10 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
+    <string name="host_url">https://nyelam-adam.dantech.id/</string>
 
     <!-- STAGING -->
-    <string name="host_url">https://nyelam.dantech.id/</string>
+    <!--<string name="host_url">https://nyelam.dantech.id/</string>-->
 
     <!--&lt;!&ndash; API STAGING AND DEVELOPMENT &ndash;&gt;-->
     <string name="api_path_login">api/user/login</string>
@@ -35,7 +35,7 @@
     <string name="api_path_master_dodive_search">api/master/dodive/search</string>
     <string name="api_path_master_organization">api/master/organization</string>
     <string name="api_path_master_license_type">api/master/lisence</string>
-    <string name="api_path_get_eco_trip_date">api/ecotrip/date</string>
+    <string name="api_path_get_eco_trip_date">api/service/ecotripCalender</string>
 
     <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>
     <string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>
@@ -135,6 +135,7 @@
     <string name="api_path_dodive_search_by_country">dodive/service/country</string>
     <string name="api_path_dodive_search_by_province">dodive/service/province</string>
     <string name="api_path_dodive_search_by_city">dodive/service/city</string>
+    <string name="api_path_get_eco_trip_date">service/ecotripCalender</string>
 
     <string name="api_path_dodive_search_dive_center_by_category">dodive/center/category</string>
     <string name="api_path_dodive_search_dive_center_by_spot">dodive/center/divespot</string>

@@ -112,10 +112,16 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-
-
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/padding_double"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
                 <RelativeLayout
+                    android:id="@+id/datetime_relativeLayout"
                     android:layout_marginTop="@dimen/padding_half"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -125,6 +131,7 @@
                         android:layout_centerVertical="true"
                         android:layout_width="28dp"
                         android:layout_height="28dp" />
+
                     <LinearLayout
                         android:id="@+id/datetime_linearLayout"
                         android:layout_toRightOf="@id/datetime_imageView"

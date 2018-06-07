@@ -133,6 +133,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:layout_marginTop="@dimen/padding"

@@ -98,6 +98,10 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
     private RecyclerView suggestionRecyclerView;
     private LinearLayout suggestionLinearLayout;
 
+    private List<Long> ecoTriScheduleList;
+    private ProgressBar progressBar;
+    private RelativeLayout datetimeRelativeLayout;
+
     //sosis slider
     private RelativeLayout bannerRelativeLayout;
     private ViewPager ecoTripViewPager;
@@ -146,6 +150,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         initAdapter();
         initViewPager();
         if(activity.isEcoTrip()){
+            ecoTriScheduleList = new ArrayList<>();
+            setSchedule(null);
             searchTextView.setBackgroundResource(R.drawable.ny_rectangle_green);
         } else {
             getSuggetionRequest();
@@ -288,12 +294,18 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // TODO Hide Past Date Here
         //datePickerDialog.show();
+
+
         DoDiveActivity activity = (DoDiveActivity)getActivity();
         if(activity.isEcoTrip()) {
 
-            List<Calendar> calendars = new ArrayList<>();
+
+            getEcoTripDateRequest();
+
+            /*List<Calendar> calendars = new ArrayList<>();
 
             try {
+
                 JSONArray array = new JSONArray(loadJSONFromAsset(getActivity()));
 
                 for (int i = 0; i < array.length(); i++) {
@@ -311,11 +323,14 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
             datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
             datePickerDialog.setMinDate(c);
-            datePickerDialog.setSelectableDays(cals);
+            datePickerDialog.setSelectableDays(cals);*/
 
-            /*List<Calendar> calendars = new ArrayList<>();
+
+
+
+            //List<Calendar> calendars = new ArrayList<>();
             //List<Calendar> calendarsTwo = new ArrayList<>();
-            int divider = 12 - month;
+            /*int divider = 12 - month;
 
             for(int i = 0; i < divider; i++) {
                 Calendar a = Calendar.getInstance();
@@ -345,8 +360,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
             Calendar[] cals = new Calendar[calendars.size()];
             calendars.toArray(cals);
-            datePickerDialog.setSelectableDays(cals);
-            */
+            datePickerDialog.setSelectableDays(cals);*/
 
         } else {
             datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
@@ -537,7 +551,11 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         datetimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
+                if (activity.isEcoTrip() && ecoTriScheduleList.size() <= 0){
+                    Toast.makeText(activity, getString(R.string.warn_schedule_not_available), Toast.LENGTH_SHORT).show();
+                } else{
+                    datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
+                }
             }
         });
 
@@ -566,6 +584,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                     Toast.makeText(getActivity(), getString(R.string.warn_empty_keyword), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(diver)) {
                     Toast.makeText(getActivity(), getString(R.string.warn_total_diver), Toast.LENGTH_SHORT).show();
+                } else if (activity.isEcoTrip()  && ecoTriScheduleList.size() <= 0) {
+                    Toast.makeText(getActivity(), getString(R.string.warn_schedule_not_available), Toast.LENGTH_SHORT).show();
                 } else {
 
                     //NYLog.e("CEK DATE 0 : "+date);
@@ -758,9 +778,13 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
 
     private void getEcoTripDateRequest() {
         try {
+            progressBar.setVisibility(View.VISIBLE);
+            datetimeRelativeLayout.setVisibility(View.GONE);
             NYGetEcoTripDateRequest req = new NYGetEcoTripDateRequest(getActivity());
             spcMgr.execute(req, onEcoTripDateRequest());
         } catch (Exception e) {
+            progressBar.setVisibility(View.GONE);
+            datetimeRelativeLayout.setVisibility(View.VISIBLE);
             e.printStackTrace();
         }
     }
@@ -769,12 +793,63 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         return new RequestListener<List<Long>>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
+                progressBar.setVisibility(View.GONE);
+                datetimeRelativeLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onRequestSuccess(List<Long> results) {
+                ecoTriScheduleList = results;
+                setSchedule(ecoTriScheduleList);
+                if (ecoTriScheduleList.size() <= 0) datetimeTextView.setText(getString(R.string.not_available));
+                progressBar.setVisibility(View.GONE);
+                datetimeRelativeLayout.setVisibility(View.VISIBLE);
             }
         };
+    }
+
+
+    public void setSchedule(List<Long> results){
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        List<Calendar> calendars = new ArrayList<>();
+
+        if (results != null && results.size() > 0){
+            for (Long d : results) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(d*1000);
+                calendars.add(cal);
+            }
+
+            Calendar[] cals = new Calendar[calendars.size()];
+            calendars.toArray(cals);
+
+            datePickerDialog = DatePickerDialog.newInstance(this, year, month, day);
+            datePickerDialog.setMinDate(c);
+            datePickerDialog.setSelectableDays(cals);
+
+
+            int y = cals[0].get(Calendar.YEAR);
+            int m = cals[0].get(Calendar.MONTH);
+            int d = cals[0].get(Calendar.DAY_OF_MONTH);
+
+            date = String.valueOf(cals[0].getTimeInMillis()/1000);
+            datetimeTextView.setText(String.valueOf(d) + "/" + String.valueOf(m+1) + "/" + String.valueOf(y));
+
+        } else {
+            /*Calendar calMin = Calendar.getInstance();
+            datePickerDialog = DatePickerDialog.newInstance(this, year, month, day+2);
+            Calendar calMax = Calendar.getInstance();
+            datePickerDialog = DatePickerDialog.newInstance(this, year, month, day+1);
+            datePickerDialog.setMinDate(calMax);
+            datePickerDialog.setMaxDate(calMin);*/
+        }
+
+
+        //datePickerDialog.setSelectableDays(null);
     }
 
     private void initView(View v) {
@@ -789,6 +864,8 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
         diverLinearLayout = (LinearLayout) v.findViewById(R.id.diver_linearLayout);
         datetimeLinearLayout = (LinearLayout) v.findViewById(R.id.datetime_linearLayout);
         licenseLinearLayout = (LinearLayout) v.findViewById(R.id.license_linearLayout);
+        datetimeRelativeLayout = (RelativeLayout) v.findViewById(R.id.datetime_relativeLayout);
+        progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
 
         suggestionRecyclerView = (RecyclerView) v.findViewById(R.id.suggestion_recyclerView);
         suggestionLinearLayout = (LinearLayout) v.findViewById(R.id.suggestion_linearLayout);

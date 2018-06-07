@@ -37,7 +37,6 @@
 
 
 
-
                     <LinearLayout
                         android:paddingLeft="@dimen/padding_double"
                         android:paddingRight="@dimen/padding_double"
