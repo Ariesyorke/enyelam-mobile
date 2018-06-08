@@ -80,9 +80,12 @@ public class DetailServiceFragment extends Fragment {
     private TextView titleTextView, scheduleTextView, diveCenterNameTextView, diveSpotsTextView, priceTextView, descriptionTextView, licenseTextView;
     private TextView ratingTextView, visitedTextView, categoryTextView;
     private TextView addressTextView, phoneNumberTextView, aboutTextView;
-    private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView, openWaterTextView, slotDiversTextView;
+    private TextView totalDivesTextView, tripDurationsTextView, totalDiveSpotsTextView, openWaterTextView, slotDiversTextView,
+            dayClassTextView, dayOnSiteTextView;
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView, icAccomodationImageView;
-    private LinearLayout diveGuideLinearLayout, equipmentLinearLayout, foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout, diveCenterLinearLayout;
+    private LinearLayout diveGuideLinearLayout, equipmentLinearLayout,
+            foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout, diveCenterLinearLayout,
+            dayClassLinearLayout, dayOnSiteLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
     private TextView availabilityStockTextView;
 
@@ -136,8 +139,15 @@ public class DetailServiceFragment extends Fragment {
             diveSpotsTextView.setVisibility(View.GONE);
             totalDiveSpotLinearLayout.setVisibility(View.GONE);
             totalDiveLinearLayout.setVisibility(View.GONE);
-            openWaterLinearLayout.setVisibility(View.VISIBLE);
+
+            tripDurationsLinearLayout.setVisibility(View.GONE);
+            slotDiversLinearLayout.setVisibility(View.GONE);
+
+            dayClassLinearLayout.setVisibility(View.VISIBLE);
+            dayOnSiteLinearLayout.setVisibility(View.VISIBLE);
+
             bannerLinearLayout.setVisibility(View.GONE);
+            openWaterLinearLayout.setVisibility(View.VISIBLE);
             aboutTextView.setText(getString(R.string.about_course));
         }
     }
@@ -193,6 +203,8 @@ public class DetailServiceFragment extends Fragment {
         licenseTextView = (TextView) v.findViewById(R.id.license_textView);
         categoryTextView = (TextView) v.findViewById(R.id.category_textView);
         availabilityStockTextView = (TextView) v.findViewById(R.id.availability_stock_textView);
+        dayClassTextView = (TextView) v.findViewById(R.id.day_class_textView);
+        dayOnSiteTextView = (TextView) v.findViewById(R.id.day_on_site_textView);
 
         icDiveGuideImageView = (ImageView) v.findViewById(R.id.icon_dive_guide_imageView);
         icEquipmentImageView = (ImageView) v.findViewById(R.id.icon_equipment_imageView);
@@ -217,6 +229,10 @@ public class DetailServiceFragment extends Fragment {
         totalDiveSpotLinearLayout = (LinearLayout) v.findViewById(R.id.total_dive_spot_linearLayout);
         openWaterLinearLayout = (LinearLayout) v.findViewById(R.id.open_water_linearLayout);
         slotDiversLinearLayout = (LinearLayout) v.findViewById(R.id.slot_divers_linearLayout);
+
+        dayClassLinearLayout = (LinearLayout) v.findViewById(R.id.days_class_linearLayout);
+        dayOnSiteLinearLayout = (LinearLayout) v.findViewById(R.id.day_on_site_linearLayout);
+
         bannerLinearLayout = (LinearLayout) v.findViewById(R.id.banner_linearLayout);
         equipmenRentContainerLinearLayoutt = (LinearLayout) v.findViewById(R.id.equipemnt_rent_container_linearLayout);
 
@@ -252,6 +268,19 @@ public class DetailServiceFragment extends Fragment {
                 if (service.getDays() > 1 ) days = " Days";
                 titleTextView.setText(service.getName()+" / "+String.valueOf(service.getDays())+days);
             }
+
+            if (service.getDays() <= 1){
+                dayClassTextView.setText(": "+String.valueOf(service.getDays())+" Day");
+            } else {
+                dayClassTextView.setText(": "+String.valueOf(service.getDays())+" Days");
+            }
+
+            if (service.getDayOnSite() <= 1){
+                dayOnSiteTextView.setText(": "+String.valueOf(service.getDayOnSite())+" Day");
+            } else {
+                dayOnSiteTextView.setText(": "+String.valueOf(service.getDayOnSite())+" Days");
+            }
+
 
             if (service.getSchedule() != null){
                 Schedule schedule = service.getSchedule();
@@ -565,7 +594,13 @@ public class DetailServiceFragment extends Fragment {
                     intent.putExtra(NYHelper.SERVICE, diveService.toString());
                     intent.putExtra(NYHelper.DIVER, activity.diver);
                     intent.putExtra(NYHelper.SCHEDULE, activity.schedule);
-                    intent.putExtra(NYHelper.CERTIFICATE, activity.certificate);
+
+                    if (diveService.isLicense()){
+                        intent.putExtra(NYHelper.CERTIFICATE, "1");
+                    } else {
+                        intent.putExtra(NYHelper.CERTIFICATE, "0");
+                    }
+
                     intent.putExtra(NYHelper.DIVE_CENTER, diveService.getDiveCenter().toString());
                     intent.putExtra(NYHelper.IS_DO_TRIP, activity.isDoTrip);
                     activity.startActivity(intent);

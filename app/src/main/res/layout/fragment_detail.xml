@@ -35,8 +35,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-
-
                     <LinearLayout
                         android:paddingLeft="@dimen/padding_double"
                         android:paddingRight="@dimen/padding_double"
@@ -340,6 +338,71 @@
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <LinearLayout
+                                        android:visibility="gone"
+                                        android:id="@+id/days_class_linearLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="3dp">
+
+                                        <com.nyelam.android.view.font.NYTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="Day Class"
+                                            android:textSize="16sp"
+                                            android:textColor="@color/ny_grey8"
+                                            app:fontTextStyle="light" />
+
+                                        <com.nyelam.android.view.font.NYTextView
+                                            android:id="@+id/day_class_textView"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text=": -"
+                                            android:textSize="16sp"
+                                            android:textColor="@color/ny_grey8"
+                                            app:fontTextStyle="light" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:visibility="gone"
+                                        android:id="@+id/day_on_site_linearLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="3dp">
+
+                                        <com.nyelam.android.view.font.NYTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="Day On Site"
+                                            android:textSize="16sp"
+                                            android:textColor="@color/ny_grey8"
+                                            app:fontTextStyle="light" />
+
+                                        <com.nyelam.android.view.font.NYTextView
+                                            android:id="@+id/day_on_site_textView"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text=": -"
+                                            android:textSize="16sp"
+                                            android:textColor="@color/ny_grey8"
+                                            app:fontTextStyle="light" />
+                                    </LinearLayout>
 
                                     <LinearLayout
                                         android:id="@+id/open_water_linearLayout"

@@ -711,7 +711,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             public void onRequestSuccess(LicenseTypeList results) {
                 licenseTypeList = results;
 
-                if (!isFirst || (isFirst && licenseType == null)){
+                if (!isFirst || (isFirst && licenseType == null) && licenseTypeList != null && licenseTypeList.getList() != null && licenseTypeList.getList().size() > 0){
                     licenseType = licenseTypeList.getList().get(0);
                 }
 

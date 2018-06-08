@@ -325,14 +325,18 @@ public class DoCourseActivity extends BasicActivity implements
             public void onClick(View v) {
                 //divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
                 //setDivingLicense(!divingLicenseSwitch.isChecked());
-                NYCustomDialog dialog = new NYCustomDialog();
 
                 /*LicenseType licenseType = new LicenseType();
                 licenseType.setId("1");
                 licenseType.setName("CMAS");
                 licenseTypes.add(licenseType);*/
+                if (licenseTypes != null && licenseTypes.getList() != null && licenseTypes.getList().size() > 0){
+                    NYCustomDialog dialog = new NYCustomDialog();
+                    dialog.showLicenseTypeDialog(DoCourseActivity.this, licenseTypes.getList(), licenseType);
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.warn_empty_license_type_list), Toast.LENGTH_SHORT).show();
+                }
 
-                dialog.showLicenseTypeDialog(DoCourseActivity.this, licenseTypes.getList(), licenseType);
             }
         });
 
@@ -506,17 +510,26 @@ public class DoCourseActivity extends BasicActivity implements
                 suggestionLinearLayout.setVisibility(View.GONE);*/
                 //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
                 setDivingLicenseProgressBar(false);
+                divingLicenseTextView.setText("");
+                licenseType = null;
             }
 
             @Override
             public void onRequestSuccess(LicenseTypeList results) {
                 licenseTypes = results;
-                licenseType = licenseTypes.getList().get(0);
+
+                if (licenseTypes != null && licenseTypes.getList() != null && licenseTypes.getList().size() > 0){
+                    licenseType = licenseTypes.getList().get(0);
+
+                    if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
+                        divingLicenseTextView.setText(licenseType.getName());
+                } else {
+                    divingLicenseTextView.setText("");
+                    licenseType = null;
+                }
 
                 setDivingLicenseProgressBar(false);
 
-                if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
-                    divingLicenseTextView.setText(licenseType.getName());
             }
         };
     }

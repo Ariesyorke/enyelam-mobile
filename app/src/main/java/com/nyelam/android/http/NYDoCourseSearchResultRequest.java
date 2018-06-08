@@ -45,7 +45,7 @@ public class NYDoCourseSearchResultRequest extends NYBasicRequest<NYPaginationRe
     public NYDoCourseSearchResultRequest(Context context, String apiPath, String page, String diverId, String type, String diver, String certificate, String date, String sortingBy, List<Category> categories, List<StateFacility> facilityList, double priceMin, double priceMax, String organizationId, String licenseTypeId, String rating, String openWater) {
         super(AuthReturn.class, context, apiPath);
 
-        if(!TextUtils.isEmpty(diverId) && !TextUtils.isEmpty(type)) {
+        if(NYHelper.isStringNotEmpty(diverId) && NYHelper.isStringNotEmpty(type)) {
             if(type.equals("1")) {
                 addQuery(POST_DIVE_SPOT_ID, diverId);
             } else if (!TextUtils.isEmpty(type) && type.equals("2")){
@@ -59,27 +59,27 @@ public class NYDoCourseSearchResultRequest extends NYBasicRequest<NYPaginationRe
             }
         }
 
-        if(!TextUtils.isEmpty(sortingBy)) {
+        if(NYHelper.isStringNotEmpty(sortingBy)) {
             addQuery(POST_SORT_BY, sortingBy);
         }
 
-        if(!TextUtils.isEmpty(page)) {
+        if(NYHelper.isStringNotEmpty(page)) {
             addQuery(POST_PAGE, page);
         }
 
-        if(!TextUtils.isEmpty(organizationId)) {
+        if(NYHelper.isStringNotEmpty(organizationId)) {
             addQuery(POST_ORGANIZATION_ID, organizationId);
         }
 
-        if(!TextUtils.isEmpty(licenseTypeId)) {
+        if(NYHelper.isStringNotEmpty(licenseTypeId)) {
             addQuery(POST_LICENSE_TYPE_ID, licenseTypeId);
         }
 
-        if(!TextUtils.isEmpty(diver)) {
+        if(NYHelper.isStringNotEmpty(diver)) {
             addQuery(POST_DIVER, diver);
         }
 
-        if(!TextUtils.isEmpty(date)) {
+        if(NYHelper.isStringNotEmpty(date)) {
             addQuery(POST_DATE, date);
         }
 
@@ -97,11 +97,11 @@ public class NYDoCourseSearchResultRequest extends NYBasicRequest<NYPaginationRe
             }
         }
 
-        if(!TextUtils.isEmpty(rating)) {
+        if(NYHelper.isStringNotEmpty(rating)) {
             addQuery(POST_RATING, rating);
         }
 
-        if(!TextUtils.isEmpty(openWater)) {
+        if(NYHelper.isStringNotEmpty(openWater)) {
             addQuery(POST_OPEN_WATER, openWater);
         }
 

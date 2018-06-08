@@ -237,7 +237,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 schedule = extras.getString(NYHelper.SCHEDULE);
             }
 
-            if(intent.hasExtra(NYHelper.CERTIFICATE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))){
+            if(intent.hasExtra(NYHelper.CERTIFICATE)  && NYHelper.isStringNotEmpty(extras.getString(NYHelper.CERTIFICATE))){
                 certificate = extras.getString(NYHelper.CERTIFICATE);
             }
 

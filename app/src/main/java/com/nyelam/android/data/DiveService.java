@@ -25,7 +25,7 @@ public class DiveService implements Parseable {
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_DIVE_SPOTS = "dive_spot";
     private static String KEY_DAYS = "days";
-    private static String KEY_DAY_ON_SITE = "day_on_site";
+    private static String KEY_DAY_ON_SITE = "day_on_site"; // do course
     private static String KEY_TOTAL_DIVES = "total_dives";
     private static String KEY_TOTAL_DAY = "total_day";
     private static String KEY_TOTAL_DIVE_SPOTS = "total_divespot";

@@ -130,7 +130,7 @@
     <string name="our_trips_services">Our Trips Services</string>
     <string name="date">Date</string>
     <string name="diver">Diver</string>
-    <string name="slot_divers">Slot Diver(s)</string>
+    <string name="slot_divers">Avilable Slots</string>
     <string name="search">Search</string>
     <string name="dive_now">Dive Now</string>
     <string name="trip_now">Trip Now</string>
@@ -152,6 +152,7 @@
     <string name="warn_empty_keyword">Keyword cannot be empty</string>
     <string name="warn_empty_association">Please, choose association</string>
     <string name="warn_empty_license_type">Please, choose license type</string>
+    <string name="warn_empty_license_type_list">License type is empty</string>
     <string name="warn_empty_schedule">Please, choose schedule</string>
     <string name="warn_total_diver">Please, choose total Diver</string>
     <string name="warn_schedule_not_available">No times are available on this service</string>
@@ -217,7 +218,7 @@
     <string name="about_course">About Course</string>
     <string name="dive_guide">Dive Guide</string>
     <string name="equipment">Equipment</string>
-    <string name="food">Food</string>
+    <string name="food">Food And Drink</string>
     <string name="transportation">Transportation</string>
     <string name="towel">Towel</string>
     <string name="accomodation">Accomodation</string>

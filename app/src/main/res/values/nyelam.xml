@@ -17,13 +17,13 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <string name="host_url">https://nyelam-adam.dantech.id/</string>
+    <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
 
     <!-- STAGING -->
     <!--<string name="host_url">https://nyelam.dantech.id/</string>-->
 
     <!--&lt;!&ndash; API STAGING AND DEVELOPMENT &ndash;&gt;-->
-    <string name="api_path_login">api/user/login</string>
+    <!--<string name="api_path_login">api/user/login</string>
     <string name="api_path_update_version">api/master/UpdateVersion</string>
     <string name="api_path_socmed_login">api/user/socmedlogin/</string>
     <string name="api_path_register">api/user/register</string>
@@ -43,7 +43,7 @@
     <string name="api_path_dodive_search_by_province">api/dodive/service/province</string>
     <string name="api_path_dodive_search_by_city">api/dodive/service/city</string>
 
-    <!--SEARCH RESULT LIST DIVE SERVICE-->
+    &lt;!&ndash;SEARCH RESULT LIST DIVE SERVICE&ndash;&gt;
     <string name="api_path_dodive_search_service_by_category">api/dodive/search/category</string>
     <string name="api_path_dodive_search_service_by_divespot">api/dodive/search/divespot</string>
     <string name="api_path_dodive_search_service_by_province">api/dodive/search/province</string>
@@ -51,7 +51,7 @@
     <string name="api_path_dodive_search_service_by_divecenter">api/dodive/search/divecenter</string>
     <string name="api_path_dodive_suggestion_service">api/dodive/sugestion</string>
 
-    <!--SEARCH RESULT LIST DO COURSE-->
+    &lt;!&ndash;SEARCH RESULT LIST DO COURSE&ndash;&gt;
     <string name="api_path_docourse_detail_service">api/docourse/detail</string>
     <string name="api_path_docourse_search_service_by_category">api/docourse/search/category</string>
     <string name="api_path_docourse_search_service_by_divespot">api/docourse/search/divespot</string>
@@ -89,7 +89,7 @@
 
     <string name="api_path_homepage_modules">api/master/homepage</string>
     <string name="api_path_equipment_rent_list">api/service/EquipmentRentList</string>
-    <!--<string name="api_path_dodive_detail_service">api/service/detail</string>-->
+    &lt;!&ndash;<string name="api_path_dodive_detail_service">api/service/detail</string>&ndash;&gt;
     <string name="api_path_dodive_detail_service">api/service/detailService</string>
     <string name="api_path_dodive_book_service_cart">api/order/bookservicecart</string>
     <string name="api_path_dodive_book_change_payment_method">api/order/changePaymentMethod</string>
@@ -106,7 +106,7 @@
     <string name="api_path_change_password">api/user/changepass</string>
     <string name="api_path_update_profile">api/user/profile/edit</string>
     <string name="api_path_upload_profile">api/user/photo</string>
-    <string name="api_path_upload_cover">api/user/cover</string>
+    <string name="api_path_upload_cover">api/user/cover</string>-->
 
 
 
@@ -115,10 +115,10 @@
 
 
     <!--&lt;!&ndash; PRODUCTION &ndash;&gt;-->
-    <!--<string name="host_url">https://api.e-nyelam.com/</string>-->
+    <string name="host_url">https://api.e-nyelam.com/</string>
 
-    <!-- API PRODUCTION -->
-    <!--<string name="api_path_login">user/login</string>
+     API PRODUCTION
+    <string name="api_path_login">user/login</string>
     <string name="api_path_update_version">master/UpdateVersion</string>
     <string name="api_path_socmed_login">user/socmedlogin/</string>
     <string name="api_path_register">user/register</string>
@@ -172,7 +172,7 @@
     <string name="api_path_upload_profile">user/photo</string>
     <string name="api_path_upload_cover">user/cover</string>
 
-    &lt;!&ndash;SEARCH RESULT LIST DIVE SERVICE&ndash;&gt;
+    <!--SEARCH RESULT LIST DIVE SERVICE-->
     <string name="api_path_dodive_search_service_by_category">dodive/search/category</string>
     <string name="api_path_dodive_search_service_by_divespot">dodive/search/divespot</string>
     <string name="api_path_dodive_search_service_by_province">dodive/search/province</string>
@@ -180,7 +180,7 @@
     <string name="api_path_dodive_search_service_by_divecenter">dodive/search/divecenter</string>
     <string name="api_path_dodive_suggestion_service">dodive/sugestion</string>
 
-    &lt;!&ndash;SEARCH RESULT LIST DO COURSE&ndash;&gt;
+    <!--SEARCH RESULT LIST DO COURSE-->
     <string name="api_path_docourse_detail_service">docourse/detail</string>
     <string name="api_path_docourse_search_service_by_category">docourse/search/category</string>
     <string name="api_path_docourse_search_service_by_divespot">docourse/search/divespot</string>
@@ -199,7 +199,6 @@
     <string name="api_path_dotrip_service_list_by_city">dotrip/search/city</string>
     <string name="api_path_dotrip_suggestion_service">dotrip/sugestion</string>
     <string name="api_path_get_min_max_price">service/minMaxPrice</string>
-    <string name="api_path_get_min_max_price_list">service/minMaxPriceList</string>-->
-
+    <string name="api_path_get_min_max_price_list">service/minMaxPriceList</string>
 
 </resources>

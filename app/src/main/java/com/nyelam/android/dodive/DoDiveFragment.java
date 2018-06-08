@@ -218,7 +218,18 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
                 keyword = diveService.getName();
                 type = "4";
                 keywordTextView.setText(keyword);
+
+                isSwitchEnable = true;
                 divingLicenseSwitch.setChecked(diveService.isLicense());
+
+                //NYLog.e("cek diveservice : "+diveService.toString());
+
+                if (diveService.isLicense()){
+                    divingLicenseTextView.setText(R.string.yes);
+                } else {
+                    divingLicenseTextView.setText(R.string.no);
+                }
+
                 setSwitchState();
                 activity.toolbar.setFocusable(true);
                 activity.toolbar.setFocusableInTouchMode(true);

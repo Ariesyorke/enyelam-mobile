@@ -237,7 +237,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
         if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getId())) licenseTypeId = licenseType.getId();
 
         // TODO: tunggu URL dari Adam
-        NYDoCourseSearchResultRequest req = new NYDoCourseSearchResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, minPrice, maxPrice, organizationId, licenseTypeId, null, String.valueOf(isOpenWater));
+        NYDoCourseSearchResultRequest req = new NYDoCourseSearchResultRequest(this, apiPath, String.valueOf(page), diverId, type, diver, certificate, date, String.valueOf(sortingType), lsCategory, lsFacilities, minPrice, maxPrice, organizationId, licenseTypeId, null, isOpenWater);
         spcMgr.execute(req, onSearchServiceRequest(isRefresh));
 
         // TODO: load data dummy, to test and waitting for API request
