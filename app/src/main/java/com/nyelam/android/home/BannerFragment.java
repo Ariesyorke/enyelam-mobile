@@ -19,6 +19,11 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Banner;
+import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.SearchService;
+import com.nyelam.android.diveservice.DetailServiceActivity;
+import com.nyelam.android.dodive.DoDiveActivity;
+import com.nyelam.android.dotrip.DoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYImageRatioImageView;
@@ -52,9 +57,37 @@ public class BannerFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Open browser on click if not null
-                if(banner != null && banner.getUrl() != null){
-                    /*Intent intent= new Intent(Intent.ACTION_VIEW, Uri.parse(banner.getUrl()));
-                    startActivity(intent);*/
+                if (banner != null){
+                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+
+                        DiveService service = new DiveService();
+                        service.setId(banner.getServiceId());
+                        service.setName(banner.getServiceName());
+
+                        Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
+                        intent.putExtra(NYHelper.SERVICE, service.toString());
+                        intent.putExtra(NYHelper.SCHEDULE, banner.getDate());
+                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
+                        intent.putExtra(NYHelper.IS_DO_COURSE, banner.isDoCourse());
+                        intent.putExtra(NYHelper.IS_DO_TRIP, banner.isDoTrip());
+                        startActivity(intent);
+
+                    } else if (banner.getType() == 2 && banner.getUrl() != null){
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(banner.getUrl()));
+                        startActivity(i);
+                    } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+
+                        SearchService service = new SearchService();
+                        service.setId(banner.getServiceId());
+                        service.setName(banner.getServiceName());
+
+                        Intent intent = new Intent(getActivity(), DoDiveActivity.class);
+                        intent.putExtra(NYHelper.SEARCH_RESULT, service.toString());
+                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
+                        startActivity(intent);
+                    }
+                } else {
                     NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
                 }
             }

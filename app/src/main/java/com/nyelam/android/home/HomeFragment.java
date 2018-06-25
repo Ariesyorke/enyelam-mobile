@@ -206,9 +206,15 @@ public class HomeFragment extends Fragment {
         //craete TEMP data banner
         BannerList bannerList = new BannerList();
         List<Banner> banners = new ArrayList<>();
-        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "captio", "http://www.nyelam.com"));
+
+        //public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense, long date, boolean isEcoTrip, boolean isDoTrip){
+        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true, 189282822, true, true));
+
         banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
-        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_3), "captio", "http://www.nyelam.com"));
+
+        //public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense){
+        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true));
+
         bannerList.setList(banners);
         //input data data
         bannerViewPagerAdapter.setBannerList(bannerList);

@@ -498,7 +498,7 @@ public class DoDiveFragment extends Fragment implements DatePickerDialog.OnDateS
             }
         }
 
-        if (searchService != null &&  searchService.getType() == 4){
+        if (searchService != null && searchService.getType() != null && searchService.getType() == 4){
             divingLicenseSwitch.setChecked(searchService.isLicense());
             setSwitchState();
             isSwitchEnable = false;
