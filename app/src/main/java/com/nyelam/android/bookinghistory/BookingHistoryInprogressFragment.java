@@ -103,7 +103,7 @@ public class BookingHistoryInprogressFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        bookingListAdapter = new BookingHistoryListAdapter(getActivity());
+        bookingListAdapter = new BookingHistoryListAdapter(getActivity(), false);
         recyclerView.setAdapter(bookingListAdapter);
 
         progressBar.setVisibility(View.VISIBLE);

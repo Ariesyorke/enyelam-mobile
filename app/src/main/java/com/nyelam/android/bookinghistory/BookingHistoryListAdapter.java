@@ -35,9 +35,11 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
 
     private Activity context;
     private List<Summary> summaryList;
+    private boolean isPast;
 
-    public BookingHistoryListAdapter(Activity context) {
+    public BookingHistoryListAdapter(Activity context, boolean isPast) {
         this.context = context;
+        this.isPast = isPast;
     }
 
     @Override
@@ -196,9 +198,9 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
             Intent intent = new Intent(context, BookingHistoryDetailActivity.class);
             if (summary != null) intent.putExtra(NYHelper.SERVICE, summary.toString());
             if (summary != null && summary.getOrder() != null && NYHelper.isStringNotEmpty(summary.getOrder().getOrderId()))intent.putExtra(NYHelper.ID_ORDER, summary.getOrder().getOrderId());
+            intent.putExtra(NYHelper.IS_PAST, isPast);
             context.startActivity(intent);
         }
-
 
     }
 

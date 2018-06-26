@@ -117,6 +117,10 @@
     <string name="confirm">Confirm</string>
     <string name="pay_now">Pay Now</string>
     <string name="book_now">Book Now</string>
+    <string name="review">Review</string>
+    <string name="your_review">Your Review</string>
+    <string name="review_hint">Write your review here..</string>
+    <string name="send">Send</string>
 
 
     <string name="enter_a_dive_spot">Enter a dive spot name</string>

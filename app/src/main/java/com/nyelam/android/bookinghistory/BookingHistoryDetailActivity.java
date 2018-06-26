@@ -62,6 +62,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String idOrder;
+    private boolean isPast;
     private OrderReturn orderReturn;
 
     private File file;
@@ -116,6 +117,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
             } else if (intent.hasExtra(NYHelper.ID_ORDER) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.ID_ORDER))) {
                 idOrder = extras.getString(NYHelper.ID_ORDER);
+            }
+
+            if (intent.hasExtra(NYHelper.IS_PAST)) {
+                isPast = intent.getBooleanExtra(NYHelper.IS_PAST, false);
             }
         }
     }
@@ -426,7 +431,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 if (NYHelper.isStringNotEmpty(order.getStatus())) {
 
                     statusTextView.setText(order.getStatus());
-                    if (order.getStatus().equalsIgnoreCase("unpaid") && orderReturn.getVeritransToken() == null) {
+                    if (!isPast && order.getStatus().equalsIgnoreCase("unpaid") && orderReturn.getVeritransToken() == null) {
                         paymentLinearLayout.setVisibility(View.VISIBLE);
                     } else {
                         paymentLinearLayout.setVisibility(View.GONE);
@@ -500,7 +505,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             }
 
 
-            if ((orderReturn.getVeritransToken() == null || !NYHelper.isStringNotEmpty(orderReturn.getVeritransToken().getTokenId())) && summary.getOrder() != null && (NYHelper.isStringNotEmpty(summary.getOrder().getStatus()) && summary.getOrder().getStatus().toLowerCase().equals("unpaid"))) {
+            if (!isPast && (orderReturn.getVeritransToken() == null || !NYHelper.isStringNotEmpty(orderReturn.getVeritransToken().getTokenId())) && summary.getOrder() != null && (NYHelper.isStringNotEmpty(summary.getOrder().getStatus()) && summary.getOrder().getStatus().toLowerCase().equals("unpaid"))) {
                 paymentLinearLayout.setVisibility(View.VISIBLE);
             } else {
                 paymentLinearLayout.setVisibility(View.GONE);

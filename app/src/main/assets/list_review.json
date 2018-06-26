@@ -3,22 +3,22 @@
     "id": "1",
     "rating": 5,
     "date": 121212121,
-    "content": "Bagus",
+    "content": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
     "user": {
       "user_id": "1",
-      "fullname": "Bobby Marwan Malik",
-      "picture": "http://url-profile-dot-com"
+      "fullname": "John Doel Anak Betawi",
+      "picture": "https://vignette.wikia.nocookie.net/jamesbond/images/6/61/Generic_Placeholder_-_Profile.jpg/revision/latest?cb=20121227201208"
     }
   },
   {
-    "id": "1",
-    "rating": 5,
+    "id": "2",
+    "rating": 4,
     "date": 121212121,
-    "content": "Bagus",
+    "content": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
     "user": {
-      "user_id": "1",
-      "fullname": "Bobby Marwan Malik",
-      "picture": "http://url-profile-dot-com"
+      "user_id": "2",
+      "fullname": "Joe John",
+      "picture": "https://vignette.wikia.nocookie.net/jamesbond/images/6/61/Generic_Placeholder_-_Profile.jpg/revision/latest?cb=20121227201208"
     }
   }
 ]

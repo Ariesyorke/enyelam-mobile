@@ -48,4 +48,6 @@
     <color name="ny_dark_transparent">#64000000</color>
     <color name="ny_dark_transparent_list">#3b000000</color>
 
+    <color name="tint">#f44336</color>
+
 </resources>
