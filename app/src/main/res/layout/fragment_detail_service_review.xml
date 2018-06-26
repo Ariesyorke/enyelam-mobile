@@ -2,17 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.nyelam.android.diveservice.DetailServiceReviewFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <include layout="@layout/view_item_review"/>
+    <!--<include layout="@layout/view_item_review"/>-->
 
-    <!--<TextView
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/no_result_textView"
         android:layout_marginTop="@dimen/padding_triple"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="@string/warn_no_reviews_found" />-->
+        android:text="@string/warn_no_reviews_found" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

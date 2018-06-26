@@ -106,6 +106,7 @@
     <string name="api_path_update_profile">api/user/profile/edit</string>
     <string name="api_path_upload_profile">api/user/photo</string>
     <string name="api_path_upload_cover">api/user/cover</string>
+    <string name="api_path_review_list">api/reviewList/</string>
 
 
 

@@ -40,7 +40,11 @@ import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
 
+import org.json.JSONArray;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -653,4 +657,19 @@ public class NYHelper {
     }
 
 
+    public static String getJSONFromResource(Context context, String nameFile){
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open(nameFile);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
 }
