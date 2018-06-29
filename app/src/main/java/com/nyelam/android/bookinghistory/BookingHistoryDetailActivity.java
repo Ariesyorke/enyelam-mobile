@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,9 +37,11 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYDoDiveBookingDetailRequest;
+import com.nyelam.android.http.NYSubmitReviewRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,6 +91,11 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private LinearLayout paymentLinearLayout;
     private LinearLayout confirmLinearLayout;
     private LinearLayout additionalLinearLayout;
+
+    private LinearLayout reviewLinearLayout;
+    private ScaleRatingBar submitRatingBar;
+    private EditText reviewEditText;
+    private TextView sendReviewTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +160,14 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        sendReviewTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
+            }
+        });
+
     }
 
     private void initView() {
@@ -177,6 +193,12 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         paymentLinearLayout = (LinearLayout) findViewById(R.id.payment_linearLayout);
         confirmLinearLayout = (LinearLayout) findViewById(R.id.confirm_linearLayout);
         additionalLinearLayout = (LinearLayout) findViewById(R.id.additional_linearLayout);
+
+        reviewLinearLayout = (LinearLayout) findViewById(R.id.review_linearLayout);
+        submitRatingBar = (ScaleRatingBar) findViewById(R.id.submitRatingBar);
+        reviewEditText = (EditText) findViewById(R.id.review_editText);
+        sendReviewTextView = (TextView) findViewById(R.id.send_review_textView);
+
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -544,6 +566,36 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 hideLoadingBar();
                 getOrderDetail(true);
                 NYHelper.handlePopupMessage(BookingHistoryDetailActivity.this, getString(R.string.confirmation_payment_success), null);
+            }
+        };
+    }
+
+
+    private void onSubmitReview(String rating, String review) {
+
+        try {
+            progressDialog.show();
+            NYSubmitReviewRequest req = new NYSubmitReviewRequest(this, orderReturn.getSummary().getDiveService().getId(), rating, review);
+            spcMgr.execute(req, onSubmitReview());
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            e.printStackTrace();
+        }
+
+    }
+
+    private RequestListener<Boolean> onSubmitReview() {
+        return new RequestListener<Boolean>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                progressDialog.dismiss();
+                NYHelper.handleAPIException(BookingHistoryDetailActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(Boolean success) {
+                progressDialog.dismiss();
+
             }
         };
     }

@@ -11,14 +11,6 @@
 
 
 
-
-
-
-
-
-
-
-
     <LinearLayout
         android:orientation="vertical"
         android:background="@color/colorGradationLeft"
@@ -678,6 +670,7 @@
 
 
 
+
                 <LinearLayout
                     android:id="@+id/review_linearLayout"
                     android:orientation="vertical"
@@ -697,37 +690,52 @@
                         android:textStyle="bold" />
 
 
-                    <!--<me.zhanghai.android.materialratingbar.MaterialRatingBar
-                        android:id="@+id/library_tinted_wide_ratingbar"
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:rating="2.5"
-                        app:mrb_progressTint="@color/tint"
-                        app:mrb_secondaryProgressTint="@color/tint"
-                        style="@style/Widget.MaterialRatingBar.RatingBar" />-->
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
+                        android:layout_marginTop="@dimen/padding_double"
+                        android:gravity="center_horizontal"
+                        android:text="Please write your review."
+                        android:textSize="18sp"
+                        android:textColor="@color/ny_black2"
+                        android:textStyle="bold" />
 
-                    <RatingBar
-                        android:id="@+id/review_ratingBar"
-                        style="@style/StarRatingBar"
+                    <com.willy.ratingbar.ScaleRatingBar
+                        android:id="@+id/submitRatingBar"
                         android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:paddingTop="@dimen/padding_half"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:rating="0"
-                        android:stepSize="8.0"
-                        android:layout_gravity="start" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:srb_numStars="5"
+                        app:srb_minimumStars="0"
+                        app:srb_rating="0"
+                        app:srb_starWidth="30dp"
+                        app:srb_starHeight="30dp"
+                        app:srb_starPadding="10dp"
+                        app:srb_stepSize="2.5"
+                        app:srb_isIndicator="false"
+                        app:srb_clickable="true"
+                        app:srb_scrollable="true"
+                        app:srb_clearRatingEnabled="true"
+                        app:srb_drawableEmpty="@drawable/star_empty"
+                        app:srb_drawableFilled="@drawable/star_filled">
+                    </com.willy.ratingbar.ScaleRatingBar>
 
                     <EditText
-                        android:id="@+id/content_editText"
+                        android:id="@+id/review_editText"
                         android:hint="@string/review_hint"
                         android:textSize="14sp"
+                        android:background="@drawable/bg_review_placeholder"
+                        android:layout_margin="@dimen/padding_double"
+                        android:padding="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-
                     <TextView
-                        android:id="@+id/send_review_linearLayout"
+                        android:id="@+id/send_review_textView"
                         android:text="@string/send"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -746,10 +754,6 @@
                         android:background="@drawable/ny_rectangle_blue_soft"/>
 
                 </LinearLayout>
-
-
-
-
 
 
 
