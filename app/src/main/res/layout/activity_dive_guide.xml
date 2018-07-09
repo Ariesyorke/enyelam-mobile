@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_above="@+id/book_now_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <com.nyelam.android.view.NYCustomViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:titleEnabled="false">
+
+                <RelativeLayout
+                    android:id="@+id/banner_relativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/toolbar"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:fitsSystemWindows="true">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/user_imageView"
+                            android:layout_width="95dp"
+                            android:layout_height="95dp"
+                            android:background="@drawable/ny_circle_blue"
+                            android:padding="3dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/logo_nyelam" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/dive_guide_abilities_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_gravity="center"
+                            android:text="Dive Guide Name"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            app:fontTextStyle="medium" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="70dp"
+                            android:text="Dive Guide License Type"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            app:fontTextStyle="reguler" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="48dp"
+                    android:background="#000071bc"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                    app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/title_textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            app:fontTextStyle="reguler"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:text="Dive Guide Profile"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.Toolbar>
+
+
+                <!--<android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorPrimary"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                    app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/title_textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="14 February 2018, 2 pax(s)"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="16sp"
+                            app:fontTextStyle="reguler" />
+                    </LinearLayout>
+                </android.support.v7.widget.Toolbar>-->
+
+                <LinearLayout
+                    android:id="@+id/tab_manager"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:background="@color/ny_dark_transparent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed">
+
+                    <com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/home_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        app:tabChecked="true"
+                        app:tabItemPosition="home"
+                        app:tabItemText="Bio"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_b" />
+
+                    <com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:visibility="visible"
+                        android:id="@+id/socialmedia_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="socmed"
+                        app:tabItemText="About"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />
+
+                    <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/socialmedia_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:tabItemPosition="socmed"
+                        app:tabItemText="Dive Spots"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />
+
+                    <com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/transaction_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:tabItemPosition="transaction"
+                        app:tabItemText="Dive Center"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
+
+                    <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
+                        android:id="@+id/my_account_tab"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tabItemPosition="my_account"
+                        app:tabItemText="Reviews"
+                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
+
+                </LinearLayout>
+
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+        <!--<LinearLayout
+            android:background="@color/ny_grey3"
+            android:padding="@dimen/padding"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.nyelam.android.view.NYQuickReturnFooterBehavior">
+
+            <TextView
+                android:text="Booking"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ny_rectangle_orange"
+                android:paddingTop="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
+                android:paddingLeft="@dimen/padding_triple"
+                android:paddingRight="@dimen/padding_triple" />
+
+        </LinearLayout>-->
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+</RelativeLayout>
+

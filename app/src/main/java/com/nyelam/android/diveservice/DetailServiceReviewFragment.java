@@ -1,7 +1,6 @@
 package com.nyelam.android.diveservice;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,25 +14,16 @@ import android.widget.TextView;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.DiveService;
-import com.nyelam.android.data.DiveServiceList;
-import com.nyelam.android.dodive.DoDiveDiveServiceSuggestionAdapter;
-import com.nyelam.android.dodive.RecyclerViewTouchListener;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
-import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
 import com.nyelam.android.http.NYReviewListRequest;
-import com.nyelam.android.http.ReviewList;
+import com.nyelam.android.data.ReviewList;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
-import java.util.List;
 
 public class DetailServiceReviewFragment extends Fragment {
 

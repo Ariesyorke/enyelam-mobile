@@ -127,7 +127,7 @@ public class Facilities implements Parseable {
 
         try {
             if (!obj.isNull(KEY_ACCOMODATION)) {
-                setTransportation(obj.getBoolean(KEY_ACCOMODATION));
+                setAccomodation(obj.getBoolean(KEY_ACCOMODATION));
             }
         } catch (JSONException e) {e.printStackTrace();}
 

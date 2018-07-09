@@ -320,6 +320,61 @@
 
 
 
+
+
+
+
+
+
+                <LinearLayout
+                    android:id="@+id/dive_guide_linearLayout"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/padding_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.nyelam.android.view.font.NYTextView
+                        app:fontTextStyle="medium"
+                        android:text="Dive Guide Instructor"
+                        android:textSize="16sp"
+                        android:textColor="@color/white"
+                        android:background="@color/ny_orange"
+                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingRight="@dimen/padding_double"
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <ProgressBar
+                        android:id="@+id/dive_guide_progress_bar"
+                        android:layout_marginTop="@dimen/padding_triple"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <com.nyelam.android.view.font.NYTextView
+                        android:visibility="gone"
+                        android:id="@+id/dive_guide_no_result_textView"
+                        app:fontTextStyle="lightItalic"
+                        android:text="Service not found."
+                        android:textSize="16sp"
+                        android:textColor="@color/ny_grey2"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/padding_double"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/dive_guide_recyclerView"
+                        android:nestedScrollingEnabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+
+
+
+
                 <LinearLayout
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/activity_horizontal_margin"

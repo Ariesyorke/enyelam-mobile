@@ -30,9 +30,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme, android:allowBackup">
-
-        <meta-data android:name="firebase_crash_collection_enabled" android:value="false" />
-
+        <meta-data
+            android:name="firebase_crash_collection_enabled"
+            android:value="false" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_public_api_key" />
@@ -146,7 +146,8 @@
         <activity android:name=".dotrip.DoTripListActivity" />
         <activity android:name=".docourse.DoCourseActivity" />
         <activity android:name=".docourse.DoCourseResultActivity" />
-        <activity android:name=".dodive.EquipmentRentActivity"></activity>
+        <activity android:name=".dodive.EquipmentRentActivity" />
+        <activity android:name=".divecenter.DiveGuideActivity"></activity>
     </application>
 
 </manifest>

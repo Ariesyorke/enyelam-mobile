@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
-import com.nyelam.android.data.SummaryList;
+import com.nyelam.android.data.ReviewList;
 
 import org.json.JSONObject;
 

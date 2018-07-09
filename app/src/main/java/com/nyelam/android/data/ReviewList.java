@@ -1,4 +1,4 @@
-package com.nyelam.android.http;
+package com.nyelam.android.data;
 
 import com.nyelam.android.data.NYAbstractList;
 import com.nyelam.android.data.Review;

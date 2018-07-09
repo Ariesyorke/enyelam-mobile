@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.text.Text;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
@@ -43,14 +44,18 @@ import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.Coordinate;
 import com.nyelam.android.data.DiveCenter;
+import com.nyelam.android.data.DiveGuide;
+import com.nyelam.android.data.DiveGuideList;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DiveServiceList;
 import com.nyelam.android.data.Location;
+import com.nyelam.android.data.ReviewList;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divespot.DiveSpotDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.home.BannerViewPagerAdapter;
+import com.nyelam.android.http.NYDiveGuideListRequest;
 import com.nyelam.android.http.NYDoDiveCenterDetailRequest;
 import com.nyelam.android.http.NYDoDiveSearchServiceRequest;
 import com.nyelam.android.view.NYBannerViewPager;
@@ -59,6 +64,7 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,6 +92,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     private String serviceId;
     private int page = 1;
     private List<DiveService> serviceList;
+    private List<DiveGuide> diveGuideList;
 
     protected DiveCenter diveCenter;
     protected String diver;
@@ -115,12 +122,20 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         return ecoTrip;
     }
 
+
+    private DiveGuideAdapter diveGuideAdapter;
+    private TextView diveGuideNoResultTextView;
+    private LinearLayout diveGuideLinearLayout;
+    private ProgressBar diveGuideProgressBar;
+    private RecyclerView diveGuideRecyclerView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dive_center_detail);
         initView();
-    //    initMap();
+//        initMap();
         initToolbar();
         initExtra();
         initAdapter();
@@ -188,16 +203,27 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     }
 
     private void initAdapter() {
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+
+        //ADAPTER SERVICE LIST
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
         serviceList = new ArrayList<>();
-
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
         serviceAdapter = new DoDiveSearchServiceAdapter(this, diver, schedule, certificate, diveCenter);
         recyclerView.setAdapter(serviceAdapter);
+
+
+        //ADAPTER DIVE GUIDE
+        diveGuideList = new ArrayList<>();
+        LinearLayoutManager layoutManagerDiveGuide
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        diveGuideRecyclerView.setLayoutManager(layoutManagerDiveGuide);
+        diveGuideRecyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
+        diveGuideAdapter = new DiveGuideAdapter(this);
+        diveGuideRecyclerView.setAdapter(diveGuideAdapter);
     }
 
 
@@ -418,6 +444,56 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
 
 
+
+
+
+
+    protected void getSDiveGuideList() {
+
+        if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())){
+
+            NYDiveGuideListRequest req = null;
+            try {
+                req = new NYDiveGuideListRequest(this, diveCenter.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            spcMgr.execute(req, onGetDiveGuideListRequest());
+
+        }
+    }
+
+    private RequestListener<DiveGuideList> onGetDiveGuideListRequest() {
+        return new RequestListener<DiveGuideList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (diveGuideProgressBar != null)diveGuideProgressBar.setVisibility(View.GONE);
+                NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
+                diveGuideNoResultTextView.setVisibility(View.VISIBLE);
+                //noResultTextView.setText(spiceException.getMessage());
+            }
+
+            @Override
+            public void onRequestSuccess(DiveGuideList results) {
+
+                if (diveGuideProgressBar != null)diveGuideProgressBar.setVisibility(View.GONE);
+
+                if (diveGuideList == null) diveGuideList = new ArrayList<>();
+                if (results != null && results.getList().size() > 0){
+                    diveGuideList = results.getList();
+                    diveGuideAdapter.addResults(diveGuideList);
+                    diveGuideAdapter.notifyDataSetChanged();
+                    diveGuideNoResultTextView.setVisibility(View.GONE);
+                } else {
+                    diveGuideNoResultTextView.setVisibility(View.VISIBLE);
+                }
+
+            }
+        };
+    }
+
+
+
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         viewPager = (NYCustomViewPager) findViewById(R.id.view_pager);
@@ -453,6 +529,13 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapProgressBar = (ProgressBar) findViewById(R.id.map_progress_bar);
         mapFrameLayout = (FrameLayout) findViewById(R.id.map_frameLayout);
+
+
+        diveGuideNoResultTextView = (TextView) findViewById(R.id.dive_guide_no_result_textView);
+        diveGuideLinearLayout = (LinearLayout) findViewById(R.id.dive_guide_linearLayout);
+        diveGuideProgressBar = (ProgressBar) findViewById(R.id.dive_guide_progress_bar);
+        diveGuideRecyclerView = (RecyclerView) findViewById(R.id.dive_guide_recyclerView);
+
     }
 
     private void initBanner() {
@@ -501,6 +584,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         spcMgr.start(getApplicationContext());
+        loadDummyDiveGuides();
     }
 
     @Override
@@ -576,5 +660,43 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
             //noLocationTextView.setVisibility(View.VISIBLE);
             mapLinearLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+
+
+
+
+
+
+    private void loadDummyDiveGuides(){
+        JSONArray array = null;
+        try {
+            array = new JSONArray(NYHelper.getJSONFromResource(this, "list_dive_guide.json"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        DiveGuideList results = new DiveGuideList();
+        try {
+            results.parse(array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(this, "ada : "+String.valueOf(results.getList().size()), Toast.LENGTH_SHORT).show();
+
+        diveGuideProgressBar.setVisibility(View.GONE);
+
+        if (results != null && results.getList() != null && results.getList().size() > 0){
+            diveGuideNoResultTextView.setVisibility(View.GONE);
+            diveGuideAdapter.clear();
+            diveGuideAdapter.addResults(results.getList());
+            diveGuideAdapter.notifyDataSetChanged();
+        } else {
+            diveGuideAdapter.clear();
+            diveGuideAdapter.notifyDataSetChanged();
+            diveGuideNoResultTextView.setVisibility(View.VISIBLE);
+        }
+
     }
 }
