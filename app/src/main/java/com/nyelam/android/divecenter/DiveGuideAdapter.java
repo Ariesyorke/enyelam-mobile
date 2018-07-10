@@ -118,9 +118,9 @@ public class DiveGuideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     diveGuideNameTextView.setText(diveGuide.getFullName());
                 }
 
-                if (NYHelper.isStringNotEmpty(diveGuide.getFullName()) && diveGuide.getCertificateOrganization() != null &&
-                        NYHelper.isStringNotEmpty(diveGuide.getCertificateOrganization().getName())){
-                    diveGuideLicenseTextView.setText(diveGuide.getCertificateOrganization().getName());
+                if (diveGuide.getCertificateDiver() != null &&
+                        NYHelper.isStringNotEmpty(diveGuide.getCertificateDiver().getName())){
+                    diveGuideLicenseTextView.setText(diveGuide.getCertificateDiver().getName());
                 }
 
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
@@ -144,7 +144,7 @@ public class DiveGuideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                         @Override
                         public void onLoadingCancelled(String imageUri, View view) {
-                            diveGuidePhotoCircleImageView.setImageResource(R.drawable.example_pic);
+                            diveGuidePhotoCircleImageView.setImageResource(R.mipmap.ic_launcher);
                         }
                     });
 

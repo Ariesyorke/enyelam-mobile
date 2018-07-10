@@ -42,6 +42,7 @@
                     android:layout_marginTop="?attr/actionBarSize"
                     android:fitsSystemWindows="true">
 
+
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
@@ -72,7 +73,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="70dp"
+                            android:layout_marginBottom="100dp"
                             android:text="Dive Guide License Type"
                             android:textColor="@color/white"
                             android:textSize="14sp"
@@ -237,6 +238,8 @@
                 android:paddingRight="@dimen/padding_triple" />
 
         </LinearLayout>-->
+
+
 
     </android.support.design.widget.CoordinatorLayout>
 

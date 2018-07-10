@@ -17,11 +17,11 @@ import java.util.List;
 public class DiveGuide implements Parseable {
 
     private static String KEY_ID = "id";
-    private static String KEY_FULLNAME = "";
-    private static String KEY_BIRTHDATE = "";
-    private static String KEY_PICTURE = "";
-    private static String KEY_GENDER = "";
-    private static String KEY_BIRTHPLACE = "";
+    private static String KEY_FULLNAME = "fullname";
+    private static String KEY_BIRTHDATE = "birthdate";
+    private static String KEY_PICTURE = "picture";
+    private static String KEY_GENDER = "gender";
+    private static String KEY_BIRTHPLACE = "birthplace";
     private static String KEY_CERTIFICATE_ORGANIZATION = "certificate_organization";
     private static String KEY_CERTIFICATE_DIVER = "certificate_diver";
     private static String KEY_LANGUAGES = "languages";
@@ -130,6 +130,22 @@ public class DiveGuide implements Parseable {
                 setBirthDate(obj.getString(KEY_BIRTHDATE));
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+
+        try {
+            if (!obj.isNull(KEY_PICTURE)) {
+                setPicture(obj.getString(KEY_PICTURE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+
+        try {
+            if (!obj.isNull(KEY_GENDER)) {
+                setGender(obj.getString(KEY_GENDER));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+
 
         try {
             if (!obj.isNull(KEY_BIRTHPLACE)) {

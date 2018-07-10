@@ -329,8 +329,6 @@
                 <LinearLayout
                     android:id="@+id/dive_guide_linearLayout"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="@dimen/padding_double"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

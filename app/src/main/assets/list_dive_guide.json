@@ -1,27 +1,51 @@
 [
   {
     "id": "1",
-    "fullname": "Bobby Marwan Malik",
+    "fullname": "Aprilian Nur Wakhid Daini",
     "birthdate": 1121111134,
-    "picture": "https://http-gambar-photo-profil",
+    "picture": "https://angular.io/assets/images/logos/angular/angular.png",
     "gender": "Male",
-    "birthplace": "Bogor"
+    "birthplace": "Bogor",
+    "certificate_organization": {
+      "id": "1",
+      "name": "Organization Name"
+    },
+    "certificate_diver": {
+      "id": "1",
+      "name": "License Type"
+    }
   },
   {
     "id": "1",
-    "fullname": "Bobby Marwan Malik",
+    "fullname": "John Doel",
     "birthdate": 1121111134,
-    "picture": "https://http-gambar-photo-profil",
+    "picture": "https://angular.io/assets/images/logos/angular/angular.png",
     "gender": "Male",
-    "birthplace": "Bogor"
+    "birthplace": "Bogor",
+    "certificate_organization": {
+      "id": "1",
+      "name": "Organization Name"
+    },
+    "certificate_diver": {
+      "id": "1",
+      "name": "License Type"
+    }
   },
   {
     "id": "1",
-    "fullname": "Bobby Marwan Malik",
+    "fullname": "Dave Grohl",
     "birthdate": 1121111134,
-    "picture": "https://http-gambar-photo-profil",
+    "picture": "https://angular.io/assets/images/logos/angular/angular.png",
     "gender": "Male",
-    "birthplace": "Bogor"
+    "birthplace": "Bogor",
+    "certificate_organization": {
+      "id": "1",
+      "name": "Organization Name"
+  },
+    "certificate_diver": {
+      "id": "1",
+      "name": "License Type"
+    }
   }
 ]
 

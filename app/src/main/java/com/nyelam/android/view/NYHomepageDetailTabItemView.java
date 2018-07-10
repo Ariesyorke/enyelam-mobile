@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.divecenter.DiveGuideActivity;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 
 /**
@@ -68,6 +69,10 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
                 int checkedTabItemPos = ((DetailServiceActivity)activity).onCheckedChanged(this, this.checked);
                 if (checkedTabItemPos > -1)
                     ((DetailServiceActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
+            } else if (activity instanceof DiveGuideActivity){
+                int checkedTabItemPos = ((DiveGuideActivity)activity).onCheckedChanged(this, this.checked);
+                if (checkedTabItemPos > -1)
+                    ((DiveGuideActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
             }
         }
 
@@ -128,6 +133,10 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
         this.activity = activity;
     }
 
+    public void setDiveGuideActivity(Activity activity) {
+        this.activity = activity;
+    }
+
     private void init(Context context, AttributeSet attrs, int defStyleAttrs) {
         View.inflate(context, R.layout.view_detail_tab_item, this);
 
@@ -174,6 +183,10 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
             int checkedTabItemPos = ((DetailServiceActivity)activity).onCheckedChanged(this, this.checked);
             if (checkedTabItemPos > -1)
                 ((DetailServiceActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
+        } else if (activity != null && activity instanceof DiveGuideActivity) {
+            int checkedTabItemPos = ((DiveGuideActivity)activity).onCheckedChanged(this, this.checked);
+            if (checkedTabItemPos > -1)
+                ((DiveGuideActivity)activity).movePagerToTabItemPosition(checkedTabItemPos);
         }
 
         textView.setText(text);
@@ -183,4 +196,12 @@ public class NYHomepageDetailTabItemView extends FrameLayout implements Checkabl
         }
 
     }
+
+
+
+
+
+
+
+
 }
