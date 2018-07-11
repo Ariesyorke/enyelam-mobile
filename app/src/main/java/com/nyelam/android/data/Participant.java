@@ -11,10 +11,12 @@ import org.json.JSONObject;
 
 public class Participant implements Parseable {
 
+    private static String KEY_TITLE = "title";
     private static String KEY_NAME = "name";
     private static String KEY_EMAIL_ADDRESS = "email_address";
     private static String KEY_EMAIL = "email";
 
+    private String title;
     private String name;
     private String email;
 
@@ -24,6 +26,14 @@ public class Participant implements Parseable {
     public Participant(String name, String email){
         this.name = name;
         this.email = email;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getName() {
@@ -48,6 +58,12 @@ public class Participant implements Parseable {
         if (obj == null) return;
 
         try {
+            if (!obj.isNull(KEY_TITLE)) {
+                setTitle(obj.getString(KEY_TITLE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
             if (!obj.isNull(KEY_NAME)) {
                 setName(obj.getString(KEY_NAME));
             }
@@ -66,6 +82,14 @@ public class Participant implements Parseable {
     public String toString() {
 
         JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getTitle())) {
+                obj.put(KEY_TITLE, getTitle());
+            } else {
+                obj.put(KEY_TITLE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!TextUtils.isEmpty(getName())) {

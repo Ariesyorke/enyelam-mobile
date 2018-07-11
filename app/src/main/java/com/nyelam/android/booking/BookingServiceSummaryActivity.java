@@ -729,7 +729,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
             if (participant != null && NYHelper.isStringNotEmpty(participant.getName())) {
                 if (NYHelper.isStringNotEmpty(participant.getName())){
-                    nameTextView.setText(participant.getName());
+
+                    String fullname = "";
+                    if (NYHelper.isStringNotEmpty(participant.getTitle())) fullname += participant.getTitle()+" ";
+                    fullname += participant.getName();
+
+                    nameTextView.setText(fullname);
                     nameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
                     wordingTextView.setText(getResources().getString(R.string.change));
                 } else {

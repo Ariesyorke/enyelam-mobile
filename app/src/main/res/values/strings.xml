@@ -37,6 +37,7 @@
     <string name="license_type">License Type</string>
     <string name="license_type_hint">License Type</string>
     <string name="gender_hint">Gender</string>
+    <string name="title">Title</string>
     <string name="phone_number">Phone Number</string>
     <string name="phone_number_hint">Phone Number *</string>
     <string name="phone_number_ex">Phone number (eg. +905...)</string>
@@ -148,6 +149,7 @@
     <string name="warn_no_services_found">No services found.</string>
     <string name="warn_no_location_found">No location found.</string>
     <string name="forgot_password_message">Click OK to recover your password</string>
+    <string name="warn_field_title_cannot_be_empty">Title cannot be empty</string>
     <string name="warn_field_name_cannot_be_empty">Name cannot be empty</string>
     <string name="warn_field_first_name_cannot_be_empty">First name cannot be empty</string>
     <string name="warn_field_username_cannot_be_empty">Username cannot be empty</string>

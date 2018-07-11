@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.nyelam.android.data.ParticipantList;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveGetParticipantsRequest;
 import com.nyelam.android.storage.ParticipantsStorage;
+import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -45,6 +47,10 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
     private AutoCompleteTextView nameAutoCompleteTextView;
     private List<Participant> dataList;
     private ParticipantsSearchAdapter adapter;
+
+    private TitleSpinnerAdapter titleSpinnerAdapter;
+    private EditText titleEditText;
+    private NYSpinner titleSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +126,10 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
                 //if (p != null && NYHelper.isStringNotEmpty(p.getName())) nameInputEditText.setText(p.getName());
                 if (p != null && NYHelper.isStringNotEmpty(p.getName())) nameAutoCompleteTextView.setText(p.getName());
                 if (p != null && NYHelper.isStringNotEmpty(p.getEmail())) emailInputEditText.setText(p.getEmail());
+                if (NYHelper.isStringNotEmpty(p.getTitle())){
+                    titleSpinnerAdapter.setSelectedPosition(titleSpinnerAdapter.setItemPosition(p.getTitle()));
+                    titleSpinner.setSelection(titleSpinnerAdapter.setItemPosition(p.getTitle()));
+                }
             }
 
         }
@@ -131,10 +141,13 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //String name = nameInputEditText.getText().toString().trim();
+                String title = titleSpinnerAdapter.getItem(titleSpinner.getSelectedItemPosition());
                 String name = nameAutoCompleteTextView.getText().toString().trim();
                 String email = emailInputEditText.getText().toString().trim();
 
-                if (!NYHelper.isStringNotEmpty(name)){
+                if (!NYHelper.isStringNotEmpty(title)){
+                    Toast.makeText(BookingServiceParticipantActivity.this, getString(R.string.warn_field_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                } else if (!NYHelper.isStringNotEmpty(name)){
                     Toast.makeText(BookingServiceParticipantActivity.this, getString(R.string.warn_field_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(email)){
                     Toast.makeText(BookingServiceParticipantActivity.this, getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
@@ -145,6 +158,7 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
                     name = NYHelper.capitalizeString(name);
 
                     Participant p = new Participant();
+                    p.setTitle(title);
                     p.setName(name);
                     p.setEmail(email);
 
@@ -162,6 +176,21 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
             }
         });
 
+
+        titleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                titleEditText.setText(titleSpinnerAdapter.getItem(i));
+                titleSpinnerAdapter.setSelectedPosition(i);
+                titleSpinner.setSelection(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         closeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +204,12 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
         //nameInputEditText  = (TextInputEditText) findViewById(R.id.name_editText);
         emailInputEditText  = (TextInputEditText) findViewById(R.id.email_editText);
         closeImageView = (ImageView) findViewById(R.id.close_imageView) ;
+
+        titleEditText = (EditText) findViewById(R.id.title_editText) ;
+        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner) ;
+
+        titleSpinnerAdapter = new TitleSpinnerAdapter(this);
+        titleSpinner.setAdapter(titleSpinnerAdapter);
     }
 
     private void getDataParticipants() {
