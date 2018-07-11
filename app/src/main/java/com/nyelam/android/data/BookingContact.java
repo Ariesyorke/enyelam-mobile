@@ -11,15 +11,26 @@ import org.json.JSONObject;
 
 public class BookingContact implements Parseable {
 
+    private static String KEY_TITLE = "title";
     private static String KEY_NAME = "name";
     private static String KEY_PHONE_NUMBER = "phone_number";
     private static String KEY_EMAIL = "email";
     private static String KEY_COUNTRY_CODE = "country_code";
 
+    private String title;
     private String name;
     private String phoneNumber;
     private String email;
     private CountryCode countryCode;
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getName() {
         return name;
@@ -57,6 +68,12 @@ public class BookingContact implements Parseable {
     public void parse(JSONObject obj) {
 
         if (obj == null) return;
+
+        try {
+            if (!obj.isNull(KEY_TITLE)) {
+                setTitle(obj.getString(KEY_TITLE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!obj.isNull(KEY_NAME)) {
@@ -124,6 +141,14 @@ public class BookingContact implements Parseable {
     public String toString() {
 
         JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getTitle())) {
+                obj.put(KEY_TITLE, getTitle());
+            } else {
+                obj.put(KEY_TITLE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!TextUtils.isEmpty(getName())) {

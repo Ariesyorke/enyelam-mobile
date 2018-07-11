@@ -59,7 +59,7 @@
                             android:src="@drawable/logo_nyelam" />
 
                         <com.nyelam.android.view.font.NYTextView
-                            android:id="@+id/dive_guide_abilities_textView"
+                            android:id="@+id/dive_guide_name_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/padding"
@@ -70,6 +70,7 @@
                             app:fontTextStyle="medium" />
 
                         <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/dive_guide_license_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -175,35 +176,6 @@
                         app:tabItemPosition="socmed"
                         app:tabItemText="About"
                         app:tabSrcIcon="@drawable/ic_navigation_home_a" />
-
-                    <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
-                        android:id="@+id/socialmedia_tab"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        app:tabItemPosition="socmed"
-                        app:tabItemText="Dive Spots"
-                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />
-
-                    <com.nyelam.android.view.NYHomepageDetailTabItemView
-                        android:id="@+id/transaction_tab"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        app:tabItemPosition="transaction"
-                        app:tabItemText="Dive Center"
-                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
-
-                    <!--<com.nyelam.android.view.NYHomepageDetailTabItemView
-                        android:id="@+id/my_account_tab"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:tabItemPosition="my_account"
-                        app:tabItemText="Reviews"
-                        app:tabSrcIcon="@drawable/ic_navigation_home_a" />-->
 
                 </LinearLayout>
 

@@ -8,11 +8,11 @@
     "birthplace": "Bogor",
     "certificate_organization": {
       "id": "1",
-      "name": "Organization Name"
+      "name": "Peakers Ltd."
     },
     "certificate_diver": {
       "id": "1",
-      "name": "License Type"
+      "name": "Noob's License"
     }
   },
   {
@@ -28,7 +28,7 @@
     },
     "certificate_diver": {
       "id": "1",
-      "name": "License Type"
+      "name": "Just License"
     }
   },
   {
@@ -44,7 +44,7 @@
   },
     "certificate_diver": {
       "id": "1",
-      "name": "License Type"
+      "name": "Any License"
     }
   }
 ]

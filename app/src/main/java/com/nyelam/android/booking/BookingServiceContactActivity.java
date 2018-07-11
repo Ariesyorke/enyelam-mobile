@@ -45,8 +45,11 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
     private EditText phoneNumberEditText;
     private RelativeLayout spinnerRelativeLayout;
     private CountryCodeAdapter countryCodeAdapter;
-
     private CountryCode countryCode;
+
+    private TitleSpinnerAdapter titleSpinnerAdapter;
+    private EditText titleEditText;
+    private NYSpinner titleSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +61,47 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
     }
 
     private void initControl() {
+
+        titleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                titleEditText.setText(titleSpinnerAdapter.getItem(i));
+                titleSpinnerAdapter.setSelectedPosition(i);
+                titleSpinner.setSelection(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        countryCodeSpinner.setOnItemSelectedListener(this);
+        countryCodeSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+            @Override
+            public void onSpinnerOpened(Spinner spinner) {
+                InputMethodManager imm = (InputMethodManager)BookingServiceContactActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+            }
+
+            @Override
+            public void onSpinnerClosed(Spinner spinner) {
+
+            }
+        });
+
         saveTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                String title = titleSpinnerAdapter.getItem(titleSpinner.getSelectedItemPosition());
                 String name = nameEditText.getText().toString().trim();
                 String phone = phoneEditText.getText().toString().trim();
                 String email = emailEditText.getText().toString().trim();
 
-                if (!NYHelper.isStringNotEmpty(name)){
+                if (!NYHelper.isStringNotEmpty(title)){
+                    Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_field_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
+                } else if (!NYHelper.isStringNotEmpty(name)){
                     Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_field_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 } else if (!NYHelper.isStringNotEmpty(phone)){
                     Toast.makeText(BookingServiceContactActivity.this, getString(R.string.warn_field_phone_cannot_be_empty), Toast.LENGTH_SHORT).show();
@@ -77,6 +112,7 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
                 } else {
                     name = NYHelper.capitalizeString(name);
                     bookingContact.setName(name);
+                    bookingContact.setTitle(title);
                     bookingContact.setPhoneNumber(phone);
                     bookingContact.setEmail(email);
                     bookingContact.setCountryCode(countryCode);
@@ -108,22 +144,16 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
         spinnerRelativeLayout = (RelativeLayout) findViewById(R.id.spinner_relativeLayout);
 
-        countryCodeSpinner.setOnItemSelectedListener(this);
-        countryCodeSpinner.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
-            @Override
-            public void onSpinnerOpened(Spinner spinner) {
-                InputMethodManager imm = (InputMethodManager)BookingServiceContactActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
-            }
-
-            @Override
-            public void onSpinnerClosed(Spinner spinner) {
-
-            }
-        });
+        titleEditText = (EditText) findViewById(R.id.title_editText) ;
+        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner) ;
     }
 
     private void getExtra() {
+
+        // inisialiasi adapter
+        titleSpinnerAdapter = new TitleSpinnerAdapter(this);
+        titleSpinner.setAdapter(titleSpinnerAdapter);
+
         extras = getIntent().getExtras();
         if (extras != null) {
 
@@ -142,6 +172,11 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
                         if (countryCode == null)countryCode = new CountryCode();
                         countryCode = bookingContact.getCountryCode();
                         plusTextView.setText("+ "+bookingContact.getCountryCode().getCountryNumber());
+                    }
+
+                    if (NYHelper.isStringNotEmpty(bookingContact.getTitle())){
+                        titleSpinnerAdapter.setSelectedPosition(titleSpinnerAdapter.setItemPosition(bookingContact.getTitle()));
+                        titleSpinner.setSelection(titleSpinnerAdapter.setItemPosition(bookingContact.getTitle()));
                     }
                 }
 

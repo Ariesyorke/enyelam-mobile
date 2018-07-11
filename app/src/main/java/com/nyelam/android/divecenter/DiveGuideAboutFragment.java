@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ public class DiveGuideAboutFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private TextView diveGuideAboutTextView;
+    private ProgressBar progressBar;
 
     public DiveGuideAboutFragment() {
         // Required empty public constructor
@@ -51,18 +53,23 @@ public class DiveGuideAboutFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         diveGuideAboutTextView = (TextView) view.findViewById(R.id.dive_guide_about_textView);
     }
 
     public void setContent(DiveGuide diveGuide) {
 
-        Toast.makeText(getActivity(), "ABOUT", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "ABOUT", Toast.LENGTH_SHORT).show();
+
+        progressBar.setVisibility(View.GONE);
 
         if (diveGuide != null && NYHelper.isStringNotEmpty(diveGuide.getFullName())){
             diveGuideAboutTextView.setText(diveGuide.getFullName());
+        } else {
+            diveGuideAboutTextView.setText("nothing");
         }
 
+        diveGuideAboutTextView.setVisibility(View.VISIBLE);
     }
 
 

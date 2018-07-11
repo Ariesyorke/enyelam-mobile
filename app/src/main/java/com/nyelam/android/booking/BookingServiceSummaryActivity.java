@@ -593,7 +593,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     bookingContact.parse(obj);
 
                     if (NYHelper.isStringNotEmpty(bookingContact.getName())){
-                        contactNameTextView.setText(bookingContact.getName());
+                        String fullname = "";
+                        if (NYHelper.isStringNotEmpty(bookingContact.getTitle())) fullname+=bookingContact.getTitle()+" ";
+                        fullname += bookingContact.getName();
+                        contactNameTextView.setText(fullname);
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
                     } else {
                         contactNameTextView.setText(getString(R.string.full_name));
@@ -620,8 +623,16 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                     bookingContact.setEmail(storage.user.getEmail());
                     if (NYHelper.isStringNotEmpty(storage.user.getFullname())){
+
                         contactNameTextView.setText(storage.user.getFullname());
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
+
+//                        String fullname = "";
+//                        if (NYHelper.isStringNotEmpty(bookingContact.getTitle())) fullname+=bookingContact.getTitle()+" ";
+//                        fullname += bookingContact.getName();
+//                        contactNameTextView.setText(fullname);
+//                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
+
                     } else {
                         contactNameTextView.setText(getString(R.string.full_name));
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));

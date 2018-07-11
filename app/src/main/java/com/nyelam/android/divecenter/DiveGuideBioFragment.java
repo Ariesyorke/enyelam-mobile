@@ -66,6 +66,8 @@ public class DiveGuideBioFragment extends Fragment {
 
     private void initView(View view) {
 
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        mainLinearLayout = (LinearLayout) view.findViewById(R.id.main_linearLayout);
         diveGuideCertificationTextView = (TextView) view.findViewById(R.id.dive_guide_certification_textView);
         diveGuideNationalityTextView = (TextView) view.findViewById(R.id.dive_guide_nationality_textView);
         diveGuideLanguageTextView = (TextView) view.findViewById(R.id.dive_guide_language_textView);
@@ -73,10 +75,12 @@ public class DiveGuideBioFragment extends Fragment {
 
     }
 
-
     public void setContent(DiveGuide diveGuide) {
 
-        Toast.makeText(getActivity(), "BIO", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "BIO", Toast.LENGTH_SHORT).show();
+
+        progressBar.setVisibility(View.GONE);
+        diveGuideAbilitiesTextView.setVisibility(View.VISIBLE);
 
         if (diveGuide != null){
 
@@ -86,22 +90,44 @@ public class DiveGuideBioFragment extends Fragment {
 //            if (diveGuide.getCertificateDiver() != null && NYHelper.isStringNotEmpty(diveGuide.getCertificateDiver().getName()))
 //                diveGuideNationalityTextView.setText(diveGuide.getCertificateDiver().getName());
 
-            String temp = "";
-            if (diveGuide.getLanguages() != null && diveGuide.getLanguages().size() > 0)
+
+            if (diveGuide.getLanguages() != null && diveGuide.getLanguages().size() > 0){
+
+                String temp = "";
+
                 for (int i = 0; i < diveGuide.getLanguages().size(); i++){
-                    if (0 == i){
-                        temp = temp + diveGuide.getLanguages().get(i);
-                    } else if (diveGuide.getLanguages().size() == i){
-                        temp = temp + ", " +diveGuide.getLanguages().get(i);
-                    } else {
-                        temp = temp + ", " +diveGuide.getLanguages().get(i);
+                    if (0 == i  && NYHelper.isStringNotEmpty(diveGuide.getLanguages().get(i).getName())){
+                        temp = temp + diveGuide.getLanguages().get(i).getName();
+                    } else if (diveGuide.getLanguages().size() == i && NYHelper.isStringNotEmpty(diveGuide.getLanguages().get(i).getName())){
+                        temp = temp + ", " +diveGuide.getLanguages().get(i).getName();
+                    } else if (NYHelper.isStringNotEmpty(diveGuide.getLanguages().get(i).getName())){
+                        temp = temp + ", " +diveGuide.getLanguages().get(i).getName();
                     }
                 }
-            diveGuideLanguageTextView.setText(temp);
+                diveGuideLanguageTextView.setText(temp);
+            }
+
+
+            if (diveGuide.getSpecialAbilities() != null && diveGuide.getSpecialAbilities().size() > 0){
+
+                String temp = "";
+
+                for (int i = 0; i < diveGuide.getSpecialAbilities().size(); i++){
+                    if (0 == i  && NYHelper.isStringNotEmpty(diveGuide.getSpecialAbilities().get(i))){
+                        temp = temp + diveGuide.getSpecialAbilities().get(i);
+                    } else if (diveGuide.getSpecialAbilities().size() == i && NYHelper.isStringNotEmpty(diveGuide.getSpecialAbilities().get(i))){
+                        temp = temp + ", " +diveGuide.getSpecialAbilities().get(i);
+                    } else if (NYHelper.isStringNotEmpty(diveGuide.getSpecialAbilities().get(i))){
+                        temp = temp + ", " +diveGuide.getSpecialAbilities().get(i);
+                    }
+                }
+                diveGuideAbilitiesTextView.setText(temp);
+            }
 
 //            if (diveGuide.getCertificateDiver() != null && NYHelper.isStringNotEmpty(diveGuide.gEertificateDiver().getaName()))
 //                diveGuideAbilitiesTextView.setText(diveGuide.getCertificateDiver().getName());
 
+            mainLinearLayout.setVisibility(View.VISIBLE);
         }
 
     }

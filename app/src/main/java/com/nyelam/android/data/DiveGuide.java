@@ -21,6 +21,8 @@ public class DiveGuide implements Parseable {
     private static String KEY_BIRTHDATE = "birthdate";
     private static String KEY_PICTURE = "picture";
     private static String KEY_GENDER = "gender";
+    private static String KEY_ABOUT = "about";
+    private static String KEY_SPECIAL_ABILITIES = "special_abilities";
     private static String KEY_BIRTHPLACE = "birthplace";
     private static String KEY_CERTIFICATE_ORGANIZATION = "certificate_organization";
     private static String KEY_CERTIFICATE_DIVER = "certificate_diver";
@@ -32,6 +34,8 @@ public class DiveGuide implements Parseable {
     private String picture;
     private String gender;
     private String birthPlace;
+    private String about;
+    private List<String> specialAbilities;
     private LicenseType certificateOrganization;
     private LicenseType certificateDiver;
     private List<Language> languages;
@@ -83,6 +87,22 @@ public class DiveGuide implements Parseable {
 
     public void setBirthPlace(String birthPlace) {
         this.birthPlace = birthPlace;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public List<String> getSpecialAbilities() {
+        return specialAbilities;
+    }
+
+    public void setSpecialAbilities(List<String> specialAbilities) {
+        this.specialAbilities = specialAbilities;
     }
 
     public LicenseType getCertificateOrganization() {
@@ -145,13 +165,32 @@ public class DiveGuide implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-
-
         try {
             if (!obj.isNull(KEY_BIRTHPLACE)) {
                 setBirthPlace(obj.getString(KEY_BIRTHPLACE));
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_ABOUT)) {
+                setAbout(obj.getString(KEY_ABOUT));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        if(!obj.isNull(KEY_SPECIAL_ABILITIES)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_SPECIAL_ABILITIES);
+                if(array != null && array.length() > 0) {
+                    specialAbilities = new ArrayList<>();
+                    for(int i = 0; i <array.length(); i++) {
+                        String spa = array.getString(i);
+                        specialAbilities.add(spa);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             if(!obj.isNull(KEY_CERTIFICATE_ORGANIZATION)) {
@@ -245,6 +284,25 @@ public class DiveGuide implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+        try {
+            if (!TextUtils.isEmpty(getAbout())) {
+                obj.put(KEY_ABOUT, getAbout());
+            } else {
+                obj.put(KEY_ABOUT, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        if(specialAbilities != null && !specialAbilities.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(String spa : specialAbilities) {
+                    array.put(spa);
+                }
+                obj.put(KEY_SPECIAL_ABILITIES, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             if (getCertificateOrganization() != null) {

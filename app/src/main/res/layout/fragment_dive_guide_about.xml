@@ -10,17 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.nyelam.android.view.font.NYTextView
-            android:id="@+id/dive_guide_about_textView"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_half"
-            android:text="My expertise include project design and implementation, research, impact assessment, financial and technical reporting, resource mobilization, advocacy, communication strategy design and implementation."
-            android:padding="@dimen/padding_double"
-            android:gravity="center"
-            android:textColor="@color/ny_grey4"
-            android:textSize="16sp"
-            app:fontTextStyle="light" />
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/padding_quad"
+                android:layout_width="45dp"
+                android:layout_height="45dp" />
+
+            <com.nyelam.android.view.font.NYTextView
+                android:visibility="gone"
+                android:id="@+id/dive_guide_about_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_half"
+                android:text="My expertise include project design and implementation, research, impact assessment, financial and technical reporting, resource mobilization, advocacy, communication strategy design and implementation."
+                android:padding="@dimen/padding_double"
+                android:gravity="center"
+                android:textColor="@color/ny_grey4"
+                android:textSize="16sp"
+                app:fontTextStyle="light" />
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

@@ -28,6 +28,7 @@ import com.nyelam.android.data.DiveGuide;
 import com.nyelam.android.data.DiveGuideList;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDiveGuideDetailRequest;
@@ -46,6 +47,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 
 public class DiveGuideActivity extends AppCompatActivity implements
@@ -66,6 +68,10 @@ public class DiveGuideActivity extends AppCompatActivity implements
     private boolean mProtectFromCheckedChange = false;
     private boolean mProtectFromPagerChange = false;
     private DiveGuide diveGuide;
+    private TextView diveGuideNameTextView;
+    private TextView diveGuideLicenseTextView;
+    private CircleImageView userImageView;
+    private boolean isStillLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +81,6 @@ public class DiveGuideActivity extends AppCompatActivity implements
         initToolbar();
         initView();
         initTab();
-        loadDummyDiveGuideDetail();
     }
 
     private void initView() {
@@ -87,6 +92,9 @@ public class DiveGuideActivity extends AppCompatActivity implements
         menuItemImageView = (ImageView) findViewById(R.id.menu_item_imageView);
         bannerViewPager = (NYBannerViewPager) findViewById(R.id.promotion_view_pager);
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
+        diveGuideNameTextView = (TextView) findViewById(R.id.dive_guide_name_textView);
+        diveGuideLicenseTextView = (TextView) findViewById(R.id.dive_guide_license_textView);
+        userImageView = (CircleImageView) findViewById(R.id.user_imageView);
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentAdapter);
@@ -109,12 +117,12 @@ public class DiveGuideActivity extends AppCompatActivity implements
                 if (fragment != null && fragment instanceof DiveGuideBioFragment){
 
                     // TODO: buat metode
-                    //((DiveGuideBioFragment) fragment).setContent();
+                    ((DiveGuideBioFragment) fragment).setContent(diveGuide);
 
                 } else if (fragment != null && fragment instanceof DiveGuideAboutFragment){
 
                     // TODO: buat metode
-                    ///((DiveGuideAboutFragment) fragment).setDiveSpot();
+                    ((DiveGuideAboutFragment) fragment).setContent(diveGuide);
 
                 }
             }
@@ -146,6 +154,8 @@ public class DiveGuideActivity extends AppCompatActivity implements
                 ((NYHomepageDetailTabItemView) child).setDiveGuideActivity(this);
             }
         }
+
+        loadDummyDiveGuideDetail();
 
     }
 
@@ -319,23 +329,49 @@ public class DiveGuideActivity extends AppCompatActivity implements
         this.diveGuide = diveGuide;
 
         if (diveGuide != null){
+            if (NYHelper.isStringNotEmpty(diveGuide.getFullName()))diveGuideNameTextView.setText(diveGuide.getFullName());
+            if (diveGuide.getCertificateDiver() != null && NYHelper.isStringNotEmpty(diveGuide.getCertificateDiver().getName()))
+                diveGuideLicenseTextView.setText(diveGuide.getCertificateDiver().getName());
             NYLog.e("CEK DIVE GUIDE : "+diveGuide.toString());
         } else {
             NYLog.e("CEK DIVE GUIDE : null");
         }
 
+        isStillLoad = false;
+
         fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
+
         if (fragment != null && fragment instanceof DiveGuideBioFragment){
 
             // TODO: buat metode
-            ((DiveGuideBioFragment) fragment).setContent(this.diveGuide);
+            ((DiveGuideBioFragment) fragment).setContent(diveGuide);
 
         } else if (fragment != null && fragment instanceof DiveGuideAboutFragment){
 
             // TODO: buat metode
-            ((DiveGuideAboutFragment) fragment).setContent(this.diveGuide);
+            ((DiveGuideAboutFragment) fragment).setContent(diveGuide);
 
         }
+
+
+
+//        fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
+//
+//        Toast.makeText(this, "frag : "+String.valueOf(viewPager.getCurrentItem()), Toast.LENGTH_SHORT).show();
+//
+//        if (fragment != null && fragment instanceof DiveGuideBioFragment){
+//
+//            // TODO: buat metode
+//            ((DiveGuideBioFragment) fragment).setContent(this.diveGuide);
+//
+//        } else if (fragment != null && fragment instanceof DiveGuideAboutFragment){
+//
+//            // TODO: buat metode
+//            ((DiveGuideAboutFragment) fragment).setContent(this.diveGuide);
+//
+//        }
+
+
     }
 
 }

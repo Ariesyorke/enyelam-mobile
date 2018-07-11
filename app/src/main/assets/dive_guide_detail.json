@@ -1,26 +1,25 @@
 {
   "id": "1",
-  "fullname": "Bobby Marwan Malik",
+  "fullname": "Aprilian Nur Wakhid Daini",
   "birthdate": 1121111134,
-  "picture": "https://http-gambar-photo-profil",
+  "picture": "https://angular.io/assets/images/logos/angular/angular.png",
   "gender": "Male",
-  "birthplace": "Bogor",
+  "birthplace": "Magetan",
+  "about":"I don't even know myself.",
+  "special_abilities":["Photography", "Diving"],
   "certificate_organization": {
     "id": "1",
-    "name": "Organization Name"
+    "name": "Peakers Ltd."
   },
   "certificate_diver": {
     "id": "1",
-    "name": "License Type"
+    "name": "Noobs"
   },
-  "languages": [
-    {
-      "id": "1",
-      "name": "English"
-    },
-    {
-      "id": "1",
-      "name": "English"
-    }
-  ]
+  "languages": [{
+    "id": "1",
+    "name": "Wakandanian"
+  }, {
+    "id": "1",
+    "name": "Indonesian"
+  }]
 }

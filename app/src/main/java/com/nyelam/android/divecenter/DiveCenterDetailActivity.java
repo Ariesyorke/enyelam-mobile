@@ -683,7 +683,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
 
-        Toast.makeText(this, "ada : "+String.valueOf(results.getList().size()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "ada : "+String.valueOf(results.getList().size()), Toast.LENGTH_SHORT).show();
 
         diveGuideProgressBar.setVisibility(View.GONE);
 
