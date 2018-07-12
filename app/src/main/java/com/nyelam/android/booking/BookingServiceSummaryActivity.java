@@ -131,6 +131,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private Intent paypalIntent;
     private int paypalRequestCode = 999;
     private List<EquipmentRentAdded> equipmentRentAddedList;
+    private boolean isCloseDialogOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1183,11 +1184,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             public void onClick(DialogInterface dialog, int which) {
                 // Do nothing
                 dialog.dismiss();
+                isCloseDialogOpened = false;
             }
         });
 
-        AlertDialog alert = builder.create();
-        alert.show();
+        if (isCloseDialogOpened == false){
+            AlertDialog alert = builder.create();
+            alert.show();
+            isCloseDialogOpened = true;
+        }
 
     }
 

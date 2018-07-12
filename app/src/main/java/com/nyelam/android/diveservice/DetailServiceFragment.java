@@ -121,7 +121,6 @@ public class DetailServiceFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -264,9 +263,10 @@ public class DetailServiceFragment extends Fragment {
             slotDiversTextView.setText(": "+String.valueOf(activity.diveService.getAvailabilityStock()));
 
             if (NYHelper.isStringNotEmpty(service.getName())){
-                String days = " Day";
-                if (service.getDays() > 1 ) days = " Days";
-                titleTextView.setText(service.getName()+" / "+String.valueOf(service.getDays())+days);
+                //String days = " Day";
+                //if (service.getDays() > 1 ) days = " Days";
+                //titleTextView.setText(service.getName()+" / "+String.valueOf(service.getDays())+days);
+                titleTextView.setText(service.getName());
             }
 
             if (service.getDays() <= 1){
@@ -465,7 +465,7 @@ public class DetailServiceFragment extends Fragment {
                     }
 
                     if (fac.getAccomodation() != null && fac.getAccomodation()){
-                        NYHelper.setFacilities(fac.getTowel(), R.drawable.ic_accomodation_active, R.drawable.ic_accomodation_unactive, icAccomodationImageView);
+                        NYHelper.setFacilities(fac.getAccomodation(), R.drawable.ic_accomodation_active, R.drawable.ic_accomodation_unactive, icAccomodationImageView);
                     } else {
                         //towelLinearLayout.setVisibility(View.GONE);
                     }
