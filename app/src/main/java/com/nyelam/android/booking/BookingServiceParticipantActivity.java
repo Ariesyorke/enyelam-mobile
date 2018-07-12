@@ -206,8 +206,9 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
         closeImageView = (ImageView) findViewById(R.id.close_imageView) ;
 
         titleEditText = (EditText) findViewById(R.id.title_editText) ;
-        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner) ;
+        titleEditText.setKeyListener(null);
 
+        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner) ;
         titleSpinnerAdapter = new TitleSpinnerAdapter(this);
         titleSpinner.setAdapter(titleSpinnerAdapter);
     }

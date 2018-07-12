@@ -3,6 +3,7 @@ package com.nyelam.android.booking;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.backup.FullBackupDataOutput;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -521,7 +522,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         locationTextView.setText(locationText);
                     }
 
-
                     // TODO: Rating and Visited
                     ratingBar.setRating(diveService.getRating());
                     ratingTextView.setText(String.valueOf(diveService.getRating()));
@@ -545,8 +545,17 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     if (i == 0){
 
                         LoginStorage storage = new LoginStorage(this);
-                        if (storage.isUserLogin() && storage.user != null){
+                        if (storage.isUserLogin() && storage.user != null) {
                             Participant p = new Participant();
+
+                            if (!NYHelper.isStringNotEmpty(storage.user.getGender()) && storage.user.getGender().equals("Male")) {
+                                p.setTitle("Mr.");
+                            } else if (!NYHelper.isStringNotEmpty(storage.user.getGender()) && storage.user.getGender().equals("Female")) {
+                                p.setTitle("Mrs.");
+                            } else {
+                                p.setTitle("Mr.");
+                            }
+
                             if (NYHelper.isStringNotEmpty(storage.user.getFullname()))p.setName(storage.user.getFullname());
                             if (NYHelper.isStringNotEmpty(storage.user.getEmail()))p.setEmail(storage.user.getEmail());
                             participantList.add(i, p);
@@ -593,6 +602,21 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     bookingContact = new BookingContact();
                     bookingContact.parse(obj);
 
+
+                    LoginStorage storage = new LoginStorage(this);
+
+                    if (!NYHelper.isStringNotEmpty(bookingContact.getTitle()) && storage.user != null && NYHelper.isStringNotEmpty(storage.user.getGender()) ) {
+
+                        if (storage.user.getGender().equals("Male")){
+                            bookingContact.setTitle("Mr.");
+                        } else {
+                            bookingContact.setTitle("Mrs.");
+                        }
+
+                    } else if (!NYHelper.isStringNotEmpty(bookingContact.getTitle())) {
+                        bookingContact.setTitle("Mr.");
+                    }
+
                     if (NYHelper.isStringNotEmpty(bookingContact.getName())){
                         String fullname = "";
                         if (NYHelper.isStringNotEmpty(bookingContact.getTitle())) fullname+=bookingContact.getTitle()+" ";
@@ -606,6 +630,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                     if (bookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(bookingContact.getCountryCode().getCountryNumber()) && NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())) contactPhoneNumberTextView.setText("+"+bookingContact.getCountryCode().getCountryNumber()+bookingContact.getPhoneNumber());
                     if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -614,6 +639,19 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 LoginStorage storage = new LoginStorage(this);
                 if (storage.isUserLogin() && storage.user != null){
                     bookingContact = new BookingContact();
+
+                    if (!NYHelper.isStringNotEmpty(bookingContact.getTitle()) && storage.user != null && NYHelper.isStringNotEmpty(storage.user.getGender()) ) {
+
+                        if (storage.user.getGender().equals("Male")){
+                            bookingContact.setTitle("Mr.");
+                        } else {
+                            bookingContact.setTitle("Mrs.");
+                        }
+
+                    } else if (!NYHelper.isStringNotEmpty(bookingContact.getTitle())) {
+                        bookingContact.setTitle("Mr.");
+                    }
+
                     bookingContact.setName(storage.user.getFullname());
                     if(storage.user.getCountryCode() != null) {
                         CountryCode c = storage.user.getCountryCode();
@@ -623,17 +661,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     }
 
                     bookingContact.setEmail(storage.user.getEmail());
-                    if (NYHelper.isStringNotEmpty(storage.user.getFullname())){
 
-                        contactNameTextView.setText(storage.user.getFullname());
+                    if (NYHelper.isStringNotEmpty(bookingContact.getName())){
+                        String fullname = "";
+                        if (NYHelper.isStringNotEmpty(bookingContact.getTitle())) fullname+=bookingContact.getTitle()+" ";
+                        fullname += bookingContact.getName();
+                        contactNameTextView.setText(fullname);
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
-
-//                        String fullname = "";
-//                        if (NYHelper.isStringNotEmpty(bookingContact.getTitle())) fullname+=bookingContact.getTitle()+" ";
-//                        fullname += bookingContact.getName();
-//                        contactNameTextView.setText(fullname);
-//                        contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_black1));
-
                     } else {
                         contactNameTextView.setText(getString(R.string.full_name));
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
@@ -642,8 +676,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     if (NYHelper.isStringNotEmpty(storage.user.getEmail()))contactEmailTextView.setText(storage.user.getEmail());
                 }
             }
-
-
 
 
             if (intent.hasExtra(NYHelper.EQUIPMENT_RENT)){
@@ -1046,7 +1078,26 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     NYDoDiveServiceOrderRequest req = null;
                     try {
                         note = noteEditText.getText().toString();
-                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
+
+                        //init
+                        BookingContact newBookingContact = new BookingContact();
+                        newBookingContact = bookingContact;
+
+                        // TODO: masukkan mr mrs ms
+                        String fullname = "";
+                        fullname = newBookingContact.getTitle()+" "+newBookingContact.getName();
+                        newBookingContact.setName(fullname);
+
+                        //init
+                        List<Participant> participants = new ArrayList<>();
+                        for (Participant p : participantList){
+                            String fullnameP = "";
+                            fullnameP = p.getTitle()+" "+p.getName();
+                            p.setName(fullnameP);
+                            participants.add(p);
+                        }
+
+                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note);
                         spcMgr.execute(req, onCreateOrderServiceRequest());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1259,6 +1310,25 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             progressDialog.show();
             note = noteEditText.getText().toString();
             try {
+
+                //init
+                BookingContact newBookingContact = new BookingContact();
+                newBookingContact = bookingContact;
+
+                // TODO: masukkan mr mrs ms
+                String fullname = "";
+                fullname = newBookingContact.getTitle()+" "+newBookingContact.getName();
+                newBookingContact.setName(fullname);
+
+                //init
+                List<Participant> participants = new ArrayList<>();
+                for (Participant p : participantList){
+                    String fullnameP = "";
+                    fullnameP = p.getTitle()+" "+p.getName();
+                    p.setName(fullnameP);
+                    participants.add(p);
+                }
+
                 NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
                 spcMgr.execute(req, onCreateOrderServiceRequest());
             } catch (Exception e) {
@@ -1486,7 +1556,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     progressDialog.dismiss();
                     e.printStackTrace();
                 }
-
             }
         }
     }
