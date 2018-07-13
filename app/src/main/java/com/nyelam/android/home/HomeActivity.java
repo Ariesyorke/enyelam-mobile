@@ -92,11 +92,13 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 Intent i = new Intent(this, BookingHistoryDetailActivity.class);
                 i.putExtra(NYHelper.ORDER, intent.getStringExtra(NYHelper.ORDER));
                 intent.removeExtra(NYHelper.ORDER);
+                intent.putExtra(NYHelper.IS_PAST, false);
                 startActivity(i);
             } else if (intent.hasExtra(NYHelper.ID_ORDER)) {
                 Intent i = new Intent(this, BookingHistoryDetailActivity.class);
                 i.putExtra(NYHelper.ID_ORDER, intent.getStringExtra(NYHelper.ID_ORDER));
                 intent.removeExtra(NYHelper.ID_ORDER);
+                intent.putExtra(NYHelper.IS_PAST, false);
                 startActivity(i);
             }
             intent.removeExtra(NYHelper.TRANSACTION_COMPLETED);

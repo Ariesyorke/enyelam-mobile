@@ -546,19 +546,23 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                         LoginStorage storage = new LoginStorage(this);
                         if (storage.isUserLogin() && storage.user != null) {
-                            Participant p = new Participant();
 
-                            if (!NYHelper.isStringNotEmpty(storage.user.getGender()) && storage.user.getGender().equals("Male")) {
+                            Participant p = new Participant();
+                            if (NYHelper.isStringNotEmpty(storage.user.getGender()) && storage.user.getGender().equals("Male")) {
                                 p.setTitle("Mr.");
-                            } else if (!NYHelper.isStringNotEmpty(storage.user.getGender()) && storage.user.getGender().equals("Female")) {
+                            } else if (NYHelper.isStringNotEmpty(storage.user.getGender()) && storage.user.getGender().equals("Female")) {
                                 p.setTitle("Mrs.");
                             } else {
                                 p.setTitle("Mr.");
                             }
 
+                            //Toast.makeText(this, "title : " + p.getTitle(), Toast.LENGTH_SHORT).show();
+
                             if (NYHelper.isStringNotEmpty(storage.user.getFullname()))p.setName(storage.user.getFullname());
                             if (NYHelper.isStringNotEmpty(storage.user.getEmail()))p.setEmail(storage.user.getEmail());
                             participantList.add(i, p);
+                        } else {
+                            participantList.add(i, new Participant());
                         }
 
                     } else {
@@ -607,8 +611,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                     if (!NYHelper.isStringNotEmpty(bookingContact.getTitle()) && storage.user != null && NYHelper.isStringNotEmpty(storage.user.getGender()) ) {
 
-                        if (storage.user.getGender().equals("Male")){
-                            bookingContact.setTitle("Mr.");
+                        if (storage.user.getGender().equals("Female")){
+                            bookingContact.setTitle("Mrs.");
                         } else {
                             bookingContact.setTitle("Mrs.");
                         }
@@ -1329,7 +1333,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     participants.add(p);
                 }
 
-                NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), bookingContact.toServer(), participantList.toString(), paymentType, note);
+                NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note);
                 spcMgr.execute(req, onCreateOrderServiceRequest());
             } catch (Exception e) {
                 e.printStackTrace();
