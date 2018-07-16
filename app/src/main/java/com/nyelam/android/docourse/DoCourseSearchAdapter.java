@@ -182,11 +182,8 @@ public class DoCourseSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 double normalPrice = Double.valueOf(diveService.getNormalPrice());
                 double specialPrice = Double.valueOf(diveService.getSpecialPrice());
 
-                if (diveService.isLicense()){
-                    divingLicenseImageView.setVisibility(View.VISIBLE);
-                } else {
-                    divingLicenseImageView.setVisibility(View.GONE);
-                }
+                if (diveService.isLicense())
+                    divingLicenseImageView.setImageResource(R.drawable.ic_license_orange);
 
                 if (specialPrice < normalPrice && specialPrice > 0){
                     priceTextView.setText(NYHelper.priceFormatter(specialPrice));

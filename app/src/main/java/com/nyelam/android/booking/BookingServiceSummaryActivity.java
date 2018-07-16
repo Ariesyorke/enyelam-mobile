@@ -126,9 +126,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private PayPalConfiguration payPalConfiguration;
     //Client ID Paypal
     //development
-//    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
+    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
     //production
-    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
+//    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
     private Intent paypalIntent;
     private int paypalRequestCode = 999;
     private List<EquipmentRentAdded> equipmentRentAddedList;
@@ -632,7 +632,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         contactNameTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey4));
                     }
 
-                    if (bookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(bookingContact.getCountryCode().getCountryNumber()) && NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())) contactPhoneNumberTextView.setText("+"+bookingContact.getCountryCode().getCountryNumber()+bookingContact.getPhoneNumber());
+                    String phonenumber = "";
+                    if (bookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(bookingContact.getCountryCode().getCountryNumber())) {
+                        phonenumber += bookingContact.getCountryCode().getCountryNumber();
+                    }
+                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())) {
+                        phonenumber += bookingContact.getPhoneNumber();
+                    }
+                    contactPhoneNumberTextView.setText("+"+phonenumber);
+
                     if (NYHelper.isStringNotEmpty(bookingContact.getEmail()))contactEmailTextView.setText(bookingContact.getEmail());
 
                 } catch (JSONException e) {
@@ -661,8 +669,17 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         CountryCode c = storage.user.getCountryCode();
                         bookingContact.setPhoneNumber(storage.user.getPhone());
                         bookingContact.setCountryCode(c);
-                        contactPhoneNumberTextView.setText("+" + c.getCountryNumber() + storage.user.getPhone());
                     }
+
+                    String phonenumber = "";
+                    if (bookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(bookingContact.getCountryCode().getCountryNumber())) {
+                        phonenumber += bookingContact.getCountryCode().getCountryNumber();
+                    }
+                    if (NYHelper.isStringNotEmpty(bookingContact.getPhoneNumber())) {
+                        phonenumber += bookingContact.getPhoneNumber();
+                    }
+                    contactPhoneNumberTextView.setText("+"+phonenumber);
+
 
                     bookingContact.setEmail(storage.user.getEmail());
 
@@ -1089,8 +1106,23 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                         // TODO: masukkan mr mrs ms
                         String fullname = "";
-                        fullname = newBookingContact.getTitle()+" "+newBookingContact.getName();
+                        if (NYHelper.isStringNotEmpty(newBookingContact.getTitle())){
+                            fullname += newBookingContact.getTitle();
+                        }
+                        if (NYHelper.isStringNotEmpty(newBookingContact.getName())){
+                            fullname += newBookingContact.getName();
+                        }
                         newBookingContact.setName(fullname);
+
+                        String phonenumber = "";
+                        if (newBookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(newBookingContact.getCountryCode().getCountryNumber())){
+                            phonenumber += "+"+newBookingContact.getCountryCode().getCountryNumber();
+                        }
+
+                        if (NYHelper.isStringNotEmpty(newBookingContact.getPhoneNumber())){
+                            phonenumber += newBookingContact.getPhoneNumber();
+                        }
+                        newBookingContact.setPhoneNumber(phonenumber);
 
                         //init
                         List<Participant> participants = new ArrayList<>();
@@ -1321,8 +1353,23 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                 // TODO: masukkan mr mrs ms
                 String fullname = "";
-                fullname = newBookingContact.getTitle()+" "+newBookingContact.getName();
+                if (NYHelper.isStringNotEmpty(newBookingContact.getTitle())){
+                    fullname += newBookingContact.getTitle();
+                }
+                if (NYHelper.isStringNotEmpty(newBookingContact.getName())){
+                    fullname += newBookingContact.getName();
+                }
                 newBookingContact.setName(fullname);
+
+                String phonenumber = "";
+                if (newBookingContact.getCountryCode() != null && NYHelper.isStringNotEmpty(newBookingContact.getCountryCode().getCountryNumber())){
+                    phonenumber += "+"+newBookingContact.getCountryCode().getCountryNumber();
+                }
+
+                if (NYHelper.isStringNotEmpty(newBookingContact.getPhoneNumber())){
+                    phonenumber += newBookingContact.getPhoneNumber();
+                }
+                newBookingContact.setPhoneNumber(phonenumber);
 
                 //init
                 List<Participant> participants = new ArrayList<>();

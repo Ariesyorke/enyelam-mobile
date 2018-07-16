@@ -240,8 +240,7 @@
                     android:layout_height="wrap_content" />
                 <ImageView
                     android:id="@+id/diving_license_imageView"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_license_orange"
+                    android:src="@drawable/ic_license_grey"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="right"

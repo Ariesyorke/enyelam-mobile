@@ -56,6 +56,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
     private double minPrice, maxPrice ;
     private double minPriceDefault, maxPriceDefault;
     private List<String> totalDives;
+    private List<Category> itemsDefault;
     private List<Category> items;
     private List<Category> categoryChooseList;
     private List<StateFacility> facilitiesItems;
@@ -340,8 +341,10 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
     @Override
     public void onDataLoaded(List<Category> items) {
+        this.itemsDefault = new ArrayList<>();
         this.items = new ArrayList<>();
         //this.items.addAll(items);
+        this.itemsDefault = items;
         this.items = items;
         this.items.add(0,new Category("0","All"));
 
@@ -438,6 +441,29 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                             idCatMap.put(ct.getId(), true);
                         }
 
+
+
+                        int i = 0;
+//                        for (Category cta : items){
+//                            for (Category ctd : itemsDefault){
+//                                if (cta != null && ctd != null && cta.getId().equals(ctd.getId())){
+//                                    i++;
+//                                    break;
+//                                }
+//                            }
+//                        }
+
+                        // TODO: check ALL
+                        for (String key : idCatMap.keySet()) {
+                            if (idCatMap.get(key)){
+                                i++;
+                            }
+                        }
+
+                        if (i == itemsDefault.size()){
+                            idCatMap.put("0", true);
+                        }
+
                         //setViewCategory(ct, fbCategory);
                     }
 
@@ -446,8 +472,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     for (Category cat : items) {
                         buildLabelCategory(cat);
                     }
-                    categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
-                    categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+                    //categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+                    //categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
 
                 }
             });

@@ -372,7 +372,11 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 if (NYHelper.isStringNotEmpty(contact.getName()))
                     contactNameTextView.setText(contact.getName());
                 if (NYHelper.isStringNotEmpty(contact.getPhoneNumber()))
-                    contactPhoneNumberTextView.setText(contact.getPhoneNumber());
+                    if (NYHelper.isStringNotEmpty(contact.getCountryCode())){
+                        contactPhoneNumberTextView.setText(contact.getCountryCode()+contact.getPhoneNumber());
+                    } else {
+                        contactPhoneNumberTextView.setText(contact.getPhoneNumber());
+                    }
                 if (NYHelper.isStringNotEmpty(contact.getEmailAddress()))
                     contactEmailTextView.setText(contact.getEmailAddress());
             }

@@ -138,9 +138,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 LoginStorage storage = new LoginStorage(getApplicationContext());
-                if (storage.isUserLogin()) {
+                if (storage.isUserLogin() && diveService.getAvailabilityStock() >= Integer.valueOf(diver) ) {
                     doBook();
-                } else {
+                } else if (storage.isUserLogin() && diveService.getAvailabilityStock() < Integer.valueOf(diver) ) {
+                    Toast.makeText(DetailServiceActivity.this, "Sorry, Dive Service stock is not available", Toast.LENGTH_SHORT).show();
+                }  else {
                     Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
                     startActivityForResult(intent, NYHelper.LOGIN_REQ);
                 }
