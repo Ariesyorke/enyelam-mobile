@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -379,8 +380,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                 buildLabelCategory(cat);
             }
 
-            categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
-            categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+//            categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+//            categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+            //categoryFlowLayout.setRowSpacing(R.dimen.row_spacing);
 
         }
 
@@ -443,26 +445,22 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
 
 
-                        int i = 0;
-//                        for (Category cta : items){
-//                            for (Category ctd : itemsDefault){
-//                                if (cta != null && ctd != null && cta.getId().equals(ctd.getId())){
-//                                    i++;
-//                                    break;
-//                                }
-//                            }
-//                        }
-
                         // TODO: check ALL
+                        int i = 0;
                         for (String key : idCatMap.keySet()) {
                             if (idCatMap.get(key)){
                                 i++;
                             }
                         }
 
-                        if (i == itemsDefault.size()){
+                        if (i == items.size()-1){
                             idCatMap.put("0", true);
                         }
+
+//                        NYLog.e("cek cat map : "+idCatMap.toString());
+//                        NYLog.e("cek cat map-i : "+String.valueOf(i));
+//                        NYLog.e("cek cat items : "+items.toString());
+//                        NYLog.e("cek cat items-size : "+String.valueOf(items.size()));
 
                         //setViewCategory(ct, fbCategory);
                     }
@@ -472,8 +470,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     for (Category cat : items) {
                         buildLabelCategory(cat);
                     }
-                    //categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
-                    //categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+//                    categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+//                    categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
 
                 }
             });
@@ -721,8 +719,9 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         for (Category cat : items) {
             buildLabelCategory(cat);
         }
-        categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
-        categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+//        categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
+//        categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+        //categoryFlowLayout.setRowSpacing(R.dimen.row_spacing);
 
 
         //reset facilities
@@ -734,6 +733,8 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
         facilitiesFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
         facilitiesFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
+        facilitiesFlowLayout.setRowSpacing(R.dimen.row_spacing);
+        facilitiesFlowLayout.setChildSpacing(R.dimen.row_spacing);
     }
 
 

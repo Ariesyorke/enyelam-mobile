@@ -279,8 +279,8 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_double"
-                android:layout_marginRight="@dimen/padding_double"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/padding"
                 android:layout_marginBottom="@dimen/padding"
                 app:flChildSpacing="auto"
@@ -346,13 +346,13 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_double"
-                android:layout_marginRight="@dimen/padding_double"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/padding"
                 android:layout_marginBottom="@dimen/padding"
                 app:flChildSpacing="auto"
                 app:flChildSpacingForLastRow="align"
-                app:flRowSpacing="8dp">
+                app:flRowSpacing="12dp">
 
                 <!--<TextView
                     android:layout_width="wrap_content"
