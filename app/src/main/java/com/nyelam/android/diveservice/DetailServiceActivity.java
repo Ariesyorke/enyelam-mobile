@@ -140,7 +140,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 LoginStorage storage = new LoginStorage(getApplicationContext());
                 if (storage.isUserLogin() && diveService.getAvailabilityStock() >= Integer.valueOf(diver) ) {
                     doBook();
-                } else if (storage.isUserLogin() && diveService.getAvailabilityStock() < Integer.valueOf(diver) ) {
+                } else if (!isDoCourse && storage.isUserLogin() && diveService.getAvailabilityStock() < Integer.valueOf(diver) ) {
                     Toast.makeText(DetailServiceActivity.this, "Sorry, Dive Service stock is not available", Toast.LENGTH_SHORT).show();
                 }  else {
                     Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
@@ -336,7 +336,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                         NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                finish();
                             }
                         });
                     }
@@ -387,7 +387,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     }
                     initBanner();
                 } else {
-
+                    NYHelper.handlePopupMessage(DetailServiceActivity.this, "Sorry, Schedule not available or out of stock", false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    });
                 }
             }
         };

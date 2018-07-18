@@ -113,6 +113,8 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void initProfile() {
+
+        dateBirth = new Date();
         LoginStorage storage = new LoginStorage(this);
         if (storage.isUserLogin()){
             User user = storage.user;
@@ -338,7 +340,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
             public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager)EditProfileActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                showBirthdatePicker(new Date());
+                showBirthdatePicker(dateBirth);
             }
         });
 
