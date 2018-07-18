@@ -284,7 +284,7 @@
                 android:layout_marginTop="@dimen/padding"
                 android:layout_marginBottom="@dimen/padding"
                 app:flChildSpacing="auto"
-                app:flChildSpacingForLastRow="align"
+                app:flChildSpacingForLastRow="auto"
                 app:flRowSpacing="8dp"/>
 
             <!--<TextView
@@ -351,8 +351,8 @@
                 android:layout_marginTop="@dimen/padding"
                 android:layout_marginBottom="@dimen/padding"
                 app:flChildSpacing="auto"
-                app:flChildSpacingForLastRow="align"
-                app:flRowSpacing="12dp">
+                app:flChildSpacingForLastRow="auto"
+                app:flRowSpacing="8dp">
 
                 <!--<TextView
                     android:layout_width="wrap_content"
