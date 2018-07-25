@@ -55,21 +55,40 @@ public class DiveGuideAboutFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         diveGuideAboutTextView = (TextView) view.findViewById(R.id.dive_guide_about_textView);
+        //setContentNew();
+    }
+
+    public void setContentNew() {
+
+        //Toast.makeText(getActivity(), "ABOUT", Toast.LENGTH_SHORT).show();
+
+        progressBar.setVisibility(View.GONE);
+
+        DiveGuide diveGuide = ((DiveGuideActivity)getActivity()).getDiveGuide();
+
+        if (diveGuide != null && NYHelper.isStringNotEmpty(diveGuide.getAbout())){
+            diveGuideAboutTextView.setText(diveGuide.getAbout());
+        } else {
+            diveGuideAboutTextView.setText("-");
+        }
+
+        diveGuideAboutTextView.setVisibility(View.VISIBLE);
     }
 
     public void setContent(DiveGuide diveGuide) {
 
         //Toast.makeText(getActivity(), "ABOUT", Toast.LENGTH_SHORT).show();
 
-        progressBar.setVisibility(View.GONE);
-
-        if (diveGuide != null && NYHelper.isStringNotEmpty(diveGuide.getFullName())){
-            diveGuideAboutTextView.setText(diveGuide.getFullName());
+        if (diveGuide != null && NYHelper.isStringNotEmpty(diveGuide.getAbout())){
+            diveGuideAboutTextView.setText(diveGuide.getAbout());
         } else {
-            diveGuideAboutTextView.setText("nothing");
+            diveGuideAboutTextView.setText("-");
         }
 
+        progressBar.setVisibility(View.GONE);
+
         diveGuideAboutTextView.setVisibility(View.VISIBLE);
+
     }
 
 

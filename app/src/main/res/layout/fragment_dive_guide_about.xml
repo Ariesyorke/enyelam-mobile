@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_half"
-                android:text="My expertise include project design and implementation, research, impact assessment, financial and technical reporting, resource mobilization, advocacy, communication strategy design and implementation."
+                android:text="-"
                 android:padding="@dimen/padding_double"
                 android:gravity="center"
                 android:textColor="@color/ny_grey4"

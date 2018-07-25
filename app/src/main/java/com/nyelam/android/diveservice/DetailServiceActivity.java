@@ -181,7 +181,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     i.setType("text/plain");
                     i.putExtra(Intent.EXTRA_SUBJECT, "e-Nyelam");
                     String sAux = "\ne-Nyelam - Find the Best Offer for Your Diving in Indonesia\n\n";
-                    sAux = sAux + "https://play.google.com/store/apps/details?id=com.nyelam.android\n\n";
+                    sAux = sAux + "http://e-nyelam.com/download\n\n";
                     i.putExtra(Intent.EXTRA_TEXT, sAux);
                     startActivity(Intent.createChooser(i, "choose one"));
                 } catch(Exception e) {

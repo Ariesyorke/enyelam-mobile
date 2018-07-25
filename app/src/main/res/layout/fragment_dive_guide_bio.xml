@@ -79,7 +79,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/service_name_textView"
                                 android:layout_marginTop="@dimen/padding_half"
-                                android:text="PADI #12345678"
+                                android:text="-"
                                 android:textColor="@color/ny_grey4"
                                 android:textSize="18sp"
                                 app:fontTextStyle="light" />
@@ -145,7 +145,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/padding_half"
-                                android:text="Indonesia"
+                                android:text="-"
                                 android:textColor="@color/ny_grey4"
                                 android:textSize="18sp"
                                 app:fontTextStyle="light" />
@@ -215,7 +215,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/service_name_textView"
                                 android:layout_marginTop="@dimen/padding_half"
-                                android:text="Indonesian, English, etc"
+                                android:text="-"
                                 android:textColor="@color/ny_grey4"
                                 android:textSize="18sp"
                                 app:fontTextStyle="light" />
@@ -281,7 +281,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/padding_half"
-                                android:text="Under Water Photography, Macro Photography"
+                                android:text="-"
                                 android:textColor="@color/ny_grey4"
                                 android:textSize="18sp"
                                 app:fontTextStyle="light" />

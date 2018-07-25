@@ -1,6 +1,8 @@
 package com.nyelam.android.divecenter;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,6 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Contact;
@@ -78,9 +84,69 @@ public class DiveGuideActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dive_guide);
         diveGuide = new DiveGuide();
-        initToolbar();
         initView();
+        initExtra();
+        initToolbar();
         initTab();
+        initRequest();
+    }
+
+
+    private void initExtra() {
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+
+            if(intent.hasExtra(NYHelper.DIVE_GUIDE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DIVE_GUIDE))){
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(extras.getString(NYHelper.DIVE_GUIDE));
+                    diveGuide = new DiveGuide();
+                    diveGuide.parse(obj);
+
+                    if (diveGuide != null){
+                        if (NYHelper.isStringNotEmpty(diveGuide.getFullName())) diveGuideNameTextView.setText(diveGuide.getFullName());
+
+                        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
+                        if (NYHelper.isStringNotEmpty(diveGuide.getPicture())) {
+
+                            ImageLoader.getInstance().loadImage(diveGuide.getPicture(), NYHelper.getOption(), new ImageLoadingListener() {
+                                @Override
+                                public void onLoadingStarted(String imageUri, View view) {
+
+                                }
+
+                                @Override
+                                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                    userImageView.setImageResource(R.mipmap.ic_launcher);
+                                }
+
+                                @Override
+                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                    userImageView.setImageBitmap(loadedImage);
+                                }
+
+                                @Override
+                                public void onLoadingCancelled(String imageUri, View view) {
+                                    userImageView.setImageResource(R.mipmap.ic_launcher);
+                                }
+                            });
+
+                            ImageLoader.getInstance().displayImage(diveGuide.getPicture(), userImageView, NYHelper.getOption());
+
+                        } else {
+                            userImageView.setImageResource(R.mipmap.ic_launcher);
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
     }
 
     private void initView() {
@@ -117,12 +183,12 @@ public class DiveGuideActivity extends AppCompatActivity implements
                 if (fragment != null && fragment instanceof DiveGuideBioFragment){
 
                     // TODO: buat metode
-                    ((DiveGuideBioFragment) fragment).setContent(diveGuide);
+                    ((DiveGuideBioFragment) fragment).setContentNew();
 
                 } else if (fragment != null && fragment instanceof DiveGuideAboutFragment){
 
                     // TODO: buat metode
-                    ((DiveGuideAboutFragment) fragment).setContent(diveGuide);
+                    ((DiveGuideAboutFragment) fragment).setContentNew();
 
                 }
             }
@@ -155,7 +221,7 @@ public class DiveGuideActivity extends AppCompatActivity implements
             }
         }
 
-        loadDummyDiveGuideDetail();
+        //loadDummyDiveGuideDetail();
 
     }
 
@@ -262,7 +328,7 @@ public class DiveGuideActivity extends AppCompatActivity implements
     }
 
     private void initRequest() {
-        if (diveGuide != null && !TextUtils.isEmpty(diveGuide.getId())){
+        if (diveGuide != null && NYHelper.isStringNotEmpty(diveGuide.getId())){
             NYDiveGuideDetailRequest req = new NYDiveGuideDetailRequest(this.getClass(), DiveGuideActivity.this, diveGuide.getId());
             spcMgr.execute(req, onGetDetailDiveGuideRequest());
         }
@@ -285,6 +351,30 @@ public class DiveGuideActivity extends AppCompatActivity implements
 //                    mainProgressBar.setVisibility(View.GONE);
 //                }
                 diveGuide = results;
+
+                if (diveGuide.getCertificateDiver() != null && NYHelper.isStringNotEmpty(diveGuide.getCertificateDiver().getName()))
+                    diveGuideLicenseTextView.setText(diveGuide.getCertificateDiver().getName());
+
+                //fragmentAdapter.notifyDataSetChanged();
+
+//                fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
+//                viewPager.setAdapter(fragmentAdapter);
+
+
+                fragment =  fragmentAdapter.getFragment(viewPager.getCurrentItem());
+
+                if (fragment != null && fragment instanceof DiveGuideBioFragment){
+
+                    // TODO: buat metode
+                    ((DiveGuideBioFragment) fragment).setContentNew();
+
+                } else if (fragment != null && fragment instanceof DiveGuideAboutFragment){
+
+                    // TODO: buat metode
+                    ((DiveGuideAboutFragment) fragment).setContentNew();
+
+                }
+
 
             }
         };
@@ -313,6 +403,11 @@ public class DiveGuideActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
+
+
+    protected DiveGuide getDiveGuide(){
+        return this.diveGuide;
     }
 
     private void loadDummyDiveGuideDetail(){
@@ -344,12 +439,12 @@ public class DiveGuideActivity extends AppCompatActivity implements
         if (fragment != null && fragment instanceof DiveGuideBioFragment){
 
             // TODO: buat metode
-            ((DiveGuideBioFragment) fragment).setContent(diveGuide);
+            ((DiveGuideBioFragment) fragment).setContentNew();
 
         } else if (fragment != null && fragment instanceof DiveGuideAboutFragment){
 
             // TODO: buat metode
-            ((DiveGuideAboutFragment) fragment).setContent(diveGuide);
+            ((DiveGuideAboutFragment) fragment).setContentNew();
 
         }
 
