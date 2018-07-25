@@ -93,6 +93,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected String schedule;
     protected String certificate;
     private TextView titleTextView, bookingTextView;
+    private ImageView shareImageView, backImageView;
     private DiveCenter diveCenter;
     private ProgressDialog progressDialog;
     //private View viewTabManager;
@@ -114,7 +115,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_service);
         initView();
-        initToolbar();
+        //initToolbar();
         initExtra();
         initTab();
         initRequest();
@@ -168,6 +169,32 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     diver = String.valueOf(diverTemp);
                     diverTextView.setText(diver);
                 }
+            }
+        });
+
+        shareImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("text/plain");
+                    i.putExtra(Intent.EXTRA_SUBJECT, "e-Nyelam");
+                    String sAux = "\ne-Nyelam - Find the Best Offer for Your Diving in Indonesia\n\n";
+                    sAux = sAux + "https://play.google.com/store/apps/details?id=com.nyelam.android\n\n";
+                    i.putExtra(Intent.EXTRA_TEXT, sAux);
+                    startActivity(Intent.createChooser(i, "choose one"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
+
+            }
+        });
+
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }
@@ -270,8 +297,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 }
 
 
-                int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
-                toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+//                int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+//                toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
             }
 
             if(intent.hasExtra(NYHelper.SERVICE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SERVICE))){
@@ -448,6 +475,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
         titleTextView = (TextView) findViewById(R.id.title_textView);
         bookingTextView = (TextView) findViewById(R.id.booking_textView);
+        shareImageView = (ImageView) findViewById(R.id.share_imageView);
+        backImageView = (ImageView) findViewById(R.id.back_imageView);
 
         diverTextView = (TextView) findViewById(R.id.diver_textView);
         minusImageView = (ImageView) findViewById(R.id.minus_imageView);
