@@ -72,9 +72,15 @@ public class BannerFragment extends Fragment {
                         intent.putExtra(NYHelper.IS_DO_TRIP, banner.isDoTrip());
                         startActivity(intent);
 
-                    } else if (banner.getType() == 2 && banner.getUrl() != null){
+                    } else if (banner.getType() == 2 && NYHelper.isStringNotEmpty(banner.getUrl())){
+
+                        String url = banner.getUrl();
+
+                        if (!url.startsWith("http://") && !url.startsWith("https://"))
+                            url = "http://" + url;
+
                         Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(banner.getUrl()));
+                        i.setData(Uri.parse(url));
                         startActivity(i);
                     } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
 

@@ -308,6 +308,7 @@ public class HomeFragment extends Fragment {
                     bannerViewPagerAdapter.clear();
                     bannerViewPagerAdapter.setBannerList(results);
                     bannerViewPagerAdapter.notifyDataSetChanged();
+                    circleIndicator.setViewPager(bannerViewPager);
                 }
             }
         };
