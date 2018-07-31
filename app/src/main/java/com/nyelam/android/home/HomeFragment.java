@@ -39,6 +39,7 @@ import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYGetBannerRequest;
 import com.nyelam.android.http.NYHomepageModuleRequest;
 import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.view.NYBannerViewPager;
@@ -194,7 +195,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
     }
 
 
@@ -208,14 +208,11 @@ public class HomeFragment extends Fragment {
         List<Banner> banners = new ArrayList<>();
 
         //public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense, long date, boolean isEcoTrip, boolean isDoTrip){
-        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true, 189282822, true, true));
-
-        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
-
-        //public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense){
-        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true));
-
+//        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true, 189282822, true, true));
+//        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
+//        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true));
         bannerList.setList(banners);
+
         //input data data
         bannerViewPagerAdapter.setBannerList(bannerList);
         bannerViewPagerAdapter.notifyDataSetChanged();
@@ -283,6 +280,37 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadDoTrip();
+        loadBanners();
+    }
+
+    public void loadBanners() {
+        NYGetBannerRequest req = null;
+        try {
+            req = new NYGetBannerRequest(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onGetBannersRequest());
+    }
+
+    private RequestListener<BannerList> onGetBannersRequest() {
+        return new RequestListener<BannerList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }*/
+            }
+
+            @Override
+            public void onRequestSuccess(BannerList results) {
+                if (results != null && results.getList() != null && !results.getList().isEmpty()){
+                    bannerViewPagerAdapter.clear();
+                    bannerViewPagerAdapter.setBannerList(results);
+                    bannerViewPagerAdapter.notifyDataSetChanged();
+                }
+            }
+        };
     }
 
 

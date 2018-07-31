@@ -126,9 +126,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private PayPalConfiguration payPalConfiguration;
     //Client ID Paypal
     //development
-    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
+//    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
     //production
-//    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
+    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
     private Intent paypalIntent;
     private int paypalRequestCode = 999;
     private List<EquipmentRentAdded> equipmentRentAddedList;
@@ -1150,10 +1150,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void payUsingVeritrans() {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
                 .setContext(this) // context is mandatory
                 .setTransactionFinishedCallback(this)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -1217,7 +1217,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         //CONFIGURASI PAYPAL
         payPalConfiguration = new PayPalConfiguration()
-                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+                .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
                 .clientId(paypalClientId);
         paypalIntent = new Intent(BookingServiceSummaryActivity.this, PayPalService.class);
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
