@@ -99,7 +99,7 @@
                             android:layout_centerInParent="true"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="14 February 2018, 2 pax(s)"
+                            android:text=""
                             android:textColor="@color/colorWhite"
                             android:textSize="18sp"
                             app:fontTextStyle="reguler" />

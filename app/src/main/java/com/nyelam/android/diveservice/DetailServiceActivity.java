@@ -91,7 +91,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected DiveService diveService, newDiveService;
     protected String diver;
     protected String schedule;
-    protected String certificate;
+    protected String certificate = "0";
     private TextView titleTextView, bookingTextView;
     private ImageView shareImageView, backImageView;
     private DiveCenter diveCenter;
@@ -277,23 +277,18 @@ public class DetailServiceActivity extends AppCompatActivity implements
             // TODO: title (tanggal + jumlah)
             if (NYHelper.isStringNotEmpty(diver) && NYHelper.isStringNotEmpty(schedule)){
 
-                if (isDoTrip){
-                    titleTextView.setText(getResources().getString(R.string.do_trip));
-                } else{
+                String dateString = "";
 
-                    String dateString = "";
+                if (isDoCourse){
+                    dateString = NYHelper.setMillisToMonthAndYear(Long.valueOf(schedule));
+                } else {
+                    dateString = NYHelper.setMillisToDate(Long.valueOf(schedule));
+                }
 
-                    if (isDoCourse){
-                        dateString = NYHelper.setMillisToMonthAndYear(Long.valueOf(schedule));
-                    } else {
-                        dateString = NYHelper.setMillisToDate(Long.valueOf(schedule));
-                    }
-
-                    if (Integer.valueOf(diver) > 1){
-                        titleTextView.setText(dateString+", "+diver+" pax(s)");
-                    } else {
-                        titleTextView.setText(dateString+", "+diver+" pax");
-                    }
+                if (Integer.valueOf(diver) > 1){
+                    titleTextView.setText(dateString+", "+diver+" pax(s)");
+                } else {
+                    titleTextView.setText(dateString+", "+diver+" pax");
                 }
 
 

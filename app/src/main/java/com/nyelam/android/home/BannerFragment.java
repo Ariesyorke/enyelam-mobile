@@ -58,18 +58,27 @@ public class BannerFragment extends Fragment {
             public void onClick(View v) {
                 // Open browser on click if not null
                 if (banner != null){
-                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+//                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId())){
 
+                        // TODO: intent ke detail service (ECO TRIP)
                         DiveService service = new DiveService();
                         service.setId(banner.getServiceId());
                         service.setName(banner.getServiceName());
 
                         Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
                         intent.putExtra(NYHelper.SERVICE, service.toString());
-                        intent.putExtra(NYHelper.SCHEDULE, banner.getDate());
-                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
+                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
+
+                        if (banner.isLicense()){
+                            intent.putExtra(NYHelper.CERTIFICATE, "1");
+                        } else {
+                            intent.putExtra(NYHelper.CERTIFICATE, "0");
+                        }
+
                         intent.putExtra(NYHelper.IS_DO_COURSE, banner.isDoCourse());
                         intent.putExtra(NYHelper.IS_DO_TRIP, banner.isDoTrip());
+                        intent.putExtra(NYHelper.DIVER, "1");
                         startActivity(intent);
 
                     } else if (banner.getType() == 2 && NYHelper.isStringNotEmpty(banner.getUrl())){
@@ -82,17 +91,65 @@ public class BannerFragment extends Fragment {
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         startActivity(i);
-                    } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+//                    } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+                    } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId())){
 
+                        // TODO: intent ke detail service (DO DIVE)
                         SearchService service = new SearchService();
                         service.setId(banner.getServiceId());
                         service.setName(banner.getServiceName());
+                        service.setType(4);
 
                         Intent intent = new Intent(getActivity(), DoDiveActivity.class);
                         intent.putExtra(NYHelper.SEARCH_RESULT, service.toString());
-                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
+                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
+
+                        if (banner.isLicense()){
+                            intent.putExtra(NYHelper.CERTIFICATE, "1");
+                        } else {
+                            intent.putExtra(NYHelper.CERTIFICATE, "0");
+                        }
+
+                        intent.putExtra(NYHelper.DIVER, "1");
+
+                        if (banner.isDoTrip()){
+                            intent.putExtra(NYHelper.IS_DO_TRIP, 1);
+                        } else {
+                            intent.putExtra(NYHelper.IS_DO_TRIP, 0);
+                        }
+
+                        if (banner.isEcoTrip()){
+                            intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+                        } else {
+                            intent.putExtra(NYHelper.IS_ECO_TRIP, 0);
+                        }
+
+                        startActivity(intent);
+                    } else if (banner.getType() == 4 && NYHelper.isStringNotEmpty(banner.getServiceId())){
+
+                        // TODO: intent ke detail service (DO COURSE)
+                        DiveService service = new DiveService();
+                        service.setId(banner.getServiceId());
+                        service.setName(banner.getServiceName());
+
+                        Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
+                        if (service != null ) intent.putExtra(NYHelper.SERVICE, service.toString());
+                        intent.putExtra(NYHelper.DIVER, "1");
+                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
+
+                        if (banner.isLicense()){
+                            intent.putExtra(NYHelper.CERTIFICATE, "1");
+                        } else {
+                            intent.putExtra(NYHelper.CERTIFICATE, "0");
+                        }
+
+                        if (service != null && service.getDiveCenter() != null) {
+                            intent.putExtra(NYHelper.DIVE_CENTER, service.getDiveCenter().toString());
+                        }
+                        intent.putExtra(NYHelper.IS_DO_COURSE, true);
                         startActivity(intent);
                     }
+
                 } else {
                     NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
                 }
