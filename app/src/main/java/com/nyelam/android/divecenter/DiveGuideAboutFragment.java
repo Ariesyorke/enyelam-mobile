@@ -13,7 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveGuide;
 import com.nyelam.android.helper.NYHelper;
