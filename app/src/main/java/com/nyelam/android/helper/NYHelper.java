@@ -147,6 +147,7 @@ public class NYHelper {
     public static final String PAYMENT_TYPE = "payment_type";
     public static final String PAYMENT_METHOD = "payment_method";
     public static final java.lang.String DIVE_GUIDE = "dive_guide";
+    public static final String TAG = "TAG";
 
 
     public static boolean isStringNotEmpty(String string) {

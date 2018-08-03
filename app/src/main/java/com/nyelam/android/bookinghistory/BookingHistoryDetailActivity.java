@@ -119,6 +119,8 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     orderReturn = new OrderReturn();
                     orderReturn.parse(obj);
                     setSummaryView();
+                    if (orderReturn != null && orderReturn.getSummary() != null && orderReturn.getSummary().getOrder() != null
+                            && NYHelper.isStringNotEmpty(orderReturn.getSummary().getOrder().getOrderId()))idOrder = orderReturn.getSummary().getOrder().getOrderId();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -164,7 +166,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         sendReviewTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
+//                onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
+                Intent intent = new Intent(BookingHistoryDetailActivity.this, RatingActivity.class);
+                intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
+                startActivity(intent);
             }
         });
 
@@ -194,9 +199,9 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         confirmLinearLayout = (LinearLayout) findViewById(R.id.confirm_linearLayout);
         additionalLinearLayout = (LinearLayout) findViewById(R.id.additional_linearLayout);
 
-        reviewLinearLayout = (LinearLayout) findViewById(R.id.review_linearLayout);
-        submitRatingBar = (ScaleRatingBar) findViewById(R.id.submitRatingBar);
-        reviewEditText = (EditText) findViewById(R.id.review_editText);
+//        reviewLinearLayout = (LinearLayout) findViewById(R.id.review_linearLayout);
+//        submitRatingBar = (ScaleRatingBar) findViewById(R.id.submitRatingBar);
+//        reviewEditText = (EditText) findViewById(R.id.review_editText);
         sendReviewTextView = (TextView) findViewById(R.id.send_review_textView);
 
 
@@ -461,6 +466,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                         paymentLinearLayout.setVisibility(View.VISIBLE);
                     } else {
                         paymentLinearLayout.setVisibility(View.GONE);
+                    }
+
+                    if (isPast && order.getStatus().equalsIgnoreCase("accepted")){
+                        reviewLinearLayout.setVisibility(View.VISIBLE);
                     }
                 }
 

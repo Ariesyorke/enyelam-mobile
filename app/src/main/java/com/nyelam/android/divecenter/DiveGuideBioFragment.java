@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.text.Text;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveGuide;
 import com.nyelam.android.data.Language;

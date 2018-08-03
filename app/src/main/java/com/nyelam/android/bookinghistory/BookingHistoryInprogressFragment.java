@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.SummaryList;
+import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingHistoryRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -74,6 +75,7 @@ public class BookingHistoryInprogressFragment extends Fragment {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getActivity(), BookingHistoryDetailActivity.class);
+                intent.putExtra(NYHelper.IS_PAST, false);
                 startActivity(intent);
 
             }
