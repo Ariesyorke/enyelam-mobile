@@ -17,10 +17,10 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
+    <string name="host_url">https://nyelam-adam.dantech.id/</string>
 
     <!-- STAGING -->
-    <string name="host_url">https://nyelam.dantech.id/</string>
+    <!--<string name="host_url">https://nyelam.dantech.id/</string>-->
 
     <!-- API STAGING AND DEVELOPMENT -->
     <string name="api_path_login">api/user/login</string>

@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled = true
-        versionCode 70
-        versionName '0.4.16'
+        versionCode 71
+        versionName '0.4.17'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -38,32 +38,23 @@ android {
 
 
 dependencies {
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     implementation('com.octo.android.robospice:robospice:1.4.14') {
         exclude group: 'org.apache.commons', module: 'commons-io'
     }
-
     /*compile 'com.github.sharish:ShimmerRecyclerView:v1.2'*/
-
     // For u sing the Veritrans Sandbox
-
     /*implementation ('com.midtrans:scancard:1.15.0'){
-                                                                                                                                                                                                                            exclude module: 'uikit'
-                                                                                                                                                                                                                        }*/
+                                                                                                                                                                                                                                exclude module: 'uikit'
+                                                                                                                                                                                                                            }*/
     // For using the Veritrans Production
     implementation 'com.midtrans:corekit:1.15.0'
-
     // For using the Veritrans Sandbox
-//    implementation 'com.midtrans:corekit:1.15.0-SANDBOX'
-
+    //    implementation 'com.midtrans:corekit:1.15.0-SANDBOX'
     // For using the Veritrans Production
-
     //  implementation 'com.midtrans:uikit:1.0.1'
-
     //    implementation ('com.midtrans:scancard:1.0.1'){
     implementation project(':uikit')
     //implementation 'com.wdullaer:materialdatetimepicker:3.5.1'
@@ -72,7 +63,6 @@ dependencies {
         exclude group: 'io.card'
     }
     //implementation 'com.stepstone.apprating:app-rating:2.2.0'
-
     //implementation 'me.zhanghai.android.materialratingbar:library:1.3.1'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:animated-vector-drawable:27.1.1'
@@ -88,7 +78,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-base:15.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
-//    implementation 'com.google.android.gms:play-services:15.0.1'
+    //    implementation 'com.google.android.gms:play-services:15.0.1'
     implementation 'com.google.android.gms:play-services-analytics:16.0.1'
     implementation 'org.apache.httpcomponents:httpcore:4.4.4'
     implementation 'com.facebook.android:facebook-android-sdk:4.27.0'
@@ -101,7 +91,7 @@ dependencies {
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-//    implementation 'com.iarcuschin:simpleratingbar:0.1.5'
+    //    implementation 'com.iarcuschin:simpleratingbar:0.1.5'
     implementation 'org.sufficientlysecure:html-textview:3.5'
     implementation 'org.lucasr.twowayview:twowayview:0.1.4'
     implementation 'com.nex3z:flow-layout:1.2.2'
@@ -110,9 +100,8 @@ dependencies {
     implementation 'com.github.medyo:fancybuttons:1.8.1'
     implementation 'com.github.ome450901:SimpleRatingBar:1.4.2'
     implementation 'ru.rambler.android:swipe-layout:1.0.15'
-//    implementation 'com.github.jkwiecien:EasyImage:1.3.1'
+    //    implementation 'com.github.jkwiecien:EasyImage:1.3.1'
     implementation 'com.github.techery:properratingbar:0.0.5'
-
     testImplementation 'junit:junit:4.12'
 }
 

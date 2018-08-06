@@ -27,6 +27,7 @@ public class DiveGuide implements Parseable {
     private static String KEY_CERTIFICATE_ORGANIZATION = "certificate_organization";
     private static String KEY_CERTIFICATE_DIVER = "certificate_diver";
     private static String KEY_LANGUAGES = "languages";
+    private static String KEY_NATIONALITY = "nationality";
 
     private String id;
     private String fullName;
@@ -39,6 +40,7 @@ public class DiveGuide implements Parseable {
     private LicenseType certificateOrganization;
     private LicenseType certificateDiver;
     private List<Language> languages;
+    private Nationality nationality;
 
 
     public String getId() {
@@ -127,6 +129,14 @@ public class DiveGuide implements Parseable {
 
     public void setLanguages(List<Language> languages) {
         this.languages = languages;
+    }
+
+    public Nationality getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
     }
 
     @Override
@@ -226,6 +236,16 @@ public class DiveGuide implements Parseable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        try {
+            if(!obj.isNull(KEY_NATIONALITY)) {
+                JSONObject o = obj.getJSONObject(KEY_NATIONALITY);
+                nationality = new Nationality();
+                nationality.parse(o);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
 
@@ -333,6 +353,15 @@ public class DiveGuide implements Parseable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        try {
+            if (getNationality() != null) {
+                JSONObject o = new JSONObject(getNationality().toString());
+                obj.put(KEY_NATIONALITY, o);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         try {

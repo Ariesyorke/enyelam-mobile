@@ -87,8 +87,8 @@ public class DiveGuideBioFragment extends Fragment {
             if (diveGuide.getCertificateOrganization() != null && NYHelper.isStringNotEmpty(diveGuide.getCertificateOrganization().getName()))
                 diveGuideCertificationTextView.setText(diveGuide.getCertificateOrganization().getName());
 
-//            if (diveGuide.getCertificateDiver() != null && NYHelper.isStringNotEmpty(diveGuide.getCertificateDiver().getName()))
-//                diveGuideNationalityTextView.setText(diveGuide.getCertificateDiver().getName());
+            if (diveGuide.getNationality() != null && NYHelper.isStringNotEmpty(diveGuide.getNationality().getName()))
+                diveGuideNationalityTextView.setText(diveGuide.getNationality().getName());
 
 
             if (diveGuide.getLanguages() != null && diveGuide.getLanguages().size() > 0){
