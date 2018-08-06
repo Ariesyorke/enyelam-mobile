@@ -8,6 +8,9 @@ import android.support.v4.view.ViewPager;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/5/2018.
  */
@@ -25,7 +28,9 @@ public class BannerViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Banner retBanner = null;
-        if(bannerList != null && bannerList.getList() != null) retBanner = bannerList.getList().get(position);
+        if(bannerList != null && bannerList.getList() != null){
+            retBanner = bannerList.getList().get(position);
+        }
         return BannerFragment.newInstance(position, retBanner);
     }
 

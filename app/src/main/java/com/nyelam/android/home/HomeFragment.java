@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -73,6 +74,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
     private DoTripRecyclerViewAdapter doTripAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -195,6 +197,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                initBanner();
+                loadBanners();
+                loadDoTrip();
+                initCacheModule();
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
     }
 
 
@@ -207,14 +222,13 @@ public class HomeFragment extends Fragment {
         BannerList bannerList = new BannerList();
         List<Banner> banners = new ArrayList<>();
 
-        //public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense, long date, boolean isEcoTrip, boolean isDoTrip){
+//        public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense, long date, boolean isEcoTrip, boolean isDoTrip){
 //        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true, 189282822, true, true));
 //        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
 //        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true));
         bannerList.setList(banners);
 
-        //input data data
-        bannerViewPagerAdapter.setBannerList(bannerList);
+        bannerViewPagerAdapter.setBannerList(filterBanners(bannerList));
         bannerViewPagerAdapter.notifyDataSetChanged();
         bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
         circleIndicator.setViewPager(bannerViewPager);
@@ -229,6 +243,7 @@ public class HomeFragment extends Fragment {
         doShopRelativeLayout = (RelativeLayout) view.findViewById(R.id.do_shop_relativeLayout);
         ecoTripRelativeLayout = (RelativeLayout)view.findViewById(R.id.eco_trip_relativeLayout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
     }
 
 
@@ -306,7 +321,7 @@ public class HomeFragment extends Fragment {
             public void onRequestSuccess(BannerList results) {
                 if (results != null && results.getList() != null && !results.getList().isEmpty()){
                     bannerViewPagerAdapter.clear();
-                    bannerViewPagerAdapter.setBannerList(results);
+                    bannerViewPagerAdapter.setBannerList(filterBanners(results));
                     bannerViewPagerAdapter.notifyDataSetChanged();
                     circleIndicator.setViewPager(bannerViewPager);
                 }
@@ -374,6 +389,22 @@ public class HomeFragment extends Fragment {
             return null;
         }
         return json;
+    }
+
+
+
+    private BannerList filterBanners(BannerList bannerList){
+
+        BannerList tempBannerList = new BannerList();
+
+        // TODO: cek tipe banner, jika dikurang dari sama dengan 4 masukkan ke array
+        List<Banner> temp = new ArrayList<>();
+        for (Banner banner : bannerList.getList()){
+            if (banner != null && banner.getType() <= 4) temp.add(banner);
+        }
+        tempBannerList.setList(temp);
+
+        return tempBannerList;
     }
 
 
