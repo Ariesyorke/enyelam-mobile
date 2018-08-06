@@ -42,6 +42,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYGetBannerRequest;
 import com.nyelam.android.http.NYHomepageModuleRequest;
+import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
@@ -203,9 +204,11 @@ public class HomeFragment extends Fragment {
             public void onRefresh()
             {
                 initBanner();
+                initControl();
+                initAdapter();
+                initCacheModule();
                 loadBanners();
                 loadDoTrip();
-                initCacheModule();
                 if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -219,19 +222,17 @@ public class HomeFragment extends Fragment {
         circleIndicator.setViewPager(bannerViewPager);
 
         //craete TEMP data banner
-        BannerList bannerList = new BannerList();
-        List<Banner> banners = new ArrayList<>();
-
+//        BannerList bannerList = new BannerList();
+//        List<Banner> banners = new ArrayList<>();
 //        public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense, long date, boolean isEcoTrip, boolean isDoTrip){
 //        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true, 189282822, true, true));
 //        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
 //        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true));
-        bannerList.setList(banners);
-
-        bannerViewPagerAdapter.setBannerList(filterBanners(bannerList));
-        bannerViewPagerAdapter.notifyDataSetChanged();
-        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
-        circleIndicator.setViewPager(bannerViewPager);
+//        bannerList.setList(banners);
+//        bannerViewPagerAdapter.setBannerList(filterBanners(bannerList));
+//        bannerViewPagerAdapter.notifyDataSetChanged();
+//        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+//        circleIndicator.setViewPager(bannerViewPager);
     }
 
     private void initView(View view) {
@@ -320,10 +321,22 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRequestSuccess(BannerList results) {
                 if (results != null && results.getList() != null && !results.getList().isEmpty()){
+
+//                    Toast.makeText(getActivity(), "sukses", Toast.LENGTH_SHORT).show();
+//                    NYLog.e("isinya apa : "+results.getList().toString());
+//                    NYLog.e("isinya apa baru : "+filterBanners(results).getList().toString());
+
+                    BannerList bannerList = filterBanners(results);
                     bannerViewPagerAdapter.clear();
-                    bannerViewPagerAdapter.setBannerList(filterBanners(results));
+                    bannerViewPagerAdapter.setBannerList(bannerList);
                     bannerViewPagerAdapter.notifyDataSetChanged();
+                    bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
                     circleIndicator.setViewPager(bannerViewPager);
+                } else {
+//                    bannerViewPagerAdapter.clear();
+//                    bannerViewPagerAdapter.setBannerList(null);
+//                    bannerViewPagerAdapter.notifyDataSetChanged();
+//                    circleIndicator.setViewPager(bannerViewPager);
                 }
             }
         };
@@ -391,22 +404,22 @@ public class HomeFragment extends Fragment {
         return json;
     }
 
-
-
     private BannerList filterBanners(BannerList bannerList){
 
         BannerList tempBannerList = new BannerList();
 
         // TODO: cek tipe banner, jika dikurang dari sama dengan 4 masukkan ke array
         List<Banner> temp = new ArrayList<>();
-        for (Banner banner : bannerList.getList()){
-            if (banner != null && banner.getType() <= 4) temp.add(banner);
+        if (bannerList != null && bannerList.getList() != null){
+            for (Banner banner : bannerList.getList()){
+                if (banner != null && banner.getType() <= 4) temp.add(banner);
+            }
         }
+
         tempBannerList.setList(temp);
 
         return tempBannerList;
     }
-
 
 
 }

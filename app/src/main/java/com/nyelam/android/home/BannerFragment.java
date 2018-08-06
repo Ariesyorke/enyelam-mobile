@@ -1,5 +1,6 @@
 package com.nyelam.android.home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,11 +39,22 @@ public class BannerFragment extends Fragment {
     private NYImageRatioImageView imageView;
     private Banner banner;
 
-    public static BannerFragment newInstance(int position, Banner banner) {
-        BannerFragment fragment = new BannerFragment();
+    public BannerFragment(){}
+
+    @SuppressLint("ValidFragment")
+    public BannerFragment(int position, Banner retBanner) {
+        this.banner = retBanner;
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_POS, position);
+//        if (banner != null)args.putString(ARG_BANNER, banner.toString());
+//        this.setArguments(args);
+    }
+
+    public  BannerFragment newInstance(int position, Banner banner) {
+        BannerFragment fragment = new BannerFragment(position, banner);
         Bundle args = new Bundle();
         args.putInt(ARG_POS, position);
-        args.putString(ARG_BANNER, banner.toString());
+        if (banner != null)args.putString(ARG_BANNER, banner.toString());
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,10 +62,28 @@ public class BannerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        banner = new Banner();
-
         imageView = (NYImageRatioImageView)view.findViewById(R.id.imageView);
+
+//        if (banner != null)banner = new Banner();
+        if(banner != null){
+            setDrawable(banner);
+        }
+
+        /*if(getArguments() != null) {
+            if(getArguments().containsKey(ARG_POS) && getArguments().containsKey(ARG_BANNER)) {
+                int position = getArguments().getInt(ARG_POS);
+                try {
+                    JSONObject obj = new JSONObject(getArguments().getString(ARG_BANNER));
+                    banner.parse(obj);
+                    if(banner != null){
+                        setDrawable(banner);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }*/
+
         imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Open browser on click if not null
@@ -156,20 +186,6 @@ public class BannerFragment extends Fragment {
             }
         });
 
-        if(getArguments() != null) {
-            if(getArguments().containsKey(ARG_POS) && getArguments().containsKey(ARG_BANNER)) {
-                int position = getArguments().getInt(ARG_POS);
-                try {
-                    JSONObject obj = new JSONObject(getArguments().getString(ARG_BANNER));
-                    banner.parse(obj);
-                    if(banner != null){
-                        setDrawable(banner);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
     }
 
@@ -189,15 +205,18 @@ public class BannerFragment extends Fragment {
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
 
-
         //SET IMAGE
         final NYApplication application = (NYApplication) getActivity().getApplication();
         Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
-        if(b != null) {
-            imageView.setImageBitmap(b);
-        } else {
-            imageView.setImageResource(R.drawable.bg_placeholder);
+
+        if (imageView != null){
+            if(b != null) {
+                imageView.setImageBitmap(b);
+            } else {
+                imageView.setImageResource(R.drawable.bg_placeholder);
+            }
         }
+
 
 
         if (banner.getImageUrl() == null || TextUtils.isEmpty(banner.getImageUrl())) {
