@@ -167,9 +167,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 //                onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
-                Intent intent = new Intent(BookingHistoryDetailActivity.this, RatingActivity.class);
-                intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
-                startActivity(intent);
+                // TODO: sementara hide review
+//                Intent intent = new Intent(BookingHistoryDetailActivity.this, RatingActivity.class);
+//                intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
+//                startActivity(intent);
             }
         });
 
@@ -468,9 +469,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                         paymentLinearLayout.setVisibility(View.GONE);
                     }
 
-                    if (isPast && order.getStatus().equalsIgnoreCase("accepted")){
-                        reviewLinearLayout.setVisibility(View.VISIBLE);
-                    }
+                    // TODO: sementara hide review
+//                    if (isPast && order.getStatus().equalsIgnoreCase("accepted")){
+//                        reviewLinearLayout.setVisibility(View.VISIBLE);
+//                    }
                 }
 
                 if (NYHelper.isStringNotEmpty(order.getOrderId()))

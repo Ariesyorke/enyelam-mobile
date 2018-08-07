@@ -129,16 +129,13 @@ public class BannerFragment extends Fragment {
                         service.setId(banner.getServiceId());
                         service.setName(banner.getServiceName());
                         service.setType(4);
+                        service.setLicense(banner.isLicense());
 
                         Intent intent = new Intent(getActivity(), DoDiveActivity.class);
                         intent.putExtra(NYHelper.SEARCH_RESULT, service.toString());
-                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
+//                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
 
-                        if (banner.isLicense()){
-                            intent.putExtra(NYHelper.CERTIFICATE, "1");
-                        } else {
-                            intent.putExtra(NYHelper.CERTIFICATE, "0");
-                        }
+                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
 
                         intent.putExtra(NYHelper.DIVER, "1");
 
