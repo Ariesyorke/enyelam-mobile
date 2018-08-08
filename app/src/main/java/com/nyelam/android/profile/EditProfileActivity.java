@@ -862,10 +862,18 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
     private void showBirthdatePicker(Date date) {
         final Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+
+        Date tempDate = new Date();
+        if (date == null){
+            tempDate.setTime(cal.getTimeInMillis());
+        } else {
+            tempDate = date;
+        }
+
+        cal.setTime(tempDate);
         if (Build.VERSION.SDK_INT >= 21) {
             final Dialog dialog = new Dialog(this);
-            dialog.setTitle(new SimpleDateFormat(DISPLAY_DATE_FORMAT).format(date));
+            dialog.setTitle(new SimpleDateFormat(DISPLAY_DATE_FORMAT).format(tempDate));
             dialog.setContentView(R.layout.view_date_picker);
             final DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.date_picker);
             View setButton = dialog.findViewById(R.id.set_button);
