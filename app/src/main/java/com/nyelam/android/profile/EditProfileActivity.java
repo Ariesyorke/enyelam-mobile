@@ -47,7 +47,6 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.docourse.DoCourseActivity;
 import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYLoginRequest;
 import com.nyelam.android.http.NYMasterCountryRequest;
 import com.nyelam.android.http.NYMasterLanguageRequest;
 import com.nyelam.android.http.NYMasterLicenseTypeRequest;

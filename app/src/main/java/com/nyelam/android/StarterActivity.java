@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -29,6 +30,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYUpdateVersionRequest;
 import com.nyelam.android.storage.NYMasterDataStorage;
+import com.nyelam.android.storage.StateStorage;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -344,10 +346,22 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
             @Override
             public void onDataLoaded(List<Category> items) {
-                Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                finish();
+
+                StateStorage stateStorage = new StateStorage(getApplicationContext());
+
+                if (stateStorage.isNotFirst){
+                    Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(StarterActivity.this, OnBoardingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+
+
             }
         },true);
     }
@@ -371,10 +385,21 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
     @Override
     public void onDataLoaded(List<CountryCode> items) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
+
+        StateStorage stateStorage = new StateStorage(getApplicationContext());
+
+        if (stateStorage.isNotFirst){
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(StarterActivity.this, OnBoardingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        }
+
     }
 
     @Override

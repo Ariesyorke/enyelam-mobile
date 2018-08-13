@@ -163,7 +163,8 @@
         <activity android:name=".dodive.EquipmentRentActivity" />
         <activity android:name=".divecenter.DiveGuideActivity" />
         <activity android:name=".bookinghistory.RatingActivity" />
-        <activity android:name=".doshop.DoShopActivity"></activity>
+        <activity android:name=".doshop.DoShopActivity" />
+        <activity android:name=".OnBoardingActivity"></activity>
     </application>
 
 </manifest>

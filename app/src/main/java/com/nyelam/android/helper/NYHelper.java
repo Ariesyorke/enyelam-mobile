@@ -39,6 +39,7 @@ import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.storage.StateStorage;
 
 import org.json.JSONArray;
 
@@ -227,6 +228,12 @@ public class NYHelper {
         storage.nyelamToken = authReturn.getToken();
         storage.user = authReturn.getUser();
         return storage.save();
+    }
+
+    public static boolean setStateOnBoarding(Context context, boolean isNotFirst) {
+        StateStorage stateStorage = new StateStorage(context);
+        stateStorage.isNotFirst = isNotFirst;
+        return stateStorage.save();
     }
 
     public static boolean saveEmailUser(Context context, String email) {
