@@ -52,7 +52,6 @@ public class DoDiveActivity extends BasicActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ecoTrip = getIntent().hasExtra(NYHelper.IS_ECO_TRIP);
-        NYLog.e("IS ECO TRIP AFTER " + ecoTrip);
         setContentView(R.layout.activity_do_dive);
         initView();
         initFragment();

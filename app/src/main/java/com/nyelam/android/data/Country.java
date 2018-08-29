@@ -55,7 +55,6 @@ public class Country implements Parseable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
