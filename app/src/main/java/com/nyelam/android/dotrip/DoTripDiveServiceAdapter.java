@@ -245,11 +245,8 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
                     scheduleTextView.setText(NYHelper.setMillisToDate(diveService.getSchedule().getStartDate()) + " - " + NYHelper.setMillisToDate(diveService.getSchedule().getEndDate()));
                 }
 
-                if (diveService.isLicense()){
-                    divingLicenseImageView.setVisibility(View.VISIBLE);
-                } else {
-                    divingLicenseImageView.setVisibility(View.GONE);
-                }
+                if (diveService.isLicense())
+                    divingLicenseImageView.setImageResource(R.drawable.ic_license_orange);
 
                 if (specialPrice < normalPrice && specialPrice > 0){
                     priceTextView.setText(NYHelper.priceFormatter(specialPrice));

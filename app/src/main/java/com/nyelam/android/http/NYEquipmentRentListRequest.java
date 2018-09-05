@@ -15,14 +15,14 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class NYEquipmentRentListRequest extends NYBasicAuthRequest<EquipmentRentList> {
+public class NYEquipmentRentListRequest extends NYBasicRequest<EquipmentRentList> {
 
     private static final String KEY_EQUIPMENT_RENTS = "equipment_rents";
 
     private static final String POST_DIVE_CENTER_ID = "divecenter_id";
     private static final String POST_DATE = "date";
 
-    public NYEquipmentRentListRequest(Context context, String diveCenterId, String date) throws Exception {
+    public NYEquipmentRentListRequest(Context context, String diveCenterId, String date) {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_equipment_rent_list));
 
         if(!TextUtils.isEmpty(date)) {

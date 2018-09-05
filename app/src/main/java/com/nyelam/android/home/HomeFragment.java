@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,7 +40,9 @@ import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYGetBannerRequest;
 import com.nyelam.android.http.NYHomepageModuleRequest;
+import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.ModulHomepageStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
@@ -72,6 +75,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private HomePageAdapter adapter;
     private DoTripRecyclerViewAdapter doTripAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -194,6 +198,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                initBanner();
+                initControl();
+                initAdapter();
+                initCacheModule();
+                loadBanners();
+                loadDoTrip();
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
     }
 
@@ -204,23 +222,17 @@ public class HomeFragment extends Fragment {
         circleIndicator.setViewPager(bannerViewPager);
 
         //craete TEMP data banner
-        BannerList bannerList = new BannerList();
-        List<Banner> banners = new ArrayList<>();
-
-        //public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense, long date, boolean isEcoTrip, boolean isDoTrip){
-        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true, 189282822, true, true));
-
-        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
-
-        //public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense){
-        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true));
-
-        bannerList.setList(banners);
-        //input data data
-        bannerViewPagerAdapter.setBannerList(bannerList);
-        bannerViewPagerAdapter.notifyDataSetChanged();
-        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
-        circleIndicator.setViewPager(bannerViewPager);
+//        BannerList bannerList = new BannerList();
+//        List<Banner> banners = new ArrayList<>();
+//        public Banner(String id, String imageUrl, String serviceId, String serviceName, boolean isLicense, long date, boolean isEcoTrip, boolean isDoTrip){
+//        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true, 189282822, true, true));
+//        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", "http://www.nyelam.com"));
+//        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "Service Ku", true));
+//        bannerList.setList(banners);
+//        bannerViewPagerAdapter.setBannerList(filterBanners(bannerList));
+//        bannerViewPagerAdapter.notifyDataSetChanged();
+//        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+//        circleIndicator.setViewPager(bannerViewPager);
     }
 
     private void initView(View view) {
@@ -232,6 +244,7 @@ public class HomeFragment extends Fragment {
         doShopRelativeLayout = (RelativeLayout) view.findViewById(R.id.do_shop_relativeLayout);
         ecoTripRelativeLayout = (RelativeLayout)view.findViewById(R.id.eco_trip_relativeLayout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
     }
 
 
@@ -283,6 +296,50 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadDoTrip();
+        loadBanners();
+    }
+
+    public void loadBanners() {
+        NYGetBannerRequest req = null;
+        try {
+            req = new NYGetBannerRequest(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onGetBannersRequest());
+    }
+
+    private RequestListener<BannerList> onGetBannersRequest() {
+        return new RequestListener<BannerList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }*/
+            }
+
+            @Override
+            public void onRequestSuccess(BannerList results) {
+                if (results != null && results.getList() != null && !results.getList().isEmpty()){
+
+//                    Toast.makeText(getActivity(), "sukses", Toast.LENGTH_SHORT).show();
+//                    NYLog.e("isinya apa : "+results.getList().toString());
+//                    NYLog.e("isinya apa baru : "+filterBanners(results).getList().toString());
+
+                    BannerList bannerList = filterBanners(results);
+                    bannerViewPagerAdapter.clear();
+                    bannerViewPagerAdapter.setBannerList(bannerList);
+                    bannerViewPagerAdapter.notifyDataSetChanged();
+                    bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+                    circleIndicator.setViewPager(bannerViewPager);
+                } else {
+//                    bannerViewPagerAdapter.clear();
+//                    bannerViewPagerAdapter.setBannerList(null);
+//                    bannerViewPagerAdapter.notifyDataSetChanged();
+//                    circleIndicator.setViewPager(bannerViewPager);
+                }
+            }
+        };
     }
 
 
@@ -347,6 +404,22 @@ public class HomeFragment extends Fragment {
         return json;
     }
 
+    private BannerList filterBanners(BannerList bannerList){
+
+        BannerList tempBannerList = new BannerList();
+
+        // TODO: cek tipe banner, jika dikurang dari sama dengan 4 masukkan ke array
+        List<Banner> temp = new ArrayList<>();
+        if (bannerList != null && bannerList.getList() != null){
+            for (Banner banner : bannerList.getList()){
+                if (banner != null && banner.getType() <= 4) temp.add(banner);
+            }
+        }
+
+        tempBannerList.setList(temp);
+
+        return tempBannerList;
+    }
 
 
 }

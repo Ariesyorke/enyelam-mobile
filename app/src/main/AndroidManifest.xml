@@ -18,6 +18,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.markermap.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:name=".NYApplication"
@@ -29,7 +33,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon, android:theme, android:allowBackup">
+        tools:replace="android:allowBackup,icon,theme,label,name">
         <meta-data
             android:name="firebase_crash_collection_enabled"
             android:value="false" />
@@ -42,6 +46,16 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.nyelam.android.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
         <activity
             android:name=".StarterActivity"
@@ -147,7 +161,9 @@
         <activity android:name=".docourse.DoCourseActivity" />
         <activity android:name=".docourse.DoCourseResultActivity" />
         <activity android:name=".dodive.EquipmentRentActivity" />
-        <activity android:name=".divecenter.DiveGuideActivity"></activity>
+        <activity android:name=".divecenter.DiveGuideActivity" />
+        <activity android:name=".bookinghistory.RatingActivity" />
+        <activity android:name=".doshop.DoShopActivity"></activity>
     </application>
 
 </manifest>

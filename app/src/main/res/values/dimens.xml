@@ -13,5 +13,6 @@
     <dimen name="create_place_photo_thumb_width">70dp</dimen>
     <dimen name="max_create_place_image_width">1024px</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="row_spacing">8dp</dimen>
 
 </resources>

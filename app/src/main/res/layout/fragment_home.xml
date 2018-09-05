@@ -7,401 +7,409 @@
     android:orientation="vertical"
     tools:context="com.nyelam.android.home.HomeFragment">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar">
 
-        <LinearLayout
-            android:focusableInTouchMode="true"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_below="@+id/toolbar">
 
-            <RelativeLayout
-                android:id="@+id/banner_relativeLayout"
+            <LinearLayout
+                android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:fitsSystemWindows="true">
+                android:orientation="vertical">
 
-
-                <ProgressBar
-                    android:id="@+id/banner_progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/ny_blue2"
-                    android:indeterminateTintMode="src_atop" />
-
-                <com.nyelam.android.view.NYBannerViewPager
-                    android:id="@+id/promotion_view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <!--<me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/circle_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_alignBottom="@+id/promotion_view_pager"
-                    android:layout_centerHorizontal="true"
-                    app:ci_drawable="@drawable/ny_circle_white"
-                    app:ci_orientation="horizontal"/>-->
-
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
+                <RelativeLayout
+                    android:id="@+id/banner_relativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:background="@android:color/transparent"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+                    android:background="@color/colorPrimary"
+                    android:fitsSystemWindows="true">
 
-                    <RelativeLayout
+
+                    <ProgressBar
+                        android:id="@+id/banner_progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/ny_blue2"
+                        android:indeterminateTintMode="src_atop" />
+
+                    <com.nyelam.android.view.NYBannerViewPager
+                        android:id="@+id/promotion_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <!--<me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/circle_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_alignBottom="@+id/promotion_view_pager"
+                        android:layout_centerHorizontal="true"
+                        app:ci_drawable="@drawable/ny_circle_white"
+                        app:ci_orientation="horizontal"/>-->
+
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:gravity="center_vertical">
+                        android:background="@android:color/transparent"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-                        <ImageView
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_header_nyelam_white" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="center_vertical">
 
-                        <ImageView
-                            android:id="@+id/menu_item_imageView"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_gravity="center_vertical"
-                            android:padding="@dimen/padding"
-                            android:src="@drawable/ic_navigation_drawer"
-                            android:visibility="gone" />
-                    </RelativeLayout>
+                            <ImageView
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/ic_header_nyelam_white" />
 
-                </android.support.v7.widget.Toolbar>
+                            <ImageView
+                                android:id="@+id/menu_item_imageView"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="center_vertical"
+                                android:padding="@dimen/padding"
+                                android:src="@drawable/ic_navigation_drawer"
+                                android:visibility="gone" />
+                        </RelativeLayout>
 
-            </RelativeLayout>
+                    </android.support.v7.widget.Toolbar>
 
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/circle_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/padding_half"
-                app:ci_drawable="@drawable/ny_circle_blue"
-                app:ci_drawable_unselected="@drawable/ny_circle_grey"
-                app:ci_orientation="horizontal" />
+                </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_vertical_margin"
-                android:paddingTop="@dimen/padding"
-                android:paddingBottom="@dimen/padding">
-
-                <!--android:id="@+id/do_dive_relativeLayout"-->
-
-
-
-
-
-
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/circle_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_half"
+                    app:ci_drawable="@drawable/ny_circle_blue"
+                    app:ci_drawable_unselected="@drawable/ny_circle_grey"
+                    app:ci_orientation="horizontal" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/activity_vertical_margin"
+                    android:paddingRight="@dimen/activity_vertical_margin"
+                    android:paddingTop="@dimen/padding"
+                    android:paddingBottom="@dimen/padding">
+
+                    <!--android:id="@+id/do_dive_relativeLayout"-->
 
 
 
 
 
-                    <RelativeLayout
-                        android:id="@+id/do_dive_relativeLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ny_rectangle_menu_white"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/padding_double"
-                            android:background="@drawable/bg_menu_top" />
 
-                        <LinearLayout
-                            android:padding="@dimen/padding_double"
-                            android:layout_marginTop="@dimen/padding"
-                            android:background="@drawable/ny_rectangle_menu_white"
-                            android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+
+
+
+                        <RelativeLayout
+                            android:id="@+id/do_dive_relativeLayout"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
+                            android:background="@drawable/ny_rectangle_menu_white"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
-                            <LinearLayout
-                                android:orientation="vertical"
+                            <View
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
+                                android:layout_height="@dimen/padding_double"
+                                android:background="@drawable/bg_menu_top" />
 
-                                <ImageView
-                                    android:layout_width="45dp"
-                                    android:layout_height="45dp"
-                                    android:src="@drawable/ic_home_menu_do_dive" />
+                            <LinearLayout
+                                android:padding="@dimen/padding_double"
+                                android:layout_marginTop="@dimen/padding"
+                                android:background="@drawable/ny_rectangle_menu_white"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                                <com.nyelam.android.view.font.NYTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="@string/do_dive"
-                                    android:textColor="@color/ny_black2"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    app:fontTextStyle="semiBold" />
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/ny_circle_white"
+                                    android:gravity="center">
+
+                                    <ImageView
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:src="@drawable/ic_home_menu_do_dive" />
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="@string/do_dive"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold" />
+                                </LinearLayout>
+
+
                             </LinearLayout>
-
-
-                        </LinearLayout>
-                    </RelativeLayout>
+                        </RelativeLayout>
 
 
 
 
 
-                    <RelativeLayout
-                        android:id="@+id/eco_trip_relativeLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ny_rectangle_menu_white"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/padding_double"
-                            android:background="@drawable/bg_menu_top" />
-
-                        <LinearLayout
-                            android:padding="@dimen/padding_double"
-                            android:layout_marginTop="@dimen/padding"
-                            android:background="@drawable/ny_rectangle_menu_white"
-                            android:layout_width="match_parent"
+                        <RelativeLayout
+                            android:id="@+id/eco_trip_relativeLayout"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
+                            android:background="@drawable/ny_rectangle_menu_white"
+                            android:layout_marginLeft="8dp"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
-                            <LinearLayout
-                                android:orientation="vertical"
+                            <View
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
+                                android:layout_height="@dimen/padding_double"
+                                android:background="@drawable/bg_menu_top" />
 
-                                <ImageView
-                                    android:layout_width="45dp"
-                                    android:layout_height="45dp"
-                                    android:src="@drawable/ic_home_menu_ecotrip" />
+                            <LinearLayout
+                                android:padding="@dimen/padding_double"
+                                android:layout_marginTop="@dimen/padding"
+                                android:background="@drawable/ny_rectangle_menu_white"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                                <com.nyelam.android.view.font.NYTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="@string/eco_trip"
-                                    android:textColor="@color/ny_black2"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    app:fontTextStyle="semiBold" />
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/ny_circle_white"
+                                    android:gravity="center">
+
+                                    <ImageView
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:src="@drawable/ic_home_menu_ecotrip" />
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="@string/eco_trip"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/do_shop_relativeLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/ny_rectangle_menu_white"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/padding_double"
+                                android:background="@drawable/bg_menu_top" />
+
+                            <LinearLayout
+                                android:padding="@dimen/padding_double"
+                                android:layout_marginTop="@dimen/padding"
+                                android:background="@drawable/ny_rectangle_menu_white"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/ny_circle_white"
+                                    android:gravity="center">
+
+                                    <ImageView
+                                        android:padding="@dimen/padding_half"
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:src="@drawable/ic_home_menu_do_shop" />
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="@string/do_shop"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold" />
+                                </LinearLayout>
+
+
                             </LinearLayout>
 
-                        </LinearLayout>
-                    </RelativeLayout>
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/ny_rectangle_menu_grey" />
+                        </RelativeLayout>
+
+
+
+
+
+                        <RelativeLayout
+                            android:id="@+id/do_course_relativeLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/ny_rectangle_menu_white"
+                            android:layout_marginLeft="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/padding_double"
+                                android:background="@drawable/bg_menu_top" />
+
+                            <LinearLayout
+                                android:padding="@dimen/padding_double"
+                                android:layout_marginTop="@dimen/padding"
+                                android:background="@drawable/ny_rectangle_menu_white"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/ny_circle_white"
+                                    android:gravity="center">
+
+                                    <ImageView
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:src="@drawable/ic_home_menu_do_course" />
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="@string/do_course"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:fontTextStyle="semiBold" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!--<View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/ny_rectangle_menu_grey" />-->
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
 
                 </LinearLayout>
 
 
 
 
-
-
-
-
-
-
+                <!--List Item Horizontalll-->
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/padding"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingRight="@dimen/padding">
 
-                    <RelativeLayout
-                        android:id="@+id/do_shop_relativeLayout"
-                        android:layout_width="0dp"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/ny_rectangle_menu_white"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/padding_double"
-                            android:background="@drawable/bg_menu_top" />
-
-                        <LinearLayout
-                            android:padding="@dimen/padding_double"
-                            android:layout_marginTop="@dimen/padding"
-                            android:background="@drawable/ny_rectangle_menu_white"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:padding="@dimen/padding_half"
-                                    android:layout_width="45dp"
-                                    android:layout_height="45dp"
-                                    android:src="@drawable/ic_home_menu_do_shop" />
-
-                                <com.nyelam.android.view.font.NYTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="@string/do_shop"
-                                    android:textColor="@color/ny_black2"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    app:fontTextStyle="semiBold" />
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/ny_rectangle_menu_grey" />
-                    </RelativeLayout>
-
-
-
-
-
-                    <RelativeLayout
-                        android:id="@+id/do_course_relativeLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ny_rectangle_menu_white"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/padding_double"
-                            android:background="@drawable/bg_menu_top" />
-
-                        <LinearLayout
-                            android:padding="@dimen/padding_double"
-                            android:layout_marginTop="@dimen/padding"
-                            android:background="@drawable/ny_rectangle_menu_white"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ny_circle_white"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="45dp"
-                                    android:layout_height="45dp"
-                                    android:src="@drawable/ic_home_menu_do_course" />
-
-                                <com.nyelam.android.view.font.NYTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="@string/do_course"
-                                    android:textColor="@color/ny_black2"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    app:fontTextStyle="semiBold" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-                        <!--<View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/ny_rectangle_menu_grey" />-->
-                    </RelativeLayout>
+                        android:layout_marginTop="@dimen/padding"
+                        android:divider="@null"
+                        android:nestedScrollingEnabled="false"
+                        app:reverseLayout="true" />
 
                 </LinearLayout>
 
-
-
             </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
-
-
-
-            <!--List Item Horizontalll-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/padding"
-                android:paddingLeft="@dimen/padding"
-                android:paddingRight="@dimen/padding">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/padding"
-                    android:divider="@null"
-                    android:nestedScrollingEnabled="false"
-                    app:reverseLayout="true" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>

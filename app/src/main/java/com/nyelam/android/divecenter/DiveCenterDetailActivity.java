@@ -36,7 +36,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.text.Text;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
@@ -340,6 +339,8 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
                 serviceAdapter.setDiveCenter(results);
                 if (diveCenter != null){
 
+                    getDiveGuideList();
+
                     mainLinearLayout.setVisibility(View.VISIBLE);
 
                     getServiceList();
@@ -448,16 +449,11 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
 
 
-    protected void getSDiveGuideList() {
+    protected void getDiveGuideList() {
 
-        if (diveCenter != null && !TextUtils.isEmpty(diveCenter.getId())){
+        if (diveCenter != null && NYHelper.isStringNotEmpty(diveCenter.getId())){
 
-            NYDiveGuideListRequest req = null;
-            try {
-                req = new NYDiveGuideListRequest(this, diveCenter.getId());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            NYDiveGuideListRequest req = new NYDiveGuideListRequest(this, diveCenter.getId());
             spcMgr.execute(req, onGetDiveGuideListRequest());
 
         }
@@ -468,7 +464,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 if (diveGuideProgressBar != null)diveGuideProgressBar.setVisibility(View.GONE);
-                NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
+                //NYHelper.handleAPIException(DiveCenterDetailActivity.this, spiceException, null);
                 diveGuideNoResultTextView.setVisibility(View.VISIBLE);
                 //noResultTextView.setText(spiceException.getMessage());
             }
@@ -584,7 +580,7 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         spcMgr.start(getApplicationContext());
-        loadDummyDiveGuides();
+        //loadDummyDiveGuides();
     }
 
     @Override
@@ -699,4 +695,6 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
         }
 
     }
+
+
 }

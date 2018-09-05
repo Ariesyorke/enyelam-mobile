@@ -15,14 +15,14 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class NYDiveGuideListRequest extends NYBasicAuthRequest<DiveGuideList> {
+public class NYDiveGuideListRequest extends NYBasicRequest<DiveGuideList> {
 
     private static final String KEY_DIVE_GUIDES = "dive_guides";
 
     private static final String POST_DIVE_CENTER_ID = "dive_center_id";
 
 
-    public NYDiveGuideListRequest(Context context, String diveCenterId) throws Exception {
+    public NYDiveGuideListRequest(Context context, String diveCenterId){
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_dive_guide_list));
 
         if(!TextUtils.isEmpty(diveCenterId)) {

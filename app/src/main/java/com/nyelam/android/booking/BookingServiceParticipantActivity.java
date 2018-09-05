@@ -89,6 +89,29 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
                     /*if (NYHelper.isStringNotEmpty(participant.getName()))
                         nameInputEditText.setText(participant.getName());*/
 
+                    if (NYHelper.isStringNotEmpty(participant.getName())){
+
+                        if (participant.getName().startsWith("Mrs.")){
+                            titleSpinner.setSelection(1);
+                            String name = participant.getName();
+                            participant.setName(name.replace("Mrs.", "").trim());
+                        } else if (participant.getName().startsWith("Ms.")){
+                            titleSpinner.setSelection(2);
+                            String name = participant.getName();
+                            participant.setName(name.replace("Mr.", "").trim());
+                        } else {
+                            titleSpinner.setSelection(0);
+                            String name = participant.getName();
+                            participant.setName(name.replace("Mr.", "").trim());
+                        }
+
+                    } else {
+                        titleSpinner.setSelection(0);
+                    }
+
+                    if (NYHelper.isStringNotEmpty(participant.getName()))
+                        nameAutoCompleteTextView.setText(participant.getName());
+
                     if (NYHelper.isStringNotEmpty(participant.getEmail()))
                         emailInputEditText.setText(participant.getEmail());
                 }
@@ -206,8 +229,9 @@ public class BookingServiceParticipantActivity extends AppCompatActivity {
         closeImageView = (ImageView) findViewById(R.id.close_imageView) ;
 
         titleEditText = (EditText) findViewById(R.id.title_editText) ;
-        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner) ;
+        titleEditText.setKeyListener(null);
 
+        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner) ;
         titleSpinnerAdapter = new TitleSpinnerAdapter(this);
         titleSpinner.setAdapter(titleSpinnerAdapter);
     }
