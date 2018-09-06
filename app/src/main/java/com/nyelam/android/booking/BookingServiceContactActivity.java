@@ -144,8 +144,9 @@ public class BookingServiceContactActivity extends AppCompatActivity implements 
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
         spinnerRelativeLayout = (RelativeLayout) findViewById(R.id.spinner_relativeLayout);
 
-        titleEditText = (EditText) findViewById(R.id.title_editText) ;
-        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner) ;
+        titleEditText = (EditText) findViewById(R.id.title_editText);
+        titleEditText.setKeyListener(null);
+        titleSpinner = (NYSpinner) findViewById(R.id.title_spinner);
     }
 
     private void getExtra() {

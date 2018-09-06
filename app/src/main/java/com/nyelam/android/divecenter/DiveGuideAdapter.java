@@ -163,7 +163,7 @@ public class DiveGuideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View v) {
 
             Intent intent = new Intent(activity, DiveGuideActivity.class);
-            if (diveGuide != null ) intent.putExtra(NYHelper.SERVICE, diveGuide.toString());
+            if (diveGuide != null ) intent.putExtra(NYHelper.DIVE_GUIDE, diveGuide.toString());
             activity.startActivity(intent);
 
         }

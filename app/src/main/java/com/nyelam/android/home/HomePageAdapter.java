@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -516,6 +517,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 TextView totalDiveTextView = (TextView) view.findViewById(R.id.total_dive_textView);
                 TextView totalDiveSpot_textView = (TextView) view.findViewById(R.id.total_dive_spot_textView);
                 TextView totalDayTextView = (TextView) view.findViewById(R.id.total_day_textView);
+                ImageView divingLicenseImageView = (ImageView) view.findViewById(R.id.diving_license_imageView);
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -549,6 +551,9 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 if (diveService != null) {
+
+                    if (diveService.isLicense())
+                        divingLicenseImageView.setImageResource(R.drawable.ic_license_orange);
 
                     if (NYHelper.isStringNotEmpty(diveService.getName()))
                         serviceNameTextView.setText(diveService.getName());

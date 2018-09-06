@@ -91,8 +91,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
     protected DiveService diveService, newDiveService;
     protected String diver;
     protected String schedule;
-    protected String certificate;
+    protected String certificate = "0";
     private TextView titleTextView, bookingTextView;
+    private ImageView shareImageView, backImageView;
     private DiveCenter diveCenter;
     private ProgressDialog progressDialog;
     //private View viewTabManager;
@@ -114,7 +115,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_service);
         initView();
-        initToolbar();
+        //initToolbar();
         initExtra();
         initTab();
         initRequest();
@@ -138,9 +139,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 LoginStorage storage = new LoginStorage(getApplicationContext());
-                if (storage.isUserLogin()) {
+                if (storage.isUserLogin() && diveService.getAvailabilityStock() >= Integer.valueOf(diver) ) {
                     doBook();
-                } else {
+                } else if (!isDoCourse && storage.isUserLogin() && diveService.getAvailabilityStock() < Integer.valueOf(diver) ) {
+                    Toast.makeText(DetailServiceActivity.this, "Sorry, Dive Service stock is not available", Toast.LENGTH_SHORT).show();
+                }  else {
                     Intent intent = new Intent(DetailServiceActivity.this, AuthActivity.class);
                     startActivityForResult(intent, NYHelper.LOGIN_REQ);
                 }
@@ -166,6 +169,32 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     diver = String.valueOf(diverTemp);
                     diverTextView.setText(diver);
                 }
+            }
+        });
+
+        shareImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("text/plain");
+                    i.putExtra(Intent.EXTRA_SUBJECT, "e-Nyelam");
+                    String sAux = "\ne-Nyelam - Find the Best Offer for Your Diving in Indonesia\n\n";
+                    sAux = sAux + "http://e-nyelam.com/download\n\n";
+                    i.putExtra(Intent.EXTRA_TEXT, sAux);
+                    startActivity(Intent.createChooser(i, "choose one"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
+
+            }
+        });
+
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }
@@ -248,28 +277,23 @@ public class DetailServiceActivity extends AppCompatActivity implements
             // TODO: title (tanggal + jumlah)
             if (NYHelper.isStringNotEmpty(diver) && NYHelper.isStringNotEmpty(schedule)){
 
-                if (isDoTrip){
-                    titleTextView.setText(getResources().getString(R.string.do_trip));
-                } else{
+                String dateString = "";
 
-                    String dateString = "";
+                if (isDoCourse){
+                    dateString = NYHelper.setMillisToMonthAndYear(Long.valueOf(schedule));
+                } else {
+                    dateString = NYHelper.setMillisToDate(Long.valueOf(schedule));
+                }
 
-                    if (isDoCourse){
-                        dateString = NYHelper.setMillisToMonthAndYear(Long.valueOf(schedule));
-                    } else {
-                        dateString = NYHelper.setMillisToDate(Long.valueOf(schedule));
-                    }
-
-                    if (Integer.valueOf(diver) > 1){
-                        titleTextView.setText(dateString+", "+diver+" pax(s)");
-                    } else {
-                        titleTextView.setText(dateString+", "+diver+" pax");
-                    }
+                if (Integer.valueOf(diver) > 1){
+                    titleTextView.setText(dateString+", "+diver+" pax(s)");
+                } else {
+                    titleTextView.setText(dateString+", "+diver+" pax");
                 }
 
 
-                int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
-                toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+//                int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+//                toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
             }
 
             if(intent.hasExtra(NYHelper.SERVICE) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SERVICE))){
@@ -334,7 +358,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                         NYHelper.handleAPIException(DetailServiceActivity.this, spiceException, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                finish();
                             }
                         });
                     }
@@ -385,7 +409,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
                     }
                     initBanner();
                 } else {
-
+                    NYHelper.handlePopupMessage(DetailServiceActivity.this, "Sorry, Schedule not available or out of stock", false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    });
                 }
             }
         };
@@ -423,7 +452,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.DIVE_CENTER, newDiveService.getDiveCenter().toString());
                 intent.putExtra(NYHelper.IS_DO_COURSE, isDoCourse);
                 if (equipmentRentList != null && !equipmentRentList.isEmpty()){
+                    NYLog.e("EQUIPMENT SERVICE EXIST!");
                     intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentList.toString());
+                } else {
+                    NYLog.e("EQUIPMENT SERVICE NOT EXIST!");
+
                 }
                 startActivity(intent);
             }
@@ -441,12 +474,15 @@ public class DetailServiceActivity extends AppCompatActivity implements
         circleIndicator = (CircleIndicator) findViewById(R.id.circle_indicator);
         titleTextView = (TextView) findViewById(R.id.title_textView);
         bookingTextView = (TextView) findViewById(R.id.booking_textView);
+        shareImageView = (ImageView) findViewById(R.id.share_imageView);
+        backImageView = (ImageView) findViewById(R.id.back_imageView);
 
         diverTextView = (TextView) findViewById(R.id.diver_textView);
         minusImageView = (ImageView) findViewById(R.id.minus_imageView);
         plusImageView = (ImageView) findViewById(R.id.plus_imageView);
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setPagingEnabled(false);
         viewPager.setAdapter(fragmentAdapter);
 
         progressDialog = new ProgressDialog(this);
@@ -499,7 +535,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 2;
+        private static final int FRAGMENT_COUNT = 1;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 

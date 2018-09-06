@@ -87,6 +87,7 @@ public class NYHelper {
     public static final String DIVER = "diver";
     public static final String NOTE = "note";
     public static final String DIVE_CENTER = "dive_center";
+    public static final String EQUIPMENT_RENTS = "equipment_rents";
     public static final String SCHEDULE = "schedule";
     public static final String DIVE_SPOT = "dive_spot";
     public static final String DIVE_SPOTS = "dive_spots";
@@ -146,6 +147,8 @@ public class NYHelper {
 
     public static final String PAYMENT_TYPE = "payment_type";
     public static final String PAYMENT_METHOD = "payment_method";
+    public static final java.lang.String DIVE_GUIDE = "dive_guide";
+    public static final String TAG = "TAG";
 
 
     public static boolean isStringNotEmpty(String string) {

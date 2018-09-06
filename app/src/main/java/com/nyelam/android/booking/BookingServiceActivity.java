@@ -21,6 +21,8 @@ import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.DiveCenter;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.data.EquipmentRent;
+import com.nyelam.android.data.EquipmentRentList;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.Participant;
 import com.nyelam.android.dev.NYLog;
@@ -51,6 +53,7 @@ public class BookingServiceActivity extends BasicActivity {
     //private String cartToken;
     private CartReturn cartReturn;
     private DiveCenter diveCenter;
+    private EquipmentRentList equipmentRents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,9 @@ public class BookingServiceActivity extends BasicActivity {
                 intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                if(equipmentRents != null) {
+                    intent.putExtra(NYHelper.EQUIPMENT_RENTS, equipmentRents.toString());
+                }
                 startActivity(intent);
             }
         });
@@ -130,6 +136,9 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    if(equipmentRents != null) {
+                        intent.putExtra(NYHelper.EQUIPMENT_RENTS, equipmentRents.toString());
+                    }
                     startActivityForResult(intent, NYHelper.REQ_CART_EXPIRED);
                 }
             }
@@ -176,6 +185,15 @@ public class BookingServiceActivity extends BasicActivity {
                         }
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(intent.hasExtra(NYHelper.EQUIPMENT_RENTS)) {
+                try {
+                    String equipmentRentsArray = intent.getStringExtra(NYHelper.EQUIPMENT_RENTS);
+                    equipmentRents.parse(new JSONArray(equipmentRentsArray));
+                }catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -444,6 +462,9 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    if(equipmentRents != null) {
+                        intent.putExtra(NYHelper.EQUIPMENT_RENTS, equipmentRents.toString());
+                    }
                     startActivity(intent);
                 }
             });
@@ -466,6 +487,9 @@ public class BookingServiceActivity extends BasicActivity {
                     intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                     intent.putExtra(NYHelper.CERTIFICATE, certificate);
                     intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                    if(equipmentRents != null) {
+                        intent.putExtra(NYHelper.EQUIPMENT_RENTS, equipmentRents.toString());
+                    }
                     startActivity(intent);
                 }
             });

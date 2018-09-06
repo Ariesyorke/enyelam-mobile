@@ -244,7 +244,7 @@ public class DoDiveSearchDiveCenterAdapter extends RecyclerView.Adapter<Recycler
             intent.putExtra(NYHelper.SCHEDULE, date);
             intent.putExtra(NYHelper.TYPE, type);
             if(activity.isEcotrip()) {
-                intent.putExtra(NYHelper.IS_ECO_TRIP, true);
+                intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
             }
             activity.startActivity(intent);
         }

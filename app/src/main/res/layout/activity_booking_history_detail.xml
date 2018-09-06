@@ -7,10 +7,6 @@
     android:orientation="vertical"
     tools:context="com.nyelam.android.booking.BookingServiceActivity">
 
-
-
-
-
     <LinearLayout
         android:orientation="vertical"
         android:background="@color/colorGradationLeft"
@@ -160,6 +156,7 @@
 
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:layout_marginTop="@dimen/padding"
@@ -672,71 +669,72 @@
 
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/review_linearLayout"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="mediumItalic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/ny_blue7"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:text="@string/your_review"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold" />
+                    <!--<com.nyelam.android.view.font.NYTextView-->
+                        <!--app:fontTextStyle="mediumItalic"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@color/ny_blue7"-->
+                        <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                        <!--android:paddingTop="@dimen/padding"-->
+                        <!--android:paddingBottom="@dimen/padding"-->
+                        <!--android:text="@string/your_review"-->
+                        <!--android:textColor="@color/colorWhite"-->
+                        <!--android:textStyle="bold" />-->
 
 
-                    <com.nyelam.android.view.font.NYTextView
-                        app:fontTextStyle="medium"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingTop="@dimen/padding"
-                        android:paddingBottom="@dimen/padding"
-                        android:layout_marginTop="@dimen/padding_double"
-                        android:gravity="center_horizontal"
-                        android:text="Please write your review."
-                        android:textSize="18sp"
-                        android:textColor="@color/ny_black2"
-                        android:textStyle="bold" />
+                    <!--<com.nyelam.android.view.font.NYTextView-->
+                        <!--app:fontTextStyle="medium"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                        <!--android:paddingTop="@dimen/padding"-->
+                        <!--android:paddingBottom="@dimen/padding"-->
+                        <!--android:layout_marginTop="@dimen/padding_double"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:text="Please write your review."-->
+                        <!--android:textSize="18sp"-->
+                        <!--android:textColor="@color/ny_black2"-->
+                        <!--android:textStyle="bold" />-->
 
-                    <com.willy.ratingbar.ScaleRatingBar
-                        android:id="@+id/submitRatingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        app:srb_numStars="5"
-                        app:srb_minimumStars="0"
-                        app:srb_rating="0"
-                        app:srb_starWidth="30dp"
-                        app:srb_starHeight="30dp"
-                        app:srb_starPadding="10dp"
-                        app:srb_stepSize="2.5"
-                        app:srb_isIndicator="false"
-                        app:srb_clickable="true"
-                        app:srb_scrollable="true"
-                        app:srb_clearRatingEnabled="true"
-                        app:srb_drawableEmpty="@drawable/star_empty"
-                        app:srb_drawableFilled="@drawable/star_filled">
-                    </com.willy.ratingbar.ScaleRatingBar>
+                    <!--<com.willy.ratingbar.ScaleRatingBar-->
+                        <!--android:id="@+id/submitRatingBar"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center_horizontal"-->
+                        <!--app:srb_numStars="5"-->
+                        <!--app:srb_minimumStars="0"-->
+                        <!--app:srb_rating="0"-->
+                        <!--app:srb_starWidth="30dp"-->
+                        <!--app:srb_starHeight="30dp"-->
+                        <!--app:srb_starPadding="10dp"-->
+                        <!--app:srb_stepSize="2.5"-->
+                        <!--app:srb_isIndicator="false"-->
+                        <!--app:srb_clickable="true"-->
+                        <!--app:srb_scrollable="true"-->
+                        <!--app:srb_clearRatingEnabled="true"-->
+                        <!--app:srb_drawableEmpty="@drawable/star_empty"-->
+                        <!--app:srb_drawableFilled="@drawable/star_filled">-->
+                    <!--</com.willy.ratingbar.ScaleRatingBar>-->
 
-                    <EditText
-                        android:id="@+id/review_editText"
-                        android:hint="@string/review_hint"
-                        android:textSize="14sp"
-                        android:background="@drawable/bg_review_placeholder"
-                        android:layout_margin="@dimen/padding_double"
-                        android:padding="@dimen/padding"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    <!--<EditText-->
+                        <!--android:id="@+id/review_editText"-->
+                        <!--android:hint="@string/review_hint"-->
+                        <!--android:textSize="14sp"-->
+                        <!--android:background="@drawable/bg_review_placeholder"-->
+                        <!--android:layout_margin="@dimen/padding_double"-->
+                        <!--android:padding="@dimen/padding"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content" />-->
 
                     <TextView
                         android:id="@+id/send_review_textView"
-                        android:text="@string/send"
+                        android:text="@string/review"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/colorWhite"

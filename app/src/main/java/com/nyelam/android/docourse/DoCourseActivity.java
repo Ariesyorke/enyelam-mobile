@@ -481,15 +481,15 @@ public class DoCourseActivity extends BasicActivity implements
 
             @Override
             public void onRequestSuccess(OrganizationList results) {
+
                 organizations = results;
-                organization = organizations.getList().get(0);
+               // organization = organizations.getList().get(0);
 
                 setAssociationProgressBar(false);
 
-                if (organization != null && NYHelper.isStringNotEmpty(organization.getName()))
-                    associationTextView.setText(organization.getName());
-
-                getLicenseTypeRequest();
+//                if (organization != null && NYHelper.isStringNotEmpty(organization.getName()))
+//                    associationTextView.setText(organization.getName());
+//                getLicenseTypeRequest();
             }
         };
     }
@@ -518,15 +518,15 @@ public class DoCourseActivity extends BasicActivity implements
             public void onRequestSuccess(LicenseTypeList results) {
                 licenseTypes = results;
 
-                if (licenseTypes != null && licenseTypes.getList() != null && licenseTypes.getList().size() > 0){
-                    licenseType = licenseTypes.getList().get(0);
-
-                    if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
-                        divingLicenseTextView.setText(licenseType.getName());
-                } else {
-                    divingLicenseTextView.setText("");
-                    licenseType = null;
-                }
+//                if (licenseTypes != null && licenseTypes.getList() != null && licenseTypes.getList().size() > 0){
+//                    licenseType = licenseTypes.getList().get(0);
+//
+//                    if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
+//                        divingLicenseTextView.setText(licenseType.getName());
+//                } else {
+//                    divingLicenseTextView.setText("");
+//                    licenseType = null;
+//                }
 
                 setDivingLicenseProgressBar(false);
 

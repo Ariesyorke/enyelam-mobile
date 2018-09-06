@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nyelam.android.booking.BookingServiceActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorGradationLeft"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="Service Review"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:fontTextStyle="reguler" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/review_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_double"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/padding"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/padding"
+                android:text="Please write your review."
+                android:textColor="@color/ny_black2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:fontTextStyle="medium" />
+
+
+
+
+            <io.techery.properratingbar.ProperRatingBar
+                android:id="@+id/submitRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/padding_half"
+                app:prb_defaultRating="0"
+                app:prb_tickNormalDrawable="@drawable/ic_star_empty"
+                app:prb_tickSelectedDrawable="@drawable/ic_star_filled"
+                app:prb_tickSpacing="@dimen/padding_half"
+                app:prb_totalTicks="5"
+                app:prb_clickable="true"
+                />
+
+            <!--<com.willy.ratingbar.ScaleRatingBar-->
+                <!--android:id="@+id/submitRatingBar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--app:srb_clearRatingEnabled="true"-->
+                <!--app:srb_clickable="true"-->
+                <!--app:srb_drawableEmpty="@drawable/star_empty"-->
+                <!--app:srb_drawableFilled="@drawable/star_filled"-->
+                <!--app:srb_isIndicator="false"-->
+                <!--app:srb_minimumStars="0"-->
+                <!--app:srb_numStars="5"-->
+                <!--app:srb_rating="0"-->
+                <!--app:srb_scrollable="false"-->
+                <!--app:srb_starHeight="30dp"-->
+                <!--app:srb_starPadding="10dp"-->
+                <!--app:srb_starWidth="30dp"-->
+                <!--app:srb_stepSize="2.5"/>-->
+
+
+
+            <EditText
+                android:id="@+id/review_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_double"
+                android:background="@drawable/bg_review_placeholder"
+                android:hint="@string/review_hint"
+                android:padding="@dimen/padding"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/send_review_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/padding_double"
+                android:layout_marginLeft="@dimen/padding_double"
+                android:layout_marginRight="@dimen/padding_double"
+                android:layout_marginTop="@dimen/padding_double"
+                android:background="@drawable/ny_rectangle_blue_soft"
+                android:gravity="center"
+                android:paddingBottom="@dimen/padding"
+                android:paddingTop="@dimen/padding"
+                android:text="@string/send"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

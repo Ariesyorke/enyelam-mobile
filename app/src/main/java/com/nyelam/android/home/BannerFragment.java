@@ -1,5 +1,6 @@
 package com.nyelam.android.home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,11 +39,22 @@ public class BannerFragment extends Fragment {
     private NYImageRatioImageView imageView;
     private Banner banner;
 
-    public static BannerFragment newInstance(int position, Banner banner) {
-        BannerFragment fragment = new BannerFragment();
+    public BannerFragment(){}
+
+    @SuppressLint("ValidFragment")
+    public BannerFragment(int position, Banner retBanner) {
+        this.banner = retBanner;
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_POS, position);
+//        if (banner != null)args.putString(ARG_BANNER, banner.toString());
+//        this.setArguments(args);
+    }
+
+    public  BannerFragment newInstance(int position, Banner banner) {
+        BannerFragment fragment = new BannerFragment(position, banner);
         Bundle args = new Bundle();
         args.putInt(ARG_POS, position);
-        args.putString(ARG_BANNER, banner.toString());
+        if (banner != null)args.putString(ARG_BANNER, banner.toString());
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,50 +62,14 @@ public class BannerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        banner = new Banner();
-
         imageView = (NYImageRatioImageView)view.findViewById(R.id.imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Open browser on click if not null
-                if (banner != null){
-                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
 
-                        DiveService service = new DiveService();
-                        service.setId(banner.getServiceId());
-                        service.setName(banner.getServiceName());
+//        if (banner != null)banner = new Banner();
+        if(banner != null){
+            setDrawable(banner);
+        }
 
-                        Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
-                        intent.putExtra(NYHelper.SERVICE, service.toString());
-                        intent.putExtra(NYHelper.SCHEDULE, banner.getDate());
-                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
-                        intent.putExtra(NYHelper.IS_DO_COURSE, banner.isDoCourse());
-                        intent.putExtra(NYHelper.IS_DO_TRIP, banner.isDoTrip());
-                        startActivity(intent);
-
-                    } else if (banner.getType() == 2 && banner.getUrl() != null){
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(banner.getUrl()));
-                        startActivity(i);
-                    } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
-
-                        SearchService service = new SearchService();
-                        service.setId(banner.getServiceId());
-                        service.setName(banner.getServiceName());
-
-                        Intent intent = new Intent(getActivity(), DoDiveActivity.class);
-                        intent.putExtra(NYHelper.SEARCH_RESULT, service.toString());
-                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
-                        startActivity(intent);
-                    }
-                } else {
-                    NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
-                }
-            }
-        });
-
-        if(getArguments() != null) {
+        /*if(getArguments() != null) {
             if(getArguments().containsKey(ARG_POS) && getArguments().containsKey(ARG_BANNER)) {
                 int position = getArguments().getInt(ARG_POS);
                 try {
@@ -106,7 +82,107 @@ public class BannerFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Open browser on click if not null
+                if (banner != null){
+//                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId())){
+
+                        // TODO: intent ke detail service (ECO TRIP)
+                        DiveService service = new DiveService();
+                        service.setId(banner.getServiceId());
+                        service.setName(banner.getServiceName());
+
+                        Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
+                        intent.putExtra(NYHelper.SERVICE, service.toString());
+                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
+
+                        if (banner.isLicense()){
+                            intent.putExtra(NYHelper.CERTIFICATE, "1");
+                        } else {
+                            intent.putExtra(NYHelper.CERTIFICATE, "0");
+                        }
+
+                        intent.putExtra(NYHelper.IS_DO_COURSE, banner.isDoCourse());
+                        intent.putExtra(NYHelper.IS_DO_TRIP, banner.isDoTrip());
+                        intent.putExtra(NYHelper.DIVER, "1");
+                        startActivity(intent);
+
+                    } else if (banner.getType() == 2 && NYHelper.isStringNotEmpty(banner.getUrl())){
+
+                        String url = banner.getUrl();
+
+                        if (!url.startsWith("http://") && !url.startsWith("https://"))
+                            url = "http://" + url;
+
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+//                    } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
+                    } else if (banner.getType() == 3 && NYHelper.isStringNotEmpty(banner.getServiceId())){
+
+                        // TODO: intent ke detail service (DO DIVE)
+                        SearchService service = new SearchService();
+                        service.setId(banner.getServiceId());
+                        service.setName(banner.getServiceName());
+                        service.setType(4);
+                        service.setLicense(banner.isLicense());
+
+                        Intent intent = new Intent(getActivity(), DoDiveActivity.class);
+                        intent.putExtra(NYHelper.SEARCH_RESULT, service.toString());
+//                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
+
+                        intent.putExtra(NYHelper.CERTIFICATE, banner.isLicense());
+
+                        intent.putExtra(NYHelper.DIVER, "1");
+
+                        if (banner.isDoTrip()){
+                            intent.putExtra(NYHelper.IS_DO_TRIP, 1);
+                        } else {
+                            intent.putExtra(NYHelper.IS_DO_TRIP, 0);
+                        }
+
+                        if (banner.isEcoTrip()){
+                            intent.putExtra(NYHelper.IS_ECO_TRIP, 1);
+                        } else {
+                            intent.putExtra(NYHelper.IS_ECO_TRIP, 0);
+                        }
+
+                        startActivity(intent);
+                    } else if (banner.getType() == 4 && NYHelper.isStringNotEmpty(banner.getServiceId())){
+
+                        // TODO: intent ke detail service (DO COURSE)
+                        DiveService service = new DiveService();
+                        service.setId(banner.getServiceId());
+                        service.setName(banner.getServiceName());
+
+                        Intent intent = new Intent(getActivity(), DetailServiceActivity.class);
+                        if (service != null ) intent.putExtra(NYHelper.SERVICE, service.toString());
+                        intent.putExtra(NYHelper.DIVER, "1");
+                        intent.putExtra(NYHelper.SCHEDULE, String.valueOf(banner.getDate()));
+
+                        if (banner.isLicense()){
+                            intent.putExtra(NYHelper.CERTIFICATE, "1");
+                        } else {
+                            intent.putExtra(NYHelper.CERTIFICATE, "0");
+                        }
+
+                        if (service != null && service.getDiveCenter() != null) {
+                            intent.putExtra(NYHelper.DIVE_CENTER, service.getDiveCenter().toString());
+                        }
+                        intent.putExtra(NYHelper.IS_DO_COURSE, true);
+                        startActivity(intent);
+                    }
+
+                } else {
+                    NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
+                }
+            }
+        });
+
 
     }
 
@@ -126,15 +202,18 @@ public class BannerFragment extends Fragment {
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
 
-
         //SET IMAGE
         final NYApplication application = (NYApplication) getActivity().getApplication();
         Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
-        if(b != null) {
-            imageView.setImageBitmap(b);
-        } else {
-            imageView.setImageResource(R.drawable.bg_placeholder);
+
+        if (imageView != null){
+            if(b != null) {
+                imageView.setImageBitmap(b);
+            } else {
+                imageView.setImageResource(R.drawable.bg_placeholder);
+            }
         }
+
 
 
         if (banner.getImageUrl() == null || TextUtils.isEmpty(banner.getImageUrl())) {

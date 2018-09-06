@@ -28,6 +28,8 @@ import com.nyelam.android.data.dao.NYCountryCode;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYUpdateVersionRequest;
+import com.nyelam.android.onboarding.IntroActivity;
+import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.NYMasterDataStorage;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
@@ -344,10 +346,19 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
             @Override
             public void onDataLoaded(List<Category> items) {
-                Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                finish();
+                LoginStorage storage = new LoginStorage(StarterActivity.this);
+                if(storage.isUserLogin()) {
+                    Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(StarterActivity.this, IntroActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         },true);
     }
@@ -371,10 +382,18 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
     @Override
     public void onDataLoaded(List<CountryCode> items) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
+        LoginStorage storage = new LoginStorage(StarterActivity.this);
+        if(storage.isUserLogin()) {
+            Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(StarterActivity.this, IntroActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

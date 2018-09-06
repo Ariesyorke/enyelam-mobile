@@ -112,7 +112,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
 
     }
 
-    public void initEquipemntRent(){
+    public void initEquipemntRent(boolean isClear){
 
         if (equipmentsRentTempList == null)equipmentsRentTempList = new ArrayList<>();
 
@@ -147,6 +147,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
             TextView priceTextView = (TextView) myParticipantsView.findViewById(R.id.price_textView);
             NYStrikethroughTextView priceStrikeThroughTextView = (NYStrikethroughTextView) myParticipantsView.findViewById(R.id.price_strikethrough_textView);
+            TextView stockTextView = (TextView) myParticipantsView.findViewById(R.id.stock_textView);
             final TextView countTextView = (TextView) myParticipantsView.findViewById(R.id.count_textView);
             ImageView plusImageView = (ImageView) myParticipantsView.findViewById(R.id.plus_imageView);
             ImageView minusImageView = (ImageView) myParticipantsView.findViewById(R.id.minus_imageView);
@@ -156,6 +157,8 @@ public class EquipmentRentActivity extends AppCompatActivity {
                 if (NYHelper.isStringNotEmpty(equipmentRent.getName())) {
                     nameTextView.setText(equipmentRent.getName());
                 }
+
+                stockTextView.setText("stock : "+String.valueOf(equipmentRent.getAvailabilityStock()));
 
                 if (equipmentRent.getSpecialPrice() < equipmentRent.getNormalPrice() && equipmentRent.getSpecialPrice() > 0){
                     priceTextView.setText("@ " + NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
@@ -169,7 +172,9 @@ public class EquipmentRentActivity extends AppCompatActivity {
                 final int[] total = {0};
 
                 for (EquipmentRentAdded add : equipmentsRentTempList){
-                    if (add.getId().equals(equipmentRent.getId())){
+                    if (isClear){
+                        total[0] = 0;
+                    } else if (add.getId().equals(equipmentRent.getId())){
                         total[0] = add.getQuantity();
                         break;
                     }
@@ -220,8 +225,9 @@ public class EquipmentRentActivity extends AppCompatActivity {
         clearTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Toast.makeText(EquipmentRentActivity.this, "clear", Toast.LENGTH_SHORT).show();
                 equipmentsRentTempList = new ArrayList<EquipmentRentAdded>();
-                initEquipemntRent();
+                initEquipemntRent(true);
             }
         });
 
@@ -237,7 +243,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
 
     private void initView() {
         notFoundTextView = (TextView) findViewById(R.id.not_found_textView);
-        clearTextView = (TextView) findViewById(R.id.reset_textView);
+        clearTextView = (TextView) findViewById(R.id.clear_textView);
         applyTextView = (TextView) findViewById(R.id.apply_textView);
         closeImageView = (ImageView) findViewById(R.id.close_imageView);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -284,7 +290,7 @@ public class EquipmentRentActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 if (results != null) {
                     equipmentRents = results.getList();
-                    initEquipemntRent();
+                    initEquipemntRent(false);
                     equipmentRentLinearLayout.setVisibility(View.VISIBLE);
                     notFoundTextView.setVisibility(View.GONE);
                     //Toast.makeText(EquipmentRentActivity.this, "ada 1", Toast.LENGTH_SHORT).show();

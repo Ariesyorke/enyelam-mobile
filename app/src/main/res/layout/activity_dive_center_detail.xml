@@ -354,7 +354,7 @@
                         android:visibility="gone"
                         android:id="@+id/dive_guide_no_result_textView"
                         app:fontTextStyle="lightItalic"
-                        android:text="Service not found."
+                        android:text="Dive Guide not found."
                         android:textSize="16sp"
                         android:textColor="@color/ny_grey2"
                         android:gravity="center"
