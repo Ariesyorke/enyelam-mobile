@@ -27,8 +27,9 @@ public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<OrderReturn>
     private static final String POST_PARTICIPANT = "diver";
     private static final String POST_TYPE = "type";
     private static final String POST_NOTE = "note";
+    private static final String POST_VOUCHER_CODE = "voucher_code";
 
-    public NYDoDiveServiceOrderRequest(Context context, String cartToken, String contact, String participant, String type, String note) throws Exception {
+    public NYDoDiveServiceOrderRequest(Context context, String cartToken, String contact, String participant, String type, String note, String voucherCode) throws Exception {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_dodive_book_service_order));
 
         if(!TextUtils.isEmpty(cartToken)) {
@@ -49,6 +50,10 @@ public class NYDoDiveServiceOrderRequest extends NYBasicAuthRequest<OrderReturn>
 
         if(!TextUtils.isEmpty(note)) {
             addQuery(POST_NOTE, note);
+        }
+
+        if(!TextUtils.isEmpty(voucherCode)) {
+            addQuery(POST_VOUCHER_CODE, voucherCode);
         }
 
     }

@@ -165,10 +165,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 int diverTemp = Integer.valueOf(diver) + 1;
-                if (diverTemp <= availabilityStock){
-                    diver = String.valueOf(diverTemp);
-                    diverTextView.setText(diver);
+                if (diverTemp > availabilityStock) {
+                    if(!isDoCourse) {
+                        return;
+                    }
                 }
+                diver = String.valueOf(diverTemp);
+                diverTextView.setText(diver);
             }
         });
 

@@ -905,14 +905,23 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
     private void getVoucher(String orderId, String voucherCode){
-        try {
-            progressDialog.show();
-            //nationalityProgressBar.setVisibility(View.VISIBLE);
-            //nationalityEditText.setVisibility(View.GONE);
-            NYVoucherCartRequest req = new NYVoucherCartRequest(this, orderId, voucherCode);
-            spcMgr.execute(req, onGetVoucherRequest());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(orderReturn == null) {
+            try {
+                progressDialog.show();
+                //nationalityProgressBar.setVisibility(View.VISIBLE);
+                //nationalityEditText.setVisibility(View.GONE);
+                NYVoucherCartRequest req = new NYVoucherCartRequest(this, orderId, voucherCode);
+                spcMgr.execute(req, onGetVoucherRequest());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                voucherEditText.setText(cartReturn.getCart().getVoucher().getCode());
+            } else {
+                voucherEditText.setText("");
+            }
+            NYHelper.handleErrorMessage(this, "You already submit order you cannot change/edit voucher!");
         }
     }
 
@@ -936,21 +945,14 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             @Override
             public void onRequestSuccess(Cart cart) {
                 if(cart != null) {
-                    serviceFeeLinearLayout.removeAllViews();
-                    subTotalPriceTextView.setText(NYHelper.priceFormatter(cart.getSubTotal()));
-                    totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
-
                     cartReturn.setCart(cart);
-                    NYLog.e("VOUCHER " + cartReturn.getCart().getVoucher());
-                    if(cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()) addAddedEquipmentRents(cartReturn.getEquipmentRents());
-                    if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) addVoucher(cartReturn.getCart().getVoucher());
-                    if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
-
-
+                    requestChangePaymentMethod();
+                } else {
+                    if(progressDialog != null && progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                 }
-                if(progressDialog != null && progressDialog.isShowing()){
-                    progressDialog.dismiss();
-                }
+
             }
         };
     }
@@ -1205,8 +1207,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                             p.setName(fullnameP);
                             participants.add(p);
                         }
+                        String voucherCode = null;
+                        if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                            Voucher voucher = cartReturn.getCart().getVoucher();
+                            voucherCode = voucher.getCode();
+                        }
 
-                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note);
+                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note, voucherCode);
                         spcMgr.execute(req, onCreateOrderServiceRequest());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1452,8 +1459,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     p.setName(fullnameP);
                     participants.add(p);
                 }
+                String voucherCode = null;
+                if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                    voucherCode = cartReturn.getCart().getVoucher().getCode();
+                }
 
-                NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note);
+                NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note, voucherCode);
                 spcMgr.execute(req, onCreateOrderServiceRequest());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1565,11 +1576,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void requestChangePaymentMethod(){
         progressDialog.show();
         try {
+            String voucherCode = null;
+            if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                voucherCode = cartReturn.getCart().getVoucher().getCode();
+            }
             NYChangePaymentMethodRequest req = null;
             if (orderReturn != null && orderReturn.getSummary() != null && orderReturn.getSummary().getOrder() != null && NYHelper.isStringNotEmpty(orderReturn.getSummary().getOrder().getOrderId())){
-                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, orderReturn.getSummary().getOrder().getOrderId(), paymentType);
+                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, orderReturn.getSummary().getOrder().getOrderId(), paymentType, voucherCode);
             } else if (cartReturn != null && NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
-                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), paymentType);
+                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), paymentType, voucherCode);
             }
             spcMgr.execute(req, onChangePaymentMethodRequest());
         } catch (Exception e) {
