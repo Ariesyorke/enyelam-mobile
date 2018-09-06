@@ -111,6 +111,9 @@
     <string name="api_path_dive_guide_list">api/diveGuides</string>
     <string name="api_path_dive_guide_detail">api/diveGuide</string>
 
+    <!--new-->
+    <string name="api_path_voucher_code"></string>
+
 
 
 
@@ -202,4 +205,5 @@
     <!--<string name="api_path_get_min_max_price">service/minMaxPrice</string>-->
     <!--<string name="api_path_get_min_max_price_list">service/minMaxPriceList</string>-->
 
+    <!--<string name="api_path_voucher_code"></string>-->
 </resources>

@@ -1,0 +1,11 @@
+{
+  "cart": {
+    "sub_total": 100000,
+    "voucher": {
+      "code": "dfafdad",
+      "value": 10000
+    },
+    "total": 80000,
+    "currency": "IDR"
+  }
+}

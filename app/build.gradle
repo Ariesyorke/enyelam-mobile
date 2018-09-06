@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.nyelam.android"
         minSdkVersion 16
@@ -25,17 +25,6 @@ android {
         disable 'MissingTranslation'
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
