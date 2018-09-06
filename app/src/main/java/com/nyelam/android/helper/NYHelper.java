@@ -87,6 +87,7 @@ public class NYHelper {
     public static final String DIVER = "diver";
     public static final String NOTE = "note";
     public static final String DIVE_CENTER = "dive_center";
+    public static final String EQUIPMENT_RENTS = "equipment_rents";
     public static final String SCHEDULE = "schedule";
     public static final String DIVE_SPOT = "dive_spot";
     public static final String DIVE_SPOTS = "dive_spots";

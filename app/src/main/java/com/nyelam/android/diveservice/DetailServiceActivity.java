@@ -452,7 +452,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.DIVE_CENTER, newDiveService.getDiveCenter().toString());
                 intent.putExtra(NYHelper.IS_DO_COURSE, isDoCourse);
                 if (equipmentRentList != null && !equipmentRentList.isEmpty()){
+                    NYLog.e("EQUIPMENT SERVICE EXIST!");
                     intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentList.toString());
+                } else {
+                    NYLog.e("EQUIPMENT SERVICE NOT EXIST!");
+
                 }
                 startActivity(intent);
             }
@@ -478,6 +482,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         plusImageView = (ImageView) findViewById(R.id.plus_imageView);
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setPagingEnabled(false);
         viewPager.setAdapter(fragmentAdapter);
 
         progressDialog = new ProgressDialog(this);
@@ -530,7 +535,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 2;
+        private static final int FRAGMENT_COUNT = 1;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 

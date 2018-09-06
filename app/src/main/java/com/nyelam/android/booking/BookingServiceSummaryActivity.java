@@ -50,6 +50,7 @@ import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.EquipmentRent;
 import com.nyelam.android.data.EquipmentRentAdded;
 import com.nyelam.android.data.EquipmentRentAddedList;
+import com.nyelam.android.data.EquipmentRentList;
 import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.NTransactionResult;
@@ -161,6 +162,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
+                    intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
+                }
                 startActivity(intent);
             }
         });
@@ -400,6 +404,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
+
             if (intent.hasExtra(NYHelper.DIVE_CENTER) && extras.get(NYHelper.DIVE_CENTER) != null) {
 
                 diveCenter = new DiveCenter();
@@ -713,10 +718,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     equipTemp = new EquipmentRentAddedList();
                     equipTemp.parse(arrayCat);
 
-                    NYLog.e("equip extras parse "+equipTemp.getList());
 
                     equipmentRentAddedList = equipTemp.getList();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -726,6 +729,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             }
 
         }
+        serviceFeeLinearLayout.removeAllViews();
+        if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
+        if(cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()) addAddedEquipmentRents(cartReturn.getEquipmentRents());
+
 
     }
 
@@ -840,6 +847,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString().trim());
                     intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
                     intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
+                    if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
+                        intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
+                    }
                     startActivity(intent);
                 }
             });
@@ -862,6 +872,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
                     intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
                     intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
+                    if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
+                        intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
+                    }
                     startActivity(intent);
                 }
             });
@@ -922,7 +935,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                 if (orderReturn != null){
 
-                    NYLog.e("payment Type : " + paymentType);
 
                     if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
 
@@ -1531,12 +1543,35 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     }
 
                     if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
+                    if(cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()) addAddedEquipmentRents(cartReturn.getEquipmentRents());
                 }
 
             }
         };
     }
 
+
+    public void addAddedEquipmentRents(List<EquipmentRent> equipmentRents) {
+        if (equipmentRents != null && !equipmentRents.isEmpty()) {
+            for (EquipmentRent equipmentRent : equipmentRents) {
+
+                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                if (equipmentRent != null) {
+                    if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName()+" x"+String.valueOf(equipmentRent.getQuantity()));
+
+                    additionalValueTextView.setText(NYHelper.priceFormatter((equipmentRent.getSpecialPrice()*equipmentRent.getQuantity())));
+
+                }
+
+                serviceFeeLinearLayout.addView(additionalView);
+            }
+        }
+    }
 
     public void addAditonalView(List<Additional> additionalList) {
 
@@ -1565,25 +1600,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
 
 
-        if (cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()){
-            for (EquipmentRent equipmentRent : cartReturn.getEquipmentRents()) {
 
-                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
-
-                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
-                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
-
-                if (equipmentRent != null) {
-                    if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName()+" x"+String.valueOf(equipmentRent.getQuantity()));
-
-                    additionalValueTextView.setText(NYHelper.priceFormatter((equipmentRent.getSpecialPrice()*equipmentRent.getQuantity())));
-
-                }
-
-                serviceFeeLinearLayout.addView(additionalView);
-            }
-        }
 
 
     }
