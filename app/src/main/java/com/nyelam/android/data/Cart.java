@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class Cart implements Parseable {
 
     private static String KEY_SUB_TOTAL = "sub_total";
-    private static String KEY_VOUCHER = "voucher";
+    private static String KEY_VOUCHER = "vouchers";
     private static String KEY_TOTAL = "total";
     private static String KEY_CURRENCY = "currency";
 

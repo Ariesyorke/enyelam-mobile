@@ -18,6 +18,7 @@
 
     <!-- DEVELOPMENT -->
     <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
+    <!--<string name="host_url">http://nyelam-yoga.dantech.id/</string>-->
 
     <!-- STAGING -->
     <string name="host_url">https://nyelam.dantech.id/</string>
@@ -110,9 +111,10 @@
     <string name="api_path_review_submit">api/service/review/submit</string>
     <string name="api_path_dive_guide_list">api/diveGuides</string>
     <string name="api_path_dive_guide_detail">api/diveGuide</string>
+    <string name="api_path_banner">api/master/banner</string>
 
     <!--new-->
-    <string name="api_path_voucher_code"></string>
+    <string name="api_path_voucher_code">api/order/voucher</string>
 
 
 
@@ -204,6 +206,7 @@
     <!--<string name="api_path_dotrip_suggestion_service">dotrip/sugestion</string>-->
     <!--<string name="api_path_get_min_max_price">service/minMaxPrice</string>-->
     <!--<string name="api_path_get_min_max_price_list">service/minMaxPriceList</string>-->
+    <!--<string name="api_path_banner">master/banner</string>-->
 
-    <!--<string name="api_path_voucher_code"></string>-->
+    <!--<string name="api_path_voucher_code">order/voucher</string>-->
 </resources>
