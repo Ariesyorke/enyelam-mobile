@@ -358,8 +358,6 @@ public class Event implements Parseable {
             }
         }
 
-
-
         if(!obj.isNull(KEY_LOCATION)) {
             try {
                 JSONObject o = obj.getJSONObject(KEY_LOCATION);
@@ -374,7 +372,6 @@ public class Event implements Parseable {
         }
 
     }
-
 
     @Override
     public String toString() {

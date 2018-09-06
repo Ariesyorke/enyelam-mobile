@@ -54,6 +54,7 @@ import com.nyelam.android.data.EquipmentRentList;
 import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.NTransactionResult;
+import com.nyelam.android.data.NationalityList;
 import com.nyelam.android.data.Organization;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.http.NYDoDiveServiceOrderResubmitRequest;
@@ -67,7 +68,10 @@ import com.nyelam.android.http.NYCartExpiredException;
 import com.nyelam.android.http.NYChangePaymentMethodRequest;
 import com.nyelam.android.http.NYDoDiveServiceCartRequest;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
+import com.nyelam.android.http.NYMasterNationalityRequest;
 import com.nyelam.android.http.NYPaypalNotificationRequest;
+import com.nyelam.android.http.NYVoucherCartRequest;
+import com.nyelam.android.profile.EditProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
 import com.nyelam.android.view.NYCustomDialog;
@@ -107,7 +111,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private boolean isTranssactionFailed = false;
     private boolean isTranssactionCanceled = false;
 
-    private LinearLayout particpantContainerLinearLayout, orderLinearLayout, serviceFeeLinearLayout;
+    private LinearLayout particpantContainerLinearLayout, orderLinearLayout, serviceFeeLinearLayout, voucher_linearLayout;
     private TextView serviceNameTextView, scheduleTextView, diveCenterNameTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
     private TextView diverCountTextView, detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
@@ -115,7 +119,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private DiveCenter center;
     private RadioGroup radioGroup;
     private LinearLayout addNoteLinearLayout;
-    private EditText noteEditText;
+    private EditText noteEditText, voucher_editText;
     private RadioButton bankTransferRadioButton, virtualAccountRadioButton, creditCardRadioButton, paypalRadioButton;
     private LinearLayout bankTransferLinearLayout, virtualAccountLinearLayout, creditCardLinearLayout, paypalLinearLayout;
     private DiveCenter diveCenter;
@@ -755,13 +759,16 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         orderLinearLayout = (LinearLayout) findViewById(R.id.order_linearLayout);
         serviceFeeLinearLayout = (LinearLayout) findViewById(R.id.service_fee_linearLayout);
         paypalLinearLayout = (LinearLayout) findViewById(R.id.payment_paypal_linearLayout);
+        voucher_linearLayout = (LinearLayout) findViewById(R.id.voucher_linearLayout);
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingTextView = (TextView) findViewById(R.id.rating_textView);
         visitedTextView = (TextView) findViewById(R.id.visited_textView);
 
         addNoteLinearLayout = (LinearLayout) findViewById(R.id.add_note_linearLayout);
+
         noteEditText = (EditText) findViewById(R.id.note_editText);
+        voucher_editText = (EditText) findViewById(R.id.voucher_editText);
 
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
@@ -879,6 +886,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 }
             });
 
+            voucher_linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String orderId = cartReturn.getCartToken();
+                    String voucher = voucher_editText.getText().toString();
+                    getVoucher(orderId,voucher);
+                }
+            });
+
             pos++;
             particpantContainerLinearLayout.addView(myParticipantsView);
 
@@ -892,6 +908,41 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+    private void getVoucher(String orderId, String voucherCode){
+        try {
+            //progressDialog.show();
+            //nationalityProgressBar.setVisibility(View.VISIBLE);
+            //nationalityEditText.setVisibility(View.GONE);
+            NYVoucherCartRequest req = new NYVoucherCartRequest(this, orderId, voucherCode);
+            spcMgr.execute(req, onGetVoucher());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<Cart> onGetVoucher() {
+        return new RequestListener<Cart>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+
+                /*if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }*/
+
+                NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, null);
+
+            }
+
+            @Override
+            public void onRequestSuccess(Cart result) {
+                /*if(progressDialog != null && progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }*/
+                Toast.makeText(BookingServiceSummaryActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     private RequestListener<OrderReturn> onCreateOrderServiceRequest() {
@@ -1162,7 +1213,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void payUsingVeritrans() {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(this) // context is mandatory
                 .setTransactionFinishedCallback(this)// set transaction finish callback (sdk callback)
                 .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
@@ -1229,7 +1280,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         //CONFIGURASI PAYPAL
         payPalConfiguration = new PayPalConfiguration()
-                .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .clientId(paypalClientId);
         paypalIntent = new Intent(BookingServiceSummaryActivity.this, PayPalService.class);
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
@@ -1624,6 +1675,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     progressDialog.dismiss();
                     e.printStackTrace();
                 }
+
             }
         }
     }

@@ -123,6 +123,9 @@
     <string name="review_hint">Write your review here..</string>
     <string name="send">Send</string>
 
+    <string name="apply">Apply</string>
+    <string name="insert_voucher">Insert your voucher here</string>
+
 
     <string name="enter_a_dive_spot">Enter a dive spot name</string>
     <string name="enter_keywords">Enter keywords..</string>
