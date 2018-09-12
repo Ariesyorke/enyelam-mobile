@@ -310,10 +310,10 @@
 
                             </LinearLayout>
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/ny_rectangle_menu_grey" />
+                            <!--<View-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="match_parent"-->
+                                <!--android:background="@drawable/ny_rectangle_menu_grey" />-->
                         </RelativeLayout>
 
 
