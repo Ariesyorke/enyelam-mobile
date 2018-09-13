@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.Cart;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONException;
@@ -37,36 +38,37 @@ public class NYVoucherCartRequest extends NYBasicAuthRequest<Cart> {
         }
     }
 
-    @Override
-    public Cart loadDataFromNetwork() throws Exception {
-        String json = null;
-        try {
-            InputStream is = getContext().getAssets().open("voucher.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-            JSONObject obj = new JSONObject(json);
-            return  onProcessSuccessData(obj);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public static String AssetJSONFile (String filename, Context context) throws IOException {
-        AssetManager manager = context.getAssets();
-        InputStream file = manager.open(filename);
-        byte[] formArray = new byte[file.available()];
-        file.read(formArray);
-        file.close();
-
-        return new String(formArray);
-    }
+//    @Override
+//    public Cart loadDataFromNetwork() throws Exception {
+//        String json = null;
+//        try {
+//            InputStream is = getContext().getAssets().open("voucher.json");
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//            json = new String(buffer, "UTF-8");
+//            JSONObject obj = new JSONObject(json);
+//            return  onProcessSuccessData(obj);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    public static String AssetJSONFile (String filename, Context context) throws IOException {
+//        AssetManager manager = context.getAssets();
+//        InputStream file = manager.open(filename);
+//        byte[] formArray = new byte[file.available()];
+//        file.read(formArray);
+//        file.close();
+//
+//        return new String(formArray);
+//    }
 
     @Override
     protected com.nyelam.android.data.Cart onProcessSuccessData(JSONObject obj) throws Exception {
+        NYLog.e("JSONOBJCET " + obj);
         Cart cart = null;
         if(!obj.isNull(KEY_CART)){
             cart = new Cart();

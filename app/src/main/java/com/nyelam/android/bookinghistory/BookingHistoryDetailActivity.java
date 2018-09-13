@@ -33,6 +33,7 @@ import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
 import com.nyelam.android.data.Summary;
+import com.nyelam.android.data.Voucher;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
@@ -390,28 +391,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
             additionalLinearLayout.removeAllViews();
 
-            if (summary != null && summary.getOrder() != null
-                    && summary.getOrder().getAdditionals() != null
-                    && summary.getOrder().getAdditionals().size() > 0){
-
-                for (Additional additional : summary.getOrder().getAdditionals()){
-                    //NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
-
-                    LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
-
-                    TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
-                    TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
-
-                    if (additional != null) {
-                        if (NYHelper.isStringNotEmpty(additional.getTitle())) additionalLabelTextView.setText(additional.getTitle());
-                        additionalValueTextView.setText(NYHelper.priceFormatter(additional.getValue()));
-                    }
-
-                    additionalLinearLayout.addView(additionalView);
-                }
-            }
-
 
             if (summary != null && summary.getOrder() != null
                     && summary.getOrder().getEquipmentRents() != null
@@ -432,7 +411,44 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
 
                     additionalLinearLayout.addView(additionalView);
                 }
+            }
 
+            if(summary != null && summary.getOrder() != null && summary.getOrder().getCart() != null && summary.getOrder().getCart().getVoucher() != null) {
+                Voucher voucher = summary.getOrder().getCart().getVoucher();
+                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                if (voucher != null) {
+                    if (NYHelper.isStringNotEmpty(voucher.getCode())) additionalLabelTextView.setText("Voucher(" + voucher.getCode() +")");
+                    additionalValueTextView.setText("-" + NYHelper.priceFormatter(voucher.getValue()));
+                }
+
+                additionalLinearLayout.addView(additionalView);
+            }
+
+            if (summary != null && summary.getOrder() != null
+                    && summary.getOrder().getAdditionals() != null
+                    && summary.getOrder().getAdditionals().size() > 0){
+
+                for (Additional additional : summary.getOrder().getAdditionals()){
+                    //NYLog.d("TES ADDITIONALS ADD : "+additional.getTitle());
+
+                    LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                    TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                    TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                    if (additional != null) {
+                        if (NYHelper.isStringNotEmpty(additional.getTitle())) additionalLabelTextView.setText(additional.getTitle());
+                        additionalValueTextView.setText(NYHelper.priceFormatter(additional.getValue()));
+                    }
+
+                    additionalLinearLayout.addView(additionalView);
+                }
             }
 
 
