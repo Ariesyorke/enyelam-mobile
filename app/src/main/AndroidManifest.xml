@@ -154,28 +154,41 @@
             android:name=".dotrip.DoTripActivity"
             android:screenOrientation="portrait" />
         />
-        <activity android:name=".dotrip.DoTripKeywordActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".dotrip.DoTripResultActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".dotrip.DoTripDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".dotrip.DoTripListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".docourse.DoCourseActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".docourse.DoCourseResultActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".dodive.EquipmentRentActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".divecenter.DiveGuideActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".bookinghistory.RatingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".doshop.DoShopActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".onboarding.IntroActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".dotrip.DoTripKeywordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dotrip.DoTripResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dotrip.DoTripDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dotrip.DoTripListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".docourse.DoCourseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".docourse.DoCourseResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".dodive.EquipmentRentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".divecenter.DiveGuideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bookinghistory.RatingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".onboarding.IntroActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".inbox.InboxActivity" />
+        <activity android:name=".inbox.NewMessageActivity"></activity>
     </application>
 
 </manifest>

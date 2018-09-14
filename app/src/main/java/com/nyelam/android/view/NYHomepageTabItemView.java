@@ -73,6 +73,8 @@ public class NYHomepageTabItemView extends FrameLayout implements Checkable {
             imageView.setImageResource(R.drawable.tab_home);
         } else if (tabItemPosition == 1 ){
             imageView.setImageResource(R.drawable.tab_cart);
+        } else if (tabItemPosition == 2 ){
+            imageView.setImageResource(R.drawable.ic_inbox);
 //        } else if (tabItemPosition == 2 ){
 //            imageView.setImageResource(R.drawable.tab_social);
         } else {

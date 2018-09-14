@@ -10,7 +10,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 
 import com.danzoye.lib.util.GalleryCameraInvoker;
 import com.nyelam.android.R;
+import com.nyelam.android.StarterActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Additional;
 import com.nyelam.android.data.Cart;
@@ -39,6 +43,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYDoDiveBookingDetailRequest;
 import com.nyelam.android.http.NYSubmitReviewRequest;
+import com.nyelam.android.inbox.NewMessageActivity;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -641,10 +646,27 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_booking, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
+        }else if(item.getItemId() == R.id.msg_btn){
+            if(orderReturn != null){
+                Summary summary = orderReturn.getSummary();
+
+                Intent intent = new Intent(BookingHistoryDetailActivity.this, NewMessageActivity.class);
+                intent.putExtra("title", summary.getDiveService().getName().toString() );
+                intent.putExtra("refId", idOrder);
+                intent.putExtra("type", "2");
+                startActivity(intent);
+            }
         }
 
         return super.onOptionsItemSelected(item);

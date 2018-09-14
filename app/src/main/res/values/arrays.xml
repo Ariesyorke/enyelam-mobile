@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_inbox">
+        <item>General</item>
+        <item>Issue App</item>
+        <item>Payment</item>
+    </string-array>
+</resources>

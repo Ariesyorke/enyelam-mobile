@@ -47,6 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class HomeActivity extends BasicActivity implements HomeFragment.OnFragmentInteractionListener,
+        InboxFragment.OnFragmentInteractionListener,
         SocmedFragment.OnFragmentInteractionListener,
         TransactionFragment.OnFragmentInteractionListener,
         MyAccountFragment.OnFragmentInteractionListener,
@@ -211,7 +212,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     }
 
     public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 3;
+        private static final int FRAGMENT_COUNT = 4;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 
@@ -245,7 +246,9 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             } else if (position == 1) {
                 TransactionFragment fragment = TransactionFragment.newInstance();
                 return fragment;
-//            }
+            } else if (position == 2) {
+                InboxFragment fragment = InboxFragment.newInstance();
+                return fragment;
 //            else if (position == 2) {
 //                SocmedFragment fragment = SocmedFragment.newInstance();
 //                return fragment;

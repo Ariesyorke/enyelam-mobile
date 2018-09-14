@@ -33,6 +33,7 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYUploadPhotoCoverRequest;
 import com.nyelam.android.http.NYUploadPhotoProfileRequest;
+import com.nyelam.android.inbox.NewMessageActivity;
 import com.nyelam.android.profile.ChangePasswordActivity;
 import com.nyelam.android.profile.EditProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
@@ -274,11 +275,14 @@ public class MyAccountFragment extends Fragment implements
         contactUsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                /*Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "mailto","info@e-nyelam.com", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hi, e-Nyelam!");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));*/
+                Intent intent = new Intent(getActivity(), NewMessageActivity.class);
+                intent.putExtra("category", true);
+                startActivity(intent);
             }
         });
 

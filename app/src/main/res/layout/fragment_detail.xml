@@ -495,6 +495,37 @@
 
 
                         <LinearLayout
+                            android:id="@+id/inbox_linearLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="2dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ny_book"
+                            android:gravity="center"
+                            android:paddingBottom="@dimen/padding"
+                            android:paddingLeft="@dimen/padding"
+                            android:paddingRight="@dimen/padding"
+                            android:paddingTop="@dimen/padding">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_inbox" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/inbox_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:text="SEND MESSAGE"
+                                android:textColor="@color/colorWhite"
+                                app:fontTextStyle="bold" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
                             android:id="@+id/banner_linearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

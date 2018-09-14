@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,8 @@ import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoDiveRelatedServiceRequest;
 import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
+import com.nyelam.android.inbox.InboxActivity;
+import com.nyelam.android.inbox.NewMessageActivity;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -85,7 +88,7 @@ public class DetailServiceFragment extends Fragment {
     private ImageView icDiveGuideImageView, icEquipmentImageView, icFoodImageView, icTransportationImageView, icTowelImageView, icAccomodationImageView;
     private LinearLayout diveGuideLinearLayout, equipmentLinearLayout,
             foodLinearLayout, transportationLinearLayout, towelLinearLayout, licenseLinearLayout, diveCenterLinearLayout,
-            dayClassLinearLayout, dayOnSiteLinearLayout;
+            dayClassLinearLayout, dayOnSiteLinearLayout, inboxLinearLayout;
     private NYStrikethroughTextView priceStrikeThroughTextView;
     private TextView availabilityStockTextView;
 
@@ -171,6 +174,22 @@ public class DetailServiceFragment extends Fragment {
 
             }
         });
+
+        inboxLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DiveService diveService = activity.getDiveService();
+
+                Log.i("title", diveService.getName().toString());
+                Log.i("refId", diveService.getId().toString());
+
+                Intent intent = new Intent(getActivity(), NewMessageActivity.class);
+                intent.putExtra("title", diveService.getName().toString());
+                intent.putExtra("refId", diveService.getId().toString());
+                intent.putExtra("type", "1");
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView(View v) {
@@ -235,6 +254,7 @@ public class DetailServiceFragment extends Fragment {
         bannerLinearLayout = (LinearLayout) v.findViewById(R.id.banner_linearLayout);
         equipmenRentContainerLinearLayoutt = (LinearLayout) v.findViewById(R.id.equipemnt_rent_container_linearLayout);
 
+        inboxLinearLayout = (LinearLayout) v.findViewById(R.id.inbox_linearLayout);
     }
 
 
