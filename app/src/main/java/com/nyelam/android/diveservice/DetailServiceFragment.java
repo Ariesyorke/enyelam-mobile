@@ -28,6 +28,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
+import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.booking.BookingServiceActivity;
 import com.nyelam.android.booking.BookingServiceParticipantActivity;
@@ -56,6 +57,7 @@ import com.nyelam.android.http.NYDoDiveSuggestionServiceRequest;
 import com.nyelam.android.http.NYDoTripSearchServiceResultRequest;
 import com.nyelam.android.inbox.InboxActivity;
 import com.nyelam.android.inbox.NewMessageActivity;
+import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -69,6 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DetailServiceFragment extends Fragment {
 
@@ -178,17 +181,19 @@ public class DetailServiceFragment extends Fragment {
         inboxLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (activity.getDiveService() != null){
-                    DiveService diveService = activity.getDiveService();
-
-                    Log.i("title", diveService.getName().toString());
-                    Log.i("refId", diveService.getId().toString());
-
-                    Intent intent = new Intent(getActivity(), NewMessageActivity.class);
-                    intent.putExtra("title", diveService.getName().toString());
-                    intent.putExtra("refId", diveService.getId().toString());
-                    intent.putExtra("type", "1");
-                    startActivity(intent);
+                LoginStorage storage = new LoginStorage(getApplicationContext());
+                if (storage.isUserLogin()) {
+                    if (activity.getDiveService() != null){
+                        DiveService diveService = activity.getDiveService();
+                        Intent intent = new Intent(getActivity(), NewMessageActivity.class);
+                        intent.putExtra("title", diveService.getName().toString());
+                        intent.putExtra("refId", diveService.getId().toString());
+                        intent.putExtra("type", "1");
+                        startActivity(intent);
+                    }
+                }  else {
+                    Intent intent = new Intent(getActivity(), AuthActivity.class);
+                    startActivityForResult(intent, NYHelper.LOGIN_REQ);
                 }
             }
         });
@@ -745,8 +750,19 @@ public class DetailServiceFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         //Toast.makeText(activity, "ada equipment 1 ", Toast.LENGTH_SHORT).show();
-
-        if (resultCode == RESULT_OK) {
+        if (requestCode == NYHelper.LOGIN_REQ) {
+            if (resultCode == RESULT_OK) {
+                if (activity.getDiveService() != null){
+                    DiveService diveService = activity.getDiveService();
+                    Intent intent = new Intent(getActivity(), NewMessageActivity.class);
+                    intent.putExtra("title", diveService.getName().toString());
+                    intent.putExtra("refId", diveService.getId().toString());
+                    intent.putExtra("type", "1");
+                    startActivity(intent);
+                }
+            }
+        }
+        else if (resultCode == RESULT_OK) {
 
             //Toast.makeText(activity, "ada equipment 2 ", Toast.LENGTH_SHORT).show();
 
@@ -779,7 +795,6 @@ public class DetailServiceFragment extends Fragment {
                     e.printStackTrace();
                 }*/
             }
-
         }
 
         setEquipmentRent();

@@ -74,6 +74,8 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private boolean isPast;
     private OrderReturn orderReturn;
 
+    private MenuItem itemMsg;
+
     private File file;
     private GalleryCameraInvoker invoker;
     private boolean isPickingPhoto;
@@ -391,6 +393,18 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     }
                 if (NYHelper.isStringNotEmpty(contact.getEmailAddress()))
                     contactEmailTextView.setText(contact.getEmailAddress());
+
+                //code untuk menyembunyikan menu message
+                Order order = summary.getOrder();
+                String status = order.getStatus().toString();
+                if(status.equals("denied") || status.equals("cancel")){
+                    itemMsg.setVisible(false);
+                }else{
+                    itemMsg.setVisible(true);
+                }
+                if(isPast){
+                    itemMsg.setVisible(false);
+                }
             }
 
 
@@ -649,6 +663,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_booking, menu);
+        itemMsg = menu.findItem(R.id.msg_btn);
         return true;
     }
 
@@ -661,7 +676,6 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             if(orderReturn != null){
                 Summary summary = orderReturn.getSummary();
                 Order order = summary.getOrder();
-
                 Intent intent = new Intent(BookingHistoryDetailActivity.this, NewMessageActivity.class);
                 intent.putExtra("title", summary.getDiveService().getName().toString() + " #" + NYHelper.setMillisToDateMonth(order.getSchedule()) );
                 intent.putExtra("refId", idOrder);

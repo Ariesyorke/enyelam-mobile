@@ -40,7 +40,7 @@
                 app:fontTextStyle="reguler"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="INBOX"
+                android:text="Inbox Detail"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="2dp"
-        android:background="@color/ny_blue4"
+        android:background="#0071BC"
         android:elevation="3dp"
         android:gravity="center_vertical"
         android:padding="@dimen/padding"

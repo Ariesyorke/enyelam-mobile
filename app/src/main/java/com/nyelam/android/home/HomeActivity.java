@@ -277,7 +277,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         NYLog.e("TAB ITEM POSITION : " + tabItemPosition);
         setCheckedId(tabItemPosition);
         LoginStorage loginStorage = new LoginStorage(getApplicationContext());
-        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2)) {
+        if (!loginStorage.isUserLogin() && (tabItemPosition == 1 || tabItemPosition == 2 || tabItemPosition == 3)) {
             Intent intent = new Intent(this, AuthActivity.class);
             startActivityForResult(intent, NYHelper.REQ_LOGIN);
         } else {

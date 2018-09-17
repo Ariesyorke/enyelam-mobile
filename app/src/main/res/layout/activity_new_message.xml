@@ -34,7 +34,7 @@
                     app:fontTextStyle="reguler"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="Send Message"
+                    android:text="Chat DC"
                     android:textColor="@color/colorWhite"
                     android:textSize="18sp" />
 
@@ -46,27 +46,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_margin="15dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Subject *"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textColor="@color/ny_black2"/>
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:layout_marginBottom="@dimen/padding">
 
-            <EditText
-                android:id="@+id/et_subject"
+            <LinearLayout
+                android:id="@+id/ll_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:layout_gravity="top|left"
-                android:enabled="true"
-                android:gravity="top|left"
-                android:textSize="12sp"
-                android:textColor="@color/dark_gray"
-                android:background="@drawable/ny_rectangle_white_border_grey_no_transparant"/>
+                android:visibility="gone"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Subject *"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/ny_black2"/>
+
+                <EditText
+                    android:id="@+id/et_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:padding="@dimen/padding"
+                    android:layout_gravity="top|left"
+                    android:singleLine="true"
+                    android:enabled="true"
+                    android:gravity="top|left"
+                    android:textSize="12sp"
+                    android:textColor="@color/dark_gray"
+                    android:background="@drawable/ny_rectangle_white_border_grey_no_transparant"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_category"
@@ -77,7 +88,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:text="Report Type"
                     android:textAllCaps="false"
                     android:textStyle="bold"
@@ -86,7 +97,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/padding"
                     android:background="@drawable/ny_rectangle_white_border_grey_no_transparant">
 
                     <Spinner
@@ -110,7 +121,41 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/padding"
+                android:text="Attachment"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@color/ny_black2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:orientation="horizontal"
+                android:background="@drawable/ny_rectangle_white_border_grey_no_transparant">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ny_rectangle_white_border_grey">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_margin="@dimen/padding_half"
+                        android:tint="@color/ny_black2"
+                        android:src="@drawable/ic_attach"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="@dimen/padding_half"
+                    android:gravity="center|left"
+                    android:text="Choose File..."/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
                 android:text="Message *"
                 android:textAllCaps="false"
                 android:textStyle="bold"
@@ -125,8 +170,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:padding="@dimen/padding"
                     android:layout_gravity="top|left"
                     android:gravity="top|left"
                     android:textSize="14sp"
@@ -137,7 +182,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:padding="10dp"
+                    android:padding="@dimen/padding"
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginRight="0dp"

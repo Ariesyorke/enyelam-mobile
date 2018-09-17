@@ -5,5 +5,6 @@
         android:id="@+id/msg_btn"
         android:icon="@drawable/ic_inbox"
         android:title="Message"
+        android:visible="false"
         app:showAsAction="ifRoom|withText" />
 </menu>

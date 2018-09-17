@@ -29,7 +29,7 @@
                 app:fontTextStyle="reguler"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="LIST INBOX"
+                android:text="Inbox"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
