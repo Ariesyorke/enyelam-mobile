@@ -504,10 +504,10 @@
                             android:layout_weight="1"
                             android:background="@drawable/ny_book"
                             android:gravity="center"
-                            android:paddingBottom="@dimen/padding"
-                            android:paddingLeft="@dimen/padding"
-                            android:paddingRight="@dimen/padding"
-                            android:paddingTop="@dimen/padding">
+                            android:paddingBottom="@dimen/padding_half"
+                            android:paddingLeft="@dimen/padding_half"
+                            android:paddingRight="@dimen/padding_half"
+                            android:paddingTop="@dimen/padding_half">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -519,7 +519,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding"
-                                android:text="SEND MESSAGE"
+                                android:text="Send Message"
                                 android:textColor="@color/colorWhite"
                                 app:fontTextStyle="bold" />
                         </LinearLayout>

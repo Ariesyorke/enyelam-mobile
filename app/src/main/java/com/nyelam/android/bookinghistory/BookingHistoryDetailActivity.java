@@ -660,9 +660,10 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         }else if(item.getItemId() == R.id.msg_btn){
             if(orderReturn != null){
                 Summary summary = orderReturn.getSummary();
+                Order order = summary.getOrder();
 
                 Intent intent = new Intent(BookingHistoryDetailActivity.this, NewMessageActivity.class);
-                intent.putExtra("title", summary.getDiveService().getName().toString() );
+                intent.putExtra("title", summary.getDiveService().getName().toString() + " #" + NYHelper.setMillisToDateMonth(order.getSchedule()) );
                 intent.putExtra("refId", idOrder);
                 intent.putExtra("type", "2");
                 startActivity(intent);

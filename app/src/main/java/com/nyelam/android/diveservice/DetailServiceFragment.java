@@ -178,16 +178,18 @@ public class DetailServiceFragment extends Fragment {
         inboxLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DiveService diveService = activity.getDiveService();
+                if (activity.getDiveService() != null){
+                    DiveService diveService = activity.getDiveService();
 
-                Log.i("title", diveService.getName().toString());
-                Log.i("refId", diveService.getId().toString());
+                    Log.i("title", diveService.getName().toString());
+                    Log.i("refId", diveService.getId().toString());
 
-                Intent intent = new Intent(getActivity(), NewMessageActivity.class);
-                intent.putExtra("title", diveService.getName().toString());
-                intent.putExtra("refId", diveService.getId().toString());
-                intent.putExtra("type", "1");
-                startActivity(intent);
+                    Intent intent = new Intent(getActivity(), NewMessageActivity.class);
+                    intent.putExtra("title", diveService.getName().toString());
+                    intent.putExtra("refId", diveService.getId().toString());
+                    intent.putExtra("type", "1");
+                    startActivity(intent);
+                }
             }
         });
     }
