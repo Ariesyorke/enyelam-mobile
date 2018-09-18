@@ -1,11 +1,7 @@
 package com.nyelam.android.data;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InboxData implements Parseable {
 
@@ -15,14 +11,14 @@ public class InboxData implements Parseable {
     private static String KEY_REF_ID = "ref_id";
     private static String KEY_STATUS = "status";
     private static String KEY_DATE = "date";
-    private static String KEY_INBOX_TYPE = "Inbox_type";
+    private static String KEY_INBOX_TYPE = "inbox_type";
 
     private int ticketId;
     private String subject;
     private String nama;
     private String refId;
     private String status;
-    private long date;
+    private String date;
     private String inboxType;
 
     public InboxData(){
@@ -30,7 +26,7 @@ public class InboxData implements Parseable {
     }
 
     public InboxData(int ticketId, String subject, String nama, String refId, String status
-            , long date, String inboxType){
+            , String date, String inboxType){
         this.ticketId = ticketId;
         this.subject = subject;
         this.nama = nama;
@@ -80,11 +76,11 @@ public class InboxData implements Parseable {
         this.status = status;
     }
 
-    public long getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(long date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -132,7 +128,7 @@ public class InboxData implements Parseable {
 
         try {
             if (!obj.isNull(KEY_DATE)) {
-                setDate(obj.getLong(KEY_DATE));
+                setDate(obj.getString(KEY_DATE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 

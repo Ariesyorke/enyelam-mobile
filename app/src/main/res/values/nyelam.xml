@@ -17,11 +17,11 @@
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
     <!-- DEVELOPMENT -->
-    <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
+    <string name="host_url">https://nyelam-adam.dantech.id/</string>
     <!--<string name="host_url">http://nyelam-yoga.dantech.id/</string>-->
 
     <!-- STAGING -->
-    <string name="host_url">https://nyelam.dantech.id/</string>
+    <!--<string name="host_url">https://nyelam.dantech.id/</string>-->
 
     <!-- API STAGING AND DEVELOPMENT -->
     <string name="api_path_login">api/user/login</string>
@@ -115,7 +115,8 @@
 
     <!--new-->
     <string name="api_path_voucher_code">api/order/voucher</string>
-
+    <string name="api_inbox_list">api/inbox/all</string>
+    <string name="api_inbox_detail">api/inbox/detail</string>
 
 
 
@@ -209,4 +210,5 @@
     <!--<string name="api_path_banner">master/banner</string>-->
 
     <!--<string name="api_path_voucher_code">order/voucher</string>-->
+    <!--<string name="api_inbox_list">api/inbox/all</string>-->
 </resources>

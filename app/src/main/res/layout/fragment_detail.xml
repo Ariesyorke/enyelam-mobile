@@ -110,15 +110,15 @@
                             android:layout_weight="1"
                             android:background="@drawable/ny_book"
                             android:gravity="center"
-                            android:paddingBottom="@dimen/padding_half"
+                            android:paddingBottom="@dimen/padding"
                             android:paddingLeft="@dimen/padding_half"
                             android:paddingRight="@dimen/padding_half"
-                            android:paddingTop="@dimen/padding_half">
+                            android:paddingTop="@dimen/padding">
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_inbox" />
+                                android:src="@drawable/tab_chat" />
 
                             <com.nyelam.android.view.font.NYTextView
                                 android:id="@+id/inbox_textView"

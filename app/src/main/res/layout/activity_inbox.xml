@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:background="@color/ny_grey1"
         android:layout_below="@+id/toolbar"
-        android:layout_above="@+id/book_now_container"
+        android:layout_above="@+id/ll_attachment"
         android:clipToPadding="false"
         android:divider="@null"/>
 
@@ -49,7 +49,40 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/book_now_container"
+        android:id="@+id/ll_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:padding="@dimen/padding"
+        android:layout_above="@+id/ll_bottom_chat"
+        android:background="@drawable/ny_rectangle_white_border_grey_no_transparant"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_cancel_attachment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_half"
+            android:layout_marginRight="@dimen/padding"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:background="@drawable/ny_rectangle_white_border_grey">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/crop__ic_cancel"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_attachment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/tertiary_text_size"
+            android:layout_gravity="center"
+            android:text="Choose File..."/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

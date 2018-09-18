@@ -78,6 +78,7 @@ public class InboxFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initInbox();
+        initControl();
     }
 
     private void initView(View view) {
@@ -87,8 +88,23 @@ public class InboxFragment extends Fragment {
     }
 
     private void initInbox(){
-        NYInboxRequest req = new NYInboxRequest(getContext());
-        spcMgr.execute(req, onCategoryRequest());
+        try {
+            NYInboxRequest req = new NYInboxRequest(getContext());
+            spcMgr.execute(req, onCategoryRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initControl() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                initInbox();
+            }
+        });
     }
 
     private RequestListener<InboxList> onCategoryRequest() {
@@ -97,19 +113,24 @@ public class InboxFragment extends Fragment {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 NYHelper.handleAPIException(getContext(), spiceException, null);
+
+                progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onRequestSuccess(InboxList inboxList) {
 
                 progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
 
                 //objects.addAll(inboxList.getInboxData());
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-                inboxAdapter = new InboxRecyclerViewAdapter(getContext(), inboxList.getInboxData());
-                recyclerView.setAdapter(inboxAdapter);
-                recyclerView.setVisibility(View.VISIBLE);
+                if(inboxList != null){
+                    inboxAdapter = new InboxRecyclerViewAdapter(getContext(), inboxList.getInboxData());
+                    recyclerView.setAdapter(inboxAdapter);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
         };
     }

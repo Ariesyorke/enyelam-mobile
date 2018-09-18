@@ -117,7 +117,7 @@
                     android:layout_weight="1"
                     app:tabItemPosition="inbox"
                     app:tabItemText="Inbox"
-                    app:tabSrcIcon="@drawable/ic_inbox"/>
+                    app:tabSrcIcon="@drawable/tab_chat"/>
 
                 <!--<com.nyelam.android.view.NYHomepageTabItemView-->
                 <!--android:id="@+id/socialmedia_tab"-->

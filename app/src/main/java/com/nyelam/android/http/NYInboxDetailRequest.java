@@ -1,28 +1,24 @@
 package com.nyelam.android.http;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.nyelam.android.R;
-import com.nyelam.android.data.DoShopList;
+import com.nyelam.android.data.InboxDetail;
 import com.nyelam.android.data.InboxList;
 import com.nyelam.android.dev.NYLog;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
+public class NYInboxDetailRequest extends NYBasicAuthRequest<InboxDetail> {
 
-public class NYInboxRequest extends NYBasicAuthRequest<InboxList> {
-
-    private static final String POST_PAGE = "page";
+    private static final String POST_TICKET_ID = "ticket_id";
     private String page = "1";
 
-    public NYInboxRequest(Context context) throws Exception{
-        super(InboxList.class, context, context.getResources().getString(R.string.api_inbox_list));
+    public NYInboxDetailRequest(Context context) throws Exception{
+        super(InboxList.class, context, context.getResources().getString(R.string.api_inbox_detail));
 
 //        if(!TextUtils.isEmpty(page)) {
-            addQuery(POST_PAGE, page);
+            addQuery(POST_TICKET_ID, page);
 //        }
     }
 
@@ -45,11 +41,10 @@ public class NYInboxRequest extends NYBasicAuthRequest<InboxList> {
     }*/
 
     @Override
-    protected InboxList onProcessSuccessData(JSONObject obj) throws Exception {
-        NYLog.e("JSONOBJCET " + obj);
-        InboxList inboxList = new InboxList();
-        inboxList.parse(obj);
-        return inboxList;
+    protected InboxDetail onProcessSuccessData(JSONObject obj) throws Exception {
+        InboxDetail inboxDetail = new InboxDetail();
+        inboxDetail.parse(obj);
+        return inboxDetail;
     }
 
 }

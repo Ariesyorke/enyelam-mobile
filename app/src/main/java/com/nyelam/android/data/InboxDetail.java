@@ -7,37 +7,26 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InboxDetail extends InboxData {
+public class InboxDetail implements Parseable {
 
-    private static String KEY_NEXT = "next";
-    private static String KEY_DATA = "data";
+    private static String KEY_DETAIL = "detail";
 
-    private String next;
-    private List<InboxDetailData> data;
+    private InboxDetailData dataInboxDetail;
 
     public InboxDetail(){
 
     }
 
-    public InboxDetail(String next, List<InboxDetailData> data){
-        this.next = next;
-        this.data = data;
+    public InboxDetail(InboxDetailData dataInboxDetail){
+        this.dataInboxDetail = dataInboxDetail;
     }
 
-    public String getNext() {
-        return next;
+    public InboxDetailData getDataInboxDetail() {
+        return dataInboxDetail;
     }
 
-    public void setNext(String next) {
-        this.next = next;
-    }
-
-    public List<InboxDetailData> getData() {
-        return data;
-    }
-
-    public void setData(List<InboxDetailData> data) {
-        this.data = data;
+    public void setDataInboxDetail(InboxDetailData dataInboxDetail) {
+        this.dataInboxDetail = dataInboxDetail;
     }
 
     @Override
@@ -45,14 +34,21 @@ public class InboxDetail extends InboxData {
         if (obj == null) return;
 
         try {
-            if (!obj.isNull(KEY_NEXT)) {
-                setNext(obj.getString(KEY_NEXT));
+            if (!obj.isNull(KEY_DETAIL)) {
+                dataInboxDetail = new InboxDetailData();
+                dataInboxDetail.parse(obj.getJSONObject(KEY_DETAIL));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        try {
-            if (!obj.isNull(KEY_DATA)) {
-                JSONArray array = obj.getJSONArray(KEY_DATA);
+        /*try {
+            if (!obj.isNull(KEY_NEXT)) {
+                setNext(obj.getString(KEY_NEXT));
+            }
+        } catch (JSONException e) {e.printStackTrace();}*/
+
+        /*try {
+            if (!obj.isNull(KEY_DETAIL)) {
+                JSONArray array = obj.getJSONArray(KEY_DETAIL);
                 if(array.length() > 0) {
                     for(int i = 0; i < array.length(); i++) {
                         if(data == null) {
@@ -65,6 +61,6 @@ public class InboxDetail extends InboxData {
                     }
                 }
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        } catch (JSONException e) {e.printStackTrace();}*/
     }
 }

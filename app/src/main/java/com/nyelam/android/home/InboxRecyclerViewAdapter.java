@@ -42,12 +42,13 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<InboxRecycler
     private List<InboxData> inboxData;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName, tvSubject;
+        public TextView tvName, tvSubject, tvIdTicket;
 
         public MyViewHolder(View view) {
             super(view);
             tvName = (TextView) view.findViewById(R.id.tv_name);
             tvSubject = (TextView) view.findViewById(R.id.tv_subject);
+            tvIdTicket = (TextView) view.findViewById(R.id.tv_id_ticket);
         }
     }
 
@@ -69,6 +70,7 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<InboxRecycler
         InboxData singleInbox = inboxData.get(position);
         holder.tvName.setText(singleInbox.getnama());
         holder.tvSubject.setText(singleInbox.getsubject());
+        holder.tvIdTicket.setText("#" + String.valueOf(singleInbox.getTicketId()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

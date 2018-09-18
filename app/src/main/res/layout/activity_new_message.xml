@@ -55,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
+                android:layout_marginTop="@dimen/padding"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
@@ -128,6 +129,7 @@
                 android:textColor="@color/ny_black2"/>
 
             <LinearLayout
+                android:id="@+id/ll_attachment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding"
@@ -145,6 +147,7 @@
                         android:src="@drawable/ic_attach"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/tv_attachment"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="@dimen/padding_half"
