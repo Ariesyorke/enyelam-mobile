@@ -2,6 +2,7 @@ package com.nyelam.android.home;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,10 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopList;
+import com.nyelam.android.data.InboxData;
 import com.nyelam.android.data.InboxList;
 import com.nyelam.android.data.ModuleList;
 import com.nyelam.android.doshop.DoShopAdapter;
@@ -32,6 +35,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -45,7 +49,7 @@ public class InboxFragment extends Fragment {
     private ProgressBar progressBar;
 
     private InboxRecyclerViewAdapter inboxAdapter;
-    private ArrayList<Object> objects = new ArrayList<>();
+    private List<InboxData> inboxDataList = new ArrayList<InboxData>();
 
     public InboxFragment() {
         // Required empty public constructor
@@ -77,8 +81,8 @@ public class InboxFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        initInbox();
         initControl();
+        initInbox(1);
     }
 
     private void initView(View view) {
@@ -87,22 +91,45 @@ public class InboxFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
     }
 
-    private void initInbox(){
+    private void initInbox(int page){
         try {
-            NYInboxRequest req = new NYInboxRequest(getContext());
+            NYInboxRequest req = new NYInboxRequest(getContext(), page);
             spcMgr.execute(req, onCategoryRequest());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private void initNext(int page){
+        try {
+            NYInboxRequest req = new NYInboxRequest(getContext(), page);
+            spcMgr.execute(req, onCategoryRequestNext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initControl() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        inboxAdapter = new InboxRecyclerViewAdapter(recyclerView, getContext());
+        recyclerView.setAdapter(inboxAdapter);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
             public void onRefresh()
             {
-                initInbox();
+                // do something
+                inboxDataList.clear();
+                inboxAdapter.clear();
+                inboxAdapter.notifyDataSetChanged();
+                initInbox(1);
+
+                // after refresh is done, remember to call the following code
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);  // This hides the spinner
+                }
             }
         });
     }
@@ -115,21 +142,114 @@ public class InboxFragment extends Fragment {
                 NYHelper.handleAPIException(getContext(), spiceException, null);
 
                 progressBar.setVisibility(View.GONE);
-                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                    inboxDataList.clear();
+                    inboxAdapter.clear();
+                    inboxAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
-            public void onRequestSuccess(InboxList inboxList) {
+            public void onRequestSuccess(final InboxList inboxList) {
 
                 progressBar.setVisibility(View.GONE);
                 if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
 
                 //objects.addAll(inboxList.getInboxData());
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                if(inboxList != null){
-                    inboxAdapter = new InboxRecyclerViewAdapter(getContext(), inboxList.getInboxData());
-                    recyclerView.setAdapter(inboxAdapter);
+                //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                if(inboxList != null && inboxList.getInboxData() != null){
+                    inboxDataList.clear();
+                    inboxDataList.addAll(inboxList.getInboxData());
+
+                    inboxAdapter.clear();
+                    inboxAdapter.addResults(inboxDataList);
+                    inboxAdapter.notifyDataSetChanged();
+                    inboxAdapter.checkScroll();
+
                     recyclerView.setVisibility(View.VISIBLE);
+
+                    //set load more listener for the RecyclerView adapter
+                    inboxAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            if (inboxList.getNext() != null) {
+                                inboxAdapter.addScroll();
+                                inboxAdapter.removeScroll();
+                                recyclerView.post(new Runnable() {
+                                    public void run() {
+                                        inboxAdapter.notifyItemInserted(inboxDataList.size());
+                                    }
+                                });
+                                initNext(Integer.parseInt(inboxList.getNext()));
+                            } else {
+                                Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else{
+
+                }
+            }
+        };
+    }
+
+    private RequestListener<InboxList> onCategoryRequestNext() {
+        return new RequestListener<InboxList>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                NYHelper.handleAPIException(getContext(), spiceException, null);
+
+                progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                    inboxDataList.clear();
+                    inboxAdapter.clear();
+                    inboxAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onRequestSuccess(final InboxList inboxList) {
+
+                progressBar.setVisibility(View.GONE);
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+
+                if(inboxList != null && inboxList.getInboxData() != null){
+                    inboxDataList.addAll(inboxList.getInboxData());
+                    inboxAdapter.clear();
+                    inboxAdapter.addResults(inboxDataList);
+                    inboxAdapter.notifyDataSetChanged();
+                    inboxAdapter.setLoaded();
+                    //set load more listener for the RecyclerView adapter
+                    inboxAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            if(inboxDataList != null && inboxDataList.size() != 0){
+                                if (inboxList.getNext() != null) {
+                                    inboxAdapter.addScroll();
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            inboxAdapter.removeScroll();
+                                            recyclerView.post(new Runnable() {
+                                                public void run() {
+                                                    inboxAdapter.notifyItemInserted(inboxDataList.size());
+                                                }
+                                            });
+                                            initNext(Integer.parseInt(inboxList.getNext()));
+                                        }
+                                    }, 5000);
+                                } else {
+                                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+                }else{
+                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
                 }
             }
         };

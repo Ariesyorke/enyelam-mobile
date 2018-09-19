@@ -16,13 +16,12 @@ import java.io.InputStream;
 public class NYInboxRequest extends NYBasicAuthRequest<InboxList> {
 
     private static final String POST_PAGE = "page";
-    private String page = "1";
 
-    public NYInboxRequest(Context context) throws Exception{
+    public NYInboxRequest(Context context, int page) throws Exception{
         super(InboxList.class, context, context.getResources().getString(R.string.api_inbox_list));
 
 //        if(!TextUtils.isEmpty(page)) {
-            addQuery(POST_PAGE, page);
+            addQuery(POST_PAGE, String.valueOf(page));
 //        }
     }
 
