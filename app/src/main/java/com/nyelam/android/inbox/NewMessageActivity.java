@@ -1,6 +1,7 @@
 package com.nyelam.android.inbox;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,10 +21,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.danzoye.lib.util.GalleryCameraInvoker;
+import com.midtrans.sdk.uikit.utilities.SdkUIFlowUtil;
 import com.nyelam.android.R;
+import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYInboxDetailRequest;
+import com.nyelam.android.http.NYInboxPostRequest;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,12 +48,16 @@ public class NewMessageActivity extends AppCompatActivity implements
     private static final int REQ_CODE_CAMERA = 100;
     private static final int REQ_CODE_GALLERY = 101;
 
+    protected SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+
     private Context context;
     private Toolbar toolbar;
     private Spinner sCategory;
     private TextView tvTitle;
     private TextView tvAttachment;
+    private TextView btnSubmit;
     private EditText etSubject;
+    private EditText etMessage;
     private LinearLayout llCategory;
     private LinearLayout llAttachment;
 
@@ -53,10 +66,13 @@ public class NewMessageActivity extends AppCompatActivity implements
 
     String title = "";
     String type = "";
+    String refId = "";
 
     private File file;
     private GalleryCameraInvoker invoker;
     private boolean isPickingPhoto;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +90,17 @@ public class NewMessageActivity extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvTitle = (TextView) findViewById(R.id.title_textView);
         tvAttachment = (TextView) findViewById(R.id.tv_attachment);
+        btnSubmit = (TextView) findViewById(R.id.btn_submit);
         etSubject = (EditText) findViewById(R.id.et_subject);
+        etMessage = (EditText) findViewById(R.id.et_message);
         sCategory = (Spinner) findViewById(R.id.s_category);
         llCategory = (LinearLayout) findViewById(R.id.ll_category);
         llAttachment = (LinearLayout) findViewById(R.id.ll_attachment);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+
     }
 
     private void initCheckExtras() {
@@ -88,7 +111,9 @@ public class NewMessageActivity extends AppCompatActivity implements
                 llCategory.setVisibility(View.VISIBLE);
                 tvTitle.setText("Contact Us");
             } else {
-
+                if(extras.getString("refId") != null){
+                    refId = extras.getString("refId");
+                }
             }
 
             if(extras.getString("title") != null){
@@ -139,6 +164,18 @@ public class NewMessageActivity extends AppCompatActivity implements
             }
         });
 
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = etMessage.getText().toString();
+                if (TextUtils.isEmpty(message)) {
+                    Toast.makeText(NewMessageActivity.this, "Message can't be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                postInbox();
+            }
+        });
+
         //Attachment Init
         llAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +184,41 @@ public class NewMessageActivity extends AppCompatActivity implements
                 onChangePhoto();
             }
         });
+    }
+
+    private void postInbox(){
+        try {
+            progressDialog.show();
+            NYInboxPostRequest req = new NYInboxPostRequest(this, etSubject.getText().toString(), etMessage.getText().toString(), file, type, refId);
+            spcMgr.execute(req, onPostInboxRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<Boolean> onPostInboxRequest() {
+        return new RequestListener<Boolean>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                NYHelper.handleAPIException(context, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(final Boolean success) {
+                /*if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }*/
+                if(success){
+                    SdkUIFlowUtil.showToast(NewMessageActivity.this, "Successfully created");
+                }else{
+                    SdkUIFlowUtil.showToast(NewMessageActivity.this, "Send failed, please try again later.");
+                }
+            }
+        };
     }
 
     protected void onChangePhoto() {
@@ -301,5 +373,17 @@ public class NewMessageActivity extends AppCompatActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        spcMgr.start(NewMessageActivity.this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 }

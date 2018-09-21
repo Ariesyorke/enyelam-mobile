@@ -1,6 +1,7 @@
 package com.nyelam.android.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.nyelam.android.R;
 import com.nyelam.android.data.InboxDetail;
@@ -12,14 +13,13 @@ import org.json.JSONObject;
 public class NYInboxDetailRequest extends NYBasicAuthRequest<InboxDetail> {
 
     private static final String POST_TICKET_ID = "ticket_id";
-    private String page = "1";
 
-    public NYInboxDetailRequest(Context context) throws Exception{
+    public NYInboxDetailRequest(Context context, int page) throws Exception{
         super(InboxList.class, context, context.getResources().getString(R.string.api_inbox_detail));
 
-//        if(!TextUtils.isEmpty(page)) {
-            addQuery(POST_TICKET_ID, page);
-//        }
+        if(!TextUtils.isEmpty(String.valueOf(page))) {
+            addQuery(POST_TICKET_ID, String.valueOf(page));
+        }
     }
 
     /*@Override

@@ -98,7 +98,7 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemInboxViewHolder) {
-            InboxData inboxData = inboxDatas.get(position);
+            final InboxData inboxData = inboxDatas.get(position);
             ItemInboxViewHolder userViewHolder = (ItemInboxViewHolder) holder;
             userViewHolder.tvIdTicket.setText("# " + String.valueOf(inboxData.getTicketId()));
             userViewHolder.tvName.setText(inboxData.getnama());
@@ -113,6 +113,9 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, InboxActivity.class);
+                    intent.putExtra("ticketid", String.valueOf(inboxData.getTicketId()));
+                    intent.putExtra("title", String.valueOf(inboxData.getsubject()));
+                    intent.putExtra("status", String.valueOf(inboxData.getStatus()));
                     context.startActivity(intent);
                 }
             });
@@ -136,18 +139,20 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         isLoading = false;
     }
 
-    public void checkScroll(){
-
-    }
-
     public void addScroll(){
-        inboxDatas.add(null);
-        notifyItemInserted(inboxDatas.size() - 1);
+        this.inboxDatas.add(null);
+        notifyItemInserted(inboxDatas.size()-1);
     }
 
     public void removeScroll(){
-        inboxDatas.remove(inboxDatas.size() - 1);
-        notifyItemRemoved(inboxDatas.size());
+        if(this.inboxDatas.size() != 0){
+            for(int i=0; i<inboxDatas.size(); i++){
+                if(inboxDatas.get(i) == null){
+                    this.inboxDatas.remove(inboxDatas.size()-1);
+                    notifyItemRemoved(inboxDatas.size());
+                }
+            }
+        }
     }
 
     public void addResult(InboxData inboxList) {

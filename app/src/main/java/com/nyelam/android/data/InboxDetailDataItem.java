@@ -3,34 +3,37 @@ package com.nyelam.android.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.Date;
+
 public class InboxDetailDataItem extends InboxData {
 
     private static String KEY_ID = "id";
     private static String KEY_USER_ID = "user_id";
-    private static String KEY_NAMA = "user_name";
+    private static String KEY_NAMA_DETAIL = "user_name";
     private static String KEY_SUBJECT_DETAIL = "subject_detail";
     private static String KEY_ATTACHMENT = "attachment";
-    private static String KEY_DATE = "date";
+    private static String KEY_DATE_DETAIL = "date";
 
     private int id;
     private String userId;
-    private String userName;
+    private String userNameDetail;
     private String subjectDetail;
     private String attachment;
-    private String date;
+    private Date dateDetail;
 
     public InboxDetailDataItem(){
 
     }
 
-    public InboxDetailDataItem(int id, String userId, String userName, String subjectDetail, String attachment
-            , String date){
+    public InboxDetailDataItem(int id, String userId, String userNameDetail, String subjectDetail, String attachment
+            , Date dateDetail){
         this.id = id;
         this.userId = userId;
-        this.userName = userName;
+        this.userNameDetail = userNameDetail;
         this.subjectDetail = subjectDetail;
         this.attachment = attachment;
-        this.date = date;
+        this.dateDetail = dateDetail;
     }
 
     public int getId() {
@@ -49,12 +52,12 @@ public class InboxDetailDataItem extends InboxData {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserNameDetail() {
+        return userNameDetail;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserNameDetail(String userNameDetail) {
+        this.userNameDetail = userNameDetail;
     }
 
     public String getSubjectDetail() {
@@ -73,13 +76,12 @@ public class InboxDetailDataItem extends InboxData {
         this.attachment = attachment;
     }
 
-    @Override
-    public String getDate() {
-        return date;
+    public Date getDateDetail() {
+        return dateDetail;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDateDetail(Date dateDetail) {
+        this.dateDetail = dateDetail;
     }
 
     @Override
@@ -99,8 +101,8 @@ public class InboxDetailDataItem extends InboxData {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_NAMA)) {
-                setUserName(obj.getString(KEY_NAMA));
+            if (!obj.isNull(KEY_NAMA_DETAIL)) {
+                setUserNameDetail(obj.getString(KEY_NAMA_DETAIL));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -112,15 +114,29 @@ public class InboxDetailDataItem extends InboxData {
 
         try {
             if (!obj.isNull(KEY_ATTACHMENT)) {
-                setStatus(obj.getString(KEY_ATTACHMENT));
+                setAttachment(obj.getString(KEY_ATTACHMENT));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        try {
-            if (!obj.isNull(KEY_DATE)) {
-                setDate(obj.getString(KEY_DATE));
+        /*try {
+            if(!obj.isNull(KEY_ATTACHMENT)) {
+                String filePath = obj.getString(KEY_ATTACHMENT);
+                attachment = new File(filePath);
+                setAttachment(attachment);
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+
+        try {
+            if(!obj.isNull(KEY_DATE_DETAIL)) {
+                long timestamp = Long.parseLong(obj.getString(KEY_DATE_DETAIL));
+                dateDetail = new Date(timestamp * 1000);
+                setDateDetail(dateDetail);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 }

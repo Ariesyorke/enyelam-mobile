@@ -50,6 +50,7 @@ public class InboxFragment extends Fragment {
 
     private InboxRecyclerViewAdapter inboxAdapter;
     private List<InboxData> inboxDataList = new ArrayList<InboxData>();
+    private boolean triggered = false;
 
     public InboxFragment() {
         // Required empty public constructor
@@ -101,11 +102,14 @@ public class InboxFragment extends Fragment {
     }
 
     private void initNext(int page){
-        try {
-            NYInboxRequest req = new NYInboxRequest(getContext(), page);
-            spcMgr.execute(req, onCategoryRequestNext());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(triggered){
+            try {
+                triggered = false;
+                NYInboxRequest req = new NYInboxRequest(getContext(), page);
+                spcMgr.execute(req, onCategoryRequestNext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -159,13 +163,30 @@ public class InboxFragment extends Fragment {
                 //objects.addAll(inboxList.getInboxData());
                 //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 if(inboxList != null && inboxList.getInboxData() != null){
+
                     inboxDataList.clear();
+
+                    List<InboxData> inboxListResult = inboxList.getInboxData();
+                    for(int i = 0; i < inboxListResult.size(); i++){
+                        boolean duplicateItem = false;
+                        InboxData inboxData = inboxListResult.get(i);
+                        if(inboxDataList.size() != 0){
+                            for(int j =0; j < inboxDataList.size(); j++){
+                                if(inboxDataList.get(j).getTicketId() == inboxData.getTicketId()){
+                                    duplicateItem = true;
+                                }
+                            }
+                            if(!duplicateItem){
+                                inboxDataList.add(inboxData);
+                            }
+                        }
+                    }
+
                     inboxDataList.addAll(inboxList.getInboxData());
 
                     inboxAdapter.clear();
                     inboxAdapter.addResults(inboxDataList);
                     inboxAdapter.notifyDataSetChanged();
-                    inboxAdapter.checkScroll();
 
                     recyclerView.setVisibility(View.VISIBLE);
 
@@ -175,13 +196,18 @@ public class InboxFragment extends Fragment {
                         public void onLoadMore() {
                             if (inboxList.getNext() != null) {
                                 inboxAdapter.addScroll();
-                                inboxAdapter.removeScroll();
-                                recyclerView.post(new Runnable() {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
                                     public void run() {
-                                        inboxAdapter.notifyItemInserted(inboxDataList.size());
+                                        // after refresh is done, remember to call the following code
+                                        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                                            swipeRefreshLayout.setRefreshing(false);  // This hides the spinner
+                                        }
+                                        inboxAdapter.removeScroll();
+                                        triggered = true;
+                                        initNext(Integer.parseInt(inboxList.getNext()));
                                     }
-                                });
-                                initNext(Integer.parseInt(inboxList.getNext()));
+                                }, 2000);
                             } else {
                                 Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
                             }
@@ -218,7 +244,21 @@ public class InboxFragment extends Fragment {
                 if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
 
                 if(inboxList != null && inboxList.getInboxData() != null){
-                    inboxDataList.addAll(inboxList.getInboxData());
+                    List<InboxData> inboxListResult = inboxList.getInboxData();
+                    for(int i = 0; i < inboxListResult.size(); i++){
+                        boolean duplicateItem = false;
+                        InboxData inboxData = inboxListResult.get(i);
+                        if(inboxDataList.size() != 0){
+                            for(int j =0; j < inboxDataList.size(); j++){
+                                if(inboxDataList.get(j).getTicketId() == inboxData.getTicketId()){
+                                    duplicateItem = true;
+                                }
+                            }
+                            if(!duplicateItem){
+                                inboxDataList.add(inboxData);
+                            }
+                        }
+                    }
                     inboxAdapter.clear();
                     inboxAdapter.addResults(inboxDataList);
                     inboxAdapter.notifyDataSetChanged();
@@ -233,15 +273,15 @@ public class InboxFragment extends Fragment {
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+                                            // after refresh is done, remember to call the following code
+                                            if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                                                swipeRefreshLayout.setRefreshing(false);  // This hides the spinner
+                                            }
                                             inboxAdapter.removeScroll();
-                                            recyclerView.post(new Runnable() {
-                                                public void run() {
-                                                    inboxAdapter.notifyItemInserted(inboxDataList.size());
-                                                }
-                                            });
+                                            triggered = true;
                                             initNext(Integer.parseInt(inboxList.getNext()));
                                         }
-                                    }, 5000);
+                                    }, 2000);
                                 } else {
                                     Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
                                 }
@@ -293,7 +333,7 @@ public class InboxFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //loadDoTrip();
+        //initInbox();
         //loadBanners();
     }
 }

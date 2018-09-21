@@ -3,6 +3,8 @@ package com.nyelam.android.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 public class InboxData implements Parseable {
 
     private static String KEY_TICKET_ID = "ticket_id";
@@ -18,7 +20,7 @@ public class InboxData implements Parseable {
     private String nama;
     private String refId;
     private String status;
-    private String date;
+    private Date date;
     private String inboxType;
 
     public InboxData(){
@@ -26,7 +28,7 @@ public class InboxData implements Parseable {
     }
 
     public InboxData(int ticketId, String subject, String nama, String refId, String status
-            , String date, String inboxType){
+            , Date date, String inboxType){
         this.ticketId = ticketId;
         this.subject = subject;
         this.nama = nama;
@@ -76,11 +78,11 @@ public class InboxData implements Parseable {
         this.status = status;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -127,10 +129,14 @@ public class InboxData implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_DATE)) {
-                setDate(obj.getString(KEY_DATE));
+            if(!obj.isNull(KEY_DATE)) {
+                long timestamp = obj.getLong(KEY_DATE);
+                date = new Date(timestamp * 1000);
+                setDate(date);
             }
-        } catch (JSONException e) {e.printStackTrace();}
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
             if (!obj.isNull(KEY_INBOX_TYPE)) {

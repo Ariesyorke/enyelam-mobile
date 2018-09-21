@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -47,6 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -675,5 +677,10 @@ public class NYHelper {
             return null;
         }
         return json;
+    }
+
+    public static Boolean isToday(Date date){
+        long timeStampDate = date.getTime();
+        return DateUtils.isToday(timeStampDate);
     }
 }
