@@ -27,7 +27,7 @@ public class NYVoucherCartRequest extends NYBasicAuthRequest<Cart> {
 
     public NYVoucherCartRequest(Context context, String cartToken, String voucherCode) throws Exception{
         //asal ambil string di path banner
-        super(Cart.class, context, context.getResources().getString(R.string.api_path_banner));
+        super(Cart.class, context, context.getResources().getString(R.string.api_path_voucher_code));
 
         if (NYHelper.isStringNotEmpty(cartToken)){
             addQuery(POST_CART_TOKEN, cartToken);
