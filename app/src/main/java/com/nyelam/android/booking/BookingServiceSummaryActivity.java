@@ -707,34 +707,24 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
 
             if (intent.hasExtra(NYHelper.EQUIPMENT_RENT)){
-
-                NYLog.e("equip extras exist");
-
                 EquipmentRentAddedList equipTemp = null;
 
                 try {
-
-                    NYLog.e("equip extras init JSONArray");
-
                     JSONArray arrayCat = new JSONArray(extras.getString(NYHelper.EQUIPMENT_RENT));
                     equipTemp = new EquipmentRentAddedList();
                     equipTemp.parse(arrayCat);
-
-
                     equipmentRentAddedList = equipTemp.getList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-            } else {
-                NYLog.e("equip extras parse NULL");
             }
-
         }
         serviceFeeLinearLayout.removeAllViews();
         if(cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()) addAddedEquipmentRents(cartReturn.getEquipmentRents());
-        if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) addVoucher(cartReturn.getCart().getVoucher());
         if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
+        if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) addVoucher(cartReturn.getCart().getVoucher());
+
 
     }
 
@@ -1624,8 +1614,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     }
 
                     if(cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()) addAddedEquipmentRents(cartReturn.getEquipmentRents());
-                    if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) addVoucher(cartReturn.getCart().getVoucher());
                     if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
+                    if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) addVoucher(cartReturn.getCart().getVoucher());
+
                 }
 
             }
@@ -1710,7 +1701,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         if (requestCode == paypalRequestCode) {
             if (resultCode == RESULT_OK) {
                 PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                NYLog.e("PAYPAL PAYMENT JSON OBJECT PAY ID : " + confirmation.getProofOfPayment().getPaymentId());
                 try {
                     progressDialog.show();
                     note = noteEditText.getText().toString().trim();
