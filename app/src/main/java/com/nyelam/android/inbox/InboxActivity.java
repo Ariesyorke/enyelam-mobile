@@ -80,6 +80,7 @@ public class InboxActivity extends AppCompatActivity implements
 
     private List<InboxDetailDataItem> listDataInbox;
     private List<ChatMessage> listMessage = new ArrayList<>();
+    private List<ChatMessage> listMessageNext = new ArrayList<>();
     private ChatMessageAdapter mAdapter;
 
     private File file;
@@ -90,6 +91,7 @@ public class InboxActivity extends AppCompatActivity implements
     private String ticketId = "";
     private String title = "";
     private String status = "";
+    private boolean triggered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +103,7 @@ public class InboxActivity extends AppCompatActivity implements
         initToolbar();
         initCheckExtras();
         initControl();
-        initChat(Integer.parseInt(ticketId));
+        initChat(Integer.parseInt(ticketId), 1);
     }
 
     private void initView() {
@@ -171,10 +173,14 @@ public class InboxActivity extends AppCompatActivity implements
             public void onRefresh()
             {
                 // do something
-                //inboxDataList.clear();
+                listDataInbox.clear();
+                listMessage.clear();
+                listMessageNext.clear();
                 mAdapter.clear();
+                mAdapter.removeScroll();
+                recyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
-                initChat(Integer.parseInt(ticketId));
+                initChat(Integer.parseInt(ticketId), 1);
 
                 // after refresh is done, remember to call the following code
                 if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
@@ -213,13 +219,26 @@ public class InboxActivity extends AppCompatActivity implements
         });
     }
 
-    private void initChat(int page){
+    private void initChat(int ticketId, int page){
         try {
             progressDialog.show();
-            NYInboxDetailRequest req = new NYInboxDetailRequest(InboxActivity.this, page);
+            NYInboxDetailRequest req = new NYInboxDetailRequest(context, ticketId, page);
             spcMgr.execute(req, onChatRequest());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void initNext(int ticketId, int page){
+        if(triggered){
+            try {
+                triggered = false;
+                progressDialog.show();
+                NYInboxDetailRequest req = new NYInboxDetailRequest(context, ticketId, page);
+                spcMgr.execute(req, onChatRequestNext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -235,7 +254,7 @@ public class InboxActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onRequestSuccess(InboxDetail inboxDetail) {
+            public void onRequestSuccess(final InboxDetail inboxDetail) {
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -284,19 +303,148 @@ public class InboxActivity extends AppCompatActivity implements
                     Collections.reverse(listMessage);
                     mAdapter.addResult(listMessage);
                     mAdapter.notifyDataSetChanged();
+
+                    //set load more listener for the RecyclerView adapter
+                    mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            if (inboxDetail.getDataInboxDetail().getNext() != null) {
+                                mAdapter.addScroll();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // after refresh is done, remember to call the following code
+                                        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                                            swipeRefreshLayout.setRefreshing(false);  // This hides the spinner
+                                        }
+                                        mAdapter.removeScroll();
+                                        triggered = true;
+                                        recyclerView.setVisibility(View.GONE);
+                                        initNext(Integer.parseInt(ticketId), Integer.parseInt(inboxDetail.getDataInboxDetail().getNext()));
+                                    }
+                                }, 2000);
+                            } else {
+                                Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    /*if (listMessage.size() > 2){
+                        recyclerView.smoothScrollToPosition(listMessage.size() -2);
+                    }*/
+
+                }
+            }
+        };
+    }
+
+    private RequestListener<InboxDetail> onChatRequestNext() {
+        return new RequestListener<InboxDetail>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                NYHelper.handleAPIException(InboxActivity.this, spiceException, null);
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onRequestSuccess(final InboxDetail inboxDetail) {
+                if(!listMessage.isEmpty()){
+                    Collections.reverse(listMessage);
+                    listMessageNext.addAll(listMessage);
+                }else{
+                    Collections.reverse(listMessageNext);
                 }
 
-/*
-                progressBar.setVisibility(View.GONE);
-                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+                if(listMessage != null) {
+                    listMessage.clear();
+                }
 
-                //objects.addAll(inboxList.getInboxData());
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                if(inboxList != null){
-                    inboxAdapter = new InboxRecyclerViewAdapter(getContext(), inboxList.getInboxData());
-                    recyclerView.setAdapter(inboxAdapter);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }*/
+                if(inboxDetail.getDataInboxDetail().getDataInboxDetailItem() != null){
+                    listDataInbox = inboxDetail.getDataInboxDetail().getDataInboxDetailItem();
+                    for(int i=0; i < listDataInbox.size(); i++){
+                        if(listDataInbox.get(i) != null){
+
+                            String userName = null;
+                            String userId = null;
+                            String subjectDetail = null;
+                            Boolean mine = false;
+                            Boolean image = false;
+                            String attachment = null;
+                            Date dateInbox = null;
+
+                            LoginStorage loginStorage = new LoginStorage(context);
+
+                            if(loginStorage.isUserLogin()) {
+                                userId = loginStorage.user.getUserId();
+                            }
+                            if(listDataInbox.get(i).getSubjectDetail() != null ){
+                                subjectDetail = listDataInbox.get(i).getSubjectDetail();
+                            }
+                            if(listDataInbox.get(i).getUserId().equalsIgnoreCase(userId)){
+                                mine = true;
+                            }
+                            if(listDataInbox.get(i).getUserNameDetail() != null ){
+                                userName = listDataInbox.get(i).getUserNameDetail();
+                            }
+                            if(listDataInbox.get(i).getAttachment() != null ){
+                                image = true;
+                                attachment = listDataInbox.get(i).getAttachment();
+                            }
+                            if(listDataInbox.get(i).getDateDetail() != null ){
+                                dateInbox = listDataInbox.get(i).getDateDetail();
+                            }
+
+                            ChatMessage cm = new ChatMessage(userName, subjectDetail, mine, image, attachment, dateInbox);
+                            listMessage.add(cm);
+                        }
+                    }
+
+                    listMessageNext.addAll(listMessage);
+                    Collections.reverse(listMessageNext);
+                    mAdapter.clear();
+                    mAdapter.addResult(listMessageNext);
+                    mAdapter.setLoaded();
+                    mAdapter.notifyDataSetChanged();
+
+                    //set load more listener for the RecyclerView adapter
+                    mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            if (inboxDetail.getDataInboxDetail().getNext() != null) {
+                                mAdapter.addScroll();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // after refresh is done, remember to call the following code
+                                        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                                            swipeRefreshLayout.setRefreshing(false);  // This hides the spinner
+                                        }
+                                        mAdapter.removeScroll();
+                                        triggered = true;
+                                        initNext(Integer.parseInt(ticketId), Integer.parseInt(inboxDetail.getDataInboxDetail().getNext()));
+                                    }
+                                }, 2000);
+                            } else {
+                                Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    /*if (listMessageNext.size() > 2){
+                        recyclerView.smoothScrollToPosition(listMessageNext.size() -2);
+                    }*/
+                }else {
+                    Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
+                }
+
+                recyclerView.setVisibility(View.VISIBLE);
+
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
         };
     }
@@ -314,16 +462,11 @@ public class InboxActivity extends AppCompatActivity implements
     private void sendMessage(String ticketId, String message, File file) {
         try {
             progressDialog.show();
-            Log.i("FILEIMAGE", String.valueOf(file));
             NYInboxAddRequest req = new NYInboxAddRequest(InboxActivity.this, ticketId, message, file);
             spcMgr.execute(req, onAddChatRequest());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /*ChatMessage chatMessage = new ChatMessage(message, true, false);
-        mAdapter.add(chatMessage);
-
-        mimicOtherMessage(message);*/
     }
 
     private RequestListener<Boolean> onAddChatRequest() {
@@ -346,7 +489,7 @@ public class InboxActivity extends AppCompatActivity implements
                     deleteAttachment();
                     mAdapter.clear();
                     mAdapter.notifyDataSetChanged();
-                    initChat(Integer.parseInt(ticketId));
+                    initChat(Integer.parseInt(ticketId), 1);
                 }else{
                     SdkUIFlowUtil.showToast(InboxActivity.this, "Gagal Mengirim Pesan");
                 }

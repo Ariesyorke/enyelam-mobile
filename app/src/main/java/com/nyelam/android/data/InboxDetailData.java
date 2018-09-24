@@ -10,15 +10,18 @@ import java.util.List;
 public class InboxDetailData extends InboxData {
 
     private static String KEY_DATA = "data";
+    private static String KEY_NEXT = "next";
 
     private List<InboxDetailDataItem> dataInboxDetailItem;
+    private String next;
 
     public InboxDetailData(){
 
     }
 
-    public InboxDetailData(List<InboxDetailDataItem> dataInboxDetailItem){
+    public InboxDetailData(List<InboxDetailDataItem> dataInboxDetailItem, String next){
         this.dataInboxDetailItem = dataInboxDetailItem;
+        this.next = next;
     }
 
     public List<InboxDetailDataItem> getDataInboxDetailItem() {
@@ -27,6 +30,14 @@ public class InboxDetailData extends InboxData {
 
     public void setDataInboxDetailItem(List<InboxDetailDataItem> dataInboxDetailItem) {
         this.dataInboxDetailItem = dataInboxDetailItem;
+    }
+
+    public String getNext() {
+        return next;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
     }
 
     @Override
@@ -50,5 +61,10 @@ public class InboxDetailData extends InboxData {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+        try {
+            if (!obj.isNull(KEY_NEXT)) {
+                setNext(obj.getString(KEY_NEXT));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 }

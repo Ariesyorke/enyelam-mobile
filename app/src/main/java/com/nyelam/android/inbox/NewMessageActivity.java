@@ -67,6 +67,7 @@ public class NewMessageActivity extends AppCompatActivity implements
     String title = "";
     String type = "";
     String refId = "";
+    private boolean postInbox = false;
 
     private File file;
     private GalleryCameraInvoker invoker;
@@ -156,7 +157,6 @@ public class NewMessageActivity extends AppCompatActivity implements
                 }else{
                     type = "5";
                 }
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
@@ -172,6 +172,7 @@ public class NewMessageActivity extends AppCompatActivity implements
                     Toast.makeText(NewMessageActivity.this, "Message can't be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                postInbox = true;
                 postInbox();
             }
         });
@@ -188,9 +189,11 @@ public class NewMessageActivity extends AppCompatActivity implements
 
     private void postInbox(){
         try {
-            progressDialog.show();
-            NYInboxPostRequest req = new NYInboxPostRequest(this, etSubject.getText().toString(), etMessage.getText().toString(), file, type, refId);
-            spcMgr.execute(req, onPostInboxRequest());
+            if(postInbox){
+                progressDialog.show();
+                NYInboxPostRequest req = new NYInboxPostRequest(this, etSubject.getText().toString(), etMessage.getText().toString(), file, type, refId);
+                spcMgr.execute(req, onPostInboxRequest());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -208,12 +211,14 @@ public class NewMessageActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onRequestSuccess(final Boolean success) {
-                /*if (progressDialog != null && progressDialog.isShowing()) {
+            public void onRequestSuccess(Boolean success) {
+                postInbox = false;
+                if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                }*/
+                }
                 if(success){
                     SdkUIFlowUtil.showToast(NewMessageActivity.this, "Successfully created");
+                    finish();
                 }else{
                     SdkUIFlowUtil.showToast(NewMessageActivity.this, "Send failed, please try again later.");
                 }

@@ -128,6 +128,8 @@ public class InboxFragment extends Fragment {
                 inboxDataList.clear();
                 inboxAdapter.clear();
                 inboxAdapter.notifyDataSetChanged();
+                recyclerView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
                 initInbox(1);
 
                 // after refresh is done, remember to call the following code
@@ -333,7 +335,9 @@ public class InboxFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //initInbox();
-        //loadBanners();
+        //refresh list Inbox
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        initInbox(1);
     }
 }

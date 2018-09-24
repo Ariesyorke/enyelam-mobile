@@ -43,7 +43,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int MY_MESSAGE = 0, OTHER_MESSAGE = 1, ISLOADING = 2;
 
     private boolean isLoading;
-    private int visibleThreshold = 5;
+    private int visibleThreshold = 10;
     private int lastVisibleItem, totalItemCount;
 
     private OnLoadMoreListener onLoadMoreListener;
@@ -69,6 +69,10 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             }
         });
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.onLoadMoreListener = mOnLoadMoreListener;
     }
 
     @Override
@@ -187,7 +191,6 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     SimpleDateFormat sdf = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
                     messageHolder.tvTime.setText(sdf.format(chatMessage.getDate()));
                 }
-
             }
 
             messageHolder.chatMessageView.setOnClickListener(new View.OnClickListener() {

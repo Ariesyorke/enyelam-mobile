@@ -64,11 +64,7 @@ public class NYInboxPostRequest extends NYBasicAuthRequest<Boolean> {
     @Override
     protected Boolean onProcessSuccessData(JSONObject obj) throws Exception {
         NYLog.e("JSONOBJCET " + obj);
-        Boolean success = false;
-        if(obj.getInt("status") == 1){
-            success = true;
-        }
-        return success;
+        return obj.getBoolean("success");
     }
 
 }
