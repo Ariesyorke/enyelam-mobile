@@ -32,6 +32,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.inbox.InboxActivity;
 import com.nyelam.android.view.font.NYStrikethroughTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,14 +101,31 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         if (holder instanceof ItemInboxViewHolder) {
             final InboxData inboxData = inboxDatas.get(position);
             ItemInboxViewHolder userViewHolder = (ItemInboxViewHolder) holder;
-            userViewHolder.tvIdTicket.setText("# " + String.valueOf(inboxData.getTicketId()));
-            userViewHolder.tvName.setText(inboxData.getnama());
+            userViewHolder.tvIdTicket.setText("#" + String.valueOf(inboxData.getTicketId()));
             userViewHolder.tvSubject.setText(inboxData.getsubject());
-            userViewHolder.tvStatus.setText(inboxData.getStatus());
-            if(inboxData.getStatus().toLowerCase().equals("open")){
-                userViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.ny_green1));
-            }else{
-                userViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.red));
+            if(inboxData.getnama() != null){
+                userViewHolder.tvName.setText(inboxData.getnama());
+            }
+            if(inboxData.getStatus() != null){
+                userViewHolder.tvStatus.setText(inboxData.getStatus());
+            }
+            if(inboxData.getDate() != null) {
+                if(NYHelper.isToday(inboxData.getDate())){
+                    String DISPLAY_DATE_FORMAT = "h:mm a";
+                    SimpleDateFormat sdf = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    userViewHolder.tvDate.setText(sdf.format(inboxData.getDate()));
+                }else {
+                    String DISPLAY_DATE_FORMAT = "dd/MM/yyy";
+                    SimpleDateFormat sdf = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+                    userViewHolder.tvDate.setText(sdf.format(inboxData.getDate()));
+                }
+            }
+            if(inboxData.getStatus() != null){
+                if(inboxData.getStatus().toLowerCase().equals("open")){
+                    userViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.ny_green1));
+                }else{
+                    userViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.red));
+                }
             }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -185,12 +203,14 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         public TextView tvName;
         public TextView tvSubject;
         public TextView tvStatus;
+        public TextView tvDate;
         public ItemInboxViewHolder(View view) {
             super(view);
             tvIdTicket = (TextView) view.findViewById(R.id.tv_id_ticket);
             tvName = (TextView) view.findViewById(R.id.tv_name);
             tvSubject = (TextView) view.findViewById(R.id.tv_subject);
             tvStatus = (TextView) view.findViewById(R.id.tv_status);
+            tvDate = (TextView) view.findViewById(R.id.tv_date);
         }
     }
 }

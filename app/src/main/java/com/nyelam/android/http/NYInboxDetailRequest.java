@@ -13,12 +13,17 @@ import org.json.JSONObject;
 public class NYInboxDetailRequest extends NYBasicAuthRequest<InboxDetail> {
 
     private static final String POST_TICKET_ID = "ticket_id";
+    private static final String POST_PAGE = "page";
 
-    public NYInboxDetailRequest(Context context, int page) throws Exception{
+    public NYInboxDetailRequest(Context context, int ticketId, int page) throws Exception{
         super(InboxList.class, context, context.getResources().getString(R.string.api_inbox_detail));
 
+        if(!TextUtils.isEmpty(String.valueOf(ticketId))) {
+            addQuery(POST_TICKET_ID, String.valueOf(ticketId));
+        }
+
         if(!TextUtils.isEmpty(String.valueOf(page))) {
-            addQuery(POST_TICKET_ID, String.valueOf(page));
+            addQuery(POST_PAGE, String.valueOf(page));
         }
     }
 
