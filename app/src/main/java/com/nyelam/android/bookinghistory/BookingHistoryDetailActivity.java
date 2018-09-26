@@ -174,11 +174,11 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         sendReviewTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
+                //onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
                 // TODO: sementara hide review
-//                Intent intent = new Intent(BookingHistoryDetailActivity.this, RatingActivity.class);
-//                intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
-//                startActivity(intent);
+                Intent intent = new Intent(BookingHistoryDetailActivity.this, RatingActivity.class);
+                intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
+                startActivity(intent);
             }
         });
 
@@ -208,9 +208,9 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         confirmLinearLayout = (LinearLayout) findViewById(R.id.confirm_linearLayout);
         additionalLinearLayout = (LinearLayout) findViewById(R.id.additional_linearLayout);
 
-//        reviewLinearLayout = (LinearLayout) findViewById(R.id.review_linearLayout);
-//        submitRatingBar = (ScaleRatingBar) findViewById(R.id.submitRatingBar);
-//        reviewEditText = (EditText) findViewById(R.id.review_editText);
+        reviewLinearLayout = (LinearLayout) findViewById(R.id.review_linearLayout);
+        submitRatingBar = (ScaleRatingBar) findViewById(R.id.submitRatingBar);
+        reviewEditText = (EditText) findViewById(R.id.review_editText);
         sendReviewTextView = (TextView) findViewById(R.id.send_review_textView);
 
 
@@ -398,12 +398,18 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 Order order = summary.getOrder();
                 String status = order.getStatus().toString();
                 if(status.equals("denied") || status.equals("cancel")){
-                    itemMsg.setVisible(false);
+                    if(itemMsg != null){
+                        itemMsg.setVisible(false);
+                    }
                 }else{
-                    itemMsg.setVisible(true);
+                    if(itemMsg != null){
+                        itemMsg.setVisible(true);
+                    }
                 }
                 if(isPast){
-                    itemMsg.setVisible(false);
+                    if(itemMsg != null){
+                        itemMsg.setVisible(false);
+                    }
                 }
             }
 
@@ -505,9 +511,9 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     }
 
                     // TODO: sementara hide review
-//                    if (isPast && order.getStatus().equalsIgnoreCase("accepted")){
-//                        reviewLinearLayout.setVisibility(View.VISIBLE);
-//                    }
+                    if (isPast && order.getStatus().equalsIgnoreCase("accepted")){
+                        reviewLinearLayout.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 if (NYHelper.isStringNotEmpty(order.getOrderId()))

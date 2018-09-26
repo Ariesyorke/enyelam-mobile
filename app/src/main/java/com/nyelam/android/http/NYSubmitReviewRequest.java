@@ -23,7 +23,7 @@ public class NYSubmitReviewRequest extends NYBasicAuthRequest<Boolean> {
     private static final String POST_REVIEW = "review";
 
     public NYSubmitReviewRequest(Context context, String serviceId, String rating, String review) throws Exception {
-        super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_review_submit));
+        super(Boolean.class, context, context.getResources().getString(R.string.api_path_review_submit));
 
         if(!TextUtils.isEmpty(serviceId)) {
             addQuery(POST_SERVICE_ID, serviceId);

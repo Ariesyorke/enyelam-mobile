@@ -126,16 +126,18 @@ public class RatingActivity extends AppCompatActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 progressDialog.dismiss();
+                //Toast.makeText(RatingActivity.this, "GAGAL POST", Toast.LENGTH_SHORT).show();
                 NYHelper.handleAPIException(RatingActivity.this, spiceException, null);
+
             }
 
             @Override
             public void onRequestSuccess(Boolean success) {
                 progressDialog.dismiss();
-                Intent intent = new Intent(RatingActivity.this, BookingHistoryDetailActivity.class);
+                /*Intent intent = new Intent(RatingActivity.this, BookingHistoryDetailActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 if (orderReturn != null) intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
-                startActivity(intent);
+                startActivity(intent);*/
                 finish();
             }
         };

@@ -487,7 +487,12 @@ public class InboxActivity extends AppCompatActivity implements
                 }*/
                 if(success){
                     deleteAttachment();
+                    listDataInbox.clear();
+                    listMessage.clear();
+                    listMessageNext.clear();
                     mAdapter.clear();
+                    mAdapter.removeScroll();
+                    recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                     initChat(Integer.parseInt(ticketId), 1);
                 }else{

@@ -408,7 +408,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                         ((DetailServiceDiveCenterFragment) fragment).setDiveCenter();
 
                     } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
-                        //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+                        ((DetailServiceReviewFragment) fragment).setReviewList();
                     }
                     initBanner();
                 } else {
@@ -538,7 +539,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 1;
+        private static final int FRAGMENT_COUNT = 2;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 
