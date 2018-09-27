@@ -138,6 +138,7 @@ public class NYHelper {
     public static final String ID = "id";
     public static final String ACCESS_TOKEN = "access_token";
     public static final String PROFILE_PICTURE = "profile_picture";
+    public static final String VOUCHER = "voucher";
     public static final String RESULT = "result";
 
     public static final String SORT_BY = "sort_by";

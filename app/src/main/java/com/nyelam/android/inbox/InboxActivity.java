@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,7 @@ public class InboxActivity extends AppCompatActivity implements
     private Context context;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView tvTitle;
     private EditText textEt;
@@ -114,6 +116,7 @@ public class InboxActivity extends AppCompatActivity implements
         tvAttachment = (TextView) findViewById(R.id.tv_attachment);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         attachImageView = (ImageView) findViewById(R.id.attach_imageView);
         sendImageView = (ImageView) findViewById(R.id.send_imageView);
         textEt = (EditText) findViewById(R.id.text_et);
@@ -180,6 +183,7 @@ public class InboxActivity extends AppCompatActivity implements
                 mAdapter.removeScroll();
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
+				progressBar.setVisibility(View.VISIBLE);
                 initChat(Integer.parseInt(ticketId), 1);
 
                 // after refresh is done, remember to call the following code
@@ -221,7 +225,7 @@ public class InboxActivity extends AppCompatActivity implements
 
     private void initChat(int ticketId, int page){
         try {
-            progressDialog.show();
+            //progressDialog.show();
             NYInboxDetailRequest req = new NYInboxDetailRequest(context, ticketId, page);
             spcMgr.execute(req, onChatRequest());
         } catch (Exception e) {
@@ -233,7 +237,7 @@ public class InboxActivity extends AppCompatActivity implements
         if(triggered){
             try {
                 triggered = false;
-                progressDialog.show();
+                //progressDialog.show();
                 NYInboxDetailRequest req = new NYInboxDetailRequest(context, ticketId, page);
                 spcMgr.execute(req, onChatRequestNext());
             } catch (Exception e) {
@@ -248,16 +252,18 @@ public class InboxActivity extends AppCompatActivity implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 NYHelper.handleAPIException(InboxActivity.this, spiceException, null);
-                if (progressDialog != null && progressDialog.isShowing()) {
+                /*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                }
+                }*/
+				progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onRequestSuccess(final InboxDetail inboxDetail) {
-                if (progressDialog != null && progressDialog.isShowing()) {
+                /*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                }
+                }*/
+				progressBar.setVisibility(View.GONE);
                 if(listMessage != null) {
                     listMessage.clear();
                 }
@@ -268,6 +274,7 @@ public class InboxActivity extends AppCompatActivity implements
 
                             String userName = null;
                             String userId = null;
+                            int ids = 0;
                             String subjectDetail = null;
                             Boolean mine = false;
                             Boolean image = false;
@@ -278,6 +285,9 @@ public class InboxActivity extends AppCompatActivity implements
 
                             if(loginStorage.isUserLogin()) {
                                 userId = loginStorage.user.getUserId();
+                            }
+                            if(listDataInbox.get(i).getId() != 0 ){
+                                ids = listDataInbox.get(i).getId();
                             }
                             if(listDataInbox.get(i).getSubjectDetail() != null ){
                                 subjectDetail = listDataInbox.get(i).getSubjectDetail();
@@ -296,7 +306,7 @@ public class InboxActivity extends AppCompatActivity implements
                                 dateInbox = listDataInbox.get(i).getDateDetail();
                             }
 
-                            ChatMessage cm = new ChatMessage(userName, subjectDetail, mine, image, attachment, dateInbox);
+                            ChatMessage cm = new ChatMessage(ids, userName, subjectDetail, mine, image, attachment, dateInbox);
                             listMessage.add(cm);
                         }
                     }
@@ -320,6 +330,7 @@ public class InboxActivity extends AppCompatActivity implements
                                         mAdapter.removeScroll();
                                         triggered = true;
                                         recyclerView.setVisibility(View.GONE);
+										progressBar.setVisibility(View.VISIBLE);
                                         initNext(Integer.parseInt(ticketId), Integer.parseInt(inboxDetail.getDataInboxDetail().getNext()));
                                     }
                                 }, 2000);
@@ -329,6 +340,7 @@ public class InboxActivity extends AppCompatActivity implements
                         }
                     });
 
+                    recyclerView.smoothScrollToPosition(listMessage.size());
                     /*if (listMessage.size() > 2){
                         recyclerView.smoothScrollToPosition(listMessage.size() -2);
                     }*/
@@ -344,13 +356,15 @@ public class InboxActivity extends AppCompatActivity implements
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 NYHelper.handleAPIException(InboxActivity.this, spiceException, null);
-                if (progressDialog != null && progressDialog.isShowing()) {
+                /*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                }
+                }*/
+				progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onRequestSuccess(final InboxDetail inboxDetail) {
+
                 if(!listMessage.isEmpty()){
                     Collections.reverse(listMessage);
                     listMessageNext.addAll(listMessage);
@@ -369,6 +383,7 @@ public class InboxActivity extends AppCompatActivity implements
 
                             String userName = null;
                             String userId = null;
+                            int ids = 0;
                             String subjectDetail = null;
                             Boolean mine = false;
                             Boolean image = false;
@@ -386,6 +401,9 @@ public class InboxActivity extends AppCompatActivity implements
                             if(listDataInbox.get(i).getUserId().equalsIgnoreCase(userId)){
                                 mine = true;
                             }
+                            if(listDataInbox.get(i).getId() != 0 ){
+                                ids = listDataInbox.get(i).getId();
+                            }
                             if(listDataInbox.get(i).getUserNameDetail() != null ){
                                 userName = listDataInbox.get(i).getUserNameDetail();
                             }
@@ -397,12 +415,28 @@ public class InboxActivity extends AppCompatActivity implements
                                 dateInbox = listDataInbox.get(i).getDateDetail();
                             }
 
-                            ChatMessage cm = new ChatMessage(userName, subjectDetail, mine, image, attachment, dateInbox);
+                            ChatMessage cm = new ChatMessage(ids, userName, subjectDetail, mine, image, attachment, dateInbox);
                             listMessage.add(cm);
                         }
                     }
 
-                    listMessageNext.addAll(listMessage);
+                    for(int j = 0; j < listMessage.size(); j++){
+                        boolean duplicateItem = false;
+                        ChatMessage chatMessage = listMessage.get(j);
+                        if(listMessageNext.size() != 0){
+                            for(int k =0; k < listMessageNext.size(); k++){
+                                if(listMessageNext.get(j).getId() == chatMessage.getId()){
+                                    duplicateItem = true;
+                                }
+                            }
+                            if(!duplicateItem){
+                                listMessageNext.add(chatMessage);
+                            }
+                        }
+                    }
+
+                    listMessage.clear();
+                    //listMessageNext.addAll(listMessage);
                     Collections.reverse(listMessageNext);
                     mAdapter.clear();
                     mAdapter.addResult(listMessageNext);
@@ -424,6 +458,8 @@ public class InboxActivity extends AppCompatActivity implements
                                         }
                                         mAdapter.removeScroll();
                                         triggered = true;
+										recyclerView.setVisibility(View.GONE);
+										progressBar.setVisibility(View.VISIBLE);
                                         initNext(Integer.parseInt(ticketId), Integer.parseInt(inboxDetail.getDataInboxDetail().getNext()));
                                     }
                                 }, 2000);
@@ -441,10 +477,11 @@ public class InboxActivity extends AppCompatActivity implements
                 }
 
                 recyclerView.setVisibility(View.VISIBLE);
-
-                if (progressDialog != null && progressDialog.isShowing()) {
+                recyclerView.smoothScrollToPosition(listMessageNext.size());
+				/*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                }
+                }*/
+				progressBar.setVisibility(View.GONE);
             }
         };
     }
@@ -482,9 +519,9 @@ public class InboxActivity extends AppCompatActivity implements
 
             @Override
             public void onRequestSuccess(final Boolean success) {
-                /*if (progressDialog != null && progressDialog.isShowing()) {
+                if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                }*/
+                }
                 if(success){
                     deleteAttachment();
                     listDataInbox.clear();

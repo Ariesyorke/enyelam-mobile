@@ -101,6 +101,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private String paymentType = "1"; // 1= bank transfer 2 = midtrans (credit), 3 (VA), 4 paypal
     private String paymentMethod = null; // 1 = virtual account dan 2 = credit card
     private String note;
+    private String voucher;
     private List<Participant> participantList = new ArrayList<>();
     private BookingContact bookingContact;
     //private String cartToken;
@@ -151,6 +152,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
     private void initControl() {
 
+        voucherEditText.setText(voucher);
+
         changeContactTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +167,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                intent.putExtra(NYHelper.VOUCHER, voucherEditText.getText().toString().trim());
                 if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
                     intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
                 }
@@ -440,6 +444,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             if (intent.hasExtra(NYHelper.PAYMENT_TYPE)) paymentType = intent.getStringExtra(NYHelper.PAYMENT_TYPE);
 
             if (intent.hasExtra(NYHelper.PAYMENT_METHOD)) paymentMethod = intent.getStringExtra(NYHelper.PAYMENT_METHOD);
+
+            if (intent.hasExtra(NYHelper.VOUCHER)) voucher = intent.getStringExtra(NYHelper.VOUCHER);
 
             if (intent.hasExtra(NYHelper.DIVER)){
                 diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
@@ -842,6 +848,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString().trim());
                     intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
                     intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
+                    intent.putExtra(NYHelper.VOUCHER, voucherEditText.getText().toString().trim());
                     if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
                         intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
                     }
@@ -867,6 +874,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
                     intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
                     intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
+                    intent.putExtra(NYHelper.VOUCHER, voucherEditText.getText().toString().trim());
                     if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
                         intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
                     }
@@ -879,7 +887,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 public void onClick(View v) {
                     hideKeyboard(BookingServiceSummaryActivity.this);
                     String orderId = cartReturn.getCartToken();
-                    String voucher = voucherEditText.getText().toString();
+                    voucher = voucherEditText.getText().toString();
                     getVoucher(orderId,voucher);
                 }
             });

@@ -391,4 +391,10 @@ public class NewMessageActivity extends AppCompatActivity implements
         super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initCheckExtras();
+    }
 }
