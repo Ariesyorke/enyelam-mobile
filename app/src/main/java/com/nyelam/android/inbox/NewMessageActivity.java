@@ -216,12 +216,13 @@ public class NewMessageActivity extends AppCompatActivity implements
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                if(success){
-                    SdkUIFlowUtil.showToast(NewMessageActivity.this, "Successfully created");
-                    finish();
+                SdkUIFlowUtil.showToast(NewMessageActivity.this, "Successfully created");
+                finish();
+                /*if(success){
+
                 }else{
                     SdkUIFlowUtil.showToast(NewMessageActivity.this, "Send failed, please try again later.");
-                }
+                }*/
             }
         };
     }

@@ -131,7 +131,6 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (chatMessage.getImageFile() != null) {
                 Picasso.get().load(chatMessage.getImageFile()).placeholder(R.drawable.example_pic).noFade().into(messageHolder.ivImage);
                 messageHolder.ivImage.setVisibility(View.VISIBLE);
-
                 /*//SET IMAGE
                 final NYApplication application = (NYApplication) mContext.getApplicationContext();
                 Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);
