@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled = true
-        versionCode 86
-        versionName '0.8.4'
+        versionCode 87
+        versionName '0.8.5'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -104,6 +104,7 @@ dependencies {
     //implementation 'com.biao:pulltorefresh:1.0.0-beta3'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'me.biubiubiu.justifytext:library:1.1'
+    implementation 'com.github.stfalcon:frescoimageviewer:0.1.0'
     //    implementation 'com.github.jkwiecien:EasyImage:1.3.1'
     implementation 'com.github.techery:properratingbar:0.0.5'
     implementation 'me.himanshusoni.chatmessageview:chat-message-view:1.0.7'

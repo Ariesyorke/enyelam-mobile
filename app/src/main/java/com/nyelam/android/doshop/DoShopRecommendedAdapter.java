@@ -1,5 +1,7 @@
 package com.nyelam.android.doshop;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,10 @@ import java.util.List;
 
 public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecommendedAdapter.MyViewHolder> {
     private List<DoShopProduct> data = new ArrayList<>();
+    private Context context;
 
-    public DoShopRecommendedAdapter(List<DoShopProduct> data) {
+    public DoShopRecommendedAdapter(Context contexts, List<DoShopProduct> data) {
+        this.context = contexts;
         this.data = data;
     }
 
@@ -33,6 +37,13 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
         //holder.image.setImageResource(data.get(position).getImage());
         //holder.title.setText(data.get(position).getHeader());
         //holder.description.setText(data.get(position).getSubHeader());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AddToCartActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

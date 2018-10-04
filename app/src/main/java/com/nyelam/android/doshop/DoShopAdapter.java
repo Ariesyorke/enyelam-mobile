@@ -83,7 +83,7 @@ public class DoShopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void recommendedView(RecommendedViewHolder holder) {
-        DoShopRecommendedAdapter adapter = new DoShopRecommendedAdapter(doShopListModule.getRecommended());
+        DoShopRecommendedAdapter adapter = new DoShopRecommendedAdapter(context, doShopListModule.getRecommended());
         holder.recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         holder.recyclerView.setAdapter(adapter);
     }

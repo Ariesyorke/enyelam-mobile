@@ -9,14 +9,13 @@
     card_view:cardElevation="4dp"
     card_view:cardMaxElevation="4dp"
     card_view:cardCornerRadius="@dimen/padding_half"
-    android:layout_margin="5dp"
+    android:layout_margin="2dp"
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/activity_vertical_margin">
+        android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/image_holder"
@@ -58,21 +57,24 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin">
 
             <com.nyelam.android.view.font.NYTextView
-                card_view:fontTextStyle="light"
+                card_view:fontTextStyle="reguler"
                 android:id="@+id/dive_center_name_textView"
-                android:text="Dive Center"
+                android:text="Salvimar One Free Diving"
                 android:textSize="14dp"
-                android:textColor="@color/ny_black2"
+                android:layout_marginTop="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:textColor="@color/ny_black3"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <com.nyelam.android.view.font.NYStrikethroughTextView
                 android:visibility="visible"
                 android:id="@+id/price_strikethrough_textView"
                 android:text="Rp 1.231.000"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/ny_black2"
@@ -84,7 +86,7 @@
                 card_view:fontTextStyle="semiBold"
                 android:id="@+id/price_textView"
                 android:text="Rp 822.300,-"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textColor="@color/ny_orange"
                 android:layout_gravity="center"
                 android:gravity="center"

@@ -12,7 +12,7 @@
         android:id="@+id/image_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="1dp">
+        android:padding="2dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -32,9 +32,12 @@
                 android:text="finds, masks and snorkels "
                 android:textColor="@color/colorWhite"
                 android:textAllCaps="true"
-                android:textSize="10sp"
+                android:textSize="@dimen/tertiary_text_size"
                 android:textStyle="bold"
                 android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

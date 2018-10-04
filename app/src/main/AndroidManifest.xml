@@ -188,7 +188,8 @@
             android:name=".onboarding.IntroActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".inbox.InboxActivity" />
-        <activity android:name=".inbox.NewMessageActivity"></activity>
+        <activity android:name=".inbox.NewMessageActivity" />
+        <activity android:name=".doshop.AddToCartActivity"></activity>
     </application>
 
 </manifest>

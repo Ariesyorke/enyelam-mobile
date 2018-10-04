@@ -2,6 +2,7 @@ package com.nyelam.android.inbox;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,7 +27,11 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.InboxRecyclerViewAdapter;
 import com.nyelam.android.home.OnLoadMoreListener;
 import com.squareup.picasso.Picasso;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -112,7 +117,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MessageHolder) {
-            ChatMessage chatMessage = mMessages.get(position);
+            final ChatMessage chatMessage = mMessages.get(position);
             final MessageHolder messageHolder = (MessageHolder) holder;
             if (chatMessage.isImage()) {
                 messageHolder.ivImage.setVisibility(View.VISIBLE);
@@ -131,6 +136,22 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (chatMessage.getImageFile() != null) {
                 Picasso.get().load(chatMessage.getImageFile()).placeholder(R.drawable.example_pic).noFade().into(messageHolder.ivImage);
                 messageHolder.ivImage.setVisibility(View.VISIBLE);
+                final String[] imgeFile = {
+                        chatMessage.getImageFile()
+                };
+//                final int ids = messageHolder.ivImage ;
+                messageHolder.ivImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        /*URL url = new URL(chatMessage.getImageFile());
+                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());*/
+
+                        /*new ImageViewer.Builder(getApplicationContext(), imgeFile)
+                                .setStartPosition(ids)
+                                .setBackgroundColorRes(R.color.colorPrimaryDark)
+                                .show();*/
+                    }
+                });
                 /*//SET IMAGE
                 final NYApplication application = (NYApplication) mContext.getApplicationContext();
                 Bitmap b = application.getCache("drawable://"+R.drawable.bg_placeholder);

@@ -5,4 +5,10 @@
         <item>Issue App</item>
         <item>Payment</item>
     </string-array>
+    <string-array name="item_size">
+        <item>L</item>
+        <item>M</item>
+        <item>S</item>
+    </string-array>
+
 </resources>

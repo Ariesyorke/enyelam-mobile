@@ -13,9 +13,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:textSize="16sp"
-        android:layout_marginTop="@dimen/padding"
+        android:layout_marginTop="@dimen/padding_half"
         android:text="@string/recommended_for_you"
         android:textColor="@color/ny_black1" />
 
