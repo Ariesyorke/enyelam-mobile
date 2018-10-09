@@ -70,7 +70,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     private boolean mProtectFromPagerChange = false;
     private String[] tabMenu;
     private TextView title;
-    //private View viewTabManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         initControl();
         initPermission();
 
-        //TODO IF TRANSACTION COMPLETED
         Intent intent = getIntent();
         if (intent.hasExtra(NYHelper.TRANSACTION_COMPLETED)) {
             if (intent.hasExtra(NYHelper.ORDER)) {
@@ -212,7 +210,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
     }
 
     public static class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 4;
+        private static final int FRAGMENT_COUNT = 3;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 
@@ -246,13 +244,15 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
             } else if (position == 1) {
                 TransactionFragment fragment = TransactionFragment.newInstance();
                 return fragment;
-            } else if (position == 2) {
-                InboxFragment fragment = InboxFragment.newInstance();
-                return fragment;
+            }
+//            else if (position == 2) {
+//                InboxFragment fragment = InboxFragment.newInstance();
+//                return fragment;
 //            else if (position == 2) {
 //                SocmedFragment fragment = SocmedFragment.newInstance();
 //                return fragment;
-            } else {
+//            }
+            else {
                 MyAccountFragment fragment = MyAccountFragment.newInstance();
                 return fragment;
             }

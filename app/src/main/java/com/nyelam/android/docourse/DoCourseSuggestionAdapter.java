@@ -124,18 +124,6 @@ public class DoCourseSuggestionAdapter extends RecyclerView.Adapter<RecyclerView
             totalDayOnSiteTextView = (TextView) itemView.findViewById(R.id.day_onsite_textView);
             ratingTextView = (TextView) itemView.findViewById(R.id.rating_textView);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
-
-
-            /*if (isHorizontal){
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int width = displayMetrics.widthPixels;
-
-                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
-                        cardView.getLayoutParams();
-                layoutParams.width = width*3/4;
-            }*/
-
             this.itemView = itemView;
         }
 

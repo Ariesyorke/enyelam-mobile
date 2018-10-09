@@ -307,15 +307,7 @@ public class DoCourseActivity extends BasicActivity implements
         associationLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
-                //setDivingLicense(!divingLicenseSwitch.isChecked());
                 NYCustomDialog dialog = new NYCustomDialog();
-
-                /*Organization organization = new Organization();
-                organization.setId("1");
-                organization.setName("CMAS");
-                organizations.add(organization);*/
-
                 dialog.showAssocitaionDialog(DoCourseActivity.this, organizations.getList(), organization);
             }
         });
@@ -323,13 +315,6 @@ public class DoCourseActivity extends BasicActivity implements
         divingLicenseLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //divingLicenseSwitch.setChecked(!divingLicenseSwitch.isChecked());
-                //setDivingLicense(!divingLicenseSwitch.isChecked());
-
-                /*LicenseType licenseType = new LicenseType();
-                licenseType.setId("1");
-                licenseType.setName("CMAS");
-                licenseTypes.add(licenseType);*/
                 if (licenseTypes != null && licenseTypes.getList() != null && licenseTypes.getList().size() > 0){
                     NYCustomDialog dialog = new NYCustomDialog();
                     dialog.showLicenseTypeDialog(DoCourseActivity.this, licenseTypes.getList(), licenseType);
@@ -420,7 +405,6 @@ public class DoCourseActivity extends BasicActivity implements
                         startActivity(intent);
 
                     } else if (type.equals("5") || type.equals("6")){
-
                         intent = new Intent(getApplicationContext(), DoCourseResultActivity.class);
                         DiveCenter diveCenter = new DiveCenter();
                         diveCenter.setId(diverId);
@@ -472,10 +456,6 @@ public class DoCourseActivity extends BasicActivity implements
         return new RequestListener<OrganizationList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                /*diveServiceSuggestionAdapter.clear();
-                diveServiceSuggestionAdapter.notifyDataSetChanged();
-                suggestionLinearLayout.setVisibility(View.GONE);*/
-                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
                 setAssociationProgressBar(false);
             }
 
@@ -483,13 +463,8 @@ public class DoCourseActivity extends BasicActivity implements
             public void onRequestSuccess(OrganizationList results) {
 
                 organizations = results;
-               // organization = organizations.getList().get(0);
 
                 setAssociationProgressBar(false);
-
-//                if (organization != null && NYHelper.isStringNotEmpty(organization.getName()))
-//                    associationTextView.setText(organization.getName());
-//                getLicenseTypeRequest();
             }
         };
     }
@@ -505,10 +480,6 @@ public class DoCourseActivity extends BasicActivity implements
         return new RequestListener<LicenseTypeList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                /*diveServiceSuggestionAdapter.clear();
-                diveServiceSuggestionAdapter.notifyDataSetChanged();
-                suggestionLinearLayout.setVisibility(View.GONE);*/
-                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
                 setDivingLicenseProgressBar(false);
                 divingLicenseTextView.setText("");
                 licenseType = null;
@@ -517,16 +488,6 @@ public class DoCourseActivity extends BasicActivity implements
             @Override
             public void onRequestSuccess(LicenseTypeList results) {
                 licenseTypes = results;
-
-//                if (licenseTypes != null && licenseTypes.getList() != null && licenseTypes.getList().size() > 0){
-//                    licenseType = licenseTypes.getList().get(0);
-//
-//                    if (licenseType != null && NYHelper.isStringNotEmpty(licenseType.getName()))
-//                        divingLicenseTextView.setText(licenseType.getName());
-//                } else {
-//                    divingLicenseTextView.setText("");
-//                    licenseType = null;
-//                }
 
                 setDivingLicenseProgressBar(false);
 
@@ -762,9 +723,14 @@ public class DoCourseActivity extends BasicActivity implements
                     keyword = searchService.getName();
                     type = String.valueOf(searchService.getType());
                     keywordTextView.setText(keyword);
-                    //scrollView.fullScroll(ScrollView.FOCUS_UP);
-                    //Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-
+                    if(searchService.getLicenseType() != null) {
+                        licenseType = searchService.getLicenseType();
+                        divingLicenseTextView.setText(licenseType.getName());
+                    }
+                    if(searchService.getOrganization() != null) {
+                        organization = searchService.getOrganization();
+                        associationTextView.setText(organization.getName());
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

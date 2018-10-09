@@ -81,17 +81,10 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_course_result);
-        //Toast.makeText(this, "DoCourse 1", Toast.LENGTH_SHORT).show();
         initView();
         initExtra();
         initAdapter();
-        //initRequest();
-        //Toast.makeText(this, "DoCourse 2", Toast.LENGTH_SHORT).show();
-        // TODO: hapus ini
-        //requestPriceRange(false);
         initRequest(false);
-
-        //initToolbar();
         initControl();
         initToolbar(true);
     }
@@ -107,25 +100,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
 
-                // TODO: load more ada bug !
-
                 initRequest(false);
-                /*if (loading) {
-                    if (dy > 0) //check for scroll down
-                    {
-                        visibleItemCount = layoutManager.getChildCount();
-                        totalItemCount = layoutManager.getItemCount();
-                        pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                            loading = false;
-
-                            Log.v("...", " Reached Last Item");
-                            loadMoreVideos(searchVideos);
-                        }
-
-                    }
-                }*/
             }
         });
 
@@ -150,33 +125,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                 startActivity(intent);
             }
         });
-
-        /*filterImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoDiveSearchResultActivity.this, FilterListServiceActivity.class);
-                *//*intent.putExtra(NYHelper.ACTIVITY, this.getClass().getName());
-                intent.putExtra(NYHelper.KEYWORD, keyword);
-                intent.putExtra(NYHelper.ID_DIVER, diverId);
-                intent.putExtra(NYHelper.DIVER, diver);
-                intent.putExtra(NYHelper.CERTIFICATE, certificate);
-                intent.putExtra(NYHelper.SCHEDULE, date);
-                intent.putExtra(NYHelper.TYPE, type);
-                intent.putExtra(NYHelper.IS_ECO_TRIP, ecotrip);
-                intent.putStringArrayListExtra(NYHelper.CATEGORIES, categories);*//*
-                //startActivity(intent);
-                // TODO: kirim parameter ke filter
-                intent.putExtra(NYHelper.CATEGORIES, categoryList.toString());
-                intent.putExtra(NYHelper.FACILITIES, stateFacilityList.toString());
-                intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
-                intent.putExtra(NYHelper.SORT_BY, sortingType);
-                intent.putExtra(NYHelper.MIN_PRICE, minPrice);
-                intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, minPriceDefault);
-                intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
-                intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, maxPriceDefault);
-                startActivityForResult(intent, mRequestCode);
-            }
-        });*/
 
         filterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,7 +233,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                 }
             }
 
-            titleTextView.setText(NYHelper.setMillisToDate(Long.valueOf(date))+", "+diver+" pax (s)");
+            titleTextView.setText(NYHelper.setMillisToMonthAndYear(Long.valueOf(date)));
         }
 
     }
@@ -309,7 +257,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
         noResultTextView = (TextView) findViewById(R.id.no_result_textView);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         searchImageView = (ImageView) findViewById(R.id.search_imageView);
-        //filterImageView = (ImageView) findViewById(R.id.filter_imageView);
         filterTextView = (TextView) findViewById(R.id.filter_textView);
         filterLinearLayout = (LinearLayout) findViewById(R.id.filter_linearLayout);
         backImageView = (ImageView) findViewById(R.id.back_imageView);
@@ -323,13 +270,7 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-
-                /*adapter.clear();
-                adapter.notifyDataSetChanged();*/
                 if (adapter.getItemCount() <= 0)noResultTextView.setVisibility(View.VISIBLE);
-                //NYHelper.handleAPIException(DoDiveSearchActivity.this, spiceException, null);
-
-                // TODO: perbaiki ini menjadi pagination
                 if(progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
@@ -351,19 +292,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-
-                /*if (results != null){
-                    diveServiceAdapter.addResults(results);
-                    diveServiceAdapter.notifyDataSetChanged();
-                }
-
-                if (diveServiceAdapter.getItemCount() > 0){
-                    noResultTextView.setVisibility(View.GONE);
-                    filterRelativeLayout.setVisibility(View.VISIBLE);
-                } else {
-                    noResultTextView.setVisibility(View.VISIBLE);
-                    //filterRelativeLayout.setVisibility(View.GONE);
-                }*/
 
                 if (adapter.getItemCount() <= 0)noResultTextView.setVisibility(View.VISIBLE);
 
@@ -388,13 +316,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                 }
                 adapter.notifyDataSetChanged();
 
-                /*if(adapter.getItemCount() > 0) {
-                    filterRelativeLayout.setVisibility(View.VISIBLE);
-                } else {
-                    filterRelativeLayout.setVisibility(View.GONE);
-                }*/
-
-                //Toast.makeText(DoDiveSearchResultActivity.this, String.valueOf(adapter.getItemCount()), Toast.LENGTH_SHORT).show();
 
             }
         };
@@ -422,7 +343,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
 
         try {
 
-            //Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 
             if (progressBar != null) {
                 progressBar.setVisibility(View.GONE);
@@ -491,10 +411,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
             if (data.hasExtra(NYHelper.MIN_PRICE))minPrice = b.getDouble(NYHelper.MIN_PRICE);
             if (data.hasExtra(NYHelper.MAX_PRICE))maxPrice = b.getDouble(NYHelper.MAX_PRICE);
 
-            NYLog.e("onresult sortBy : "+sortingType);
-            NYLog.e("onresult minPrice : "+minPrice);
-            NYLog.e("onresult maxPrice : "+maxPrice);
-
             totalDives = new ArrayList<>();
             if (data.hasExtra(NYHelper.TOTAL_DIVES)){
                 try {
@@ -502,7 +418,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                     for (int i=0; i<arrayTotalDives.length(); i++) {
                         totalDives.add(arrayTotalDives.getString(i));
                     }
-                    NYLog.e("onresult totalDives : "+totalDives.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -510,15 +425,12 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
 
             if (totalDives != null && totalDives.size() > 0) NYLog.e("cek total dives RESULT: "+totalDives.toString());
 
-            NYLog.e("onresult categories : "+b.getString(NYHelper.CATEGORIES));
-            NYLog.e("onresult facilities : "+b.getString(NYHelper.FACILITIES));
 
             if (data.hasExtra(NYHelper.CATEGORIES)){
                 try {
                     JSONArray arrayCat = new JSONArray(b.getString(NYHelper.CATEGORIES));
                     categoryList = new CategoryList();
                     categoryList.parse(arrayCat);
-                    NYLog.e("onresult categories final : "+categoryList.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -529,7 +441,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
                     JSONArray arrayFac = new JSONArray(b.getString(NYHelper.FACILITIES));
                     stateFacilityList = new StateFacilityList();
                     stateFacilityList.parse(arrayFac);
-                    NYLog.e("onresult facilities final : "+stateFacilityList.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -538,9 +449,6 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
             page=1;
             adapter.clear();
             adapter.notifyDataSetChanged();
-            //initRequest();
-            // TODO: hapus ini
-            //requestPriceRange(true);
             initRequest(true);
         }
     }
@@ -554,13 +462,9 @@ public class DoCourseResultActivity extends BasicActivity implements NYCustomDia
         if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
         NYGetMinMaxPriceRequest req = null;
         try {
-            //1 = do dive, 2 = do trip
-            //req = new NYGetMinMaxPriceRequest(this, "1");
-            // TODO: ganti type pice range 
             req = new NYGetMinMaxPriceRequest(this, "1", type, diverId, categoryList.getList(), diver, certificate, date, String.valueOf(sortingType), false);
 
         } catch (Exception e) {
-            //Toast.makeText(this, "DoCourse 3 error", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         spcMgr.execute(req, onGetMinMaxPriceRequest(isRefresh));
