@@ -665,13 +665,13 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_booking, menu);
-        itemMsg = menu.findItem(R.id.msg_btn);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_booking, menu);
+//        itemMsg = menu.findItem(R.id.msg_btn);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

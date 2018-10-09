@@ -535,7 +535,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 2;
+        private static final int FRAGMENT_COUNT = 1;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 
