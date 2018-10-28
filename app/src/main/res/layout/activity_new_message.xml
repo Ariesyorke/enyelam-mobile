@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/message_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".inbox.NewMessageActivity"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/send_container"
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
@@ -119,41 +125,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding"
-                android:text="Attachment"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textColor="@color/ny_black2"/>
 
-            <LinearLayout
-                android:id="@+id/ll_attachment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding"
-                android:orientation="horizontal"
-                android:background="@drawable/ny_rectangle_white_border_grey_no_transparant">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ny_rectangle_white_border_grey">
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_margin="@dimen/padding_half"
-                        android:tint="@color/ny_black2"
-                        android:src="@drawable/ic_attach"/>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/tv_attachment"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_marginLeft="@dimen/padding_half"
-                    android:gravity="center|left"
-                    android:text="Choose File..."/>
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -171,7 +143,7 @@
                 <EditText
                     android:id="@+id/et_message"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginTop="@dimen/padding"
                     android:padding="@dimen/padding"
@@ -181,27 +153,63 @@
                     android:textColor="@color/dark_gray"
                     android:background="@drawable/ny_rectangle_white_border_grey_no_transparant"/>
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:padding="@dimen/padding"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="0dp"
-                    android:background="@drawable/ny_book">
-                    <TextView
-                        android:id="@+id/btn_submit"
-                        android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Attachment"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/ny_black2"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_attachment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal"
+                    android:background="@drawable/ny_rectangle_white_border_grey_no_transparant">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Send"/>
+                        android:background="@drawable/ny_rectangle_white_border_grey">
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_margin="@dimen/padding_half"
+                            android:tint="@color/ny_black2"
+                            android:src="@drawable/ic_attach"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_attachment"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:gravity="center|left"
+                        android:text="Choose File..."/>
                 </LinearLayout>
-
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/send_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/padding"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_marginRight="@dimen/padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@drawable/ny_book">
+        <TextView
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Send"/>
+    </LinearLayout>
+</RelativeLayout>

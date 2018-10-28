@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled = true
-        versionCode 90
-        versionName '0.8.8'
+        versionCode 94
+        versionName '0.8.12'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -19,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     productFlavors {
     }
 
@@ -50,9 +51,10 @@ dependencies {
     implementation project(':uikit')
     //implementation 'com.wdullaer:materialdatetimepicker:3.5.1'
     implementation project(':materialdatetimepicker')
-    implementation('com.paypal.sdk:paypal-android-sdk:2.16.0') {
-        exclude group: 'io.card'
-    }
+//    implementation('com.paypal.sdk:paypal-android-sdk:2.16.0') {
+//        exclude group: 'io.card'
+//    }
+    implementation group: 'com.paypal.sdk', name: 'paypal-android-sdk', version: '2.15.1'
     //implementation 'com.stepstone.apprating:app-rating:2.2.0'
     //implementation 'me.zhanghai.android.materialratingbar:library:1.3.1'
     implementation 'com.android.support:appcompat-v7:27.1.1'

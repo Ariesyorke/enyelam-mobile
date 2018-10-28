@@ -275,14 +275,14 @@ public class MyAccountFragment extends Fragment implements
         contactUsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto","info@e-nyelam.com", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hi, e-Nyelam!");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-                startActivity(Intent.createChooser(emailIntent, "Send email..."));
-//                Intent intent = new Intent(getActivity(), NewMessageActivity.class);
-//                intent.putExtra("category", true);
-//                startActivity(intent);
+//                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+//                        "mailto","info@e-nyelam.com", null));
+//                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hi, e-Nyelam!");
+//                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+//                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                Intent intent = new Intent(getActivity(), NewMessageActivity.class);
+                intent.putExtra("category", true);
+                startActivity(intent);
             }
         });
 

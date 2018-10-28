@@ -10,11 +10,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -170,6 +172,7 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 }
             }
         });
+
 
         sendReviewTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -587,14 +590,13 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 paymentLinearLayout.setVisibility(View.VISIBLE);
             } else {
                 paymentLinearLayout.setVisibility(View.GONE);
+                if(orderReturn.getSummary() != null && orderReturn.getSummary().getOrder() != null && !TextUtils.isEmpty(orderReturn.getSummary().getOrder().getStatus()) && orderReturn.getSummary().getOrder().getStatus().equalsIgnoreCase("accepted")) {
+                    sendReviewTextView.setVisibility(View.VISIBLE);
+                } else {
+                    sendReviewTextView.setVisibility(View.GONE);
+                }
             }
-
-
-        } else {
-
         }
-
-
     }
 
 
@@ -665,13 +667,13 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_booking, menu);
-//        itemMsg = menu.findItem(R.id.msg_btn);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_booking, menu);
+        itemMsg = menu.findItem(R.id.msg_btn);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

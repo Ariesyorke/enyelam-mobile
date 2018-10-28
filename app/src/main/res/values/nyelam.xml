@@ -44,7 +44,7 @@
     <!--<string name="api_path_dodive_search_by_province">api/dodive/service/province</string>-->
     <!--<string name="api_path_dodive_search_by_city">api/dodive/service/city</string>-->
 
-    <!--SEARCH RESULT LIST DIVE SERVICE-->
+    <!--&lt;!&ndash;SEARCH RESULT LIST DIVE SERVICE&ndash;&gt;-->
     <!--<string name="api_path_dodive_search_service_by_category">api/dodive/search/category</string>-->
     <!--<string name="api_path_dodive_search_service_by_divespot">api/dodive/search/divespot</string>-->
     <!--<string name="api_path_dodive_search_service_by_province">api/dodive/search/province</string>-->
@@ -52,7 +52,7 @@
     <!--<string name="api_path_dodive_search_service_by_divecenter">api/dodive/search/divecenter</string>-->
     <!--<string name="api_path_dodive_suggestion_service">api/dodive/sugestion</string>-->
 
-    <!--SEARCH RESULT LIST DO COURSE-->
+    <!--&lt;!&ndash;SEARCH RESULT LIST DO COURSE&ndash;&gt;-->
     <!--<string name="api_path_docourse_detail_service">api/docourse/detail</string>-->
     <!--<string name="api_path_docourse_search_service_by_category">api/docourse/search/category</string>-->
     <!--<string name="api_path_docourse_search_service_by_divespot">api/docourse/search/divespot</string>-->
@@ -113,7 +113,7 @@
     <!--<string name="api_path_dive_guide_detail">api/diveGuide</string>-->
     <!--<string name="api_path_banner">api/master/banner</string>-->
 
-    <!--new-->
+    <!--&lt;!&ndash;new&ndash;&gt;-->
     <!--<string name="api_path_voucher_code">api/order/voucher</string>-->
     <!--<string name="api_inbox_list">api/inbox/all</string>-->
     <!--<string name="api_inbox_detail">api/inbox/detail</string>-->
@@ -216,12 +216,9 @@
     <string name="api_path_review_submit">service/review/submit</string>
     <string name="api_path_review_list">service/review</string>
 
-
-
-
     <string name="api_path_voucher_code">order/voucher</string>
-    <string name="api_inbox_list">api/inbox/all</string>
-    <string name="api_inbox_detail">api/inbox/detail</string>
-    <string name="api_inbox_post">api/inbox/post</string>
-    <string name="api_inbox_add">api/inbox/add</string>
+    <string name="api_inbox_list">inbox/all</string>
+    <string name="api_inbox_detail">inbox/detail</string>
+    <string name="api_inbox_post">inbox/post</string>
+    <string name="api_inbox_add">inbox/add</string>
 </resources>

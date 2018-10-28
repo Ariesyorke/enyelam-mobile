@@ -308,15 +308,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 }
             }
 
-
-
-
-
-
-
         }
 
-        //Toast.makeText(this, diveService.getId()+" - "+diveCenter.getId(), Toast.LENGTH_SHORT).show();
     }
 
     private void initRequest() {
@@ -362,7 +355,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
                         });
                     }
                 }
-
             }
 
             @Override
@@ -535,7 +527,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
     }
 
     public class NYFragmentPagerAdapter extends FragmentPagerAdapter {
-        private static final int FRAGMENT_COUNT = 1;
+        private static final int FRAGMENT_COUNT = 2;
         private Map<Integer, String> fragmentTags;
         private FragmentManager fragmentManager;
 

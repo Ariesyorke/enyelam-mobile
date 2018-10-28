@@ -1324,7 +1324,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         //CONFIGURASI PAYPAL
         payPalConfiguration = new PayPalConfiguration()
-                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+                .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
                 .clientId(paypalClientId);
         paypalIntent = new Intent(BookingServiceSummaryActivity.this, PayPalService.class);
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
@@ -1518,7 +1518,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))NYLog.e("CEK TRANSACTION 2 : "+transactionResult.getResponse().getFraudStatus());
             if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))NYLog.e("CEK TRANSACTION 3 : "+transactionResult.getResponse().getTransactionStatus());
         } else {
-            NYLog.e("CEK TRANSACTION : null");
         }
 
         if (transactionResult != null && transactionResult.getResponse() != null && (transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) || transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING)) ){
