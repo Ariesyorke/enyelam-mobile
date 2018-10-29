@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
@@ -18,7 +18,6 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.midtrans.sdk.uikit.abstracts.BaseActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -26,19 +25,19 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.DoShopList;
 import com.nyelam.android.data.DoShopProduct;
+import com.nyelam.android.data.DoShopProductList;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYCategoryRequest;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
+import com.nyelam.android.http.NYDoShopProductListRequest;
+import com.nyelam.android.http.result.NYPaginationResult;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +46,7 @@ public class AddToCartActivity extends BasicActivity {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    private DoShopRecommendedAdapter recommendedAdapter;
 
     private String productId;
     private DoShopProduct product;
@@ -84,13 +84,13 @@ public class AddToCartActivity extends BasicActivity {
         if (product != null){
             progressBar.setVisibility(View.VISIBLE);
             llMainContainer.setVisibility(View.GONE);
-            initCategory(product.getId());
+            initProductDetail(product.getId());
         } else {
             dialogItemNotAvailable();
         }
     }
 
-    private void initCategory(String id){
+    private void initProductDetail(String id){
         NYDoShopProductDetailRequest req = new NYDoShopProductDetailRequest(context, id);
         spcMgr.execute(req, onProductDetailRequest());
     }
@@ -115,6 +115,50 @@ public class AddToCartActivity extends BasicActivity {
                 setProductView(product);
                 progressBar.setVisibility(View.GONE);
                 llMainContainer.setVisibility(View.VISIBLE);
+                if (product != null && product.getCategories() != null && product.getCategories().size() > 0 && NYHelper.isStringNotEmpty(product.getCategories().get(0).getId()))
+                    initRelatedItem(product.getCategories().get(0).getId());
+            }
+        };
+    }
+
+    private void initRelatedItem(String categoryId){
+        NYLog.e("cek related 1");
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, "40000",  "500000", "1");
+        spcMgr.execute(req, onRealtedItemRequest());
+    }
+
+    private RequestListener<NYPaginationResult<DoShopProductList>> onRealtedItemRequest() {
+        return new RequestListener<NYPaginationResult<DoShopProductList>>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                //NYHelper.handleAPIException(context, spiceException, null);
+                //swipeRefreshLayout.setRefreshing(false);
+                llRelatedItem.setVisibility(View.GONE);
+                NYLog.e("cek related error");
+            }
+
+            @Override
+            public void onRequestSuccess(NYPaginationResult<DoShopProductList> listNYPaginationResult) {
+                //progressBar.setVisibility(View.GONE);
+                //swipeRefreshLayout.setRefreshing(false);
+                NYLog.e("cek related success");
+                if (listNYPaginationResult != null && listNYPaginationResult.item != null && listNYPaginationResult.item.getList() != null &&
+                        listNYPaginationResult.item.getList().size() > 0){
+                    NYLog.e("cek related data : "+listNYPaginationResult.item.getList().toString());
+
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                    //GridLayoutManager layoutManager = new GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false);
+                    rvRelatedItem.setLayoutManager(layoutManager);
+
+                    recommendedAdapter = new DoShopRecommendedAdapter(context, listNYPaginationResult.item.getList(), true);
+                    rvRelatedItem.setAdapter(recommendedAdapter);
+                    recommendedAdapter.notifyDataSetChanged();
+                    llRelatedItem.setVisibility(View.VISIBLE);
+                } else {
+                    llRelatedItem.setVisibility(View.GONE);
+                }
+
             }
         };
     }

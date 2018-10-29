@@ -25,6 +25,8 @@ import java.util.List;
 
 
 public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecommendedAdapter.MyViewHolder> {
+
+    private boolean isRelatedItem = false;
     private List<DoShopProduct> data = new ArrayList<>();
     private Context context;
 
@@ -33,9 +35,18 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
         this.data = data;
     }
 
+    public DoShopRecommendedAdapter(Context contexts, List<DoShopProduct> data, boolean isRelatedItem) {
+        this.context = contexts;
+        this.data = data;
+        this.isRelatedItem = isRelatedItem;
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_recommended_do_shop_item, parent, false);
+        if (isRelatedItem){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_do_shop_related_product, parent, false);
+        }
         return new MyViewHolder(view);
     }
 
