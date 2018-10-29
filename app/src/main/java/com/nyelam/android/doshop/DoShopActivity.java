@@ -77,12 +77,13 @@ public class DoShopActivity extends AppCompatActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 NYHelper.handleAPIException(context, spiceException, null);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onRequestSuccess(DoShopList doShopList) {
-
                 progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
 
                 objects.add(doShopList.getCategories());
                 objects.add(doShopList.getRecommended());
@@ -137,6 +138,7 @@ public class DoShopActivity extends AppCompatActivity {
 
     public void onRefreshs(){
         swipeRefreshLayout.setRefreshing(true);
+        objects = new ArrayList<>();
         initCategory();
     }
 }

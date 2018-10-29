@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.Cart;
@@ -18,25 +19,32 @@ public class NYCategoryRequest extends NYBasicRequest<DoShopList> {
 
     public NYCategoryRequest(Context context){
         //sumber api asal ambil
-        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_dive_guide_list));
+        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_homepage));
     }
 
+
+//    @Override
+//    public DoShopList loadDataFromNetwork() throws Exception {
+//        String json = null;
+//        try {
+//            InputStream is = getContext().getAssets().open("do_shop_list.json");
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//            json = new String(buffer, "UTF-8");
+//            JSONObject obj = new JSONObject(json);
+//            return  onProcessSuccessData(obj);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//    }
+
+
     @Override
-    public DoShopList loadDataFromNetwork() throws Exception {
-        String json = null;
-        try {
-            InputStream is = getContext().getAssets().open("do_shop_list.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-            JSONObject obj = new JSONObject(json);
-            return  onProcessSuccessData(obj);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
+    public String getHTTPType() {
+        return DHTTPConnectionHelper.HTTP_GET;
     }
 
     @Override

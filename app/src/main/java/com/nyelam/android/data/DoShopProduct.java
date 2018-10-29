@@ -1,5 +1,7 @@
 package com.nyelam.android.data;
 
+import android.text.TextUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +25,8 @@ public class DoShopProduct implements Parseable {
     private String productName;
     private String featuredImage;
     private List<String> images;
-    private String specialPrice;
-    private String normalPrice;
+    private double specialPrice;
+    private double normalPrice;
     private String status;
     private List<DoShopCategory> categories;
     private String description;
@@ -33,8 +35,8 @@ public class DoShopProduct implements Parseable {
 
     }
 
-    public DoShopProduct(String id, String productName, String featuredImage, List<String> images, String specialPrice
-            , String normalPrice, String status, List<DoShopCategory> categories, String description){
+    public DoShopProduct(String id, String productName, String featuredImage, List<String> images, double specialPrice
+            , double normalPrice, String status, List<DoShopCategory> categories, String description){
         this.id = id;
         this.productName = productName;
         this.featuredImage = featuredImage;
@@ -78,19 +80,19 @@ public class DoShopProduct implements Parseable {
         this.images = images;
     }
 
-    public String getSpecialPrice() {
+    public double getSpecialPrice() {
         return specialPrice;
     }
 
-    public void setSpecialPrice(String specialPrice) {
+    public void setSpecialPrice(double specialPrice) {
         this.specialPrice = specialPrice;
     }
 
-    public String getNormalPrice() {
+    public double getNormalPrice() {
         return normalPrice;
     }
 
-    public void setNormalPrice(String normalPrice) {
+    public void setNormalPrice(double normalPrice) {
         this.normalPrice = normalPrice;
     }
 
@@ -157,19 +159,19 @@ public class DoShopProduct implements Parseable {
 
         try {
             if (!obj.isNull(KEY_SPECIAL_PRICE)) {
-                setFeaturedImage(obj.getString(KEY_SPECIAL_PRICE));
+                setSpecialPrice(obj.getDouble(KEY_SPECIAL_PRICE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!obj.isNull(KEY_NORMAL_PRICE)) {
-                setFeaturedImage(obj.getString(KEY_NORMAL_PRICE));
+                setNormalPrice(obj.getDouble(KEY_NORMAL_PRICE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!obj.isNull(KEY_STATUS)) {
-                setFeaturedImage(obj.getString(KEY_STATUS));
+                setStatus(obj.getString(KEY_STATUS));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -196,5 +198,109 @@ public class DoShopProduct implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public String toString() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getId())) {
+                obj.put(KEY_ID, getId());
+            } else {
+                obj.put(KEY_ID, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getProductName())) {
+                obj.put(KEY_PRODUCT_NAME, getProductName());
+            } else {
+                obj.put(KEY_PRODUCT_NAME, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getFeaturedImage())) {
+                obj.put(KEY_FEATURED_IMAGE, getFeaturedImage());
+            } else {
+                obj.put(KEY_FEATURED_IMAGE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+
+        try {
+            obj.put(KEY_SPECIAL_PRICE, getSpecialPrice());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_NORMAL_PRICE, getNormalPrice());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (!TextUtils.isEmpty(getStatus())) {
+                obj.put(KEY_STATUS, getStatus());
+            } else {
+                obj.put(KEY_STATUS, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getDescription())) {
+                obj.put(KEY_DESCRIPTION, getDescription());
+            } else {
+                obj.put(KEY_DESCRIPTION, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+
+
+        if(images != null && !images.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(String a : images) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_IMAGES, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(categories != null && !categories.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(DoShopCategory a : categories) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_CATEGORIES, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        try {
+            return obj.toString(3);
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return super.toString();
     }
 }

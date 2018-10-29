@@ -58,7 +58,7 @@
 
             <com.nyelam.android.view.font.NYTextView
                 card_view:fontTextStyle="reguler"
-                android:id="@+id/dive_center_name_textView"
+                android:id="@+id/item_name_textView"
                 android:text="Salvimar One Free Diving"
                 android:textSize="14dp"
                 android:layout_marginTop="@dimen/padding_half"

@@ -78,4 +78,41 @@ public class DoShopCategory implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
     }
+
+
+    @Override
+    public String toString() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            if (!TextUtils.isEmpty(getId())) {
+                obj.put(KEY_ID, getId());
+            } else {
+                obj.put(KEY_ID, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getName())) {
+                obj.put(KEY_NAME, getName());
+            } else {
+                obj.put(KEY_NAME, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getImageUri())) {
+                obj.put(KEY_IMAGE, getImageUri());
+            } else {
+                obj.put(KEY_IMAGE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+
+        try {
+            return obj.toString(3);
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return super.toString();
+    }
 }

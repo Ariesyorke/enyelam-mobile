@@ -19,11 +19,10 @@ import java.util.List;
 public class DoShopList implements Parseable {
 
     private static final String KEY_CATEGORIES = "categories";
-    private static final String KEY_RECOMMENDED = "recommended";
+    private static final String KEY_RECOMMENDED = "recomended";
 
     private List<DoShopCategory> categories;
     private List<DoShopProduct> recommended;
-
 
     public DoShopList(){
 
