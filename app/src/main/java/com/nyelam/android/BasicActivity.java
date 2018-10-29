@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/3/2018.
  */

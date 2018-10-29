@@ -188,6 +188,7 @@
     <string name="warn_check_agreement_to_continue">Please read carefully and check the agreement to continue</string>
     <string name="warn_cancel_booking">"Are you sure want to cancel your bookings? Any changes to your bookings will be lost."</string>
     <string name="warn_logout">Are you sure want to sign out ?</string>
+    <string name="warn_item_not_available">Sorry, this item is not available</string>
 
     <string name="message_update_profile_success">Your profile has been successfully updated</string>
     <string name="message_update_password_success">Your password has been successfully updated</string>

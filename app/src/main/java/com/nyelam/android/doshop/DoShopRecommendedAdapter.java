@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -44,52 +45,58 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
         //holder.title.setText(data.get(position).getHeader());
         //holder.description.setText(data.get(position).getSubHeader());
 
-        DoShopProduct product = data.get(position);
+        final DoShopProduct product = data.get(position);
 
-        if (product == null) return;
-        if (NYHelper.isStringNotEmpty(product.getProductName())) holder.name.setText(product.getProductName());
+        if (product != null){
+            if (NYHelper.isStringNotEmpty(product.getProductName())) holder.name.setText(product.getProductName());
 
-        if (product.getSpecialPrice() < product.getNormalPrice()){
-            holder.priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-            holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
-            holder.priceStrike.setVisibility(View.VISIBLE);
-        } else {
-            holder.price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-            holder.priceStrike.setVisibility(View.GONE);
+            if (product.getSpecialPrice() < product.getNormalPrice()){
+                holder.priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
+                holder.priceStrike.setVisibility(View.VISIBLE);
+            } else {
+                holder.price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                holder.priceStrike.setVisibility(View.GONE);
+            }
+
+            if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
+                ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+                ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        holder.image.setImageResource(R.drawable.example_pic);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        holder.image.setImageResource(R.drawable.example_pic);
+                    }
+                });
+
+                ImageLoader.getInstance().displayImage(product.getFeaturedImage(), holder.image, NYHelper.getOption());
+            }
         }
-
-        if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
-            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
-            ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    holder.image.setImageResource(R.drawable.example_pic);
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-                    holder.image.setImageResource(R.drawable.example_pic);
-                }
-            });
-
-            ImageLoader.getInstance().displayImage(product.getFeaturedImage(), holder.image, NYHelper.getOption());
-        }
-
+        
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, AddToCartActivity.class);
-                context.startActivity(intent);
+                if (product != null && NYHelper.isStringNotEmpty(product.getId())){
+                    Intent intent = new Intent(context, AddToCartActivity.class);
+                    intent.putExtra(NYHelper.PRODUCT, product.toString());
+                    context.startActivity(intent);    
+                } else {
+                    Toast.makeText(context, "Sorry, this item is not available", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
