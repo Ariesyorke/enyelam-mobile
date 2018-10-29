@@ -6,10 +6,15 @@ import android.text.TextUtils;
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.AuthReturn;
+import com.nyelam.android.data.DiveGuide;
 import com.nyelam.android.data.DiveGuideList;
 import com.nyelam.android.data.ReviewList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
@@ -32,13 +37,7 @@ public class NYDiveGuideListRequest extends NYBasicRequest<DiveGuideList> {
     }
 
     @Override
-    public String getHTTPType() {
-        return DHTTPConnectionHelper.HTTP_POST;
-    }
-
-    @Override
     protected DiveGuideList onProcessSuccessData(JSONObject obj) throws Exception {
-
         DiveGuideList diveGuideList = new DiveGuideList();
         diveGuideList.parse(obj.getJSONArray(KEY_DIVE_GUIDES));
         return diveGuideList;

@@ -18,6 +18,7 @@
 
     <!-- DEVELOPMENT -->
     <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
+    <!--<string name="host_url">http://nyelam-yoga.dantech.id/</string>-->
 
     <!-- STAGING -->
     <!--<string name="host_url">https://nyelam.dantech.id/</string>-->
@@ -106,12 +107,18 @@
     <!--<string name="api_path_update_profile">api/user/profile/edit</string>-->
     <!--<string name="api_path_upload_profile">api/user/photo</string>-->
     <!--<string name="api_path_upload_cover">api/user/cover</string>-->
-    <!--<string name="api_path_review_list">api/reviewList/</string>-->
+    <!--<string name="api_path_review_list">api/service/review</string>-->
     <!--<string name="api_path_review_submit">api/service/review/submit</string>-->
-    <!--<string name="api_path_dive_guide_list">api/user/diveguideList</string>-->
-    <!--<string name="api_path_dive_guide_detail">api/user/diveguide</string>-->
+    <!--<string name="api_path_dive_guide_list">api/diveGuides</string>-->
+    <!--<string name="api_path_dive_guide_detail">api/diveGuide</string>-->
     <!--<string name="api_path_banner">api/master/banner</string>-->
 
+    <!--&lt;!&ndash;new&ndash;&gt;-->
+    <!--<string name="api_path_voucher_code">api/order/voucher</string>-->
+    <!--<string name="api_inbox_list">api/inbox/all</string>-->
+    <!--<string name="api_inbox_detail">api/inbox/detail</string>-->
+    <!--<string name="api_inbox_post">api/inbox/post</string>-->
+    <!--<string name="api_inbox_add">api/inbox/add</string>-->
 
 
 
@@ -119,7 +126,7 @@
     <!--&lt;!&ndash; PRODUCTION &ndash;&gt;-->
     <string name="host_url">https://api.e-nyelam.com/</string>
 
-    <!--API PRODUCTION-->
+     <!--API PRODUCTION-->
     <string name="api_path_login">user/login</string>
     <string name="api_path_update_version">master/UpdateVersion</string>
     <string name="api_path_socmed_login">user/socmedlogin/</string>
@@ -202,10 +209,16 @@
     <string name="api_path_dotrip_suggestion_service">dotrip/sugestion</string>
     <string name="api_path_get_min_max_price">service/minMaxPrice</string>
     <string name="api_path_get_min_max_price_list">service/minMaxPriceList</string>
-    <string name="api_path_review_list">reviewList/</string>
-    <string name="api_path_review_submit">service/review/submit</string>
-    <string name="api_path_dive_guide_list">user/diveguideList</string>
-    <string name="api_path_dive_guide_detail">user/diveguide</string>
     <string name="api_path_banner">master/banner</string>
 
+    <string name="api_path_dive_guide_list">diveGuides</string>
+    <string name="api_path_dive_guide_detail">diveGuide</string>
+    <string name="api_path_review_submit">service/review/submit</string>
+    <string name="api_path_review_list">service/review</string>
+
+    <string name="api_path_voucher_code">order/voucher</string>
+    <string name="api_inbox_list">inbox/all</string>
+    <string name="api_inbox_detail">inbox/detail</string>
+    <string name="api_inbox_post">inbox/post</string>
+    <string name="api_inbox_add">inbox/add</string>
 </resources>

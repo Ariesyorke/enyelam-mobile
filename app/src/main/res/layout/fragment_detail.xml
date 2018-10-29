@@ -36,11 +36,11 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:paddingLeft="@dimen/padding_double"
-                        android:paddingRight="@dimen/padding_double"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/padding_double"
+                        android:paddingRight="@dimen/padding_double">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -63,7 +63,6 @@
 
 
                                 <com.nyelam.android.view.font.NYTextView
-                                    android:visibility="gone"
                                     android:id="@+id/schedule_textView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -71,6 +70,7 @@
                                     android:text="-"
                                     android:textColor="@color/ny_black2"
                                     android:textSize="18sp"
+                                    android:visibility="gone"
                                     app:fontTextStyle="reguler" />
 
                                 <LinearLayout
@@ -109,12 +109,12 @@
                                     android:textSize="16sp" />
 
                                 <LinearLayout
-                                    android:visibility="gone"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/padding"
                                     android:gravity="center_vertical"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:visibility="visible">
 
                                     <RatingBar
                                         android:id="@+id/ratingBar"
@@ -132,6 +132,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="@dimen/padding_half"
+                                        android:visibility="gone"
                                         android:text="0.0"
                                         android:textColor="@color/ny_grey8"
                                         android:textSize="16sp" />
@@ -141,6 +142,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="@dimen/padding_half"
+                                        android:visibility="gone"
                                         android:text="/ 0 visited"
                                         android:textColor="@color/ny_grey8"
                                         android:textSize="16sp" />
@@ -182,8 +184,8 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:text="/ pax"
-                                        android:textSize="16sp"
                                         android:textColor="@color/ny_grey8"
+                                        android:textSize="16sp"
                                         app:fontTextStyle="light" />
                                 </LinearLayout>
 
@@ -202,11 +204,11 @@
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:visibility="gone"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/padding_half"
-                                        android:orientation="horizontal">
+                                        android:orientation="horizontal"
+                                        android:visibility="gone">
 
                                         <com.nyelam.android.view.font.NYTextView
                                             android:id="@+id/NYTextView"
@@ -214,8 +216,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="3"
                                             android:text="Availability Stock "
-                                            android:textSize="14sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="14sp"
                                             app:fontTextStyle="reguler" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -240,8 +242,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text="Total Dives"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -250,8 +252,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text=": 0"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
@@ -267,8 +269,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text="DiveSpot Option"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -277,8 +279,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text=": 0"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
@@ -295,8 +297,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text="Trip Durations"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -305,8 +307,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text=": 0"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
@@ -322,8 +324,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text="@string/slot_divers"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -332,34 +334,26 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text=": 0"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
 
-
-
-
-
-
-
-
-
                                     <LinearLayout
-                                        android:visibility="gone"
                                         android:id="@+id/days_class_linearLayout"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="3dp">
+                                        android:layout_marginTop="3dp"
+                                        android:visibility="gone">
 
                                         <com.nyelam.android.view.font.NYTextView
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text="Day Class"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -368,25 +362,25 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text=": -"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:visibility="gone"
                                         android:id="@+id/day_on_site_linearLayout"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="3dp">
+                                        android:layout_marginTop="3dp"
+                                        android:visibility="gone">
 
                                         <com.nyelam.android.view.font.NYTextView
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text="Day On Site"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -395,25 +389,25 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text=": -"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
                                     <LinearLayout
                                         android:id="@+id/open_water_linearLayout"
-                                        android:visibility="gone"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="3dp">
+                                        android:layout_marginTop="3dp"
+                                        android:visibility="gone">
 
                                         <com.nyelam.android.view.font.NYTextView
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text="Open Water"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
 
                                         <com.nyelam.android.view.font.NYTextView
@@ -422,8 +416,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:text=": 0"
-                                            android:textSize="16sp"
                                             android:textColor="@color/ny_grey8"
+                                            android:textSize="16sp"
                                             app:fontTextStyle="light" />
                                     </LinearLayout>
 
@@ -434,8 +428,6 @@
 
 
                         </LinearLayout>
-
-
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -494,11 +486,45 @@
                         </LinearLayout>
 
 
+                        <!-- margin inbox -->
+
+                        <LinearLayout
+                            android:id="@+id/inbox_linearLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ny_book"
+                            android:gravity="center"
+                            android:visibility="visible"
+                            android:paddingBottom="@dimen/padding"
+                            android:paddingLeft="@dimen/padding_half"
+                            android:paddingRight="@dimen/padding_half"
+                            android:paddingTop="@dimen/padding">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/tab_chat" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/inbox_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:text="Chat DC"
+                                android:textColor="@color/colorWhite"
+                                app:fontTextStyle="bold" />
+                        </LinearLayout>
+
+
                         <LinearLayout
                             android:id="@+id/banner_linearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/padding_double"
+                            android:layout_marginTop="@dimen/padding"
                             android:orientation="horizontal">
 
                             <LinearLayout
@@ -594,8 +620,8 @@
                                         android:layout_marginLeft="@dimen/padding"
                                         android:layout_marginTop="@dimen/padding"
                                         android:text="@string/dive_guide"
-                                        android:textSize="16sp"
                                         android:textColor="@color/ny_grey8"
+                                        android:textSize="16sp"
                                         app:fontTextStyle="light" />
                                 </LinearLayout>
 
@@ -659,8 +685,8 @@
                                         android:layout_marginLeft="@dimen/padding"
                                         android:layout_marginTop="@dimen/padding"
                                         android:text="@string/food"
-                                        android:textSize="16sp"
                                         android:textColor="@color/ny_grey8"
+                                        android:textSize="16sp"
                                         app:fontTextStyle="light" />
                                 </LinearLayout>
 
@@ -689,8 +715,8 @@
                                         android:layout_marginLeft="@dimen/padding"
                                         android:layout_marginTop="@dimen/padding"
                                         android:text="@string/transportation"
-                                        android:textSize="16sp"
                                         android:textColor="@color/ny_grey8"
+                                        android:textSize="16sp"
                                         app:fontTextStyle="light" />
                                 </LinearLayout>
 
@@ -725,8 +751,8 @@
                                         android:layout_marginLeft="@dimen/padding"
                                         android:layout_marginTop="@dimen/padding"
                                         android:text="@string/towel"
-                                        android:textSize="16sp"
                                         android:textColor="@color/ny_grey8"
+                                        android:textSize="16sp"
                                         app:fontTextStyle="light" />
                                 </LinearLayout>
 
@@ -754,8 +780,8 @@
                                         android:layout_marginLeft="@dimen/padding"
                                         android:layout_marginTop="@dimen/padding"
                                         android:text="@string/accomodation"
-                                        android:textSize="16sp"
                                         android:textColor="@color/ny_grey8"
+                                        android:textSize="16sp"
                                         app:fontTextStyle="light" />
                                 </LinearLayout>
 
@@ -764,15 +790,13 @@
                         </LinearLayout>
 
 
-
                         <View
-                            android:paddingLeft="@dimen/padding_double"
-                            android:paddingRight="@dimen/padding_double"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginTop="@dimen/padding"
-                            android:background="@color/ny_grey3" />
-
+                            android:background="@color/ny_grey3"
+                            android:paddingLeft="@dimen/padding_double"
+                            android:paddingRight="@dimen/padding_double" />
 
                         <LinearLayout
                             android:layout_width="match_parent"

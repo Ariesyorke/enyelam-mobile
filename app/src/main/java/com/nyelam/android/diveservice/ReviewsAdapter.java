@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveSpot;
 import com.nyelam.android.data.Review;
+import com.nyelam.android.data.ReviewUser;
 import com.nyelam.android.data.User;
 import com.nyelam.android.divespot.DiveSpotDetailActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -113,7 +114,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if (this.review != null){
                 if (review.getUser() != null){
-                    User user = review.getUser();
+                    ReviewUser user = review.getUser();
                     if (NYHelper.isStringNotEmpty(user.getFullname())) nameTextView.setText(user.getFullname());
 
                     ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));

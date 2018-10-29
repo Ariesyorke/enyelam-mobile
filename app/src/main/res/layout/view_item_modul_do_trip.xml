@@ -160,8 +160,7 @@
                 android:textColor="@color/ny_black2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
-            <!--<LinearLayout
+            <LinearLayout
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingTop="@dimen/padding_half"
@@ -197,7 +196,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-            </LinearLayout>-->
+            </LinearLayout>
 
             <TextView
                 android:visibility="gone"

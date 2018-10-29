@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context="com.nyelam.android.home.HomeFragment">
 
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
@@ -46,15 +45,6 @@
                         android:id="@+id/promotion_view_pager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-
-                    <!--<me.relex.circleindicator.CircleIndicator
-                        android:id="@+id/circle_indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_alignBottom="@+id/promotion_view_pager"
-                        android:layout_centerHorizontal="true"
-                        app:ci_drawable="@drawable/ny_circle_white"
-                        app:ci_orientation="horizontal"/>-->
 
 
                     <android.support.v7.widget.Toolbar
@@ -126,10 +116,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-
-
-
-
                         <RelativeLayout
                             android:id="@+id/do_dive_relativeLayout"
                             android:layout_width="0dp"
@@ -182,10 +168,6 @@
 
                             </LinearLayout>
                         </RelativeLayout>
-
-
-
-
 
                         <RelativeLayout
                             android:id="@+id/eco_trip_relativeLayout"
@@ -240,16 +222,6 @@
                         </RelativeLayout>
 
                     </LinearLayout>
-
-
-
-
-
-
-
-
-
-
 
                     <LinearLayout
                         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -314,6 +286,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@drawable/ny_rectangle_menu_grey" />
+
                         </RelativeLayout>
 
 

@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -48,6 +49,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -88,6 +90,7 @@ public class NYHelper {
     public static final String DIVER = "diver";
     public static final String NOTE = "note";
     public static final String DIVE_CENTER = "dive_center";
+    public static final String EQUIPMENT_RENTS = "equipment_rents";
     public static final String SCHEDULE = "schedule";
     public static final String DIVE_SPOT = "dive_spot";
     public static final String DIVE_SPOTS = "dive_spots";
@@ -136,6 +139,7 @@ public class NYHelper {
     public static final String ID = "id";
     public static final String ACCESS_TOKEN = "access_token";
     public static final String PROFILE_PICTURE = "profile_picture";
+    public static final String VOUCHER = "voucher";
     public static final String RESULT = "result";
 
     public static final String SORT_BY = "sort_by";
@@ -681,5 +685,10 @@ public class NYHelper {
             return null;
         }
         return json;
+    }
+
+    public static Boolean isToday(Date date){
+        long timeStampDate = date.getTime();
+        return DateUtils.isToday(timeStampDate);
     }
 }

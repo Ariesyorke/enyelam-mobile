@@ -22,6 +22,7 @@ import com.nyelam.android.data.SearchDiveCenter;
 import com.nyelam.android.data.SearchResult;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.data.SearchSpot;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.dotrip.DoTripActivity;
 import com.nyelam.android.dotrip.DoTripKeywordActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -225,7 +226,6 @@ public class DoDiveSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         break;
                     }
                 }
-
                 if (doCourseSearchResults.size() > 5) doCourseSearchResults.remove(4);
                 doCourseSearchResults.add(searchResult);
 

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:id="@+id/message_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".inbox.NewMessageActivity"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/send_container"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/ny_grey6">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:background="#0071BC"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            app:layout_collapseMode="pin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    app:fontTextStyle="reguler"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="Chat DC"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:layout_marginBottom="@dimen/padding">
+
+            <LinearLayout
+                android:id="@+id/ll_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/padding"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Subject *"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/ny_black2"/>
+
+                <EditText
+                    android:id="@+id/et_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:padding="@dimen/padding"
+                    android:layout_gravity="top|left"
+                    android:singleLine="true"
+                    android:enabled="true"
+                    android:gravity="top|left"
+                    android:textSize="12sp"
+                    android:textColor="@color/dark_gray"
+                    android:background="@drawable/ny_rectangle_white_border_grey_no_transparant"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Report Type"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/ny_black2"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_white_border_grey_no_transparant">
+
+                    <Spinner
+                        android:id="@+id/s_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:popupBackground="@android:color/transparent"
+                        android:entries="@array/category_inbox"
+                        android:background="@android:color/transparent"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="5dp"
+                        android:src="@drawable/arrow"
+                        android:layout_gravity="center"
+                        android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="Message *"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@color/ny_black2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/et_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/padding"
+                    android:padding="@dimen/padding"
+                    android:layout_gravity="top|left"
+                    android:gravity="top|left"
+                    android:textSize="14sp"
+                    android:textColor="@color/dark_gray"
+                    android:background="@drawable/ny_rectangle_white_border_grey_no_transparant"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Attachment"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/ny_black2"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_attachment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal"
+                    android:background="@drawable/ny_rectangle_white_border_grey_no_transparant">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ny_rectangle_white_border_grey">
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_margin="@dimen/padding_half"
+                            android:tint="@color/ny_black2"
+                            android:src="@drawable/ic_attach"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_attachment"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:gravity="center|left"
+                        android:text="Choose File..."/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/send_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/padding"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_marginRight="@dimen/padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@drawable/ny_book">
+        <TextView
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Send"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="@color/colorGradationLeft"
+        android:background="#0071BC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.v7.widget.Toolbar
@@ -43,7 +43,7 @@
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginTop="@dimen/padding_triple"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
@@ -734,11 +734,12 @@
 
                     <TextView
                         android:id="@+id/send_review_textView"
+                        android:visibility="gone"
                         android:text="@string/review"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/colorWhite"
-                        android:textAllCaps="true"
+                        android:textAllCaps="false"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:paddingTop="@dimen/padding"

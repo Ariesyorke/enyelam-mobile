@@ -13,10 +13,30 @@ public class SearchService extends SearchResult {
     private static String KEY_DIVE_SPOT = "dive_spot";
     private static String KEY_DIVE_SERVICE = "dive_service";
     private static String KEY_LICENSE = "license";
+    private static String KEY_LICENSE_TYPE = "license_type";
+    private static String KEY_ORGANIZATION = "organization";
 
     private String diveSpot;
     private String diveService;
     private boolean license;
+    private Organization organization;
+    private LicenseType licenseType;
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
 
     public String getDiveSpot() {
         return diveSpot;
@@ -101,6 +121,24 @@ public class SearchService extends SearchResult {
                 }
             }
         } catch (JSONException e) {e.printStackTrace();}
+        try {
+            if(!obj.isNull(KEY_ORGANIZATION)) {
+                JSONObject o = obj.getJSONObject(KEY_ORGANIZATION);
+                if(o != null) {
+                    organization = new Organization();
+                    organization.parse(o);
+                }
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+        try {
+            if(!obj.isNull(KEY_LICENSE_TYPE)) {
+                JSONObject o = obj.getJSONObject(KEY_LICENSE_TYPE);
+                if(o != null) {
+                    licenseType = new LicenseType();
+                    licenseType.parse(o);
+                }
+            }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     @Override
@@ -160,6 +198,18 @@ public class SearchService extends SearchResult {
             obj.put(KEY_LICENSE, isLicense());
         } catch (JSONException e){e.printStackTrace();}
 
+        try {
+            if(organization != null) {
+                JSONObject o = new JSONObject(organization.toString());
+                obj.put(KEY_ORGANIZATION, o);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+        try {
+            if(licenseType != null) {
+                JSONObject o = new JSONObject(licenseType.toString());
+                obj.put(KEY_LICENSE_TYPE, o);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
         try {
             return obj.toString(3);
         } catch (JSONException e) {e.printStackTrace();}

@@ -37,6 +37,7 @@ import com.nyelam.android.data.NYPopularDiveSpotModule;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.docourse.DoCourseActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
+import com.nyelam.android.doshop.DoShopActivity;
 import com.nyelam.android.ecotrip.EcoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
@@ -185,6 +186,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
+//                Intent intent = new Intent(getActivity(), DoShopActivity.class);
+//                startActivity(intent);
             }
         });
 

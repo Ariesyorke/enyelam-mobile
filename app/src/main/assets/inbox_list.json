@@ -1,0 +1,30 @@
+{
+  "next": 1,
+  "inbox_datas": [{
+    "ticket_id": 1, // inbox kalo tanya dive service
+    "subject": "Wakatobi Dive Trip on November 2018",
+    "name": "Manta Point Divers Indonesia",
+    "ref_id": "1", //id table masing2 dari inbox_type (diveservice & booking)
+    "status": "open",
+    "date": 1536918212,
+    "Inbox_type": 1 // diveservice, 2 // booking // 3 general // 4 issue app // 5 payment
+  }, {
+    "ticket_id": 1, // inbox kalo tanya dive service
+    "subject": "Raja Ampat - Misool Trip on March 2019",
+    "name": "Manta Point Divers Indonesia",
+    "ref_id": "1", //id table masing2 dari inbox_type
+    "status": "open",
+    "date": 1536918212,
+    "Inbox_type": 2 // diveservice, 2 // booking // 3 general // 4 issue app // 5 payment
+  },
+    {
+      "ticket_id": 1, // inbox kalo tanya dive service
+      "subject": "Aplikasi e-Nyelam",
+      "name": "e-Nyelam Team",
+      "ref_id": "1", //id table masing2 dari inbox_type
+      "status": "open",
+      "date": 1536918212,
+      "Inbox_type": 4 // diveservice, 2 // booking // 3 general // 4 issue app // 5 payment
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "categories": [{
+    "id": "1",
+    "name": "Scuba Gear",
+    "image_url": "http://category-image-url-dot-com"
+  }, {
+    "id": "1",
+    "name": "Scuba Gear",
+    "image_url": "http://category-image-url-dot-com"
+  }, {
+    "id": "1",
+    "name": "Scuba Gear",
+    "image_url": "http://category-image-url-dot-com"
+  }, {
+    "id": "1",
+    "name": "Scuba Gear",
+    "image_url": "http://category-image-url-dot-com"
+  }],
+  "recommended": [{
+    "id": "1",
+    "product_name": "Product Name",
+    "featured_image": "Featured Image",
+    "images": ["http-image-dot-com", "http-image-dot-com"],
+    "special_price": 10000,
+    "normal_price": 100000,
+    "status": "in stock",
+    "categories": [{"id":"1", "name":"category name"}],
+    "description": "descriptions"
+  }, {
+    "id": "1",
+    "product_name": "Product Name",
+    "featured_image": "Featured Image",
+    "images": ["http-image-dot-com", "http-image-dot-com"],
+    "special_price": 10000,
+    "normal_price": 100000,
+    "status": "in stock",
+    "categories": [{"id":"1", "name":"category name"}],
+    "description": "descriptions"
+  }, {
+    "id": "1",
+    "product_name": "Product Name",
+    "featured_image": "Featured Image",
+    "images": ["http-image-dot-com", "http-image-dot-com"],
+    "special_price": 10000,
+    "normal_price": 100000,
+    "status": "in stock",
+    "categories": [{"id":"1", "name":"category name"}],
+    "description": "descriptions"
+  }]
+}
+

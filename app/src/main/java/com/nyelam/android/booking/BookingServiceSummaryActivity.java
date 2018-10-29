@@ -50,11 +50,13 @@ import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.EquipmentRent;
 import com.nyelam.android.data.EquipmentRentAdded;
 import com.nyelam.android.data.EquipmentRentAddedList;
+import com.nyelam.android.data.EquipmentRentList;
 import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Location;
 import com.nyelam.android.data.NTransactionResult;
 import com.nyelam.android.data.Organization;
 import com.nyelam.android.diveservice.DetailServiceActivity;
+import com.nyelam.android.data.Voucher;
 import com.nyelam.android.http.NYDoDiveServiceOrderResubmitRequest;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
@@ -67,6 +69,7 @@ import com.nyelam.android.http.NYChangePaymentMethodRequest;
 import com.nyelam.android.http.NYDoDiveServiceCartRequest;
 import com.nyelam.android.http.NYDoDiveServiceOrderRequest;
 import com.nyelam.android.http.NYPaypalNotificationRequest;
+import com.nyelam.android.http.NYVoucherCartRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
 import com.nyelam.android.view.NYCustomDialog;
@@ -103,10 +106,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     //private String cartToken;
     private CartReturn cartReturn;
     private OrderReturn orderReturn;
+    private Voucher voucher;
     private boolean isTranssactionFailed = false;
     private boolean isTranssactionCanceled = false;
 
-    private LinearLayout particpantContainerLinearLayout, orderLinearLayout, serviceFeeLinearLayout;
+    private LinearLayout particpantContainerLinearLayout, orderLinearLayout, serviceFeeLinearLayout, voucherLinearLayout;
     private TextView serviceNameTextView, scheduleTextView, diveCenterNameTextView, locationTextView;
     private TextView contactNameTextView, contactPhoneNumberTextView, contactEmailTextView, changeContactTextView;
     private TextView diverCountTextView, detailPriceTextView, subTotalPriceTextView, totalPriceTextView, ratingTextView, visitedTextView;
@@ -114,7 +118,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     private DiveCenter center;
     private RadioGroup radioGroup;
     private LinearLayout addNoteLinearLayout;
-    private EditText noteEditText;
+    private EditText noteEditText, voucherEditText;
     private RadioButton bankTransferRadioButton, virtualAccountRadioButton, creditCardRadioButton, paypalRadioButton;
     private LinearLayout bankTransferLinearLayout, virtualAccountLinearLayout, creditCardLinearLayout, paypalLinearLayout;
     private DiveCenter diveCenter;
@@ -161,6 +165,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 intent.putExtra(NYHelper.DIVER, String.valueOf(diver));
                 intent.putExtra(NYHelper.CERTIFICATE, certificate);
                 intent.putExtra(NYHelper.DIVE_CENTER, diveCenter.toString());
+                if(voucher != null){
+                    intent.putExtra(NYHelper.VOUCHER, voucher.toString());
+                }
+                if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
+                    intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
+                }
                 startActivity(intent);
             }
         });
@@ -400,6 +410,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
+
             if (intent.hasExtra(NYHelper.DIVE_CENTER) && extras.get(NYHelper.DIVE_CENTER) != null) {
 
                 diveCenter = new DiveCenter();
@@ -433,6 +444,27 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             if (intent.hasExtra(NYHelper.PAYMENT_TYPE)) paymentType = intent.getStringExtra(NYHelper.PAYMENT_TYPE);
 
             if (intent.hasExtra(NYHelper.PAYMENT_METHOD)) paymentMethod = intent.getStringExtra(NYHelper.PAYMENT_METHOD);
+
+            if (intent.hasExtra(NYHelper.VOUCHER)){
+                voucher = new Voucher();
+
+                try {
+                    JSONObject obj = new JSONObject(extras.getString(NYHelper.VOUCHER));
+                    voucher.parse(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (voucher != null){
+
+                    /*if (NYHelper.isStringNotEmpty(voucher.getCode())){
+                        voucherEditText.setText(voucher.getCode());
+                    }*/
+
+                    addVoucher(voucher);
+
+                }
+            }
 
             if (intent.hasExtra(NYHelper.DIVER)){
                 diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
@@ -700,32 +732,24 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
 
             if (intent.hasExtra(NYHelper.EQUIPMENT_RENT)){
-
-                NYLog.e("equip extras exist");
-
                 EquipmentRentAddedList equipTemp = null;
 
                 try {
-
-                    NYLog.e("equip extras init JSONArray");
-
                     JSONArray arrayCat = new JSONArray(extras.getString(NYHelper.EQUIPMENT_RENT));
                     equipTemp = new EquipmentRentAddedList();
                     equipTemp.parse(arrayCat);
-
-                    NYLog.e("equip extras parse "+equipTemp.getList());
-
                     equipmentRentAddedList = equipTemp.getList();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-            } else {
-                NYLog.e("equip extras parse NULL");
             }
-
         }
+        serviceFeeLinearLayout.removeAllViews();
+        if(cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()) addAddedEquipmentRents(cartReturn.getEquipmentRents());
+        if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
+//        if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) addVoucher(cartReturn.getCart().getVoucher());
+        if(voucher != null) addVoucher(voucher);
 
     }
 
@@ -748,13 +772,16 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         orderLinearLayout = (LinearLayout) findViewById(R.id.order_linearLayout);
         serviceFeeLinearLayout = (LinearLayout) findViewById(R.id.service_fee_linearLayout);
         paypalLinearLayout = (LinearLayout) findViewById(R.id.payment_paypal_linearLayout);
+        voucherLinearLayout = (LinearLayout) findViewById(R.id.voucher_linearLayout);
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingTextView = (TextView) findViewById(R.id.rating_textView);
         visitedTextView = (TextView) findViewById(R.id.visited_textView);
 
         addNoteLinearLayout = (LinearLayout) findViewById(R.id.add_note_linearLayout);
+
         noteEditText = (EditText) findViewById(R.id.note_editText);
+        voucherEditText = (EditText) findViewById(R.id.voucher_editText);
 
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         bankTransferRadioButton = (RadioButton) findViewById(R.id.bankTransferRadioButton);
@@ -840,6 +867,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString().trim());
                     intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
                     intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
+                    if(voucher != null){
+                        intent.putExtra(NYHelper.VOUCHER, voucher.toString());
+                    }
+                    if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
+                        intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
+                    }
                     startActivity(intent);
                 }
             });
@@ -862,7 +895,23 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     intent.putExtra(NYHelper.NOTE, noteEditText.getText().toString());
                     intent.putExtra(NYHelper.PAYMENT_TYPE, paymentType);
                     intent.putExtra(NYHelper.PAYMENT_METHOD, paymentMethod);
+                    if(voucher != null){
+                        intent.putExtra(NYHelper.VOUCHER, voucher.toString());
+                    }
+                    if(equipmentRentAddedList != null && !equipmentRentAddedList.isEmpty()) {
+                        intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentAddedList.toString());
+                    }
                     startActivity(intent);
+                }
+            });
+
+            voucherLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideKeyboard(BookingServiceSummaryActivity.this);
+                    String orderId = cartReturn.getCartToken();
+                    String voucherCode = voucherEditText.getText().toString();
+                    getVoucher(orderId,voucherCode);
                 }
             });
 
@@ -879,6 +928,60 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+    private void getVoucher(String orderId, String voucherCode){
+        if(orderReturn == null) {
+            try {
+                progressDialog.show();
+                //nationalityProgressBar.setVisibility(View.VISIBLE);
+                //nationalityEditText.setVisibility(View.GONE);
+                NYVoucherCartRequest req = new NYVoucherCartRequest(this, orderId, voucherCode);
+                spcMgr.execute(req, onGetVoucherRequest());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                voucherEditText.setText(cartReturn.getCart().getVoucher().getCode());
+            } else {
+                voucherEditText.setText("");
+            }
+            NYHelper.handleErrorMessage(this, "You already submit order you cannot change/edit voucher!");
+        }
+    }
+
+    private RequestListener<Cart> onGetVoucherRequest() {
+        return new RequestListener<Cart>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                NYHelper.handleAPIException(BookingServiceSummaryActivity.this, spiceException, null);
+                if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                    voucherEditText.setText(cartReturn.getCart().getVoucher().getCode());
+                } else {
+                    voucherEditText.setText("");
+                }
+
+            }
+
+            @Override
+            public void onRequestSuccess(Cart cart) {
+                if(cart != null) {
+                    cartReturn.setCart(cart);
+                    voucher = cartReturn.getCart().getVoucher();
+                    requestChangePaymentMethod();
+                } else {
+                    if(progressDialog != null && progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                }
+
+            }
+        };
     }
 
     private RequestListener<OrderReturn> onCreateOrderServiceRequest() {
@@ -922,7 +1025,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                 if (orderReturn != null){
 
-                    NYLog.e("payment Type : " + paymentType);
 
                     if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
 
@@ -1132,8 +1234,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                             p.setName(fullnameP);
                             participants.add(p);
                         }
+                        String voucherCode = null;
+                        if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                            Voucher voucher = cartReturn.getCart().getVoucher();
+                            voucherCode = voucher.getCode();
+                        }
 
-                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note);
+                        req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note, voucherCode);
                         spcMgr.execute(req, onCreateOrderServiceRequest());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1323,12 +1430,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     @Override
     protected void onResume() {
         super.onResume();
-        if (!spcMgr.isStarted()) spcMgr.start(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        spcMgr.start(this);
     }
 
 
@@ -1379,8 +1486,12 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     p.setName(fullnameP);
                     participants.add(p);
                 }
+                String voucherCode = null;
+                if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                    voucherCode = cartReturn.getCart().getVoucher().getCode();
+                }
 
-                NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note);
+                NYDoDiveServiceOrderRequest req = new NYDoDiveServiceOrderRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), newBookingContact.toString(), participants.toString(), paymentType, note, voucherCode);
                 spcMgr.execute(req, onCreateOrderServiceRequest());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1407,7 +1518,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
             if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))NYLog.e("CEK TRANSACTION 2 : "+transactionResult.getResponse().getFraudStatus());
             if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))NYLog.e("CEK TRANSACTION 3 : "+transactionResult.getResponse().getTransactionStatus());
         } else {
-            NYLog.e("CEK TRANSACTION : null");
         }
 
         if (transactionResult != null && transactionResult.getResponse() != null && (transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) || transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING)) ){
@@ -1492,11 +1602,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void requestChangePaymentMethod(){
         progressDialog.show();
         try {
+            String voucherCode = null;
+            if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                voucherCode = cartReturn.getCart().getVoucher().getCode();
+            }
             NYChangePaymentMethodRequest req = null;
             if (orderReturn != null && orderReturn.getSummary() != null && orderReturn.getSummary().getOrder() != null && NYHelper.isStringNotEmpty(orderReturn.getSummary().getOrder().getOrderId())){
-                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, orderReturn.getSummary().getOrder().getOrderId(), paymentType);
+                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, orderReturn.getSummary().getOrder().getOrderId(), paymentType, voucherCode);
             } else if (cartReturn != null && NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
-                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), paymentType);
+                req = new NYChangePaymentMethodRequest(BookingServiceSummaryActivity.this, cartReturn.getCartToken(), paymentType, voucherCode);
             }
             spcMgr.execute(req, onChangePaymentMethodRequest());
         } catch (Exception e) {
@@ -1530,7 +1644,11 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         totalPriceTextView.setText(NYHelper.priceFormatter(cart.getTotal()));
                     }
 
-                    if (cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
+                    if(cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()) addAddedEquipmentRents(cartReturn.getEquipmentRents());
+                    if(cartReturn != null && cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0)addAditonalView(cartReturn.getAdditionals());
+                    //if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) addVoucher(cartReturn.getCart().getVoucher());
+                    if(voucher != null) addVoucher(voucher);
+
                 }
 
             }
@@ -1538,10 +1656,48 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
 
+    public void addAddedEquipmentRents(List<EquipmentRent> equipmentRents) {
+        if (equipmentRents != null && !equipmentRents.isEmpty()) {
+            for (EquipmentRent equipmentRent : equipmentRents) {
+
+                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                if (equipmentRent != null) {
+                    if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName()+" x"+String.valueOf(equipmentRent.getQuantity()));
+
+                    additionalValueTextView.setText(NYHelper.priceFormatter((equipmentRent.getSpecialPrice()*equipmentRent.getQuantity())));
+
+                }
+
+                serviceFeeLinearLayout.addView(additionalView);
+            }
+        }
+    }
+
+    public void addVoucher(Voucher voucher) {
+        LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+        TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+        TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+        if (voucher != null) {
+            if (NYHelper.isStringNotEmpty(voucher.getCode())) additionalLabelTextView.setText("Voucher("+voucher.getCode() + ")");
+
+            additionalValueTextView.setText("-" + NYHelper.priceFormatter(voucher.getValue()));
+            serviceFeeLinearLayout.addView(additionalView);
+        }
+
+        voucherEditText.setText(voucher.getCode().toString());
+    }
+
     public void addAditonalView(List<Additional> additionalList) {
 
         //NYLog.d("TES ADDITIONALS INIT");
-        serviceFeeLinearLayout.removeAllViews();
 
         if (additionalList != null && !additionalList.isEmpty()){
             for (Additional additional : additionalList) {
@@ -1565,25 +1721,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
 
 
-        if (cartReturn != null && cartReturn.getEquipmentRents() != null && !cartReturn.getEquipmentRents().isEmpty()){
-            for (EquipmentRent equipmentRent : cartReturn.getEquipmentRents()) {
 
-                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
-
-                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
-                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
-
-                if (equipmentRent != null) {
-                    if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName()+" x"+String.valueOf(equipmentRent.getQuantity()));
-
-                    additionalValueTextView.setText(NYHelper.priceFormatter((equipmentRent.getSpecialPrice()*equipmentRent.getQuantity())));
-
-                }
-
-                serviceFeeLinearLayout.addView(additionalView);
-            }
-        }
 
 
     }
@@ -1597,7 +1735,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         if (requestCode == paypalRequestCode) {
             if (resultCode == RESULT_OK) {
                 PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                NYLog.e("PAYPAL PAYMENT JSON OBJECT PAY ID : " + confirmation.getProofOfPayment().getPaymentId());
                 try {
                     progressDialog.show();
                     note = noteEditText.getText().toString().trim();
@@ -1607,6 +1744,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     progressDialog.dismiss();
                     e.printStackTrace();
                 }
+
             }
         }
     }

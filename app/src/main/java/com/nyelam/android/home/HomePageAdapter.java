@@ -19,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -513,7 +514,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 NYStrikethroughTextView priceStrikethroughTextView = (NYStrikethroughTextView) itemView.findViewById(R.id.price_strikethrough_textView);
                 TextView priceTextView = (TextView) view.findViewById(R.id.price_textView);
                 TextView scheduleTextView = (TextView) view.findViewById(R.id.shedule_textView);
-
+                RatingBar ratingBar = (RatingBar)view.findViewById(R.id.ratingBar);
                 TextView totalDiveTextView = (TextView) view.findViewById(R.id.total_dive_textView);
                 TextView totalDiveSpot_textView = (TextView) view.findViewById(R.id.total_dive_spot_textView);
                 TextView totalDayTextView = (TextView) view.findViewById(R.id.total_day_textView);
@@ -551,7 +552,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 if (diveService != null) {
-
+                    ratingBar.setRating(diveService.getRating());
                     if (diveService.isLicense())
                         divingLicenseImageView.setImageResource(R.drawable.ic_license_orange);
 

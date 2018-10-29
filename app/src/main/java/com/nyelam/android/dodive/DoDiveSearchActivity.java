@@ -64,7 +64,7 @@ public class DoDiveSearchActivity extends BasicActivity {
         initAdapter();
         initFirstData();
         //Toast.makeText(this, "hello "+String.valueOf(isDoCourse), Toast.LENGTH_SHORT).show();
-        //debugStorage();
+//        debugStorage();
     }
 
     private void debugStorage() {

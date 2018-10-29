@@ -35,6 +35,7 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
     public static final String KEY_API_VER = "api_ver";
     public static final String KEY_TIMESTAMP = "timestamp";
     public static final String KEY_DEVICE = "device";
+    public static final String KEY_PLATFORM = "platform";
 
     private Context context;
     private long gaStartTiming;
@@ -53,6 +54,7 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
         addQuery(KEY_API_VER, getApiVersion());
         addQuery(KEY_TIMESTAMP, String.valueOf(getTimestamp()));
         addQuery(KEY_DEVICE, NYHelper.getDevice());
+        addQuery(KEY_PLATFORM, "1");
         gaStartTiming = System.currentTimeMillis();
 
     }

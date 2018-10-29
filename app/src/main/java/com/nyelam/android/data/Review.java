@@ -20,11 +20,11 @@ public class Review implements Parseable {
     private int rating;
     private long date;
     private String content;
-    private User user;
+    private ReviewUser user;
 
     public Review(){}
 
-    public Review(String id, int rating, long date, String content, User user){
+    public Review(String id, int rating, long date, String content, ReviewUser user){
         this.id = id;
         this.rating = rating;
         this.date = date;
@@ -64,11 +64,11 @@ public class Review implements Parseable {
         this.content = content;
     }
 
-    public User getUser() {
+    public ReviewUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(ReviewUser user) {
         this.user = user;
     }
 
@@ -105,7 +105,7 @@ public class Review implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_USER);
                 if(o != null) {
-                    user = new User();
+                    user = new ReviewUser();
                     user.parse(o);
                 }
             } catch (JSONException e) {

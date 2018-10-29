@@ -97,7 +97,7 @@
                                 android:orientation="horizontal">
 
                                 <RatingBar
-                                    android:visibility="gone"
+                                    android:visibility="visible"
                                     android:id="@+id/ratingBar"
                                     style="@style/StarRatingBar"
                                     android:layout_width="wrap_content"
@@ -113,6 +113,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/padding_half"
+                                    android:visibility="gone"
                                     android:text="0.0"
                                     android:textColor="@color/ny_grey8"
                                     android:textSize="16sp" />
@@ -122,6 +123,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/padding_half"
+                                    android:visibility="gone"
                                     android:text="/ 0 visited"
                                     android:textColor="@color/ny_grey8"
                                     android:textSize="16sp" />

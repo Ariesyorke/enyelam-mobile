@@ -10,8 +10,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,6 +26,7 @@ import android.widget.Toast;
 
 import com.danzoye.lib.util.GalleryCameraInvoker;
 import com.nyelam.android.R;
+import com.nyelam.android.StarterActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Additional;
 import com.nyelam.android.data.Cart;
@@ -33,11 +39,13 @@ import com.nyelam.android.data.Order;
 import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.data.Participant;
 import com.nyelam.android.data.Summary;
+import com.nyelam.android.data.Voucher;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYDoDiveBookingDetailRequest;
 import com.nyelam.android.http.NYSubmitReviewRequest;
+import com.nyelam.android.inbox.NewMessageActivity;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -67,6 +75,8 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     private String idOrder;
     private boolean isPast;
     private OrderReturn orderReturn;
+
+    private MenuItem itemMsg;
 
     private File file;
     private GalleryCameraInvoker invoker;
@@ -163,14 +173,15 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
             }
         });
 
+
         sendReviewTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
+                //onSubmitReview(String.valueOf(submitRatingBar.getRating()), reviewEditText.getText().toString());
                 // TODO: sementara hide review
-//                Intent intent = new Intent(BookingHistoryDetailActivity.this, RatingActivity.class);
-//                intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
-//                startActivity(intent);
+                Intent intent = new Intent(BookingHistoryDetailActivity.this, RatingActivity.class);
+                intent.putExtra(NYHelper.ORDER_RETURN, orderReturn.toString());
+                startActivity(intent);
             }
         });
 
@@ -200,9 +211,9 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
         confirmLinearLayout = (LinearLayout) findViewById(R.id.confirm_linearLayout);
         additionalLinearLayout = (LinearLayout) findViewById(R.id.additional_linearLayout);
 
-//        reviewLinearLayout = (LinearLayout) findViewById(R.id.review_linearLayout);
-//        submitRatingBar = (ScaleRatingBar) findViewById(R.id.submitRatingBar);
-//        reviewEditText = (EditText) findViewById(R.id.review_editText);
+        reviewLinearLayout = (LinearLayout) findViewById(R.id.review_linearLayout);
+        submitRatingBar = (ScaleRatingBar) findViewById(R.id.submitRatingBar);
+        reviewEditText = (EditText) findViewById(R.id.review_editText);
         sendReviewTextView = (TextView) findViewById(R.id.send_review_textView);
 
 
@@ -385,10 +396,50 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     }
                 if (NYHelper.isStringNotEmpty(contact.getEmailAddress()))
                     contactEmailTextView.setText(contact.getEmailAddress());
+
+                //code untuk menyembunyikan menu message
+                Order order = summary.getOrder();
+                String status = order.getStatus().toString();
+                if(status.equals("denied") || status.equals("cancel")){
+                    if(itemMsg != null){
+                        itemMsg.setVisible(false);
+                    }
+                }else{
+                    if(itemMsg != null){
+                        itemMsg.setVisible(true);
+                    }
+                }
+                if(isPast){
+                    if(itemMsg != null){
+                        itemMsg.setVisible(false);
+                    }
+                }
             }
 
 
             additionalLinearLayout.removeAllViews();
+
+
+            if (summary != null && summary.getOrder() != null
+                    && summary.getOrder().getEquipmentRents() != null
+                    && summary.getOrder().getEquipmentRents().size() > 0){
+
+                for (EquipmentRent equipmentRent : summary.getOrder().getEquipmentRents()){
+
+                    LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+
+                    TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                    TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
+
+                    if (equipmentRent != null) {
+                        if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName());
+                        additionalValueTextView.setText(NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
+                    }
+
+                    additionalLinearLayout.addView(additionalView);
+                }
+            }
 
             if (summary != null && summary.getOrder() != null
                     && summary.getOrder().getAdditionals() != null
@@ -412,27 +463,20 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 }
             }
 
+            if(summary != null && summary.getOrder() != null && summary.getOrder().getCart() != null && summary.getOrder().getCart().getVoucher() != null) {
+                Voucher voucher = summary.getOrder().getCart().getVoucher();
+                LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
 
-            if (summary != null && summary.getOrder() != null
-                    && summary.getOrder().getEquipmentRents() != null
-                    && summary.getOrder().getEquipmentRents().size() > 0){
+                TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
+                TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
 
-                for (EquipmentRent equipmentRent : summary.getOrder().getEquipmentRents()){
-
-                    LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
-
-                    TextView additionalLabelTextView = (TextView) additionalView.findViewById(R.id.additional_label_textView);
-                    TextView additionalValueTextView = (TextView) additionalView.findViewById(R.id.additional_value_textView);
-
-                    if (equipmentRent != null) {
-                        if (NYHelper.isStringNotEmpty(equipmentRent.getName())) additionalLabelTextView.setText(equipmentRent.getName());
-                        additionalValueTextView.setText(NYHelper.priceFormatter(equipmentRent.getSpecialPrice()));
-                    }
-
-                    additionalLinearLayout.addView(additionalView);
+                if (voucher != null) {
+                    if (NYHelper.isStringNotEmpty(voucher.getCode())) additionalLabelTextView.setText("Voucher(" + voucher.getCode() +")");
+                    additionalValueTextView.setText("-" + NYHelper.priceFormatter(voucher.getValue()));
                 }
 
+                additionalLinearLayout.addView(additionalView);
             }
 
 
@@ -470,9 +514,9 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                     }
 
                     // TODO: sementara hide review
-//                    if (isPast && order.getStatus().equalsIgnoreCase("accepted")){
-//                        reviewLinearLayout.setVisibility(View.VISIBLE);
-//                    }
+                    if (isPast && order.getStatus().equalsIgnoreCase("accepted")){
+                        reviewLinearLayout.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 if (NYHelper.isStringNotEmpty(order.getOrderId()))
@@ -546,14 +590,13 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
                 paymentLinearLayout.setVisibility(View.VISIBLE);
             } else {
                 paymentLinearLayout.setVisibility(View.GONE);
+                if(orderReturn.getSummary() != null && orderReturn.getSummary().getOrder() != null && !TextUtils.isEmpty(orderReturn.getSummary().getOrder().getStatus()) && orderReturn.getSummary().getOrder().getStatus().equalsIgnoreCase("accepted")) {
+                    sendReviewTextView.setVisibility(View.VISIBLE);
+                } else {
+                    sendReviewTextView.setVisibility(View.GONE);
+                }
             }
-
-
-        } else {
-
         }
-
-
     }
 
 
@@ -625,10 +668,28 @@ public class BookingHistoryDetailActivity extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_booking, menu);
+        itemMsg = menu.findItem(R.id.msg_btn);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
+        }else if(item.getItemId() == R.id.msg_btn){
+            if(orderReturn != null){
+                Summary summary = orderReturn.getSummary();
+                Order order = summary.getOrder();
+                Intent intent = new Intent(BookingHistoryDetailActivity.this, NewMessageActivity.class);
+                intent.putExtra("title", summary.getDiveService().getName().toString() + " #" + NYHelper.setMillisToDateMonth(order.getSchedule()) );
+                intent.putExtra("refId", idOrder);
+                intent.putExtra("type", "2");
+                startActivity(intent);
+            }
         }
 
         return super.onOptionsItemSelected(item);

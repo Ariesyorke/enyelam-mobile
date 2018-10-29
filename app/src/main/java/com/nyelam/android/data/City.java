@@ -43,6 +43,7 @@ public class City implements Parseable {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
             }
+
         } catch (JSONException e) {e.printStackTrace();}
 
         try {

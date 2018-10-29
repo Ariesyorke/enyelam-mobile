@@ -31,7 +31,7 @@ public class NYLoginRequest extends NYBasicRequest<AuthReturn> {
 
         if(!TextUtils.isEmpty(password)) {
             addQuery(POST_PASSWORD, StringHelper.md5(password.getBytes()));
-            //   addQuery(POST_PASSWORD, password);
+            //addQuery(POST_PASSWORD, password);
         }
     }
 

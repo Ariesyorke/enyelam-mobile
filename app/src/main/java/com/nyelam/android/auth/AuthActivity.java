@@ -15,6 +15,8 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.storage.LoginStorage;
 
+import static android.app.Activity.RESULT_OK;
+
 public class AuthActivity extends BasicActivity implements
     LoginFragment.OnFragmentInteractionListener,
     RegisterFragment.OnFragmentInteractionListener,

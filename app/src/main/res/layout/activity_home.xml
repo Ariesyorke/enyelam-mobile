@@ -65,7 +65,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context="com.kuratif.android.MainActivity"
             android:background="@android:color/white">
 
             <com.nyelam.android.view.NYCustomViewPager
@@ -110,6 +109,15 @@
                     app:tabItemPosition="transaction"
                     app:tabItemText="Transaction"
                     app:tabSrcIcon="@drawable/ic_my_booking_normal"/>
+
+                <com.nyelam.android.view.NYHomepageTabItemView
+                    android:id="@+id/socialmedia_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:tabItemPosition="inbox"
+                    app:tabItemText="Inbox"
+                    app:tabSrcIcon="@drawable/tab_chat"/>
 
                 <!--<com.nyelam.android.view.NYHomepageTabItemView-->
                 <!--android:id="@+id/socialmedia_tab"-->

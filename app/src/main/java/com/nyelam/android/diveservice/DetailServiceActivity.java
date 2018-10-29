@@ -165,10 +165,13 @@ public class DetailServiceActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 int diverTemp = Integer.valueOf(diver) + 1;
-                if (diverTemp <= availabilityStock){
-                    diver = String.valueOf(diverTemp);
-                    diverTextView.setText(diver);
+                if (diverTemp > availabilityStock) {
+                    if(!isDoCourse) {
+                        return;
+                    }
                 }
+                diver = String.valueOf(diverTemp);
+                diverTextView.setText(diver);
             }
         });
 
@@ -201,9 +204,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
 
     private void doBook() {
 
-        NYLog.e("CEK BOOKING : DATA -> "+newDiveService.toString());
 
-        NYLog.e("CEK BOOKING : INIT");
 
         progressDialog.show();
         NYDoDiveServiceCartRequest req = null;
@@ -217,14 +218,12 @@ public class DetailServiceActivity extends AppCompatActivity implements
             } else if (isDoCourse && newDiveService.getOrganization() != null && NYHelper.isStringNotEmpty(newDiveService.getOrganization().getId())
                     && newDiveService.getLicenseType() != null && NYHelper.isStringNotEmpty(newDiveService.getLicenseType().getId())) {
 
-                NYLog.e("CEK BOOKING : INIT 2");
 
                 req = new NYDoDiveServiceCartRequest(DetailServiceActivity.this, diveService.getId(), diver, schedule, newDiveService.getDiveCenter().getId(), newDiveService.getOrganization().getId(), newDiveService.getLicenseType().getId(), equipment);
             }
             spcMgr.execute(req, onCreateCartServiceRequest());
         } catch (Exception e) {
 
-            NYLog.e("CEK BOOKING : ERROR");
 
             if (progressDialog != null) {
                 progressDialog.dismiss();
@@ -286,9 +285,9 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 }
 
                 if (Integer.valueOf(diver) > 1){
-                    titleTextView.setText(dateString+", "+diver+" pax(s)");
+                    titleTextView.setText(dateString);
                 } else {
-                    titleTextView.setText(dateString+", "+diver+" pax");
+                    titleTextView.setText(dateString);
                 }
 
 
@@ -309,15 +308,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 }
             }
 
-
-
-
-
-
-
         }
 
-        //Toast.makeText(this, diveService.getId()+" - "+diveCenter.getId(), Toast.LENGTH_SHORT).show();
     }
 
     private void initRequest() {
@@ -363,7 +355,6 @@ public class DetailServiceActivity extends AppCompatActivity implements
                         });
                     }
                 }
-
             }
 
             @Override
@@ -405,7 +396,8 @@ public class DetailServiceActivity extends AppCompatActivity implements
                         ((DetailServiceDiveCenterFragment) fragment).setDiveCenter();
 
                     } else if (fragment != null && fragment instanceof DetailServiceReviewFragment){
-                        //Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(DetailServiceActivity.this, fragment.getClass().getName(), Toast.LENGTH_SHORT).show();
+                        ((DetailServiceReviewFragment) fragment).setReviewList();
                     }
                     initBanner();
                 } else {
@@ -452,7 +444,11 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.DIVE_CENTER, newDiveService.getDiveCenter().toString());
                 intent.putExtra(NYHelper.IS_DO_COURSE, isDoCourse);
                 if (equipmentRentList != null && !equipmentRentList.isEmpty()){
+                    NYLog.e("EQUIPMENT SERVICE EXIST!");
                     intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentList.toString());
+                } else {
+                    NYLog.e("EQUIPMENT SERVICE NOT EXIST!");
+
                 }
                 startActivity(intent);
             }
@@ -478,6 +474,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
         plusImageView = (ImageView) findViewById(R.id.plus_imageView);
 
         fragmentAdapter = new NYFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setPagingEnabled(false);
         viewPager.setAdapter(fragmentAdapter);
 
         progressDialog = new ProgressDialog(this);
