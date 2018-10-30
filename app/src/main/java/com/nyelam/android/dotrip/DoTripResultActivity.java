@@ -207,7 +207,7 @@ public class DoTripResultActivity extends BasicActivity implements NYCustomDialo
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        diveServiceAdapter = new DoTripDiveServiceAdapter(this, diver, date, certificate, type, diverId);
+        diveServiceAdapter = new DoTripDiveServiceAdapter(this, diver, certificate, type, diverId);
         recyclerView.setAdapter(diveServiceAdapter);
     }
 

@@ -19,6 +19,7 @@ import com.nyelam.android.NYApplication;
 import com.nyelam.android.NYPagingBridge;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DiveService;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveSearchDiveServiceAdapter;
 import com.nyelam.android.dodive.DoDiveSearchResultActivity;
@@ -39,7 +40,6 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
     private Activity activity;
     private List<DiveService> diveServiceList;
     private String diver;
-    private String date;
     private String certificate;
     private String type;
     private String diverId;
@@ -59,10 +59,9 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
         Collections.sort(diveServiceList, new StudentDateComparator());
     }
 
-    public DoTripDiveServiceAdapter(Activity activity, String diver, String date, String certificate, String type, String diverId) {
+    public DoTripDiveServiceAdapter(Activity activity, String diver, String certificate, String type, String diverId) {
         this.activity = activity;
         this.diver = diver;
-        this.date = date;
         this.certificate = certificate;
         this.type = type;
         this.diverId = diverId;
@@ -361,8 +360,8 @@ public class DoTripDiveServiceAdapter extends RecyclerView.Adapter<RecyclerView.
             Intent intent = new Intent(activity, DetailServiceActivity.class);
             if (diveService != null ) intent.putExtra(NYHelper.SERVICE, diveService.toString());
             intent.putExtra(NYHelper.DIVER, diver);
-            intent.putExtra(NYHelper.SCHEDULE, date);
-            if (diveService.isLicense()){
+            intent.putExtra(NYHelper.SCHEDULE, String.valueOf(diveService.getSchedule().getStartDate()));
+            if (diveService.isLicense()) {
                 intent.putExtra(NYHelper.CERTIFICATE, "1");
             } else {
                 intent.putExtra(NYHelper.CERTIFICATE, "0");

@@ -289,10 +289,6 @@
 
                         </RelativeLayout>
 
-
-
-
-
                         <RelativeLayout
                             android:id="@+id/do_course_relativeLayout"
                             android:layout_width="0dp"

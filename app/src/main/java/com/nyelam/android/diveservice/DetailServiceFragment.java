@@ -515,17 +515,6 @@ public class DetailServiceFragment extends Fragment {
 
 
     public void setEquipmentRent(){
-
-        /*final List<EquipmentRent> equipmentRents = new ArrayList<>();
-
-        EquipmentRent equipmentRent1 = new EquipmentRent();
-        equipmentRent1.setId("1");
-        equipmentRent1.setName("BCD Gear x1");
-        equipmentRent1.setNormalPrice(25000);
-        equipmentRent1.setSpecialPrice(10000);
-        equipmentRent1.setAvailabilityStock(3);
-        equipmentRents.add(equipmentRent1);*/
-
         if (equipmentRentList != null && equipmentRentList.getList() != null && !equipmentRentList.getList().isEmpty()){
 
             equipmenRentContainerLinearLayoutt.removeAllViews();
@@ -543,7 +532,6 @@ public class DetailServiceFragment extends Fragment {
                 layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(getActivity(), 10));
                 myParticipantsView.setLayoutParams(layoutParamsAddons);
 
-                //myViewAddons.setId(0);
                 LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.linearLayout);
                 TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
 
@@ -577,7 +565,6 @@ public class DetailServiceFragment extends Fragment {
             layoutParamsAddons.setMargins(0, 0, 0, NYHelper.integerToDP(getActivity(), 10));
             myParticipantsView.setLayoutParams(layoutParamsAddons);
 
-            //myViewAddons.setId(0);
             LinearLayout linearLayout = (LinearLayout) myParticipantsView.findViewById(R.id.linearLayout);
             TextView nameTextView = (TextView) myParticipantsView.findViewById(R.id.name_textView);
 
@@ -649,19 +636,13 @@ public class DetailServiceFragment extends Fragment {
         if (activity.isDoTrip){
             apiPath = getString(R.string.api_path_dotrip_service_list_by_divecenter);
             if (diveService != null && diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getId())){
-                // TODO: realted service belum
                 NYDoTripSearchServiceResultRequest req = new NYDoTripSearchServiceResultRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, String.valueOf(2), null, null, null, -1, -1);
                 spcMgr.execute(req, onSearchServiceRequest());
-                // TODO: load data dummy, to test and waitting for API request
-                //loadJSONAsset();
             }
         } else {
             if (diveService != null && diveService.getDiveCenter() != null && NYHelper.isStringNotEmpty(diveService.getDiveCenter().getId())){
-                // TODO: realted service belum
                 NYDoDiveRelatedServiceRequest req = new NYDoDiveRelatedServiceRequest(getActivity(), apiPath, String.valueOf(1), diveService.getDiveCenter().getId(), "3", activity.diver, activity.certificate, activity.schedule, null, null, null, null, -1, -1, String.valueOf(0));
                 spcMgr.execute(req, onSearchServiceRequest());
-                // TODO: load data dummy, to test and waitting for API request
-                //loadJSONAsset();
             }
         }
 

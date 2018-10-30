@@ -16,14 +16,14 @@
     <string name="api_veritrans_production">https://api.veritrans.co.id/v2</string>
     <string name="api_veritrans_development">https://api.sandbox.midtrans.com/v2</string>
 
-    <!-- DEVELOPMENT -->
+    <!--&lt;!&ndash; DEVELOPMENT &ndash;&gt;-->
     <!--<string name="host_url">https://nyelam-adam.dantech.id/</string>-->
-    <!--<string name="host_url">http://nyelam-yoga.dantech.id/</string>-->
+    <!--&lt;!&ndash;<string name="host_url">http://nyelam-yoga.dantech.id/</string>&ndash;&gt;-->
 
-    <!-- STAGING -->
-    <!--<string name="host_url">https://nyelam.dantech.id/</string>-->
+     <!--&lt;!&ndash;STAGING &ndash;&gt;-->
+    <!--&lt;!&ndash;<string name="host_url">https://nyelam.dantech.id/</string>&ndash;&gt;-->
 
-    <!-- API STAGING AND DEVELOPMENT -->
+     <!--&lt;!&ndash;API STAGING AND DEVELOPMENT &ndash;&gt;-->
     <!--<string name="api_path_login">api/user/login</string>-->
     <!--<string name="api_path_update_version">api/master/UpdateVersion</string>-->
     <!--<string name="api_path_socmed_login">api/user/socmedlogin/</string>-->

@@ -262,13 +262,13 @@ public class DoTripActivity extends BasicActivity implements
 
         }
 
-        //TODO HARCODE ECOTRIP!!
-        if(isDoTripBanner) {
-            keyword = "Save Our Small Island";
-            keywordTextView.setText(keyword);
-            type = "3";
-            diverId = "23";
-        }
+//        //TODO HARCODE ECOTRIP!!
+//        if(isDoTripBanner) {
+//            keyword = "Save Our Small Island";
+//            keywordTextView.setText(keyword);
+//            type = "3";
+//            diverId = "23";
+//        }
     }
 
     private void initControl() {
