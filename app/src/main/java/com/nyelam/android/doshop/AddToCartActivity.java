@@ -286,6 +286,8 @@ public class AddToCartActivity extends BasicActivity implements NYDialogAddToCar
     @Override
     public void onPayNowListener(DoShopProduct product) {
         Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, DoShopCheckoutActivity.class);
+        startActivity(intent);
     }
 
 }

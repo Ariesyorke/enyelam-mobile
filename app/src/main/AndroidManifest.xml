@@ -190,7 +190,8 @@
         <activity android:name=".inbox.InboxActivity" />
         <activity android:name=".inbox.NewMessageActivity" />
         <activity android:name=".doshop.AddToCartActivity" />
-        <activity android:name=".doshop.DoShopCategoryActivity"/>
+        <activity android:name=".doshop.DoShopCategoryActivity" />
+        <activity android:name=".doshop.DoShopCheckoutActivity"></activity>
     </application>
 
 </manifest>
