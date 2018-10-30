@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -32,6 +33,8 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
+import com.nyelam.android.view.NYCustomDialog;
+import com.nyelam.android.view.NYDialogAddToCart;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -41,8 +44,9 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class AddToCartActivity extends BasicActivity {
+public class AddToCartActivity extends BasicActivity implements NYDialogAddToCart.Listener {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -73,6 +77,11 @@ public class AddToCartActivity extends BasicActivity {
     @BindView(R.id.tv_product_description) TextView tvProductDescription;
     @BindView(R.id.ll_related_item) LinearLayout llRelatedItem;
     @BindView(R.id.rv_related_item) RecyclerView rvRelatedItem;
+
+    @OnClick(R.id.tv_add_to_basket)void addToBasket(){
+        NYDialogAddToCart dialog = new NYDialogAddToCart();
+        dialog.showAddToCartDialog(this, product);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,7 +225,7 @@ public class AddToCartActivity extends BasicActivity {
 
                 double value = product.getNormalPrice()-product.getSpecialPrice();
                 double percent = value/product.getNormalPrice();
-                tvYouSave.setText(String.format("%.0f", percent));
+                tvYouSave.setText("You Save : "+String.format("%.0f", percent));
 
                 llPriceContainer.setVisibility(View.VISIBLE);
             } else {
@@ -268,4 +277,15 @@ public class AddToCartActivity extends BasicActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    @Override
+    public void onShopAgainListener() {
+        finish();
+    }
+
+    @Override
+    public void onPayNowListener(DoShopProduct product) {
+        Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
+    }
+
 }

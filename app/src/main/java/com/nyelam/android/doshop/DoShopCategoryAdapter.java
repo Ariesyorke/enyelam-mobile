@@ -2,6 +2,7 @@ package com.nyelam.android.doshop;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.images.internal.LoadingImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,7 +51,7 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
 //            vh.setModel(data.get(position));
 //        }
 
-        DoShopCategory cat = data.get(position);
+        final DoShopCategory cat = data.get(position);
 
         if (cat == null) return;
         if (NYHelper.isStringNotEmpty(cat.getName())) holder.name.setText(cat.getName());
@@ -79,6 +81,19 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
 
             ImageLoader.getInstance().displayImage(cat.getImageUri(), holder.image, NYHelper.getOption());
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cat != null && NYHelper.isStringNotEmpty(cat.getId())){
+                    Intent intent = new Intent(context, DoShopCategoryActivity.class);
+                    intent.putExtra(NYHelper.CATEGORY, cat.toString());
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Sorry, this category is not available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         //holder.image.setImageResource(data.get(position).getImage());
         //holder.title.setText(data.get(position).getHeader());

@@ -58,7 +58,7 @@
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cressi Gloves 5 mm Ultrastrecht"
+                tools:text="Cressi Gloves 5 mm Ultrastrecht"
                 android:textColor="@color/ny_black2"
                 android:textSize="@dimen/eightteen_sp"
                 app:fontTextStyle="bold"/>
@@ -127,7 +127,7 @@
                     android:gravity="center"
                     android:textColor="@color/ny_black2"
                     android:textSize="@dimen/jumbo_text"
-                    android:text="Rp 257098"
+                    tools:text="Rp 257098"
                     app:fontTextStyle="bold"/>
                 <LinearLayout
                     android:id="@+id/ll_price_container"
@@ -151,7 +151,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/padding"
-                            android:text="Rp 318585"
+                            tools:text="Rp 318585"
                             android:textColor="@color/ny_black2"
                             android:textSize="@dimen/tertiary_text_size"
                             android:visibility="visible" />
@@ -162,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/tertiary_text_size"
                         android:textColor="@color/ny_black2"
-                        android:text="You Save : 19.3 %"
+                        tools:text="You Save : 19.3 %"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -359,9 +359,9 @@
                 android:id="@+id/tv_product_description_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding"
+                android:layout_marginTop="@dimen/padding_double"
                 android:gravity="center"
-                android:text="Product Description Cressi Gloves 5 mm Ultrastrecht"
+                tools:text="Product Description Cressi Gloves 5 mm Ultrastrecht"
                 android:textColor="@color/ny_black2"
                 android:textSize="@dimen/eightteen_sp"
                 app:fontTextStyle="bold"/>
@@ -371,7 +371,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding"
-                android:text="At Scubastore, we show all the characteristics of the cressi Gloves 5 mm Ultrastrecht. Secure payment and guaranteed shipment! in addition, discover more similiar producs of cress "
+                android:layout_marginBottom="@dimen/padding_double"
+                tools:text="At Scubastore, we show all the characteristics of the cressi Gloves 5 mm Ultrastrecht. Secure payment and guaranteed shipment! in addition, discover more similiar producs of cress "
                 android:textColor="@color/ny_black2"
                 android:textSize="@dimen/tertiary_text_size"/>
 
@@ -380,7 +381,7 @@
                 android:id="@+id/ll_related_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#F7F7F7"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <com.nyelam.android.view.font.NYTextView

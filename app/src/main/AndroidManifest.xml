@@ -189,7 +189,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".inbox.InboxActivity" />
         <activity android:name=".inbox.NewMessageActivity" />
-        <activity android:name=".doshop.AddToCartActivity"></activity>
+        <activity android:name=".doshop.AddToCartActivity" />
+        <activity android:name=".doshop.DoShopCategoryActivity"/>
     </application>
 
 </manifest>

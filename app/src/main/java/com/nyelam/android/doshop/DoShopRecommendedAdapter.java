@@ -30,6 +30,10 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
     private List<DoShopProduct> data = new ArrayList<>();
     private Context context;
 
+    public DoShopRecommendedAdapter(Context contexts) {
+        this.context = contexts;
+    }
+
     public DoShopRecommendedAdapter(Context contexts, List<DoShopProduct> data) {
         this.context = contexts;
         this.data = data;
@@ -111,6 +115,22 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
             }
         });
     }
+
+    public List<DoShopProduct> getData() {
+        if (data == null) data = new ArrayList<>();
+        return data;
+    }
+
+    public void setData(List<DoShopProduct> data) {
+        this.data = data;
+    }
+
+    public void addData(List<DoShopProduct> data) {
+        if (this.data == null) this.data = new ArrayList<>();
+        this.data.addAll(data);
+    }
+
+
 
     @Override
     public int getItemCount() {
