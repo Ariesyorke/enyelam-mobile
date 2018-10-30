@@ -228,6 +228,7 @@
 
 
             <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_checkout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FF642E"
@@ -244,7 +245,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 />
-
 
         </LinearLayout>
     </ScrollView>

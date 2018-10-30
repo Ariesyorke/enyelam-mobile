@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
 
+import butterknife.OnClick;
+
 public class DoShopCartFragment extends BasicFragment {
 
+    private CheckoutListener listener;
 
-
+    @OnClick(R.id.tv_checkout) void checkOut(){
+        listener.proceedToCheckOut();
+    }
 
     public DoShopCartFragment() {
         // Required empty public constructor
@@ -22,6 +27,7 @@ public class DoShopCartFragment extends BasicFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        listener = (CheckoutListener) getActivity();
     }
 
 

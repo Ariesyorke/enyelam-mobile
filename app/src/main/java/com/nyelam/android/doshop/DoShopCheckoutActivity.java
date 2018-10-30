@@ -13,7 +13,7 @@ import com.nyelam.android.dodive.DoDiveFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DoShopCheckoutActivity extends BasicActivity {
+public class DoShopCheckoutActivity extends BasicActivity implements CheckoutListener {
 
     @BindView(R.id.container)
     FrameLayout container;
@@ -34,7 +34,13 @@ public class DoShopCheckoutActivity extends BasicActivity {
         fragmentTransaction.commit();
     }
 
-
-
+    @Override
+    public void proceedToCheckOut() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        DoShopCheckoutFragment fragment = new DoShopCheckoutFragment();
+        fragmentTransaction.replace(R.id.container, fragment)
+                .addToBackStack("frag1")
+                .commit();
+    }
 
 }
