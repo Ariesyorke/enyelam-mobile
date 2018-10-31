@@ -11,9 +11,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent">
         <ImageView
+            android:layout_gravity="top"
             android:src="@drawable/banner_1"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="100dp" />
     </LinearLayout>
 
 
@@ -36,7 +37,7 @@
                 android:text="Cressi Gloves 5 mm Ultrastrecht"
                 android:textStyle="bold"
                 android:textColor="@color/ny_black2"
-                android:layout_gravity="center"
+                android:layout_gravity="top"
                 android:layout_margin="@dimen/padding_half"
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -46,7 +47,7 @@
                 android:text="Estimate delivery time takes up to 2-8 workdays"
                 android:textStyle="bold"
                 android:textColor="@color/ny_black1"
-                android:layout_gravity="center"
+                android:layout_gravity="top"
                 android:layout_margin="@dimen/padding_half"
                 android:layout_weight="1"
                 android:layout_width="0dp"

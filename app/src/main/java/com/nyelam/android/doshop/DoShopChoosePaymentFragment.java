@@ -10,25 +10,19 @@ import android.view.ViewGroup;
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
 
-import butterknife.BindView;
 import butterknife.OnClick;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class DoShopCheckoutFragment extends BasicFragment  {
-
+public class DoShopChoosePaymentFragment extends BasicFragment {
 
     private CheckoutListener listener;
 
-    @OnClick(R.id.tv_checkout) void choosePayment(){
-        listener.proceedToChoosePayment();
+    @OnClick(R.id.tv_payment) void processPayment(){
+        listener.proceedPayment();
     }
 
-    public DoShopCheckoutFragment() {
+    public DoShopChoosePaymentFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -38,7 +32,9 @@ public class DoShopCheckoutFragment extends BasicFragment  {
 
     @Override
     protected int getFragmentLayout() {
-        return R.layout.fragment_do_shop_checkout;
+        return R.layout.fragment_do_shop_choose_payment;
     }
+
+
 
 }

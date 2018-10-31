@@ -5,4 +5,6 @@ package com.nyelam.android.doshop;
  */
 public interface CheckoutListener {
     void proceedToCheckOut();
+    void proceedToChoosePayment();
+    void proceedPayment();
 }

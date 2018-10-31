@@ -39,8 +39,27 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         DoShopCheckoutFragment fragment = new DoShopCheckoutFragment();
         fragmentTransaction.replace(R.id.container, fragment)
-                .addToBackStack("frag1")
+                .addToBackStack("itemDetail")
                 .commit();
     }
+
+    @Override
+    public void proceedToChoosePayment() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        DoShopChoosePaymentFragment fragment = new DoShopChoosePaymentFragment();
+        fragmentTransaction.replace(R.id.container, fragment)
+                .addToBackStack("checkout")
+                .commit();
+    }
+
+    @Override
+    public void proceedPayment() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        DoShopOrderSuccessFragment fragment = new DoShopOrderSuccessFragment();
+        fragmentTransaction.replace(R.id.container, fragment)
+                .addToBackStack("payment")
+                .commit();
+    }
+
 
 }

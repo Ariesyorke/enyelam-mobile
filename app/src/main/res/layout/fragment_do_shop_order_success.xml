@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".doshop.DoShopOrderSuccessFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="bold"
+                android:text="Thank You"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/padding_quad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="bold"
+                android:text="For Using E-Nylam\nDo Shop"
+                android:textSize="18sp"
+                android:textColor="@color/ny_black2"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/padding_quad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="bold"
+                android:text="Please finish the transaction before"
+                android:textSize="15sp"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/padding_double"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="medium"
+                android:text="Wednesday, 22 August 2018 12:21 WIB"
+                android:textSize="15sp"
+                android:textColor="@color/ny_grey2"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="medium"
+                    android:text="Amount of Transaction"
+                    android:textSize="15sp"
+                    android:textColor="@color/ny_black2"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="bold"
+                    android:text="Rp 8.000.000"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="medium"
+                    android:text="Please do transfer the payment\nincluding 3 digits of last\nunique codes."
+                    android:textColor="@color/ny_grey3"
+                    android:background="@color/colorPrimary"
+                    android:padding="@dimen/padding_double"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    app:fontTextStyle="reguler"
+                    android:text="If the amount are incorrect, the\nverification process will not be\nable to be proceed."
+                    android:textColor="@color/ny_grey3"
+                    android:background="@color/colorPrimary"
+                    android:padding="@dimen/padding_double"
+                    android:gravity="center"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="semiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/padding_quad"
+                android:background="#CCCCCC"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="Continue Shopping"
+                android:textAllCaps="true"
+                android:textColor="#7F7F7F"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="semiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/padding_double"
+                android:background="#CCCCCC"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="Payment Confirmation"
+                android:textAllCaps="true"
+                android:textColor="#7F7F7F"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.nyelam.android.view.font.NYTextView
+                app:fontTextStyle="semiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_triple"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/padding_double"
+                android:background="#FF642E"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="Order History"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+
+
+</LinearLayout>
