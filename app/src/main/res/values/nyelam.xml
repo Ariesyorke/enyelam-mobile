@@ -126,7 +126,10 @@
     <string name="api_path_doshop_product_detail">api/doshop/detailProduct</string>
     <string name="api_path_doshop_add_cart">api/doshop/addCart</string>
     <string name="api_path_doshop_cart_list">api/doshop/cartList</string>
-
+    <string name="api_path_doshop_add_voucher">api/doshop/addCart</string>
+    <string name="api_path_doshop_address_list">api/doshop/addressList</string>
+    <string name="api_path_doshop_add_address">api/doshop/addressList</string>
+    <string name="api_path_doshop_checkout_product">api/doshop/addCart</string>
 
 
 
