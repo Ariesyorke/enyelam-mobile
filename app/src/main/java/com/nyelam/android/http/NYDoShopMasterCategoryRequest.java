@@ -16,12 +16,12 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class NYDoShopCategoryListRequest extends NYBasicRequest<DoShopCategoryList> {
+public class NYDoShopMasterCategoryRequest extends NYBasicRequest<DoShopCategoryList> {
 
     private final static String KEY_CATEGORIES = "categories";
     //private final static String POST_PAGE = "page";
 
-    public NYDoShopCategoryListRequest(Context context, String page, String keyword, String categoryId, String priceMin, String priceMax, String sortBy){
+    public NYDoShopMasterCategoryRequest(Context context, String page, String keyword, String categoryId, String priceMin, String priceMax, String sortBy){
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_product_list));
 
 //        if(!TextUtils.isEmpty(page)) {

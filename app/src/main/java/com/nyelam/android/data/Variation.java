@@ -1,38 +1,27 @@
 package com.nyelam.android.data;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nyelam.android.data.dao.DaoSession;
-import com.nyelam.android.data.dao.NYCategory;
-
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DoShopCategory implements Parseable {
+/**
+ * Created by Aprilian Nur Wakhid Daini on 1/11/2018.
+ */
+
+public class Variation implements Parseable {
 
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
-    private static String KEY_DESCRIPTION = "description";
-    private static String KEY_IMAGE = "image_url";
+    private static String KEY_QTY = "qty";
+    private static String KEY_NORMAL_PRICE = "normal_price";
+    private static String KEY_SPECIAL_PRICE = "special_price";
 
     private String id;
     private String name;
-    private String description;
-    private String imageUrl;
-
-    public DoShopCategory(){
-
-    }
-
-    public DoShopCategory(String id, String name, String imageUrl){
-        this.id = id;
-        this.name = name;
-        this.imageUrl = imageUrl;
-    }
+    private int qty;
+    private double normalPrice;
+    private double specialPrice;
 
     public String getId() {
         return id;
@@ -50,24 +39,28 @@ public class DoShopCategory implements Parseable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public int getQty() {
+        return qty;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public double getNormalPrice() {
+        return normalPrice;
     }
 
-    public String getImageUri() {
-        return imageUrl;
+    public void setNormalPrice(double normalPrice) {
+        this.normalPrice = normalPrice;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public double getSpecialPrice() {
+        return specialPrice;
+    }
+
+    public void setSpecialPrice(double specialPrice) {
+        this.specialPrice = specialPrice;
     }
 
     @Override
@@ -78,6 +71,7 @@ public class DoShopCategory implements Parseable {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
             }
+
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
@@ -87,16 +81,23 @@ public class DoShopCategory implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_DESCRIPTION)) {
-                setDescription(obj.getString(KEY_DESCRIPTION));
+            if (!obj.isNull(KEY_QTY)) {
+                setQty(obj.getInt(KEY_QTY));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_IMAGE)) {
-                setImageUrl(obj.getString(KEY_IMAGE));
+            if (!obj.isNull(KEY_NORMAL_PRICE)) {
+                setNormalPrice(obj.getDouble(KEY_NORMAL_PRICE));
             }
         } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_SPECIAL_PRICE)) {
+                setSpecialPrice(obj.getDouble(KEY_SPECIAL_PRICE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
     }
 
 
@@ -121,19 +122,15 @@ public class DoShopCategory implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!TextUtils.isEmpty(getDescription())) {
-                obj.put(KEY_DESCRIPTION, getDescription());
-            } else {
-                obj.put(KEY_DESCRIPTION, JSONObject.NULL);
-            }
+            obj.put(KEY_QTY, getQty());
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!TextUtils.isEmpty(getImageUri())) {
-                obj.put(KEY_IMAGE, getImageUri());
-            } else {
-                obj.put(KEY_IMAGE, JSONObject.NULL);
-            }
+            obj.put(KEY_NORMAL_PRICE, getNormalPrice());
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            obj.put(KEY_SPECIAL_PRICE, getSpecialPrice());
         } catch (JSONException e) {e.printStackTrace();}
 
 
@@ -143,4 +140,6 @@ public class DoShopCategory implements Parseable {
 
         return super.toString();
     }
+
+
 }

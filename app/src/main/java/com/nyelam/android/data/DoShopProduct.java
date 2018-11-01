@@ -17,17 +17,21 @@ public class DoShopProduct implements Parseable {
     private static String KEY_IMAGES = "images";
     private static String KEY_SPECIAL_PRICE = "special_price";
     private static String KEY_NORMAL_PRICE = "normal_price";
+    private static String KEY_WEIGHT = "weight";
     private static String KEY_STATUS = "status";
     private static String KEY_CATEGORIES = "categories";
-    private static String KEY_DESCRIPTION = "description";
+    private static String KEY_VARIATIONS = "variations";
+    private static String KEY_DESCRIPTION = "product_description";
 
     private String id;
     private String productName;
     private String featuredImage;
     private List<String> images;
+    private String weight;
     private double specialPrice;
     private double normalPrice;
     private String status;
+    private Variations variations;
     private List<DoShopCategory> categories;
     private String description;
 
@@ -120,6 +124,22 @@ public class DoShopProduct implements Parseable {
         this.description = description;
     }
 
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public Variations getVariations() {
+        return variations;
+    }
+
+    public void setVariations(Variations variations) {
+        this.variations = variations;
+    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -198,17 +218,25 @@ public class DoShopProduct implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+        try {
+            if (!obj.isNull(KEY_WEIGHT)) {
+                setWeight(obj.getString(KEY_WEIGHT));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if(!obj.isNull(KEY_VARIATIONS)) {
+                JSONObject o = obj.getJSONObject(KEY_VARIATIONS);
+                if(o != null && o.length() > 0) {
+                    variations = new Variations();
+                    variations.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
-
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -294,6 +322,26 @@ public class DoShopProduct implements Parseable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        try {
+            if (!TextUtils.isEmpty(getWeight())) {
+                obj.put(KEY_WEIGHT, getWeight());
+            } else {
+                obj.put(KEY_WEIGHT, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+
+        try{
+            if(getVariations()!=null){
+                JSONObject objVar= new JSONObject(getVariations().toString());
+                obj.put(KEY_VARIATIONS, objVar);
+            } else {
+                obj.put(KEY_VARIATIONS, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
         }
 
 

@@ -2,26 +2,22 @@ package com.nyelam.android.data;
 
 import com.nyelam.android.helper.NYHelper;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class DeliveryService implements Parseable {
+public class DeliveryServiceType implements Parseable {
 
-    private static String KEY_ID = "id";
+    private static String KEY_ID = "type_id";
     private static String KEY_NAME = "name";
-    private static String KEY_TYPES = "types";
+    private static String KEY_PRICE = "price";
 
     private String id;
     private String name;
-    private List<DeliveryServiceType> types;
+    private double price;
 
     public String getId() {
         return id;
@@ -39,12 +35,12 @@ public class DeliveryService implements Parseable {
         this.name = name;
     }
 
-    public List<DeliveryServiceType> getTypes() {
-        return types;
+    public double getPrice() {
+        return price;
     }
 
-    public void setTypes(List<DeliveryServiceType> types) {
-        this.types = types;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override
@@ -65,22 +61,12 @@ public class DeliveryService implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-        if (!obj.isNull(KEY_TYPES)) {
-            try {
-                JSONArray array = obj.getJSONArray(KEY_TYPES);
-                if (array != null && array.length() > 0) {
-                    types = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject o = array.getJSONObject(i);
-                        DeliveryServiceType a = new DeliveryServiceType();
-                        a.parse(o);
-                        types.add(a);
-                    }
-                }
-            } catch (JSONException e) {e.printStackTrace();}
-        }
 
-
+        try {
+            if (!obj.isNull(KEY_PRICE)) {
+                setPrice(obj.getDouble(KEY_PRICE));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     @Override
@@ -104,18 +90,10 @@ public class DeliveryService implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-
-        if(types != null && !types.isEmpty()) {
-            try {
-                JSONArray array = new JSONArray();
-                for(DeliveryServiceType a : types) {
-                    JSONObject o = new JSONObject(a.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_TYPES, array);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        try {
+            obj.put(KEY_PRICE, price);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         try {
