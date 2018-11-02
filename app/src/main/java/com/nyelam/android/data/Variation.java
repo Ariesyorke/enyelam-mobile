@@ -23,6 +23,13 @@ public class Variation implements Parseable {
     private double normalPrice;
     private double specialPrice;
 
+    public Variation(){}
+
+    public Variation(String id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }

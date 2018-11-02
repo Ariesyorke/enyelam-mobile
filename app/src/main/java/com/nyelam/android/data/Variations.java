@@ -13,8 +13,8 @@ import java.util.List;
 
 public class Variations implements Parseable {
 
-    private static String KEY_COLOR = "color";
-    private static String KEY_SIZE = "size";
+    private static String KEY_COLOR = "Color";
+    private static String KEY_SIZE = "Size";
 
     private List<Variation> colors;
     private List<Variation> sizes;
@@ -28,6 +28,7 @@ public class Variations implements Parseable {
     }
 
     public List<Variation> getSizes() {
+        if (sizes == null) sizes = new ArrayList<>();
         return sizes;
     }
 

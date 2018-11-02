@@ -15,9 +15,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class NYCategoryRequest extends NYBasicRequest<DoShopList> {
+public class NYDoShopHomepageRequest extends NYBasicRequest<DoShopList> {
 
-    public NYCategoryRequest(Context context){
+    public NYDoShopHomepageRequest(Context context){
         //sumber api asal ambil
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_homepage));
     }

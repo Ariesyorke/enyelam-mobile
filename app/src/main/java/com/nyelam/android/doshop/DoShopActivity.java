@@ -1,35 +1,27 @@
 package com.nyelam.android.doshop;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.nyelam.android.R;
-import com.nyelam.android.StarterActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.DoShopCategory;
+import com.nyelam.android.data.DoShopCategoryList;
 import com.nyelam.android.data.DoShopList;
-import com.nyelam.android.data.Update;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYCategoryRequest;
-import com.nyelam.android.http.NYUpdateVersionRequest;
-import com.nyelam.android.http.NYVoucherCartRequest;
-import com.nyelam.android.view.NYCustomDialog;
-import com.nyelam.android.view.NYUnswipableViewPager;
+import com.nyelam.android.http.NYDoShopHomepageRequest;
+import com.nyelam.android.http.NYDoShopMasterCategoryRequest;
+import com.nyelam.android.storage.DoShopCategoryStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -53,6 +45,8 @@ public class DoShopActivity extends AppCompatActivity {
     private DoShopAdapter doShopAdapter;
     private ArrayList<Object> objects = new ArrayList<>();
 
+    private DoShopMenuCategoryAdapter menuCategoryAdapter;
+
 
     @BindView(R.id.list_view_menu)
     ListView listViewMenu;
@@ -75,7 +69,7 @@ public class DoShopActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         progressBar = findViewById(R.id.progressBar);
 
-        initCategory();
+        initHomepage();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -84,24 +78,25 @@ public class DoShopActivity extends AppCompatActivity {
             }
         });
 
+        // TODO: load menu
+        DoShopCategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
+        if (storage != null && storage.getCategoryList() != null){
+            menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, storage.getCategoryList().getList());
+            menuCategoryAdapter.notifyDataSetChanged();
+            listViewMenu.setAdapter(menuCategoryAdapter);
+        }
 
-        List<String> strings = new ArrayList<>();
-        strings.add("Menu 1");
-        strings.add("Menu 2");
-        strings.add("Menu 3");
-        strings.add("Menu 4");
-        strings.add("Menu 5");
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, strings);
-        listViewMenu.setAdapter(adapter);
+        menuCategoryAdapter = new DoShopMenuCategoryAdapter(this);
+        listViewMenu.setAdapter(menuCategoryAdapter);
+        loadCategories();
     }
 
-    private void initCategory(){
-        NYCategoryRequest req = new NYCategoryRequest(context);
-        spcMgr.execute(req, onCategoryRequest());
+    private void initHomepage(){
+        NYDoShopHomepageRequest req = new NYDoShopHomepageRequest(context);
+        spcMgr.execute(req, onHomepageRequest());
     }
 
-    private RequestListener<DoShopList> onCategoryRequest() {
+    private RequestListener<DoShopList> onHomepageRequest() {
         return new RequestListener<DoShopList>() {
 
             @Override
@@ -144,6 +139,39 @@ public class DoShopActivity extends AppCompatActivity {
         };
     }
 
+    private void loadCategories(){
+        NYDoShopMasterCategoryRequest req = new NYDoShopMasterCategoryRequest(context);
+        spcMgr.execute(req, onCategoryRequest());
+    }
+
+    private RequestListener<DoShopCategoryList> onCategoryRequest() {
+        return new RequestListener<DoShopCategoryList>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                NYHelper.handleAPIException(context, spiceException, null);
+
+            }
+
+            @Override
+            public void onRequestSuccess(DoShopCategoryList categoryList) {
+                progressBar.setVisibility(View.GONE);
+
+                if (categoryList != null){
+                    DoShopCategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
+                    storage.setCategoryList(categoryList);
+
+                    menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, categoryList.getList());
+                    menuCategoryAdapter.notifyDataSetChanged();
+                    listViewMenu.setAdapter(menuCategoryAdapter);
+                }
+
+            }
+        };
+    }
+
+
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -169,6 +197,6 @@ public class DoShopActivity extends AppCompatActivity {
     public void onRefreshs(){
         swipeRefreshLayout.setRefreshing(true);
         objects = new ArrayList<>();
-        initCategory();
+        initHomepage();
     }
 }

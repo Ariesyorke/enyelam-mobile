@@ -6,10 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,12 +28,12 @@ import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
+import com.nyelam.android.data.Variation;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
-import com.nyelam.android.view.NYCustomDialog;
 import com.nyelam.android.view.NYDialogAddToCart;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -42,11 +42,14 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddToCartActivity extends BasicActivity implements NYDialogAddToCart.Listener {
+public class DoShopDetailItemActivity extends BasicActivity implements NYDialogAddToCart.Listener {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -86,7 +89,7 @@ public class AddToCartActivity extends BasicActivity implements NYDialogAddToCar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_to_cart);
+        setContentView(R.layout.activity_do_shop_detail_item);
         ButterKnife.bind(this);
         context = this;
         initExtra();
@@ -95,12 +98,22 @@ public class AddToCartActivity extends BasicActivity implements NYDialogAddToCar
             llMainContainer.setVisibility(View.GONE);
             initProductDetail(product.getId());
         } else {
+
+            Toast.makeText(context, "not found", Toast.LENGTH_SHORT).show();
             dialogItemNotAvailable();
         }
     }
 
     private void initProductDetail(String id){
-        NYDoShopProductDetailRequest req = new NYDoShopProductDetailRequest(context, id);
+
+        Toast.makeText(context, "request detail", Toast.LENGTH_SHORT).show();
+
+        NYDoShopProductDetailRequest req = null;
+        try {
+            req = new NYDoShopProductDetailRequest(context, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         spcMgr.execute(req, onProductDetailRequest());
     }
 
@@ -126,6 +139,13 @@ public class AddToCartActivity extends BasicActivity implements NYDialogAddToCar
                 llMainContainer.setVisibility(View.VISIBLE);
                 if (product != null && product.getCategories() != null && product.getCategories().size() > 0 && NYHelper.isStringNotEmpty(product.getCategories().get(0).getId()))
                     initRelatedItem(product.getCategories().get(0).getId());
+
+
+                List<Variation> sizes = new ArrayList<>();
+                sizes.add(new Variation("1", "L"));
+                sizes.add(new Variation("2", "XL"));
+                final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(DoShopDetailItemActivity.this, sizes);
+                spinnerItemSize.setAdapter(sizeSpinAdapter);
             }
         };
     }
@@ -232,6 +252,25 @@ public class AddToCartActivity extends BasicActivity implements NYDialogAddToCar
                 tvPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
                 llPriceContainer.setVisibility(View.GONE);
             }
+
+
+            if (product.getVariations() != null && product.getVariations().getSizes() != null){
+                final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(this, product.getVariations().getSizes());
+                spinnerItemSize.setAdapter(sizeSpinAdapter);
+                spinnerItemSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view,
+                                               int position, long id) {
+                        // Here you get the current item (a User object) that is selected by its position
+                        Variation variation = sizeSpinAdapter.getItem(position);
+                        if (NYHelper.isStringNotEmpty(variation.getName()))Toast.makeText(context, variation.getName(), Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapter) {  }
+                });
+            }
+
+
 
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));

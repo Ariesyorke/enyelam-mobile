@@ -21,8 +21,8 @@ public class NYDoShopMasterCategoryRequest extends NYBasicRequest<DoShopCategory
     private final static String KEY_CATEGORIES = "categories";
     //private final static String POST_PAGE = "page";
 
-    public NYDoShopMasterCategoryRequest(Context context, String page, String keyword, String categoryId, String priceMin, String priceMax, String sortBy){
-        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_product_list));
+    public NYDoShopMasterCategoryRequest(Context context){
+        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_master_category));
 
 //        if(!TextUtils.isEmpty(page)) {
 //            addQuery(POST_PAGE, page);

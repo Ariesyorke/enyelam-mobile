@@ -332,7 +332,6 @@ public class DoShopProduct implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-
         try{
             if(getVariations()!=null){
                 JSONObject objVar= new JSONObject(getVariations().toString());
@@ -343,7 +342,6 @@ public class DoShopProduct implements Parseable {
         }catch (JSONException e){
             e.printStackTrace();
         }
-
 
         try {
             return obj.toString(3);

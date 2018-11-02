@@ -10,12 +10,12 @@ import com.nyelam.android.data.DoShopProduct;
 
 import org.json.JSONObject;
 
-public class NYDoShopProductDetailRequest extends NYBasicAuthRequest<DoShopProduct> {
+public class NYDoShopProductDetailRequest extends NYBasicRequest<DoShopProduct> {
 
     private final static String KEY_PRODUCT = "product";
     private final static String POST_PRODUCT_ID = "product_id";
 
-    public NYDoShopProductDetailRequest(Context context, String productId) throws Exception {
+    public NYDoShopProductDetailRequest(Context context, String productId) {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_product_detail));
 
         if(!TextUtils.isEmpty(productId)) {

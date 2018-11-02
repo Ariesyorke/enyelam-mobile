@@ -16,7 +16,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
-import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.helper.NYHelper;
 
@@ -106,7 +105,7 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
             @Override
             public void onClick(View v) {
                 if (product != null && NYHelper.isStringNotEmpty(product.getId())){
-                    Intent intent = new Intent(context, AddToCartActivity.class);
+                    Intent intent = new Intent(context, DoShopDetailItemActivity.class);
                     intent.putExtra(NYHelper.PRODUCT, product.toString());
                     context.startActivity(intent);    
                 } else {
