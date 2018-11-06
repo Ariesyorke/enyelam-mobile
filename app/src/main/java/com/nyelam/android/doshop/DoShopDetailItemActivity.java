@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,11 +27,14 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.DoShopCart;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
 import com.nyelam.android.data.Variation;
+import com.nyelam.android.data.Variations;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYDoShopAddToCartRequest;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
@@ -57,6 +61,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     private String productId;
     private DoShopProduct product;
+    private List<Variation> chosenVariations;
+    private int chosenQty;
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.ll_main_container) LinearLayout llMainContainer;
@@ -71,6 +77,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     @BindView(R.id.tv_you_save ) TextView tvYouSave ;
     @BindView(R.id.tv_coinns) TextView tvCoinns;
     @BindView(R.id.spinner_item_size) Spinner spinnerItemSize;
+    @BindView(R.id.spinner_quantity) Spinner spinnerQuantity;
     @BindView(R.id.et_quantity) EditText etQuantity;
     @BindView(R.id.tv_status) TextView tvStatus;
     @BindView(R.id.tv_add_to_basket) TextView tvAddToBasket;
@@ -82,8 +89,13 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     @BindView(R.id.rv_related_item) RecyclerView rvRelatedItem;
 
     @OnClick(R.id.tv_add_to_basket)void addToBasket(){
-        NYDialogAddToCart dialog = new NYDialogAddToCart();
-        dialog.showAddToCartDialog(this, product);
+//        NYDialogAddToCart dialog = new NYDialogAddToCart();
+//        dialog.showAddToCartDialog(this, product);
+
+        if (product != null && NYHelper.isStringNotEmpty(product.getId())){
+            addToCart(product.getId(),chosenVariations, String.valueOf(chosenQty));
+        }
+
     }
 
     @Override
@@ -91,6 +103,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_shop_detail_item);
         ButterKnife.bind(this);
+        chosenVariations = new ArrayList<>();
         context = this;
         initExtra();
         if (product != null){
@@ -140,12 +153,14 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                 if (product != null && product.getCategories() != null && product.getCategories().size() > 0 && NYHelper.isStringNotEmpty(product.getCategories().get(0).getId()))
                     initRelatedItem(product.getCategories().get(0).getId());
 
+                if (product != null && product.getVariations() != null && product.getVariations().getSizes() != null){
+                    //List<Variation> sizes = new ArrayList<>();
+                    //sizes.add(new Variation("1", "L"));
+                    //sizes.add(new Variation("2", "XL"));
+                    final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(DoShopDetailItemActivity.this, product.getVariations().getSizes());
+                    spinnerItemSize.setAdapter(sizeSpinAdapter);
+                }
 
-                List<Variation> sizes = new ArrayList<>();
-                sizes.add(new Variation("1", "L"));
-                sizes.add(new Variation("2", "XL"));
-                final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(DoShopDetailItemActivity.this, sizes);
-                spinnerItemSize.setAdapter(sizeSpinAdapter);
             }
         };
     }
@@ -192,6 +207,38 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         };
     }
 
+
+    private void addToCart(String productId, List<Variation> variations, String qty){
+        //NYLog.e("cek related 1");
+        pDialog.show();
+        NYDoShopAddToCartRequest req = null;
+        try {
+            req = new NYDoShopAddToCartRequest(context, productId, variations, qty);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onAddToCartRequest());
+    }
+
+    private RequestListener<DoShopCart> onAddToCartRequest() {
+        return new RequestListener<DoShopCart>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                pDialog.dismiss();
+                NYHelper.handleAPIException(context, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(DoShopCart cart) {
+                pDialog.dismiss();
+
+                NYDialogAddToCart dialog = new NYDialogAddToCart();
+                dialog.showAddToCartDialog(DoShopDetailItemActivity.this, product);
+            }
+        };
+    }
+
     private void initExtra() {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -227,7 +274,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     }
 
 
-    public void setProductView(DoShopProduct product) {
+    public void setProductView(final DoShopProduct product) {
         if (product != null){
 
             if (NYHelper.isStringNotEmpty(product.getStatus())){
@@ -262,12 +309,38 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                     public void onItemSelected(AdapterView<?> adapterView, View view,
                                                int position, long id) {
                         // Here you get the current item (a User object) that is selected by its position
+                        chosenVariations = new ArrayList<>();
+                        if (product != null && product.getVariations() != null && product.getVariations().getColors() != null
+                                && product.getVariations().getColors().size() > 0)chosenVariations.add(product.getVariations().getColors().get(0));
+
                         Variation variation = sizeSpinAdapter.getItem(position);
+                        chosenVariations.add(variation);
+
+
+                        if (variation.getQty() > 0){
+                            List<String> quantities = new ArrayList<>();
+                            for (int i=1; i<=variation.getQty(); i++){
+                                quantities.add(String.valueOf(i));
+                            }
+
+                            //final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(this, product.getVariations().getSizes());
+                            ArrayAdapter qtyAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, quantities);
+                            spinnerQuantity.setAdapter(qtyAdapter);
+                        }
+
+
+                        chosenQty = variation.getQty();
+
                         if (NYHelper.isStringNotEmpty(variation.getName()))Toast.makeText(context, variation.getName(), Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> adapter) {  }
                 });
+
+
+
+
+
             }
 
 

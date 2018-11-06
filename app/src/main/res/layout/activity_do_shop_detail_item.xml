@@ -279,6 +279,7 @@
                     android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
 
                     <EditText
+                        android:visibility="gone"
                         android:id="@+id/et_quantity"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -287,6 +288,24 @@
                         android:inputType="numberDecimal"
                         android:popupBackground="@android:color/transparent"
                         android:background="@android:color/transparent"/>
+
+
+                    <Spinner
+                        android:id="@+id/spinner_quantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:popupBackground="@android:color/transparent"
+                        android:background="@android:color/transparent"/>
+                    <!--android:entries="@array/item_size"-->
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="5dp"
+                        android:src="@drawable/arrow"
+                        android:layout_gravity="center"
+                        android:layout_alignParentRight="true"/>
+
 
                 </RelativeLayout>
             </LinearLayout>

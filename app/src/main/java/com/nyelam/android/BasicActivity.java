@@ -1,5 +1,6 @@
 package com.nyelam.android;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,10 +19,15 @@ import butterknife.ButterKnife;
 public abstract class BasicActivity extends AppCompatActivity {
 
     private ImageView backImageView;
+    protected ProgressDialog pDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+        pDialog.setMessage(getString(R.string.loading));
     }
 
     protected void initToolbar(boolean isHomeBackEnable) {

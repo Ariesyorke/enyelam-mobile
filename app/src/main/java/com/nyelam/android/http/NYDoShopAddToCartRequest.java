@@ -5,31 +5,36 @@ import android.text.TextUtils;
 
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
+import com.nyelam.android.data.DoShopCart;
 import com.nyelam.android.data.DoShopList;
+import com.nyelam.android.data.StateFacility;
 import com.nyelam.android.data.Variation;
+import com.nyelam.android.data.Variations;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONObject;
 
 import java.util.List;
 
-public class NYDoShopAddToCartRequest extends NYBasicAuthRequest<String> {
+public class NYDoShopAddToCartRequest extends NYBasicAuthRequest<DoShopCart> {
 
     private final static String KEY_PRODUCT_CART_ID = "product_cart_id";
 
     private final static String POST_PRODUCT_ID = "product_id";
-    private final static String POST_VARIATIONS = "variations";
+    private final static String POST_VARIATIONS = "variations[]";
     private final static String POST_QTY = "qty";
 
     public NYDoShopAddToCartRequest(Context context, String productId, List<Variation> variations, String qty) throws Exception {
-        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_add_cart));
+        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_add_to_cart));
 
         if(!TextUtils.isEmpty(productId)) {
             addQuery(POST_PRODUCT_ID, productId);
         }
 
-        if(variations != null && variations.size() > 0) {
-            addQuery(POST_VARIATIONS, variations.toString());
+        if (variations != null && variations.size() > 0){
+            for (Variation var : variations){
+                if (var != null && NYHelper.isStringNotEmpty(var.getId()))addQuery(POST_VARIATIONS, var.getId());
+            }
         }
 
         if(!TextUtils.isEmpty(qty)) {
@@ -44,13 +49,18 @@ public class NYDoShopAddToCartRequest extends NYBasicAuthRequest<String> {
     }
 
     @Override
-    protected String onProcessSuccessData(JSONObject obj) throws Exception {
+    protected DoShopCart onProcessSuccessData(JSONObject obj) throws Exception {
 
-        if (obj.has(KEY_PRODUCT_CART_ID) && obj.get(KEY_PRODUCT_CART_ID) instanceof String && NYHelper.isStringNotEmpty(obj.getString(KEY_PRODUCT_CART_ID))){
-            return obj.getString(KEY_PRODUCT_CART_ID);
-        } else {
-          return null;
-        }
+
+        DoShopCart doShopCart = new DoShopCart();
+        doShopCart.parse(obj);
+        return doShopCart;
+
+//        if (obj.has(KEY_PRODUCT_CART_ID) && obj.get(KEY_PRODUCT_CART_ID) instanceof String && NYHelper.isStringNotEmpty(obj.getString(KEY_PRODUCT_CART_ID))){
+//            return obj.getString(KEY_PRODUCT_CART_ID);
+//        } else {
+//          return null;
+//        }
 
     }
 

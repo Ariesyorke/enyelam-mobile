@@ -90,13 +90,15 @@ public class NYDialogAddToCart {
         if (product != null){
 
             if (NYHelper.isStringNotEmpty(product.getProductName()))tvItemName.setText(product.getProductName());
-            if (product.getSpecialPrice() < product.getNormalPrice()){
-                tvPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
-                tvPriceStrikethrough.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-            } else {
-                tvPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-            }
+//            if (product.getSpecialPrice() < product.getNormalPrice()){
+//                tvPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
+//                tvPriceStrikethrough.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+//            } else {
+//                tvPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+//            }
 
+            tvPriceStrikethrough.setVisibility(View.GONE);
+            tvPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
 
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())) {
 
