@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:clickable="true"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:orientation="vertical"
     tools:context=".doshop.DoShopCheckoutFragment">
 
     <ScrollView
@@ -14,130 +14,215 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding">
+
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_double"
+                android:background="#EDEDED"
+                android:padding="@dimen/padding"
+                android:text="1. Personal Informations"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                app:fontTextStyle="medium" />
 
             <LinearLayout
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:background="@drawable/ny_rectangle_transparant_grey_border"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding"
+                android:orientation="vertical">
+
                 <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_double"
                     android:text="Billing Address"
                     android:textColor="@color/ny_black1"
-                    app:fontTextStyle="bold"
                     android:textSize="18sp"
+                    app:fontTextStyle="medium" />
+
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:background="#EDEDED" />
 
                 <com.nyelam.android.view.font.NYTextView
-                    android:text="John Doe"
-                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Full Name*"
                     android:textColor="@color/ny_black1"
-                    app:fontTextStyle="medium"
-                    android:layout_marginTop="@dimen/padding_half"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="St. James Park 200, Newcastle, EN"
-                    android:textSize="16sp"
-                    android:textColor="@color/ny_black1"
-                    android:layout_marginTop="@dimen/padding_half"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="081201010101"
-                    android:textSize="16sp"
-                    android:textColor="@color/ny_black1"
-                    android:layout_marginTop="@dimen/padding_half"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="Pilih Alamat Lain"
                     android:textSize="14sp"
-                    android:textColor="@color/ny_black1"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
-                    android:padding="@dimen/padding"
+                    app:fontTextStyle="reguler" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
                     android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_half" />
 
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Address*"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:maxLines="4"
+                    android:minLines="4"
+                    android:padding="@dimen/padding_half" />
 
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Province"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_half" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="States"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_half" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="District"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_half" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Zip Code*"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_half" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Phone Number*"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_half" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="Email Address*"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_half" />
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:layout_width="24dp"
+                        android:layout_height="24dp" />
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding"
+                        android:layout_weight="1"
+                        android:text="Shipping address same as billing address"
+                        android:textSize="14sp"
+                        app:fontTextStyle="medium" />
+
+                </LinearLayout>
             </LinearLayout>
 
 
 
-
-
-
-            <LinearLayout
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:background="@drawable/ny_rectangle_transparant_grey_border"
+            <com.nyelam.android.view.font.NYTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="Shipping Address"
-                    android:textColor="@color/ny_black1"
-                    app:fontTextStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="John Doe"
-                    android:textSize="16sp"
-                    android:textColor="@color/ny_black1"
-                    app:fontTextStyle="medium"
-                    android:layout_marginTop="@dimen/padding_half"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="St. James Park 200, Newcastle, EN"
-                    android:textSize="16sp"
-                    android:textColor="@color/ny_black1"
-                    android:layout_marginTop="@dimen/padding_half"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="081201010101"
-                    android:textSize="16sp"
-                    android:textColor="@color/ny_black1"
-                    android:layout_marginTop="@dimen/padding_half"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:text="Pilih Alamat Lain"
-                    android:textSize="14sp"
-                    android:textColor="@color/ny_black1"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
-                    android:padding="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-
-
-
-
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_double"
+                android:background="#EDEDED"
+                android:padding="@dimen/padding"
+                android:text="2. Shipping"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                app:fontTextStyle="medium" />
 
             <LinearLayout
                 android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -145,7 +230,6 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:padding="@dimen/activity_horizontal_margin"
                 android:orientation="vertical"
-                android:background="@drawable/ny_rectangle_transparant_grey_border"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.nyelam.android.view.font.NYTextView
@@ -190,7 +274,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-
             </LinearLayout>
 
 
@@ -198,121 +281,161 @@
 
 
 
+
+
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_double"
+                android:layout_marginBottom="@dimen/padding_double"
+                android:background="#EDEDED"
+                android:padding="@dimen/padding"
+                android:text="3. Payment"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                app:fontTextStyle="medium" />
+
+
+
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_double"
+                android:background="#EDEDED"
+                android:padding="@dimen/padding"
+                android:text="4. Order Details"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                app:fontTextStyle="medium" />
 
 
             <LinearLayout
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:orientation="vertical"
-                android:background="@drawable/ny_rectangle_transparant_grey_border"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:padding="@dimen/activity_horizontal_margin">
+
                 <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Order Details"
                     android:textColor="@color/ny_black1"
-                    app:fontTextStyle="bold"
                     android:textSize="18sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    app:fontTextStyle="bold" />
 
-                <include layout="@layout/view_item_cart"/>
+                <include layout="@layout/view_item_cart" />
 
                 <View
-                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginBottom="@dimen/padding"
-                    android:background="@color/ny_grey3"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        android:text="Total Price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <com.nyelam.android.view.font.NYTextView
-                        android:text="Rp 1.000.000"
-                        android:gravity="right|end"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_marginTop="@dimen/padding"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        android:text="Total Price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <com.nyelam.android.view.font.NYTextView
-                        android:text="Rp 1.000.000"
-                        android:gravity="right|end"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                    android:background="@color/ny_grey3" />
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/padding"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <com.nyelam.android.view.font.NYTextView
-                        android:text="Asuransi"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="Total" />
+
                     <com.nyelam.android.view.font.NYTextView
-                        android:text="Rp 5.000"
-                        android:gravity="right|end"
-                        android:layout_weight="1"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right|end"
+                        android:text="Rp 1.000.000" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@color/ny_grey3" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal">
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shipping Fee" />
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right|end"
+                        android:text="Rp 18.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@color/ny_grey3" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal">
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Grand Total" />
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right|end"
+                        android:text="Rp 1.018.000" />
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
-
-
-
-        <LinearLayout
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/padding"
-            android:paddingBottom="@dimen/padding"
-            android:orientation="horizontal"
-            android:background="@drawable/ny_rectangle_transparant_grey_border"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <CheckBox
-                android:layout_gravity="center"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:gravity="center"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/padding">
 
-            <com.nyelam.android.view.font.NYTextView
-                android:text="I have read and agreed to the terms and conditions"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <CheckBox
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center" />
 
-
-
-
-
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="I have read and agreed to the terms and conditions" />
+            </LinearLayout>
 
 
             <com.nyelam.android.view.font.NYTextView

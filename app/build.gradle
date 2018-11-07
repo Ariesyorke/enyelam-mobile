@@ -103,6 +103,7 @@ dependencies {
     implementation 'me.himanshusoni.chatmessageview:chat-message-view:1.0.7'
     implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation 'com.github.baoyachi:StepView:1.9'
     testImplementation 'junit:junit:4.12'
 }
 

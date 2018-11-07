@@ -36,6 +36,37 @@
 
     </android.support.v7.widget.Toolbar>
 
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.baoyachi.stepview.HorizontalStepView
+            android:id="@+id/step_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+
+        <!--<com.midtrans.sdk.uikit.widgets.RoundedImageView-->
+            <!--android:src="@drawable/ic_check_white"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<com.midtrans.sdk.uikit.widgets.RoundedImageView-->
+            <!--android:src="@drawable/ic_check_white"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<com.midtrans.sdk.uikit.widgets.RoundedImageView-->
+            <!--android:src="@drawable/ic_check_white"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"

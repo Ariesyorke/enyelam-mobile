@@ -1,6 +1,7 @@
 package com.nyelam.android.doshop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -57,6 +58,17 @@ public class DoShopActivity extends AppCompatActivity {
     @OnClick(R.id.iv_menu_categories) void openMenu(){
         drawerLayout.openDrawer(GravityCompat.START);
     }
+
+    @OnClick(R.id.et_search) void openSearchItem(){
+        DoShopCategory cat = new DoShopCategory();
+        cat.setId("1");
+        cat.setName("Scuba Gear 1");
+        Intent intent = new Intent(context, DoShopCategoryActivity.class);
+        intent.putExtra(NYHelper.CATEGORY, cat.toString());
+        startActivity(intent);
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

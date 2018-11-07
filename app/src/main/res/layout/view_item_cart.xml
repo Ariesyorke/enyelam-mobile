@@ -11,13 +11,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent">
         <ImageView
+            android:id="@+id/iv_item_image"
             android:layout_gravity="top"
             android:src="@drawable/banner_1"
             android:layout_width="match_parent"
             android:layout_height="100dp" />
     </LinearLayout>
-
-
 
 
     <LinearLayout
@@ -43,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
             <com.nyelam.android.view.font.NYTextView
-                android:id="@+id/tv_details"
+                android:id="@+id/tv_estimate_delivery"
                 android:text="Estimate delivery time takes up to 2-8 workdays"
                 android:textStyle="bold"
                 android:textColor="@color/ny_black1"
@@ -87,6 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_item_qty"
                         android:text="1"
                         android:textStyle="bold"
                         android:textColor="@color/ny_black1"
@@ -103,6 +103,7 @@
             <com.nyelam.android.view.font.NYTextView
                 android:id="@+id/tv_remove_item"
                 android:text="Remove Items"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="#0D76BF"
                 android:layout_margin="@dimen/padding"

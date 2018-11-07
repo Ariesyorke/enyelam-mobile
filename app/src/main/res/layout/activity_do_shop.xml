@@ -40,6 +40,12 @@
                         android:src="@drawable/ic_navigation_drawer" />
 
                     <EditText
+                        android:id="@+id/et_search"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:editable="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/padding"
