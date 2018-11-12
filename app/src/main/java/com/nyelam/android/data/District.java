@@ -14,6 +14,9 @@ public class District implements Parseable {
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
 
+    private static String KEY_SUBDISTRICT_ID = "subdistrict_id";
+    private static String KEY_SUBDISTRICT_NAME = "subdistrict_name";
+
     private String id;
     private String name;
 
@@ -40,18 +43,20 @@ public class District implements Parseable {
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
+            } else if (!obj.isNull(KEY_SUBDISTRICT_ID)) {
+                setId(obj.getString(KEY_SUBDISTRICT_ID));
             }
-
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!obj.isNull(KEY_NAME)) {
                 setName(obj.getString(KEY_NAME));
+            } else if (!obj.isNull(KEY_SUBDISTRICT_NAME)) {
+                setName(obj.getString(KEY_SUBDISTRICT_NAME));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
     }
-
 
     @Override
     public String toString() {

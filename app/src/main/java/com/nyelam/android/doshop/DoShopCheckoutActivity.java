@@ -30,18 +30,28 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
         setContentView(R.layout.activity_do_shop_checkout);
         ButterKnife.bind(this);
         initFragment();
-        initStepView();
+        initStepView(1);
     }
 
-    private void initStepView() {
+    private void initStepView(int pos) {
         HorizontalStepView setpview5 = (HorizontalStepView) findViewById(R.id.step_view);
         List<StepBean> stepsBeanList = new ArrayList<>();
-        StepBean stepBean0 = new StepBean("Step 1",1);
-        StepBean stepBean1 = new StepBean("Step 2",0);
-        StepBean stepBean2 = new StepBean("Step 3",-1);
-        stepsBeanList.add(stepBean0);
-        stepsBeanList.add(stepBean1);
-        stepsBeanList.add(stepBean2);
+
+        if (pos == 1){
+            StepBean stepBean0 = new StepBean("Step 1",0);
+            StepBean stepBean1 = new StepBean("Step 2",-1);
+            StepBean stepBean2 = new StepBean("Step 3",-1);
+            stepsBeanList.add(stepBean0);
+            stepsBeanList.add(stepBean1);
+            stepsBeanList.add(stepBean2);
+        } else {
+            StepBean stepBean0 = new StepBean("Step 1",0);
+            StepBean stepBean1 = new StepBean("Step 2",0);
+            StepBean stepBean2 = new StepBean("Step 3",-1);
+            stepsBeanList.add(stepBean0);
+            stepsBeanList.add(stepBean1);
+            stepsBeanList.add(stepBean2);
+        }
 
         setpview5
                 .setStepViewTexts(stepsBeanList)//总步骤
@@ -58,7 +68,8 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
     private void initFragment() {
         //FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        DoShopCartFragment fragment = new DoShopCartFragment();
+        //DoShopCartFragment fragment = new DoShopCartFragment();
+        DoShopCheckoutFragment fragment = new DoShopCheckoutFragment();
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
     }
@@ -88,6 +99,11 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
         fragmentTransaction.replace(R.id.container, fragment)
                 .addToBackStack("payment")
                 .commit();
+    }
+
+    @Override
+    public void stepView(int pos) {
+        initStepView(pos);
     }
 
 

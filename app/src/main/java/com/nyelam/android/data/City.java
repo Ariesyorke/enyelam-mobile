@@ -16,6 +16,9 @@ public class City implements Parseable {
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
 
+    private static String KEY_CITY_ID = "city_id";
+    private static String KEY_CITY_NAME = "city_name";
+
     private String id;
     private String name;
 
@@ -42,13 +45,16 @@ public class City implements Parseable {
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
+            } else if (!obj.isNull(KEY_CITY_ID)) {
+                setId(obj.getString(KEY_CITY_ID));
             }
-
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!obj.isNull(KEY_NAME)) {
                 setName(obj.getString(KEY_NAME));
+            } else if (!obj.isNull(KEY_CITY_NAME)) {
+                setName(obj.getString(KEY_CITY_NAME));
             }
         } catch (JSONException e) {e.printStackTrace();}
 

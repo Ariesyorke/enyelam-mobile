@@ -57,8 +57,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <!-- android:name=".StarterActivity" -->
+
         <activity
-            android:name=".StarterActivity"
+            android:name=".doshop.DoShopCheckoutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Fullscreen">
             <intent-filter>
@@ -189,9 +191,15 @@
             android:screenOrientation="portrait" />
         <activity android:name=".inbox.InboxActivity" />
         <activity android:name=".inbox.NewMessageActivity" />
-        <activity android:name=".doshop.DoShopDetailItemActivity" />
-        <activity android:name=".doshop.DoShopCategoryActivity" />
-        <activity android:name=".doshop.DoShopCheckoutActivity"></activity>
+        <activity android:name=".doshop.DoShopDetailItemActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".doshop.DoShopCategoryActivity"
+            android:screenOrientation="portrait"/>
+        <!-- <activity android:name=".doshop.DoShopCheckoutActivity"></activity> -->
+        <activity android:name=".doshop.DoShopChooseAddressActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".doshop.DoShopAddAddressActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

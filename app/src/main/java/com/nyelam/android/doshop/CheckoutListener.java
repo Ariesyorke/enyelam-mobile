@@ -7,4 +7,5 @@ public interface CheckoutListener {
     void proceedToCheckOut();
     void proceedToChoosePayment();
     void proceedPayment();
+    void stepView(int pos);
 }

@@ -13,6 +13,7 @@ public class DoShopAddress implements Parseable {
 
     private static String KEY_ADDRESS_ID = "address_id";
     private static String KEY_FULLNAME = "fullname";
+    private static String KEY_EMAIL = "email";
     private static String KEY_ADDRESS = "address";
     private static String KEY_ZIP_CODE = "zip_code";
     private static String KEY_PROVINCE = "province";
@@ -24,6 +25,7 @@ public class DoShopAddress implements Parseable {
 
     private String addressId;
     private String fullName;
+    private String email;
     private String address;
     private String zipCode;
     private String phoneNumber;
@@ -47,6 +49,14 @@ public class DoShopAddress implements Parseable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAddress() {
@@ -119,6 +129,12 @@ public class DoShopAddress implements Parseable {
         try {
             if (!obj.isNull(KEY_FULLNAME)) {
                 setFullName(obj.getString(KEY_FULLNAME));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_EMAIL)) {
+                setEmail(obj.getString(KEY_EMAIL));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -204,6 +220,14 @@ public class DoShopAddress implements Parseable {
                 obj.put(KEY_FULLNAME, getFullName());
             } else {
                 obj.put(KEY_FULLNAME, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (NYHelper.isStringNotEmpty(getEmail())) {
+                obj.put(KEY_EMAIL, getEmail());
+            } else {
+                obj.put(KEY_EMAIL, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 

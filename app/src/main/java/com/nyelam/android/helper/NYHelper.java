@@ -155,6 +155,7 @@ public class NYHelper {
     public static final String TAG = "TAG";
     public static final String PRODUCT = "product";
     public static final String CATEGORY = "category";
+    public static final String ADDRESS = "address";
 
 
     public static boolean isStringNotEmpty(String string) {
