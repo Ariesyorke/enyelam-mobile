@@ -270,6 +270,36 @@ public class DoShopAddress implements Parseable {
             e.printStackTrace();
         }
 
+        try{
+            if(getProvince()!=null){
+                obj.put(KEY_PROVINCE, getProvince());
+            } else {
+                obj.put(KEY_PROVINCE, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getCity()!=null){
+                obj.put(KEY_CITY, getCity());
+            } else {
+                obj.put(KEY_CITY, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getDistrict()!=null){
+                obj.put(KEY_DISTRICT, getDistrict());
+            } else {
+                obj.put(KEY_DISTRICT, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
 
         try {
             return obj.toString(3);

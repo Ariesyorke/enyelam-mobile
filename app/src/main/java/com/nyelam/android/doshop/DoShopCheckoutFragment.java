@@ -1,6 +1,7 @@
 package com.nyelam.android.doshop;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.solver.widgets.Helper;
@@ -8,40 +9,111 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
+import com.nyelam.android.data.Courier;
+import com.nyelam.android.data.CourierList;
+import com.nyelam.android.data.CourierType;
 import com.nyelam.android.data.DoShopAddress;
+import com.nyelam.android.general.CourierAdapter;
+import com.nyelam.android.general.CourierTypeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYDialogChooseAddress;
+import com.nyelam.android.view.NYSpinner;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DoShopCheckoutFragment extends BasicFragment implements NYDialogChooseAddress.Listener  {
+public class DoShopCheckoutFragment extends BasicFragment implements NYDialogChooseAddress.Listener, AdapterView.OnItemSelectedListener {
 
+    private DoShopCheckoutFragment thisFragment;
 
     private CheckoutListener listener;
     private DoShopAddress address;
+    private List<Courier> couriers;
+    private Courier currentCourier;
+    private CourierType currentCourierType;
+
+    private CourierAdapter courierAdapter;
+    private CourierTypeAdapter courierTypeAdapter;
 
     @BindView(R.id.ll_container_input_personal_information)
     LinearLayout llContainerInputPersonal;
+
+    @BindView(R.id.tv_choose_address)
+    TextView tvChooseAddress;
+
+    @BindView(R.id.tv_edit_address)
+    TextView tvEditAddress;
+
     @BindView(R.id.ll_container_personal_information)
     LinearLayout llContainerPersonal;
 
-    @OnClick(R.id.tv_next_step_personal_information) void nextStepPersonalInformation(){
-        llContainerInputPersonal.setVisibility(View.GONE);
-        llContainerPersonal.setVisibility(View.VISIBLE);
-        listener.stepView(2);
-    }
+    @BindView(R.id.tv_address_name)
+    TextView tvAddressName;
+
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+
+    @BindView(R.id.tv_address_phone)
+    TextView tvAddressPhone;
+
+    @BindView(R.id.ll_container_shipping_address)
+    LinearLayout llContainerShippingAddress;
+
+    @BindView(R.id.tv_shipping_address)
+    TextView tvShippingAddress;
+
+    @BindView(R.id.tv_shipping_address_name)
+    TextView tvShippingAddressName;
+
+    @BindView(R.id.tv_shipping_address_phone)
+    TextView tvShippingAddressPhone;
+
+
+
+    @BindView(R.id.et_courier)
+    EditText etCourier;
+
+    @BindView(R.id.spinner_courier)
+    NYSpinner spinnerCourier;
+
+    @BindView(R.id.et_courier_type)
+    EditText etCourierType;
+
+    @BindView(R.id.spinner_courier_types)
+    NYSpinner spinnerCourierTypes;
+
+//    @OnClick(R.id.tv_next_step_personal_information) void nextStepPersonalInformation(){
+//        llContainerInputPersonal.setVisibility(View.GONE);
+//        llContainerPersonal.setVisibility(View.VISIBLE);
+//        listener.stepView(2);
+//    }
 
     @OnClick(R.id.tv_checkout) void choosePayment(){
         listener.proceedToChoosePayment();
@@ -54,8 +126,13 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
         //startActivity(intent);
         startActivityForResult(intent, 100);
-
     }
+
+    @OnClick(R.id.tv_edit_address) void editAddress(){
+        Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
+        startActivityForResult(intent, 100);
+    }
+
 
     public DoShopCheckoutFragment() {
         // Required empty public constructor
@@ -66,6 +143,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listener = (CheckoutListener) getActivity();
+        thisFragment = this;
     }
 
     @Override
@@ -92,12 +170,235 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
         if (data != null && data.hasExtra(NYHelper.ADDRESS)){
             try {
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
+                address = new DoShopAddress();
                 address.parse(obj);
+                setViewAddress(address);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public void setViewAddress(DoShopAddress viewAddress) {
+        if (address != null){
+            // TODO: bind data billing address
+            if (NYHelper.isStringNotEmpty(address.getFullName()))tvAddressName.setText(address.getFullName());
+            if (NYHelper.isStringNotEmpty(address.getAddress()))tvAddress.setText(address.getAddress());
+            if (NYHelper.isStringNotEmpty(address.getPhoneNumber()))tvAddressPhone.setText(address.getPhoneNumber());
+            llContainerPersonal.setVisibility(View.VISIBLE);
+            tvChooseAddress.setVisibility(View.GONE);
+            tvEditAddress.setVisibility(View.VISIBLE);
+
+            // TODO: bind data shipping address
+            if (NYHelper.isStringNotEmpty(address.getFullName()))tvShippingAddressName.setText(address.getFullName());
+            if (NYHelper.isStringNotEmpty(address.getAddress()))tvShippingAddress.setText(address.getAddress());
+            if (NYHelper.isStringNotEmpty(address.getPhoneNumber()))tvShippingAddressPhone.setText(address.getPhoneNumber());
+            llContainerShippingAddress.setVisibility(View.VISIBLE);
+
+            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getDistrict().getId()))loadOngkir("501", address.getDistrict().getId(),"1500", "jne");
+        }
+    }
+
+
+    private void loadOngkir(String originId, String destinationId, String weight, String courier) {
+
+        OkHttpClient client = new OkHttpClient();
+        // GET request
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, "origin="+originId+"&originType=subdistrict&destination="+destinationId+"&destinationType=subdistrict&weight="+weight+"&courier="+courier);
+        Request request = new Request.Builder()
+                .url("https://pro.rajaongkir.com/api/cost")
+                .post(body)
+                .addHeader("key", "f6884fab1a6386a9438b9c541b1d3333")
+                .addHeader("content-type", "application/x-www-form-urlencoded")
+                .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+
+                    try {
+                        String jsonData = response.body().string();
+                        JSONObject Jobject = null;
+                        try {
+                            Jobject = new JSONObject(jsonData);
+                            JSONArray Jarray = Jobject.getJSONObject("rajaongkir").getJSONArray("results");
+//
+                            final CourierList courierList = new CourierList();
+                            courierList.parse(Jarray);
+
+                            couriers = courierList.getList();
+                            courierAdapter = new CourierAdapter(getActivity());
+                            courierAdapter.addCouriers(couriers);
+
+                            if (courierList != null && courierList.getList() != null){
+                                // TODO: masukkan ke spinner
+
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        //Log.d("UI thread", "I am the UI thread");
+
+                                        Toast.makeText(getActivity(), "ONGKIR ADA "+String.valueOf(courierList.getList().size()), Toast.LENGTH_SHORT).show();
+
+                                        spinnerCourier.setAdapter(courierAdapter);
+                                        spinnerCourier.setOnItemSelectedListener(thisFragment);
+                                        spinnerCourier.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+                                            @Override
+                                            public void onSpinnerOpened(Spinner spinner) {
+                                                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+
+                                            }
+
+                                            @Override
+                                            public void onSpinnerClosed(Spinner spinner) {
+
+                                                int position = spinner.getSelectedItemPosition();
+                                                Courier courier = courierAdapter.getItem(position);
+
+                                                Toast.makeText(getActivity(), courier.getName(), Toast.LENGTH_SHORT).show();
+
+                                                if (courier != null && NYHelper.isStringNotEmpty(courier.getCode()))
+                                                    etCourier.setText(courier.getCode().toUpperCase());
+                                                if (currentCourier != courier){
+                                                    currentCourierType = null;
+                                                    // TODO: load courierTypes
+                                                    loadCourierTypes(currentCourier);
+                                                }
+
+                                            }
+                                        });
+
+
+                                        if (courierList != null && courierList.getList() != null && courierList.getList().size() > 0){
+                                            courierAdapter.clear();
+                                            courierAdapter.addCouriers(courierList.getList());
+                                            courierAdapter.notifyDataSetChanged();
+
+                                            int pos = 0;
+                                            for (Courier courier : courierList.getList()){
+                                                if (courier != null && NYHelper.isStringNotEmpty(courier.getCode())){
+                                                    etCourier.setText(courier.getCode().toUpperCase());
+                                                    currentCourier = courier;
+                                                    // TODO: load courierTypes
+                                                    loadCourierTypes(currentCourier);
+                                                    spinnerCourier.setSelection(pos);
+                                                    courierAdapter.setSelectedPosition(pos);
+                                                    courierAdapter.notifyDataSetChanged();
+                                                    break;
+                                                }
+                                                pos++;
+                                            }
+                                        }
+
+                                    }
+                                });
+
+                            } else {
+                                // TODO: ongkir tidak tersedia
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+    }
+
+    private void loadCourierTypes(Courier currentCourier) {
+        if (currentCourier != null && currentCourier.getCourierTypes() != null){
+            // TODO: masukkan ke spinner
+
+            final List<CourierType> courierTypes = currentCourier.getCourierTypes();
+
+            courierTypeAdapter = new CourierTypeAdapter(getActivity());
+            courierTypeAdapter.addCouriers(courierTypes);
+
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    //Log.d("UI thread", "I am the UI thread");
+                    spinnerCourierTypes.setAdapter(courierTypeAdapter);
+                    spinnerCourierTypes.setOnItemSelectedListener(thisFragment);
+                    spinnerCourierTypes.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+                        @Override
+                        public void onSpinnerOpened(Spinner spinner) {
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+
+                        }
+
+                        @Override
+                        public void onSpinnerClosed(Spinner spinner) {
+
+                            int position = spinner.getSelectedItemPosition();
+                            CourierType courierType = courierTypeAdapter.getItem(position);
+
+                            //Toast.makeText(getActivity(), courierType.getName(), Toast.LENGTH_SHORT).show();
+
+                            if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService()))
+                                etCourierType.setText(courierType.getService().toUpperCase());
+                            if (currentCourierType != courierType){
+                                currentCourierType = null;
+                                // TODO: load courierTypes
+                                //loadCity(province.getId());
+                            }
+
+                        }
+                    });
+
+
+                    if (courierTypes != null && courierTypes.size() > 0){
+                        courierTypeAdapter.clear();
+                        courierTypeAdapter.addCouriers(courierTypes);
+                        courierTypeAdapter.notifyDataSetChanged();
+
+                        int pos = 0;
+                        for (CourierType courierType : courierTypes){
+                            if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService())){
+                                etCourierType.setText(courierType.getService());
+                                currentCourierType = courierType;
+                                // TODO: load courierTypes
+                                //loadCity(currentProvince.getId());
+                                spinnerCourierTypes.setSelection(pos);
+                                courierTypeAdapter.setSelectedPosition(pos);
+                                courierTypeAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                            pos++;
+                        }
+                    }
+
+                }
+            });
+
+        } else {
+            // TODO: ongkir tidak tersedia
+        }
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
 
 
 }
