@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class NYDoShopAddressListRequest extends NYBasicAuthRequest<DoShopAddressList> {
 
-    private final static String KEY_ADDRESSES = "addresses";
+    private final static String KEY_ADDRESSES = "address";
 
     public NYDoShopAddressListRequest(Context context) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_address_list));

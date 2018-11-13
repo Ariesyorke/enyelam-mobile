@@ -12,6 +12,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.Area;
 import com.nyelam.android.data.City;
 import com.nyelam.android.data.Province;
 import com.nyelam.android.helper.NYHelper;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 
 public class CityAdapter extends BaseAdapter implements SpinnerAdapter {
-    private List<City> cities;
+    private List<Area> cities;
     private Activity context;
     private int color = Color.BLACK;
     private int selectedPosition = 0;
@@ -33,7 +34,7 @@ public class CityAdapter extends BaseAdapter implements SpinnerAdapter {
         this.context = context;
     }
 
-    public List<City> getCities() {
+    public List<Area> getCities() {
         return cities;
     }
 
@@ -41,7 +42,7 @@ public class CityAdapter extends BaseAdapter implements SpinnerAdapter {
         this.context = context;
         this.color = color;
     }
-    public void addCities(List<City> cities) {
+    public void addCities(List<Area> cities) {
         if (this.cities == null) {
             this.cities = new ArrayList<>();
         }
@@ -62,7 +63,7 @@ public class CityAdapter extends BaseAdapter implements SpinnerAdapter {
 
 
     @Override
-    public City getItem(int i) {
+    public Area getItem(int i) {
         if(cities != null && !cities.isEmpty()) {
             return cities.get(i);
         }
@@ -113,7 +114,7 @@ public class CityAdapter extends BaseAdapter implements SpinnerAdapter {
         tvName.setWidth(width*4/6);
 
 
-        City city = cities.get(position);
+        Area city = cities.get(position);
         if (city != null){
             if (NYHelper.isStringNotEmpty(city.getName()) && NYHelper.isStringNotEmpty(city.getId())){
                 tvName.setText(cities.get(position).getName());

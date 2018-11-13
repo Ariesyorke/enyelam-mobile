@@ -34,6 +34,14 @@ public class DoShopAddress implements Parseable {
     private City city ;
     private boolean isPicked;
 
+    public DoShopAddress(){}
+
+    public DoShopAddress(String fullName, String address, String phoneNumber){
+        this.fullName = fullName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
+
 
     public String getAddressId() {
         return addressId;

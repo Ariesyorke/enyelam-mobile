@@ -4,19 +4,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.DoShopAddress;
 import com.nyelam.android.data.DoShopAddressList;
+import com.nyelam.android.divecenter.DoDiveSearchServiceAdapter;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoShopAddressListRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,13 +56,26 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_do_shop_choose_address);
         ButterKnife.bind(this);
         context = getApplicationContext();
+
+//        List<DoShopAddress> addresses = new ArrayList<>();
+//        addresses.add(new DoShopAddress("Aprilian", "Jalan Pajajaran", "018181881"));
+//        addresses.add(new DoShopAddress("Aprilian Nur", "Jalan Pajajaran", "018181881"));
+
         adapter = new DoShopAddressAdapter(this);
+
+        //ADAPTER SERVICE LIST
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
         recyclerView.setAdapter(adapter);
-        loadAddress();
+
+        loadAddress(false);
     }
 
-    private void loadAddress(){
-        progressBar.setVisibility(View.VISIBLE);
+    private void loadAddress(boolean isRefresh){
+        if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
         NYDoShopAddressListRequest req = null;
         try {
             req = new NYDoShopAddressListRequest(context);
@@ -84,8 +105,12 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
             public void onRequestSuccess(DoShopAddressList addressList) {
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.GONE);
-                if (addressList != null){
-//                    DoShopCategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
+                if (addressList != null && addressList.getList() != null){
+                    adapter.setAddresses(addressList.getList());
+                    adapter.notifyDataSetChanged();
+
+                    //Toast.makeText(context, "address ada : "+String.valueOf(addressList.getList().size()), Toast.LENGTH_SHORT).show();
+//                    DoShopCnategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
 //                    storage.setCategoryList(categoryList);
 //
 //                    menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, categoryList.getList());
@@ -107,6 +132,7 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!spcMgr.isStarted()) spcMgr.start(this);
+        loadAddress(true);
     }
 
 }

@@ -2,7 +2,6 @@ package com.nyelam.android.doshop;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +39,12 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
         layoutInflater = LayoutInflater.from(activity);
     }
 
-    @NonNull
+    public void setAddresses(List<DoShopAddress> addresses) {
+        this.addresses = addresses;
+    }
+
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_address, parent, false);
         return new MyViewHolder(view);
     }
@@ -64,8 +66,12 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
 //                    Intent intent = new Intent(activity, DoShopDetailItemActivity.class);
 //                    intent.putExtra(NYHelper.ADDRESS, address.toString());
 //                    activity.startActivity(intent);
+                    Intent intent=new Intent();
+                    intent.putExtra(NYHelper.ADDRESS,address.toString());
+                    activity.setResult(2,intent);
+                    activity.finish();
 
-                    Toast.makeText(activity, address.toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(activity, address.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(activity, "Sorry, this item is not available", Toast.LENGTH_SHORT).show();
                 }
@@ -75,13 +81,13 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
 
     @Override
     public long getItemId(int position) {
-
         return position;
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        if (addresses == null) addresses = new ArrayList<>();
+        return addresses.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -9,11 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DoShopAddress;
+import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYDialogChooseAddress;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -25,6 +30,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
 
     private CheckoutListener listener;
+    private DoShopAddress address;
 
     @BindView(R.id.ll_container_input_personal_information)
     LinearLayout llContainerInputPersonal;
@@ -46,7 +52,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 //        NYDialogChooseAddress dialog = new NYDialogChooseAddress();
 //        dialog.showChooseAddressDialog(getActivity(), null);
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
-        startActivity(intent);
+        //startActivity(intent);
+        startActivityForResult(intent, 100);
+
     }
 
     public DoShopCheckoutFragment() {
@@ -74,4 +82,22 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     public void onChoosedAddress(DoShopAddress address) {
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data); comment this unless you want to pass your result to the activity.
+//        Toast.makeText(getActivity(), "rquest code : "+String.valueOf(requestCode), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "result code : "+String.valueOf(resultCode), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "is address Exist : "+String.valueOf(data.hasExtra(NYHelper.ADDRESS)), Toast.LENGTH_SHORT).show();
+        if (data != null && data.hasExtra(NYHelper.ADDRESS)){
+            try {
+                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
+                address.parse(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

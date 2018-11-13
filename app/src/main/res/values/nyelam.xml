@@ -135,6 +135,7 @@
     <string name="api_path_doshop_submit_order">api/doshop/addCart</string>
     <string name="api_path_doshop_order_list">api/doshop/addCart</string>
     <string name="api_path_doshop_order_detail">api/doshop/addCart</string>
+    <string name="api_path_doshop_get_location">api/doshop/get_location</string>
 
 
 

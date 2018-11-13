@@ -12,6 +12,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.Area;
 import com.nyelam.android.data.CountryCode;
 import com.nyelam.android.data.Province;
 import com.nyelam.android.helper.NYHelper;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 
 public class ProvinceAdapter extends BaseAdapter implements SpinnerAdapter {
-    private List<Province> provinces;
+    private List<Area> provinces;
     private Activity context;
     private int color = Color.BLACK;
     private int selectedPosition = 0;
@@ -33,7 +34,7 @@ public class ProvinceAdapter extends BaseAdapter implements SpinnerAdapter {
         this.context = context;
     }
 
-    public List<Province> getProvinces() {
+    public List<Area> getProvinces() {
         return provinces;
     }
 
@@ -41,7 +42,7 @@ public class ProvinceAdapter extends BaseAdapter implements SpinnerAdapter {
         this.context = context;
         this.color = color;
     }
-    public void addProvinces(List<Province> provinces) {
+    public void addProvinces(List<Area> provinces) {
         if (this.provinces == null) {
             this.provinces = new ArrayList<>();
         }
@@ -62,7 +63,7 @@ public class ProvinceAdapter extends BaseAdapter implements SpinnerAdapter {
 
 
     @Override
-    public Province getItem(int i) {
+    public Area getItem(int i) {
         if(provinces != null && !provinces.isEmpty()) {
             return provinces.get(i);
         }
@@ -112,7 +113,7 @@ public class ProvinceAdapter extends BaseAdapter implements SpinnerAdapter {
         tvName.setWidth(width*4/6);
 
 
-        Province province = provinces.get(position);
+        Area province = provinces.get(position);
         if (province != null){
             if (NYHelper.isStringNotEmpty(province.getName()) && NYHelper.isStringNotEmpty(province.getId())){
                 tvName.setText(provinces.get(position).getName());

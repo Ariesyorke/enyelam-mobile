@@ -12,6 +12,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
+import com.nyelam.android.data.Area;
 import com.nyelam.android.data.District;
 import com.nyelam.android.data.Province;
 import com.nyelam.android.helper.NYHelper;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 
 public class DistrictAdapter extends BaseAdapter implements SpinnerAdapter {
-    private List<District> districts;
+    private List<Area> districts;
     private Activity context;
     private int color = Color.BLACK;
     private int selectedPosition = 0;
@@ -33,7 +34,7 @@ public class DistrictAdapter extends BaseAdapter implements SpinnerAdapter {
         this.context = context;
     }
 
-    public List<District> getDistricts() {
+    public List<Area> getDistricts() {
         return districts;
     }
 
@@ -41,7 +42,7 @@ public class DistrictAdapter extends BaseAdapter implements SpinnerAdapter {
         this.context = context;
         this.color = color;
     }
-    public void addDistricts(List<District> districts) {
+    public void addDistricts(List<Area> districts) {
         if (this.districts == null) {
             this.districts = new ArrayList<>();
         }
@@ -62,7 +63,7 @@ public class DistrictAdapter extends BaseAdapter implements SpinnerAdapter {
 
 
     @Override
-    public District getItem(int i) {
+    public Area getItem(int i) {
         if(districts != null && !districts.isEmpty()) {
             return districts.get(i);
         }
@@ -112,7 +113,7 @@ public class DistrictAdapter extends BaseAdapter implements SpinnerAdapter {
         tvName.setWidth(width*4/6);
 
 
-        District district = districts.get(position);
+        Area district = districts.get(position);
         if (district != null){
             if (NYHelper.isStringNotEmpty(district.getName()) && NYHelper.isStringNotEmpty(district.getId())){
                 tvName.setText(districts.get(position).getName());

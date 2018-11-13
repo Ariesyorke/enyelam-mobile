@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
+import com.nyelam.android.data.Area;
 import com.nyelam.android.data.City;
 import com.nyelam.android.data.District;
 import com.nyelam.android.data.DoShopAddress;
@@ -31,7 +32,7 @@ public class NYDoShopAddAddressRequest extends NYBasicAuthRequest<DoShopAddress>
     private final static String POST_DISTRICT_NAME = "district_name";
     private final static String POST_ZIP_CODE = "zip_code";
 
-    public NYDoShopAddAddressRequest(Context context, String fullname, String address, String email, String phoneNumber, Province province, City city, District district, String zipCode) throws Exception {
+    public NYDoShopAddAddressRequest(Context context, String fullname, String address, String email, String phoneNumber, Area province, Area city, Area district, String zipCode) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_add_address));
 
         if(!TextUtils.isEmpty(fullname)) {

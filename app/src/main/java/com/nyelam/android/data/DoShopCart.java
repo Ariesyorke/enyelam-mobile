@@ -17,6 +17,7 @@ public class DoShopCart implements Parseable {
 
     private static String KEY_CART_TOKEN = "cart_token";
     private static String KEY_PRODUCTS = "products";
+    private static String KEY_MERCHANTS = "merchants";
     private static String KEY_SUB_TOTAL = "sub_total";
     private static String KEY_ADDITIONALS = "additionals";
     private static String KEY_VOUCHER = "voucher";
@@ -25,6 +26,7 @@ public class DoShopCart implements Parseable {
     private String cartToken;
     private List<DoShopProduct> doShopProducts;
     private List<Additional> additionals;
+    private List<DoShopMerchant> merchants;
     private Voucher voucher;
     private double subTotal;
     private double total;
@@ -78,6 +80,14 @@ public class DoShopCart implements Parseable {
         this.total = total;
     }
 
+    public List<DoShopMerchant> getMerchants() {
+        return merchants;
+    }
+
+    public void setMerchants(List<DoShopMerchant> merchants) {
+        this.merchants = merchants;
+    }
+
     @Override
     public void parse(JSONObject obj) {
 
@@ -114,6 +124,21 @@ public class DoShopCart implements Parseable {
                         Additional a = new Additional();
                         a.parse(o);
                         additionals.add(a);
+                    }
+                }
+            } catch (JSONException e) {e.printStackTrace();}
+        }
+
+        if (!obj.isNull(KEY_MERCHANTS)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_MERCHANTS);
+                if (array != null && array.length() > 0) {
+                    merchants = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        DoShopMerchant a = new DoShopMerchant();
+                        a.parse(o);
+                        merchants.add(a);
                     }
                 }
             } catch (JSONException e) {e.printStackTrace();}
@@ -179,6 +204,19 @@ public class DoShopCart implements Parseable {
                     array.put(o);
                 }
                 obj.put(KEY_ADDITIONALS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(merchants != null && !merchants.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(DoShopMerchant a : merchants) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_MERCHANTS, array);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
