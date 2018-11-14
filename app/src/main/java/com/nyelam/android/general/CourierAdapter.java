@@ -55,7 +55,7 @@ public class CourierAdapter extends BaseAdapter implements SpinnerAdapter {
     public int getCount() {
         int count = 0;
         if(this.couriers != null && !couriers.isEmpty()) {
-            count += this.couriers.size();
+            count = this.couriers.size();
         }
         return count;
     }
@@ -63,7 +63,7 @@ public class CourierAdapter extends BaseAdapter implements SpinnerAdapter {
 
     @Override
     public Courier getItem(int i) {
-        if(couriers != null && !couriers.isEmpty()) {
+        if(couriers != null && couriers.size() > 0 && !couriers.isEmpty()) {
             return couriers.get(i);
         }
         return null;

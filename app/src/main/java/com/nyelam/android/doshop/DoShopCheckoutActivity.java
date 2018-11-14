@@ -44,10 +44,17 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
             stepsBeanList.add(stepBean0);
             stepsBeanList.add(stepBean1);
             stepsBeanList.add(stepBean2);
-        } else {
+        } else if (pos == 2) {
             StepBean stepBean0 = new StepBean("Step 1",0);
             StepBean stepBean1 = new StepBean("Step 2",0);
             StepBean stepBean2 = new StepBean("Step 3",-1);
+            stepsBeanList.add(stepBean0);
+            stepsBeanList.add(stepBean1);
+            stepsBeanList.add(stepBean2);
+        } else if (pos == 3) {
+            StepBean stepBean0 = new StepBean("Step 1",0);
+            StepBean stepBean1 = new StepBean("Step 2",0);
+            StepBean stepBean2 = new StepBean("Step 3",0);
             stepsBeanList.add(stepBean0);
             stepsBeanList.add(stepBean1);
             stepsBeanList.add(stepBean2);

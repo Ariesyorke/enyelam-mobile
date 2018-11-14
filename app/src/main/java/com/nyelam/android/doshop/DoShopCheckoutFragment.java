@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -195,7 +196,71 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
             if (NYHelper.isStringNotEmpty(address.getPhoneNumber()))tvShippingAddressPhone.setText(address.getPhoneNumber());
             llContainerShippingAddress.setVisibility(View.VISIBLE);
 
-            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getDistrict().getId()))loadOngkir("501", address.getDistrict().getId(),"1500", "jne");
+            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getDistrict().getId()))loadCourier("501", address.getDistrict().getId(),"1500");
+            //loadCourier("501", address.getDistrict().getId(),"1500");
+        }
+    }
+
+
+    private void loadCourier(final String originId, final String destinationId, final String weight){
+
+        Toast.makeText(getActivity(), "load courier 1", Toast.LENGTH_SHORT).show();
+
+        listener.stepView(2);
+        //final CourierList courierList = new CourierList();
+        final List<Courier> couriers = new ArrayList<Courier>();
+        couriers.add(new Courier("jne", "JNE"));
+        couriers.add(new Courier("tiki", "TIKI"));
+
+        this.couriers = couriers;
+        courierAdapter = new CourierAdapter(getActivity());
+        courierAdapter.addCouriers(couriers);
+
+        if (couriers != null){
+            // TODO: masukkan ke spinner
+            //Log.d("UI thread", "I am the UI thread");
+            //Toast.makeText(getActivity(), "ONGKIR ADA "+String.valueOf(couriers.size()), Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getActivity(), "load courier 2", Toast.LENGTH_SHORT).show();
+
+            spinnerCourier.setAdapter(courierAdapter);
+            spinnerCourier.setOnItemSelectedListener(thisFragment);
+            spinnerCourier.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+                @Override
+                public void onSpinnerOpened(Spinner spinner) {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+
+                }
+
+                @Override
+                public void onSpinnerClosed(Spinner spinner) {
+
+                    int position = spinner.getSelectedItemPosition();
+                    Courier courier = courierAdapter.getItem(position);
+                    //Toast.makeText(getActivity(), courier.getName(), Toast.LENGTH_SHORT).show();
+
+                    if (courier != null && NYHelper.isStringNotEmpty(courier.getCode()))
+                        etCourier.setText(courier.getCode().toUpperCase());
+                    if (currentCourier != courier){
+                        currentCourier = courier;
+                        currentCourierType = null;
+                        // TODO: load courierTypes
+                        //loadCourierTypes(currentCourier);
+                        loadOngkir(originId, destinationId, weight, currentCourier.getCode());
+                    }
+
+                }
+            });
+
+            if (couriers.size() > 0){
+                currentCourier = couriers.get(0);
+                etCourier.setText(currentCourier.getName());
+                loadOngkir(originId, destinationId, weight, currentCourier.getCode());
+            }
+
+        } else {
+            // TODO: ongkir tidak tersedia
         }
     }
 
@@ -232,71 +297,17 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
                             final CourierList courierList = new CourierList();
                             courierList.parse(Jarray);
 
-                            couriers = courierList.getList();
-                            courierAdapter = new CourierAdapter(getActivity());
-                            courierAdapter.addCouriers(couriers);
+                            if (courierList != null && courierList.getList() != null && courierList.getList().size() > 0){
 
-                            if (courierList != null && courierList.getList() != null){
+                                //courierAdapter = new CourierAdapter(getActivity());
+                                //courierAdapter.addCouriers(courierList.getList());
+
                                 // TODO: masukkan ke spinner
-
-
                                 getActivity().runOnUiThread(new Runnable() {
                                     public void run() {
                                         //Log.d("UI thread", "I am the UI thread");
-
-                                        Toast.makeText(getActivity(), "ONGKIR ADA "+String.valueOf(courierList.getList().size()), Toast.LENGTH_SHORT).show();
-
-                                        spinnerCourier.setAdapter(courierAdapter);
-                                        spinnerCourier.setOnItemSelectedListener(thisFragment);
-                                        spinnerCourier.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
-                                            @Override
-                                            public void onSpinnerOpened(Spinner spinner) {
-                                                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
-
-                                            }
-
-                                            @Override
-                                            public void onSpinnerClosed(Spinner spinner) {
-
-                                                int position = spinner.getSelectedItemPosition();
-                                                Courier courier = courierAdapter.getItem(position);
-
-                                                Toast.makeText(getActivity(), courier.getName(), Toast.LENGTH_SHORT).show();
-
-                                                if (courier != null && NYHelper.isStringNotEmpty(courier.getCode()))
-                                                    etCourier.setText(courier.getCode().toUpperCase());
-                                                if (currentCourier != courier){
-                                                    currentCourierType = null;
-                                                    // TODO: load courierTypes
-                                                    loadCourierTypes(currentCourier);
-                                                }
-
-                                            }
-                                        });
-
-
-                                        if (courierList != null && courierList.getList() != null && courierList.getList().size() > 0){
-                                            courierAdapter.clear();
-                                            courierAdapter.addCouriers(courierList.getList());
-                                            courierAdapter.notifyDataSetChanged();
-
-                                            int pos = 0;
-                                            for (Courier courier : courierList.getList()){
-                                                if (courier != null && NYHelper.isStringNotEmpty(courier.getCode())){
-                                                    etCourier.setText(courier.getCode().toUpperCase());
-                                                    currentCourier = courier;
-                                                    // TODO: load courierTypes
-                                                    loadCourierTypes(currentCourier);
-                                                    spinnerCourier.setSelection(pos);
-                                                    courierAdapter.setSelectedPosition(pos);
-                                                    courierAdapter.notifyDataSetChanged();
-                                                    break;
-                                                }
-                                                pos++;
-                                            }
-                                        }
-
+                                        //Toast.makeText(getActivity(), "ONGKIR ADA "+String.valueOf(courierList.getList().size()), Toast.LENGTH_SHORT).show();
+                                        loadCourierTypes(courierList.getList().get(0));
                                     }
                                 });
 
@@ -344,40 +355,18 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
                             int position = spinner.getSelectedItemPosition();
                             CourierType courierType = courierTypeAdapter.getItem(position);
-
+                            currentCourierType = courierType;
                             //Toast.makeText(getActivity(), courierType.getName(), Toast.LENGTH_SHORT).show();
 
                             if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService()))
                                 etCourierType.setText(courierType.getService().toUpperCase());
-                            if (currentCourierType != courierType){
-                                currentCourierType = null;
-                                // TODO: load courierTypes
-                                //loadCity(province.getId());
-                            }
 
                         }
                     });
 
-
-                    if (courierTypes != null && courierTypes.size() > 0){
-                        courierTypeAdapter.clear();
-                        courierTypeAdapter.addCouriers(courierTypes);
-                        courierTypeAdapter.notifyDataSetChanged();
-
-                        int pos = 0;
-                        for (CourierType courierType : courierTypes){
-                            if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService())){
-                                etCourierType.setText(courierType.getService());
-                                currentCourierType = courierType;
-                                // TODO: load courierTypes
-                                //loadCity(currentProvince.getId());
-                                spinnerCourierTypes.setSelection(pos);
-                                courierTypeAdapter.setSelectedPosition(pos);
-                                courierTypeAdapter.notifyDataSetChanged();
-                                break;
-                            }
-                            pos++;
-                        }
+                    if (couriers.size() > 0){
+                        currentCourierType = courierTypes.get(0);
+                        etCourier.setText(currentCourierType.getService());
                     }
 
                 }

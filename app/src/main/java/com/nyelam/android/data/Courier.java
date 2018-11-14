@@ -23,6 +23,14 @@ public class Courier implements Parseable {
     private String name;
     private List<CourierType> courierTypes;
 
+
+    public Courier (){}
+
+    public Courier (String code, String name){
+        this.code = code;
+        this.name = name;
+    }
+
     public String getCode() {
         return code;
     }

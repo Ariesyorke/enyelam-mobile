@@ -169,7 +169,7 @@ public class DoShopAddress implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_PROVINCE);
                 if(o != null) {
-                    Province province = new Province();
+                    province = new Province();
                     province.parse(o);
                 }
             } catch (JSONException e) {
@@ -181,7 +181,7 @@ public class DoShopAddress implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_DISTRICT);
                 if(o != null) {
-                    District district = new District();
+                    district = new District();
                     district.parse(o);
                 }
             } catch (JSONException e) {
@@ -193,7 +193,7 @@ public class DoShopAddress implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_CITY);
                 if(o != null) {
-                    City city = new City();
+                    city = new City();
                     city.parse(o);
                 }
             } catch (JSONException e) {
@@ -206,7 +206,6 @@ public class DoShopAddress implements Parseable {
                 setPicked(obj.getBoolean(KEY_IS_PICKED));
             }
         } catch (JSONException e) {e.printStackTrace();}
-
 
     }
 
@@ -272,6 +271,8 @@ public class DoShopAddress implements Parseable {
 
         try{
             if(getProvince()!=null){
+                JSONObject objProv = new JSONObject(getProvince().toString());
+                obj.put(KEY_PROVINCE, objProv);
                 obj.put(KEY_PROVINCE, getProvince());
             } else {
                 obj.put(KEY_PROVINCE, JSONObject.NULL);
@@ -282,7 +283,8 @@ public class DoShopAddress implements Parseable {
 
         try{
             if(getCity()!=null){
-                obj.put(KEY_CITY, getCity());
+                JSONObject objCity = new JSONObject(getCity().toString());
+                obj.put(KEY_CITY, objCity);
             } else {
                 obj.put(KEY_CITY, JSONObject.NULL);
             }
@@ -292,7 +294,8 @@ public class DoShopAddress implements Parseable {
 
         try{
             if(getDistrict()!=null){
-                obj.put(KEY_DISTRICT, getDistrict());
+                JSONObject objDist = new JSONObject(getDistrict().toString());
+                obj.put(KEY_DISTRICT, objDist);
             } else {
                 obj.put(KEY_DISTRICT, JSONObject.NULL);
             }
