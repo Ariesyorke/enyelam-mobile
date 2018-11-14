@@ -5,29 +5,15 @@ import android.text.TextUtils;
 
 import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
-import com.nyelam.android.data.DoShopCart;
-import com.nyelam.android.data.DoShopCheckout;
+import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopList;
 
 import org.json.JSONObject;
 
-public class NYDoShopListCartRequest extends NYBasicAuthRequest<DoShopCart> {
+public class NYDoShopListCartRequest extends NYBasicAuthRequest<DoShopCartReturn> {
 
-    private final static String KEY_PRODUCT_CART_ID = "product_cart_id";
-
-    private final static String POST_CART_TOKEN = "cart_token";
-    private final static String POST_VOUCHER_CODE = "voucher_code";
-
-    public NYDoShopListCartRequest(Context context, String cartToken, String voucherCode) throws Exception {
-        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_add_voucher));
-
-        if(!TextUtils.isEmpty(cartToken)) {
-            addQuery(POST_CART_TOKEN, cartToken);
-        }
-
-        if(!TextUtils.isEmpty(voucherCode)) {
-            addQuery(POST_VOUCHER_CODE, voucherCode);
-        }
+    public NYDoShopListCartRequest(Context context) throws Exception {
+        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_cart_list));
 
     }
 
@@ -37,12 +23,11 @@ public class NYDoShopListCartRequest extends NYBasicAuthRequest<DoShopCart> {
     }
 
     @Override
-    protected DoShopCart onProcessSuccessData(JSONObject obj) throws Exception {
+    protected DoShopCartReturn onProcessSuccessData(JSONObject obj) throws Exception {
 
-        DoShopCart doShopCart = new DoShopCart();
+        DoShopCartReturn doShopCart = new DoShopCartReturn();
         doShopCart.parse(obj);
         return doShopCart;
-
     }
 
 }

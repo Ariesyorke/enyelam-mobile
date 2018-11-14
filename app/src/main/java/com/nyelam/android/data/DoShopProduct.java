@@ -12,6 +12,7 @@ import java.util.List;
 public class DoShopProduct implements Parseable {
 
     private static String KEY_ID = "id";
+    private static String KEY_PRODUCT_CARD_ID = "product_cart_id";
     private static String KEY_PRODUCT_NAME = "product_name";
     private static String KEY_FEATURED_IMAGE = "featured_image";
     private static String KEY_IMAGES = "images";
@@ -22,6 +23,7 @@ public class DoShopProduct implements Parseable {
     private static String KEY_CATEGORIES = "categories";
     private static String KEY_VARIATIONS = "variations";
     private static String KEY_DESCRIPTION = "product_description";
+    private static String KEY_QTY = "qty";
 
     private String id;
     private String productName;
@@ -34,6 +36,7 @@ public class DoShopProduct implements Parseable {
     private Variations variations;
     private List<DoShopCategory> categories;
     private String description;
+    private int qty;
 
     public DoShopProduct(){
 
@@ -140,6 +143,14 @@ public class DoShopProduct implements Parseable {
         this.variations = variations;
     }
 
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -147,6 +158,8 @@ public class DoShopProduct implements Parseable {
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
+            } else if (!obj.isNull(KEY_PRODUCT_CARD_ID)) {
+                setId(obj.getString(KEY_PRODUCT_CARD_ID));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -236,6 +249,11 @@ public class DoShopProduct implements Parseable {
             e.printStackTrace();
         }
 
+        try {
+            if (!obj.isNull(KEY_QTY)) {
+                setQty(obj.getInt(KEY_QTY));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
 
@@ -340,6 +358,12 @@ public class DoShopProduct implements Parseable {
                 obj.put(KEY_VARIATIONS, JSONObject.NULL);
             }
         }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_QTY, getQty());
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 

@@ -5,7 +5,9 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.baoyachi.stepview.bean.StepBean;
@@ -24,6 +26,13 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
     @BindView(R.id.container)
     FrameLayout container;
 
+    @BindView(R.id.ll_container_step_view)
+    LinearLayout llContainerStepView;
+
+    @BindView(R.id.step_view)
+    HorizontalStepView stepView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +43,16 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
     }
 
     private void initStepView(int pos) {
-        HorizontalStepView setpview5 = (HorizontalStepView) findViewById(R.id.step_view);
         List<StepBean> stepsBeanList = new ArrayList<>();
 
-        if (pos == 1){
+        if (pos == 0){
+            StepBean stepBean0 = new StepBean("Step 1",-1);
+            StepBean stepBean1 = new StepBean("Step 2",-1);
+            StepBean stepBean2 = new StepBean("Step 3",-1);
+            stepsBeanList.add(stepBean0);
+            stepsBeanList.add(stepBean1);
+            stepsBeanList.add(stepBean2);
+        } else if (pos == 1){
             StepBean stepBean0 = new StepBean("Step 1",0);
             StepBean stepBean1 = new StepBean("Step 2",-1);
             StepBean stepBean2 = new StepBean("Step 3",-1);
@@ -60,7 +75,7 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
             stepsBeanList.add(stepBean2);
         }
 
-        setpview5
+        stepView
                 .setStepViewTexts(stepsBeanList)//总步骤
                 .setTextSize(12)//set textSize
                 .setStepsViewIndicatorCompletedLineColor(ContextCompat.getColor(this, android.R.color.white))
@@ -75,8 +90,8 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
     private void initFragment() {
         //FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        //DoShopCartFragment fragment = new DoShopCartFragment();
-        DoShopCheckoutFragment fragment = new DoShopCheckoutFragment();
+        DoShopCartFragment fragment = new DoShopCartFragment();
+        //DoShopCheckoutFragment fragment = new DoShopCheckoutFragment();
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
     }
@@ -110,6 +125,12 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
 
     @Override
     public void stepView(int pos) {
+        if (pos == 0){
+            llContainerStepView.setVisibility(View.GONE);
+        } else {
+            llContainerStepView.setVisibility(View.VISIBLE);
+        }
+
         initStepView(pos);
     }
 

@@ -366,7 +366,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
                     if (couriers.size() > 0){
                         currentCourierType = courierTypes.get(0);
-                        etCourier.setText(currentCourierType.getService());
+                        etCourierType.setText(currentCourierType.getService());
                     }
 
                 }
@@ -388,6 +388,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
     }
 
-
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        listener.stepView(1);
+    }
 }

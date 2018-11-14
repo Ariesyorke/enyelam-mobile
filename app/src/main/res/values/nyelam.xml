@@ -125,8 +125,9 @@
     <string name="api_path_doshop_product_list">api/doshop/product_list</string>
     <string name="api_path_doshop_product_detail">api/doshop/product_detail</string>
     <string name="api_path_doshop_add_to_cart">api/doshop/cart_add</string>
-    <string name="api_path_doshop_cart_list">api/doshop/cartList</string>
-    <string name="api_path_doshop_add_voucher">api/doshop/addCart</string>
+    <string name="api_path_doshop_remove_product_cart">api/doshop/cart_remove</string>
+    <string name="api_path_doshop_cart_list">api/doshop/cart_list</string>
+    <string name="api_path_doshop_add_voucher">api/doshop/add_voucher</string>
     <string name="api_path_doshop_address_list">api/doshop/get_address</string>
     <string name="api_path_doshop_add_address">api/doshop/add_address</string>
     <string name="api_path_doshop_checkout_product">api/doshop/addCart</string>

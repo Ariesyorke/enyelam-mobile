@@ -60,7 +60,7 @@
         <!-- android:name=".StarterActivity" -->
 
         <activity
-            android:name=".doshop.DoShopCheckoutActivity"
+            android:name=".StarterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Fullscreen">
             <intent-filter>
@@ -195,7 +195,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".doshop.DoShopCategoryActivity"
             android:screenOrientation="portrait"/>
-        <!-- <activity android:name=".doshop.DoShopCheckoutActivity"></activity> -->
+         <activity android:name=".doshop.DoShopCheckoutActivity"
+             android:screenOrientation="portrait"
+             />
         <activity android:name=".doshop.DoShopChooseAddressActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".doshop.DoShopAddAddressActivity"

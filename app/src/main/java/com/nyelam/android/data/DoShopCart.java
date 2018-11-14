@@ -15,16 +15,15 @@ import java.util.List;
 
 public class DoShopCart implements Parseable {
 
-    private static String KEY_CART_TOKEN = "cart_token";
-    private static String KEY_PRODUCTS = "products";
+//    private static String KEY_PRODUCTS = "products";
     private static String KEY_MERCHANTS = "merchants";
     private static String KEY_SUB_TOTAL = "sub_total";
     private static String KEY_ADDITIONALS = "additionals";
     private static String KEY_VOUCHER = "voucher";
     private static String KEY_TOTAL = "total";
 
-    private String cartToken;
-    private List<DoShopProduct> doShopProducts;
+//    private String cartToken;
+//    private List<DoShopProduct> doShopProducts;
     private List<Additional> additionals;
     private List<DoShopMerchant> merchants;
     private Voucher voucher;
@@ -32,21 +31,21 @@ public class DoShopCart implements Parseable {
     private double total;
 
 
-    public String getCartToken() {
-        return cartToken;
-    }
+//    public String getCartToken() {
+//        return cartToken;
+//    }
+//
+//    public void setCartToken(String cartToken) {
+//        this.cartToken = cartToken;
+//    }
 
-    public void setCartToken(String cartToken) {
-        this.cartToken = cartToken;
-    }
-
-    public List<DoShopProduct> getDoShopProducts() {
-        return doShopProducts;
-    }
-
-    public void setDoShopProducts(List<DoShopProduct> doShopProducts) {
-        this.doShopProducts = doShopProducts;
-    }
+//    public List<DoShopProduct> getDoShopProducts() {
+//        return doShopProducts;
+//    }
+//
+//    public void setDoShopProducts(List<DoShopProduct> doShopProducts) {
+//        this.doShopProducts = doShopProducts;
+//    }
 
     public List<Additional> getAdditionals() {
         return additionals;
@@ -93,26 +92,26 @@ public class DoShopCart implements Parseable {
 
         if (obj == null) return;
 
-        try {
-            if (!obj.isNull(KEY_CART_TOKEN)) {
-                setCartToken(obj.getString(KEY_CART_TOKEN));
-            }
-        } catch (JSONException e) {e.printStackTrace();}
+//        try {
+//            if (!obj.isNull(KEY_CART_TOKEN)) {
+//                setCartToken(obj.getString(KEY_CART_TOKEN));
+//            }
+//        } catch (JSONException e) {e.printStackTrace();}
 
-        if (!obj.isNull(KEY_PRODUCTS)) {
-            try {
-                JSONArray array = obj.getJSONArray(KEY_PRODUCTS);
-                if (array != null && array.length() > 0) {
-                    doShopProducts = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject o = array.getJSONObject(i);
-                        DoShopProduct a = new DoShopProduct();
-                        a.parse(o);
-                        doShopProducts.add(a);
-                    }
-                }
-            } catch (JSONException e) {e.printStackTrace();}
-        }
+//        if (!obj.isNull(KEY_PRODUCTS)) {
+//            try {
+//                JSONArray array = obj.getJSONArray(KEY_PRODUCTS);
+//                if (array != null && array.length() > 0) {
+//                    doShopProducts = new ArrayList<>();
+//                    for (int i = 0; i < array.length(); i++) {
+//                        JSONObject o = array.getJSONObject(i);
+//                        DoShopProduct a = new DoShopProduct();
+//                        a.parse(o);
+//                        doShopProducts.add(a);
+//                    }
+//                }
+//            } catch (JSONException e) {e.printStackTrace();}
+//        }
 
         if (!obj.isNull(KEY_ADDITIONALS)) {
             try {
@@ -175,26 +174,26 @@ public class DoShopCart implements Parseable {
 
         JSONObject obj = new JSONObject();
 
-        try {
-            if (!TextUtils.isEmpty(getCartToken())) {
-                obj.put(KEY_CART_TOKEN, getCartToken());
-            } else {
-                obj.put(KEY_CART_TOKEN, JSONObject.NULL);
-            }
-        } catch (JSONException e) {e.printStackTrace();}
+//        try {
+//            if (!TextUtils.isEmpty(getCartToken())) {
+//                obj.put(KEY_CART_TOKEN, getCartToken());
+//            } else {
+//                obj.put(KEY_CART_TOKEN, JSONObject.NULL);
+//            }
+//        } catch (JSONException e) {e.printStackTrace();}
 
-        if(doShopProducts != null && !doShopProducts.isEmpty()) {
-            try {
-                JSONArray array = new JSONArray();
-                for(DoShopProduct a : doShopProducts) {
-                    JSONObject o = new JSONObject(a.toString());
-                    array.put(o);
-                }
-                obj.put(KEY_PRODUCTS, array);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        if(doShopProducts != null && !doShopProducts.isEmpty()) {
+//            try {
+//                JSONArray array = new JSONArray();
+//                for(DoShopProduct a : doShopProducts) {
+//                    JSONObject o = new JSONObject(a.toString());
+//                    array.put(o);
+//                }
+//                obj.put(KEY_PRODUCTS, array);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         if(additionals != null && !additionals.isEmpty()) {
             try {

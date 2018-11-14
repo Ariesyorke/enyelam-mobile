@@ -14,30 +14,24 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class NYDoShopAddToCartRequest extends NYBasicAuthRequest<DoShopCartReturn> {
+public class NYDoShopRemoveProductCartRequest extends NYBasicAuthRequest<DoShopCartReturn> {
 
     private final static String KEY_PRODUCT_CART_ID = "product_cart_id";
 
-    private final static String POST_PRODUCT_ID = "product_id";
-    private final static String POST_VARIATIONS = "variations[]";
-    private final static String POST_QTY = "qty";
+    private final static String POST_IDS = "product_cart_id[]";
 
-    public NYDoShopAddToCartRequest(Context context, String productId, List<Variation> variations, String qty) throws Exception {
-        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_add_to_cart));
+    //List<String> productsId
 
-        if(!TextUtils.isEmpty(productId)) {
-            addQuery(POST_PRODUCT_ID, productId);
-        }
+    public NYDoShopRemoveProductCartRequest(Context context, String productCartId) throws Exception {
+        super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_remove_product_cart));
 
-        if (variations != null && variations.size() > 0){
-            for (Variation var : variations){
-                if (var != null && NYHelper.isStringNotEmpty(var.getId()))addQuery(POST_VARIATIONS, var.getId());
-            }
-        }
+//        if (productsId != null && productsId.size() > 0){
+//            for (String id : productsId){
+//                if (NYHelper.isStringNotEmpty(id))addQuery(POST_IDS, id);
+//            }
+//        }
 
-        if(!TextUtils.isEmpty(qty)) {
-            addQuery(POST_QTY, qty);
-        }
+        if (NYHelper.isStringNotEmpty(productCartId))addQuery(POST_IDS, productCartId);
 
     }
 

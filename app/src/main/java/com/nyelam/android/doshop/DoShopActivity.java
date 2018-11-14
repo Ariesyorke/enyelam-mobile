@@ -68,6 +68,10 @@ public class DoShopActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.iv_cart) void intentToCart(){
+        Intent intent = new Intent(context, DoShopCheckoutActivity.class);
+        startActivity(intent);
+    }
 
 
     @Override

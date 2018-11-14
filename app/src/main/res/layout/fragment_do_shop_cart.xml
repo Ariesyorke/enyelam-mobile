@@ -92,7 +92,7 @@
                 android:layout_height="1dp"/>
 
 
-            <include layout="@layout/view_item_cart"/>
+            <!--<include layout="@layout/view_item_cart"/>-->
 
 
             <android.support.v7.widget.RecyclerView
@@ -123,6 +123,7 @@
                     android:gravity="center">
 
                     <EditText
+                        android:id="@+id/et_voucher_code"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -132,6 +133,7 @@
                         android:padding="@dimen/padding" />
 
                     <TextView
+                        android:id="@+id/tv_apply_voucher_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/padding"
@@ -148,8 +150,7 @@
 
 
 
-
-            <com.nyelam.android.view.font.NYStrikethroughTextView
+            <com.nyelam.android.view.font.NYTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_horizontal_margin"
@@ -159,8 +160,6 @@
                 android:textColor="#808080"
                 android:background="#EDEDED"
                 />
-
-
 
 
             <LinearLayout
@@ -181,11 +180,12 @@
                         android:textSize="16sp"
                         />
                     <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_sub_total"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="Rp 257098"
+                        tools:text="Rp 257098"
                         android:textColor="#808080"
                         android:textSize="16sp"
                         />
@@ -203,11 +203,12 @@
                         android:textSize="16sp"
                         />
                     <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_total"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="Rp 257098"
+                        tools:text="Rp 257098"
                         android:textColor="#1B1B1B"
                         android:textSize="16sp"
                         />

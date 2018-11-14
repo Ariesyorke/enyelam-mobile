@@ -28,6 +28,7 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopCart;
+import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
 import com.nyelam.android.data.Variation;
@@ -220,8 +221,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         spcMgr.execute(req, onAddToCartRequest());
     }
 
-    private RequestListener<DoShopCart> onAddToCartRequest() {
-        return new RequestListener<DoShopCart>() {
+    private RequestListener<DoShopCartReturn> onAddToCartRequest() {
+        return new RequestListener<DoShopCartReturn>() {
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -230,7 +231,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             }
 
             @Override
-            public void onRequestSuccess(DoShopCart cart) {
+            public void onRequestSuccess(DoShopCartReturn cart) {
                 pDialog.dismiss();
 
                 NYDialogAddToCart dialog = new NYDialogAddToCart();

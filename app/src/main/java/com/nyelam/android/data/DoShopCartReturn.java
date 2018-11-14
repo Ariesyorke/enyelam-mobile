@@ -13,29 +13,28 @@ import java.util.List;
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class DoShopCartReturn extends DoShopCart implements Parseable {
+public class DoShopCartReturn implements Parseable {
 
-    private static String KEY_VERITRANS_TOKEN = "veritrans_token";
-    private static String KEY_PAYPAL_CURRENCY = "paypal_currency";
+    private static String KEY_CART_TOKEN = "cart_token";
+    private static String KEY_CART = "cart";
 
-    private VeritransToken veritransToken;
-    private PaypalCurrency paypalCurrency;
+    private String cartToken;
+    private DoShopCart cart;
 
-
-    public VeritransToken getVeritransToken() {
-        return veritransToken;
+    public String getCartToken() {
+        return cartToken;
     }
 
-    public void setVeritransToken(VeritransToken veritransToken) {
-        this.veritransToken = veritransToken;
+    public void setCartToken(String cartToken) {
+        this.cartToken = cartToken;
     }
 
-    public PaypalCurrency getPaypalCurrency() {
-        return paypalCurrency;
+    public DoShopCart getCart() {
+        return cart;
     }
 
-    public void setPaypalCurrency(PaypalCurrency paypalCurrency) {
-        this.paypalCurrency = paypalCurrency;
+    public void setCart(DoShopCart cart) {
+        this.cart = cart;
     }
 
     @Override
@@ -43,24 +42,18 @@ public class DoShopCartReturn extends DoShopCart implements Parseable {
 
         if (obj == null) return;
 
-        if(!obj.isNull(KEY_VERITRANS_TOKEN)) {
-            try {
-                JSONObject o = obj.getJSONObject(KEY_VERITRANS_TOKEN);
-                if(o != null && o.length() > 0) {
-                    veritransToken = new VeritransToken();
-                    veritransToken.parse(o);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            if (!obj.isNull(KEY_CART_TOKEN)) {
+                setCartToken(obj.getString(KEY_CART_TOKEN));
             }
-        }
+        } catch (JSONException e) {e.printStackTrace();}
 
-        if(!obj.isNull(KEY_PAYPAL_CURRENCY)) {
+        if(!obj.isNull(KEY_CART)) {
             try {
-                JSONObject o = obj.getJSONObject(KEY_VERITRANS_TOKEN);
+                JSONObject o = obj.getJSONObject(KEY_CART);
                 if(o != null && o.length() > 0) {
-                    paypalCurrency = new PaypalCurrency();
-                    paypalCurrency.parse(o);
+                    cart = new DoShopCart();
+                    cart.parse(o);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -73,23 +66,20 @@ public class DoShopCartReturn extends DoShopCart implements Parseable {
 
         JSONObject obj = new JSONObject();
 
-        try{
-            if(getVeritransToken()!=null){
-                JSONObject objVer = new JSONObject(getVeritransToken().toString());
-                obj.put(KEY_VERITRANS_TOKEN, objVer);
+        try {
+            if (!TextUtils.isEmpty(getCartToken())) {
+                obj.put(KEY_CART_TOKEN, getCartToken());
             } else {
-                obj.put(KEY_VERITRANS_TOKEN, JSONObject.NULL);
+                obj.put(KEY_CART_TOKEN, JSONObject.NULL);
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+        } catch (JSONException e) {e.printStackTrace();}
 
         try{
-            if(getPaypalCurrency()!=null){
-                JSONObject objPay = new JSONObject(getPaypalCurrency().toString());
-                obj.put(KEY_PAYPAL_CURRENCY, objPay);
+            if(getCart()!=null){
+                JSONObject objPay = new JSONObject(getCart().toString());
+                obj.put(KEY_CART, objPay);
             } else {
-                obj.put(KEY_PAYPAL_CURRENCY, JSONObject.NULL);
+                obj.put(KEY_CART, JSONObject.NULL);
             }
         }catch (JSONException e){
             e.printStackTrace();

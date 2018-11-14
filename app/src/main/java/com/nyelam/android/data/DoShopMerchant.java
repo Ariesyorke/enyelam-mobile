@@ -2,8 +2,12 @@ package com.nyelam.android.data;
 
 import android.text.TextUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
@@ -19,6 +23,7 @@ public class DoShopMerchant implements Parseable {
     private static String KEY_POSTAL_CODE = "postal_code";
     private static String KEY_ADDRESS = "address";
     private static String KEY_TOTAL_WEIGHT = "total_weight";
+    private static String KEY_PRODUCTS = "products";
 
     private String id;
     private String name;
@@ -28,6 +33,7 @@ public class DoShopMerchant implements Parseable {
     private String postalCode;
     private String address;
     private double totalWeight;
+    private List<DoShopProduct> doShopProducts;
 
 
     public String getId() {
@@ -94,6 +100,14 @@ public class DoShopMerchant implements Parseable {
         this.totalWeight = totalWeight;
     }
 
+    public List<DoShopProduct> getDoShopProducts() {
+        return doShopProducts;
+    }
+
+    public void setDoShopProducts(List<DoShopProduct> doShopProducts) {
+        this.doShopProducts = doShopProducts;
+    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -147,6 +161,21 @@ public class DoShopMerchant implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+
+        if (!obj.isNull(KEY_PRODUCTS)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_PRODUCTS);
+                if (array != null && array.length() > 0) {
+                    doShopProducts = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        DoShopProduct a = new DoShopProduct();
+                        a.parse(o);
+                        doShopProducts.add(a);
+                    }
+                }
+            } catch (JSONException e) {e.printStackTrace();}
+        }
 
 
     }
@@ -216,6 +245,19 @@ public class DoShopMerchant implements Parseable {
             obj.put(KEY_TOTAL_WEIGHT, getTotalWeight());
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        if(doShopProducts != null && !doShopProducts.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(DoShopProduct a : doShopProducts) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_PRODUCTS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
