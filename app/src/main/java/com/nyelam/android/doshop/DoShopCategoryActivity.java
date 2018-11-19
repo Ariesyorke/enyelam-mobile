@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -55,12 +57,21 @@ public class DoShopCategoryActivity extends BasicActivity {
     @BindView(R.id.rv_item_list)
     RecyclerView rvItemList;
 
+    @OnClick(R.id.ll_filter) void filter(){
+        startActivity(new Intent(this, DoShopFilterActivity.class));
+    }
+
+    @OnClick(R.id.ll_sort_by) void sortBy(){
+        startActivity(new Intent(this, DoShopFilterActivity.class));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_shop_category);
         ButterKnife.bind(this);
         context = this;
+        initToolbar();
         initExtra();
 
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
@@ -166,5 +177,23 @@ public class DoShopCategoryActivity extends BasicActivity {
     protected void onStart() {
         super.onStart();
     }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

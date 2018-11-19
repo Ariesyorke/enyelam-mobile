@@ -10,13 +10,13 @@ import com.nyelam.android.data.DoShopOrder;
 
 import org.json.JSONObject;
 
-public class NYDoShopOrderDetailRequest extends NYBasicRequest<DoShopOrder> {
+public class NYDoShopOrderDetailRequest extends NYBasicAuthRequest<DoShopOrder> {
 
     private final static String KEY_ORDER = "Order";
 
     private final static String POST_ORDER_ID = "product_id";
 
-    public NYDoShopOrderDetailRequest(Context context, String orderId){
+    public NYDoShopOrderDetailRequest(Context context, String orderId) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_order_detail));
 
         if(!TextUtils.isEmpty(orderId)) {

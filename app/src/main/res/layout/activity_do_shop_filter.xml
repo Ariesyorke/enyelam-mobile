@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".doshop.DoShopFilterActivity">
+
+    <include layout="@layout/toolbar_dialog"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.nyelam.android.view.font.NYTextView
+                android:text="Sort by"
+                android:textSize="16sp"
+                android:textColor="@color/ny_black3"
+                app:fontTextStyle="light"
+                android:background="#F7F7F7"
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:padding="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/payment_bank_transfer_linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/lowerPriceRadioButton"
+                            android:checked="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:orientation="horizontal">
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/bank_transfer_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_toRightOf="@+id/bank_transfer"
+                                android:layout_centerVertical="true"
+                                android:text="Lowest Price"
+                                android:textColor="@color/ny_black1"
+                                android:textSize="16sp"
+                                app:fontTextStyle="medium"
+                                android:layout_alignParentTop="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/payment_virtual_account_linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/highestPriceRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/highest_price_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:text="Highest Price"
+                                android:textColor="@color/ny_black1"
+                                android:textSize="16sp"
+                                app:fontTextStyle="medium"
+                                android:layout_alignParentTop="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </RadioGroup>
+            </LinearLayout>
+
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F7F7F7"
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="Price Range"
+                android:textSize="16sp"
+                android:textColor="@color/ny_black3"
+                app:fontTextStyle="light" />
+
+            <LinearLayout
+                android:padding="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                    android:id="@+id/price_range_seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:layout_marginBottom="@dimen/padding_half"
+                    app:corner_radius="10"
+                    app:bar_color="#B1B1B1"
+                    app:bar_highlight_color="#0071BC"
+                    app:left_thumb_color="#EFEFEF"
+                    app:right_thumb_color="#EFEFEF"
+                    app:left_thumb_color_pressed="#EFEFEF"
+                    app:right_thumb_color_pressed="#EFEFEF"
+                    app:data_type="_integer"/>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/price_min_textView"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Rp xx.xxx.xxx,-"
+                        android:textSize="16sp"
+                        android:textColor="@color/ny_black3"
+                        android:gravity="left"
+                        app:fontTextStyle="light" />
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/price_max_textView"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Rp xx.xxx.xxx,-"
+                        android:textSize="16sp"
+                        android:textColor="@color/ny_black3"
+                        android:gravity="right"
+                        app:fontTextStyle="light" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <android.support.v7.widget.CardView
+                android:visibility="gone"
+                android:id="@+id/do_dive_cardView"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false"
+                android:layout_margin="@dimen/padding"
+                android:elevation="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="0dp">
+                        <LinearLayout
+                            android:id="@+id/categories_linearLayout"
+                            android:orientation="vertical"
+                            android:padding="@dimen/padding"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </ScrollView>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:background="#dfdfdf"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"/>
+
+                        <TextView
+                            android:id="@+id/done_textView"
+                            android:text="Done"
+                            android:textColor="@color/colorWhite"
+                            android:gravity="center"
+                            android:background="@drawable/ny_rectangle_blue"
+                            android:padding="@dimen/padding"
+                            android:layout_margin="@dimen/padding_double"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:background="@color/ny_grey1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <LinearLayout
+        android:layout_below="@+id/scrollView"
+        android:id="@+id/filter_linearLayout"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/apply_textView"
+            android:text="Apply"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/ny_rectangle_blue"
+            android:padding="@dimen/padding"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginEnd="@dimen/padding_half"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/clear_textView"
+            android:text="Clear"
+            android:textSize="16sp"
+            android:textColor="@color/ny_grey4"
+            android:background="@drawable/ny_rectangle_white_border_grey"
+            android:padding="@dimen/padding"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:layout_marginStart="@dimen/padding_half"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -2,10 +2,13 @@ package com.nyelam.android.doshop;
 
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nyelam.android.BasicFragment;
@@ -42,11 +45,23 @@ public class DoShopCartFragment extends BasicFragment {
     @BindView(R.id.tv_total)
     TextView tvTotal;
 
+    @BindView(R.id.tv_not_found)
+    TextView tvNotFound;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.ll_main_container)
+    LinearLayout llMainContainer;
+
     @BindView(R.id.tv_sub_total)
     TextView tvSubTotal;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @OnClick(R.id.tv_checkout) void checkOut(){
         listener.proceedToCheckOut();
@@ -54,6 +69,16 @@ public class DoShopCartFragment extends BasicFragment {
 
     @BindView(R.id.et_voucher_code)
     EditText etVoucherCode;
+
+
+    @BindView(R.id.ll_voucher_container)
+    LinearLayout llVoucherContainer;
+
+    @BindView(R.id.tv_voucher_code)
+    TextView tvVoucherCode;
+
+    @BindView(R.id.tv_voucher_total)
+    TextView tvVoucherTotal;
 
     @OnClick(R.id.tv_apply_voucher_code) void applyVoucher(){
         //listener.proceedToCheckOut();
@@ -86,7 +111,15 @@ public class DoShopCartFragment extends BasicFragment {
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
         recyclerView.setAdapter(adapter);
 
-        getCartList();
+        getCartList(false);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCartList(true);
+            }
+        });
+
     }
 
 
@@ -95,11 +128,14 @@ public class DoShopCartFragment extends BasicFragment {
         return R.layout.fragment_do_shop_cart;
     }
 
-    private void getCartList(){
+    private void getCartList(boolean isRefresh){
+        if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
         NYDoShopListCartRequest req = null;
         try {
             req = new NYDoShopListCartRequest(getActivity());
         } catch (Exception e) {
+            progressBar.setVisibility(View.GONE);
+            tvNotFound.setVisibility(View.VISIBLE);
             e.printStackTrace();
         }
         spcMgr.execute(req, onCartListRequest());
@@ -111,14 +147,18 @@ public class DoShopCartFragment extends BasicFragment {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 //NYHelper.handleAPIException(context, spiceException, null);
-                //swipeRefreshLayout.setRefreshing(false);
-                //llRelatedItem.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.GONE);
+                llMainContainer.setVisibility(View.GONE);
+                tvNotFound.setVisibility(View.VISIBLE);
+
             }
 
             @Override
             public void onRequestSuccess(DoShopCartReturn cartReturn) {
-                //progressBar.setVisibility(View.GONE);
-                //swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.GONE);
+                tvNotFound.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
 
                 thisFragment.cartReturn = cartReturn;
 
@@ -138,6 +178,7 @@ public class DoShopCartFragment extends BasicFragment {
                 adapter.notifyDataSetChanged();
 
                 initCartReturn(cartReturn);
+                llMainContainer.setVisibility(View.VISIBLE);
             }
         };
     }
@@ -239,6 +280,14 @@ public class DoShopCartFragment extends BasicFragment {
         if (cartReturn != null && cartReturn.getCart() != null){
             tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()));
             tvSubTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getSubTotal()));
+
+            if (cartReturn.getCart().getVoucher() != null){
+                if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))tvVoucherCode.setText("Voucher {"+cartReturn.getCart().getVoucher().getCode()+")");
+                tvVoucherTotal.setText(" - "+NYHelper.priceFormatter(cartReturn.getCart().getVoucher().getValue()));
+                llVoucherContainer.setVisibility(View.VISIBLE);
+            } else {
+                llVoucherContainer.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -252,6 +301,7 @@ public class DoShopCartFragment extends BasicFragment {
     @Override
     public void onResume() {
         super.onResume();
+        listener.setTitle("Cart");
         listener.stepView(0);
         if (!spcMgr.isStarted()) spcMgr.start(getActivity());
     }

@@ -14,12 +14,17 @@ import com.nyelam.android.http.result.NYPaginationResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class NYDoShopOrderListRequest extends NYBasicRequest<DoShopOrderList> {
+public class NYDoShopOrderListRequest extends NYBasicAuthRequest<DoShopOrderList> {
 
     private final static String KEY_ORDERS = "orders";
+    private final static String POST_STATUS = "status";
 
-    public NYDoShopOrderListRequest(Context context){
+    public NYDoShopOrderListRequest(Context context, String status) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_order_list));
+
+        if(!TextUtils.isEmpty(status)) {
+            addQuery(POST_STATUS, status);
+        }
 
     }
 

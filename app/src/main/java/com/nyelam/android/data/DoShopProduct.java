@@ -21,6 +21,7 @@ public class DoShopProduct implements Parseable {
     private static String KEY_WEIGHT = "weight";
     private static String KEY_STATUS = "status";
     private static String KEY_CATEGORIES = "categories";
+    private static String KEY_MERCHANT = "merchant";
     private static String KEY_VARIATIONS = "variations";
     private static String KEY_DESCRIPTION = "product_description";
     private static String KEY_QTY = "qty";
@@ -33,6 +34,7 @@ public class DoShopProduct implements Parseable {
     private double specialPrice;
     private double normalPrice;
     private String status;
+    private DoShopMerchant merchant;
     private Variations variations;
     private List<DoShopCategory> categories;
     private String description;
@@ -143,6 +145,14 @@ public class DoShopProduct implements Parseable {
         this.variations = variations;
     }
 
+    public DoShopMerchant getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(DoShopMerchant merchant) {
+        this.merchant = merchant;
+    }
+
     public int getQty() {
         return qty;
     }
@@ -243,6 +253,18 @@ public class DoShopProduct implements Parseable {
                 if(o != null && o.length() > 0) {
                     variations = new Variations();
                     variations.parse(o);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(!obj.isNull(KEY_MERCHANT)) {
+                JSONObject o = obj.getJSONObject(KEY_MERCHANT);
+                if(o != null && o.length() > 0) {
+                    merchant = new DoShopMerchant();
+                    merchant.parse(o);
                 }
             }
         } catch (JSONException e) {
@@ -356,6 +378,17 @@ public class DoShopProduct implements Parseable {
                 obj.put(KEY_VARIATIONS, objVar);
             } else {
                 obj.put(KEY_VARIATIONS, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getMerchant()!=null){
+                JSONObject objMer= new JSONObject(getMerchant().toString());
+                obj.put(KEY_MERCHANT, objMer);
+            } else {
+                obj.put(KEY_MERCHANT, JSONObject.NULL);
             }
         }catch (JSONException e){
             e.printStackTrace();

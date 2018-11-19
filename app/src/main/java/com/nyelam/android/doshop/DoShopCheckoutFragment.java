@@ -393,4 +393,10 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
         super.onStart();
         listener.stepView(1);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        listener.setTitle("Checkout");
+    }
 }

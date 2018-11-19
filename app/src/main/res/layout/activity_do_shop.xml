@@ -10,6 +10,50 @@
     android:fitsSystemWindows="true"
     tools:context=".doshop.DoShopActivity">
 
+
+
+    <!--&lt;!&ndash; Container for contents of drawer - use NavigationView to make configuration easier &ndash;&gt;
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+        android:background="@color/white"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            &lt;!&ndash;<include layout="@layout/nav_header" />&ndash;&gt;
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_double"
+                android:gravity="center"
+                android:padding="@dimen/padding"
+                android:text="Categories"
+                android:textColor="@color/ny_black2"
+                android:textSize="16sp" />
+
+            <ListView
+                android:id="@+id/list_view_menu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>-->
+
+
+
+
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -57,10 +101,14 @@
                         android:paddingLeft="@dimen/padding"
                         android:paddingRight="@dimen/padding"
                         android:paddingTop="@dimen/padding_half"
+                        android:textSize="15sp"
+                        android:singleLine="true"
+                        android:maxLines="1"
                         android:textColor="@color/ny_black1"
-                        android:textColorHint="@color/ny_black1" />
+                        android:textColorHint="@color/ny_grey2" />
 
                     <ImageView
+                        android:visibility="gone"
                         android:id="@+id/iv_cart"
                         android:layout_marginRight="@dimen/padding"
                         android:layout_width="wrap_content"
@@ -144,42 +192,9 @@
     </RelativeLayout>
 
 
-    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
-        android:background="@color/white"
-        android:fitsSystemWindows="true">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:orientation="vertical">
+    <include layout="@layout/nav_drawer_do_shop"/>
 
-            <!--<include layout="@layout/nav_header" />-->
-
-            <com.nyelam.android.view.font.NYTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_double"
-                android:gravity="center"
-                android:padding="@dimen/padding"
-                android:text="Categories"
-                android:textColor="@color/ny_black2"
-                android:textSize="16sp" />
-
-            <ListView
-                android:id="@+id/list_view_menu"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-    </android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>

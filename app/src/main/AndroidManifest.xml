@@ -191,17 +191,25 @@
             android:screenOrientation="portrait" />
         <activity android:name=".inbox.InboxActivity" />
         <activity android:name=".inbox.NewMessageActivity" />
-        <activity android:name=".doshop.DoShopDetailItemActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".doshop.DoShopCategoryActivity"
-            android:screenOrientation="portrait"/>
-         <activity android:name=".doshop.DoShopCheckoutActivity"
-             android:screenOrientation="portrait"
-             />
-        <activity android:name=".doshop.DoShopChooseAddressActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".doshop.DoShopAddAddressActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".doshop.DoShopDetailItemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopCategoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopCheckoutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopChooseAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopAddAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".doshop.DoShopFilterActivity" />
+        <activity android:name=".doshop.DoShopSortByActivity" />
+        <activity android:name=".doshoporderhistory.DoShopOrderHistoryActivity" />
+        <activity android:name=".doshoporderhistory.DoShopOrderDetailActivity"></activity>
     </application>
 
 </manifest>

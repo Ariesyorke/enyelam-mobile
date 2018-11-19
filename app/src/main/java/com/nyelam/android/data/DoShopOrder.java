@@ -2,8 +2,12 @@ package com.nyelam.android.data;
 
 import com.nyelam.android.helper.NYHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
@@ -16,13 +20,17 @@ public class DoShopOrder implements Parseable {
     private static String KEY_ORDER_STATUS = "order_status";
     private static String KEY_PAYPAL_CURRENCY = "paypal_currency";
     private static String KEY_VERITRANS_TOKEN = "veritrans_token";
-    private static String KEY_ADDRESS = "address";
+    private static String KEY_BILLING_ADDRESS = "billing_address";
+    private static String KEY_SHIPPING_ADDRESS = "shipping_address";
+    private static String KEY_ADDITIONALS = "additionals";
     private static String KEY_DELIVERY_SERVICE = "delivery_service";
     private static String KEY_CART = "cart";
 
     private String orderId;
     private String orderStatus;
-    private DoShopAddress address;
+    private DoShopAddress billingAddress;
+    private DoShopAddress shippingAddress;
+    private List<Additional> additionals;
     private DeliveryService deliveryService;
     private DoShopCart cart;
     private PaypalCurrency paypalCurrency;
@@ -44,12 +52,20 @@ public class DoShopOrder implements Parseable {
         this.orderStatus = orderStatus;
     }
 
-    public DoShopAddress getAddress() {
-        return address;
+    public DoShopAddress getBillingAddress() {
+        return billingAddress;
     }
 
-    public void setAddress(DoShopAddress address) {
-        this.address = address;
+    public void setBillingAddress(DoShopAddress billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public DoShopAddress getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(DoShopAddress shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 
     public DeliveryService getDeliveryService() {
@@ -66,6 +82,14 @@ public class DoShopOrder implements Parseable {
 
     public void setCart(DoShopCart cart) {
         this.cart = cart;
+    }
+
+    public List<Additional> getAdditionals() {
+        return additionals;
+    }
+
+    public void setAdditionals(List<Additional> additionals) {
+        this.additionals = additionals;
     }
 
     public VeritransToken getVeritransToken() {
@@ -102,16 +126,43 @@ public class DoShopOrder implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
 
-        if(!obj.isNull(KEY_ADDRESS)) {
+        if(!obj.isNull(KEY_BILLING_ADDRESS)) {
             try {
-                JSONObject o = obj.getJSONObject(KEY_ADDRESS);
+                JSONObject o = obj.getJSONObject(KEY_BILLING_ADDRESS);
                 if(o != null && o.length() > 0) {
-                    address = new DoShopAddress();
-                    address.parse(o);
+                    billingAddress = new DoShopAddress();
+                    billingAddress.parse(o);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        if(!obj.isNull(KEY_SHIPPING_ADDRESS)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_SHIPPING_ADDRESS);
+                if(o != null && o.length() > 0) {
+                    shippingAddress = new DoShopAddress();
+                    shippingAddress.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!obj.isNull(KEY_ADDITIONALS)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_ADDITIONALS);
+                if (array != null && array.length() > 0) {
+                    additionals = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        Additional a = new Additional();
+                        a.parse(o);
+                        additionals.add(a);
+                    }
+                }
+            } catch (JSONException e) {e.printStackTrace();}
         }
 
         if(!obj.isNull(KEY_DELIVERY_SERVICE)) {
@@ -187,11 +238,22 @@ public class DoShopOrder implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try{
-            if(getAddress()!=null){
-                JSONObject objVer = new JSONObject(getAddress().toString());
-                obj.put(KEY_ADDRESS, objVer);
+            if(getBillingAddress()!=null){
+                JSONObject objVer = new JSONObject(getBillingAddress().toString());
+                obj.put(KEY_BILLING_ADDRESS, objVer);
             } else {
-                obj.put(KEY_ADDRESS, JSONObject.NULL);
+                obj.put(KEY_BILLING_ADDRESS, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(getShippingAddress()!=null){
+                JSONObject objVer = new JSONObject(getShippingAddress().toString());
+                obj.put(KEY_SHIPPING_ADDRESS, objVer);
+            } else {
+                obj.put(KEY_SHIPPING_ADDRESS, JSONObject.NULL);
             }
         }catch (JSONException e){
             e.printStackTrace();
@@ -206,6 +268,19 @@ public class DoShopOrder implements Parseable {
             }
         }catch (JSONException e){
             e.printStackTrace();
+        }
+
+        if(additionals != null && !additionals.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(Additional a : additionals) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_ADDITIONALS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         try{

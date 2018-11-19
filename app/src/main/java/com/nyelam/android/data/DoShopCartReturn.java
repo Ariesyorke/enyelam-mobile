@@ -17,9 +17,11 @@ public class DoShopCartReturn implements Parseable {
 
     private static String KEY_CART_TOKEN = "cart_token";
     private static String KEY_CART = "cart";
+    private static String KEY_ADDITIONALS = "additionals";
 
     private String cartToken;
     private DoShopCart cart;
+    private List<Additional> additionals;
 
     public String getCartToken() {
         return cartToken;
@@ -35,6 +37,14 @@ public class DoShopCartReturn implements Parseable {
 
     public void setCart(DoShopCart cart) {
         this.cart = cart;
+    }
+
+    public List<Additional> getAdditionals() {
+        return additionals;
+    }
+
+    public void setAdditionals(List<Additional> additionals) {
+        this.additionals = additionals;
     }
 
     @Override
@@ -59,6 +69,22 @@ public class DoShopCartReturn implements Parseable {
                 e.printStackTrace();
             }
         }
+
+        if (!obj.isNull(KEY_ADDITIONALS)) {
+            try {
+                JSONArray array = obj.getJSONArray(KEY_ADDITIONALS);
+                if (array != null && array.length() > 0) {
+                    additionals = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+                        Additional a = new Additional();
+                        a.parse(o);
+                        additionals.add(a);
+                    }
+                }
+            } catch (JSONException e) {e.printStackTrace();}
+        }
+
     }
 
     @Override
@@ -85,6 +111,18 @@ public class DoShopCartReturn implements Parseable {
             e.printStackTrace();
         }
 
+        if(additionals != null && !additionals.isEmpty()) {
+            try {
+                JSONArray array = new JSONArray();
+                for(Additional a : additionals) {
+                    JSONObject o = new JSONObject(a.toString());
+                    array.put(o);
+                }
+                obj.put(KEY_ADDITIONALS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             return obj.toString(3);

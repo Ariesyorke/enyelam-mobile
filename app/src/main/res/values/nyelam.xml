@@ -133,9 +133,9 @@
     <string name="api_path_doshop_checkout_product">api/doshop/addCart</string>
     <string name="api_path_doshop_get_list_delivery">api/doshop/addCart</string>
     <string name="api_path_doshop_check_payment_method">api/doshop/addCart</string>
-    <string name="api_path_doshop_submit_order">api/doshop/addCart</string>
-    <string name="api_path_doshop_order_list">api/doshop/addCart</string>
-    <string name="api_path_doshop_order_detail">api/doshop/addCart</string>
+    <string name="api_path_doshop_submit_order">api/doshop/submit_order</string>
+    <string name="api_path_doshop_order_list">api/doshop/order_list</string>
+    <string name="api_path_doshop_order_detail">api/doshop/order_detail</string>
     <string name="api_path_doshop_get_location">api/doshop/get_location</string>
 
 

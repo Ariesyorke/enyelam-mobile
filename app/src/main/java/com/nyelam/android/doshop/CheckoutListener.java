@@ -8,4 +8,5 @@ public interface CheckoutListener {
     void proceedToChoosePayment();
     void proceedPayment();
     void stepView(int pos);
+    void setTitle(String title);
 }

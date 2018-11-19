@@ -5,9 +5,12 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.baoyachi.stepview.bean.StepBean;
@@ -23,6 +26,9 @@ import butterknife.ButterKnife;
 
 public class DoShopCheckoutActivity extends BasicActivity implements CheckoutListener {
 
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+
     @BindView(R.id.container)
     FrameLayout container;
 
@@ -32,12 +38,12 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
     @BindView(R.id.step_view)
     HorizontalStepView stepView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_shop_checkout);
         ButterKnife.bind(this);
+        initToolbar();
         initFragment();
         initStepView(1);
     }
@@ -132,6 +138,29 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
         }
 
         initStepView(pos);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void setTitle(String title) {
+        tvTitle.setText(title);
     }
 
 

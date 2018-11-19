@@ -8,6 +8,7 @@
     tools:context=".doshop.DoShopCheckoutActivity">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,6 +25,7 @@
             <!--android:layout_height="wrap_content" />-->
 
             <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_title"
                 android:text="Checkout"
                 android:textSize="18sp"
                 android:textColor="@color/white"
