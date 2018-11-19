@@ -310,7 +310,6 @@
                 </LinearLayout>
 
 
-
                 <com.nyelam.android.view.font.NYTextView
                     app:fontTextStyle="medium"
                     android:layout_width="match_parent"

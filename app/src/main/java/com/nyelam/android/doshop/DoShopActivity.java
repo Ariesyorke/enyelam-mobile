@@ -68,11 +68,11 @@ public class DoShopActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.et_search) void openSearchItem(){
-        DoShopCategory cat = new DoShopCategory();
-        cat.setId("1");
-        cat.setName("Scuba Gear 1");
+//        DoShopCategory cat = new DoShopCategory();
+//        cat.setId("1");
+//        cat.setName("Scuba Gear 1");
         Intent intent = new Intent(context, DoShopCategoryActivity.class);
-        intent.putExtra(NYHelper.CATEGORY, cat.toString());
+//        intent.putExtra(NYHelper.CATEGORY, cat.toString());
         startActivity(intent);
     }
 

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
@@ -47,6 +48,9 @@ public class DoShopCategoryActivity extends BasicActivity {
 
     private String categoryId;
     private DoShopCategory category;
+    private String sortBy = "1";
+    private String minPrice = "0";
+    private String maxPrice = "10000000";
 
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
@@ -58,11 +62,19 @@ public class DoShopCategoryActivity extends BasicActivity {
     RecyclerView rvItemList;
 
     @OnClick(R.id.ll_filter) void filter(){
-        startActivity(new Intent(this, DoShopFilterActivity.class));
+        Intent intent = new Intent(this, DoShopFilterActivity.class);
+        intent.putExtra(NYHelper.SORT_BY, sortBy);
+        intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
+        intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
+        startActivityForResult(intent, 1);
     }
 
     @OnClick(R.id.ll_sort_by) void sortBy(){
-        startActivity(new Intent(this, DoShopFilterActivity.class));
+        Intent intent = new Intent(this, DoShopFilterActivity.class);
+        intent.putExtra(NYHelper.SORT_BY, sortBy);
+        intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
+        intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -80,16 +92,16 @@ public class DoShopCategoryActivity extends BasicActivity {
         rvItemList.setAdapter(adapter);
 
         if (category != null && NYHelper.isStringNotEmpty(category.getId())){
-            progressBar.setVisibility(View.VISIBLE);
             initListItem(category.getId());
         } else {
-            dialogCategoryNotAvailable();
+            //dialogCategoryNotAvailable();
+            initListItem(null);
         }
     }
 
     private void initListItem(String categoryId){
-        NYLog.e("cek related 1");
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, "40000",  "500000", "1");
+        progressBar.setVisibility(View.VISIBLE);
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, minPrice,  maxPrice, sortBy);
         spcMgr.execute(req, onRealtedItemRequest());
     }
 
@@ -195,5 +207,30 @@ public class DoShopCategoryActivity extends BasicActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        //Toast.makeText(context, "tes 1", Toast.LENGTH_SHORT).show();
+
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            //Toast.makeText(context, "tes 2", Toast.LENGTH_SHORT).show();
+            Bundle b = data.getExtras();
+            if (data.hasExtra(NYHelper.SORT_BY)) sortBy = b.getString(NYHelper.SORT_BY);
+            if (data.hasExtra(NYHelper.MIN_PRICE)) minPrice =   String.valueOf(b.getDouble(NYHelper.MIN_PRICE, 0));
+            if (data.hasExtra(NYHelper.MAX_PRICE)) maxPrice = String.valueOf(b.getDouble(NYHelper.MAX_PRICE, 1000000));
+
+
+            adapter.clear();
+            adapter.notifyDataSetChanged();
+
+            if (category != null && NYHelper.isStringNotEmpty(category.getId())){
+                initListItem(category.getId());
+            } else {
+                //dialogCategoryNotAvailable();
+                initListItem(null);
+            }
+        }
+
+    }
 }

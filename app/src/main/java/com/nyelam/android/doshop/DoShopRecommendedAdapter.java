@@ -129,6 +129,9 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
         this.data.addAll(data);
     }
 
+    public void clear() {
+        this.data = new ArrayList<>();
+    }
 
 
     @Override
