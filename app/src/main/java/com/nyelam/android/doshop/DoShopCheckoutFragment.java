@@ -1,11 +1,14 @@
 package com.nyelam.android.doshop;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.solver.widgets.Helper;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +26,13 @@ import com.nyelam.android.data.Courier;
 import com.nyelam.android.data.CourierList;
 import com.nyelam.android.data.CourierType;
 import com.nyelam.android.data.DoShopAddress;
+import com.nyelam.android.data.DoShopCartReturn;
+import com.nyelam.android.data.DoShopMerchant;
+import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.general.CourierAdapter;
 import com.nyelam.android.general.CourierTypeAdapter;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.view.NYDialogChooseAddress;
 import com.nyelam.android.view.NYSpinner;
 
@@ -55,6 +62,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     private DoShopCheckoutFragment thisFragment;
 
     private CheckoutListener listener;
+    private DoShopCartReturn cartReturn;
     private DoShopAddress address;
     private List<Courier> couriers;
     private Courier currentCourier;
@@ -62,6 +70,32 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
     private CourierAdapter courierAdapter;
     private CourierTypeAdapter courierTypeAdapter;
+
+
+    private DoShopCartListAdapter adapter;
+    @BindView(R.id.ll_voucher_container)
+    LinearLayout llVoucherContainer;
+
+    @BindView(R.id.tv_voucher_code)
+    TextView tvVoucherCode;
+
+    @BindView(R.id.tv_voucher_total)
+    TextView tvVoucherTotal;
+
+    @BindView(R.id.tv_sub_total)
+    TextView tvSubTotal;
+
+    @BindView(R.id.tv_total)
+    TextView tvTotal;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
+
+
+
+
+
 
     @BindView(R.id.ll_container_input_personal_information)
     LinearLayout llContainerInputPersonal;
@@ -139,43 +173,75 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
         // Required empty public constructor
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if (getArguments() != null && getArguments().get(NYHelper.CART_RETURN) != null){
+            try {
+                JSONObject obj = new JSONObject(getArguments().getString(NYHelper.CART_RETURN));
+                cartReturn = new DoShopCartReturn();
+                cartReturn.parse(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listener = (CheckoutListener) getActivity();
         thisFragment = this;
+        initAdapter();
+        initCartReturn(cartReturn);
     }
+
 
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_do_shop_checkout;
     }
 
-    @Override
-    public void onShopAgainListener() {
+    private void initAdapter() {
+        adapter = new DoShopCartListAdapter(getActivity(), thisFragment);
 
+        //ADAPTER SERVICE LIST
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
+        recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onChoosedAddress(DoShopAddress address) {
+    private void initCartReturn(DoShopCartReturn cartReturn){
 
-    }
+        List<DoShopProduct> products = new ArrayList<DoShopProduct>();
+        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
+            for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
+                if (merchant != null && merchant.getDoShopProducts() != null){
+                    for (DoShopProduct product : merchant.getDoShopProducts()){
+                        products.add(product);
+                    }
+                }
+            }
+        }
+        adapter.setData(products);
+        adapter.notifyDataSetChanged();
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data); comment this unless you want to pass your result to the activity.
-//        Toast.makeText(getActivity(), "rquest code : "+String.valueOf(requestCode), Toast.LENGTH_SHORT).show();
-//        Toast.makeText(getActivity(), "result code : "+String.valueOf(resultCode), Toast.LENGTH_SHORT).show();
-//        Toast.makeText(getActivity(), "is address Exist : "+String.valueOf(data.hasExtra(NYHelper.ADDRESS)), Toast.LENGTH_SHORT).show();
-        if (data != null && data.hasExtra(NYHelper.ADDRESS)){
-            try {
-                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
-                address = new DoShopAddress();
-                address.parse(obj);
-                setViewAddress(address);
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+        if (cartReturn != null && cartReturn.getCart() != null){
+            tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()));
+            tvSubTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getSubTotal()));
+
+            if (cartReturn.getCart().getVoucher() != null){
+                if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))tvVoucherCode.setText("Voucher ("+cartReturn.getCart().getVoucher().getCode()+")");
+                tvVoucherTotal.setText(" - "+NYHelper.priceFormatter(cartReturn.getCart().getVoucher().getValue()));
+                llVoucherContainer.setVisibility(View.VISIBLE);
+            } else {
+                llVoucherContainer.setVisibility(View.GONE);
             }
         }
     }
@@ -387,6 +453,33 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    @Override
+    public void onShopAgainListener() {
+
+    }
+
+    @Override
+    public void onChoosedAddress(DoShopAddress address) {
+
+    }
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null && data.hasExtra(NYHelper.ADDRESS)){
+            try {
+                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
+                address = new DoShopAddress();
+                address.parse(obj);
+                setViewAddress(address);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @Override
     public void onStart() {

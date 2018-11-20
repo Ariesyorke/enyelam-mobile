@@ -546,7 +546,12 @@
                     android:textSize="18sp"
                     app:fontTextStyle="bold" />
 
-                <include layout="@layout/view_item_cart" />
+                <!--<include layout="@layout/view_item_cart" />-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -566,11 +571,12 @@
                         android:text="Total" />
 
                     <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_sub_total"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right|end"
-                        android:text="Rp 1.000.000" />
+                        tools:text="Rp 1.000.000" />
                 </LinearLayout>
 
                 <View
@@ -592,11 +598,42 @@
                         android:text="Shipping Fee" />
 
                     <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_shipping_total"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right|end"
-                        android:text="Rp 18.000" />
+                        tools:text="Rp 18.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_marginTop="@dimen/padding"
+                    android:background="@color/ny_grey3" />
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_voucher_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:orientation="horizontal">
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_voucher_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Voucher" />
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_voucher_total"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right|end"
+                        tools:text="Rp 18.000" />
                 </LinearLayout>
 
                 <View
@@ -618,6 +655,7 @@
                         android:text="Grand Total" />
 
                     <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_total"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -643,6 +681,7 @@
                 android:paddingTop="@dimen/padding">
 
                 <CheckBox
+                    android:id="@+id/checkBox"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"

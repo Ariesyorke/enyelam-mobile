@@ -147,7 +147,7 @@ public class DoShopCart implements Parseable {
             try {
                 JSONObject o = obj.getJSONObject(KEY_VOUCHER);
                 if(o != null && o.length() > 0) {
-                    Voucher voucher = new Voucher();
+                    voucher = new Voucher();
                     voucher.parse(o);
                 }
             } catch (JSONException e) {

@@ -16,7 +16,9 @@ import com.baoyachi.stepview.HorizontalStepView;
 import com.baoyachi.stepview.bean.StepBean;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.dodive.DoDiveFragment;
+import com.nyelam.android.helper.NYHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,9 +105,13 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
     }
 
     @Override
-    public void proceedToCheckOut() {
+    public void proceedToCheckOut(DoShopCartReturn cartReturn) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(NYHelper.CART_RETURN, cartReturn.toString());
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         DoShopCheckoutFragment fragment = new DoShopCheckoutFragment();
+        fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.container, fragment)
                 .addToBackStack("itemDetail")
                 .commit();

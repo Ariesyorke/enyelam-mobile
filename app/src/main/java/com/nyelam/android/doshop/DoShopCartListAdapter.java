@@ -3,6 +3,7 @@ package com.nyelam.android.doshop;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
 
     private List<DoShopProduct> data = new ArrayList<>();
     private Context context;
-    private DoShopCartFragment fragment;
+    private Fragment fragment;
 
     public DoShopCartListAdapter(Context context) {
         this.context = context;
@@ -38,7 +39,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
 //        this.data = data;
 //    }
 
-    public DoShopCartListAdapter(Context context, DoShopCartFragment fragment) {
+    public DoShopCartListAdapter(Context context, Fragment fragment) {
         this.context = context;
         this.fragment = fragment;
     }
@@ -90,7 +91,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Remove item", Toast.LENGTH_SHORT).show();
-                if (product != null && NYHelper.isStringNotEmpty(product.getId()))fragment.onRemoveItem(product.getId());
+                if (fragment instanceof DoShopCartFragment && product != null && NYHelper.isStringNotEmpty(product.getId())) ((DoShopCartFragment)fragment).onRemoveItem(product.getId());
             }
         });
     }

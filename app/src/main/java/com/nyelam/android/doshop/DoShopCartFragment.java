@@ -64,12 +64,11 @@ public class DoShopCartFragment extends BasicFragment {
     SwipeRefreshLayout swipeRefreshLayout;
 
     @OnClick(R.id.tv_checkout) void checkOut(){
-        listener.proceedToCheckOut();
+        if (cartReturn != null)listener.proceedToCheckOut(cartReturn);
     }
 
     @BindView(R.id.et_voucher_code)
     EditText etVoucherCode;
-
 
     @BindView(R.id.ll_voucher_container)
     LinearLayout llVoucherContainer;
@@ -162,20 +161,18 @@ public class DoShopCartFragment extends BasicFragment {
 
                 thisFragment.cartReturn = cartReturn;
 
-                List<DoShopProduct> products = new ArrayList<DoShopProduct>();
-
-                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-                    for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
-                        if (merchant != null && merchant.getDoShopProducts() != null){
-                            for (DoShopProduct product : merchant.getDoShopProducts()){
-                                products.add(product);
-                            }
-                        }
-                    }
-                }
-
-                adapter.setData(products);
-                adapter.notifyDataSetChanged();
+//                List<DoShopProduct> products = new ArrayList<DoShopProduct>();
+//                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
+//                    for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
+//                        if (merchant != null && merchant.getDoShopProducts() != null){
+//                            for (DoShopProduct product : merchant.getDoShopProducts()){
+//                                products.add(product);
+//                            }
+//                        }
+//                    }
+//                }
+//                adapter.setData(products);
+//                adapter.notifyDataSetChanged();
 
                 initCartReturn(cartReturn);
                 llMainContainer.setVisibility(View.VISIBLE);
@@ -200,6 +197,10 @@ public class DoShopCartFragment extends BasicFragment {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 pDialog.dismiss();
+                swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.GONE);
+                llMainContainer.setVisibility(View.GONE);
+                tvNotFound.setVisibility(View.VISIBLE);
                 NYHelper.handleAPIException(getActivity(), spiceException, null);
             }
 
@@ -207,22 +208,10 @@ public class DoShopCartFragment extends BasicFragment {
             public void onRequestSuccess(DoShopCartReturn cartReturn) {
                 pDialog.dismiss();
 
-                List<DoShopProduct> products = new ArrayList<DoShopProduct>();
-
-                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-                    for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
-                        if (merchant != null && merchant.getDoShopProducts() != null){
-                            for (DoShopProduct product : merchant.getDoShopProducts()){
-                                products.add(product);
-                            }
-                        }
-                    }
-                }
-
-                adapter.setData(products);
-                adapter.notifyDataSetChanged();
+                thisFragment.cartReturn = cartReturn;
 
                 initCartReturn(cartReturn);
+                llMainContainer.setVisibility(View.VISIBLE);
             }
         };
     }
@@ -253,21 +242,20 @@ public class DoShopCartFragment extends BasicFragment {
             public void onRequestSuccess(DoShopCartReturn cartReturn) {
                 pDialog.dismiss();
 
-                List<DoShopProduct> products = new ArrayList<DoShopProduct>();
+                thisFragment.cartReturn = cartReturn;
 
-                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-                    for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
-                        if (merchant != null && merchant.getDoShopProducts() != null){
-                            for (DoShopProduct product : merchant.getDoShopProducts()){
-                                products.add(product);
-                            }
-                        }
-                    }
-                }
-
-                adapter.setData(products);
-                adapter.notifyDataSetChanged();
-
+//                List<DoShopProduct> products = new ArrayList<DoShopProduct>();
+//                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
+//                    for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
+//                        if (merchant != null && merchant.getDoShopProducts() != null){
+//                            for (DoShopProduct product : merchant.getDoShopProducts()){
+//                                products.add(product);
+//                            }
+//                        }
+//                    }
+//                }
+//                adapter.setData(products);
+//                adapter.notifyDataSetChanged();
 
                 initCartReturn(cartReturn);
             }
@@ -277,12 +265,27 @@ public class DoShopCartFragment extends BasicFragment {
 
 
     private void initCartReturn(DoShopCartReturn cartReturn){
+
+        List<DoShopProduct> products = new ArrayList<DoShopProduct>();
+        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
+            for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
+                if (merchant != null && merchant.getDoShopProducts() != null){
+                    for (DoShopProduct product : merchant.getDoShopProducts()){
+                        products.add(product);
+                    }
+                }
+            }
+        }
+        adapter.setData(products);
+        adapter.notifyDataSetChanged();
+
+
         if (cartReturn != null && cartReturn.getCart() != null){
             tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()));
             tvSubTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getSubTotal()));
 
             if (cartReturn.getCart().getVoucher() != null){
-                if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))tvVoucherCode.setText("Voucher {"+cartReturn.getCart().getVoucher().getCode()+")");
+                if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))tvVoucherCode.setText("Voucher ("+cartReturn.getCart().getVoucher().getCode()+")");
                 tvVoucherTotal.setText(" - "+NYHelper.priceFormatter(cartReturn.getCart().getVoucher().getValue()));
                 llVoucherContainer.setVisibility(View.VISIBLE);
             } else {
