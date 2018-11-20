@@ -1,11 +1,8 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;

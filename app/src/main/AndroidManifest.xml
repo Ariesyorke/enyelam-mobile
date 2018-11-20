@@ -198,18 +198,19 @@
             android:name=".doshop.DoShopCategoryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".doshop.DoShopCheckoutActivity"
+            android:name=".doshoporder.DoShopCheckoutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".doshop.DoShopChooseAddressActivity"
+            android:name=".doshoporder.DoShopChooseAddressActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".doshop.DoShopAddAddressActivity"
+            android:name=".doshoporder.DoShopAddAddressActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".doshop.DoShopFilterActivity" />
         <activity android:name=".doshop.DoShopSortByActivity" />
         <activity android:name=".doshoporderhistory.DoShopOrderHistoryActivity" />
-        <activity android:name=".doshoporderhistory.DoShopOrderDetailActivity"></activity>
+        <activity android:name=".doshoporderhistory.DoShopOrderDetailActivity" />
+        <activity android:name=".doshoporder.DoShopChooseCourierActivity"></activity>
     </application>
 
 </manifest>

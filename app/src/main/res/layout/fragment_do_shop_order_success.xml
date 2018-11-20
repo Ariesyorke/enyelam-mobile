@@ -7,7 +7,7 @@
     android:clickable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    tools:context=".doshop.DoShopOrderSuccessFragment">
+    tools:context=".doshoporder.DoShopOrderSuccessFragment">
 
     <ScrollView
         android:layout_width="match_parent"

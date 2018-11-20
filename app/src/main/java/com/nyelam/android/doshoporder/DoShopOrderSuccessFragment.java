@@ -1,4 +1,4 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
 import android.content.Context;
 import android.net.Uri;

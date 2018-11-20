@@ -1,9 +1,8 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,30 +17,32 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DoShopProduct;
+import com.nyelam.android.doshop.DoShopDetailItemActivity;
 import com.nyelam.android.helper.NYHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAdapter.MyViewHolder> {
+public class DoShopCartItemAdapter extends RecyclerView.Adapter<DoShopCartItemAdapter.MyViewHolder> {
 
+    private boolean isRelatedItem = false;
     private List<DoShopProduct> data = new ArrayList<>();
     private Context context;
-    private Fragment fragment;
 
-    public DoShopCartListAdapter(Context context) {
-        this.context = context;
+    public DoShopCartItemAdapter(Context contexts) {
+        this.context = contexts;
     }
 
-//    public DoShopCartListAdapter(Context context, List<DoShopProduct> data) {
-//        this.context = context;
-//        this.data = data;
-//    }
+    public DoShopCartItemAdapter(Context contexts, List<DoShopProduct> data) {
+        this.context = contexts;
+        this.data = data;
+    }
 
-    public DoShopCartListAdapter(Context context, Fragment fragment) {
-        this.context = context;
-        this.fragment = fragment;
+    public DoShopCartItemAdapter(Context contexts, List<DoShopProduct> data, boolean isRelatedItem) {
+        this.context = contexts;
+        this.data = data;
+        this.isRelatedItem = isRelatedItem;
     }
 
     @Override
@@ -57,7 +58,15 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
 
         if (product != null){
             if (NYHelper.isStringNotEmpty(product.getProductName())) holder.name.setText(product.getProductName());
-            holder.qty.setText(String.valueOf(product.getQty()));
+
+//            if (product.getSpecialPrice() < product.getNormalPrice()){
+//                holder.priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+//                holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
+//                holder.priceStrike.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+//                holder.priceStrike.setVisibility(View.GONE);
+//            }
 
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
@@ -87,11 +96,16 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
             }
         }
         
-        holder.remove.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Remove item", Toast.LENGTH_SHORT).show();
-                if (fragment instanceof DoShopCartFragment && product != null && NYHelper.isStringNotEmpty(product.getId())) ((DoShopCartFragment)fragment).onRemoveItem(product.getId());
+                if (product != null && NYHelper.isStringNotEmpty(product.getId())){
+                    Intent intent = new Intent(context, DoShopDetailItemActivity.class);
+                    intent.putExtra(NYHelper.PRODUCT, product.toString());
+                    context.startActivity(intent);    
+                } else {
+                    Toast.makeText(context, "Sorry, this item is not available", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -110,6 +124,8 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
         this.data.addAll(data);
     }
 
+
+
     @Override
     public int getItemCount() {
         if (data == null) data = new ArrayList<>();
@@ -119,17 +135,17 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;
-        TextView estimate;
         TextView qty;
-        TextView remove;
+        //TextView priceStrike;
+        //TextView price;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.iv_item_image);
-            name = (TextView) itemView.findViewById(R.id.tv_item_name);
-            estimate = (TextView) itemView.findViewById(R.id.tv_estimate_delivery);
-            qty = (TextView) itemView.findViewById(R.id.tv_item_qty);
-            remove = (TextView) itemView.findViewById(R.id.tv_remove_item);
+            name = (TextView) itemView.findViewById(R.id.item_name_textView);
+            name = (TextView) itemView.findViewById(R.id.tv_item_qty);
+            //priceStrike = (TextView) itemView.findViewById(R.id.price_strikethrough_textView);
+            //price = (TextView) itemView.findViewById(R.id.tv_itemprice_textView);
         }
     }
 }

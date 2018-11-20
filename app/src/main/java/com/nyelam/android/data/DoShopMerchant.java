@@ -24,6 +24,7 @@ public class DoShopMerchant implements Parseable {
     private static String KEY_ADDRESS = "address";
     private static String KEY_TOTAL_WEIGHT = "total_weight";
     private static String KEY_PRODUCTS = "products";
+    private static String KEY_DELIVERY_SERVICE = "delivery_service";
 
     private String id;
     private String name;
@@ -34,7 +35,7 @@ public class DoShopMerchant implements Parseable {
     private String address;
     private double totalWeight;
     private List<DoShopProduct> doShopProducts;
-
+    private DeliveryService deliveryService;
 
     public String getId() {
         return id;
@@ -108,6 +109,14 @@ public class DoShopMerchant implements Parseable {
         this.doShopProducts = doShopProducts;
     }
 
+    public DeliveryService getDeliveryService() {
+        return deliveryService;
+    }
+
+    public void setDeliveryService(DeliveryService deliveryService) {
+        this.deliveryService = deliveryService;
+    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -177,6 +186,18 @@ public class DoShopMerchant implements Parseable {
             } catch (JSONException e) {e.printStackTrace();}
         }
 
+
+        if(!obj.isNull(KEY_DELIVERY_SERVICE)) {
+            try {
+                JSONObject o = obj.getJSONObject(KEY_DELIVERY_SERVICE);
+                if(o != null && o.length() > 0) {
+                    deliveryService = new DeliveryService();
+                    deliveryService.parse(o);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -258,6 +279,17 @@ public class DoShopMerchant implements Parseable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        try{
+            if(getDeliveryService()!=null){
+                JSONObject objVer = new JSONObject(getDeliveryService().toString());
+                obj.put(KEY_DELIVERY_SERVICE, objVer);
+            } else {
+                obj.put(KEY_DELIVERY_SERVICE, JSONObject.NULL);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
         }
 
         try {

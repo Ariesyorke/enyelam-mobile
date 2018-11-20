@@ -18,9 +18,11 @@ public class DeliveryService implements Parseable {
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
     private static String KEY_TYPES = "types";
+    private static String KEY_PRICE = "price";
 
     private String id;
     private String name;
+    private double price;
     private List<DeliveryServiceType> types;
 
     public String getId() {
@@ -37,6 +39,14 @@ public class DeliveryService implements Parseable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public List<DeliveryServiceType> getTypes() {
@@ -62,6 +72,12 @@ public class DeliveryService implements Parseable {
         try {
             if (!obj.isNull(KEY_NAME)) {
                 setName(obj.getString(KEY_NAME));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_PRICE)) {
+                setPrice(obj.getDouble(KEY_PRICE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -96,12 +112,17 @@ public class DeliveryService implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+
         try {
             if (NYHelper.isStringNotEmpty(getName())) {
                 obj.put(KEY_NAME, getName());
             } else {
                 obj.put(KEY_NAME, JSONObject.NULL);
             }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            obj.put(KEY_PRICE, getPrice());
         } catch (JSONException e) {e.printStackTrace();}
 
 

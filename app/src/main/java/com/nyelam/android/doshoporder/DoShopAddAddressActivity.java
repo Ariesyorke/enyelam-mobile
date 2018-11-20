@@ -1,67 +1,36 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.print.PrinterId;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
-import com.nyelam.android.StarterActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Area;
 import com.nyelam.android.data.AreaList;
-import com.nyelam.android.data.City;
-import com.nyelam.android.data.CityList;
-import com.nyelam.android.data.CountryCode;
-import com.nyelam.android.data.District;
-import com.nyelam.android.data.DistrictList;
 import com.nyelam.android.data.DoShopAddress;
-import com.nyelam.android.data.DoShopAddressList;
-import com.nyelam.android.data.Province;
-import com.nyelam.android.data.ProvinceList;
-import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.general.CityAdapter;
-import com.nyelam.android.general.CountryCodeAdapter;
 import com.nyelam.android.general.DistrictAdapter;
 import com.nyelam.android.general.ProvinceAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopAddAddressRequest;
-import com.nyelam.android.http.NYDoShopAddressListRequest;
 import com.nyelam.android.http.NYDoShopGetLocationRequest;
 import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class DoShopAddAddressActivity extends BasicActivity implements AdapterView.OnItemSelectedListener {
 

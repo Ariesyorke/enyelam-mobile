@@ -1,4 +1,4 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,22 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.DoShopAddress;
 import com.nyelam.android.data.DoShopAddressList;
-import com.nyelam.android.divecenter.DoDiveSearchServiceAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoShopAddressListRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

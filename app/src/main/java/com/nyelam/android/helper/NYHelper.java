@@ -156,6 +156,11 @@ public class NYHelper {
     public static final String PRODUCT = "product";
     public static final String CATEGORY = "category";
     public static final String ADDRESS = "address";
+    public static final String MERCHANT = "merchant";
+    public static final String COURIER = "courier";
+    public static final String COURIER_TYPE = "courier_type";
+    public static final String DISTRICT_ID = "district_id";
+    public static final String WEIGHT = "weight";
 
 
     public static boolean isStringNotEmpty(String string) {

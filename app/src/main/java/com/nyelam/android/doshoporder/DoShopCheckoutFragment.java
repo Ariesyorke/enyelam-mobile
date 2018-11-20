@@ -1,11 +1,9 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.solver.widgets.Helper;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +14,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +29,7 @@ import com.nyelam.android.data.DoShopAddress;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopProduct;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.general.CourierAdapter;
 import com.nyelam.android.general.CourierTypeAdapter;
 import com.nyelam.android.helper.NYHelper;
@@ -59,20 +60,28 @@ import okhttp3.Response;
  */
 public class DoShopCheckoutFragment extends BasicFragment implements NYDialogChooseAddress.Listener, AdapterView.OnItemSelectedListener {
 
-    private DoShopCheckoutFragment thisFragment;
 
+    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
+    private Intent paypalIntent;
+    private int paypalRequestCode = 999;
+
+    private String paymentType = "1"; // 1= bank transfer 2 = midtrans (credit), 3 (VA), 4 paypal
+    private String paymentMethod = null; // 1 = virtual account dan 2 = credit card
+
+    private DoShopCheckoutFragment thisFragment;
     private CheckoutListener listener;
     private DoShopCartReturn cartReturn;
-    private DoShopAddress address;
+    private DoShopAddress shippingAddress;
+    private DoShopAddress billingAddress;
     private List<Courier> couriers;
     private Courier currentCourier;
     private CourierType currentCourierType;
 
     private CourierAdapter courierAdapter;
     private CourierTypeAdapter courierTypeAdapter;
+    private DoShopCheckoutAdapter adapter;
 
 
-    private DoShopCartListAdapter adapter;
     @BindView(R.id.ll_voucher_container)
     LinearLayout llVoucherContainer;
 
@@ -87,6 +96,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
     @BindView(R.id.tv_total)
     TextView tvTotal;
+
+    @BindView(R.id.ll_shipping_total_container)
+    LinearLayout llShippingTotalContainer;
+
+    @BindView(R.id.tv_shipping_total)
+    TextView tvShippingTotal;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -155,11 +170,10 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     }
 
     @OnClick(R.id.tv_choose_address) void chooseAddress(){
-        //listener.proceedToChoosePayment();
+//        listener.proceedToChoosePayment();
 //        NYDialogChooseAddress dialog = new NYDialogChooseAddress();
 //        dialog.showChooseAddressDialog(getActivity(), null);
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
-        //startActivity(intent);
         startActivityForResult(intent, 100);
     }
 
@@ -205,7 +219,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     }
 
     private void initAdapter() {
-        adapter = new DoShopCartListAdapter(getActivity(), thisFragment);
+        adapter = new DoShopCheckoutAdapter(getActivity(), thisFragment);
 
         //ADAPTER SERVICE LIST
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
@@ -218,17 +232,18 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
     private void initCartReturn(DoShopCartReturn cartReturn){
 
-        List<DoShopProduct> products = new ArrayList<DoShopProduct>();
-        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-            for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
-                if (merchant != null && merchant.getDoShopProducts() != null){
-                    for (DoShopProduct product : merchant.getDoShopProducts()){
-                        products.add(product);
-                    }
-                }
-            }
-        }
-        adapter.setData(products);
+//        List<DoShopProduct> products = new ArrayList<DoShopProduct>();
+//        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
+//            for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
+//                if (merchant != null && merchant.getDoShopProducts() != null){
+//                    for (DoShopProduct product : merchant.getDoShopProducts()){
+//                        products.add(product);
+//                    }
+//                }
+//            }
+//        }
+
+        adapter.setData(cartReturn.getCart().getMerchants());
         adapter.notifyDataSetChanged();
 
 
@@ -246,23 +261,27 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
         }
     }
 
-    public void setViewAddress(DoShopAddress viewAddress) {
-        if (address != null){
+    public void setViewBillingAddress(DoShopAddress billingAddress) {
+        if (billingAddress != null){
             // TODO: bind data billing address
-            if (NYHelper.isStringNotEmpty(address.getFullName()))tvAddressName.setText(address.getFullName());
-            if (NYHelper.isStringNotEmpty(address.getAddress()))tvAddress.setText(address.getAddress());
-            if (NYHelper.isStringNotEmpty(address.getPhoneNumber()))tvAddressPhone.setText(address.getPhoneNumber());
+            if (NYHelper.isStringNotEmpty(billingAddress.getFullName()))tvAddressName.setText(billingAddress.getFullName());
+            if (NYHelper.isStringNotEmpty(billingAddress.getAddress()))tvAddress.setText(billingAddress.getAddress());
+            if (NYHelper.isStringNotEmpty(billingAddress.getPhoneNumber()))tvAddressPhone.setText(billingAddress.getPhoneNumber());
             llContainerPersonal.setVisibility(View.VISIBLE);
             tvChooseAddress.setVisibility(View.GONE);
             tvEditAddress.setVisibility(View.VISIBLE);
+        }
+    }
 
+    public void setViewShippingAddress(DoShopAddress shippingAddress) {
+        if (shippingAddress != null){
             // TODO: bind data shipping address
-            if (NYHelper.isStringNotEmpty(address.getFullName()))tvShippingAddressName.setText(address.getFullName());
-            if (NYHelper.isStringNotEmpty(address.getAddress()))tvShippingAddress.setText(address.getAddress());
-            if (NYHelper.isStringNotEmpty(address.getPhoneNumber()))tvShippingAddressPhone.setText(address.getPhoneNumber());
+            if (NYHelper.isStringNotEmpty(shippingAddress.getFullName()))tvShippingAddressName.setText(shippingAddress.getFullName());
+            if (NYHelper.isStringNotEmpty(shippingAddress.getAddress()))tvShippingAddress.setText(shippingAddress.getAddress());
+            if (NYHelper.isStringNotEmpty(shippingAddress.getPhoneNumber()))tvShippingAddressPhone.setText(shippingAddress.getPhoneNumber());
             llContainerShippingAddress.setVisibility(View.VISIBLE);
 
-            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getDistrict().getId()))loadCourier("501", address.getDistrict().getId(),"1500");
+            //if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getDistrict().getId()))loadCourier("501", address.getDistrict().getId(),"1500");
             //loadCourier("501", address.getDistrict().getId(),"1500");
         }
     }
@@ -427,12 +446,33 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
                             if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService()))
                                 etCourierType.setText(courierType.getService().toUpperCase());
 
+                            if (currentCourierType != null && currentCourierType.getCourierCosts() != null && currentCourierType.getCourierCosts().size() > 0 ){
+                                tvShippingTotal.setText(NYHelper.priceFormatter(currentCourierType.getCourierCosts().get(0).getValue()));
+                                if (cartReturn != null && cartReturn.getCart() != null){
+                                    double total = cartReturn.getCart().getTotal()+currentCourierType.getCourierCosts().get(0).getValue();
+                                    tvTotal.setText(NYHelper.priceFormatter(total));
+                                }
+                                llShippingTotalContainer.setVisibility(View.VISIBLE);
+                            } else {
+                                llShippingTotalContainer.setVisibility(View.GONE);
+                            }
+
                         }
                     });
 
                     if (couriers.size() > 0){
                         currentCourierType = courierTypes.get(0);
                         etCourierType.setText(currentCourierType.getService());
+                        if (currentCourierType != null && currentCourierType.getCourierCosts() != null && currentCourierType.getCourierCosts().size() > 0 ){
+                            tvShippingTotal.setText(NYHelper.priceFormatter(currentCourierType.getCourierCosts().get(0).getValue()));
+                            if (cartReturn != null && cartReturn.getCart() != null){
+                                double total = cartReturn.getCart().getTotal()+currentCourierType.getCourierCosts().get(0).getValue();
+                                tvTotal.setText(NYHelper.priceFormatter(total));
+                            }
+                            llShippingTotalContainer.setVisibility(View.VISIBLE);
+                        } else {
+                            llShippingTotalContainer.setVisibility(View.GONE);
+                        }
                     }
 
                 }
@@ -464,20 +504,103 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
     }
 
+    public void chooseCourrier(DoShopMerchant merchant){
 
+
+
+        if (merchant != null && merchant.getDoShopProducts() != null && merchant.getDoShopProducts().size() > 0 && shippingAddress != null && shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getId())){
+
+            int totalWeight = 0;
+            for (DoShopProduct product : merchant.getDoShopProducts()){
+                totalWeight += product.getWeight()*1000;
+            }
+
+            Toast.makeText(getActivity(), "Choose courier", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), DoShopChooseCourierActivity.class);
+            intent.putExtra(NYHelper.MERCHANT, merchant.toString());
+            intent.putExtra(NYHelper.WEIGHT, totalWeight);
+            intent.putExtra(NYHelper.DISTRICT_ID, shippingAddress.getDistrict().getId());
+            startActivityForResult(intent, 101);
+        } else {
+            Toast.makeText(getActivity(), "Please, choose your billing and shipping adddress first", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null && data.hasExtra(NYHelper.ADDRESS)){
             try {
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
-                address = new DoShopAddress();
-                address.parse(obj);
-                setViewAddress(address);
+                billingAddress = new DoShopAddress();
+                billingAddress.parse(obj);
+                // TODO: untuk semetara shipping sama billing address masih sama
+                this.shippingAddress = billingAddress;
+                setViewBillingAddress(billingAddress);
+                setViewShippingAddress(shippingAddress);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+
+//        intent.putExtra(NYHelper.MERCHANT, merchant.toString());
+//        intent.putExtra(NYHelper.COURIER, currentCourier.toString());
+//        intent.putExtra(NYHelper.COURIER_TYPE, currentCourierType.toString());
+//        intent.putExtra(NYHelper.NOTE, note);
+
+
+        if (cartReturn != null && data != null && data.hasExtra(NYHelper.MERCHANT)){
+            try {
+                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.MERCHANT));
+                DoShopMerchant newMerchant = new DoShopMerchant();
+                newMerchant.parse(obj);
+
+                List<DoShopMerchant> merchantList = new ArrayList<DoShopMerchant>();
+                for (DoShopMerchant mer : cartReturn.getCart().getMerchants()){
+                    if (mer.getId().equals(newMerchant.getId())){
+                        merchantList.add(newMerchant);
+                    } else {
+                        merchantList.add(mer);
+                    }
+                }
+
+                cartReturn.getCart().setMerchants(merchantList);
+
+                //Toast.makeText(getActivity(), "new cart", Toast.LENGTH_SHORT).show();
+                //NYLog.e("cek new cart return : "+cartReturn.toString());
+
+                // TODO: refresh cart
+                initCartReturn(cartReturn);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+//        if (data != null && data.hasExtra(NYHelper.COURIER)){
+//            try {
+//                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.COURIER));
+//                Courier courier = new Courier();
+//                courier.parse(obj);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        if (data != null && data.hasExtra(NYHelper.COURIER_TYPE)){
+//            try {
+//                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.COURIER_TYPE));
+//                CourierType courierType = new CourierType();
+//                courierType.parse(obj);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        if (data != null && data.hasExtra(NYHelper.NOTE)){
+//            String note = data.getStringExtra(NYHelper.COURIER_TYPE);
+//        }
+
     }
 
 
@@ -492,4 +615,103 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
         super.onResume();
         listener.setTitle("Checkout");
     }
+
+
+    @BindView(R.id.radioGroup) RadioGroup radioGroup;
+    @BindView(R.id.bankTransferRadioButton) RadioButton bankTransferRadioButton;
+    @BindView(R.id.virtualAccountRadioButton) RadioButton virtualAccountRadioButton;
+    @BindView(R.id.creditCardRadioButton) RadioButton creditCardRadioButton;
+    @BindView(R.id.paypalRadioButton) RadioButton paypalRadioButton;
+
+    @BindView(R.id.payment_bank_transfer_linearLayout) LinearLayout bankTransferLinearLayout;
+    @BindView(R.id.payment_virtual_account_linearLayout) LinearLayout virtualAccountLinearLayout;
+    @BindView(R.id.payment_credit_card_linearLayout) LinearLayout creditCardLinearLayout;
+    @BindView(R.id.payment_paypal_linearLayout) LinearLayout paypalLinearLayout;
+
+    @OnClick(R.id.virtualAccountRadioButton) void setPayVA(){
+        if (virtualAccountRadioButton.isChecked()){
+            creditCardRadioButton.setChecked(false);
+            bankTransferRadioButton.setChecked(false);
+            paypalRadioButton.setChecked(false);
+            paymentType = "3";
+            paymentMethod = "1";
+            //requestChangePaymentMethod();
+        }
+    }
+
+    @OnClick(R.id.creditCardRadioButton) void setPayCC(){
+        if (creditCardRadioButton.isChecked()){
+            virtualAccountRadioButton.setChecked(false);
+            bankTransferRadioButton.setChecked(false);
+            paypalRadioButton.setChecked(false);
+            paymentType = "2";
+            paymentMethod = "2";
+            //requestChangePaymentMethod();
+        }
+    }
+
+    @OnClick(R.id.bankTransferRadioButton) void setPayBT(){
+        if (bankTransferRadioButton.isChecked()){
+            virtualAccountRadioButton.setChecked(false);
+            creditCardRadioButton.setChecked(false);
+            paypalRadioButton.setChecked(false);
+            paymentType = "1";
+            paymentMethod = null;
+            //requestChangePaymentMethod();
+        }
+    }
+
+    @OnClick(R.id.payment_virtual_account_linearLayout) void setPayVA2(){
+        virtualAccountRadioButton.setChecked(true);
+        creditCardRadioButton.setChecked(false);
+        bankTransferRadioButton.setChecked(false);
+        paypalRadioButton.setChecked(false);
+        paymentType = "3";
+        paymentMethod = "1";
+        //requestChangePaymentMethod();
+    }
+
+    @OnClick(R.id.payment_credit_card_linearLayout) void setPayCC2(){
+        creditCardRadioButton.setChecked(true);
+        virtualAccountRadioButton.setChecked(false);
+        bankTransferRadioButton.setChecked(false);
+        paypalRadioButton.setChecked(false);
+        paymentType = "2";
+        paymentMethod = "2";
+        //requestChangePaymentMethod();
+    }
+
+    @OnClick(R.id.payment_bank_transfer_linearLayout) void setPayBT2(){
+        bankTransferRadioButton.setChecked(true);
+        virtualAccountRadioButton.setChecked(false);
+        creditCardRadioButton.setChecked(false);
+        paypalRadioButton.setChecked(false);
+        paymentType = "1";
+        paymentMethod = null;
+        //requestChangePaymentMethod();
+    }
+
+    @OnClick(R.id.paypalRadioButton) void setPayPal(){
+        if (paypalRadioButton.isChecked()){
+            paypalRadioButton.setChecked(true);
+            bankTransferRadioButton.setChecked(false);
+            virtualAccountRadioButton.setChecked(false);
+            creditCardRadioButton.setChecked(false);
+            paymentType = "4";
+            paymentMethod = null;
+            //requestChangePaymentMethod();
+        }
+    }
+
+    @OnClick(R.id.payment_paypal_linearLayout) void setPayPal2(){
+        paypalRadioButton.setChecked(true);
+        bankTransferRadioButton.setChecked(false);
+        virtualAccountRadioButton.setChecked(false);
+        creditCardRadioButton.setChecked(false);
+        paymentType = "4";
+        paymentMethod = null;
+        //requestChangePaymentMethod();
+    }
+
+
 }

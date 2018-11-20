@@ -1,4 +1,4 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
 
 import android.os.Bundle;
@@ -14,9 +14,7 @@ import android.widget.TextView;
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.DoShopCart;
 import com.nyelam.android.data.DoShopCartReturn;
-import com.nyelam.android.data.DoShopCheckout;
 import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.helper.NYHelper;

@@ -1,7 +1,5 @@
-package com.nyelam.android.doshop;
+package com.nyelam.android.doshoporder;
 
-import android.app.Activity;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -17,7 +15,6 @@ import com.baoyachi.stepview.bean.StepBean;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DoShopCartReturn;
-import com.nyelam.android.dodive.DoDiveFragment;
 import com.nyelam.android.helper.NYHelper;
 
 import java.util.ArrayList;

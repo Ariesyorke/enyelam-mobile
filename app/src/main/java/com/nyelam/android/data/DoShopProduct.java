@@ -30,7 +30,7 @@ public class DoShopProduct implements Parseable {
     private String productName;
     private String featuredImage;
     private List<String> images;
-    private String weight;
+    private int weight;
     private double specialPrice;
     private double normalPrice;
     private String status;
@@ -129,11 +129,20 @@ public class DoShopProduct implements Parseable {
         this.description = description;
     }
 
-    public String getWeight() {
+//    public String getWeight() {
+//        return weight;
+//    }
+//
+//    public void setWeight(String weight) {
+//        this.weight = weight;
+//    }
+
+
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 
@@ -242,8 +251,10 @@ public class DoShopProduct implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
-            if (!obj.isNull(KEY_WEIGHT)) {
-                setWeight(obj.getString(KEY_WEIGHT));
+            if (!obj.isNull(KEY_WEIGHT) && obj.get(KEY_WEIGHT) instanceof String) {
+                setWeight(Integer.valueOf(obj.getString(KEY_WEIGHT)));
+            } else if (!obj.isNull(KEY_WEIGHT) && obj.get(KEY_WEIGHT) instanceof Integer) {
+                setWeight(obj.getInt(KEY_WEIGHT));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -365,12 +376,16 @@ public class DoShopProduct implements Parseable {
         }
 
         try {
-            if (!TextUtils.isEmpty(getWeight())) {
-                obj.put(KEY_WEIGHT, getWeight());
-            } else {
-                obj.put(KEY_WEIGHT, JSONObject.NULL);
-            }
+            obj.put(KEY_WEIGHT, getWeight());
         } catch (JSONException e) {e.printStackTrace();}
+
+//        try {
+//            if (!TextUtils.isEmpty(getWeight())) {
+//                obj.put(KEY_WEIGHT, getWeight());
+//            } else {
+//                obj.put(KEY_WEIGHT, JSONObject.NULL);
+//            }
+//        } catch (JSONException e) {e.printStackTrace();}
 
         try{
             if(getVariations()!=null){

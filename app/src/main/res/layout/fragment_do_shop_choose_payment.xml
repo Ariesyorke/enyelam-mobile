@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:clickable="true"
     android:background="@color/white"
-    tools:context=".doshop.DoShopChoosePaymentFragment">
+    tools:context=".doshoporder.DoShopChoosePaymentFragment">
 
     <LinearLayout
         android:layout_marginTop="@dimen/activity_vertical_margin"

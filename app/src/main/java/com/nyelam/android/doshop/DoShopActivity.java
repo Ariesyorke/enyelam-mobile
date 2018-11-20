@@ -21,6 +21,7 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopCategoryList;
 import com.nyelam.android.data.DoShopList;
+import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.doshoporderhistory.DoShopOrderHistoryActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopHomepageRequest;
