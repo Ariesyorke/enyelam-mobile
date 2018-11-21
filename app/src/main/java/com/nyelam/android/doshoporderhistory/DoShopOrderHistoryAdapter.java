@@ -89,7 +89,7 @@ public class DoShopOrderHistoryAdapter extends RecyclerView.Adapter<DoShopOrderH
             @Override
             public void onClick(View v) {
                 if (order != null && NYHelper.isStringNotEmpty(order.getOrderId())){
-                    Intent intent = new Intent(context, DoShopDetailItemActivity.class);
+                    Intent intent = new Intent(context, DoShopOrderDetailActivity.class);
                     intent.putExtra(NYHelper.ORDER, order.toString());
                     context.startActivity(intent);
                 } else {

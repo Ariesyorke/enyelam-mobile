@@ -12,9 +12,9 @@ import org.json.JSONObject;
 
 public class NYDoShopOrderDetailRequest extends NYBasicAuthRequest<DoShopOrder> {
 
-    private final static String KEY_ORDER = "Order";
+    private final static String KEY_ORDER = "order";
 
-    private final static String POST_ORDER_ID = "product_id";
+    private final static String POST_ORDER_ID = "order_id";
 
     public NYDoShopOrderDetailRequest(Context context, String orderId) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_order_detail));

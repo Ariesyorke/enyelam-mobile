@@ -105,6 +105,7 @@
     <string name="review_your_booking">Review and  fill a detailed booking</string>
     <string name="your_booking">Your Booking</string>
     <string name="your_booking_id">Your Booking ID : </string>
+    <string name="your_order_id">Your Order ID : </string>
     <string name="booking_summary">Booking Summary</string>
     <string name="payment">Payment</string>
     <string name="transfer_to">Transfer To BANK BCA</string>
@@ -128,6 +129,9 @@
     <string name="your_review">Your Review</string>
     <string name="review_hint">Write your review here..</string>
     <string name="send">Send</string>
+
+
+
 
     <string name="apply">Apply</string>
     <string name="insert_voucher">Insert your voucher here</string>
@@ -253,6 +257,15 @@
         <item>My Account</item>
     </string-array>
     <string name="title_activity_blank_notification">BlankNotificationActivity</string>
+
+
+
+
+    <string name="address">Address</string>
+    <string name="billing_address">Billing Address</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="shipping_cost">Shipping Cost</string>
+    <string name="warn_order_not_available">Sorry, this order is not available</string>
 
 
 </resources>

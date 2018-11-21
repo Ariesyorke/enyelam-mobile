@@ -74,6 +74,7 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
             req = new NYDoShopOrderListRequest(getActivity(), null);
         } catch (Exception e) {
             progressBar.setVisibility(View.GONE);
+            tvNotFound.setVisibility(View.VISIBLE);
             e.printStackTrace();
         }
         spcMgr.execute(req, onOrderHistoryRequest());

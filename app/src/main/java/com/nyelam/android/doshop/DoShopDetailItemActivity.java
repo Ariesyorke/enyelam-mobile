@@ -377,7 +377,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     private void dialogItemNotAvailable(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(getString(R.string.logout));
+        builder.setTitle("Item Not Available");
+        builder.setCancelable(false);
         builder.setMessage(getString(R.string.warn_item_not_available));
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
