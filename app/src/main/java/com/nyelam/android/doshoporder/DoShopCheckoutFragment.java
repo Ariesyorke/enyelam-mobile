@@ -1,7 +1,7 @@
 package com.nyelam.android.doshoporder;
 
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,75 +10,98 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
+import com.midtrans.sdk.uikit.storage.PaymentMethodStorage;
+import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
+import com.midtrans.sdk.corekit.core.LocalDataHandler;
+import com.midtrans.sdk.corekit.core.MidtransSDK;
+import com.midtrans.sdk.corekit.core.TransactionRequest;
+import com.midtrans.sdk.corekit.core.UIKitCustomSetting;
+import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
+import com.midtrans.sdk.corekit.models.ItemDetails;
+import com.midtrans.sdk.corekit.models.UserDetail;
+import com.midtrans.sdk.corekit.models.snap.TransactionResult;
+
+
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
-import com.nyelam.android.data.Courier;
-import com.nyelam.android.data.CourierList;
-import com.nyelam.android.data.CourierType;
+import com.nyelam.android.VeritransNotificationActivity;
+import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.booking.BookingServiceSummaryActivity;
+import com.nyelam.android.data.Cart;
+import com.nyelam.android.data.Contact;
+import com.nyelam.android.data.DeliveryService;
+import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DoShopAddress;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopMerchant;
+import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopProduct;
+import com.nyelam.android.data.NTransactionResult;
+import com.nyelam.android.data.Order;
 import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.general.CourierAdapter;
-import com.nyelam.android.general.CourierTypeAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.http.NYDoDiveServiceOrderResubmitRequest;
+import com.nyelam.android.http.NYDoShopSubmitOrderRequest;
+import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.storage.VeritransStorage;
+import com.nyelam.android.view.NYCustomDialog;
 import com.nyelam.android.view.NYDialogChooseAddress;
-import com.nyelam.android.view.NYSpinner;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DoShopCheckoutFragment extends BasicFragment implements NYDialogChooseAddress.Listener, AdapterView.OnItemSelectedListener {
+public class DoShopCheckoutFragment extends BasicFragment implements
+        NYDialogChooseAddress.Listener,
+        AdapterView.OnItemSelectedListener,
+        TransactionFinishedCallback {
 
 
     private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
+    private PayPalConfiguration payPalConfiguration;
     private Intent paypalIntent;
     private int paypalRequestCode = 999;
+    private boolean isTranssactionFailed = false;
+    private boolean isTranssactionCanceled = false;
 
-    private String paymentType = "1"; // 1= bank transfer 2 = midtrans (credit), 3 (VA), 4 paypal
-    private String paymentMethod = null; // 1 = virtual account dan 2 = credit card
 
-    private DoShopCheckoutFragment thisFragment;
-    private CheckoutListener listener;
+    //DATA YANG AKAN DIKIRIM
+    private DoShopOrder orderReturn;
     private DoShopCartReturn cartReturn;
     private DoShopAddress shippingAddress;
     private DoShopAddress billingAddress;
-    private List<Courier> couriers;
-    private Courier currentCourier;
-    private CourierType currentCourierType;
+    private String paymentType = "1"; // 1= bank transfer 2 = midtrans (credit), 3 (VA), 4 paypal
+    private String paymentMethod = null; // 1 = virtual account dan 2 = credit card
 
-    private CourierAdapter courierAdapter;
-    private CourierTypeAdapter courierTypeAdapter;
+    private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+    private DoShopCheckoutFragment thisFragment;
+    private CheckoutListener listener;
     private DoShopCheckoutAdapter adapter;
 
 
@@ -105,12 +128,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-
-
-
-
-
-
 
     @BindView(R.id.ll_container_input_personal_information)
     LinearLayout llContainerInputPersonal;
@@ -145,28 +162,64 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     @BindView(R.id.tv_shipping_address_phone)
     TextView tvShippingAddressPhone;
 
-
-
-    @BindView(R.id.et_courier)
-    EditText etCourier;
-
-    @BindView(R.id.spinner_courier)
-    NYSpinner spinnerCourier;
-
-    @BindView(R.id.et_courier_type)
-    EditText etCourierType;
-
-    @BindView(R.id.spinner_courier_types)
-    NYSpinner spinnerCourierTypes;
-
-//    @OnClick(R.id.tv_next_step_personal_information) void nextStepPersonalInformation(){
-//        llContainerInputPersonal.setVisibility(View.GONE);
-//        llContainerPersonal.setVisibility(View.VISIBLE);
-//        listener.stepView(2);
-//    }
-
     @OnClick(R.id.tv_checkout) void choosePayment(){
-        listener.proceedToChoosePayment();
+        //listener.proceedToChoosePayment();
+        //req = new NYDoShopSubmitOrderRequest(getActivity(), paymentMethod, cartToken, billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+
+        // TODO: check delivery service
+        List<DeliveryService> deliveryServices = new ArrayList<>();
+        int merchantSize = 0;
+        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
+            for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()){
+                if (merchant.getDeliveryService() != null)deliveryServices.add(merchant.getDeliveryService());
+                merchantSize++;
+            }
+        }
+
+
+        // TODO: check parameter yang akan dikirim
+        if (cartReturn == null || !NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
+            Toast.makeText(getActivity(), "Please, choose billing address first", Toast.LENGTH_SHORT).show();
+        } else if (billingAddress == null || !NYHelper.isStringNotEmpty(billingAddress.getAddressId())){
+            Toast.makeText(getActivity(), "Please, choose billing address first", Toast.LENGTH_SHORT).show();
+        } else if (shippingAddress == null || !NYHelper.isStringNotEmpty(shippingAddress.getAddressId())){
+            Toast.makeText(getActivity(), "Please, choose shipping address first", Toast.LENGTH_SHORT).show();
+        } else if(deliveryServices == null || deliveryServices.size() < merchantSize){
+            Toast.makeText(getActivity(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
+        } else if (!NYHelper.isStringNotEmpty(paymentMethod)){
+            Toast.makeText(getActivity(), "Please, choose payment method first", Toast.LENGTH_SHORT).show();
+        } else {
+
+            //getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+
+            if (isTranssactionCanceled){
+                // TODO: resubmit order
+                //onResubmitOrder();
+                getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+            } else if (orderReturn == null && isTranssactionFailed){
+                // TODO: request ulang cart token atau cart return
+                //new NYCustomDialog().showAgreementDialog(getActivity());
+                getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+            } else if (orderReturn == null){
+                //new NYCustomDialog().showAgreementDialog(getActivity());
+                getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+            } else {
+                payUsingVeritrans();
+            }
+
+
+        }
+
+    }
+
+    private void onResubmitOrder() {
+//        pDialog.show();
+//        try {
+//            NYDoDiveServiceOrderResubmitRequest req = new NYDoDiveServiceOrderResubmitRequest(getActivity(), orderReturn.getSummary().getOrder().getOrderId(),  paymentType);
+//            spcMgr.execute(req, onCancelOrderRequest());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @OnClick(R.id.tv_choose_address) void chooseAddress(){
@@ -232,16 +285,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
 
     private void initCartReturn(DoShopCartReturn cartReturn){
 
-//        List<DoShopProduct> products = new ArrayList<DoShopProduct>();
-//        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-//            for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
-//                if (merchant != null && merchant.getDoShopProducts() != null){
-//                    for (DoShopProduct product : merchant.getDoShopProducts()){
-//                        products.add(product);
-//                    }
-//                }
-//            }
-//        }
 
         adapter.setData(cartReturn.getCart().getMerchants());
         adapter.notifyDataSetChanged();
@@ -280,208 +323,99 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
             if (NYHelper.isStringNotEmpty(shippingAddress.getAddress()))tvShippingAddress.setText(shippingAddress.getAddress());
             if (NYHelper.isStringNotEmpty(shippingAddress.getPhoneNumber()))tvShippingAddressPhone.setText(shippingAddress.getPhoneNumber());
             llContainerShippingAddress.setVisibility(View.VISIBLE);
-
-            //if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getDistrict().getId()))loadCourier("501", address.getDistrict().getId(),"1500");
-            //loadCourier("501", address.getDistrict().getId(),"1500");
         }
     }
 
+    private void getSubmitOrder(String paymentMethod, String cartToken, String billingAddressId, String shippingAddressId, List<DeliveryService> deliveryServices, String typeId, String voucher){
+        pDialog.show();
+        NYDoShopSubmitOrderRequest req = null;
+        try {
+            req = new NYDoShopSubmitOrderRequest(getActivity(), paymentMethod, cartToken, billingAddressId, shippingAddressId, deliveryServices, typeId, voucher);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onSubmitOrderRequest());
+    }
 
-    private void loadCourier(final String originId, final String destinationId, final String weight){
+    private RequestListener<DoShopOrder> onSubmitOrderRequest() {
+        return new RequestListener<DoShopOrder>() {
 
-        Toast.makeText(getActivity(), "load courier 1", Toast.LENGTH_SHORT).show();
-
-        listener.stepView(2);
-        //final CourierList courierList = new CourierList();
-        final List<Courier> couriers = new ArrayList<Courier>();
-        couriers.add(new Courier("jne", "JNE"));
-        couriers.add(new Courier("tiki", "TIKI"));
-
-        this.couriers = couriers;
-        courierAdapter = new CourierAdapter(getActivity());
-        courierAdapter.addCouriers(couriers);
-
-        if (couriers != null){
-            // TODO: masukkan ke spinner
-            //Log.d("UI thread", "I am the UI thread");
-            //Toast.makeText(getActivity(), "ONGKIR ADA "+String.valueOf(couriers.size()), Toast.LENGTH_SHORT).show();
-
-            Toast.makeText(getActivity(), "load courier 2", Toast.LENGTH_SHORT).show();
-
-            spinnerCourier.setAdapter(courierAdapter);
-            spinnerCourier.setOnItemSelectedListener(thisFragment);
-            spinnerCourier.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
-                @Override
-                public void onSpinnerOpened(Spinner spinner) {
-                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
-
-                }
-
-                @Override
-                public void onSpinnerClosed(Spinner spinner) {
-
-                    int position = spinner.getSelectedItemPosition();
-                    Courier courier = courierAdapter.getItem(position);
-                    //Toast.makeText(getActivity(), courier.getName(), Toast.LENGTH_SHORT).show();
-
-                    if (courier != null && NYHelper.isStringNotEmpty(courier.getCode()))
-                        etCourier.setText(courier.getCode().toUpperCase());
-                    if (currentCourier != courier){
-                        currentCourier = courier;
-                        currentCourierType = null;
-                        // TODO: load courierTypes
-                        //loadCourierTypes(currentCourier);
-                        loadOngkir(originId, destinationId, weight, currentCourier.getCode());
-                    }
-
-                }
-            });
-
-            if (couriers.size() > 0){
-                currentCourier = couriers.get(0);
-                etCourier.setText(currentCourier.getName());
-                loadOngkir(originId, destinationId, weight, currentCourier.getCode());
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                pDialog.dismiss();
+                NYHelper.handleAPIException(getActivity(), spiceException, null);
             }
 
-        } else {
-            // TODO: ongkir tidak tersedia
-        }
-    }
+            @Override
+            public void onRequestSuccess(DoShopOrder result) {
+                pDialog.dismiss();
+                //thisFragment.cartReturn = cartReturn;
+                //initCartReturn(cartReturn);
 
 
-    private void loadOngkir(String originId, String destinationId, String weight, String courier) {
+                //kasih flag jika nanti setelah masuk payment dibatalkan
+                isTranssactionCanceled = true;
 
-        OkHttpClient client = new OkHttpClient();
-        // GET request
-        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "origin="+originId+"&originType=subdistrict&destination="+destinationId+"&destinationType=subdistrict&weight="+weight+"&courier="+courier);
-        Request request = new Request.Builder()
-                .url("https://pro.rajaongkir.com/api/cost")
-                .post(body)
-                .addHeader("key", "f6884fab1a6386a9438b9c541b1d3333")
-                .addHeader("content-type", "application/x-www-form-urlencoded")
-                .build();
+                orderReturn = result;
 
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+                if (orderReturn != null){
 
-                }
+                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                        //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
+                        VeritransStorage veritransStorage = new VeritransStorage(getActivity());
+                        veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
 
-                    try {
-                        String jsonData = response.body().string();
-                        JSONObject Jobject = null;
-                        try {
-                            Jobject = new JSONObject(jsonData);
-                            JSONArray Jarray = Jobject.getJSONObject("rajaongkir").getJSONArray("results");
-//
-                            final CourierList courierList = new CourierList();
-                            courierList.parse(Jarray);
+                        Contact contact = new Contact();
+                        contact.setName(billingAddress.getFullName());
+                        contact.setEmailAddress(billingAddress.getEmail());
+                        contact.setPhoneNumber(billingAddress.getPhoneNumber());
+                        veritransStorage.contact = contact;
 
-                            if (courierList != null && courierList.getList() != null && courierList.getList().size() > 0){
+                        Cart cart = new Cart();
+                        cart.setSubTotal(result.getCart().getSubTotal());
+                        cart.setTotal(result.getCart().getTotal());
+                        cart.setVoucher(result.getCart().getVoucher());
+                        cart.setCurrency(null);
+                        veritransStorage.cart = cart;
 
-                                //courierAdapter = new CourierAdapter(getActivity());
-                                //courierAdapter.addCouriers(courierList.getList());
+                        Order order = new Order();
+                        order.setOrderId(result.getOrderId());
+                        order.setAdditionals(result.getAdditionals());
+                        order.setCart(cart);
+                        order.setStatus(order.getStatus());
+                        veritransStorage.order = order;
 
-                                // TODO: masukkan ke spinner
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        //Log.d("UI thread", "I am the UI thread");
-                                        //Toast.makeText(getActivity(), "ONGKIR ADA "+String.valueOf(courierList.getList().size()), Toast.LENGTH_SHORT).show();
-                                        loadCourierTypes(courierList.getList().get(0));
+                        veritransStorage.totalParticipants = 1;
+                        veritransStorage.save();
+
+                        payUsingVeritrans();
+
+                    } else if (paymentType.equals("1")){
+                        //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
+                        NYHelper.handlePopupMessage(getActivity(), getString(R.string.transaction_success), false,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                        intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                        intent.putExtra(NYHelper.ID_ORDER_DO_SHOP, orderReturn.getOrderId());
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
                                     }
-                                });
-
-                            } else {
-                                // TODO: ongkir tidak tersedia
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-
-    }
-
-    private void loadCourierTypes(Courier currentCourier) {
-        if (currentCourier != null && currentCourier.getCourierTypes() != null){
-            // TODO: masukkan ke spinner
-
-            final List<CourierType> courierTypes = currentCourier.getCourierTypes();
-
-            courierTypeAdapter = new CourierTypeAdapter(getActivity());
-            courierTypeAdapter.addCouriers(courierTypes);
-
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    //Log.d("UI thread", "I am the UI thread");
-                    spinnerCourierTypes.setAdapter(courierTypeAdapter);
-                    spinnerCourierTypes.setOnItemSelectedListener(thisFragment);
-                    spinnerCourierTypes.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
-                        @Override
-                        public void onSpinnerOpened(Spinner spinner) {
-                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
-
-                        }
-
-                        @Override
-                        public void onSpinnerClosed(Spinner spinner) {
-
-                            int position = spinner.getSelectedItemPosition();
-                            CourierType courierType = courierTypeAdapter.getItem(position);
-                            currentCourierType = courierType;
-                            //Toast.makeText(getActivity(), courierType.getName(), Toast.LENGTH_SHORT).show();
-
-                            if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService()))
-                                etCourierType.setText(courierType.getService().toUpperCase());
-
-                            if (currentCourierType != null && currentCourierType.getCourierCosts() != null && currentCourierType.getCourierCosts().size() > 0 ){
-                                tvShippingTotal.setText(NYHelper.priceFormatter(currentCourierType.getCourierCosts().get(0).getValue()));
-                                if (cartReturn != null && cartReturn.getCart() != null){
-                                    double total = cartReturn.getCart().getTotal()+currentCourierType.getCourierCosts().get(0).getValue();
-                                    tvTotal.setText(NYHelper.priceFormatter(total));
-                                }
-                                llShippingTotalContainer.setVisibility(View.VISIBLE);
-                            } else {
-                                llShippingTotalContainer.setVisibility(View.GONE);
-                            }
-
-                        }
-                    });
-
-                    if (couriers.size() > 0){
-                        currentCourierType = courierTypes.get(0);
-                        etCourierType.setText(currentCourierType.getService());
-                        if (currentCourierType != null && currentCourierType.getCourierCosts() != null && currentCourierType.getCourierCosts().size() > 0 ){
-                            tvShippingTotal.setText(NYHelper.priceFormatter(currentCourierType.getCourierCosts().get(0).getValue()));
-                            if (cartReturn != null && cartReturn.getCart() != null){
-                                double total = cartReturn.getCart().getTotal()+currentCourierType.getCourierCosts().get(0).getValue();
-                                tvTotal.setText(NYHelper.priceFormatter(total));
-                            }
-                            llShippingTotalContainer.setVisibility(View.VISIBLE);
-                        } else {
-                            llShippingTotalContainer.setVisibility(View.GONE);
-                        }
+                                }, getResources().getString(R.string.check_order));
+                    } else if (paymentType.equals("4")){
+                        //TODO DISINI HANDLE KALO TRANSAKSI DI PAYPAL SUKSES
+                        payUsingPaypal();
                     }
 
                 }
-            });
 
-        } else {
-            // TODO: ongkir tidak tersedia
-        }
+
+            }
+        };
     }
+
 
 
     @Override
@@ -505,8 +439,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
     }
 
     public void chooseCourrier(DoShopMerchant merchant){
-
-
 
         if (merchant != null && merchant.getDoShopProducts() != null && merchant.getDoShopProducts().size() > 0 && shippingAddress != null && shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getId())){
 
@@ -542,13 +474,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
             }
         }
 
-
-//        intent.putExtra(NYHelper.MERCHANT, merchant.toString());
-//        intent.putExtra(NYHelper.COURIER, currentCourier.toString());
-//        intent.putExtra(NYHelper.COURIER_TYPE, currentCourierType.toString());
-//        intent.putExtra(NYHelper.NOTE, note);
-
-
         if (cartReturn != null && data != null && data.hasExtra(NYHelper.MERCHANT)){
             try {
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.MERCHANT));
@@ -577,43 +502,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
             }
         }
 
-//        if (data != null && data.hasExtra(NYHelper.COURIER)){
-//            try {
-//                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.COURIER));
-//                Courier courier = new Courier();
-//                courier.parse(obj);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        if (data != null && data.hasExtra(NYHelper.COURIER_TYPE)){
-//            try {
-//                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.COURIER_TYPE));
-//                CourierType courierType = new CourierType();
-//                courierType.parse(obj);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        if (data != null && data.hasExtra(NYHelper.NOTE)){
-//            String note = data.getStringExtra(NYHelper.COURIER_TYPE);
-//        }
-
     }
-
 
     @Override
     public void onStart() {
         super.onStart();
         listener.stepView(1);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        listener.setTitle("Checkout");
     }
 
 
@@ -713,5 +607,184 @@ public class DoShopCheckoutFragment extends BasicFragment implements NYDialogCho
         //requestChangePaymentMethod();
     }
 
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (spcMgr.isStarted()) spcMgr.shouldStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        listener.setTitle("Checkout");
+        if (!spcMgr.isStarted()) spcMgr.start(getActivity());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void payUsingVeritrans() {
+
+        SdkUIFlowBuilder.init()
+                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
+                .setContext(getActivity()) // context is mandatory
+                .setTransactionFinishedCallback(thisFragment)// set transaction finish callback (sdk callback)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
+                .enableLog(true) // enable sdk log (optional)
+                .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
+                .buildSDK();
+
+        PaymentMethodStorage paymentMethodStorage = new PaymentMethodStorage(getActivity());
+        paymentMethodStorage.paymentMethod = paymentMethod;
+        paymentMethodStorage.save();
+
+        VeritransStorage veritransStorage = new VeritransStorage(getActivity());
+        Contact contact = veritransStorage.contact;
+        Order order = veritransStorage.order;
+        String token = veritransStorage.veritransToken;
+        Cart cart = veritransStorage.cart;
+        DiveService service = veritransStorage.service;
+        Integer totalParticipants = veritransStorage.totalParticipants;
+
+        if (veritransStorage != null){
+            UserDetail userDetail = null;
+
+            if (userDetail == null) {
+                userDetail = new UserDetail();
+                if (contact != null){
+                    userDetail.setUserFullName(contact.getName());
+                    userDetail.setEmail(contact.getEmailAddress());
+                    userDetail.setPhoneNumber(contact.getPhoneNumber());
+
+                    LoginStorage loginStorage = new LoginStorage(getActivity());
+                    userDetail.setUserId(loginStorage.user.getUserId());
+                    LocalDataHandler.saveObject("user_details", userDetail);
+                }
+            }
+
+            UIKitCustomSetting setting = MidtransSDK.getInstance().getUIKitCustomSetting();
+            setting.setSkipCustomerDetailsPages(true);
+            MidtransSDK.getInstance().setUIKitCustomSetting(setting);
+
+            TransactionRequest transactionRequest;
+            if (cart != null){
+                transactionRequest = new TransactionRequest(order.getOrderId(), cart.getTotal());
+            } else {
+                transactionRequest = new TransactionRequest(order.getOrderId(), 0);
+            }
+
+            // Create array list and add above item details in it and then set it to transaction request.
+            ArrayList<ItemDetails> itemDetailsList = new ArrayList<>();
+            if (service != null)itemDetailsList.add(new ItemDetails(service.getId(), (int)service.getNormalPrice(), totalParticipants, service.getName()));
+            transactionRequest.setItemDetails(itemDetailsList);
+
+
+            MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
+            MidtransSDK.getInstance().startPaymentUiFlow(getActivity(), token);
+            //MidtransSDK.getInstance().startPaymentUiFlow(this, "eba5b676-abea-4b6d-8f88-3ad1517f2e2e");
+        }
+
+    }
+
+
+
+    public void payUsingPaypal() {
+
+        //CONFIGURASI PAYPAL
+        payPalConfiguration = new PayPalConfiguration()
+                .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+                .clientId(paypalClientId);
+        paypalIntent = new Intent(getActivity(), PayPalService.class);
+        paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
+        getActivity().startService(paypalIntent);
+
+        if (orderReturn != null && orderReturn.getPaypalCurrency() != null
+                && NYHelper.isStringNotEmpty(orderReturn.getPaypalCurrency().getCurrency())
+                && orderReturn.getPaypalCurrency().getAmount() != null
+                && NYHelper.isStringNotEmpty(orderReturn.getOrderId())
+                && orderReturn.getCart() != null){
+
+            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), "#"+orderReturn.getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
+//            PayPalItem item = new PayPalItem(diveService.getName(), 1, new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), PayPalPayment.PAYMENT_INTENT_SALE);
+//            payPalPayment.items(new PayPalItem[]{item});
+            Intent intent = new Intent(getActivity(), PaymentActivity.class);
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
+            intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
+            startActivityForResult(intent, paypalRequestCode);
+
+        } else {
+            NYHelper.handlePopupMessage(getActivity(), getString(R.string.warn_paymet_using_paypal_failed), false,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }, getResources().getString(R.string.ok));
+        }
+    }
+
+
+    @Override
+    public void onTransactionFinished(final TransactionResult transactionResult) {
+        //TODO DISINI HANDLE KALO TRANSAKSI DI MIDTRANS SUKSES
+
+        if (transactionResult != null){
+            if (transactionResult.getResponse() != null) NYLog.e("CEK TRANSACTION 1: "+transactionResult.getResponse().getTransactionStatus());
+            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))NYLog.e("CEK TRANSACTION 2 : "+transactionResult.getResponse().getFraudStatus());
+            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))NYLog.e("CEK TRANSACTION 3 : "+transactionResult.getResponse().getTransactionStatus());
+        } else {
+        }
+
+        if (transactionResult != null && transactionResult.getResponse() != null && (transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) || transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING)) ){
+            NYHelper.handlePopupMessage(getActivity(), getString(R.string.transaction_success), false,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getActivity(), VeritransNotificationActivity.class);
+                            //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
+                            if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
+                                if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
+                                    NTransactionResult result = new NTransactionResult();
+                                    result.setData(transactionResult.getResponse());
+                                    intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                    intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                    intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
+                                } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
+                                    NTransactionResult result = new NTransactionResult();
+                                    result.setData(transactionResult.getResponse());
+                                    intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
+                                    intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                    intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
+                                }
+                            }
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    }, "Check Order");
+        } else if (transactionResult != null && transactionResult.getResponse() != null && transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_CHALLENGE_FRAUD_STATUS)){
+
+            // TODO: jika transaksi gagal
+            orderReturn = null;
+            isTranssactionFailed = true;
+            virtualAccountLinearLayout.setVisibility(View.VISIBLE);
+            bankTransferLinearLayout.setVisibility(View.VISIBLE);
+
+        } else {
+            //bankTransferLinearLayout.setVisibility(View.GONE);
+        }
+
+    }
 
 }

@@ -137,7 +137,8 @@ public class DoShopCheckoutActivity extends BasicActivity implements CheckoutLis
         if (pos == 0){
             llContainerStepView.setVisibility(View.GONE);
         } else {
-            llContainerStepView.setVisibility(View.VISIBLE);
+            //llContainerStepView.setVisibility(View.VISIBLE);
+            llContainerStepView.setVisibility(View.GONE);
         }
 
         initStepView(pos);

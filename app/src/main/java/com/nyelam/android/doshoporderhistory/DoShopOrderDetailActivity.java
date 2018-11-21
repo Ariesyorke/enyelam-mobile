@@ -151,6 +151,9 @@ public class DoShopOrderDetailActivity extends BasicActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else if(intent.hasExtra(NYHelper.ID_ORDER_DO_SHOP)) {
+                order = new DoShopOrder();
+                order.setOrderId(intent.getStringExtra(NYHelper.ID_ORDER_DO_SHOP));
             }
         }
 
@@ -165,7 +168,6 @@ public class DoShopOrderDetailActivity extends BasicActivity {
                     getOrderDetail(order.getOrderId());
                 }
             });
-
 
         } else {
             dialogOrderNotAvailable();

@@ -1,11 +1,13 @@
 package com.nyelam.android.doshoporder;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -81,6 +83,8 @@ public class DoShopCartFragment extends BasicFragment {
         //listener.proceedToCheckOut();
         String voucher = etVoucherCode.getText().toString().trim();
         if (NYHelper.isStringNotEmpty(voucher) && cartReturn != null && NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
+            // Check if no view has focus:
+            NYHelper.hideKeyboard(getActivity());
             getApplyVoucher(cartReturn.getCartToken(), voucher);
         }
     }
@@ -159,19 +163,6 @@ public class DoShopCartFragment extends BasicFragment {
 
                 thisFragment.cartReturn = cartReturn;
 
-//                List<DoShopProduct> products = new ArrayList<DoShopProduct>();
-//                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-//                    for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
-//                        if (merchant != null && merchant.getDoShopProducts() != null){
-//                            for (DoShopProduct product : merchant.getDoShopProducts()){
-//                                products.add(product);
-//                            }
-//                        }
-//                    }
-//                }
-//                adapter.setData(products);
-//                adapter.notifyDataSetChanged();
-
                 initCartReturn(cartReturn);
                 llMainContainer.setVisibility(View.VISIBLE);
             }
@@ -240,20 +231,8 @@ public class DoShopCartFragment extends BasicFragment {
             public void onRequestSuccess(DoShopCartReturn cartReturn) {
                 pDialog.dismiss();
 
+                etVoucherCode.setText("");
                 thisFragment.cartReturn = cartReturn;
-
-//                List<DoShopProduct> products = new ArrayList<DoShopProduct>();
-//                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-//                    for (DoShopMerchant merchant :cartReturn.getCart().getMerchants()){
-//                        if (merchant != null && merchant.getDoShopProducts() != null){
-//                            for (DoShopProduct product : merchant.getDoShopProducts()){
-//                                products.add(product);
-//                            }
-//                        }
-//                    }
-//                }
-//                adapter.setData(products);
-//                adapter.notifyDataSetChanged();
 
                 initCartReturn(cartReturn);
             }

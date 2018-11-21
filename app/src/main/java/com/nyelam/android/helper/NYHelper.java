@@ -24,6 +24,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -113,6 +114,7 @@ public class NYHelper {
     public static final String CART_RETURN = "cart_return";
     public static final int LOGIN_REQ = 101;
     public static final String ID_ORDER = "id_order";
+    public static final String ID_ORDER_DO_SHOP = "id_order_do_shop";
     public static final String SUMMARY = "summary";
     public static final String ORDER_RETURN = "order_return";
     public static final String BANK_TRANSFER = "bank_transfer";
@@ -699,5 +701,13 @@ public class NYHelper {
     public static Boolean isToday(Date date){
         long timeStampDate = date.getTime();
         return DateUtils.isToday(timeStampDate);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
