@@ -24,6 +24,7 @@ public class NYDoShopSubmitOrderRequest extends NYBasicAuthRequest<DoShopOrder> 
     private final static String POST_CART_TOKEN = "cart_token";
     private final static String POST_BILLING_ADDRESS_ID = "billing_address_id";
     private final static String POST_SHIPPING_ADDRESS_ID = "shipping_address_id";
+    //private final static String POST_DELIVERY_SERVICE = "delivery_service[]";
     private final static String POST_DELIVERY_SERVICE = "delivery_service";
     private final static String POST_TYPE_ID = "type_id";
     private final static String POST_VOUCHER_CODE = "voucher_code";
@@ -50,8 +51,11 @@ public class NYDoShopSubmitOrderRequest extends NYBasicAuthRequest<DoShopOrder> 
         if(deliveryServices != null && deliveryServices.size() > 0) {
             for (DeliveryService deliveryService : deliveryServices){
                 if (deliveryService != null && NYHelper.isStringNotEmpty(deliveryService.getName())){
-                    String service = deliveryService.getName()+":"+String.valueOf(deliveryService.getPrice());
-                    addQuery(POST_DELIVERY_SERVICE+"["+String.valueOf(service)+"]", service);
+                    //String service = deliveryService.getName()+" "+deliveryService.getTypes().get(0).getName()+":"+String.valueOf(deliveryService.getPrice());
+                    //addQuery(POST_DELIVERY_SERVICE+"["+String.valueOf(service)+"]", service);
+                    String service = deliveryService.getName()+":"+String.valueOf((int)deliveryService.getPrice());
+                    addQuery(POST_DELIVERY_SERVICE+"["+String.valueOf(service.length())+"]", service);
+                    //addQuery(POST_DELIVERY_SERVICE, deliveryService.toString());
                 }
             }
         }

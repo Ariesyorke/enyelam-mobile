@@ -186,7 +186,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             Toast.makeText(getActivity(), "Please, choose shipping address first", Toast.LENGTH_SHORT).show();
         } else if(deliveryServices == null || deliveryServices.size() < merchantSize){
             Toast.makeText(getActivity(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
-        } else if (!NYHelper.isStringNotEmpty(paymentMethod)){
+        } else if (!NYHelper.isStringNotEmpty(paymentType)){
             Toast.makeText(getActivity(), "Please, choose payment method first", Toast.LENGTH_SHORT).show();
         } else {
 
@@ -195,14 +195,14 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             if (isTranssactionCanceled){
                 // TODO: resubmit order
                 //onResubmitOrder();
-                getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
             } else if (orderReturn == null && isTranssactionFailed){
                 // TODO: request ulang cart token atau cart return
                 //new NYCustomDialog().showAgreementDialog(getActivity());
-                getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
             } else if (orderReturn == null){
                 //new NYCustomDialog().showAgreementDialog(getActivity());
-                getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
             } else {
                 payUsingVeritrans();
             }
