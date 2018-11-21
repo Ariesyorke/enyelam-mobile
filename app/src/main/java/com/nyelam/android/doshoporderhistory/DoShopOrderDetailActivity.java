@@ -22,6 +22,7 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.data.Additional;
 import com.nyelam.android.data.DoShopCategory;
+import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopOrderList;
 import com.nyelam.android.data.Order;
@@ -204,7 +205,21 @@ public class DoShopOrderDetailActivity extends BasicActivity {
                 //TOTAL COST
                 tvSubTotal.setText(NYHelper.priceFormatter(order.getCart().getSubTotal()));
                 tvTotal.setText(NYHelper.priceFormatter(order.getCart().getTotal()));
-                if (order.getCart().getVoucher() != null)tvTotal.setText(NYHelper.priceFormatter(order.getCart().getVoucher().getValue()));
+                if (order.getCart().getVoucher() != null){
+                    tvTotal.setText(NYHelper.priceFormatter(order.getCart().getVoucher().getValue()));
+                    llVoucherContainer.setVisibility(View.VISIBLE);
+                } else {
+                    llVoucherContainer.setVisibility(View.GONE);
+                }
+
+
+                if (order.getCart().getMerchants() != null){
+                    double totalShippingCost = 0;
+                    for (DoShopMerchant merchant : order.getCart().getMerchants()){
+                        if (merchant != null && merchant.getDeliveryService() != null)totalShippingCost+=merchant.getDeliveryService().getPrice();
+                    }
+                    tvShippingCost.setText(NYHelper.priceFormatter(totalShippingCost));
+                }
 
                 llAdditionalContainer.removeAllViews();
                 if (order.getAdditionals() != null && order.getAdditionals().size() > 0){
