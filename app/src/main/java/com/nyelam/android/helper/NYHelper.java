@@ -161,6 +161,7 @@ public class NYHelper {
     public static final String COURIER_TYPE = "courier_type";
     public static final String DISTRICT_ID = "district_id";
     public static final String WEIGHT = "weight";
+    public static final String STATUS = "status";
 
 
     public static boolean isStringNotEmpty(String string) {

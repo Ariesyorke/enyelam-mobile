@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +48,9 @@ public class DoShopOrderDetailActivity extends BasicActivity {
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopOrder order;
     private DoShopMerchantItemAdapter adapter;
+
+    @BindView(R.id.refresh_swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.ll_main_container)
     LinearLayout llMainContainer;
@@ -120,6 +124,7 @@ public class DoShopOrderDetailActivity extends BasicActivity {
         initToolbar();
         initAdapter();
         initExtra();
+
     }
 
     private void initAdapter() {
@@ -151,6 +156,17 @@ public class DoShopOrderDetailActivity extends BasicActivity {
 
         if (order != null && NYHelper.isStringNotEmpty(order.getOrderId())){
             getOrderDetail(order.getOrderId());
+
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+            {
+                @Override
+                public void onRefresh()
+                {
+                    getOrderDetail(order.getOrderId());
+                }
+            });
+
+
         } else {
             dialogOrderNotAvailable();
         }
@@ -177,6 +193,7 @@ public class DoShopOrderDetailActivity extends BasicActivity {
                 //NYHelper.handleAPIException(context, spiceException, null);
                 //swipeRefreshLayout.setRefreshing(false);
                 //llRelatedItem.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
                 tvError.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 llMainContainer.setVisibility(View.GONE);
@@ -184,6 +201,7 @@ public class DoShopOrderDetailActivity extends BasicActivity {
 
             @Override
             public void onRequestSuccess(DoShopOrder order) {
+                swipeRefreshLayout.setRefreshing(false);
                 tvError.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 if (order != null)initOrderView(order);

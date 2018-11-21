@@ -17,13 +17,19 @@ import org.json.JSONObject;
 public class NYDoShopOrderListRequest extends NYBasicAuthRequest<DoShopOrderList> {
 
     private final static String KEY_ORDERS = "orders";
-    private final static String POST_STATUS = "status";
 
-    public NYDoShopOrderListRequest(Context context, String status) throws Exception {
+    private final static String POST_PAGE = "page";
+    private final static String POST_TYPE = "type";
+
+    public NYDoShopOrderListRequest(Context context, String type, String page) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_order_list));
 
-        if(!TextUtils.isEmpty(status)) {
-            addQuery(POST_STATUS, status);
+        if(!TextUtils.isEmpty(type)) {
+            addQuery(POST_TYPE, type);
+        }
+
+        if(!TextUtils.isEmpty(page)) {
+            addQuery(POST_PAGE, page);
         }
 
     }

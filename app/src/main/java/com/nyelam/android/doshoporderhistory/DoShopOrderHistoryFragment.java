@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
@@ -20,11 +21,15 @@ import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopOrderList;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.doshop.DoShopRecommendedAdapter;
+import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopListCartRequest;
 import com.nyelam.android.http.NYDoShopOrderListRequest;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +42,7 @@ import butterknife.BindView;
 public class DoShopOrderHistoryFragment extends BasicFragment {
 
     private String status = "1";
+    private int page = 1;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopOrderHistoryAdapter adapter;
 
@@ -51,6 +57,17 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
 
     public DoShopOrderHistoryFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if (getArguments() != null && getArguments().get(NYHelper.STATUS) != null){
+            status = getArguments().getString(NYHelper.STATUS);
+            Toast.makeText(getActivity(), "STATUS : "+status, Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -71,7 +88,7 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
         tvNotFound.setVisibility(View.GONE);
         NYDoShopOrderListRequest req = null;
         try {
-            req = new NYDoShopOrderListRequest(getActivity(), null);
+            req = new NYDoShopOrderListRequest(getActivity(), status, String.valueOf(page));
         } catch (Exception e) {
             progressBar.setVisibility(View.GONE);
             tvNotFound.setVisibility(View.VISIBLE);

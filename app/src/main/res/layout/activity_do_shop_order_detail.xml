@@ -396,7 +396,6 @@
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="reguler"
                                 android:id="@+id/tv_billing_address"
-                                android:layout_marginTop="@dimen/padding"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
@@ -527,7 +526,6 @@
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="reguler"
                                 android:id="@+id/tv_shipping_address"
-                                android:layout_marginTop="@dimen/padding"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
