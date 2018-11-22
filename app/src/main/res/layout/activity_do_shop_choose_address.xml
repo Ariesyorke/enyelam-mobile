@@ -42,6 +42,65 @@
     </android.support.v7.widget.Toolbar>
 
 
+
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/ll_container_yesno"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.nyelam.android.view.font.NYTextView
+            app:fontTextStyle="medium"
+            android:text="Set as biling and shipping address"
+            android:textColor="@color/ny_black2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioGroup
+            android:checkedButton="@+id/rbNo"
+            android:id="@+id/radioGroup"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/padding"
+            android:background="@drawable/blue_out_line"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbNo"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/toggle_widget_background"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="No"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/rbYes"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_widget_background"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Yes"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+    </LinearLayout>
+
     <ProgressBar
         android:visibility="gone"
         android:id="@+id/progress_bar"

@@ -21,15 +21,17 @@ import java.util.List;
  */
 public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdapter.MyViewHolder>  {
 
-    List<DoShopAddress> addresses;
-    Activity activity;
-    LayoutInflater layoutInflater;
+    private List<DoShopAddress> addresses;
+    private Activity activity;
+    private LayoutInflater layoutInflater;
+    private String TAG = "billing";
 
-    public DoShopAddressAdapter(Activity activity) {
+    public DoShopAddressAdapter(Activity activity, String TAG) {
         super();
         this.addresses = new ArrayList<>();
         this.activity = activity;
         layoutInflater = LayoutInflater.from(activity);
+        this.TAG = TAG;
     }
 
     public DoShopAddressAdapter(Activity activity, List<DoShopAddress> addresses) {
@@ -41,6 +43,14 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
 
     public void setAddresses(List<DoShopAddress> addresses) {
         this.addresses = addresses;
+    }
+
+    public String getTAG() {
+        return TAG;
+    }
+
+    public void setTAG(String TAG) {
+        this.TAG = TAG;
     }
 
     @Override
@@ -63,14 +73,11 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
             @Override
             public void onClick(View v) {
                 if (address != null && NYHelper.isStringNotEmpty(address.getAddressId())){
-//                    Intent intent = new Intent(activity, DoShopDetailItemActivity.class);
-//                    intent.putExtra(NYHelper.ADDRESS, address.toString());
-//                    activity.startActivity(intent);
                     Intent intent=new Intent();
+                    intent.putExtra(NYHelper.TAG,TAG);
                     intent.putExtra(NYHelper.ADDRESS,address.toString());
                     activity.setResult(2,intent);
                     activity.finish();
-
                     //Toast.makeText(activity, address.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(activity, "Sorry, this item is not available", Toast.LENGTH_SHORT).show();

@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.nyelam.android.R;
@@ -29,6 +32,7 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopAddressAdapter adapter;
+    private String TAG = "billing";
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -38,6 +42,18 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
 
     @BindView(R.id.tv_not_found)
     TextView tvNotFound;
+
+    @BindView(R.id.ll_container_yesno)
+    LinearLayout llContainerYesno;
+
+    @BindView(R.id.rbNo)
+    RadioButton rbNo;
+
+    @BindView(R.id.rbYes)
+    RadioButton rbYes;
+
+    @BindView(R.id.radioGroup)
+    RadioGroup radioGroup;
 
     @OnClick(R.id.iv_add_address) void addAddress(){
         Intent intent = new Intent(this, DoShopAddAddressActivity.class);
@@ -50,13 +66,10 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_do_shop_choose_address);
         ButterKnife.bind(this);
         context = getApplicationContext();
+        rbNo.setChecked(true);
+        initExtra();
 
-//        List<DoShopAddress> addresses = new ArrayList<>();
-//        addresses.add(new DoShopAddress("Aprilian", "Jalan Pajajaran", "018181881"));
-//        addresses.add(new DoShopAddress("Aprilian Nur", "Jalan Pajajaran", "018181881"));
-
-        adapter = new DoShopAddressAdapter(this);
-
+        adapter = new DoShopAddressAdapter(this, TAG);
         //ADAPTER SERVICE LIST
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         LinearLayoutManager layoutManager
@@ -65,8 +78,33 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
         recyclerView.setAdapter(adapter);
 
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == 0){
+                    adapter.setTAG(TAG);
+                } else {
+                    adapter.setTAG("billing and shipping");
+                }
+            }
+        });
+
         loadAddress(false);
     }
+
+
+    private void initExtra() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            if(intent.hasExtra(NYHelper.TAG) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.TAG))){
+                TAG = extras.getString(NYHelper.TAG);
+            }
+        }
+    }
+
 
     private void loadAddress(boolean isRefresh){
         if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
@@ -87,6 +125,7 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
                 NYHelper.handleAPIException(context, spiceException, null);
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.VISIBLE);
+                llContainerYesno.setVisibility(View.GONE);
 
                 if (spiceException != null) {
                     NYHelper.handleAPIException(DoShopChooseAddressActivity.this, spiceException, null);
@@ -100,13 +139,13 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.GONE);
                 if (addressList != null && addressList.getList() != null){
+                    llContainerYesno.setVisibility(View.VISIBLE);
                     adapter.setAddresses(addressList.getList());
                     adapter.notifyDataSetChanged();
 
                     //Toast.makeText(context, "address ada : "+String.valueOf(addressList.getList().size()), Toast.LENGTH_SHORT).show();
 //                    DoShopCnategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
 //                    storage.setCategoryList(categoryList);
-//
 //                    menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, categoryList.getList());
 //                    menuCategoryAdapter.notifyDataSetChanged();
 //                    listViewMenu.setAdapter(menuCategoryAdapter);

@@ -55,7 +55,7 @@
                         android:textSize="18sp"
                         app:fontTextStyle="medium" />
                     <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_choose_address"
+                        android:id="@+id/tv_choose_billing_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Choose Address"
@@ -67,7 +67,7 @@
 
                     <com.nyelam.android.view.font.NYTextView
                         android:visibility="gone"
-                        android:id="@+id/tv_edit_address"
+                        android:id="@+id/tv_edit_billing_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Edit Address"
@@ -78,191 +78,12 @@
                         app:fontTextStyle="reguler" />
                 </LinearLayout>
 
-                <!--<View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:background="#EDEDED" />-->
-
-                <!--<com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Full Name*"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="1"
-                    android:padding="@dimen/padding_half" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Address*"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="4"
-                    android:minLines="4"
-                    android:padding="@dimen/padding_half" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Province"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="1"
-                    android:padding="@dimen/padding_half" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="States"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="1"
-                    android:padding="@dimen/padding_half" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="District"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="1"
-                    android:padding="@dimen/padding_half" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Zip Code*"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="1"
-                    android:padding="@dimen/padding_half" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Phone Number*"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="1"
-                    android:padding="@dimen/padding_half" />
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:text="Email Address*"
-                    android:textColor="@color/ny_black1"
-                    android:textSize="14sp"
-                    app:fontTextStyle="reguler" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_transparant_grey_border"
-                    android:maxLines="1"
-                    android:padding="@dimen/padding_half" />
-
-                <LinearLayout
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:layout_width="24dp"
-                        android:layout_height="24dp" />
-
-                    <com.nyelam.android.view.font.NYTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_weight="1"
-                        android:text="Shipping address same as billing address"
-                        android:textSize="14sp"
-                        app:fontTextStyle="medium" />
-
-                </LinearLayout>
-
-
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/tv_next_step_personal_information"
-                    app:fontTextStyle="medium"
-                    android:text="Next Step"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textAllCaps="true"
-                    android:gravity="center"
-                    android:padding="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_orange"
-                    android:layout_marginTop="@dimen/padding_double"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />-->
             </LinearLayout>
 
 
             <LinearLayout
                 android:visibility="gone"
-                android:id="@+id/ll_container_personal_information"
+                android:id="@+id/ll_container_billing_address"
                 android:padding="@dimen/padding"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -309,48 +130,90 @@
                         app:fontTextStyle="reguler" />
                 </LinearLayout>
 
+            </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_container_shipping_address"
-                    android:orientation="vertical"
+
+
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/padding_double"
+                android:padding="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Shipping Address"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="18sp"
+                    app:fontTextStyle="medium" />
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_choose_shipping_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Address"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:padding="@dimen/padding_half"
+                    android:background="@drawable/ny_rectangle_blue_soft"
+                    app:fontTextStyle="reguler" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_edit_shipping_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Address"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:padding="@dimen/padding_half"
+                    android:background="@drawable/ny_rectangle_blue_soft"
+                    app:fontTextStyle="reguler" />
+            </LinearLayout>
+
+
+
+
+
+
+
+            <LinearLayout
+                android:id="@+id/ll_container_shipping_address"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:padding="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_shipping_address_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_double"
-                        android:text="Shipping Address"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="18sp"
-                        app:fontTextStyle="medium" />
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_shipping_address_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding"
-                        android:text="John Doe"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="16sp"
-                        app:fontTextStyle="medium" />
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_shipping_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_half"
-                        android:text="Jalan Pajajaran No.10 Kota Bogor"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        app:fontTextStyle="reguler" />
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_shipping_address_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_half"
-                        android:text="08182878100"
-                        android:textColor="@color/ny_black1"
-                        android:textSize="14sp"
-                        app:fontTextStyle="reguler" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:text="John Doe"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="16sp"
+                    app:fontTextStyle="medium" />
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_shipping_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:text="Jalan Pajajaran No.10 Kota Bogor"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_shipping_address_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:text="08182878100"
+                    android:textColor="@color/ny_black1"
+                    android:textSize="14sp"
+                    app:fontTextStyle="reguler" />
             </LinearLayout>
 
 

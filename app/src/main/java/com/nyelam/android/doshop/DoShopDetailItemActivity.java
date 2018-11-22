@@ -159,6 +159,10 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                     //sizes.add(new Variation("2", "XL"));
                     final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(DoShopDetailItemActivity.this, product.getVariations().getSizes());
                     spinnerItemSize.setAdapter(sizeSpinAdapter);
+                } else {
+                    // TODO: hide add to cart
+                    tvAddToBasket.setVisibility(View.GONE);
+                    dialogItemNotAvailable();
                 }
 
             }

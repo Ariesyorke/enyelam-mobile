@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -132,14 +133,14 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     @BindView(R.id.ll_container_input_personal_information)
     LinearLayout llContainerInputPersonal;
 
-    @BindView(R.id.tv_choose_address)
-    TextView tvChooseAddress;
+    @BindView(R.id.tv_choose_billing_address)
+    TextView tvChooseBillingAddress;
 
-    @BindView(R.id.tv_edit_address)
-    TextView tvEditAddress;
+    @BindView(R.id.tv_edit_billing_address)
+    TextView tvEditBillingAddress;
 
-    @BindView(R.id.ll_container_personal_information)
-    LinearLayout llContainerPersonal;
+    @BindView(R.id.ll_container_billing_address)
+    LinearLayout llContainerBillingAddress;
 
     @BindView(R.id.tv_address_name)
     TextView tvAddressName;
@@ -153,6 +154,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     @BindView(R.id.ll_container_shipping_address)
     LinearLayout llContainerShippingAddress;
 
+    @BindView(R.id.tv_choose_shipping_address)
+    TextView tvChooseShippingAddress;
+
+    @BindView(R.id.tv_edit_shipping_address)
+    TextView tvEditShippingAddress;
+
     @BindView(R.id.tv_shipping_address)
     TextView tvShippingAddress;
 
@@ -161,6 +168,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     @BindView(R.id.tv_shipping_address_phone)
     TextView tvShippingAddressPhone;
+
+    @BindView(R.id.checkBox)
+    CheckBox checkBox;
 
     @OnClick(R.id.tv_checkout) void choosePayment(){
         //listener.proceedToChoosePayment();
@@ -188,6 +198,8 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             Toast.makeText(getActivity(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
         } else if (!NYHelper.isStringNotEmpty(paymentType)){
             Toast.makeText(getActivity(), "Please, choose payment method first", Toast.LENGTH_SHORT).show();
+        } else if (!checkBox.isChecked()){
+            Toast.makeText(getActivity(), "Please, checklist agreements", Toast.LENGTH_SHORT).show();
         } else {
 
             //getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
@@ -222,17 +234,31 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 //        }
     }
 
-    @OnClick(R.id.tv_choose_address) void chooseAddress(){
+    @OnClick(R.id.tv_choose_billing_address) void chooseBillingAddress(){
 //        listener.proceedToChoosePayment();
 //        NYDialogChooseAddress dialog = new NYDialogChooseAddress();
 //        dialog.showChooseAddressDialog(getActivity(), null);
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
+        intent.putExtra(NYHelper.TAG, "billing");
         startActivityForResult(intent, 100);
     }
 
-    @OnClick(R.id.tv_edit_address) void editAddress(){
+    @OnClick(R.id.tv_edit_billing_address) void editBillingAddress(){
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
+        intent.putExtra(NYHelper.TAG, "billing");
         startActivityForResult(intent, 100);
+    }
+
+    @OnClick(R.id.tv_choose_shipping_address) void chooseShippingAddress(){
+        Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
+        intent.putExtra(NYHelper.TAG, "shipping");
+        startActivityForResult(intent, 101);
+    }
+
+    @OnClick(R.id.tv_edit_shipping_address) void editShippingAddress(){
+        Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
+        intent.putExtra(NYHelper.TAG, "shipping");
+        startActivityForResult(intent, 101);
     }
 
 
@@ -310,9 +336,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             if (NYHelper.isStringNotEmpty(billingAddress.getFullName()))tvAddressName.setText(billingAddress.getFullName());
             if (NYHelper.isStringNotEmpty(billingAddress.getAddress()))tvAddress.setText(billingAddress.getAddress());
             if (NYHelper.isStringNotEmpty(billingAddress.getPhoneNumber()))tvAddressPhone.setText(billingAddress.getPhoneNumber());
-            llContainerPersonal.setVisibility(View.VISIBLE);
-            tvChooseAddress.setVisibility(View.GONE);
-            tvEditAddress.setVisibility(View.VISIBLE);
+            llContainerBillingAddress.setVisibility(View.VISIBLE);
+            tvChooseBillingAddress.setVisibility(View.GONE);
+            tvEditBillingAddress.setVisibility(View.VISIBLE);
         }
     }
 
@@ -323,6 +349,8 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             if (NYHelper.isStringNotEmpty(shippingAddress.getAddress()))tvShippingAddress.setText(shippingAddress.getAddress());
             if (NYHelper.isStringNotEmpty(shippingAddress.getPhoneNumber()))tvShippingAddressPhone.setText(shippingAddress.getPhoneNumber());
             llContainerShippingAddress.setVisibility(View.VISIBLE);
+            tvChooseShippingAddress.setVisibility(View.GONE);
+            tvEditShippingAddress.setVisibility(View.VISIBLE);
         }
     }
 
@@ -460,7 +488,25 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null && data.hasExtra(NYHelper.ADDRESS)){
+        if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("billing")){
+            try {
+                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
+                billingAddress = new DoShopAddress();
+                billingAddress.parse(obj);
+                setViewBillingAddress(billingAddress);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("shipping")){
+            try {
+                JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
+                shippingAddress = new DoShopAddress();
+                shippingAddress.parse(obj);
+                setViewShippingAddress(shippingAddress);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (data != null && data.hasExtra(NYHelper.ADDRESS)){
             try {
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
                 billingAddress = new DoShopAddress();
