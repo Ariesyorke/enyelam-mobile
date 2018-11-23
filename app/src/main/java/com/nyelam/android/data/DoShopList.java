@@ -24,7 +24,6 @@ public class DoShopList implements Parseable {
     private List<DoShopCategory> categories;
     private List<DoShopProduct> recommended;
 
-
     public DoShopList(){
 
     }

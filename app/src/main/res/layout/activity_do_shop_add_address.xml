@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".doshoporder.DoShopChooseAddressActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.nyelam.android.view.font.NYTextView
+                android:text="Add Address"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:fontTextStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="Full Name*"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <EditText
+                android:id="@+id/et_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:maxLines="1"
+                android:padding="@dimen/padding_half" />
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="Address*"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <EditText
+                android:id="@+id/et_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:maxLines="4"
+                android:minLines="4"
+                android:padding="@dimen/padding_half" />
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="@string/province"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <RelativeLayout
+                android:gravity="center"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:hint="@string/province"
+                    android:id="@+id/et_province"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingRight="@dimen/padding"
+                    android:backgroundTint="@android:color/transparent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:inputType="none"
+                    />
+
+                <com.nyelam.android.view.NYSpinner
+                    android:id="@+id/spinner_province"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:spinnerMode="dropdown"
+                    android:backgroundTint="@android:color/transparent"
+                    android:gravity="bottom|center_horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="@dimen/padding"/>
+
+            </RelativeLayout>
+
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="@string/city"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <RelativeLayout
+                android:gravity="center"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:hint="@string/city"
+                    android:id="@+id/et_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingRight="@dimen/padding"
+                    android:backgroundTint="@android:color/transparent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:inputType="none"
+                    />
+
+                <com.nyelam.android.view.NYSpinner
+                    android:id="@+id/spinner_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:spinnerMode="dropdown"
+                    android:backgroundTint="@android:color/transparent"
+                    android:gravity="bottom|center_horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="@dimen/padding"/>
+
+            </RelativeLayout>
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="@string/district"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <RelativeLayout
+                android:gravity="center"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:hint="@string/district"
+                    android:id="@+id/et_district"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingRight="@dimen/padding"
+                    android:backgroundTint="@android:color/transparent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:inputType="none"
+                    />
+
+                <com.nyelam.android.view.NYSpinner
+                    android:id="@+id/spinner_district"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:spinnerMode="dropdown"
+                    android:backgroundTint="@android:color/transparent"
+                    android:gravity="bottom|center_horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="@dimen/padding"/>
+
+            </RelativeLayout>
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="Zip Code*"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <EditText
+                android:id="@+id/et_zipcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:maxLines="1"
+                android:padding="@dimen/padding_half" />
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="Phone Number*"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:inputType="phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:maxLines="1"
+                android:padding="@dimen/padding_half" />
+
+            <com.nyelam.android.view.font.NYTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="Email Address*"
+                android:textColor="@color/ny_black1"
+                android:textSize="14sp"
+                app:fontTextStyle="reguler" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:inputType="textEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:maxLines="1"
+                android:padding="@dimen/padding_half" />
+
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_triple"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_marginTop="@dimen/padding_triple"
+                android:background="@drawable/ny_rectangle_orange"
+                android:padding="@dimen/padding"
+                android:gravity="center"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontTextStyle="medium" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+</LinearLayout>

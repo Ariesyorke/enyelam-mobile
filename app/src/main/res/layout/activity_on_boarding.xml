@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+    </android.support.v4.view.ViewPager>
+
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:background="#F2F2F1"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.nyelam.android.view.font.NYTextView
+            app:fontTextStyle="medium"
+            android:id="@+id/skip_textView"
+            android:text="Skip"
+            android:textAllCaps="true"
+            android:textColor="#A7A7A7"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:padding="@dimen/padding"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <com.pixelcan.inkpageindicator.InkPageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ipi_dotDiameter="8dp"
+            app:ipi_dotGap="8dp"
+            app:ipi_animationDuration="320"
+            app:ipi_pageIndicatorColor="@color/ny_grey2"
+            app:ipi_currentPageIndicatorColor="@color/ny_blue2"/>
+
+        <com.nyelam.android.view.font.NYTextView
+            app:fontTextStyle="medium"
+            android:id="@+id/next_textView"
+            android:text="Next"
+            android:textAllCaps="true"
+            android:textColor="#A7A7A7"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:padding="@dimen/padding"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

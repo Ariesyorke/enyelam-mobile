@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <!--<include layout="@layout/nav_header" />-->
+
+                <View
+                    android:background="@color/ny_grey3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_menu_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:gravity="center"
+                    android:padding="@dimen/padding"
+                    android:text="Cart"
+                    android:textColor="@color/ny_black2"
+                    android:textSize="16sp" />
+
+                <View
+                    android:background="@color/ny_grey3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_menu_order_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:gravity="center"
+                    android:padding="@dimen/padding"
+                    android:text="Order History"
+                    android:textColor="@color/ny_black2"
+                    android:textSize="16sp" />
+
+                <View
+                    android:background="@color/ny_grey3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_double"
+                    android:gravity="center"
+                    android:padding="@dimen/padding"
+                    android:text="Categories"
+                    android:textColor="@color/ny_black2"
+                    android:textSize="16sp" />
+
+                <ListView
+                    android:visibility="gone"
+                    android:id="@+id/list_view_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <iammert.com.expandablelib.ExpandableLayout
+                    android:id="@+id/el_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:parentLayout="@layout/item_category_parent"
+                    app:childLayout="@layout/item_category_child"/>
+
+        </LinearLayout>
+</android.support.design.widget.NavigationView>
+
+
+
+

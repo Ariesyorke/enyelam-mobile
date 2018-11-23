@@ -24,6 +24,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.storage.StateStorage;
 
 import org.json.JSONArray;
 
@@ -112,6 +114,7 @@ public class NYHelper {
     public static final String CART_RETURN = "cart_return";
     public static final int LOGIN_REQ = 101;
     public static final String ID_ORDER = "id_order";
+    public static final String ID_ORDER_DO_SHOP = "id_order_do_shop";
     public static final String SUMMARY = "summary";
     public static final String ORDER_RETURN = "order_return";
     public static final String BANK_TRANSFER = "bank_transfer";
@@ -152,6 +155,15 @@ public class NYHelper {
     public static final String PAYMENT_METHOD = "payment_method";
     public static final java.lang.String DIVE_GUIDE = "dive_guide";
     public static final String TAG = "TAG";
+    public static final String PRODUCT = "product";
+    public static final String CATEGORY = "category";
+    public static final String ADDRESS = "address";
+    public static final String MERCHANT = "merchant";
+    public static final String COURIER = "courier";
+    public static final String COURIER_TYPE = "courier_type";
+    public static final String DISTRICT_ID = "district_id";
+    public static final String WEIGHT = "weight";
+    public static final String STATUS = "status";
 
 
     public static boolean isStringNotEmpty(String string) {
@@ -231,6 +243,12 @@ public class NYHelper {
         storage.nyelamToken = authReturn.getToken();
         storage.user = authReturn.getUser();
         return storage.save();
+    }
+
+    public static boolean setStateOnBoarding(Context context, boolean isNotFirst) {
+        StateStorage stateStorage = new StateStorage(context);
+        stateStorage.isNotFirst = isNotFirst;
+        return stateStorage.save();
     }
 
     public static boolean saveEmailUser(Context context, String email) {
@@ -683,5 +701,13 @@ public class NYHelper {
     public static Boolean isToday(Date date){
         long timeStampDate = date.getTime();
         return DateUtils.isToday(timeStampDate);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.danzoye.lib.http;
 
+import com.nyelam.android.dev.NYLog;
 import com.octo.android.robospice.request.SpiceRequest;
 
 import org.apache.http.Header;
@@ -55,6 +56,8 @@ public abstract class DBaseRequest<RESULT> extends SpiceRequest<RESULT> {
             this.queries = Collections.synchronizedList(new ArrayList<Object[]>());
         }
         this.queries.add(new String[]{param, value});
+
+        if (param != null && value != null)NYLog.e(param+" : "+value);
     }
 
     public String getHTTPType() {

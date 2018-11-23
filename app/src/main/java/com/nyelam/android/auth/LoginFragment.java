@@ -218,6 +218,7 @@ public class LoginFragment extends AuthBaseFragment implements
                 loadingRealtiveLayout.setVisibility(View.GONE);
 
                 NYHelper.saveUserData(getActivity(), authReturn);
+                NYHelper.setStateOnBoarding(getActivity(), true);
                 if (NYHelper.isStringNotEmpty(emailEditText.getText().toString()))NYHelper.saveEmailUser(getActivity(), emailEditText.getText().toString());
                 mListener.isLoginSuccess(true);
             }
@@ -343,6 +344,7 @@ public class LoginFragment extends AuthBaseFragment implements
             @Override
             public void onRequestSuccess(AuthReturn authReturn) {
                 loadingRealtiveLayout.setVisibility(View.GONE);
+                NYHelper.setStateOnBoarding(getActivity(), true);
                 NYHelper.saveUserData(getActivity(), authReturn);
 
                 NYLog.e("LOGIN SOCMED SUCCES");

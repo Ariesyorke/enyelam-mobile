@@ -14,6 +14,9 @@ public class Province implements Parseable {
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
 
+    private static String KEY_PROVINCE_ID = "province_id";
+    private static String KEY_PROVINCE = "province";
+
     private String id;
     private String name;
 
@@ -40,12 +43,16 @@ public class Province implements Parseable {
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
+            } else if (!obj.isNull(KEY_PROVINCE_ID)) {
+                setId(obj.getString(KEY_PROVINCE_ID));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
             if (!obj.isNull(KEY_NAME)) {
                 setName(obj.getString(KEY_NAME));
+            } else if (!obj.isNull(KEY_PROVINCE)) {
+                setName(obj.getString(KEY_PROVINCE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 

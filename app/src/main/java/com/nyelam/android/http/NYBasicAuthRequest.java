@@ -21,7 +21,9 @@ public abstract class NYBasicAuthRequest<DATA> extends NYBasicRequest<DATA> {
 
         if(loginStorage.isUserLogin()) {
             addQuery(POST_USER_ID, loginStorage.user.getUserId());
+            //addQuery(POST_USER_ID, "126");
             addQuery(POST_NYELAM_TOKEN, loginStorage.nyelamToken);
+            //addQuery(POST_NYELAM_TOKEN, "56bb43de6cde0feef01b");
 
         } else {
             throw new NYUserNotFoundException("User is either not login or token is expired");

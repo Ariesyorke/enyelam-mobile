@@ -26,7 +26,6 @@ public class NYMasterCountryRequest extends NYBasicRequest<CountryList> {
         super(CountryCodeList.class, context, context.getResources().getString(R.string.api_path_master_country));
 
         addQuery(POST_SORT, NYHelper.ASC);
-
     }
 
     @Override

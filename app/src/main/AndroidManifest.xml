@@ -57,6 +57,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <!-- android:name=".StarterActivity" -->
+
         <activity
             android:name=".StarterActivity"
             android:screenOrientation="portrait"
@@ -189,7 +191,44 @@
             android:screenOrientation="portrait" />
         <activity android:name=".inbox.InboxActivity" />
         <activity android:name=".inbox.NewMessageActivity" />
-        <activity android:name=".doshop.AddToCartActivity"></activity>
+        <activity
+            android:name=".doshop.DoShopDetailItemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopCategoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporder.DoShopCheckoutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporder.DoShopChooseAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporder.DoShopAddAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopFilterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopSortByActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporderhistory.DoShopOrderHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporderhistory.DoShopOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporder.DoShopChooseCourierActivity"
+            android:screenOrientation="portrait" />
+        <!-- <activity -->
+        <!-- android:name="com.etiennelawlor.imagegallery.library.activities.ImageGalleryActivity" -->
+        <!-- android:configChanges="orientation|keyboardHidden|screenSize" -->
+        <!-- android:label="" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- /> -->
+
+        <activity android:name=".doshop.DoShopDetailItemImagesActivity"></activity>
     </application>
 
 </manifest>

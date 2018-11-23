@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nyelam.android.view.font.NYTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_category"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/padding_double"
+    android:gravity="center"
+    android:padding="@dimen/padding"
+    android:text="Categories"
+    android:textColor="@color/ny_black2"
+    android:textSize="14sp"
+    />
+

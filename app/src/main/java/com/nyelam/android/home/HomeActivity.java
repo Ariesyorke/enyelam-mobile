@@ -31,6 +31,7 @@ import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
 import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.doshoporderhistory.DoShopOrderDetailActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.profile.ProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
@@ -97,6 +98,12 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 Intent i = new Intent(this, BookingHistoryDetailActivity.class);
                 i.putExtra(NYHelper.ID_ORDER, intent.getStringExtra(NYHelper.ID_ORDER));
                 intent.removeExtra(NYHelper.ID_ORDER);
+                intent.putExtra(NYHelper.IS_PAST, false);
+                startActivity(i);
+            } else if (intent.hasExtra(NYHelper.ID_ORDER_DO_SHOP)) {
+                Intent i = new Intent(this, DoShopOrderDetailActivity.class);
+                i.putExtra(NYHelper.ID_ORDER_DO_SHOP, intent.getStringExtra(NYHelper.ID_ORDER_DO_SHOP));
+                intent.removeExtra(NYHelper.ID_ORDER_DO_SHOP);
                 intent.putExtra(NYHelper.IS_PAST, false);
                 startActivity(i);
             }

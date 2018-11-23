@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.companion.AssociationRequest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -31,12 +32,17 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.ecommerce.Product;
 import com.midtrans.sdk.uikit.utilities.RecyclerItemClickListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.NYApplication;
 import com.nyelam.android.R;
 import com.nyelam.android.StarterActivity;
 import com.nyelam.android.data.Country;
 import com.nyelam.android.data.CountryCode;
+import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.Language;
 import com.nyelam.android.data.LicenseType;
 import com.nyelam.android.data.Nationality;
@@ -707,5 +713,6 @@ public class NYCustomDialog {
 
         dialog.show();
     }
+
 
 }

@@ -11,7 +11,8 @@ import org.json.JSONObject;
 
 public class Voucher implements Parseable {
 
-    private static String KEY_TYPE = "coupon_type";
+    private static String KEY_TYPE = "type";
+    private static String KEY_COUPON_TYPE = "coupon_type";
     private static String KEY_CODE = "code";
     private static String KEY_VALUE = "value";
 
@@ -52,6 +53,8 @@ public class Voucher implements Parseable {
         try {
             if (!obj.isNull(KEY_TYPE)) {
                 setType(obj.getString(KEY_TYPE));
+            } else if (!obj.isNull(KEY_COUPON_TYPE)) {
+                setType(obj.getString(KEY_COUPON_TYPE));
             }
         } catch (JSONException e) {e.printStackTrace();}
 

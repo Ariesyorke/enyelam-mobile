@@ -77,7 +77,7 @@ public class DoShopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void categoryView(CategoryViewHolder holder) {
-        DoShopCategoryAdapter adapter1 = new DoShopCategoryAdapter(doShopListModule.getCategories());
+        DoShopCategoryAdapter adapter1 = new DoShopCategoryAdapter(context, doShopListModule.getCategories());
         holder.recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         holder.recyclerView.setAdapter(adapter1);
     }

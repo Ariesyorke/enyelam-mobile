@@ -61,7 +61,10 @@
     <string name="country">Country</string>
     <string name="dive_service">Dive Service</string>
     <string name="province">Province</string>
+    <string name="courier">Courier</string>
+    <string name="service_types">Service Types</string>
     <string name="city">City</string>
+    <string name="district">District</string>
     <string name="area">Area</string>
     <string name="save">Save</string>
     <string name="change">Change</string>
@@ -102,6 +105,7 @@
     <string name="review_your_booking">Review and  fill a detailed booking</string>
     <string name="your_booking">Your Booking</string>
     <string name="your_booking_id">Your Booking ID : </string>
+    <string name="your_order_id">Your Order ID : </string>
     <string name="booking_summary">Booking Summary</string>
     <string name="payment">Payment</string>
     <string name="transfer_to">Transfer To BANK BCA</string>
@@ -125,6 +129,7 @@
     <string name="your_review">Your Review</string>
     <string name="review_hint">Write your review here..</string>
     <string name="send">Send</string>
+
 
     <string name="apply">Apply</string>
     <string name="insert_voucher">Insert your voucher here</string>
@@ -171,6 +176,7 @@
     <string name="warn_schedule_not_available">No times are available on this service</string>
     <string name="warn_field_email_cannot_be_empty">Email cannot be empty</string>
     <string name="warn_field_phone_cannot_be_empty">Phone number cannot be empty</string>
+    <string name="warn_field_address_cannot_be_empty">Address cannot be empty</string>
     <string name="warn_field_password_cannot_be_empty">Password cannot be empty</string>
     <string name="warn_field_confirm_password_didnt_match">Password and confirm password didn\'t match</string>
     <string name="warn_field_confirm_password_cannot_be_empty">Confirm password cannot be empty</string>
@@ -188,7 +194,13 @@
     <string name="warn_check_agreement_to_continue">Please read carefully and check the agreement to continue</string>
     <string name="warn_cancel_booking">"Are you sure want to cancel your bookings? Any changes to your bookings will be lost."</string>
     <string name="warn_logout">Are you sure want to sign out ?</string>
+    <string name="warn_item_not_available">Sorry, this item is not available</string>
 
+    <string name="warn_field_selected_province">Please select your province</string>
+    <string name="warn_field_selected_city">Please select your city</string>
+    <string name="warn_field_selected_district">Please select your district</string>
+
+    <string name="message_add_address_success">Your address has been successfully added</string>
     <string name="message_update_profile_success">Your profile has been successfully updated</string>
     <string name="message_update_password_success">Your password has been successfully updated</string>
 
@@ -243,6 +255,13 @@
         <item>My Account</item>
     </string-array>
     <string name="title_activity_blank_notification">BlankNotificationActivity</string>
+
+
+    <string name="address">Address</string>
+    <string name="billing_address">Billing Address</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="shipping_cost">Shipping Cost</string>
+    <string name="warn_order_not_available">Sorry, this order is not available</string>
 
 
 </resources>

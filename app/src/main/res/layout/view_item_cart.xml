@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:padding="@dimen/padding"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_item_image"
+            android:layout_gravity="top"
+            android:src="@drawable/banner_1"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_item_name"
+                android:text="Cressi Gloves 5 mm Ultrastrecht"
+                android:textStyle="bold"
+                android:textColor="@color/ny_black2"
+                android:layout_gravity="top"
+                android:layout_margin="@dimen/padding_half"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_estimate_delivery"
+                android:text="Estimate delivery time takes up to 2-8 workdays"
+                android:textStyle="bold"
+                android:textColor="@color/ny_black1"
+                android:layout_gravity="top"
+                android:layout_margin="@dimen/padding_half"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
+
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/ll_quantity"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    android:text="QTY"
+                    android:textStyle="bold"
+                    android:textColor="@color/ny_black2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_marginStart="@dimen/padding"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/ll_container_qty"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="@dimen/padding"
+                        android:background="@drawable/ny_rectangle_grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/tv_item_qty"
+                            android:text="1"
+                            android:textStyle="bold"
+                            android:textColor="@color/ny_black1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_expand_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <com.nyelam.android.view.NYSpinner
+                        android:id="@+id/spinner_quantity"
+                        android:layout_alignTop="@+id/ll_container_qty"
+                        android:layout_alignBottom="@+id/ll_container_qty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dropdown"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="bottom|center_horizontal"
+                        android:layout_gravity="bottom"
+                        />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_remove_item"
+                android:text="Remove Items"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#0D76BF"
+                android:layout_margin="@dimen/padding"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

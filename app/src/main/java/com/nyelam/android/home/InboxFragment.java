@@ -6,38 +6,26 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.data.DoShopList;
 import com.nyelam.android.data.InboxData;
 import com.nyelam.android.data.InboxList;
-import com.nyelam.android.data.ModuleList;
-import com.nyelam.android.doshop.DoShopAdapter;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYCategoryRequest;
-import com.nyelam.android.http.NYGetBannerRequest;
 import com.nyelam.android.http.NYInboxRequest;
-import com.nyelam.android.storage.ModulHomepageStorage;
-import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.relex.circleindicator.CircleIndicator;
 
 
 public class InboxFragment extends Fragment {

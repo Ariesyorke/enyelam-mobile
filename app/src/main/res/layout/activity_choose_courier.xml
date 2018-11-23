@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".doshoporder.DoShopChooseCourierActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_close"
+            android:src="@drawable/ic_close_black"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.nyelam.android.view.font.NYTextView
+            android:text="Courier and Service"
+            android:textColor="@color/ny_black1"
+            app:fontTextStyle="bold"
+            android:textSize="18sp"
+            android:layout_margin="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/padding"
+        android:background="@color/ny_grey3" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginTop="@dimen/padding_half"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:gravity="center"
+                    android:layout_marginRight="@dimen/padding_half"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:hint="@string/courier"
+                        android:id="@+id/et_courier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/padding"
+                        android:paddingRight="@dimen/padding"
+                        android:backgroundTint="@android:color/transparent"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:inputType="none"
+                        />
+
+                    <com.nyelam.android.view.NYSpinner
+                        android:id="@+id/spinner_courier"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignTop="@+id/et_courier"
+                        android:layout_alignBottom="@id/et_courier"
+                        android:spinnerMode="dropdown"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="bottom|center_horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="@dimen/padding"/>
+
+                </RelativeLayout>
+
+
+                <!--<com.nyelam.android.view.font.NYTextView
+                    android:text="Type"
+                    android:textSize="16sp"
+                    android:textColor="@color/ny_black1"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />-->
+
+                <RelativeLayout
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/padding_half"
+                    android:background="@drawable/ny_rectangle_transparant_grey_border"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:hint="@string/service_types"
+                        android:id="@+id/et_courier_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/padding"
+                        android:paddingRight="@dimen/padding"
+                        android:backgroundTint="@android:color/transparent"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:inputType="none"
+                        />
+
+                    <com.nyelam.android.view.NYSpinner
+                        android:id="@+id/spinner_courier_types"
+                        android:layout_alignTop="@+id/et_courier_type"
+                        android:layout_alignBottom="@id/et_courier_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:spinnerMode="dropdown"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="bottom|center_horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="@dimen/padding"/>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <EditText
+                android:hint="Write notes\nex : Extra bubble wrap packaging"
+                android:textSize="16sp"
+                android:textColor="@color/ny_black1"
+                android:padding="@dimen/padding"
+                android:background="@drawable/ny_rectangle_transparant_grey_border"
+                android:maxLines="5"
+                android:minLines="5"
+                android:layout_marginTop="@dimen/padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_choose"
+                android:text="Choose"
+                android:gravity="center"
+                android:padding="@dimen/padding"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/padding_double"
+                android:background="@drawable/ny_rectangle_blue_soft"
+                android:paddingLeft="@dimen/padding_quad"
+                android:paddingRight="@dimen/padding_quad"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
