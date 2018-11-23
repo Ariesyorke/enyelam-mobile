@@ -474,16 +474,17 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
         if (merchant != null && merchant.getDoShopProducts() != null && merchant.getDoShopProducts().size() > 0 && shippingAddress != null && shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getId())){
 
-            int totalWeight = 0;
+            double totalWeight = 0;
             for (DoShopProduct product : merchant.getDoShopProducts()){
                 totalWeight += product.getWeight()*1000;
             }
 
-            Toast.makeText(getActivity(), "Choose courier", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Choose courier", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getActivity(), DoShopChooseCourierActivity.class);
             intent.putExtra(NYHelper.MERCHANT, merchant.toString());
-            intent.putExtra(NYHelper.WEIGHT, totalWeight);
+            intent.putExtra(NYHelper.WEIGHT, (int)totalWeight);
             intent.putExtra(NYHelper.DISTRICT_ID, shippingAddress.getDistrict().getId());
+            //Toast.makeText(getActivity(), String.valueOf(totalWeight), Toast.LENGTH_SHORT).show();
             startActivityForResult(intent, 101);
         } else {
             Toast.makeText(getActivity(), "Please, choose your billing and shipping adddress first", Toast.LENGTH_SHORT).show();
