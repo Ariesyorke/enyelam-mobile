@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,12 +49,18 @@ public class DoShopCategoryActivity extends BasicActivity {
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopRecommendedAdapter adapter;
+    private boolean loadmore=true;
+    private LinearLayoutManager layoutManager;
 
+    private int page = 1;
     private String categoryId;
     private DoShopCategory category;
     private String sortBy = "1";
     private String minPrice = "0";
     private String maxPrice = "10000000";
+
+    @BindView(R.id.et_search)
+    EditText etSearch;
 
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
@@ -60,6 +70,9 @@ public class DoShopCategoryActivity extends BasicActivity {
 
     @BindView(R.id.rv_item_list)
     RecyclerView rvItemList;
+
+    @BindView(R.id.refresh_swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @OnClick(R.id.ll_filter) void filter(){
         Intent intent = new Intent(this, DoShopFilterActivity.class);
@@ -92,16 +105,67 @@ public class DoShopCategoryActivity extends BasicActivity {
         rvItemList.setAdapter(adapter);
 
         if (category != null && NYHelper.isStringNotEmpty(category.getId())){
-            initListItem(category.getId());
+            initListItem(category.getId(), null);
         } else {
             //dialogCategoryNotAvailable();
-            initListItem(null);
+            initListItem(null, null);
         }
+
+        initControl();
     }
 
-    private void initListItem(String categoryId){
+    private void initControl() {
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+                adapter.clear();
+                adapter.notifyDataSetChanged();
+                initListItem(categoryId, s.toString());
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                loadmore = true;
+                swipeRefreshLayout.setRefreshing(true);
+                adapter.clear();
+                adapter.notifyDataSetChanged();
+                initListItem(categoryId, etSearch.getText().toString());
+            }
+        });
+
+        layoutManager = ((LinearLayoutManager)rvItemList.getLayoutManager());
+        rvItemList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                // super.onScrolled(recyclerView, dx, dy);
+                int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+                if (lastVisiblePosition == recyclerView.getChildCount()) {
+                    if (loadmore) {
+                        loadmore = false;
+                        initListItem(categoryId, etSearch.getText().toString());
+                    }
+                }
+            }
+        });
+    }
+
+    private void initListItem(String categoryId, String keyword){
         progressBar.setVisibility(View.VISIBLE);
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, minPrice,  maxPrice, sortBy);
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, String.valueOf(page), keyword, categoryId, minPrice,  maxPrice, sortBy);
         spcMgr.execute(req, onRealtedItemRequest());
     }
 
@@ -111,7 +175,8 @@ public class DoShopCategoryActivity extends BasicActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 //NYHelper.handleAPIException(context, spiceException, null);
-                //swipeRefreshLayout.setRefreshing(false);
+                loadmore = false;
+                swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
                 NYLog.e("cek related error");
                 if (adapter.getItemCount() == 0) tvNotFound.setVisibility(View.VISIBLE);
@@ -119,8 +184,8 @@ public class DoShopCategoryActivity extends BasicActivity {
 
             @Override
             public void onRequestSuccess(NYPaginationResult<DoShopProductList> listNYPaginationResult) {
-                //progressBar.setVisibility(View.GONE);
-                //swipeRefreshLayout.setRefreshing(false);
+                loadmore = true;
+                swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
                 NYLog.e("cek related success");
                 if (listNYPaginationResult != null && listNYPaginationResult.item != null && listNYPaginationResult.item.getList() != null &&
@@ -132,6 +197,8 @@ public class DoShopCategoryActivity extends BasicActivity {
                     else
                         adapter.addData(listNYPaginationResult.item.getList());
                     adapter.notifyDataSetChanged();
+
+                    page++;
                 }
 
                 if (adapter.getItemCount() == 0) tvNotFound.setVisibility(View.VISIBLE);
@@ -225,10 +292,10 @@ public class DoShopCategoryActivity extends BasicActivity {
             adapter.notifyDataSetChanged();
 
             if (category != null && NYHelper.isStringNotEmpty(category.getId())){
-                initListItem(category.getId());
+                initListItem(category.getId(), null);
             } else {
                 //dialogCategoryNotAvailable();
-                initListItem(null);
+                initListItem(null, null);
             }
         }
 

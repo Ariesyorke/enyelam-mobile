@@ -116,7 +116,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-
             if (intent.hasExtra(NYHelper.SUMMARY) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.SUMMARY))) {
                 intent = new Intent(this, BookingHistoryDetailActivity.class);
                 intent.putExtra(NYHelper.SUMMARY, extras.getString(NYHelper.SUMMARY));

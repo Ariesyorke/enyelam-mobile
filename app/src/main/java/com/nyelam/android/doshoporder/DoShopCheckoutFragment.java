@@ -810,16 +810,17 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                                     NTransactionResult result = new NTransactionResult();
                                     result.setData(transactionResult.getResponse());
                                     intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
-                                    intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                    intent.putExtra(NYHelper.ID_ORDER_DO_SHOP, transactionResult.getResponse().getOrderId());
                                     intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
                                 } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
                                     NTransactionResult result = new NTransactionResult();
                                     result.setData(transactionResult.getResponse());
                                     intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
-                                    intent.putExtra(NYHelper.ID_ORDER, transactionResult.getResponse().getOrderId());
+                                    intent.putExtra(NYHelper.ID_ORDER_DO_SHOP, transactionResult.getResponse().getOrderId());
                                     intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
                                 }
                             }
+                            intent.putExtra(NYHelper.TAG, "product");
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }

@@ -11,6 +11,7 @@ import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.VeritransNotificationRequest;
+import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -20,7 +21,8 @@ import org.json.JSONObject;
 
 public class VeritransNotificationActivity extends AppCompatActivity {
     private NTransactionResult result;
-    private String orderId;
+    private String orderId = null;
+    private String orderIdDoShop = null;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
 
     @Override
@@ -37,6 +39,9 @@ public class VeritransNotificationActivity extends AppCompatActivity {
             if(intent.hasExtra(NYHelper.ID_ORDER)) {
                 orderId = intent.getStringExtra(NYHelper.ID_ORDER);
             }
+            if(intent.hasExtra(NYHelper.ID_ORDER_DO_SHOP)) {
+                orderIdDoShop = intent.getStringExtra(NYHelper.ID_ORDER_DO_SHOP);
+            }
             if(intent.hasExtra(NYHelper.TRANSACTION_RESPONSE)) {
                 try {
                     String responseJson = intent.getStringExtra(NYHelper.TRANSACTION_RESPONSE);
@@ -47,7 +52,8 @@ public class VeritransNotificationActivity extends AppCompatActivity {
                         @Override
                         public void onRequestFailure(SpiceException spiceException) {
                             Intent intent = new Intent(VeritransNotificationActivity.this, HomeActivity.class);
-                            intent.putExtra(NYHelper.ID_ORDER, orderId);
+                            if (NYHelper.isStringNotEmpty(orderId))intent.putExtra(NYHelper.ID_ORDER, orderId);
+                            if (NYHelper.isStringNotEmpty(orderIdDoShop))intent.putExtra(NYHelper.ID_ORDER_DO_SHOP, orderIdDoShop);
                             intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -56,7 +62,8 @@ public class VeritransNotificationActivity extends AppCompatActivity {
                         @Override
                         public void onRequestSuccess(Boolean aBoolean) {
                             Intent intent = new Intent(VeritransNotificationActivity.this, HomeActivity.class);
-                            intent.putExtra(NYHelper.ID_ORDER, orderId);
+                            if (NYHelper.isStringNotEmpty(orderId))intent.putExtra(NYHelper.ID_ORDER, orderId);
+                            if (NYHelper.isStringNotEmpty(orderIdDoShop))intent.putExtra(NYHelper.ID_ORDER_DO_SHOP, orderIdDoShop);
                             intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

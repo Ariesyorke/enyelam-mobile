@@ -137,7 +137,6 @@ public class DoShopProduct implements Parseable {
 //        this.weight = weight;
 //    }
 
-
     public double getWeight() {
         return weight;
     }
@@ -255,6 +254,8 @@ public class DoShopProduct implements Parseable {
                 setWeight(Integer.valueOf(obj.getString(KEY_WEIGHT)));
             } else if (!obj.isNull(KEY_WEIGHT) && obj.get(KEY_WEIGHT) instanceof Double) {
                 setWeight(obj.getDouble(KEY_WEIGHT));
+            } else if (!obj.isNull(KEY_WEIGHT) && obj.get(KEY_WEIGHT) instanceof Integer) {
+                setWeight(obj.getInt(KEY_WEIGHT));
             }
         } catch (JSONException e) {e.printStackTrace();}
 

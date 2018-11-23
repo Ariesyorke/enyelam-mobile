@@ -118,6 +118,8 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
                 weight = 1000;
             }
 
+            if (weight == 0) weight=1000;
+
             if(intent.hasExtra(NYHelper.DISTRICT_ID) && NYHelper.isStringNotEmpty(extras.getString(NYHelper.DISTRICT_ID))){
                 originDistrictId = extras.getString(NYHelper.DISTRICT_ID);
             }

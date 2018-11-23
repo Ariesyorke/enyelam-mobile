@@ -22,6 +22,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/et_search"
                 android:hint="Search.."
                 android:backgroundTint="@android:color/transparent"
                 android:textSize="14sp"
@@ -91,30 +92,40 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:visibility="gone"
-        android:layout_margin="@dimen/padding_triple"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
-
-    <com.nyelam.android.view.font.NYTextView
-        android:id="@+id/tv_not_found"
-        android:visibility="gone"
-        android:text="Result not found"
-        android:textSize="16sp"
-        android:textColor="@color/ny_black2"
-        android:layout_margin="@dimen/padding_triple"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_item_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:visibility="gone"
+                android:layout_margin="@dimen/padding_triple"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_not_found"
+                android:visibility="gone"
+                android:text="Result not found"
+                android:textSize="16sp"
+                android:textColor="@color/ny_black2"
+                android:layout_margin="@dimen/padding_triple"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_item_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>
