@@ -141,6 +141,7 @@
                     android:orientation="vertical">
 
                     <FrameLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -167,6 +168,44 @@
                             app:fontTextStyle="medium" />
 
                     </FrameLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/banner_relativeLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:fitsSystemWindows="true">
+
+                        <ProgressBar
+                            android:id="@+id/banner_progress_bar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:indeterminate="true"
+                            android:indeterminateTint="@color/ny_blue2"
+                            android:indeterminateTintMode="src_atop" />
+
+                        <com.nyelam.android.view.NYBannerViewPager
+                            android:id="@+id/banner_view_pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <me.relex.circleindicator.CircleIndicator
+                            android:id="@+id/circle_indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/padding_half"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="@dimen/padding"
+                            app:ci_drawable="@drawable/ny_circle_blue"
+                            app:ci_drawable_unselected="@drawable/ny_circle_grey"
+                            app:ci_orientation="horizontal" />
+
+
+                    </RelativeLayout>
+
 
                     <ProgressBar
                         android:id="@+id/progressBar"

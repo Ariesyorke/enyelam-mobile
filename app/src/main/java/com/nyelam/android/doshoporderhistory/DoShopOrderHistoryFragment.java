@@ -3,7 +3,9 @@ package com.nyelam.android.doshoporderhistory;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.nyelam.android.doshop.DoShopRecommendedAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopListCartRequest;
 import com.nyelam.android.http.NYDoShopOrderListRequest;
+import com.nyelam.android.http.result.NYPaginationResult;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -45,6 +48,8 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
     private int page = 1;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopOrderHistoryAdapter adapter;
+    private boolean loadmore=true;
+    private LinearLayoutManager layoutManager;
 
     @BindView(R.id.tv_not_found)
     TextView tvNotFound;
@@ -54,6 +59,9 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @BindView(R.id.refresh_swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public DoShopOrderHistoryFragment() {
         // Required empty public constructor
@@ -80,11 +88,44 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
         adapter = new DoShopOrderHistoryAdapter(getActivity());
         recyclerView.setAdapter(adapter);
 
-        getOrderHistoryList(null);
+        getOrderHistoryList(status, false);
+        initController();
     }
 
-    private void getOrderHistoryList(String status){
-        progressBar.setVisibility(View.VISIBLE);
+    private void initController() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                swipeRefreshLayout.setRefreshing(true);
+                getOrderHistoryList(status, true);
+            }
+        });
+
+
+        layoutManager = ((LinearLayoutManager)recyclerView.getLayoutManager());
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                // super.onScrolled(recyclerView, dx, dy);
+                int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+                if (lastVisiblePosition == recyclerView.getChildCount()) {
+                    if (loadmore) {
+                        loadmore = false;
+                        getOrderHistoryList(status, true);
+                    }
+                }
+            }
+        });
+    }
+
+    private void getOrderHistoryList(String status, boolean isRefresh){
+        if (isRefresh){
+            progressBar.setVisibility(View.GONE);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         tvNotFound.setVisibility(View.GONE);
         NYDoShopOrderListRequest req = null;
         try {
@@ -97,24 +138,33 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
         spcMgr.execute(req, onOrderHistoryRequest());
     }
 
-    private RequestListener<DoShopOrderList> onOrderHistoryRequest() {
-        return new RequestListener<DoShopOrderList>() {
+    private RequestListener<NYPaginationResult<DoShopOrderList>> onOrderHistoryRequest() {
+        return new RequestListener<NYPaginationResult<DoShopOrderList>>() {
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 //NYHelper.handleAPIException(context, spiceException, null);
                 //swipeRefreshLayout.setRefreshing(false);
                 //llRelatedItem.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.VISIBLE);
+                loadmore = false;
             }
 
             @Override
-            public void onRequestSuccess(DoShopOrderList orderList) {
+            public void onRequestSuccess(NYPaginationResult<DoShopOrderList> orderList) {
+                swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.GONE);
                 //swipeRefreshLayout.setRefreshing(false);
-                if (orderList!=null)adapter.setData(orderList.getList());
+                if (orderList!=null && orderList.item != null && orderList.item.getList() != null && orderList.item.getList().size() > 0){
+                    if (page == 1) adapter.setData(orderList.item.getList());
+                    else adapter.addData(orderList.item.getList());
+                    adapter.notifyDataSetChanged();
+                    page++;
+                    loadmore = true;
+                }
             }
         };
     }

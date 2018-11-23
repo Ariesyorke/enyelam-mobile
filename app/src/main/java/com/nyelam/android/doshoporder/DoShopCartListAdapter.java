@@ -101,7 +101,6 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
             });
 
 
-
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
                 ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {

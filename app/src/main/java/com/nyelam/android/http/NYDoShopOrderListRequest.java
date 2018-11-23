@@ -14,7 +14,7 @@ import com.nyelam.android.http.result.NYPaginationResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class NYDoShopOrderListRequest extends NYBasicAuthRequest<DoShopOrderList> {
+public class NYDoShopOrderListRequest extends NYBasicAuthRequest<NYPaginationResult<DoShopOrderList>> {
 
     private final static String KEY_ORDERS = "orders";
 
@@ -38,19 +38,16 @@ public class NYDoShopOrderListRequest extends NYBasicAuthRequest<DoShopOrderList
     public String getHTTPType() {
         return DHTTPConnectionHelper.HTTP_POST;
     }
-
     @Override
-    protected DoShopOrderList onProcessSuccessData(JSONObject obj) throws Exception {
-
-        if (obj.has(KEY_ORDERS) && obj.get(KEY_ORDERS) instanceof JSONArray && obj.getJSONArray(KEY_ORDERS) != null){
-            DoShopOrderList orderList = new DoShopOrderList();
-            orderList.parse(obj.getJSONArray(KEY_ORDERS));
-            return orderList;
-        } else {
-            return null;
-        }
-
-
+    protected NYPaginationResult<DoShopOrderList> onProcessSuccessData(JSONObject obj) throws Exception {
+        NYPaginationResult<DoShopOrderList> temp = new NYPaginationResult<DoShopOrderList>(DoShopOrderList.class) {
+            @Override
+            protected String getListKey() {
+                return KEY_ORDERS;
+            }
+        };
+        temp.parse(obj);
+        return temp;
     }
 
 }

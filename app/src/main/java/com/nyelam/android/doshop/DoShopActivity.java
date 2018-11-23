@@ -18,15 +18,19 @@ import android.widget.Toast;
 
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.Banner;
+import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopCategoryList;
 import com.nyelam.android.data.DoShopList;
 import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.doshoporderhistory.DoShopOrderHistoryActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoShopHomepageRequest;
 import com.nyelam.android.http.NYDoShopMasterCategoryRequest;
 import com.nyelam.android.storage.DoShopCategoryStorage;
+import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -39,12 +43,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import iammert.com.expandablelib.ExpandableLayout;
 import iammert.com.expandablelib.Section;
+import me.relex.circleindicator.CircleIndicator;
 
 public class DoShopActivity extends AppCompatActivity {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
 
+
+    private BannerViewPagerAdapter bannerViewPagerAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -54,6 +61,15 @@ public class DoShopActivity extends AppCompatActivity {
 
     private DoShopMenuCategoryAdapter menuCategoryAdapter;
 
+
+    @BindView(R.id.banner_view_pager)
+    NYBannerViewPager bannerViewPager;
+
+    @BindView(R.id.banner_progress_bar)
+    ProgressBar bannerProgressBar;
+
+    @BindView(R.id.circle_indicator)
+    CircleIndicator circleIndicator;
 
     @BindView(R.id.list_view_menu)
     ListView listViewMenu;
@@ -103,6 +119,7 @@ public class DoShopActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         progressBar = findViewById(R.id.progressBar);
 
+        initBanner();
         initHomepage();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -123,6 +140,26 @@ public class DoShopActivity extends AppCompatActivity {
         menuCategoryAdapter = new DoShopMenuCategoryAdapter(this);
         listViewMenu.setAdapter(menuCategoryAdapter);
         loadCategories();
+    }
+
+    private void initBanner() {
+        bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
+        bannerViewPager.setAdapter(bannerViewPagerAdapter);
+        circleIndicator.setViewPager(bannerViewPager);
+
+        //craete TEMP data banner
+        progressBar.setVisibility(View.VISIBLE);
+        BannerList bannerList = new BannerList();
+        List<Banner> banners = new ArrayList<>();
+        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "captio", null));
+        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", null));
+        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_3), "captio", null));
+        bannerList.setList(banners);
+        bannerViewPagerAdapter.setBannerList(bannerList);
+        bannerViewPagerAdapter.notifyDataSetChanged();
+        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+        circleIndicator.setViewPager(bannerViewPager);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void initHomepage(){
