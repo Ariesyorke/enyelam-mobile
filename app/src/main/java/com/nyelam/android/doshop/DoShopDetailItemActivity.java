@@ -114,13 +114,19 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     @OnClick(R.id.iv_item_image) void showImage(){
         if (product != null && NYHelper.isStringNotEmpty(product.getFeaturedImage())){
-            List<String> images = new ArrayList<>();
+            ArrayList<String> images = new ArrayList<>();
             images.add(product.getFeaturedImage());
 
             if (product.getImages() != null && product.getImages().size() > 0){
                 for (String im : product.getImages()){
                     if (NYHelper.isStringNotEmpty(im))images.add(im);
                 }
+
+                Intent intent = new Intent(DoShopDetailItemActivity.this, DoShopDetailItemImagesActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList(DoShopDetailItemImagesActivity.KEY_IMAGES, images);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
 
 
@@ -399,7 +405,6 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                 });
 
             }
-
 
 
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
