@@ -141,7 +141,7 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
 
     private void loadCourier(final String originId, final String destinationId, final String weight){
 
-        Toast.makeText(this, "load courier 1", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "load courier 1", Toast.LENGTH_SHORT).show();
 
         //final CourierList courierList = new CourierList();
         final List<Courier> couriers = new ArrayList<Courier>();
@@ -156,8 +156,7 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
             // TODO: masukkan ke spinner
             //Log.d("UI thread", "I am the UI thread");
             //Toast.makeText(this, "ONGKIR ADA "+String.valueOf(couriers.size()), Toast.LENGTH_SHORT).show();
-
-            Toast.makeText(this, "load courier 2", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "load courier 2", Toast.LENGTH_SHORT).show();
 
             spinnerCourier.setAdapter(courierAdapter);
             spinnerCourier.setOnItemSelectedListener(activity);
@@ -226,6 +225,9 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
                 try {
                     String jsonData = response.body().string();
                     JSONObject Jobject = null;
+
+                    NYLog.e("CEK RAJA ONGKIR : "+jsonData);
+
                     try {
                         Jobject = new JSONObject(jsonData);
                         JSONArray Jarray = Jobject.getJSONObject("rajaongkir").getJSONArray("results");

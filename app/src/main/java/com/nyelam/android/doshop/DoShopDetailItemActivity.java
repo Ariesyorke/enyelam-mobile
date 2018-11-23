@@ -42,6 +42,7 @@ import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYDialogAddToCart;
+import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -62,6 +63,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopRecommendedAdapter recommendedAdapter;
+    private ArrayAdapter qtyAdapter;
+
 
     private String productId;
     private DoShopProduct product;
@@ -80,8 +83,9 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     @BindView(R.id.tv_price_strikethrough) TextView tvPriceStrikethrough;
     @BindView(R.id.tv_you_save ) TextView tvYouSave ;
     @BindView(R.id.tv_coinns) TextView tvCoinns;
-    @BindView(R.id.spinner_item_size) Spinner spinnerItemSize;
-    @BindView(R.id.spinner_quantity) Spinner spinnerQuantity;
+    @BindView(R.id.spinner_item_size)
+    NYSpinner spinnerItemSize;
+    @BindView(R.id.spinner_quantity) NYSpinner spinnerQuantity;
     @BindView(R.id.et_quantity) EditText etQuantity;
     @BindView(R.id.tv_status) TextView tvStatus;
     @BindView(R.id.tv_add_to_basket) TextView tvAddToBasket;
@@ -95,6 +99,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     @OnClick(R.id.tv_add_to_basket)void addToBasket(){
 //        NYDialogAddToCart dialog = new NYDialogAddToCart();
 //        dialog.showAddToCartDialog(this, product);
+
+        //Toast.makeText(context, String.valueOf(chosenQty), Toast.LENGTH_SHORT).show();
 
         LoginStorage storage = new LoginStorage(this);
         if (storage.isUserLogin() && product != null && NYHelper.isStringNotEmpty(product.getId())){
@@ -367,11 +373,24 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                             }
 
                             //final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(this, product.getVariations().getSizes());
-                            ArrayAdapter qtyAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, quantities);
+                            qtyAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, quantities);
                             spinnerQuantity.setAdapter(qtyAdapter);
+                            chosenQty = 1;
+                        } else {
+                            chosenQty = 0;
                         }
+                        //if (NYHelper.isStringNotEmpty(variation.getName()))Toast.makeText(context, variation.getName(), Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapter) {  }
+                });
 
-                        chosenQty = variation.getQty();
+                spinnerQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view,
+                                               int position, long id) {
+                        // Here you get the current item (a User object) that is selected by its position
+                        if (qtyAdapter != null && qtyAdapter.getItem(position) != null)chosenQty = Integer.valueOf((String) qtyAdapter.getItem(position));
 
                         //if (NYHelper.isStringNotEmpty(variation.getName()))Toast.makeText(context, variation.getName(), Toast.LENGTH_SHORT).show();
                     }

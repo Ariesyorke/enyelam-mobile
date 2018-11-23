@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
             android:background="@drawable/ny_rectangle_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -27,10 +27,12 @@
                 android:maxLines="1"
                 android:textColor="@color/ny_black1"
                 android:textColorHint="@color/ny_grey2"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
 

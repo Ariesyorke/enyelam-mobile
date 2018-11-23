@@ -130,7 +130,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Remove item", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Remove item", Toast.LENGTH_SHORT).show();
                 if (fragment instanceof DoShopCartFragment && product != null && NYHelper.isStringNotEmpty(product.getId())) ((DoShopCartFragment)fragment).onRemoveItem(product.getId());
             }
         });
