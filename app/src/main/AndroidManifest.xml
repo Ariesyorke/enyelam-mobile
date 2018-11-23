@@ -206,11 +206,29 @@
         <activity
             android:name=".doshoporder.DoShopAddAddressActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".doshop.DoShopFilterActivity" />
-        <activity android:name=".doshop.DoShopSortByActivity" />
-        <activity android:name=".doshoporderhistory.DoShopOrderHistoryActivity" />
-        <activity android:name=".doshoporderhistory.DoShopOrderDetailActivity" />
-        <activity android:name=".doshoporder.DoShopChooseCourierActivity"></activity>
+        <activity
+            android:name=".doshop.DoShopFilterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshop.DoShopSortByActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporderhistory.DoShopOrderHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporderhistory.DoShopOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".doshoporder.DoShopChooseCourierActivity"
+            android:screenOrientation="portrait" />
+        <!-- <activity -->
+        <!-- android:name="com.etiennelawlor.imagegallery.library.activities.ImageGalleryActivity" -->
+        <!-- android:configChanges="orientation|keyboardHidden|screenSize" -->
+        <!-- android:label="" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- /> -->
+
+        <activity android:name=".doshop.DoShopDetailItemImagesActivity"></activity>
     </application>
 
 </manifest>

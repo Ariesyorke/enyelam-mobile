@@ -20,12 +20,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.etiennelawlor.imagegallery.library.activities.ImageGalleryActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopProduct;
@@ -38,10 +40,12 @@ import com.nyelam.android.http.NYDoShopAddToCartRequest;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
+import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYDialogAddToCart;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,10 +96,48 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 //        NYDialogAddToCart dialog = new NYDialogAddToCart();
 //        dialog.showAddToCartDialog(this, product);
 
-        if (product != null && NYHelper.isStringNotEmpty(product.getId())){
+        LoginStorage storage = new LoginStorage(this);
+        if (storage.isUserLogin() && product != null && NYHelper.isStringNotEmpty(product.getId())){
             addToCart(product.getId(),chosenVariations, String.valueOf(chosenQty));
+        } else if (product != null && NYHelper.isStringNotEmpty(product.getId())){
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivityForResult(intent, NYHelper.LOGIN_REQ);
         }
 
+    }
+
+    @OnClick(R.id.iv_item_image) void showImage(){
+        if (product != null && NYHelper.isStringNotEmpty(product.getFeaturedImage())){
+            List<String> images = new ArrayList<>();
+            images.add(product.getFeaturedImage());
+
+            if (product.getImages() != null && product.getImages().size() > 0){
+                for (String im : product.getImages()){
+                    if (NYHelper.isStringNotEmpty(im))images.add(im);
+                }
+            }
+
+
+//            Intent intent = new Intent(DoShopDetailItemActivity.this, ImageGalleryActivity.class);
+//            //String[] images = getResources().getStringArray(R.array.unsplash_images);
+//            Bundle bundle = new Bundle();
+//            //bundle.putStringArrayList(ImageGalleryActivity.KEY_IMAGES, new ArrayList<>(Arrays.asList(images)));
+//            bundle.putStringArrayList(ImageGalleryActivity.KEY_IMAGES, images);
+//            bundle.putString(ImageGalleryActivity.KEY_TITLE, "Gallery");
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+
+
+//
+//            new ImageViewer.Builder<>(this, images)
+//                    .setFormatter(new ImageViewer.Formatter<String>() {
+//                        @Override
+//                        public String format(String customImage) {
+//                            return customImage;
+//                        }
+//                    })
+//                    .show();
+        }
     }
 
     @Override
@@ -111,15 +153,14 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             llMainContainer.setVisibility(View.GONE);
             initProductDetail(product.getId());
         } else {
-
-            Toast.makeText(context, "not found", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "not found", Toast.LENGTH_SHORT).show();
             dialogItemNotAvailable();
         }
     }
 
     private void initProductDetail(String id){
 
-        Toast.makeText(context, "request detail", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "request detail", Toast.LENGTH_SHORT).show();
 
         NYDoShopProductDetailRequest req = null;
         try {
@@ -304,7 +345,6 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                 llPriceContainer.setVisibility(View.GONE);
             }
 
-
             if (product.getVariations() != null && product.getVariations().getSizes() != null){
                 final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(this, product.getVariations().getSizes());
                 spinnerItemSize.setAdapter(sizeSpinAdapter);
@@ -320,7 +360,6 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                         Variation variation = sizeSpinAdapter.getItem(position);
                         chosenVariations.add(variation);
 
-
                         if (variation.getQty() > 0){
                             List<String> quantities = new ArrayList<>();
                             for (int i=1; i<=variation.getQty(); i++){
@@ -332,18 +371,13 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                             spinnerQuantity.setAdapter(qtyAdapter);
                         }
 
-
                         chosenQty = variation.getQty();
 
-                        if (NYHelper.isStringNotEmpty(variation.getName()))Toast.makeText(context, variation.getName(), Toast.LENGTH_SHORT).show();
+                        //if (NYHelper.isStringNotEmpty(variation.getName()))Toast.makeText(context, variation.getName(), Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> adapter) {  }
                 });
-
-
-
-
 
             }
 
@@ -402,9 +436,23 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     @Override
     public void onPayNowListener(DoShopProduct product) {
-        Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, DoShopCheckoutActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NYHelper.LOGIN_REQ) {
+            if (resultCode == RESULT_OK) {
+                //triggerBook = true;
+                if (product != null && NYHelper.isStringNotEmpty(product.getId())){
+                    addToCart(product.getId(),chosenVariations, String.valueOf(chosenQty));
+                }
+            }
+        } else {
+            //Toast.makeText(this, "hallo", Toast.LENGTH_SHORT).show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

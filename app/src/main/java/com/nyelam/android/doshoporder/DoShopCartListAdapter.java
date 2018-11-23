@@ -81,23 +81,21 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
             final ArrayAdapter qtyAdapter = new ArrayAdapter(context, R.layout.spinner_quantity, quantities);
             holder.spinnerQuantity.setAdapter(qtyAdapter);
             holder.spinnerQuantity.setSelection(selectedPos);
-
-
             holder.spinnerQuantity.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
                 @Override
                 public void onSpinnerOpened(Spinner spinner) {
 //                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 //                    imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
-
                 }
 
                 @Override
                 public void onSpinnerClosed(Spinner spinner) {
-
                     int position = spinner.getSelectedItemPosition();
-                    ((DoShopCartFragment)fragment).onQuantityChange(product.getId(), (String) qtyAdapter.getItem(position));
-
+                    if (product != null && NYHelper.isStringNotEmpty((String) qtyAdapter.getItem(position)) && !((String) qtyAdapter.getItem(position)).equals(String.valueOf(product.getQty()))){
+                        ((DoShopCartFragment)fragment).onQuantityChange(product.getId(), (String) qtyAdapter.getItem(position));
+                    }
                 }
+
             });
 
 

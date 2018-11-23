@@ -2,6 +2,7 @@ package com.nyelam.android.doshop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.storage.StorageManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nyelam.android.R;
+import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
@@ -31,6 +33,7 @@ import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoShopHomepageRequest;
 import com.nyelam.android.http.NYDoShopMasterCategoryRequest;
 import com.nyelam.android.storage.DoShopCategoryStorage;
+import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -51,7 +54,6 @@ public class DoShopActivity extends AppCompatActivity {
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
 
-
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -61,7 +63,7 @@ public class DoShopActivity extends AppCompatActivity {
     private ArrayList<Object> objects = new ArrayList<>();
 
     private DoShopMenuCategoryAdapter menuCategoryAdapter;
-
+    private String tempState = null;
 
     @BindView(R.id.banner_view_pager)
     NYBannerViewPager bannerViewPager;
@@ -95,18 +97,42 @@ public class DoShopActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.iv_cart) void intentToCart(){
-        drawerLayout.closeDrawer(Gravity.START);
-        startActivity(new Intent(context, DoShopCheckoutActivity.class));
+        LoginStorage storage = new LoginStorage(this);
+        if (storage.isUserLogin()){
+            drawerLayout.closeDrawer(Gravity.START);
+            startActivity(new Intent(context, DoShopCheckoutActivity.class));
+        } else {
+            drawerLayout.closeDrawer(Gravity.START);
+            tempState = "cart";
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivityForResult(intent, NYHelper.LOGIN_REQ);
+        }
     }
 
     @OnClick(R.id.tv_menu_order_history) void intentToOrderHistory(){
-        drawerLayout.closeDrawer(Gravity.START);
-        startActivity(new Intent(context, DoShopOrderHistoryActivity.class));
+        LoginStorage storage = new LoginStorage(this);
+        if (storage.isUserLogin()){
+            drawerLayout.closeDrawer(Gravity.START);
+            startActivity(new Intent(context, DoShopOrderHistoryActivity.class));
+        } else {
+            drawerLayout.closeDrawer(Gravity.START);
+            tempState = "order_history";
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivityForResult(intent, NYHelper.LOGIN_REQ);
+        }
     }
 
     @OnClick(R.id.tv_menu_cart) void intentToCart2(){
-        drawerLayout.closeDrawer(Gravity.START);
-        startActivity(new Intent(context, DoShopCheckoutActivity.class));
+        LoginStorage storage = new LoginStorage(this);
+        if (storage.isUserLogin()){
+            drawerLayout.closeDrawer(Gravity.START);
+            startActivity(new Intent(context, DoShopCheckoutActivity.class));
+        } else {
+            drawerLayout.closeDrawer(Gravity.START);
+            tempState = "cart";
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivityForResult(intent, NYHelper.LOGIN_REQ);
+        }
     }
 
     @Override
@@ -324,5 +350,22 @@ public class DoShopActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(true);
         objects = new ArrayList<>();
         initHomepage();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NYHelper.LOGIN_REQ) {
+            if (resultCode == RESULT_OK) {
+                //triggerBook = true;
+                if (NYHelper.isStringNotEmpty(tempState) && tempState.equals("cart")){
+                    startActivity(new Intent(this, DoShopCheckoutActivity.class));
+                } else if (NYHelper.isStringNotEmpty(tempState) && tempState.equals("order_history")){
+                    startActivity(new Intent(this, DoShopOrderHistoryActivity.class));
+                }
+            }
+        } else {
+            //Toast.makeText(this, "hallo", Toast.LENGTH_SHORT).show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

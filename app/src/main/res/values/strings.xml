@@ -131,8 +131,6 @@
     <string name="send">Send</string>
 
 
-
-
     <string name="apply">Apply</string>
     <string name="insert_voucher">Insert your voucher here</string>
 
@@ -257,8 +255,6 @@
         <item>My Account</item>
     </string-array>
     <string name="title_activity_blank_notification">BlankNotificationActivity</string>
-
-
 
 
     <string name="address">Address</string>
