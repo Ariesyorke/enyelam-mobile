@@ -178,12 +178,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
         orderLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //Toast.makeText(BookingServiceSummaryActivity.this, "Payment Tpe : "+paymentType, Toast.LENGTH_SHORT).show();
-
                 boolean isContactEmpty = false;
                 boolean isParticipantEmpty = false;
-
                 if (bookingContact != null){
                     if (!NYHelper.isStringNotEmpty(bookingContact.getName())){
                         isContactEmpty = true;
@@ -227,7 +223,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         payUsingVeritrans();
                     }
                 }
-
             }
         });
 
@@ -341,93 +336,24 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 requestChangePaymentMethod();
             }
         });
-
-
-
-        /*addNoteLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNoteLinearLayout.setVisibility(View.GONE);
-                noteEditText.setVisibility(View.VISIBLE);
-            }
-        });*/
-
-        /*noteEditText.setOnKeyListener(new View.OnKeyListener()
-        {
-            public boolean onKey(View v, int keyCode, KeyEvent event)
-            {
-                if (event.getAction() == KeyEvent.ACTION_DOWN)
-                {
-                    //check if the right key was pressed
-                    if (keyCode == KeyEvent.KEYCODE_BACK)
-                    {
-                        if (noteEditText.getText().toString().isEmpty()){
-                            noteEditText.setVisibility(View.GONE);
-                            addNoteLinearLayout.setVisibility(View.VISIBLE);
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });*/
-
-        /*noteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-
-                    Toast.makeText(BookingServiceSummaryActivity.this, "hilang", Toast.LENGTH_SHORT).show();
-                    // code to execute when EditText loses focus
-
-                } else {
-                    Toast.makeText(BookingServiceSummaryActivity.this, "ada", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
-
-        /*noteEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-                    if (noteEditText.getText().toString().isEmpty()){
-                        noteEditText.setVisibility(View.GONE);
-                        addNoteLinearLayout.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                return false;
-            }
-        });*/
-
     }
 
     private void initData() {
-
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-
         if (extras != null) {
-
             if (intent.hasExtra(NYHelper.DIVE_CENTER) && extras.get(NYHelper.DIVE_CENTER) != null) {
-
                 diveCenter = new DiveCenter();
-
                 try {
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.DIVE_CENTER));
                     diveCenter.parse(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 if (diveCenter != null){
-
                     if (NYHelper.isStringNotEmpty(diveCenter.getName())){
                         diveCenterNameTextView.setText(diveCenter.getName());
                     }
-
                     if (diveCenter.getContact() != null && diveCenter.getContact().getLocation() != null){
                         Location location = diveCenter.getContact().getLocation();
                         String locString = "";
@@ -436,40 +362,26 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         if (NYHelper.isStringNotEmpty(location.getCountry())) locString += ", "+location.getCountry();
                         locationTextView.setText(locString);
                     }
-
                 }
-
             }
-
             if (intent.hasExtra(NYHelper.PAYMENT_TYPE)) paymentType = intent.getStringExtra(NYHelper.PAYMENT_TYPE);
-
             if (intent.hasExtra(NYHelper.PAYMENT_METHOD)) paymentMethod = intent.getStringExtra(NYHelper.PAYMENT_METHOD);
-
             if (intent.hasExtra(NYHelper.VOUCHER)){
                 voucher = new Voucher();
-
                 try {
                     JSONObject obj = new JSONObject(extras.getString(NYHelper.VOUCHER));
                     voucher.parse(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 if (voucher != null){
-
-                    /*if (NYHelper.isStringNotEmpty(voucher.getCode())){
-                        voucherEditText.setText(voucher.getCode());
-                    }*/
-
                     addVoucher(voucher);
-
                 }
             }
 
             if (intent.hasExtra(NYHelper.DIVER)){
                 diver = Integer.valueOf(intent.getStringExtra(NYHelper.DIVER));
             }
-
             if (intent.hasExtra(NYHelper.SCHEDULE) && extras.get(NYHelper.SCHEDULE) != null){
                 schedule = intent.getStringExtra(NYHelper.SCHEDULE);
             }
@@ -1337,7 +1249,9 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 && NYHelper.isStringNotEmpty(orderReturn.getSummary().getOrder().getOrderId())
                 && orderReturn.getSummary().getOrder().getCart() != null){
 
-            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), "#"+orderReturn.getSummary().getOrder().getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
+            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), orderReturn.getSummary().getOrder().getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
+            payPalPayment.invoiceNumber(orderReturn.getSummary().getOrder().getOrderId());
+
             //PayPalItem item = new PayPalItem(diveService.getName(), 1, new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), PayPalPayment.PAYMENT_INTENT_SALE);
 //            payPalPayment.items(new PayPalItem[]{item});
             Intent intent = new Intent(BookingServiceSummaryActivity.this, PaymentActivity.class);
@@ -1734,16 +1648,28 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
         if (requestCode == paypalRequestCode) {
             if (resultCode == RESULT_OK) {
-                PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                try {
-                    progressDialog.show();
-                    note = noteEditText.getText().toString().trim();
-                    NYPaypalNotificationRequest req = new NYPaypalNotificationRequest(BookingServiceSummaryActivity.this, confirmation.getProofOfPayment().getPaymentId());
-                    spcMgr.execute(req, onPaypalNotificationRequest());
-                } catch (Exception e) {
-                    progressDialog.dismiss();
-                    e.printStackTrace();
-                }
+//                PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+//                try {
+//                    progressDialog.show();
+//                    note = noteEditText.getText().toString().trim();
+//                    NYPaypalNotificationRequest req = new NYPaypalNotificationRequest(BookingServiceSummaryActivity.this, confirmation.getProofOfPayment().getPaymentId());
+//                    spcMgr.execute(req, onPaypalNotificationRequest());
+//                } catch (Exception e) {
+//                    progressDialog.dismiss();
+//                    e.printStackTrace();
+//                }
+
+                NYHelper.handlePopupMessage(BookingServiceSummaryActivity.this, getString(R.string.transaction_success), false,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(BookingServiceSummaryActivity.this, HomeActivity.class);
+                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                intent.putExtra(NYHelper.ID_ORDER, orderReturn.getSummary().getOrder().getOrderId());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        }, getResources().getString(R.string.check_order));
 
             }
         }

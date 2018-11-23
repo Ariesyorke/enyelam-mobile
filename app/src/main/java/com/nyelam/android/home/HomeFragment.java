@@ -351,43 +351,7 @@ public class HomeFragment extends Fragment {
         doTripAdapter = new DoTripRecyclerViewAdapter(getActivity());
         NYHomepageModuleRequest req = new NYHomepageModuleRequest(getActivity());
         spcMgr.execute(req, onGetModulesHomepageRequest());
-//        try {
-//
-//
-//            //JSONObject obj = new JSONObject(loadJSONFromAsset(this));
-//            JSONObject obj = new JSONObject(loadJSONFromAsset(getActivity()));
-//            JSONArray array = obj.getJSONArray("modules");
-//
-//            ModuleList moduleList = new ModuleList();
-//            moduleList.parse(array);
-//
-//
-//            //DiveServiceList results = new DiveServiceList();
-//            //results.parse(array);
-//
-//            if (moduleList != null && moduleList.getList() != null && moduleList.getList().size() > 0){
-//                //noResultTextView.setVisibility(View.GONE);
-//                /*doTripAdapter.clear();
-//                doTripAdapter.addResults(results.getList());
-//                doTripAdapter.notifyDataSetChanged();*/
-//
-//
-//                adapter.clear();
-//                adapter.addModules(moduleList.getList());
-//                adapter.notifyDataSetChanged();
-//
-//
-//            } else {
-//
-//                /*doTripAdapter.clear();
-//                doTripAdapter.notifyDataSetChanged();*/
-//                //noResultTextView.setVisibility(View.VISIBLE);
-//            }
-//
-//        } catch (JSONException e) {
-//            NYLog.e("cek error : "+e.getMessage());
-//            e.printStackTrace();
-//        }
+
     }
 
 

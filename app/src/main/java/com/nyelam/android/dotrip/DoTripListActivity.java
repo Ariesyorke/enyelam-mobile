@@ -114,31 +114,12 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //endlessScroll.resetValue();
-                //checkNewEvents();
                 page=1;
                 diveServiceAdapter.clear();
                 diveServiceAdapter.notifyDataSetChanged();
                 requestPriceRange(true);
             }
         });
-
-        /*filterImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoTripResultActivity.this, FilterListServiceActivity.class);
-                // TODO: kirim parameter ke filter
-                if (categoryList != null && categoryList.getList() != null && categoryList.getList().size() > 0)intent.putExtra(NYHelper.CATEGORIES, categoryList.getList().toString());
-                if (stateFacilityList != null && stateFacilityList.getList() != null && stateFacilityList.getList().size() > 0)intent.putExtra(NYHelper.FACILITIES, stateFacilityList.getList().toString());
-                if (totalDives != null && totalDives.size() > 0)intent.putExtra(NYHelper.TOTAL_DIVES, totalDives.toString());
-                intent.putExtra(NYHelper.SORT_BY, sortingType);
-                intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, minPriceDefault);
-                intent.putExtra(NYHelper.MIN_PRICE, minPrice);
-                intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, maxPriceDefault);
-                intent.putExtra(NYHelper.MAX_PRICE, maxPrice);
-                startActivityForResult(intent, mRequestCode);
-            }
-        });*/
 
         filterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,7 +210,7 @@ public class DoTripListActivity extends BasicActivity implements NYCustomDialog.
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new NYSpacesItemDecoration(spacingInPixels));
 
-        diveServiceAdapter = new DoTripDiveServiceAdapter(this, diver, date, certificate, type, diverId);
+        diveServiceAdapter = new DoTripDiveServiceAdapter(this, diver, certificate, type, diverId);
         recyclerView.setAdapter(diveServiceAdapter);
     }
 
