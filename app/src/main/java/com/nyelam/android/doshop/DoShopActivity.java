@@ -20,6 +20,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.CategoryList;
 import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopCategoryList;
 import com.nyelam.android.data.DoShopList;
@@ -139,6 +140,14 @@ public class DoShopActivity extends AppCompatActivity {
 
         menuCategoryAdapter = new DoShopMenuCategoryAdapter(this);
         listViewMenu.setAdapter(menuCategoryAdapter);
+
+        loadCategoriesStorage();
+    }
+
+    private void loadCategoriesStorage() {
+        DoShopCategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
+        if (storage != null && storage.getCategoryList() != null && storage.getCategoryList().getList() != null
+                && storage.getCategoryList().getList().size() > 0)setMenuCategories(storage.getCategoryList());
         loadCategories();
     }
 
@@ -228,19 +237,24 @@ public class DoShopActivity extends AppCompatActivity {
             public void onRequestSuccess(DoShopCategoryList categoryList) {
                 progressBar.setVisibility(View.GONE);
 
-                if (categoryList != null){
-                    DoShopCategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
-                    storage.setCategoryList(categoryList);
-
-                    menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, categoryList.getList());
-                    menuCategoryAdapter.notifyDataSetChanged();
-                    listViewMenu.setAdapter(menuCategoryAdapter);
-
-                    setCategory(categoryList.getList());
-                }
+                setMenuCategories(categoryList);
 
             }
         };
+    }
+
+
+    private void setMenuCategories(DoShopCategoryList categoryList){
+        if (categoryList != null && categoryList.getList() !=null){
+            DoShopCategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
+            storage.setCategoryList(categoryList);
+
+            menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, categoryList.getList());
+            menuCategoryAdapter.notifyDataSetChanged();
+            listViewMenu.setAdapter(menuCategoryAdapter);
+
+            setCategory(categoryList.getList());
+        }
     }
 
     private void setCategory(List<DoShopCategory> categories) {
