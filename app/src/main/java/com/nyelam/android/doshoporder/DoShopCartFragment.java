@@ -22,6 +22,7 @@ import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.http.NYDoShopAddVoucherRequest;
+import com.nyelam.android.http.NYDoShopChangeQuantityRequest;
 import com.nyelam.android.http.NYDoShopListCartRequest;
 import com.nyelam.android.http.NYDoShopRemoveProductCartRequest;
 import com.octo.android.robospice.SpiceManager;
@@ -285,4 +286,38 @@ public class DoShopCartFragment extends BasicFragment {
         listener.stepView(0);
         if (!spcMgr.isStarted()) spcMgr.start(getActivity());
     }
+
+    public void onQuantityChange(String id, String item) {
+        pDialog.show();
+        NYDoShopChangeQuantityRequest req = null;
+        try {
+            req = new NYDoShopChangeQuantityRequest(getActivity(), id, item);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onQuantityChangeRequest());
+    }
+
+    private RequestListener<DoShopCartReturn> onQuantityChangeRequest() {
+        return new RequestListener<DoShopCartReturn>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                pDialog.dismiss();
+                NYHelper.handleAPIException(getActivity(), spiceException, null);
+                initCartReturn(cartReturn);
+            }
+
+            @Override
+            public void onRequestSuccess(DoShopCartReturn cartReturn) {
+                pDialog.dismiss();
+
+                etVoucherCode.setText("");
+                thisFragment.cartReturn = cartReturn;
+
+                initCartReturn(cartReturn);
+            }
+        };
+    }
+
 }

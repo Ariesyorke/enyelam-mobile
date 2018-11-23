@@ -76,27 +76,46 @@
                     android:textColor="@color/ny_black2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:padding="@dimen/padding"
-                    android:background="@drawable/ny_rectangle_grey"
+
+                <RelativeLayout
                     android:layout_marginStart="@dimen/padding"
                     android:layout_marginLeft="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_item_qty"
-                        android:text="1"
-                        android:textStyle="bold"
-                        android:textColor="@color/ny_black1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <ImageView
-                        android:src="@drawable/ic_expand_more"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_container_qty"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="@dimen/padding"
+                        android:background="@drawable/ny_rectangle_grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/tv_item_qty"
+                            android:text="1"
+                            android:textStyle="bold"
+                            android:textColor="@color/ny_black1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:src="@drawable/ic_expand_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <com.nyelam.android.view.NYSpinner
+                        android:id="@+id/spinner_quantity"
+                        android:layout_alignTop="@+id/ll_container_qty"
+                        android:layout_alignBottom="@+id/ll_container_qty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dropdown"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="bottom|center_horizontal"
+                        android:layout_gravity="bottom"
+                        />
+
+                </RelativeLayout>
+
             </LinearLayout>
 
 

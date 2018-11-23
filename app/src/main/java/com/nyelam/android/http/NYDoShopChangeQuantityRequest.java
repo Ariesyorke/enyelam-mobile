@@ -21,7 +21,7 @@ public class NYDoShopChangeQuantityRequest extends NYBasicAuthRequest<DoShopCart
     private final static String POST_PRODUCT_ID = "product_cart_id";
     private final static String POST_QTY = "qty";
 
-    public NYDoShopChangeQuantityRequest(Context context, String productId, List<Variation> variations, String qty) throws Exception {
+    public NYDoShopChangeQuantityRequest(Context context, String productId, String qty) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_change_quantity));
 
         if(!TextUtils.isEmpty(productId)) {

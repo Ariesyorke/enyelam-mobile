@@ -7,7 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +20,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
+import com.nyelam.android.data.Courier;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.view.NYSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,10 +59,48 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         final DoShopProduct product = data.get(position);
+        final boolean[] isFirst = new boolean[1];
 
         if (product != null){
             if (NYHelper.isStringNotEmpty(product.getProductName())) holder.name.setText(product.getProductName());
             holder.qty.setText(String.valueOf(product.getQty()));
+
+            int maxQty = 10;
+            if (maxQty < product.getQty()){
+                maxQty = product.getQty();
+            }
+
+            List<String> quantities = new ArrayList<>();
+            int selectedPos = 0;
+            for (int i=1; i<=maxQty;i++){
+                quantities.add(String.valueOf(i));
+                if (i==product.getQty()){
+                    selectedPos=i-1;
+                }
+            }
+            final ArrayAdapter qtyAdapter = new ArrayAdapter(context, R.layout.spinner_quantity, quantities);
+            holder.spinnerQuantity.setAdapter(qtyAdapter);
+            holder.spinnerQuantity.setSelection(selectedPos);
+
+
+            holder.spinnerQuantity.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
+                @Override
+                public void onSpinnerOpened(Spinner spinner) {
+//                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
+
+                }
+
+                @Override
+                public void onSpinnerClosed(Spinner spinner) {
+
+                    int position = spinner.getSelectedItemPosition();
+                    ((DoShopCartFragment)fragment).onQuantityChange(product.getId(), (String) qtyAdapter.getItem(position));
+
+                }
+            });
+
+
 
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
@@ -121,6 +165,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
         TextView estimate;
         TextView qty;
         TextView remove;
+        NYSpinner spinnerQuantity;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -129,6 +174,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
             estimate = (TextView) itemView.findViewById(R.id.tv_estimate_delivery);
             qty = (TextView) itemView.findViewById(R.id.tv_item_qty);
             remove = (TextView) itemView.findViewById(R.id.tv_remove_item);
+            spinnerQuantity = (NYSpinner) itemView.findViewById(R.id.spinner_quantity);
         }
     }
 }
