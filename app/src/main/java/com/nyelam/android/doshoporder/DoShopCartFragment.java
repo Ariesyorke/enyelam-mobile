@@ -191,7 +191,7 @@ public class DoShopCartFragment extends BasicFragment {
                 progressBar.setVisibility(View.GONE);
                 llMainContainer.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.VISIBLE);
-                NYHelper.handleAPIException(getActivity(), spiceException, null);
+                if(!spiceException.getCause().getMessage().trim().toLowerCase().equals("unknown error")) NYHelper.handleAPIException(getActivity(), spiceException, null);
             }
 
             @Override

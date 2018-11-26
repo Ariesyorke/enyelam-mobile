@@ -31,7 +31,9 @@ public class NYDoShopRemoveProductCartRequest extends NYBasicAuthRequest<DoShopC
 //            }
 //        }
 
-        if (NYHelper.isStringNotEmpty(productCartId))addQuery(POST_IDS, productCartId);
+        if (NYHelper.isStringNotEmpty(productCartId)){
+            addQuery(POST_IDS, productCartId);
+        }
 
     }
 

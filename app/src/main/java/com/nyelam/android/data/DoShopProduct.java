@@ -27,6 +27,7 @@ public class DoShopProduct implements Parseable {
     private static String KEY_QTY = "qty";
 
     private String id;
+    private String productCartId;
     private String productName;
     private String featuredImage;
     private List<String> images;
@@ -63,6 +64,14 @@ public class DoShopProduct implements Parseable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getProductCartId() {
+        return productCartId;
+    }
+
+    public void setProductCartId(String productCartId) {
+        this.productCartId = productCartId;
     }
 
     public String getProductName() {
@@ -176,8 +185,12 @@ public class DoShopProduct implements Parseable {
         try {
             if (!obj.isNull(KEY_ID)) {
                 setId(obj.getString(KEY_ID));
-            } else if (!obj.isNull(KEY_PRODUCT_CARD_ID)) {
-                setId(obj.getString(KEY_PRODUCT_CARD_ID));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_PRODUCT_CARD_ID)) {
+                setProductCartId(obj.getString(KEY_PRODUCT_CARD_ID));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -300,6 +313,14 @@ public class DoShopProduct implements Parseable {
                 obj.put(KEY_ID, getId());
             } else {
                 obj.put(KEY_ID, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getProductCartId())) {
+                obj.put(KEY_PRODUCT_CARD_ID, getProductCartId());
+            } else {
+                obj.put(KEY_PRODUCT_CARD_ID, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 
