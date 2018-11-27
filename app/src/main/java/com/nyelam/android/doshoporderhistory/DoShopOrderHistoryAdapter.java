@@ -119,6 +119,11 @@ public class DoShopOrderHistoryAdapter extends RecyclerView.Adapter<DoShopOrderH
         return data.size();
     }
 
+    public void clear() {
+        data = new ArrayList<>();
+        this.notifyDataSetChanged();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;

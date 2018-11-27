@@ -1,6 +1,7 @@
 package com.nyelam.android.doshoporderhistory;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -67,12 +68,18 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("ValidFragment")
+    public DoShopOrderHistoryFragment(String status) {
+        // Required empty public constructor
+        this.status = status;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         if (getArguments() != null && getArguments().get(NYHelper.STATUS) != null){
             status = getArguments().getString(NYHelper.STATUS);
-            Toast.makeText(getActivity(), "STATUS : "+status, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "STATUS : "+status, Toast.LENGTH_SHORT).show();
         }
 
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -150,6 +157,11 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.VISIBLE);
                 loadmore = false;
+                if (adapter.getItemCount() <= 0){
+                    tvNotFound.setVisibility(View.VISIBLE);
+                } else {
+                    tvNotFound.setVisibility(View.GONE);
+                }
             }
 
             @Override

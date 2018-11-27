@@ -8,7 +8,12 @@
 
     <com.nyelam.android.view.font.NYTextView
         android:id="@+id/tv_not_found"
+        android:visibility="gone"
+        android:text="Not found"
+        android:textSize="16sp"
+        android:textColor="@color/ny_black2"
         android:layout_gravity="center"
+        android:layout_margin="@dimen/padding_double"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

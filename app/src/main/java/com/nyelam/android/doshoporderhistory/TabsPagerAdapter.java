@@ -31,42 +31,42 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 Bundle bundle1 = new Bundle();
                 bundle1.putString(NYHelper.STATUS, "1");
-                DoShopOrderHistoryFragment fragment1 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment1 = new DoShopOrderHistoryFragment("1");
                 return fragment1;
             case 1:
                 Bundle bundle2 = new Bundle();
                 bundle2.putString(NYHelper.STATUS, "2");
-                DoShopOrderHistoryFragment fragment2 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment2 = new DoShopOrderHistoryFragment("2");
                 return fragment2;
             case 2:
                 Bundle bundle3 = new Bundle();
                 bundle3.putString(NYHelper.STATUS, "3");
-                DoShopOrderHistoryFragment fragment3 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment3 = new DoShopOrderHistoryFragment("3");
                 return fragment3;
             case 3:
                 Bundle bundle4 = new Bundle();
                 bundle4.putString(NYHelper.STATUS, "4");
-                DoShopOrderHistoryFragment fragment4 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment4 = new DoShopOrderHistoryFragment("4");
                 return fragment4;
             case 4:
                 Bundle bundle5 = new Bundle();
                 bundle5.putString(NYHelper.STATUS, "5");
-                DoShopOrderHistoryFragment fragment5 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment5 = new DoShopOrderHistoryFragment("5");
                 return fragment5;
             case 5:
                 Bundle bundle6 = new Bundle();
                 bundle6.putString(NYHelper.STATUS, "6");
-                DoShopOrderHistoryFragment fragment6 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment6 = new DoShopOrderHistoryFragment("6");
                 return fragment6;
             case 6:
                 Bundle bundle7 = new Bundle();
                 bundle7.putString(NYHelper.STATUS, "7");
-                DoShopOrderHistoryFragment fragment7 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment7 = new DoShopOrderHistoryFragment("7");
                 return fragment7;
             case 7:
                 Bundle bundle8 = new Bundle();
                 bundle8.putString(NYHelper.STATUS, "8");
-                DoShopOrderHistoryFragment fragment8 = new DoShopOrderHistoryFragment();
+                DoShopOrderHistoryFragment fragment8 = new DoShopOrderHistoryFragment("8");
                 return fragment8;
             default:
                 Bundle bundle = new Bundle();
