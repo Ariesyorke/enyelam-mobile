@@ -379,7 +379,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                             }
 
                             //final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(this, product.getVariations().getSizes());
-                            qtyAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, quantities);
+                            qtyAdapter = new ArrayAdapter(context, R.layout.spinner_quantity, quantities);
                             spinnerQuantity.setAdapter(qtyAdapter);
                             chosenQty = 1;
                         } else {

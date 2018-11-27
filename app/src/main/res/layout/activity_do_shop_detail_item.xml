@@ -228,6 +228,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="@dimen/padding_half"
                     android:layout_marginRight="@dimen/padding_half"
+                    android:padding="1dp"
                     android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
 
                     <com.nyelam.android.view.NYSpinner
@@ -276,6 +277,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="@dimen/padding_half"
                     android:layout_marginRight="@dimen/padding_half"
+                    android:padding="1dp"
                     android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
 
                     <EditText
@@ -288,7 +290,6 @@
                         android:inputType="numberDecimal"
                         android:popupBackground="@android:color/transparent"
                         android:background="@android:color/transparent"/>
-
 
                     <com.nyelam.android.view.NYSpinner
                         android:id="@+id/spinner_quantity"

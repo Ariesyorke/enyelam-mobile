@@ -78,7 +78,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
                     selectedPos=i-1;
                 }
             }
-            final ArrayAdapter qtyAdapter = new ArrayAdapter(context, R.layout.spinner_quantity, quantities);
+            final ArrayAdapter qtyAdapter = new ArrayAdapter(context, R.layout.spinner_quantity_grey, quantities);
             holder.spinnerQuantity.setAdapter(qtyAdapter);
             holder.spinnerQuantity.setSelection(selectedPos);
             holder.spinnerQuantity.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
