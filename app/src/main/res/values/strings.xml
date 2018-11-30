@@ -108,12 +108,12 @@
     <string name="your_order_id">Your Order ID : </string>
     <string name="booking_summary">Booking Summary</string>
     <string name="payment">Payment</string>
-    <string name="transfer_to">Transfer To BANK BCA</string>
+    <string name="transfer_to">Transfer To BANK MANDIRI</string>
     <string name="bank_branch">Citra Grand Bekasi Branch</string>
     <string name="account_number_label">Account Number</string>
-    <string name="account_number">802-50-78701</string>
+    <string name="account_number">070-000-971-3921</string>
     <string name="account_name_label">Account Name</string>
-    <string name="account_name">Yufron Kharis</string>
+    <string name="account_name">Wimiku Indo Digital</string>
     <string name="contact_details">Contact Details</string>
     <string name="participants">Participants</string>
     <string name="participant_details">Participant Details</string>

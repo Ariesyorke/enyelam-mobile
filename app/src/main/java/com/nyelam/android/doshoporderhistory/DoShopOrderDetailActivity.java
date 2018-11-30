@@ -1,9 +1,12 @@
 package com.nyelam.android.doshoporderhistory;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +19,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.danzoye.lib.util.GalleryCameraInvoker;
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -28,8 +33,10 @@ import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopOrderList;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.Summary;
+import com.nyelam.android.doshop.DoShopDetailItemActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
+import com.nyelam.android.http.NYDoDiveBookingConfirmPaymentRequest;
 import com.nyelam.android.http.NYDoShopOrderDetailRequest;
 import com.nyelam.android.http.NYDoShopOrderListRequest;
 import com.nyelam.android.inbox.NewMessageActivity;
@@ -40,14 +47,30 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class DoShopOrderDetailActivity extends BasicActivity {
+public class DoShopOrderDetailActivity extends BasicActivity implements GalleryCameraInvoker.CallbackWithProcessing {
+
+    private static final int REQ_CODE_CAMERA = 100;
+    private static final int REQ_CODE_GALLERY = 101;
+    private static final int REQ_CODE_CHILD = 102;
 
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopOrder order;
     private DoShopMerchantItemAdapter adapter;
+
+    private File paymentFile;
+    private GalleryCameraInvoker invoker;
+    private boolean isPickingPhoto;
 
     @BindView(R.id.refresh_swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -114,6 +137,27 @@ public class DoShopOrderDetailActivity extends BasicActivity {
 
     @BindView(R.id.ll_additional_container)
     LinearLayout llAdditionalContainer;
+
+    @BindView(R.id.payment_linearLayout)
+    LinearLayout paymentLinearLayout;
+
+    @BindView(R.id.transfer_evidence_textView)
+    TextView tvTransferEvidence;
+
+    @OnClick(R.id.choose_file_textView) void chooseFile() {
+        isPickingPhoto = false;
+        onChangePhoto();
+    }
+
+    @OnClick(R.id.confirm_linearLayout) void uploadPayment(){
+        if (paymentFile != null && order != null && NYHelper.isStringNotEmpty(order.getOrderId())){
+            confirmPayment();
+        } else {
+            Toast.makeText(this, getString(R.string.warn_file_not_found), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
 
     @Override
@@ -216,7 +260,15 @@ public class DoShopOrderDetailActivity extends BasicActivity {
         if (order != null){
 
             if (NYHelper.isStringNotEmpty(order.getOrderId()))tvOrderId.setText(order.getOrderId());
-            if (NYHelper.isStringNotEmpty(order.getOrderStatus()))tvOrderStatus.setText(order.getOrderStatus());
+            if (NYHelper.isStringNotEmpty(order.getOrderStatus())){
+                tvOrderStatus.setText(order.getOrderStatus());
+                if (order.getOrderStatus().equalsIgnoreCase("pending") && order.getVeritransToken() == null) {
+                    paymentLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    paymentLinearLayout.setVisibility(View.GONE);
+                }
+            }
+
             //if (NYHelper.isStringNotEmpty(order.()))tvOrderDate.setText(order.getOrderId());
 
             if (order.getCart() != null){
@@ -298,6 +350,169 @@ public class DoShopOrderDetailActivity extends BasicActivity {
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
+    private void confirmPayment() {
+        try {
+            pDialog.show();
+            NYDoDiveBookingConfirmPaymentRequest req = new NYDoDiveBookingConfirmPaymentRequest(this, order.getOrderId(), paymentFile);
+            spcMgr.execute(req, onConfirmPaymentRequest());
+        } catch (Exception e) {
+            pDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
+    private RequestListener<Boolean> onConfirmPaymentRequest() {
+        return new RequestListener<Boolean>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                pDialog.dismiss();
+                NYHelper.handleAPIException(DoShopOrderDetailActivity.this, spiceException, null);
+            }
+
+            @Override
+            public void onRequestSuccess(Boolean success) {
+                pDialog.dismiss();
+                paymentLinearLayout.setVisibility(View.GONE);
+                getOrderDetail(order.getOrderId());
+                NYHelper.handlePopupMessage(DoShopOrderDetailActivity.this, getString(R.string.confirmation_payment_success), null);
+            }
+        };
+    }
+
+
+
+    protected void onChangePhoto() {
+        invoker = new GalleryCameraInvoker() {
+
+            @Override
+            protected int maxImageWidth() {
+                return getResources().getDimensionPixelSize(R.dimen.max_create_place_image_width);
+            }
+
+            @Override
+            protected File onProcessingImageFromCamera(String path) {
+                File realFile = super.onProcessingImageFromCamera(path);
+
+                Bitmap bitmap = null;
+                int targetW = getResources().getDimensionPixelSize(R.dimen.create_place_photo_thumb_width);
+
+                // Get the dimensions of the bitmap
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                int photoW = bmOptions.outWidth;
+                int scaleFactor = photoW / targetW;
+
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+
+                bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+
+                // Log.d("danzoye", "thumb bitmap = " + bitmap);
+
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, imageStream);
+                bitmap.recycle();
+
+                String localPath = realFile.getPath();
+                String thumbPath = localPath.replace("JPEG", "THUMB");
+                File pictureFile = new File(thumbPath);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(imageStream.toByteArray());
+                    fos.close();
+
+                    return realFile;
+                } catch (FileNotFoundException e) {
+                    // Log.e("danzoye", "File not found: " + e.getMessage());
+                } catch (IOException e) {
+                    // Log.e("danzoye", "Error accessing file: " + e.getMessage());
+                } finally {
+                    System.gc();
+                }
+                return null;
+            }
+
+            @Override
+            protected File onProcessingImageFromGallery(InputStream inputStream) throws IOException {
+                File realFile = super.onProcessingImageFromGallery(inputStream);
+
+                int targetW = getResources().getDimensionPixelSize(R.dimen.create_place_photo_thumb_width);
+
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                int targetH = (photoH * targetW) / photoW;
+
+                // Determine how much to scale down the image
+                int scaleFactor = photoW / targetW;
+
+                // Decode the image file into a Bitmap sized to fill the
+                // View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+
+                Bitmap bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, imageStream);
+                bitmap.recycle();
+
+                String localPath = realFile.getPath();
+                String thumbPath = localPath.replace("JPEG", "THUMB");
+                File pictureFile = new File(thumbPath);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(imageStream.toByteArray());
+                    fos.close();
+
+                    return realFile;
+                } catch (FileNotFoundException e) {
+                    // Log.e("danzoye", "File not found: " + e.getMessage());
+                } catch (IOException e) {
+                    // Log.e("danzoye", "Error accessing file: " + e.getMessage());
+                } finally {
+                    System.gc();
+                }
+                return null;
+
+            }
+
+            @Override
+            protected void onShowOptionList(Context context) {
+                super.onShowOptionList(context);
+                isPickingPhoto = true;
+            }
+        };
+        invoker.invokeGalleryAndCamera(this, this, REQ_CODE_CAMERA, REQ_CODE_GALLERY, false);
+    }
+
+    @Override
+    public void onBitmapResult(File file) {
+        if (file != null) {
+            this.paymentFile = file;
+            if (NYHelper.isStringNotEmpty(file.getName()))
+                tvTransferEvidence.setText(file.getName());
+        }
+    }
+
+    @Override
+    public void onCancelGalleryCameraInvoker() {
+        isPickingPhoto = false;
+    }
+
+    @Override
+    public void onProcessing() {
+
+    }
+
     private void dialogOrderNotAvailable(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Order Not Available");
@@ -312,6 +527,17 @@ public class DoShopOrderDetailActivity extends BasicActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (invoker != null) {
+            invoker.onActivityResult(requestCode, resultCode, data);
+        }
+        if ((requestCode == REQ_CODE_CAMERA || requestCode == REQ_CODE_GALLERY) && resultCode == Activity.RESULT_CANCELED) {
+            isPickingPhoto = false;
+        }
     }
 
     @Override
@@ -335,5 +561,6 @@ public class DoShopOrderDetailActivity extends BasicActivity {
         super.onResume();
         if (!spcMgr.isStarted()) spcMgr.start(this);
     }
+
 
 }
