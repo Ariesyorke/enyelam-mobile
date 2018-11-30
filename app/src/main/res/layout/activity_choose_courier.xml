@@ -138,6 +138,7 @@
             </LinearLayout>
 
             <EditText
+                android:visibility="gone"
                 android:hint="Write notes\nex : Extra bubble wrap packaging"
                 android:textSize="16sp"
                 android:textColor="@color/ny_black1"

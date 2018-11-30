@@ -171,6 +171,7 @@
 
 
                     <RelativeLayout
+                        android:visibility="gone"
                         android:id="@+id/banner_relativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -202,7 +203,6 @@
                             app:ci_drawable="@drawable/ny_circle_blue"
                             app:ci_drawable_unselected="@drawable/ny_circle_grey"
                             app:ci_orientation="horizontal" />
-
 
                     </RelativeLayout>
 

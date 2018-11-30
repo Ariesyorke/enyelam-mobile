@@ -264,4 +264,8 @@
     <string name="warn_order_not_available">Sorry, this order is not available</string>
 
 
+    <!--DOSHOP ORDER DETAIL-->
+    <string name="total_summary">Total Summary</string>
+
+
 </resources>
