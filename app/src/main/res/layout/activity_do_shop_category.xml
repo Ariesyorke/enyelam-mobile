@@ -24,6 +24,8 @@
             <EditText
                 android:id="@+id/et_search"
                 android:hint="Search.."
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:backgroundTint="@android:color/transparent"
                 android:textSize="14sp"
                 android:singleLine="true"
@@ -38,6 +40,7 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
+        android:visibility="gone"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -97,7 +100,7 @@
         android:id="@+id/refresh_swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -107,9 +110,12 @@
                 android:layout_margin="@dimen/padding_triple"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                />
 
             <com.nyelam.android.view.font.NYTextView
+                android:layout_below="@+id/progress_bar"
                 android:id="@+id/tv_not_found"
                 android:visibility="gone"
                 android:text="Result not found"
@@ -118,14 +124,53 @@
                 android:layout_margin="@dimen/padding_triple"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                />
 
             <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/tv_not_found"
                 android:id="@+id/rv_item_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-        </LinearLayout>
+
+
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/filter_linearLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/ny_rectangle_blue_soft_elipse"
+                android:paddingTop="@dimen/padding_half"
+                android:paddingBottom="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_quad"
+                android:paddingLeft="@dimen/padding_quad"
+                android:layout_marginBottom="@dimen/padding"
+                android:gravity="center_vertical"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/ic_filter"
+                    android:layout_marginRight="@dimen/padding"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp" />
+
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/filter_textView"
+                    app:fontTextStyle="medium"
+                    android:text="@string/filter"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

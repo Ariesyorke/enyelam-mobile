@@ -72,7 +72,6 @@ public class DoShopFilterActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_shop_filter);
         ButterKnife.bind(this);
-        tvTitle.setText("Filters");
         initState();
         initControl();
     }

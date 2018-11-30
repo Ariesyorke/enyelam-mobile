@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +76,9 @@ public class DoShopCategoryActivity extends BasicActivity {
     @BindView(R.id.refresh_swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.filter_linearLayout)
+    LinearLayout llFilter;
+
     @OnClick(R.id.ll_filter) void filter(){
         Intent intent = new Intent(this, DoShopFilterActivity.class);
         intent.putExtra(NYHelper.SORT_BY, sortBy);
@@ -83,6 +88,14 @@ public class DoShopCategoryActivity extends BasicActivity {
     }
 
     @OnClick(R.id.ll_sort_by) void sortBy(){
+        Intent intent = new Intent(this, DoShopFilterActivity.class);
+        intent.putExtra(NYHelper.SORT_BY, sortBy);
+        intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
+        intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
+        startActivityForResult(intent, 1);
+    }
+
+    @OnClick(R.id.filter_linearLayout) void intentFilter(){
         Intent intent = new Intent(this, DoShopFilterActivity.class);
         intent.putExtra(NYHelper.SORT_BY, sortBy);
         intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
@@ -201,7 +214,12 @@ public class DoShopCategoryActivity extends BasicActivity {
                     page++;
                 }
 
-                if (adapter.getItemCount() == 0) tvNotFound.setVisibility(View.VISIBLE);
+                if (adapter.getItemCount() == 0){
+                    tvNotFound.setVisibility(View.VISIBLE);
+                } else {
+                    tvNotFound.setVisibility(View.GONE);
+                    llFilter.setVisibility(View.VISIBLE);
+                }
 
             }
         };
@@ -299,5 +317,19 @@ public class DoShopCategoryActivity extends BasicActivity {
             }
         }
 
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Checks whether a hardware keyboard is available
+        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
+            //Toast.makeText(this, "keyboard visible", Toast.LENGTH_SHORT).show();
+            llFilter.setVisibility(View.GONE);
+        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
+            //Toast.makeText(this, "keyboard hidden", Toast.LENGTH_SHORT).show();
+            llFilter.setVisibility(View.VISIBLE);
+        }
     }
 }

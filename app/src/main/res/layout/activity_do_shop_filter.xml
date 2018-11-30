@@ -7,7 +7,42 @@
     android:orientation="vertical"
     tools:context=".doshop.DoShopFilterActivity">
 
-    <include layout="@layout/toolbar_dialog"/>
+    <!--<include layout="@layout/toolbar_dialog"/>-->
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:background="#0071BC"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <ImageView
+            android:id="@+id/iv_close"
+            android:src="@drawable/ic_circle_close_white"
+            android:layout_centerVertical="true"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/tv_title"
+            app:fontTextStyle="reguler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Filter"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+        <com.nyelam.android.view.font.NYTextView
+            android:visibility="gone"
+            android:id="@+id/reset_textView"
+            app:fontTextStyle="reguler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="Reset"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -237,6 +272,7 @@
         android:id="@+id/filter_linearLayout"
         android:orientation="horizontal"
         android:padding="@dimen/activity_horizontal_margin"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.nyelam.android.view.font.NYTextView
