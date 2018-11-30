@@ -111,7 +111,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     private CheckoutListener listener;
     private DoShopCheckoutAdapter adapter;
 
-
     @BindView(R.id.ll_voucher_container)
     LinearLayout llVoucherContainer;
 
@@ -225,7 +224,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 payUsingVeritrans();
             }
 
-
         }
 
     }
@@ -323,8 +321,20 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
 
         if (cartReturn != null && cartReturn.getCart() != null){
-            tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()));
+
+            double totalShipping = 0;
+            if (cartReturn.getCart().getMerchants() != null){
+                for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()){
+                    if (merchant != null && merchant.getDeliveryService() != null)totalShipping += merchant.getDeliveryService().getPrice();
+                }
+            }
+
+            tvShippingTotal.setText(NYHelper.priceFormatter(totalShipping));
+            llShippingTotalContainer.setVisibility(View.VISIBLE);
+
+
             tvSubTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getSubTotal()));
+            tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()+totalShipping));
 
             if (cartReturn.getCart().getVoucher() != null){
                 if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))tvVoucherCode.setText("Voucher ("+cartReturn.getCart().getVoucher().getCode()+")");
