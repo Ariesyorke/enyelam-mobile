@@ -21,6 +21,8 @@ public class DoShopAddress implements Parseable {
     private static String KEY_CITY = "city";
     private static String KEY_PHONE_NUMBER = "phone_number";
     private static String KEY_IS_PICKED = "is_picked";
+    private static String KEY_DEFAULT_BILLING = "default_billing";
+    private static String KEY_DEFAULT_SHIPPING = "default_shipping";
 
 
     private String addressId;
@@ -33,6 +35,8 @@ public class DoShopAddress implements Parseable {
     private District district;
     private City city ;
     private boolean isPicked;
+    private int defaultBilling;
+    private int defaultShipping;
 
     public DoShopAddress(){}
 
@@ -41,7 +45,6 @@ public class DoShopAddress implements Parseable {
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
-
 
     public String getAddressId() {
         return addressId;
@@ -121,6 +124,22 @@ public class DoShopAddress implements Parseable {
 
     public void setPicked(boolean picked) {
         isPicked = picked;
+    }
+
+    public int getDefaultBilling() {
+        return defaultBilling;
+    }
+
+    public void setDefaultBilling(int defaultBilling) {
+        this.defaultBilling = defaultBilling;
+    }
+
+    public int getDefaultShipping() {
+        return defaultShipping;
+    }
+
+    public void setDefaultShipping(int defaultShipping) {
+        this.defaultShipping = defaultShipping;
     }
 
     @Override
@@ -207,6 +226,18 @@ public class DoShopAddress implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+        try {
+            if (!obj.isNull(KEY_DEFAULT_BILLING)) {
+                setDefaultBilling(obj.getInt(KEY_DEFAULT_BILLING));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_DEFAULT_SHIPPING)) {
+                setDefaultShipping(obj.getInt(KEY_DEFAULT_SHIPPING));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
     }
 
     @Override
@@ -262,13 +293,6 @@ public class DoShopAddress implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
-
-        try {
-            obj.put(KEY_IS_PICKED, isPicked);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         try{
             if(getProvince()!=null){
                 JSONObject objProv = new JSONObject(getProvince().toString());
@@ -303,6 +327,23 @@ public class DoShopAddress implements Parseable {
             e.printStackTrace();
         }
 
+        try {
+            obj.put(KEY_IS_PICKED, isPicked);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_DEFAULT_BILLING, defaultBilling);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            obj.put(KEY_DEFAULT_SHIPPING, defaultShipping);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
             return obj.toString(3);

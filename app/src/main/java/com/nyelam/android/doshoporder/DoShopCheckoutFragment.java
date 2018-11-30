@@ -41,6 +41,7 @@ import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DeliveryService;
 import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DoShopAddress;
+import com.nyelam.android.data.DoShopAddressList;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopOrder;
@@ -52,6 +53,7 @@ import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYDoDiveServiceOrderResubmitRequest;
+import com.nyelam.android.http.NYDoShopAddressListRequest;
 import com.nyelam.android.http.NYDoShopSubmitOrderRequest;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
@@ -292,7 +294,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         listener = (CheckoutListener) getActivity();
         thisFragment = this;
         initAdapter();
-        initCartReturn(cartReturn);
+        loadAddress();
     }
 
 
@@ -448,6 +450,49 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         };
     }
 
+
+    private void loadAddress(){
+        pDialog.show();
+        NYDoShopAddressListRequest req = null;
+        try {
+            req = new NYDoShopAddressListRequest(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onLoadAdressRequest());
+    }
+
+    private RequestListener<DoShopAddressList> onLoadAdressRequest() {
+        return new RequestListener<DoShopAddressList>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                pDialog.dismiss();
+                // TODO: ini cart after get address
+                initCartReturn(cartReturn);
+            }
+
+            @Override
+            public void onRequestSuccess(DoShopAddressList addressList) {
+                pDialog.dismiss();
+                if (addressList != null && addressList.getList() != null){
+                    for (DoShopAddress address : addressList.getList()){
+                        if (address != null && address.getDefaultBilling() == 1){
+                            billingAddress = address;
+                            setViewBillingAddress(billingAddress);
+                        }
+
+                        if (address != null && address.getDefaultShipping() == 1){
+                            shippingAddress = address;
+                            setViewShippingAddress(shippingAddress);
+                        }
+                    }
+                }
+                // TODO: ini cart after get address
+                initCartReturn(cartReturn);
+            }
+        };
+    }
 
 
     @Override
@@ -672,17 +717,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         listener.setTitle("Checkout");
         if (!spcMgr.isStarted()) spcMgr.start(getActivity());
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
