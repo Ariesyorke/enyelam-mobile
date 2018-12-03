@@ -69,7 +69,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     private String productId;
     private DoShopProduct product;
-    private List<Variation> chosenVariations;
+    //private List<Variation> chosenVariations;
 
     private Variation chosenVariationSize;
     private Variation chosenVariationColor;
@@ -113,7 +113,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
         LoginStorage storage = new LoginStorage(this);
         if (storage.isUserLogin() && product != null && NYHelper.isStringNotEmpty(product.getId())){
-            addToCart(product.getId(),chosenVariations, String.valueOf(chosenQtySize));
+            addToCart(product.getId(),chosenVariationSize, chosenVariationColor, String.valueOf(chosenQtySize));
         } else if (product != null && NYHelper.isStringNotEmpty(product.getId())){
             Intent intent = new Intent(this, AuthActivity.class);
             startActivityForResult(intent, NYHelper.LOGIN_REQ);
@@ -145,7 +145,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_shop_detail_item);
         ButterKnife.bind(this);
-        chosenVariations = new ArrayList<>();
+        //chosenVariations = new ArrayList<>();
         context = this;
         initExtra();
         if (product != null){
@@ -265,12 +265,12 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     }
 
 
-    private void addToCart(String productId, List<Variation> variations, String qty){
+    private void addToCart(String productId, Variation variationSize, Variation variationColor, String qty){
         //NYLog.e("cek related 1");
         pDialog.show();
         NYDoShopAddToCartRequest req = null;
         try {
-            req = new NYDoShopAddToCartRequest(context, productId, variations, qty);
+            req = new NYDoShopAddToCartRequest(context, productId, variationSize, variationColor, qty);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -510,7 +510,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             if (resultCode == RESULT_OK) {
                 //triggerBook = true;
                 if (product != null && NYHelper.isStringNotEmpty(product.getId())){
-                    addToCart(product.getId(),chosenVariations, String.valueOf(chosenQtySize));
+                    addToCart(product.getId(),chosenVariationSize, chosenVariationColor, String.valueOf(chosenQtySize));
                 }
             }
         } else {

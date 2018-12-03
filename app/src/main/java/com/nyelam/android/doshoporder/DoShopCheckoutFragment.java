@@ -456,7 +456,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             if (cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0){
                 for (Additional additional : cartReturn.getAdditionals()){
                     LayoutInflater inflaterAddons = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional, null);
+                    View additionalView = inflaterAddons.inflate(R.layout.view_item_additional_doshop, null);
 
                     TextView tvLabel = (TextView) additionalView.findViewById(R.id.additional_label_textView);
                     TextView tvValue = (TextView) additionalView.findViewById(R.id.additional_value_textView);

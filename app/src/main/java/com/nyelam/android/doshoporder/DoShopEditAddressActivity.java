@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -124,6 +126,7 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
         setContentView(R.layout.activity_do_shop_add_address);
         ButterKnife.bind(this);
         context = getApplicationContext();
+        initToolbar();
         provinceAdapter = new ProvinceAdapter(this);
         cityAdapter = new CityAdapter(this);
         districtAdapter = new DistrictAdapter(this);
@@ -436,6 +439,24 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
 
             }
         };
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

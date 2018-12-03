@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -117,6 +119,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
         setContentView(R.layout.activity_do_shop_add_address);
         ButterKnife.bind(this);
         context = getApplicationContext();
+        initToolbar();
         provinceAdapter = new ProvinceAdapter(this);
         cityAdapter = new CityAdapter(this);
         districtAdapter = new DistrictAdapter(this);
@@ -317,7 +320,6 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                     public void onSpinnerOpened(Spinner spinner) {
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
-
                     }
 
                     @Override
@@ -328,7 +330,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                         currentDistrict = district;
 
                         if (district != null && NYHelper.isStringNotEmpty(district.getName())){
-                            Toast.makeText(context, district.getName(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, district.getName(), Toast.LENGTH_SHORT).show();
                             etDistrict.setText(district.getName());
                         }
                     }
@@ -412,6 +414,24 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
 
             }
         };
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
