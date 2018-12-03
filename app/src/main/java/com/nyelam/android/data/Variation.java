@@ -30,6 +30,11 @@ public class Variation implements Parseable {
         this.name = name;
     }
 
+    public Variation(String id, int qty){
+        this.id = id;
+        this.qty = qty;
+    }
+
     public String getId() {
         return id;
     }

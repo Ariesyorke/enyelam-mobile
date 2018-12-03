@@ -523,8 +523,6 @@
                                 android:textColor="@color/ny_grey4" />
                         </LinearLayout>
 
-
-
                         <LinearLayout
                             android:id="@+id/ll_additional_container"
                             android:orientation="vertical"

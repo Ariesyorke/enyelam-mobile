@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Variations implements Parseable {
 
-    private static String KEY_COLOR = "Color";
+    private static String KEY_COLOR = "Colour";
     private static String KEY_SIZE = "Size";
 
     private List<Variation> colors;

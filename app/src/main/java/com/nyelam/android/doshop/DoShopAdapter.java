@@ -23,6 +23,7 @@ import com.nyelam.android.data.DoShopCategoryModule;
 import com.nyelam.android.data.DoShopList;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductModule;
+import com.nyelam.android.view.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,13 @@ public class DoShopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private void categoryView(CategoryViewHolder holder) {
         DoShopCategoryAdapter adapter1 = new DoShopCategoryAdapter(context, doShopListModule.getCategories());
         holder.recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+
+        int spacing_left = 10; // 50px
+        int spacing_top=10;
+
+        holder.recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacing_left, spacing_top));
+
+
         holder.recyclerView.setAdapter(adapter1);
     }
 

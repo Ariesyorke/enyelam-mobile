@@ -2,6 +2,7 @@ package com.nyelam.android.doshoporder;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -28,14 +29,20 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DoShopAddAddressActivity extends BasicActivity implements AdapterView.OnItemSelectedListener {
+public class DoShopEditAddressActivity extends BasicActivity implements AdapterView.OnItemSelectedListener {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
+
+    private DoShopAddress doShopAddress;
+
     private ProvinceAdapter provinceAdapter;
     private CityAdapter cityAdapter;
     private DistrictAdapter districtAdapter;
@@ -105,7 +112,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
         } else if (!NYHelper.isStringNotEmpty(email)){
             Toast.makeText(context, getString(R.string.warn_field_email_cannot_be_empty), Toast.LENGTH_SHORT).show();
         } else {
-            addAddress(label, fullName, address, phone, email, currentProvince, currentCity, currentDistrict, zipCode);
+            editAddress(doShopAddress.getAddressId(), label, fullName, address, phone, email, currentProvince, currentCity, currentDistrict, zipCode);
         }
 
     };
@@ -120,8 +127,33 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
         provinceAdapter = new ProvinceAdapter(this);
         cityAdapter = new CityAdapter(this);
         districtAdapter = new DistrictAdapter(this);
-        //loadProvince();
-        loadProvinces();
+        initExtras();
+    }
+
+    private void initExtras() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null && intent.hasExtra(NYHelper.ADDRESS)) {
+            try {
+                JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.ADDRESS));
+                doShopAddress = new DoShopAddress();
+                doShopAddress.parse(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (doShopAddress != null){
+            if (NYHelper.isStringNotEmpty(doShopAddress.getLabel()))etLabel.setText(doShopAddress.getLabel());
+            if (NYHelper.isStringNotEmpty(doShopAddress.getFullName()))etFullName.setText(doShopAddress.getFullName());
+            if (NYHelper.isStringNotEmpty(doShopAddress.getEmail()))etEmail.setText(doShopAddress.getEmail());
+            if (NYHelper.isStringNotEmpty(doShopAddress.getAddress()))etAddress.setText(doShopAddress.getAddress());
+            if (NYHelper.isStringNotEmpty(doShopAddress.getZipCode()))etZipCode.setText(doShopAddress.getZipCode());
+            if (NYHelper.isStringNotEmpty(doShopAddress.getPhoneNumber()))etPhone.setText(doShopAddress.getPhoneNumber());
+            loadProvinces();
+        } else {
+
+        }
     }
 
     private void loadProvinces(){
@@ -148,7 +180,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                 provinceAdapter.clear();
 
                 spinnerProvince.setAdapter(provinceAdapter);
-                spinnerProvince.setOnItemSelectedListener(DoShopAddAddressActivity.this);
+                spinnerProvince.setOnItemSelectedListener(DoShopEditAddressActivity.this);
                 spinnerProvince.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
                     @Override
                     public void onSpinnerOpened(Spinner spinner) {
@@ -184,10 +216,12 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                     provinceAdapter.addProvinces(areaList.getList());
                     provinceAdapter.notifyDataSetChanged();
 
+
+                    String provinceId = doShopAddress.getProvince().getId();
                     int pos = 0;
                     for (Area province : areaList.getList()){
-                        if (province != null && NYHelper.isStringNotEmpty(province.getName())){
-                            etProvince.setText(province.getName());
+                        if (province != null && doShopAddress.getProvince() != null && doShopAddress.getProvince().getId().equals(province.getId())){
+                            if (NYHelper.isStringNotEmpty(province.getName()))etProvince.setText(province.getName());
                             currentProvince = province;
                             loadCities(currentProvince.getId());
                             spinnerProvince.setSelection(pos);
@@ -231,7 +265,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                 cityAdapter.clear();
 
                 spinnerCitye.setAdapter(cityAdapter);
-                spinnerCitye.setOnItemSelectedListener(DoShopAddAddressActivity.this);
+                spinnerCitye.setOnItemSelectedListener(DoShopEditAddressActivity.this);
                 spinnerCitye.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
                     @Override
                     public void onSpinnerOpened(Spinner spinner) {
@@ -269,8 +303,8 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
 
                     int pos = 0;
                     for (Area city : areaList.getList()){
-                        if (city != null && NYHelper.isStringNotEmpty(city.getName())){
-                            etCity.setText(city.getName());
+                        if (city != null && doShopAddress.getCity() != null && doShopAddress.getCity().getId().equals(city.getId())){
+                            if (NYHelper.isStringNotEmpty(city.getName()))etCity.setText(city.getName());
                             currentCity = city;
                             loadDistrict(currentProvince.getId(), currentCity.getId());
                             spinnerCitye.setSelection(pos);
@@ -311,7 +345,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                 districtAdapter.clear();
 
                 spinnerDistrict.setAdapter(districtAdapter);
-                spinnerDistrict.setOnItemSelectedListener(DoShopAddAddressActivity.this);
+                spinnerDistrict.setOnItemSelectedListener(DoShopEditAddressActivity.this);
                 spinnerDistrict.setSpinnerEventsListener(new NYSpinner.OnSpinnerEventsListener() {
                     @Override
                     public void onSpinnerOpened(Spinner spinner) {
@@ -328,9 +362,10 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                         currentDistrict = district;
 
                         if (district != null && NYHelper.isStringNotEmpty(district.getName())){
-                            Toast.makeText(context, district.getName(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, district.getName(), Toast.LENGTH_SHORT).show();
                             etDistrict.setText(district.getName());
                         }
+
                     }
                 });
 
@@ -343,8 +378,8 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
 
                     int pos = 0;
                     for (Area district : areaList.getList()){
-                        if (district != null && NYHelper.isStringNotEmpty(district.getName())){
-                            etDistrict.setText(district.getName());
+                        if (district != null && doShopAddress.getDistrict() != null && doShopAddress.getDistrict().equals(district.getId())){
+                            if (NYHelper.isStringNotEmpty(district.getName()))etDistrict.setText(district.getName());
                             currentDistrict = district;
                             spinnerDistrict.setSelection(pos);
                             districtAdapter.setSelectedPosition(pos);
@@ -359,12 +394,11 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
         };
     }
 
-
-    private void addAddress(String label, String fullname, String address, String phone, String email, Area province, Area city, Area district, String zipCode){
+    private void editAddress(String addressId, String label, String fullname, String address, String phone, String email, Area province, Area city, Area district, String zipCode){
         pDialog.show();
         NYDoShopAddAddressRequest req = null;
         try {
-            req = new NYDoShopAddAddressRequest(context, null, label, fullname, address, email, phone, province, city, district, zipCode);
+            req = new NYDoShopAddAddressRequest(context, label, addressId, fullname, address, email, phone, province, city, district, zipCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -378,18 +412,17 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
             public void onRequestFailure(SpiceException spiceException) {
                 if (pDialog != null )pDialog.dismiss();
                 if (spiceException != null) {
-                    NYHelper.handleAPIException(DoShopAddAddressActivity.this, spiceException, null);
+                    NYHelper.handleAPIException(DoShopEditAddressActivity.this, spiceException, null);
                 } else {
-                    NYHelper.handleErrorMessage(DoShopAddAddressActivity.this, getResources().getString(R.string.warn_no_connection));
+                    NYHelper.handleErrorMessage(DoShopEditAddressActivity.this, getResources().getString(R.string.warn_no_connection));
                 }
             }
 
             @Override
             public void onRequestSuccess(DoShopAddress address) {
                 pDialog.dismiss();
-                finish();
 
-                AlertDialog alertDialog = new AlertDialog.Builder(DoShopAddAddressActivity.this)
+                AlertDialog alertDialog = new AlertDialog.Builder(DoShopEditAddressActivity.this)
                         .setMessage(R.string.message_add_address_success)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
@@ -400,15 +433,6 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                         })
                         .create();
                 alertDialog.show();
-
-                if (address != null){
-//                    DoShopCategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
-//                    storage.setCategoryList(categoryList);
-//
-//                    menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, categoryList.getList());
-//                    menuCategoryAdapter.notifyDataSetChanged();
-//                    listViewMenu.setAdapter(menuCategoryAdapter);
-                }
 
             }
         };

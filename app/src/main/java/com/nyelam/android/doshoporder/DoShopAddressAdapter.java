@@ -64,6 +64,12 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
         final DoShopAddress address = addresses.get(position);
 
         if (address != null){
+            if (NYHelper.isStringNotEmpty(address.getLabel())){
+                holder.tvLabel.setText(address.getLabel());
+                holder.tvLabel.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvLabel.setVisibility(View.GONE);
+            }
             if (NYHelper.isStringNotEmpty(address.getFullName())) holder.tvName.setText(address.getFullName());
             if (NYHelper.isStringNotEmpty(address.getAddress())) holder.tvAddress.setText(address.getAddress());
             if (NYHelper.isStringNotEmpty(address.getPhoneNumber())) holder.tvPhone.setText(address.getPhoneNumber());
@@ -84,6 +90,17 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
                 }
             }
         });
+
+        holder.tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (address != null && NYHelper.isStringNotEmpty(address.getAddressId())){
+                    Intent intent=new Intent(activity, DoShopEditAddressActivity.class);
+                    intent.putExtra(NYHelper.ADDRESS,address.toString());
+                    activity.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -99,15 +116,19 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        TextView tvLabel;
         TextView tvName;
         TextView tvAddress;
         TextView tvPhone;
+        TextView tvEdit;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            tvLabel = (TextView) itemView.findViewById(R.id.tv_label);
             tvName = (TextView) itemView.findViewById(R.id.tv_name);
             tvAddress = (TextView) itemView.findViewById(R.id.tv_address);
             tvPhone = (TextView) itemView.findViewById(R.id.tv_phone);
+            tvEdit = (TextView) itemView.findViewById(R.id.tv_edit);
         }
     }
 

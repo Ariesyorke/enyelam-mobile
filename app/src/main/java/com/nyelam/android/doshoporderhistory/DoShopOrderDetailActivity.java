@@ -168,7 +168,6 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
         initToolbar();
         initAdapter();
         initExtra();
-
     }
 
     private void initAdapter() {

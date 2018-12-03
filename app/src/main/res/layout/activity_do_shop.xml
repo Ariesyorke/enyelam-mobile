@@ -108,12 +108,12 @@
                         android:textColorHint="@color/ny_grey2" />
 
                     <ImageView
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:id="@+id/iv_cart"
                         android:layout_marginRight="@dimen/padding"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_add" />
+                        android:src="@drawable/ic_cart_active" />
 
                 </LinearLayout>
 
@@ -219,7 +219,6 @@
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="@dimen/padding_half"
                         android:nestedScrollingEnabled="false"
                         android:visibility="gone" />
 

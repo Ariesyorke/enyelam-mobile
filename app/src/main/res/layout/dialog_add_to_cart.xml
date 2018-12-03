@@ -4,7 +4,6 @@
     android:id="@+id/dialog_linearLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_marginBottom="@dimen/padding_double"
     android:background="@drawable/ny_rectangle_white"
     android:layout_height="match_parent">
 
@@ -94,15 +93,15 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:padding="@dimen/padding_double"
+        android:padding="@dimen/padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tv_shop_again"
-            android:text="Shop Again"
+            android:text="Continue Shopping"
             android:textColor="@color/colorWhite"
             android:textStyle="normal"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textAllCaps="true"
             android:gravity="center"
             android:layout_marginRight="@dimen/padding_half"
@@ -111,13 +110,13 @@
             android:layout_gravity="center"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
         <com.nyelam.android.view.font.NYTextView
             android:id="@+id/tv_pay_now"
-            android:text="Pay Now"
+            android:text="Go To Cart"
             android:textColor="@color/colorWhite"
             android:textStyle="normal"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textAllCaps="true"
             android:gravity="center"
             android:layout_marginLeft="@dimen/padding_half"
@@ -126,7 +125,7 @@
             android:layout_gravity="center"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

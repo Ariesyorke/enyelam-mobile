@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <com.nyelam.android.view.font.NYTextView
-                android:text="Add Address"
+                android:text="Edit Address"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:textStyle="bold"

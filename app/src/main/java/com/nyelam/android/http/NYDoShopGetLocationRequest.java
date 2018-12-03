@@ -16,14 +16,14 @@ import org.json.JSONObject;
  * Created by Aprilian Nur Wakhid Daini on 1/15/2018.
  */
 
-public class NYDoShopGetLocationRequest extends NYBasicAuthRequest<AreaList> {
+public class NYDoShopGetLocationRequest extends NYBasicRequest<AreaList> {
 
     private static final String KEY_AREAS = "areas";
 
     private final static String POST_PROVINCE_ID = "province_id";
     private final static String POST_CITY_ID = "city_id";
 
-    public NYDoShopGetLocationRequest(Context context, String provinceId, String cityId) throws Exception {
+    public NYDoShopGetLocationRequest(Context context, String provinceId, String cityId){
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_doshop_get_location));
 
         if(!TextUtils.isEmpty(provinceId)) {

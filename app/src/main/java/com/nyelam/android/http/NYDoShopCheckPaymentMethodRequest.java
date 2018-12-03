@@ -19,8 +19,9 @@ public class NYDoShopCheckPaymentMethodRequest extends NYBasicAuthRequest<DoShop
 
     private static final String POST_CART_TOKEN = "cart_token";
     private static final String POST_PAYMENT_METHOD_ID = "payment_method_id";
+    private static final String POST_VOUCHER_CODE = "voucher_code";
 
-    public NYDoShopCheckPaymentMethodRequest(Context context, String cartToken, String paymentMethodId) throws Exception {
+    public NYDoShopCheckPaymentMethodRequest(Context context, String cartToken, String paymentMethodId, String voucherCode) throws Exception {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_doshop_check_payment_method));
 
         if(!TextUtils.isEmpty(cartToken)) {
@@ -29,6 +30,10 @@ public class NYDoShopCheckPaymentMethodRequest extends NYBasicAuthRequest<DoShop
 
         if(!TextUtils.isEmpty(paymentMethodId)) {
             addQuery(POST_PAYMENT_METHOD_ID, paymentMethodId);
+        }
+
+        if(!TextUtils.isEmpty(voucherCode)) {
+            addQuery(POST_VOUCHER_CODE, voucherCode);
         }
 
     }

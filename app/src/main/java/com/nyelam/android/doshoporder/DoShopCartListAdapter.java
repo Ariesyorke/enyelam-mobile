@@ -92,7 +92,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
                 public void onSpinnerClosed(Spinner spinner) {
                     int position = spinner.getSelectedItemPosition();
                     if (product != null && NYHelper.isStringNotEmpty((String) qtyAdapter.getItem(position)) && !((String) qtyAdapter.getItem(position)).equals(String.valueOf(product.getQty()))){
-                        ((DoShopCartFragment)fragment).onQuantityChange(product.getId(), (String) qtyAdapter.getItem(position));
+                        ((DoShopCartFragment)fragment).onQuantityChange(product.getProductCartId(), (String) qtyAdapter.getItem(position));
                     }
                 }
 

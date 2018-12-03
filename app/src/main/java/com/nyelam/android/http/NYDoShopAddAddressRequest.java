@@ -20,6 +20,8 @@ public class NYDoShopAddAddressRequest extends NYBasicAuthRequest<DoShopAddress>
 
     private final static String KEY_ADDRESS = "address";
 
+    private final static String POST_ADDRESS_ID = "address_id";
+    private final static String POST_LABEL = "label";
     private final static String POST_FULLNAME = "fullname";
     private final static String POST_EMAIL = "email";
     private final static String POST_ADDRESS = "address";
@@ -32,8 +34,16 @@ public class NYDoShopAddAddressRequest extends NYBasicAuthRequest<DoShopAddress>
     private final static String POST_DISTRICT_NAME = "district_name";
     private final static String POST_ZIP_CODE = "zip_code";
 
-    public NYDoShopAddAddressRequest(Context context, String fullname, String address, String email, String phoneNumber, Area province, Area city, Area district, String zipCode) throws Exception {
+    public NYDoShopAddAddressRequest(Context context, String addressId, String label, String fullname, String address, String email, String phoneNumber, Area province, Area city, Area district, String zipCode) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_add_address));
+
+        if(!TextUtils.isEmpty(addressId)) {
+            addQuery(POST_ADDRESS_ID, addressId);
+        }
+
+        if(!TextUtils.isEmpty(label)) {
+            addQuery(POST_LABEL, label);
+        }
 
         if(!TextUtils.isEmpty(fullname)) {
             addQuery(POST_FULLNAME, fullname);

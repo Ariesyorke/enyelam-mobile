@@ -17,11 +17,13 @@
                 <!--<include layout="@layout/nav_header" />-->
 
                 <View
+                    android:visibility="gone"
                     android:background="@color/ny_grey3"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"/>
 
                 <com.nyelam.android.view.font.NYTextView
+                    android:visibility="gone"
                     android:id="@+id/tv_menu_cart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

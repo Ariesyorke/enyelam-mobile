@@ -149,23 +149,29 @@ public class DoShopCartFragment extends BasicFragment {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 //NYHelper.handleAPIException(context, spiceException, null);
+                pDialog.dismiss();
                 swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
                 llMainContainer.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.VISIBLE);
-
             }
 
             @Override
             public void onRequestSuccess(DoShopCartReturn cartReturn) {
+                pDialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
 
                 thisFragment.cartReturn = cartReturn;
 
-                initCartReturn(cartReturn);
-                llMainContainer.setVisibility(View.VISIBLE);
+                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null && cartReturn.getCart().getMerchants().size() > 0){
+                    initCartReturn(cartReturn);
+                    llMainContainer.setVisibility(View.VISIBLE);
+                } else {
+                    llMainContainer.setVisibility(View.GONE);
+                    tvNotFound.setVisibility(View.VISIBLE);
+                }
             }
         };
     }
@@ -200,8 +206,13 @@ public class DoShopCartFragment extends BasicFragment {
 
                 thisFragment.cartReturn = cartReturn;
 
-                initCartReturn(cartReturn);
-                llMainContainer.setVisibility(View.VISIBLE);
+                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null && cartReturn.getCart().getMerchants().size() > 0){
+                    initCartReturn(cartReturn);
+                    llMainContainer.setVisibility(View.VISIBLE);
+                } else {
+                    llMainContainer.setVisibility(View.GONE);
+                    tvNotFound.setVisibility(View.VISIBLE);
+                }
             }
         };
     }
@@ -235,7 +246,13 @@ public class DoShopCartFragment extends BasicFragment {
                 etVoucherCode.setText("");
                 thisFragment.cartReturn = cartReturn;
 
-                initCartReturn(cartReturn);
+                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null && cartReturn.getCart().getMerchants().size() > 0){
+                    initCartReturn(cartReturn);
+                    llMainContainer.setVisibility(View.VISIBLE);
+                } else {
+                    llMainContainer.setVisibility(View.GONE);
+                    tvNotFound.setVisibility(View.VISIBLE);
+                }
             }
         };
     }
@@ -276,6 +293,7 @@ public class DoShopCartFragment extends BasicFragment {
     @Override
     public void onStop() {
         super.onStop();
+        if (pDialog != null)pDialog.cancel();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 

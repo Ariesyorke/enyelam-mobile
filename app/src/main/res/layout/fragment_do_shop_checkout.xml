@@ -580,6 +580,13 @@
 
 
                 <LinearLayout
+                    android:id="@+id/ll_additional_container"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+                <LinearLayout
                     android:visibility="gone"
                     android:id="@+id/ll_voucher_container"
                     android:layout_width="match_parent"

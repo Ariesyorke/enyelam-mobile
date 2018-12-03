@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopAddressList;
@@ -27,7 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DoShopChooseAddressActivity extends AppCompatActivity {
+public class DoShopChooseAddressActivity extends BasicActivity {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
@@ -142,13 +143,6 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
                     llContainerYesno.setVisibility(View.VISIBLE);
                     adapter.setAddresses(addressList.getList());
                     adapter.notifyDataSetChanged();
-
-                    //Toast.makeText(context, "address ada : "+String.valueOf(addressList.getList().size()), Toast.LENGTH_SHORT).show();
-//                    DoShopCnategoryStorage storage = new DoShopCategoryStorage(DoShopActivity.this);
-//                    storage.setCategoryList(categoryList);
-//                    menuCategoryAdapter = new DoShopMenuCategoryAdapter( DoShopActivity.this, categoryList.getList());
-//                    menuCategoryAdapter.notifyDataSetChanged();
-//                    listViewMenu.setAdapter(menuCategoryAdapter);
                 }
 
             }
@@ -158,6 +152,7 @@ public class DoShopChooseAddressActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        if (pDialog != null) pDialog.cancel();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
     }
 

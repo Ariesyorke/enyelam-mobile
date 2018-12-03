@@ -207,6 +207,9 @@
             android:name=".doshoporder.DoShopAddAddressActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".doshoporder.DoShopEditAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".doshop.DoShopFilterActivity"
             android:screenOrientation="portrait" />
         <activity

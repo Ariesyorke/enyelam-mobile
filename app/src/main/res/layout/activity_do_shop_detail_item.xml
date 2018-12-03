@@ -140,6 +140,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <com.nyelam.android.view.font.NYTextView
+                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/tertiary_text_size"
@@ -189,127 +190,259 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/tertiary_text_size"
                     android:textColor="@color/ny_black2"
-                    android:text="15 CoINNs / 2514 Rp"
+                    android:text="0 CoINNs / 0 Rp"
                     app:fontTextStyle="bold" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/padding">
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_half"
-                    android:layout_weight="1"
-                    android:textColor="@color/ny_black2"
-                    android:layout_gravity="left"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:text="Size"/>
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_half"
-                    android:textColor="@color/ny_black2"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:text="Size chart"/>
-            </LinearLayout>
+
+
 
             <LinearLayout
-                android:id="@+id/ll_item_size"
+                android:id="@+id/ll_container_color"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="@dimen/padding_half"
-                    android:layout_marginRight="@dimen/padding_half"
-                    android:padding="1dp"
-                    android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
-
-                    <com.nyelam.android.view.NYSpinner
-                        android:id="@+id/spinner_item_size"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding">
+                    <com.nyelam.android.view.font.NYTextView
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:popupBackground="@android:color/transparent"
-                        android:background="@android:color/transparent"/>
-                    <!--android:entries="@array/item_size"-->
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_half"
+                        android:layout_weight="1"
+                        android:textColor="@color/ny_black2"
+                        android:layout_gravity="left"
+                        android:textSize="@dimen/tertiary_text_size"
+                        android:text="Color"/>
+                </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginBottom="5dp"
-                        android:src="@drawable/arrow"
-                        android:layout_gravity="center"
-                        android:layout_alignParentRight="true"/>
-                </RelativeLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/padding">
-                <com.nyelam.android.view.font.NYTextView
+                <LinearLayout
+                    android:id="@+id/ll_item_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_half"
-                    android:layout_weight="1"
-                    android:textColor="@color/ny_black2"
-                    android:layout_gravity="left"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:text="Quantity"/>
-            </LinearLayout>
+                    android:visibility="visible"
+                    android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ll_quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="@dimen/padding_half"
-                    android:layout_marginRight="@dimen/padding_half"
-                    android:padding="1dp"
-                    android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
-
-                    <EditText
-                        android:visibility="gone"
-                        android:id="@+id/et_quantity"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginLeft="@dimen/padding_half"
                         android:layout_marginRight="@dimen/padding_half"
-                        android:inputType="numberDecimal"
-                        android:popupBackground="@android:color/transparent"
-                        android:background="@android:color/transparent"/>
+                        android:padding="1dp"
+                        android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
 
-                    <com.nyelam.android.view.NYSpinner
-                        android:id="@+id/spinner_quantity"
+                        <com.nyelam.android.view.NYSpinner
+                            android:id="@+id/spinner_item_color"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:popupBackground="@android:color/transparent"
+                            android:background="@android:color/transparent"/>
+                        <!--android:entries="@array/item_size"-->
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/arrow"
+                            android:layout_gravity="center"
+                            android:layout_alignParentRight="true"/>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding">
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_half"
+                        android:layout_weight="1"
+                        android:textColor="@color/ny_black2"
+                        android:layout_gravity="left"
+                        android:textSize="@dimen/tertiary_text_size"
+                        android:text="Quantity"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_quantity_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:popupBackground="@android:color/transparent"
-                        android:background="@android:color/transparent"/>
-                    <!--android:entries="@array/item_size"-->
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_marginRight="@dimen/padding_half"
+                        android:padding="1dp"
+                        android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginBottom="5dp"
-                        android:src="@drawable/arrow"
-                        android:layout_gravity="center"
-                        android:layout_alignParentRight="true"/>
+                        <EditText
+                            android:visibility="gone"
+                            android:id="@+id/et_quantity_color"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="@dimen/padding_half"
+                            android:layout_marginRight="@dimen/padding_half"
+                            android:inputType="numberDecimal"
+                            android:popupBackground="@android:color/transparent"
+                            android:background="@android:color/transparent"/>
 
+                        <com.nyelam.android.view.NYSpinner
+                            android:id="@+id/spinner_quantity_color"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:popupBackground="@android:color/transparent"
+                            android:background="@android:color/transparent"/>
+                        <!--android:entries="@array/item_size"-->
 
-                </RelativeLayout>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/arrow"
+                            android:layout_gravity="center"
+                            android:layout_alignParentRight="true"/>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
             </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_container_size"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding">
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_half"
+                        android:layout_weight="1"
+                        android:textColor="@color/ny_black2"
+                        android:layout_gravity="left"
+                        android:textSize="@dimen/tertiary_text_size"
+                        android:text="Size"/>
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_half"
+                        android:textColor="@color/ny_black2"
+                        android:textSize="@dimen/tertiary_text_size"
+                        android:text="Size chart"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_item_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_marginRight="@dimen/padding_half"
+                        android:padding="1dp"
+                        android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
+
+                        <com.nyelam.android.view.NYSpinner
+                            android:id="@+id/spinner_item_size"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:popupBackground="@android:color/transparent"
+                            android:background="@android:color/transparent"/>
+                        <!--android:entries="@array/item_size"-->
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/arrow"
+                            android:layout_gravity="center"
+                            android:layout_alignParentRight="true"/>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/padding">
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_half"
+                        android:layout_weight="1"
+                        android:textColor="@color/ny_black2"
+                        android:layout_gravity="left"
+                        android:textSize="@dimen/tertiary_text_size"
+                        android:text="Quantity"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_quantity_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_marginRight="@dimen/padding_half"
+                        android:padding="1dp"
+                        android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant">
+
+                        <EditText
+                            android:visibility="gone"
+                            android:id="@+id/et_quantity_size"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="@dimen/padding_half"
+                            android:layout_marginRight="@dimen/padding_half"
+                            android:inputType="numberDecimal"
+                            android:popupBackground="@android:color/transparent"
+                            android:background="@android:color/transparent"/>
+
+                        <com.nyelam.android.view.NYSpinner
+                            android:id="@+id/spinner_quantity_size"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:popupBackground="@android:color/transparent"
+                            android:background="@android:color/transparent"/>
+                        <!--android:entries="@array/item_size"-->
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/arrow"
+                            android:layout_gravity="center"
+                            android:layout_alignParentRight="true"/>
+
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
 
             <com.nyelam.android.view.font.NYTextView
                 android:id="@+id/tv_status"

@@ -77,7 +77,7 @@ public class NYDialogAddToCart {
 
 
         LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.dialog_linearLayout);
-        linearLayout.setMinimumWidth(width*3/4);
+        linearLayout.setMinimumWidth(width*5/6);
 
         ImageView ivItemImage = (ImageView) dialog.findViewById(R.id.iv_item_image);
         TextView tvItemName = (TextView) dialog.findViewById(R.id.tv_item_name);

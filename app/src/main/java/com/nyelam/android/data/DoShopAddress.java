@@ -12,6 +12,7 @@ import org.json.JSONObject;
 public class DoShopAddress implements Parseable {
 
     private static String KEY_ADDRESS_ID = "address_id";
+    private static String KEY_LABEL = "label";
     private static String KEY_FULLNAME = "fullname";
     private static String KEY_EMAIL = "email";
     private static String KEY_ADDRESS = "address";
@@ -26,6 +27,7 @@ public class DoShopAddress implements Parseable {
 
 
     private String addressId;
+    private String label;
     private String fullName;
     private String email;
     private String address;
@@ -52,6 +54,14 @@ public class DoShopAddress implements Parseable {
 
     public void setAddressId(String addressId) {
         this.addressId = addressId;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getFullName() {
@@ -154,6 +164,12 @@ public class DoShopAddress implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
+            if (!obj.isNull(KEY_LABEL)) {
+                setLabel(obj.getString(KEY_LABEL));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
             if (!obj.isNull(KEY_FULLNAME)) {
                 setFullName(obj.getString(KEY_FULLNAME));
             }
@@ -250,6 +266,14 @@ public class DoShopAddress implements Parseable {
                 obj.put(KEY_ADDRESS_ID, getAddressId());
             } else {
                 obj.put(KEY_ADDRESS_ID, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (NYHelper.isStringNotEmpty(getLabel())) {
+                obj.put(KEY_LABEL, getLabel());
+            } else {
+                obj.put(KEY_LABEL, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 

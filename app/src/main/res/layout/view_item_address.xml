@@ -9,13 +9,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.nyelam.android.view.font.NYTextView
-        android:id="@+id/tv_name"
+        android:visibility="gone"
+        android:id="@+id/tv_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="John Doe"
-        android:textColor="@color/ny_black1"
-        android:textSize="16sp"
-        app:fontTextStyle="medium" />
+        android:layout_marginBottom="@dimen/padding_half"
+        tools:text="Rumah"
+        android:textColor="@color/ny_grey4"
+        android:textSize="14sp"
+        app:fontTextStyle="reguler" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/tv_name"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="John Doe"
+            android:textColor="@color/ny_black1"
+            android:textSize="16sp"
+            app:fontTextStyle="medium" />
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/tv_edit"
+            android:text="Edit"
+            android:textSize="14sp"
+            android:textColor="@color/colorAccent"
+            android:padding="@dimen/padding_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <com.nyelam.android.view.font.NYTextView
         android:id="@+id/tv_address"
         android:layout_width="match_parent"
