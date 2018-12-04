@@ -157,7 +157,7 @@ public class DoShopChooseAddressActivity extends BasicActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
-        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+        toolbar.setContentInsetsRelative(0, 0);
     }
 
 

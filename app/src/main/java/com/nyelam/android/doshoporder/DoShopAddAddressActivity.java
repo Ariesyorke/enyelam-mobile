@@ -166,14 +166,25 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                         int position = spinner.getSelectedItemPosition();
                         Area province = provinceAdapter.getItem(position);
 
-                        if (province != null && NYHelper.isStringNotEmpty(province.getName())){
-                            Toast.makeText(context, province.getName(), Toast.LENGTH_SHORT).show();
+                        if (province != null && NYHelper.isStringNotEmpty(province.getName()) && NYHelper.isStringNotEmpty(province.getId())){
+
+
+                            if (currentProvince != province && province.getId() != null){
+                                currentCity = null;
+                                cityAdapter.clear();
+                                cityAdapter.notifyDataSetChanged();
+
+                                currentDistrict = null;
+                                districtAdapter.clear();
+                                districtAdapter.notifyDataSetChanged();
+
+                                loadCities(province.getId());
+                            }
+
+                            //Toast.makeText(context, province.getName()+" "+province.getId(), Toast.LENGTH_SHORT).show();
                             etProvince.setText(province.getName());
-                        }
-                        if (currentProvince != province){
-                            currentCity = null;
-                            currentDistrict = null;
-                            loadCities(province.getId());
+
+                            currentProvince = province;
                         }
 
                     }
@@ -192,7 +203,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                         if (province != null && NYHelper.isStringNotEmpty(province.getName())){
                             etProvince.setText(province.getName());
                             currentProvince = province;
-                            loadCities(currentProvince.getId());
+                            //loadCities(currentProvince.getId());
                             spinnerProvince.setSelection(pos);
                             provinceAdapter.setSelectedPosition(pos);
                             provinceAdapter.notifyDataSetChanged();
@@ -207,11 +218,10 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
     }
 
 
-
-
     private void loadCities(String provinceId){
         NYDoShopGetLocationRequest req = null;
         try {
+            //Toast.makeText(context, "mulai", Toast.LENGTH_SHORT).show();
             req = new NYDoShopGetLocationRequest(context, provinceId, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,11 +235,14 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
+                //Toast.makeText(context, "gagal", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onRequestSuccess(AreaList areaList) {
 
+                //Toast.makeText(context, "berhasil", Toast.LENGTH_SHORT).show();
 
                 cityAdapter.clear();
 
@@ -249,21 +262,28 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                         int position = spinner.getSelectedItemPosition();
                         Area city = cityAdapter.getItem(position);
 
+
+
                         if (city != null && NYHelper.isStringNotEmpty(city.getName())){
-                            Toast.makeText(context, city.getName(), Toast.LENGTH_SHORT).show();
-                            etCity.setText(city.getName());
+
+                            //Toast.makeText(context, city.getName(), Toast.LENGTH_SHORT).show();
+
+                            if (currentCity != city && city.getId() != null){
+                                currentCity = city;
+                                currentDistrict = null;
+                                districtAdapter.clear();
+                                districtAdapter.notifyDataSetChanged();
+                                loadDistrict(currentProvince.getId(), currentCity.getId());
+                                etCity.setText(city.getName());
+                            }
+
                         }
-                        if (currentCity != city){
-                            currentCity = city;
-                            currentDistrict = null;
-                            loadDistrict(currentProvince.getId(), currentCity.getId());
-                        }
+
 
                     }
                 });
 
                 if (areaList!= null && areaList.getList() != null)areaList.getList().add(0, new Area(null, "Choose City"));
-
 
                 if (areaList != null && areaList.getList() != null && areaList.getList().size() > 0){
                     cityAdapter.clear();
@@ -275,7 +295,7 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
                         if (city != null && NYHelper.isStringNotEmpty(city.getName())){
                             etCity.setText(city.getName());
                             currentCity = city;
-                            loadDistrict(currentProvince.getId(), currentCity.getId());
+                            //loadDistrict(currentProvince.getId(), currentCity.getId());
                             spinnerCitye.setSelection(pos);
                             cityAdapter.setSelectedPosition(pos);
                             cityAdapter.notifyDataSetChanged();
@@ -327,11 +347,11 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
 
                         int position = spinner.getSelectedItemPosition();
                         Area district = districtAdapter.getItem(position);
-                        currentDistrict = district;
 
                         if (district != null && NYHelper.isStringNotEmpty(district.getName())){
                             //Toast.makeText(context, district.getName(), Toast.LENGTH_SHORT).show();
                             etDistrict.setText(district.getName());
+                            currentDistrict = district;
                         }
                     }
                 });
