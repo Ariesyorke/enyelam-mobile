@@ -619,7 +619,7 @@ public class DoCourseActivity extends BasicActivity implements
         }
         builder.setMinYear(year)
                 .setMaxYear(year+2)
-                .setMinMonth(month+1)
+                .setMinMonth(month)
                 .setTitle("Select Schedule")
                 .setMonthRange(Calendar.JANUARY, Calendar.DECEMBER)
 
