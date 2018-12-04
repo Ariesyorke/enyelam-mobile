@@ -203,7 +203,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             }
         }
 
-
         // TODO: check parameter yang akan dikirim
         if (cartReturn == null || !NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
             Toast.makeText(getActivity(), "Please, choose billing address first", Toast.LENGTH_SHORT).show();
@@ -228,10 +227,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             } else if (orderReturn == null && isTranssactionFailed){
                 // TODO: request ulang cart token atau cart return
                 //new NYCustomDialog().showAgreementDialog(getActivity());
-                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+                //getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
             } else if (orderReturn == null){
                 //new NYCustomDialog().showAgreementDialog(getActivity());
-                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+                //getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
+                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
             } else {
                 payUsingVeritrans();
             }
@@ -507,11 +508,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         }
     }
 
-    private void getSubmitOrder(String paymentMethod, String cartToken, String billingAddressId, String shippingAddressId, List<DeliveryService> deliveryServices, String typeId, String voucher){
+    //private void getSubmitOrder(String paymentMethod, String cartToken, String billingAddressId, String shippingAddressId, List<DeliveryService> deliveryServices, String typeId, String voucher){
+    private void getSubmitOrder(String paymentMethod, String cartToken, String billingAddressId, String shippingAddressId, List<DoShopMerchant> merchants, String typeId, String voucher){
         pDialog.show();
         NYDoShopSubmitOrderRequest req = null;
         try {
-            req = new NYDoShopSubmitOrderRequest(getActivity(), paymentMethod, cartToken, billingAddressId, shippingAddressId, deliveryServices, typeId, voucher);
+            req = new NYDoShopSubmitOrderRequest(getActivity(), paymentMethod, cartToken, billingAddressId, shippingAddressId, merchants, typeId, voucher);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -880,7 +882,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
                 // TODO: refresh order detail
                 // 1 = bank 2 = cc 3 = virtual 4 = paypal
-                cartReturn = result;
+                //cartReturn = result;
+                // TODO: ambil additionalsnya aja
+                cartReturn.setAdditionals(result.getAdditionals());
 
                 if (cartReturn != null && cartReturn.getCart() != null){
                     // TODO: init cart, tes lagi apakah ongkir ilang atau tidak

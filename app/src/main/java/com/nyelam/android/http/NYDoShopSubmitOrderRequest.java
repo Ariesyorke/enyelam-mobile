@@ -7,6 +7,7 @@ import com.danzoye.lib.http.DHTTPConnectionHelper;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DeliveryService;
 import com.nyelam.android.data.DoShopList;
+import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.Variation;
@@ -29,7 +30,8 @@ public class NYDoShopSubmitOrderRequest extends NYBasicAuthRequest<DoShopOrder> 
     private final static String POST_TYPE_ID = "type_id";
     private final static String POST_VOUCHER_CODE = "voucher_code";
 
-    public NYDoShopSubmitOrderRequest(Context context, String paymentMethodId, String cartToken, String billingAddressId, String shippingAddressId, List<DeliveryService> deliveryServices, String typeId, String voucherCode) throws Exception {
+    //public NYDoShopSubmitOrderRequest(Context context, String paymentMethodId, String cartToken, String billingAddressId, String shippingAddressId, List<DeliveryService> deliveryServices, String typeId, String voucherCode) throws Exception {
+    public NYDoShopSubmitOrderRequest(Context context, String paymentMethodId, String cartToken, String billingAddressId, String shippingAddressId, List<DoShopMerchant> merchants, String typeId, String voucherCode) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_submit_order));
 
         if(!TextUtils.isEmpty(paymentMethodId)) {
@@ -48,14 +50,20 @@ public class NYDoShopSubmitOrderRequest extends NYBasicAuthRequest<DoShopOrder> 
             addQuery(POST_SHIPPING_ADDRESS_ID, shippingAddressId);
         }
 
-        if(deliveryServices != null && deliveryServices.size() > 0) {
-            for (DeliveryService deliveryService : deliveryServices){
-                if (deliveryService != null && NYHelper.isStringNotEmpty(deliveryService.getName())){
-                    //String service = deliveryService.getName()+" "+deliveryService.getTypes().get(0).getName()+":"+String.valueOf(deliveryService.getPrice());
-                    //addQuery(POST_DELIVERY_SERVICE+"["+String.valueOf(service)+"]", service);
-                    String service = deliveryService.getName()+":"+String.valueOf((int)deliveryService.getPrice());
-                    addQuery(POST_DELIVERY_SERVICE+"["+String.valueOf(service.length())+"]", service);
-                    //addQuery(POST_DELIVERY_SERVICE, deliveryService.toString());
+//        if(deliveryServices != null && deliveryServices.size() > 0) {
+//            for (DeliveryService deliveryService : deliveryServices){
+//                if (deliveryService != null && NYHelper.isStringNotEmpty(deliveryService.getName())){
+//                    String service = deliveryService.getName()+":"+String.valueOf((int)deliveryService.getPrice());
+//                    addQuery(POST_DELIVERY_SERVICE+"["+String.valueOf(service.length())+"]", service);
+//                }
+//            }
+//        }
+
+        if(merchants != null && merchants.size() > 0) {
+            for (DoShopMerchant merchant : merchants){
+                if (merchant != null && NYHelper.isStringNotEmpty(merchant.getId()) && merchant.getDeliveryService() != null && NYHelper.isStringNotEmpty(merchant.getDeliveryService().getName())){
+                    String service = merchant.getDeliveryService().getName()+":"+String.valueOf((int) merchant.getDeliveryService().getPrice());
+                    addQuery(POST_DELIVERY_SERVICE+"["+merchant.getId()+"]", service);
                 }
             }
         }
