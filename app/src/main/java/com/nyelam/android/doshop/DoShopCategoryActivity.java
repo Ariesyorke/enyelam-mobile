@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -24,15 +25,18 @@ import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.docourse.DoCourseActivity;
+import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
+import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -101,6 +105,16 @@ public class DoShopCategoryActivity extends BasicActivity {
         intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
         startActivityForResult(intent, 1);
+    }
+
+    @OnClick(R.id.iv_cart) void intentToCart(){
+        LoginStorage storage = new LoginStorage(this);
+        if (storage.isUserLogin()){
+            startActivity(new Intent(context, DoShopCheckoutActivity.class));
+        } else {
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivityForResult(intent, NYHelper.LOGIN_REQ);
+        }
     }
 
     @Override
@@ -279,8 +293,8 @@ public class DoShopCategoryActivity extends BasicActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
-        //toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class DoShopProduct implements Parseable {
     private static String KEY_CATEGORIES = "categories";
     private static String KEY_MERCHANT = "merchant";
     private static String KEY_VARIATIONS = "variations";
-    private static String KEY_DESCRIPTION = "product_description";
+    private static String KEY_DESCRIPTION = "description";
     private static String KEY_QTY = "qty";
 
     private String id;
@@ -258,7 +258,7 @@ public class DoShopProduct implements Parseable {
 
         try {
             if (!obj.isNull(KEY_DESCRIPTION)) {
-                setFeaturedImage(obj.getString(KEY_DESCRIPTION));
+                setDescription(obj.getString(KEY_DESCRIPTION));
             }
         } catch (JSONException e) {e.printStackTrace();}
 

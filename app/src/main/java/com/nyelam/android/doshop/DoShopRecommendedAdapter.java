@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DoShopProduct;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
 import java.util.ArrayList;
@@ -73,7 +74,12 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
                 holder.priceStrike.setVisibility(View.GONE);
             }
 
+            //product.setFeaturedImage("https://www.zamzar.com/images/filetypes/jpg.png");
+
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
+
+                NYLog.e("CEK IMAGE : "+product.getFeaturedImage());
+
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
                 ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
                     @Override

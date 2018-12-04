@@ -12,28 +12,56 @@
         android:id="@+id/toolbar"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:contentInsetStartWithNavigation="0dp"
+        android:contentInsetStart="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp"
+        android:paddingLeft="0dp"
+        >
 
         <LinearLayout
-            android:background="@drawable/ny_rectangle_white"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/et_search"
-                android:hint="Search.."
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:backgroundTint="@android:color/transparent"
-                android:textSize="14sp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:editable="false"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginRight="@dimen/padding"
+                android:background="@drawable/bg_search_do_shop"
+                android:hint="Search product"
+                android:paddingBottom="@dimen/padding_half"
+                android:paddingLeft="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:paddingTop="@dimen/padding_half"
+                android:textSize="15sp"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:textColor="@color/ny_black1"
-                android:textColorHint="@color/ny_grey2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:textColorHint="@color/ny_grey2" />
+
+            <ImageView
+                android:visibility="visible"
+                android:id="@+id/iv_cart"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cart_active" />
 
         </LinearLayout>
 

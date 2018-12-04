@@ -59,23 +59,23 @@ public class DoShopDetailItemImagesActivity extends FragmentActivity {
                 .setFragmentManager(getSupportFragmentManager())
                 //.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.logo_nyelam)))
                 //.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(toBitmap(R.drawable.logo_nyelam))))
-                .addMedia(MediaInfo.mediaLoader(new MediaLoader() {
-                    @Override public boolean isImage() {
-                        return true;
-                    }
-
-                    @Override public void loadMedia(Context context, ImageView imageView,
-                                                    MediaLoader.SuccessCallback callback) {
-                        imageView.setImageBitmap(toBitmap(R.drawable.logo_nyelam));
-                        callback.onSuccess();
-                    }
-
-                    @Override public void loadThumbnail(Context context, ImageView thumbnailView,
-                                                        MediaLoader.SuccessCallback callback) {
-                        thumbnailView.setImageBitmap(toBitmap(R.drawable.logo_nyelam));
-                        callback.onSuccess();
-                    }
-                }))
+//                .addMedia(MediaInfo.mediaLoader(new MediaLoader() {
+//                    @Override public boolean isImage() {
+//                        return true;
+//                    }
+//
+//                    @Override public void loadMedia(Context context, ImageView imageView,
+//                                                    MediaLoader.SuccessCallback callback) {
+//                        imageView.setImageBitmap(toBitmap(R.drawable.logo_nyelam));
+//                        callback.onSuccess();
+//                    }
+//
+//                    @Override public void loadThumbnail(Context context, ImageView thumbnailView,
+//                                                        MediaLoader.SuccessCallback callback) {
+//                        thumbnailView.setImageBitmap(toBitmap(R.drawable.logo_nyelam));
+//                        callback.onSuccess();
+//                    }
+//                }))
                 //.addMedia(MediaInfo.mediaLoader(new DefaultVideoLoader(movieUrl, R.drawable.logo_nyelam)))
                 .addMedia(infos);
     }

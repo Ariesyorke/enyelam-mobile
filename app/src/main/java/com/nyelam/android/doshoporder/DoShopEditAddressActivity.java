@@ -123,7 +123,7 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_do_shop_add_address);
+        setContentView(R.layout.activity_do_shop_edit_address);
         ButterKnife.bind(this);
         context = getApplicationContext();
         initToolbar();

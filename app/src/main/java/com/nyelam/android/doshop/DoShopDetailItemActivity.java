@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -342,7 +344,14 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                 tvName.setText(product.getProductName());
                 tvProductDescriptionTitle.setText("Product description "+product.getProductName());
             }
-            if (NYHelper.isStringNotEmpty(product.getDescription()))tvProductDescription.setText(product.getDescription());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && NYHelper.isStringNotEmpty(product.getDescription())) {
+                tvProductDescription.setText(Html.fromHtml(product.getDescription()));
+            } else if (NYHelper.isStringNotEmpty(product.getDescription())){
+                tvProductDescription.setText(Html.fromHtml(product.getDescription()));
+            }
+
+
             if (product.getSpecialPrice() < product.getNormalPrice()){
                 tvPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                 tvPriceStrikethrough.setText(NYHelper.priceFormatter(product.getNormalPrice()));
