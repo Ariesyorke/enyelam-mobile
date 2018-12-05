@@ -13,6 +13,7 @@ import com.nyelam.android.helper.NYHelper;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 public class NYDoShopAddToCartRequest extends NYBasicAuthRequest<DoShopCartReturn> {
 
@@ -23,27 +24,22 @@ public class NYDoShopAddToCartRequest extends NYBasicAuthRequest<DoShopCartRetur
     private final static String POST_QTY = "qty";
 
     //public NYDoShopAddToCartRequest(Context context, String productId, List<Variation> variations, String qty) throws Exception {
-    public NYDoShopAddToCartRequest(Context context, String productId, Variation variationSize, Variation variationColor, String qty) throws Exception {
+    public NYDoShopAddToCartRequest(Context context, String productId, Map<String, String> variations, String qty) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_add_to_cart));
 
         if(!TextUtils.isEmpty(productId)) {
             addQuery(POST_PRODUCT_ID, productId);
         }
 
-        if(variationSize != null && !TextUtils.isEmpty(variationSize.getId())) {
-            addQuery(POST_VARIATIONS, variationSize.getId());
+
+        if (variations != null && variations.size() > 0){
+            for (final Map.Entry<String, String> entry : variations.entrySet()) {
+                if(entry != null && NYHelper.isStringNotEmpty(entry.getValue())) {
+                    addQuery(POST_VARIATIONS, entry.getValue());
+                }
+
+            }
         }
-
-        if(variationColor != null && !TextUtils.isEmpty(variationColor.getId())) {
-            addQuery(POST_VARIATIONS, variationColor.getId());
-        }
-
-
-//        if (variations != null && variations.size() > 0){
-//            for (Variation var : variations){
-//                if (var != null && NYHelper.isStringNotEmpty(var.getId()))addQuery(POST_VARIATIONS, var.getId());
-//            }
-//        }
 
         if(!TextUtils.isEmpty(qty)) {
             addQuery(POST_QTY, qty);

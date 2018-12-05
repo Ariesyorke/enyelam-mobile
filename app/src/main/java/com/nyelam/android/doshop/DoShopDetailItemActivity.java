@@ -9,7 +9,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +37,8 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.Banner;
+import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
@@ -39,11 +47,13 @@ import com.nyelam.android.data.VariationsUtility;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.home.BannerViewPagerAdapter;
 import com.nyelam.android.http.NYDoShopAddToCartRequest;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYDialogAddToCart;
 import com.nyelam.android.view.NYSpinner;
 import com.octo.android.robospice.SpiceManager;
@@ -56,30 +66,32 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.ToDoubleBiFunction;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.relex.circleindicator.CircleIndicator;
 
 public class DoShopDetailItemActivity extends BasicActivity implements NYDialogAddToCart.Listener {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopRecommendedAdapter recommendedAdapter;
-    private ArrayAdapter qtyAdapterColor;
-    private ArrayAdapter qtyAdapterSize;
-
 
     private String productId;
     private DoShopProduct product;
-    //private List<Variation> chosenVariations;
+    private Map<String, String> selectedMapVariations;
 
-    private Variation chosenVariationSize;
-    private Variation chosenVariationColor;
-    private int chosenQtySize;
-    private int chosenQtyColor;
+
+
+    private BannerViewPagerAdapter bannerViewPagerAdapter;
+    @BindView(R.id.banner_view_pager) NYBannerViewPager bannerViewPager;
+    @BindView(R.id.circle_indicator) CircleIndicator circleIndicator;
+
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.ll_main_container) LinearLayout llMainContainer;
@@ -93,14 +105,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     @BindView(R.id.tv_price_strikethrough) TextView tvPriceStrikethrough;
     @BindView(R.id.tv_you_save ) TextView tvYouSave ;
     @BindView(R.id.tv_coinns) TextView tvCoinns;
-    @BindView(R.id.spinner_item_color)
-    NYSpinner spinnerItemColor;
-    @BindView(R.id.spinner_item_size)
-    NYSpinner spinnerItemSize;
-    @BindView(R.id.spinner_quantity_color) NYSpinner spinnerQuantityColor;
-    @BindView(R.id.et_quantity_color) EditText etQuantityColor;
-    @BindView(R.id.spinner_quantity_size) NYSpinner spinnerQuantitySize;
-    @BindView(R.id.et_quantity_size) EditText etQuantitySize;
+
     @BindView(R.id.tv_status) TextView tvStatus;
     @BindView(R.id.tv_add_to_basket) TextView tvAddToBasket;
     @BindView(R.id.tv_sent_date_one) TextView tvSentDateOne;
@@ -108,17 +113,42 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     @BindView(R.id.tv_product_description_title) TextView tvProductDescriptionTitle;
     @BindView(R.id.tv_product_description) TextView tvProductDescription;
     @BindView(R.id.ll_related_item) LinearLayout llRelatedItem;
-    @BindView(R.id.ll_container_color) LinearLayout llContainerColor;
-    @BindView(R.id.ll_container_size) LinearLayout llContainerSize;
     @BindView(R.id.rv_related_item) RecyclerView rvRelatedItem;
+
+    @BindView(R.id.tv_brand_name) TextView tvBrandName;
+    @BindView(R.id.tv_merchant_name) TextView tvMerchantName;
+    @BindView(R.id.civ_merchant) ImageView civMerchant;
+
+    @BindView(R.id.ll_container_spinner) LinearLayout llContainerSpinner;
+    @BindView(R.id.et_quantity) EditText etQuantity;
 
     @OnClick(R.id.tv_add_to_basket)void addToBasket(){
 //        NYDialogAddToCart dialog = new NYDialogAddToCart();
 //        dialog.showAddToCartDialog(this, product);
 
         LoginStorage storage = new LoginStorage(this);
-        if (storage.isUserLogin() && product != null && NYHelper.isStringNotEmpty(product.getId())){
-            addToCart(product.getId(),chosenVariationSize, chosenVariationColor, String.valueOf(chosenQtySize));
+
+        int quantity = 0;
+        if (NYHelper.isStringNotEmpty(etQuantity.getText().toString()))quantity = Integer.valueOf(etQuantity.getText().toString());
+
+        // TODO: check selected variations
+        boolean isValid = true;
+        String tagKey = null;
+        for (final Map.Entry<String, String> entry : selectedMapVariations.entrySet()) {
+            if (entry.getValue() == null || entry.getValue().isEmpty()){
+                isValid = false;
+                tagKey = entry.getKey();
+                break;
+            }
+        }
+
+        // TODO: selected param
+        if (!isValid){
+            Toast.makeText(context, "Please, select "+tagKey+" first to continue", Toast.LENGTH_SHORT).show();
+        } else if (quantity <= 0){
+            Toast.makeText(context, "Please, insert quantity item", Toast.LENGTH_SHORT).show();
+        } else if (storage.isUserLogin() && product != null && NYHelper.isStringNotEmpty(product.getId())){
+            addToCart(product.getId(),selectedMapVariations, String.valueOf(quantity));
         } else if (product != null && NYHelper.isStringNotEmpty(product.getId())){
             Intent intent = new Intent(this, AuthActivity.class);
             startActivityForResult(intent, NYHelper.LOGIN_REQ);
@@ -150,7 +180,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_shop_detail_item);
         ButterKnife.bind(this);
-        //chosenVariations = new ArrayList<>();
+        initToolbar();
         context = this;
         initExtra();
         if (product != null){
@@ -162,14 +192,72 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             dialogItemNotAvailable();
         }
 
+        initVariations();
+    }
 
+    private void initVariations() {
         try {
             JSONObject obj = new JSONObject(NYHelper.getJSONFromResource(this, "variations.json"));
             Map<String, List<Variation>> vars = VariationsUtility.jsonToMap(obj);
+
+            if (vars != null)NYLog.e("CEK VARS : "+vars.size());
+
+            // TODO: init TEMP selected variations
+            selectedMapVariations = new HashMap<>();
+
+            llContainerSpinner.removeAllViews();
+
+            if (vars.size() > 0){
+                for (final Map.Entry<String, List<Variation>> entry : vars.entrySet()) {
+
+                    // TODO: DEBUG DATA
+                    System.out.println(entry);
+                    NYLog.e("CEK VARS key : "+entry.getKey());
+                    NYLog.e("CEK VARS value : "+entry.getValue());
+
+                    // TODO: CHECK AND PROSES DATA
+                    if (entry != null && NYHelper.isStringNotEmpty(entry.getKey()) && entry.getValue() != null && entry.getValue().size() > 0){
+
+                        // TODO: tampung data + default selected
+                        List<Variation> variations = new ArrayList<>();
+                        variations.add(new Variation(null, "Select "+entry.getKey()));
+                        variations.addAll(entry.getValue());
+
+                        // TODO: init selected variations, sesuai jumlah data  dari API
+                        selectedMapVariations.put(entry.getKey(), null);
+
+                        // TODO: init view spinner
+                        LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View spinnerView = inflaterAddons.inflate(R.layout.spinner_variation, null);
+                        LinearLayout llContainer = (LinearLayout) spinnerView.findViewById(R.id.ll_container);
+                        TextView tvTitle = (TextView) spinnerView.findViewById(R.id.tv_title);
+                        NYSpinner spinner = (NYSpinner) spinnerView.findViewById(R.id.spinner);
+
+                        if (NYHelper.isStringNotEmpty(entry.getKey())) tvTitle.setText(entry.getKey());
+
+                        // TODO: init data spinner
+                        final SizeSpinAdapter spinAdapter = new SizeSpinAdapter(this, variations);
+                        spinner.setAdapter(spinAdapter);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                                       int position, long id) {
+
+                                selectedMapVariations.put(entry.getKey(), spinAdapter.getVariationId(position));
+                            }
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapter) {  }
+                        });
+
+
+                        llContainerSpinner.addView(spinnerView);
+                    }
+
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void initProductDetail(String id){
@@ -208,22 +296,6 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
                 if (product != null && product.getCategories() != null && product.getCategories().size() > 0 && NYHelper.isStringNotEmpty(product.getCategories().get(0).getId())){
                     initRelatedItem(product.getCategories().get(0).getId());
-                }
-
-                if (product != null && product.getVariations() != null && product.getVariations().getColors() != null && product.getVariations().getColors().size() > 0){
-                    final SizeSpinAdapter colorSpinAdapter = new SizeSpinAdapter(DoShopDetailItemActivity.this, product.getVariations().getColors());
-                    spinnerItemColor.setAdapter(colorSpinAdapter);
-                    llContainerColor.setVisibility(View.VISIBLE);
-                } else {
-                    llContainerColor.setVisibility(View.GONE);
-                }
-
-                if (product != null && product.getVariations() != null && product.getVariations().getSizes() != null){
-                    final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(DoShopDetailItemActivity.this, product.getVariations().getSizes());
-                    spinnerItemSize.setAdapter(sizeSpinAdapter);
-                    llContainerSize.setVisibility(View.VISIBLE);
-                } else {
-                    llContainerSize.setVisibility(View.GONE);
                 }
 
                 if (product == null || product.getVariations() == null || ((product.getVariations().getSizes() == null || product.getVariations().getSizes().size() <= 0) && (product.getVariations().getColors() == null || product.getVariations().getColors().size() <= 0)) ){
@@ -279,12 +351,12 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     }
 
 
-    private void addToCart(String productId, Variation variationSize, Variation variationColor, String qty){
+    private void addToCart(String productId, Map<String, String> variations, String qty){
         //NYLog.e("cek related 1");
         pDialog.show();
         NYDoShopAddToCartRequest req = null;
         try {
-            req = new NYDoShopAddToCartRequest(context, productId, variationSize, variationColor, qty);
+            req = new NYDoShopAddToCartRequest(context, productId, variations, qty);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -357,6 +429,39 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                 tvProductDescriptionTitle.setText("Product description "+product.getProductName());
             }
 
+            if (product.getBrand() != null && NYHelper.isStringNotEmpty(product.getBrand().getName()))tvBrandName.setText(product.getBrand().getName());
+
+            if (product.getMerchant() != null){
+                if (NYHelper.isStringNotEmpty(product.getMerchant().getName()))tvMerchantName.setText(product.getMerchant().getName());
+                if (NYHelper.isStringNotEmpty(product.getMerchant().getLogo())){
+                    ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+                    ImageLoader.getInstance().loadImage(product.getMerchant().getLogo(), NYHelper.getOption(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            civMerchant.setImageResource(R.drawable.example_pic);
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+                            civMerchant.setImageResource(R.drawable.example_pic);
+                        }
+                    });
+
+                    ImageLoader.getInstance().displayImage(product.getMerchant().getLogo(), civMerchant, NYHelper.getOption());
+                }
+
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && NYHelper.isStringNotEmpty(product.getDescription())) {
                 tvProductDescription.setText(Html.fromHtml(product.getDescription()));
             } else if (NYHelper.isStringNotEmpty(product.getDescription())){
@@ -377,95 +482,6 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                 tvPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
                 llPriceContainer.setVisibility(View.GONE);
             }
-
-            if (product.getVariations() != null && product.getVariations().getColors() != null){
-
-                final SizeSpinAdapter colorSpinAdapter = new SizeSpinAdapter(this, product.getVariations().getColors());
-                spinnerItemColor.setAdapter(colorSpinAdapter);
-                spinnerItemColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view,
-                                               int position, long id) {
-
-                        Variation variation = colorSpinAdapter.getItem(position);
-                        chosenVariationColor = variation;
-
-                        if (variation.getQty() > 0){
-                            List<String> quantities = new ArrayList<>();
-                            for (int i=1; i<=variation.getQty(); i++){
-                                quantities.add(String.valueOf(i));
-                            }
-
-                            qtyAdapterColor = new ArrayAdapter(context, R.layout.spinner_quantity, quantities);
-                            spinnerQuantityColor.setAdapter(qtyAdapterColor);
-                            chosenQtyColor = 1;
-                        } else {
-                            chosenQtyColor = 0;
-                        }
-
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapter) {  }
-                });
-
-                spinnerQuantityColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view,
-                                               int position, long id) {
-                        // Here you get the current item (a User object) that is selected by its position
-                        if (qtyAdapterColor != null && qtyAdapterColor.getItem(position) != null)chosenQtyColor = Integer.valueOf((String) qtyAdapterColor.getItem(position));
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapter) {  }
-                });
-            }
-
-
-
-
-            if (product.getVariations() != null && product.getVariations().getSizes() != null) {
-                final SizeSpinAdapter sizeSpinAdapter = new SizeSpinAdapter(this, product.getVariations().getSizes());
-                spinnerItemSize.setAdapter(sizeSpinAdapter);
-                spinnerItemSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view,
-                                               int position, long id) {
-                        // Here you get the current item (a User object) that is selected by its position
-                        //chosenVariations = new ArrayList<>();
-
-                        Variation variation = sizeSpinAdapter.getItem(position);
-                        chosenVariationSize = variation;
-
-                        if (variation.getQty() > 0){
-                            List<String> quantities = new ArrayList<>();
-                            for (int i=1; i<=variation.getQty(); i++){
-                                quantities.add(String.valueOf(i));
-                            }
-
-                            qtyAdapterSize = new ArrayAdapter(context, R.layout.spinner_quantity, quantities);
-                            spinnerQuantitySize.setAdapter(qtyAdapterSize);
-                            chosenQtySize = 1;
-                        } else {
-                            chosenQtySize = 0;
-                        }
-
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapter) {  }
-                });
-
-                spinnerQuantitySize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view,
-                                               int position, long id) {
-                        // Here you get the current item (a User object) that is selected by its position
-                        if (qtyAdapterSize != null && qtyAdapterSize.getItem(position) != null)chosenQtySize = Integer.valueOf((String) qtyAdapterSize.getItem(position));
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapter) {  }
-                });
-            }
-
 
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
@@ -493,6 +509,50 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
                 ImageLoader.getInstance().displayImage(product.getFeaturedImage(), ivItemImage, NYHelper.getOption());
             }
+
+
+            etQuantity.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().length() == 1 && s.toString().startsWith("0")) {
+                        s.clear();
+                    }
+                }
+            });
+
+
+            // TODO: init image gallery
+            BannerList bannerList = new BannerList();
+            List<Banner> banners = new ArrayList<>();
+            if (product != null && product.getFeaturedImage() != null && !TextUtils.isEmpty(product.getFeaturedImage()))banners.add(new Banner("1", product.getFeaturedImage(), "captio", null));
+            bannerList.setList(banners);
+            if(product != null && product.getImages() != null && !product.getImages().isEmpty()) {
+                int i = 1;
+                for(String image: product.getImages()) {
+                    banners.add(new Banner(String.valueOf(i), image, "gallery", null));
+                    i++;
+                }
+            }
+
+
+            //input data data
+            bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
+            bannerViewPager.setAdapter(bannerViewPagerAdapter);
+            circleIndicator.setViewPager(bannerViewPager);
+            bannerViewPagerAdapter.setBannerList(bannerList);
+            bannerViewPagerAdapter.notifyDataSetChanged();
+            bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+            circleIndicator.setViewPager(bannerViewPager);
 
         }
     }
@@ -530,8 +590,33 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         if (requestCode == NYHelper.LOGIN_REQ) {
             if (resultCode == RESULT_OK) {
                 //triggerBook = true;
-                if (product != null && NYHelper.isStringNotEmpty(product.getId())){
-                    addToCart(product.getId(),chosenVariationSize, chosenVariationColor, String.valueOf(chosenQtySize));
+
+                LoginStorage storage = new LoginStorage(context);
+
+                int quantity = 0;
+                if (NYHelper.isStringNotEmpty(etQuantity.getText().toString()))quantity = Integer.valueOf(etQuantity.getText().toString());
+
+                // TODO: check selected variations
+                boolean isValid = true;
+                String tagKey = null;
+                for (final Map.Entry<String, String> entry : selectedMapVariations.entrySet()) {
+                    if (entry.getValue() == null || entry.getValue().isEmpty()){
+                        isValid = false;
+                        tagKey = entry.getKey();
+                        break;
+                    }
+                }
+
+                // TODO: selected param
+                if (!isValid){
+                    Toast.makeText(context, "Please, select "+tagKey+" first to continue", Toast.LENGTH_SHORT).show();
+                } else if (quantity <= 0){
+                    Toast.makeText(context, "Please, insert quantity item", Toast.LENGTH_SHORT).show();
+                } else if (storage.isUserLogin() && product != null && NYHelper.isStringNotEmpty(product.getId())){
+                    addToCart(product.getId(),selectedMapVariations, String.valueOf(quantity));
+                } else if (product != null && NYHelper.isStringNotEmpty(product.getId())){
+                    Intent intent = new Intent(this, AuthActivity.class);
+                    startActivityForResult(intent, NYHelper.LOGIN_REQ);
                 }
             }
         } else {
@@ -539,4 +624,26 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Detail");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Detail");
+        int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
+        toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

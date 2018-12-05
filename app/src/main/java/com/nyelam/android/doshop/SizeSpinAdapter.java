@@ -49,6 +49,13 @@ public class SizeSpinAdapter extends ArrayAdapter<Variation> implements SpinnerA
         return position;
     }
 
+    public String getVariationId(int position){
+        if (values.get(position) != null){
+            return values.get(position).getId();
+        }
+        return null;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

@@ -17,6 +17,9 @@ public class DoShopMerchant implements Parseable {
 
     private static String KEY_ID = "id";
     private static String KEY_NAME = "name";
+    private static String KEY_MERCHANT_NAME = "merchant_name";
+    private static String KEY_LOGO = "logo";
+    private static String KEY_MERCHANT_LOGO = "merchant_logo";
     private static String KEY_PROVINCE_ID = "province_id";
     private static String KEY_CITY_ID = "city_id";
     private static String KEY_DISTRICT_ID = "district_id";
@@ -28,6 +31,7 @@ public class DoShopMerchant implements Parseable {
 
     private String id;
     private String name;
+    private String logo;
     private String provinceId;
     private String cityId;
     private String districtId;
@@ -51,6 +55,14 @@ public class DoShopMerchant implements Parseable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getProvinceId() {
@@ -130,6 +142,16 @@ public class DoShopMerchant implements Parseable {
         try {
             if (!obj.isNull(KEY_NAME)) {
                 setName(obj.getString(KEY_NAME));
+            } else if (!obj.isNull(KEY_MERCHANT_NAME)) {
+                setName(obj.getString(KEY_MERCHANT_NAME));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!obj.isNull(KEY_LOGO)) {
+                setLogo(obj.getString(KEY_LOGO));
+            } else if (!obj.isNull(KEY_MERCHANT_LOGO)) {
+                setLogo(obj.getString(KEY_MERCHANT_LOGO));
             }
         } catch (JSONException e) {e.printStackTrace();}
 
@@ -219,6 +241,14 @@ public class DoShopMerchant implements Parseable {
                 obj.put(KEY_NAME, getName());
             } else {
                 obj.put(KEY_NAME, JSONObject.NULL);
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+
+        try {
+            if (!TextUtils.isEmpty(getLogo())) {
+                obj.put(KEY_LOGO, getLogo());
+            } else {
+                obj.put(KEY_LOGO, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 

@@ -171,7 +171,7 @@
 
 
                     <RelativeLayout
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:id="@+id/banner_relativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
