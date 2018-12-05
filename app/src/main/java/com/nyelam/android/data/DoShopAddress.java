@@ -200,17 +200,18 @@ public class DoShopAddress implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
 
-        if (obj.has(KEY_PROVINCE)){
-            try {
+        try {
+            if (obj.has(KEY_PROVINCE)){
                 JSONObject o = obj.getJSONObject(KEY_PROVINCE);
                 if(o != null) {
                     province = new Province();
                     province.parse(o);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
 
         if (obj.has(KEY_DISTRICT)){
             try {
@@ -321,7 +322,6 @@ public class DoShopAddress implements Parseable {
             if(getProvince()!=null){
                 JSONObject objProv = new JSONObject(getProvince().toString());
                 obj.put(KEY_PROVINCE, objProv);
-                obj.put(KEY_PROVINCE, getProvince());
             } else {
                 obj.put(KEY_PROVINCE, JSONObject.NULL);
             }

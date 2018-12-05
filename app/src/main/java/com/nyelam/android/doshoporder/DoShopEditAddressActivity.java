@@ -20,6 +20,7 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Area;
 import com.nyelam.android.data.AreaList;
 import com.nyelam.android.data.DoShopAddress;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.general.CityAdapter;
 import com.nyelam.android.general.DistrictAdapter;
 import com.nyelam.android.general.ProvinceAdapter;
@@ -49,10 +50,11 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
     private CityAdapter cityAdapter;
     private DistrictAdapter districtAdapter;
 
-
     private Area currentProvince;
     private Area currentCity;
     private Area currentDistrict;
+
+    private boolean isInit = true;
 
     @BindView(R.id.et_label)
     EditText etLabel;
@@ -153,9 +155,26 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
             if (NYHelper.isStringNotEmpty(doShopAddress.getAddress()))etAddress.setText(doShopAddress.getAddress());
             if (NYHelper.isStringNotEmpty(doShopAddress.getZipCode()))etZipCode.setText(doShopAddress.getZipCode());
             if (NYHelper.isStringNotEmpty(doShopAddress.getPhoneNumber()))etPhone.setText(doShopAddress.getPhoneNumber());
+
+//            if (doShopAddress.getProvince() != null){
+//                currentProvince = new Area();
+//                currentProvince.setId(doShopAddress.getProvince().getId());
+//                currentProvince.setName(doShopAddress.getProvince().getName());
+//            }
+//            if (doShopAddress.getCity() != null){
+//                currentCity = new Area();
+//                currentCity.setId(doShopAddress.getCity().getId());
+//                currentCity.setName(doShopAddress.getCity().getName());
+//            }
+//            if (doShopAddress.getDistrict() != null){
+//                currentDistrict = new Area();
+//                currentDistrict.setId(doShopAddress.getDistrict().getId());
+//                currentDistrict.setName(doShopAddress.getDistrict().getName());
+//            }
+
             loadProvinces();
         } else {
-
+            loadProvinces();
         }
     }
 
@@ -198,14 +217,24 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
                         int position = spinner.getSelectedItemPosition();
                         Area province = provinceAdapter.getItem(position);
 
-                        if (province != null && NYHelper.isStringNotEmpty(province.getName())){
-                            Toast.makeText(context, province.getName(), Toast.LENGTH_SHORT).show();
+                        if (province != null && NYHelper.isStringNotEmpty(province.getName()) && NYHelper.isStringNotEmpty(province.getId())){
+
+                            if (currentProvince != province && province.getId() != null){
+                                currentCity = null;
+                                cityAdapter.clear();
+                                cityAdapter.notifyDataSetChanged();
+
+                                currentDistrict = null;
+                                districtAdapter.clear();
+                                districtAdapter.notifyDataSetChanged();
+
+                                loadCities(province.getId());
+                            }
+
+                            //Toast.makeText(context, province.getName()+" "+province.getId(), Toast.LENGTH_SHORT).show();
                             etProvince.setText(province.getName());
-                        }
-                        if (currentProvince != province){
-                            currentCity = null;
-                            currentDistrict = null;
-                            loadCities(province.getId());
+
+                            currentProvince = province;
                         }
 
                     }
@@ -219,17 +248,26 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
                     provinceAdapter.addProvinces(areaList.getList());
                     provinceAdapter.notifyDataSetChanged();
 
-
-                    String provinceId = doShopAddress.getProvince().getId();
                     int pos = 0;
+
+                    Toast.makeText(context, "init province", Toast.LENGTH_SHORT).show();
+
                     for (Area province : areaList.getList()){
-                        if (province != null && doShopAddress.getProvince() != null && doShopAddress.getProvince().getId().equals(province.getId())){
-                            if (NYHelper.isStringNotEmpty(province.getName()))etProvince.setText(province.getName());
+
+//                        if (province != null && NYHelper.isStringNotEmpty(province.getId()))NYLog.e("CEK PROVINCE ID : "+province.getId());
+//                        if (province.getId().equals(doShopAddress.getProvince().getId()))
+//                            Toast.makeText(context, "found province", Toast.LENGTH_SHORT).show();
+
+                        if (isInit && doShopAddress != null && doShopAddress.getProvince() != null && NYHelper.isStringNotEmpty(doShopAddress.getProvince().getId())
+                                && province != null && NYHelper.isStringNotEmpty(province.getId())
+                                && doShopAddress.getProvince().getId().equals(province.getId()) && NYHelper.isStringNotEmpty(province.getName())){
+                            etProvince.setText(province.getName());
                             currentProvince = province;
                             loadCities(currentProvince.getId());
                             spinnerProvince.setSelection(pos);
                             provinceAdapter.setSelectedPosition(pos);
                             provinceAdapter.notifyDataSetChanged();
+                            Toast.makeText(context, "got province", Toast.LENGTH_SHORT).show();
                             break;
                         }
                         pos++;
@@ -241,11 +279,10 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
     }
 
 
-
-
     private void loadCities(String provinceId){
         NYDoShopGetLocationRequest req = null;
         try {
+            //Toast.makeText(context, "mulai", Toast.LENGTH_SHORT).show();
             req = new NYDoShopGetLocationRequest(context, provinceId, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,11 +296,14 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
+                //Toast.makeText(context, "gagal", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onRequestSuccess(AreaList areaList) {
 
+                //Toast.makeText(context, "berhasil", Toast.LENGTH_SHORT).show();
 
                 cityAdapter.clear();
 
@@ -284,20 +324,24 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
                         Area city = cityAdapter.getItem(position);
 
                         if (city != null && NYHelper.isStringNotEmpty(city.getName())){
-                            Toast.makeText(context, city.getName(), Toast.LENGTH_SHORT).show();
-                            etCity.setText(city.getName());
-                        }
-                        if (currentCity != city){
-                            currentCity = city;
-                            currentDistrict = null;
-                            loadDistrict(currentProvince.getId(), currentCity.getId());
+
+                            //Toast.makeText(context, city.getName(), Toast.LENGTH_SHORT).show();
+
+                            if (currentCity != city && city.getId() != null){
+                                currentCity = city;
+                                currentDistrict = null;
+                                districtAdapter.clear();
+                                districtAdapter.notifyDataSetChanged();
+                                loadDistrict(currentProvince.getId(), currentCity.getId());
+                                etCity.setText(city.getName());
+                            }
+
                         }
 
                     }
                 });
 
                 if (areaList!= null && areaList.getList() != null)areaList.getList().add(0, new Area(null, "Choose City"));
-
 
                 if (areaList != null && areaList.getList() != null && areaList.getList().size() > 0){
                     cityAdapter.clear();
@@ -306,8 +350,13 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
 
                     int pos = 0;
                     for (Area city : areaList.getList()){
-                        if (city != null && doShopAddress.getCity() != null && doShopAddress.getCity().getId().equals(city.getId())){
-                            if (NYHelper.isStringNotEmpty(city.getName()))etCity.setText(city.getName());
+                        //if (city != null && NYHelper.isStringNotEmpty(city.getName())){
+                        //if (isInit && doShopAddress != null && doShopAddress.getCity() != null && doShopAddress.getCity().getId().equals(city.getId()) && city != null && NYHelper.isStringNotEmpty(city.getName())){
+                        if (isInit && doShopAddress != null && doShopAddress.getCity() != null && NYHelper.isStringNotEmpty(doShopAddress.getCity().getId())
+                                && city != null && NYHelper.isStringNotEmpty(city.getId())
+                                && doShopAddress.getCity().getId().equals(city.getId()) && NYHelper.isStringNotEmpty(city.getName())){
+
+                            etCity.setText(city.getName());
                             currentCity = city;
                             loadDistrict(currentProvince.getId(), currentCity.getId());
                             spinnerCitye.setSelection(pos);
@@ -354,7 +403,6 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
                     public void onSpinnerOpened(Spinner spinner) {
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(spinner.getWindowToken(), 0);
-
                     }
 
                     @Override
@@ -362,13 +410,12 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
 
                         int position = spinner.getSelectedItemPosition();
                         Area district = districtAdapter.getItem(position);
-                        currentDistrict = district;
 
                         if (district != null && NYHelper.isStringNotEmpty(district.getName())){
                             //Toast.makeText(context, district.getName(), Toast.LENGTH_SHORT).show();
                             etDistrict.setText(district.getName());
+                            currentDistrict = district;
                         }
-
                     }
                 });
 
@@ -381,12 +428,18 @@ public class DoShopEditAddressActivity extends BasicActivity implements AdapterV
 
                     int pos = 0;
                     for (Area district : areaList.getList()){
-                        if (district != null && doShopAddress.getDistrict() != null && doShopAddress.getDistrict().equals(district.getId())){
-                            if (NYHelper.isStringNotEmpty(district.getName()))etDistrict.setText(district.getName());
+                        //if (district != null && NYHelper.isStringNotEmpty(district.getName())){
+                        //if (isInit && doShopAddress != null && doShopAddress.getDistrict() != null && doShopAddress.getDistrict().getId().equals(district.getId()) && district != null && NYHelper.isStringNotEmpty(district.getName())){
+                        if (isInit && doShopAddress != null && doShopAddress.getDistrict() != null && NYHelper.isStringNotEmpty(doShopAddress.getDistrict().getId())
+                                && district != null && NYHelper.isStringNotEmpty(district.getId())
+                                && doShopAddress.getDistrict().getId().equals(district.getId()) && NYHelper.isStringNotEmpty(district.getName())){
+
+                            etDistrict.setText(district.getName());
                             currentDistrict = district;
                             spinnerDistrict.setSelection(pos);
                             districtAdapter.setSelectedPosition(pos);
                             districtAdapter.notifyDataSetChanged();
+                            isInit = false;
                             break;
                         }
                         pos++;

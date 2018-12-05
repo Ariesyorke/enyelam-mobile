@@ -488,8 +488,15 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         if (billingAddress != null){
             // TODO: bind data billing address
             if (NYHelper.isStringNotEmpty(billingAddress.getFullName()))tvAddressName.setText(billingAddress.getFullName());
-            if (NYHelper.isStringNotEmpty(billingAddress.getAddress()))tvAddress.setText(billingAddress.getAddress());
             if (NYHelper.isStringNotEmpty(billingAddress.getPhoneNumber()))tvAddressPhone.setText(billingAddress.getPhoneNumber());
+            String addressString = "";
+            if (NYHelper.isStringNotEmpty(billingAddress.getAddress())) addressString+=billingAddress.getAddress();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getDistrict().getName())) addressString+=", "+billingAddress.getDistrict().getName();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getCity().getName())) addressString+=", "+billingAddress.getCity().getName();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getProvince().getName())) addressString+=", "+billingAddress.getProvince().getName();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getZipCode())) addressString+=", "+billingAddress.getZipCode();
+            if (NYHelper.isStringNotEmpty(addressString)) tvAddress.setText(addressString);
+
             llContainerBillingAddress.setVisibility(View.VISIBLE);
             tvChooseBillingAddress.setVisibility(View.GONE);
             tvEditBillingAddress.setVisibility(View.VISIBLE);
@@ -500,8 +507,16 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         if (shippingAddress != null){
             // TODO: bind data shipping address
             if (NYHelper.isStringNotEmpty(shippingAddress.getFullName()))tvShippingAddressName.setText(shippingAddress.getFullName());
-            if (NYHelper.isStringNotEmpty(shippingAddress.getAddress()))tvShippingAddress.setText(shippingAddress.getAddress());
             if (NYHelper.isStringNotEmpty(shippingAddress.getPhoneNumber()))tvShippingAddressPhone.setText(shippingAddress.getPhoneNumber());
+
+            String addressString = "";
+            if (NYHelper.isStringNotEmpty(shippingAddress.getAddress())) addressString+=shippingAddress.getAddress();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getName())) addressString+=", "+shippingAddress.getDistrict().getName();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getCity().getName())) addressString+=", "+shippingAddress.getCity().getName();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getProvince().getName())) addressString+=", "+shippingAddress.getProvince().getName();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getZipCode())) addressString+=", "+shippingAddress.getZipCode();
+            if (NYHelper.isStringNotEmpty(addressString)) tvAddress.setText(addressString);
+
             llContainerShippingAddress.setVisibility(View.VISIBLE);
             tvChooseShippingAddress.setVisibility(View.GONE);
             tvEditShippingAddress.setVisibility(View.VISIBLE);

@@ -71,8 +71,15 @@ public class DoShopAddressAdapter extends RecyclerView.Adapter<DoShopAddressAdap
                 holder.tvLabel.setVisibility(View.GONE);
             }
             if (NYHelper.isStringNotEmpty(address.getFullName())) holder.tvName.setText(address.getFullName());
-            if (NYHelper.isStringNotEmpty(address.getAddress())) holder.tvAddress.setText(address.getAddress());
             if (NYHelper.isStringNotEmpty(address.getPhoneNumber())) holder.tvPhone.setText(address.getPhoneNumber());
+
+            String addressString = "";
+            if (NYHelper.isStringNotEmpty(address.getAddress())) addressString+=address.getAddress();
+            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getDistrict().getName())) addressString+=", "+address.getDistrict().getName();
+            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getCity().getName())) addressString+=", "+address.getCity().getName();
+            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getProvince().getName())) addressString+=", "+address.getProvince().getName();
+            if (address.getDistrict() != null && NYHelper.isStringNotEmpty(address.getZipCode())) addressString+=", "+address.getZipCode();
+            if (NYHelper.isStringNotEmpty(addressString)) holder.tvAddress.setText(addressString);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

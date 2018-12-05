@@ -102,6 +102,8 @@ public class DoShopAddAddressActivity extends BasicActivity implements AdapterVi
             Toast.makeText(context, getString(R.string.warn_field_selected_city), Toast.LENGTH_SHORT).show();
         } else if (currentDistrict == null || currentDistrict.getId() == null){
             Toast.makeText(context, getString(R.string.warn_field_selected_district), Toast.LENGTH_SHORT).show();
+        } else if (!NYHelper.isStringNotEmpty(zipCode)){
+            Toast.makeText(context, getString(R.string.warn_field_selected_zipcode), Toast.LENGTH_SHORT).show();
         } else if (!NYHelper.isStringNotEmpty(phone)){
             Toast.makeText(context, getString(R.string.warn_field_phone_cannot_be_empty), Toast.LENGTH_SHORT).show();
         } else if (!NYHelper.isStringNotEmpty(email)){

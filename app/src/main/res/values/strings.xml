@@ -202,6 +202,7 @@
     <string name="warn_field_selected_province">Please select your province</string>
     <string name="warn_field_selected_city">Please select your city</string>
     <string name="warn_field_selected_district">Please select your district</string>
+    <string name="warn_field_selected_zipcode">Please select your zip code</string>
 
     <string name="message_add_address_success">Your address has been successfully added</string>
     <string name="message_update_profile_success">Your profile has been successfully updated</string>
