@@ -35,6 +35,7 @@ import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
 import com.nyelam.android.data.Variation;
+import com.nyelam.android.data.VariationsUtility;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -50,11 +51,13 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -158,6 +161,15 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             //Toast.makeText(context, "not found", Toast.LENGTH_SHORT).show();
             dialogItemNotAvailable();
         }
+
+
+        try {
+            JSONObject obj = new JSONObject(NYHelper.getJSONFromResource(this, "variations.json"));
+            Map<String, List<Variation>> vars = VariationsUtility.jsonToMap(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void initProductDetail(String id){

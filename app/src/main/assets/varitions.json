@@ -1,0 +1,34 @@
+{
+  "Colour":[
+    {
+      "id":"3",
+      "name":"Red",
+      "qty":"10",
+      "normal_price":200000,
+      "special_price":150000
+    },
+    {
+      "id":"4",
+      "name":"Blue",
+      "qty":"5",
+      "normal_price":200000,
+      "special_price":150000
+    },
+    {
+      "id":"13",
+      "name":"Brown",
+      "qty":"12",
+      "normal_price":200000,
+      "special_price":150000
+    }
+  ],
+  "Size":[
+    {
+      "id":"5",
+      "name":"S",
+      "qty":"10",
+      "normal_price":200000,
+      "special_price":150000
+    }
+  ]
+}
