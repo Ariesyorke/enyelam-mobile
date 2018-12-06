@@ -120,6 +120,7 @@
     <string name="api_inbox_post">api/inbox/post</string>
     <string name="api_inbox_add">api/inbox/add</string>
 
+    <string name="api_path_doshop_banner">api/doshop/banner</string>
     <string name="api_path_doshop_homepage">api/doshop/homepage</string>
     <string name="api_path_doshop_master_category">api/doshop/category</string>
     <string name="api_path_doshop_product_list">api/doshop/product_list</string>

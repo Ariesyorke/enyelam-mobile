@@ -23,6 +23,7 @@ public class DoShopCategory implements Parseable {
     private String name;
     private String description;
     private String imageUrl;
+    private int drawable;
 
     public DoShopCategory(){
 
@@ -32,6 +33,12 @@ public class DoShopCategory implements Parseable {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
+    }
+
+    public DoShopCategory(String id, String name, int drawable){
+        this.id = id;
+        this.name = name;
+        this.drawable = drawable;
     }
 
     public String getId() {

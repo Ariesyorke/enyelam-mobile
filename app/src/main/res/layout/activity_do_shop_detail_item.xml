@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".doshop.DoShopDetailItemActivity">
 
     <android.support.v7.widget.Toolbar
@@ -13,18 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#0071BC"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        app:contentInsetStartWithNavigation="0dp"
-        android:contentInsetStart="0dp"
+        android:contentInsetEnd="0dp"
         android:contentInsetLeft="0dp"
         android:contentInsetRight="0dp"
-        android:contentInsetEnd="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        app:contentInsetRight="0dp"
-        app:contentInsetEnd="0dp"
+        android:contentInsetStart="0dp"
         android:paddingLeft="0dp"
-        >
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:title="Detail"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -32,17 +33,15 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/back_imageView"
-                android:src="@drawable/ic_back_button_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                />
+                android:src="@drawable/ic_back_button_white"
+                android:visibility="gone" />
 
             <com.nyelam.android.view.font.NYTextView
-                android:visibility="gone"
                 android:id="@+id/title_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,18 +51,18 @@
                 android:text="Detail"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:fontTextStyle="reguler" />
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/share_imageView"
-                android:src="@drawable/ic_action_share"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                />
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_action_share"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -74,452 +73,471 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:visibility="gone"
-            android:id="@+id/rl_image_item"
-            android:layout_width="match_parent"
-            android:layout_height="300dp">
-
-            <ImageView
-                android:id="@+id/iv_item_image"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/example_pic" />
-
-            <ImageView
-                android:layout_width="@dimen/padding_triple"
-                android:layout_height="@dimen/padding_triple"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_search_zoom"
-                android:tint="@color/ny_grey3" />
-        </RelativeLayout>
-
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/padding_quad"
-            android:layout_width="55dp"
-            android:layout_height="55dp" />
-
         <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_main_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/padding">
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/banner_relativeLayout"
+                android:id="@+id/rl_image_item"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/toolbar"
-                android:fitsSystemWindows="true">
+                android:layout_height="300dp"
+                android:visibility="gone">
 
-                <ProgressBar
-                    android:id="@+id/banner_progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/ny_blue2"
-                    android:indeterminateTintMode="src_atop" />
-
-                <com.nyelam.android.view.NYBannerViewPager
-                    android:id="@+id/banner_view_pager"
+                <ImageView
+                    android:id="@+id/iv_item_image"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/ny_blue2" />
+                    android:layout_height="300dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/example_pic" />
 
-                <me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/circle_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_alignTop="@+id/promotion_view_pager"
-                    android:layout_centerHorizontal="true"
-                    app:ci_drawable="@drawable/ny_circle_white"
-                    app:ci_orientation="horizontal" />
-
+                <ImageView
+                    android:layout_width="@dimen/padding_triple"
+                    android:layout_height="@dimen/padding_triple"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_search_zoom"
+                    android:tint="@color/ny_grey3" />
             </RelativeLayout>
 
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/padding_quad" />
+
             <LinearLayout
-                android:orientation="vertical"
-                android:padding="@dimen/padding_half"
+                android:id="@+id/ll_main_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/tv_name"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/banner_relativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Cressi Gloves 5 mm Ultrastrecht"
-                    android:textColor="@color/ny_black2"
-                    android:textSize="@dimen/eightteen_sp"
-                    app:fontTextStyle="bold"/>
+                    android:layout_below="@id/toolbar"
+                    android:fitsSystemWindows="true">
 
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/tv_brand_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="PlanetSurf"
-                    android:textColor="@color/ny_black2"
-                    android:textSize="@dimen/sixteen_sp"
-                    android:layout_marginTop="@dimen/padding_half"
-                    app:fontTextStyle="reguler"/>
-
-                <LinearLayout
-                    android:id="@+id/dive_center_linearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_merchant"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/logo_nyelam" />
-
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_merchant_name"
-                        android:layout_width="0dp"
+                    <ProgressBar
+                        android:id="@+id/banner_progress_bar"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/padding"
-                        android:layout_weight="1"
-                        tools:text="Merchant"
-                        android:textColor="@color/ny_black3"
-                        android:textSize="16sp" />
+                        android:layout_centerInParent="true"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/ny_blue2"
+                        android:indeterminateTintMode="src_atop" />
 
-                </LinearLayout>
+                    <com.nyelam.android.view.NYBannerViewPager
+                        android:id="@+id/banner_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/ny_blue2" />
+
+                    <me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/circle_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        app:ci_drawable="@drawable/ny_circle_white"
+                        app:ci_orientation="horizontal" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:orientation="horizontal">
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        style="@style/StarRatingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:rating="4"
-                        android:stepSize="1.0"
-                        android:layout_gravity="start" />
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_review_point"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/padding_half"
-                        android:textSize="@dimen/tertiary_text_size"
-                        android:textColor="@color/ny_black2"
-                        android:text="(19)"/>
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_underline_reviews"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/padding_half"
-                        android:textSize="@dimen/tertiary_text_size"
-                        android:textColor="@color/ny_black2"
-                        android:text="Reviews"/>
-                    <com.nyelam.android.view.font.NYTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/padding_half"
-                        android:textSize="@dimen/tertiary_text_size"
-                        android:textColor="@color/ny_black2"
-                        android:text="|"/>
-                    <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_write_review"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/padding_half"
-                        android:textSize="@dimen/tertiary_text_size"
-                        android:textColor="@color/ny_black2"
-                        android:text="Write a Review"/>
-                </LinearLayout>
+                    android:layout_margin="@dimen/padding"
+                    android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_half">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/eightteen_sp"
+                            app:fontTextStyle="bold"
+                            tools:text="Cressi Gloves 5 mm Ultrastrecht" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/tv_brand_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_half"
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/sixteen_sp"
+                            app:fontTextStyle="reguler"
+                            tools:text="PlanetSurf" />
+
+                        <LinearLayout
+                            android:id="@+id/dive_center_linearLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/civ_merchant"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/logo_nyelam" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/tv_merchant_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_weight="1"
+                                android:textColor="@color/ny_black3"
+                                android:textSize="16sp"
+                                tools:text="Merchant" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:orientation="horizontal">
+
+                            <RatingBar
+                                android:id="@+id/ratingBar"
+                                style="@style/StarRatingBar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_gravity="start"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:rating="4"
+                                android:stepSize="1.0" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/tv_review_point"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/padding_half"
+                                android:text="(19)"
+                                android:textColor="@color/ny_black2"
+                                android:textSize="@dimen/tertiary_text_size" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/tv_underline_reviews"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/padding_half"
+                                android:text="Reviews"
+                                android:textColor="@color/ny_black2"
+                                android:textSize="@dimen/tertiary_text_size" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/padding_half"
+                                android:text="|"
+                                android:textColor="@color/ny_black2"
+                                android:textSize="@dimen/tertiary_text_size" />
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/tv_write_review"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/padding_half"
+                                android:text="Write a Review"
+                                android:textColor="@color/ny_black2"
+                                android:textSize="@dimen/tertiary_text_size" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:orientation="horizontal">
+
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/tv_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:gravity="center"
+                                android:textColor="@color/ny_black2"
+                                android:textSize="@dimen/jumbo_text"
+                                app:fontTextStyle="bold"
+                                tools:text="Rp 257098" />
+
+                            <LinearLayout
+                                android:id="@+id/ll_price_container"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding_half"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <com.nyelam.android.view.font.NYTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="RRP : "
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="@dimen/tertiary_text_size"
+                                        android:visibility="gone" />
+
+                                    <com.nyelam.android.view.font.NYStrikethroughTextView
+                                        android:id="@+id/tv_price_strikethrough"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="@dimen/padding"
+                                        android:textColor="@color/ny_black2"
+                                        android:textSize="@dimen/tertiary_text_size"
+                                        android:visibility="visible"
+                                        tools:text="Rp 318585" />
+                                </LinearLayout>
+
+                                <com.nyelam.android.view.font.NYTextView
+                                    android:id="@+id/tv_you_save"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/ny_black2"
+                                    android:textSize="@dimen/tertiary_text_size"
+                                    tools:text="You Save : 19.3 %" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_half"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="@dimen/padding_half"
+                            android:src="@drawable/ic_forbidden" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Buy this product and earn "
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/tertiary_text_size" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/tv_coinns"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 CoINNs / 0 Rp"
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/tertiary_text_size"
+                            app:fontTextStyle="bold" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_container_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:padding="@dimen/padding_half"
+                            android:text="Quantity"
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/tertiary_text_size" />
+
+                        <EditText
+                            android:id="@+id/et_quantity"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="@dimen/padding_half"
+                            android:layout_marginLeft="@dimen/padding_half"
+                            android:layout_marginRight="@dimen/padding_half"
+                            android:layout_marginStart="@dimen/padding_half"
+                            android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant"
+                            android:inputType="number"
+                            android:paddingEnd="@dimen/padding_double"
+                            android:paddingLeft="@dimen/padding_double"
+                            android:paddingRight="@dimen/padding_double"
+                            android:paddingStart="@dimen/padding_double"
+                            android:popupBackground="@android:color/transparent"
+                            android:textColor="@color/ny_black2"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+
                     <com.nyelam.android.view.font.NYTextView
-                        android:id="@+id/tv_price"
+                        android:id="@+id/tv_status"
                         android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:padding="@dimen/padding_half"
+                        android:text="In Stock"
+                        android:textAllCaps="true"
+                        android:textColor="@color/ny_green3"
+                        android:textSize="@dimen/secondary_text_size"
+                        app:fontTextStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_add_to_basket"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_marginRight="@dimen/padding_half"
+                        android:layout_marginTop="@dimen/padding"
+                        android:background="@drawable/ny_rectangle_orange"
+                        android:gravity="center"
+                        android:padding="@dimen/padding"
+                        android:text="@string/add_to_basket"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/secondary_text_size"
+                        android:textStyle="bold" />
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Order now and it will be delivered directly to you between"
+                        android:textColor="@color/ny_black2"
+                        android:textSize="@dimen/tertiary_text_size"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/tv_sent_date_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wed. 1 Aug."
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/tertiary_text_size"
+                            app:fontTextStyle="bold" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" and "
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/tertiary_text_size" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/tv_sent_date_two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thu. 2 Aug."
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/tertiary_text_size"
+                            app:fontTextStyle="bold" />
+                    </LinearLayout>
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_product_description_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_double"
                         android:gravity="center"
                         android:textColor="@color/ny_black2"
-                        android:textSize="@dimen/jumbo_text"
-                        tools:text="Rp 257098"
-                        app:fontTextStyle="bold"/>
-                    <LinearLayout
-                        android:id="@+id/ll_price_container"
-                        android:layout_width="wrap_content"
+                        android:textSize="@dimen/eightteen_sp"
+                        app:fontTextStyle="bold"
+                        tools:text="Product Description Cressi Gloves 5 mm Ultrastrecht" />
+
+                    <com.nyelam.android.view.font.NYTextView
+                        android:id="@+id/tv_product_description"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/padding_half"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <com.nyelam.android.view.font.NYTextView
-                                android:visibility="gone"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/tertiary_text_size"
-                                android:textColor="@color/ny_black2"
-                                android:text="RRP : "
-                                />
-                            <com.nyelam.android.view.font.NYStrikethroughTextView
-                                android:id="@+id/tv_price_strikethrough"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/padding"
-                                tools:text="Rp 318585"
-                                android:textColor="@color/ny_black2"
-                                android:textSize="@dimen/tertiary_text_size"
-                                android:visibility="visible" />
-                        </LinearLayout>
-                        <com.nyelam.android.view.font.NYTextView
-                            android:id="@+id/tv_you_save"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/tertiary_text_size"
-                            android:textColor="@color/ny_black2"
-                            tools:text="You Save : 19.3 %"
-                            />
-                    </LinearLayout>
+                        android:layout_marginBottom="@dimen/padding_double"
+                        android:layout_marginTop="@dimen/padding"
+                        android:textColor="@color/ny_black2"
+                        android:textSize="@dimen/tertiary_text_size"
+                        tools:text="At Scubastore, we show all the characteristics of the cressi Gloves 5 mm Ultrastrecht. Secure payment and guaranteed shipment! in addition, discover more similiar producs of cress " />
                 </LinearLayout>
-            </LinearLayout>
-
-
-
-
-
-
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_half"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_forbidden"
-                    android:layout_marginRight="@dimen/padding_half"/>
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:textColor="@color/ny_black2"
-                    android:text="Buy this product and earn "/>
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/tv_coinns"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:textColor="@color/ny_black2"
-                    android:text="0 CoINNs / 0 Rp"
-                    app:fontTextStyle="bold" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/ll_container_spinner"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_half"
-                    android:layout_weight="1"
-                    android:textColor="@color/ny_black2"
-                    android:layout_gravity="left"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:text="Quantity"/>
-                <EditText
-                    android:id="@+id/et_quantity"
-                    android:textSize="16sp"
-                    android:textColor="@color/ny_black2"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:paddingLeft="@dimen/padding_double"
-                    android:paddingStart="@dimen/padding_double"
-                    android:paddingRight="@dimen/padding_double"
-                    android:paddingEnd="@dimen/padding_double"
-                    android:layout_marginLeft="@dimen/padding_half"
-                    android:layout_marginStart="@dimen/padding_half"
-                    android:layout_marginRight="@dimen/padding_half"
-                    android:layout_marginEnd="@dimen/padding_half"
-                    android:inputType="number"
-                    android:popupBackground="@android:color/transparent"
-                    android:background="@drawable/ny_rectangle_white_border_grey_two_no_transparant"/>
-            </LinearLayout>
-
-
-
-
-
-
-            <com.nyelam.android.view.font.NYTextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_half"
-                android:textAllCaps="true"
-                android:textColor="@color/ny_green3"
-                android:textSize="@dimen/secondary_text_size"
-                android:layout_marginTop="@dimen/padding"
-                android:text="In Stock"
-                app:fontTextStyle="bold"/>
-
-            <TextView
-                android:id="@+id/tv_add_to_basket"
-                android:text="@string/add_to_basket"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/secondary_text_size"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:background="@drawable/ny_rectangle_orange"
-                android:gravity="center"
-                android:padding="@dimen/padding"
-                android:layout_marginTop="@dimen/padding"
-                android:layout_marginLeft="@dimen/padding_half"
-                android:layout_marginRight="@dimen/padding_half"
-                android:layout_marginBottom="@dimen/padding"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <com.nyelam.android.view.font.NYTextView
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/tertiary_text_size"
-                android:textColor="@color/ny_black2"
-                android:text="Order now and it will be delivered directly to you between"/>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/tv_sent_date_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:textColor="@color/ny_black2"
-                    app:fontTextStyle="bold"
-                    android:text="Wed. 1 Aug."/>
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" and "
-                    android:textColor="@color/ny_black2"
-                    android:textSize="@dimen/tertiary_text_size" />
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/tv_sent_date_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/tertiary_text_size"
-                    android:textColor="@color/ny_black2"
-                    app:fontTextStyle="bold"
-                    android:text="Thu. 2 Aug."/>
-            </LinearLayout>
-
-            <com.nyelam.android.view.font.NYTextView
-                android:id="@+id/tv_product_description_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_double"
-                android:gravity="center"
-                tools:text="Product Description Cressi Gloves 5 mm Ultrastrecht"
-                android:textColor="@color/ny_black2"
-                android:textSize="@dimen/eightteen_sp"
-                app:fontTextStyle="bold"/>
-
-            <com.nyelam.android.view.font.NYTextView
-                android:id="@+id/tv_product_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding"
-                android:layout_marginBottom="@dimen/padding_double"
-                tools:text="At Scubastore, we show all the characteristics of the cressi Gloves 5 mm Ultrastrecht. Secure payment and guaranteed shipment! in addition, discover more similiar producs of cress "
-                android:textColor="@color/ny_black2"
-                android:textSize="@dimen/tertiary_text_size"/>
-
-            <LinearLayout
-                android:visibility="visible"
-                android:id="@+id/ll_related_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <com.nyelam.android.view.font.NYTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding"
-                    android:gravity="center"
-                    android:textAllCaps="true"
-                    android:text="Recommended for you"
-                    android:textColor="@color/ny_black2"
-                    android:textSize="@dimen/eightteen_sp"
-                    app:fontTextStyle="bold"/>
 
                 <LinearLayout
+                    android:id="@+id/ll_related_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/padding_half">
-                    <com.nyelam.android.view.font.NYTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="See all products"
-                        android:textColor="@color/ny_black2"
-                        android:textSize="@dimen/tertiary_text_size"/>
-                    <ImageView
-                        android:layout_width="@dimen/padding"
-                        android:layout_height="@dimen/padding"
-                        android:layout_marginLeft="@dimen/padding_half"
-                        android:src="@drawable/ic_arrow_right_grey"/>
-                </LinearLayout>
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_related_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="none" />
+                    <com.nyelam.android.view.font.NYTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding"
+                        android:gravity="center"
+                        android:text="Recommended for you"
+                        android:textAllCaps="true"
+                        android:textColor="@color/ny_black2"
+                        android:textSize="@dimen/eightteen_sp"
+                        app:fontTextStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_see_all"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_half"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="See all products"
+                            android:textColor="@color/ny_black2"
+                            android:textSize="@dimen/tertiary_text_size" />
+
+                        <ImageView
+                            android:layout_width="@dimen/padding"
+                            android:layout_height="@dimen/padding"
+                            android:layout_marginLeft="@dimen/padding_half"
+                            android:src="@drawable/ic_arrow_right_grey" />
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_related_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:nestedScrollingEnabled="false"
+                        android:scrollbars="none" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
     </ScrollView>
 </LinearLayout>

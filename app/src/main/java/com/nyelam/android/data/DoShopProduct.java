@@ -2,12 +2,15 @@ package com.nyelam.android.data;
 
 import android.text.TextUtils;
 
+import com.nyelam.android.helper.NYHelper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DoShopProduct implements Parseable {
 
@@ -38,7 +41,8 @@ public class DoShopProduct implements Parseable {
     private String status;
     private DoShopMerchant merchant;
     private Brand brand;
-    private Variations variations;
+    //private Variations variations;
+    private Map<String, List<Variation>> variations;
     private List<DoShopCategory> categories;
     private String description;
     private int qty;
@@ -156,11 +160,19 @@ public class DoShopProduct implements Parseable {
         this.weight = weight;
     }
 
-    public Variations getVariations() {
+//    public Variations getVariations() {
+//        return variations;
+//    }
+//
+//    public void setVariations(Variations variations) {
+//        this.variations = variations;
+//    }
+
+    public Map<String, List<Variation>> getVariations() {
         return variations;
     }
 
-    public void setVariations(Variations variations) {
+    public void setVariations(Map<String, List<Variation>> variations) {
         this.variations = variations;
     }
 
@@ -282,17 +294,30 @@ public class DoShopProduct implements Parseable {
             }
         } catch (JSONException e) {e.printStackTrace();}
 
+//        try {
+//            if(!obj.isNull(KEY_VARIATIONS)) {
+//                JSONObject o = obj.getJSONObject(KEY_VARIATIONS);
+//                if(o != null && o.length() > 0) {
+//                    variations = new Variations();
+//                    variations.parse(o);
+//                }
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
         try {
             if(!obj.isNull(KEY_VARIATIONS)) {
                 JSONObject o = obj.getJSONObject(KEY_VARIATIONS);
                 if(o != null && o.length() > 0) {
-                    variations = new Variations();
-                    variations.parse(o);
+                    variations = VariationsUtility.jsonToMap(o);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
 
         try {
             if(!obj.isNull(KEY_MERCHANT)) {

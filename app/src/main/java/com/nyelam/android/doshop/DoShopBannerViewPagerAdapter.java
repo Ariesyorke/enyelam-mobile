@@ -1,37 +1,35 @@
-package com.nyelam.android.home;
+package com.nyelam.android.doshop;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.nyelam.android.data.DoShopBanner;
+import com.nyelam.android.data.DoShopBannerList;
+import com.nyelam.android.home.BannerFragment;
 
 /**
  * Created by Aprilian Nur Wakhid Daini on 1/5/2018.
  */
 
-public class BannerViewPagerAdapter extends FragmentStatePagerAdapter {
+public class DoShopBannerViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private BannerList bannerList;
+    private DoShopBannerList bannerList;
     private int count = 0;
     private boolean isGallery = false;
 
-    public BannerViewPagerAdapter(FragmentManager fm) {
+    public DoShopBannerViewPagerAdapter(FragmentManager fm) {
         super(fm);
-        bannerList = new BannerList();
+        bannerList = new DoShopBannerList();
     }
 
     @Override
     public Fragment getItem(int position) {
-        Banner retBanner = bannerList.getList().get(position);
+        DoShopBanner retBanner = bannerList.getList().get(position);
 //        return BannerFragment.newInstance(position, retBanner);
-        return new BannerFragment(position, retBanner, isGallery);
+        return new DoShopBannerFragment(position, retBanner);
     }
 
 
@@ -40,8 +38,8 @@ public class BannerViewPagerAdapter extends FragmentStatePagerAdapter {
         return POSITION_NONE;
     }
 
-    public void setBannerList(BannerList bannerList) {
-        this.bannerList = new BannerList();
+    public void setBannerList(DoShopBannerList bannerList) {
+        this.bannerList = new DoShopBannerList();
         this.bannerList = bannerList;
         this.count = bannerList.getList().size();
         this.notifyDataSetChanged();
@@ -58,7 +56,7 @@ public class BannerViewPagerAdapter extends FragmentStatePagerAdapter {
 
 
     public void clear() {
-        bannerList = new BannerList();
+        bannerList = new DoShopBannerList();
     }
 
     public boolean isGallery() {

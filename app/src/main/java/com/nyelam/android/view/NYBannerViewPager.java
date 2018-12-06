@@ -3,6 +3,9 @@ package com.nyelam.android.view;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.nyelam.android.R;
 
@@ -12,14 +15,18 @@ import com.nyelam.android.R;
 
 public class NYBannerViewPager extends ViewPager {
 
+    private OnItemClickListener mOnItemClickListener;
+
     private int[] RATIO;
     public NYBannerViewPager(Context context) {
         super(context);
+        setup();
         init(context, null, 0);
     }
 
     public NYBannerViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setup();
         init(context, attrs, 0);
     }
 
@@ -42,5 +49,41 @@ public class NYBannerViewPager extends ViewPager {
                 context.getResources().getInteger(R.integer.timeline_place_item_image_ratio_height)
         };
     }
+
+
+    // TODO: tambahkan untuk setOnclick Listener POSITION
+    private void setup() {
+        final GestureDetector tapGestureDetector = new GestureDetector(getContext(), new TapGestureListener());
+
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                tapGestureDetector.onTouchEvent(event);
+                return false;
+            }
+        });
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    private class TapGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if(mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClick(getCurrentItem());
+            }
+            return true;
+        }
+    }
+
+
+
 
 }

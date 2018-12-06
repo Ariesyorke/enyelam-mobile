@@ -18,6 +18,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopMerchant;
+import com.nyelam.android.data.DoShopMerchantList;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
@@ -25,6 +26,7 @@ import com.nyelam.android.http.NYDoShopAddVoucherRequest;
 import com.nyelam.android.http.NYDoShopChangeQuantityRequest;
 import com.nyelam.android.http.NYDoShopListCartRequest;
 import com.nyelam.android.http.NYDoShopRemoveProductCartRequest;
+import com.nyelam.android.storage.CartStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -209,9 +211,20 @@ public class DoShopCartFragment extends BasicFragment {
                 if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null && cartReturn.getCart().getMerchants().size() > 0){
                     initCartReturn(cartReturn);
                     llMainContainer.setVisibility(View.VISIBLE);
+
+                    DoShopMerchantList merchantList = new DoShopMerchantList();
+                    merchantList.setList(cartReturn.getCart().getMerchants());
+                    CartStorage storage = new CartStorage(getActivity());
+                    storage.setMerchants(merchantList);
+                    storage.save();
+
                 } else {
                     llMainContainer.setVisibility(View.GONE);
                     tvNotFound.setVisibility(View.VISIBLE);
+
+                    CartStorage storage = new CartStorage(getActivity());
+                    storage.setMerchants(null);
+                    storage.save();
                 }
             }
         };
@@ -334,6 +347,19 @@ public class DoShopCartFragment extends BasicFragment {
                 thisFragment.cartReturn = cartReturn;
 
                 initCartReturn(cartReturn);
+
+                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null && cartReturn.getCart().getMerchants().size() > 0){
+                    DoShopMerchantList merchantList = new DoShopMerchantList();
+                    merchantList.setList(cartReturn.getCart().getMerchants());
+                    CartStorage storage = new CartStorage(getActivity());
+                    storage.setMerchants(merchantList);
+                    storage.save();
+                } else {
+                    CartStorage storage = new CartStorage(getActivity());
+                    storage.setMerchants(null);
+                    storage.save();
+                }
+
             }
         };
     }

@@ -40,11 +40,14 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DoShopCartReturn;
+import com.nyelam.android.data.DoShopCategory;
+import com.nyelam.android.data.DoShopMerchantList;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
 import com.nyelam.android.data.Variation;
 import com.nyelam.android.data.VariationsUtility;
 import com.nyelam.android.dev.NYLog;
+import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
@@ -52,6 +55,7 @@ import com.nyelam.android.http.NYDoShopAddToCartRequest;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
+import com.nyelam.android.storage.CartStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.nyelam.android.view.NYDialogAddToCart;
@@ -66,9 +70,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.ToDoubleBiFunction;
 
 import butterknife.BindView;
@@ -87,11 +93,9 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     private Map<String, String> selectedMapVariations;
 
 
-
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     @BindView(R.id.banner_view_pager) NYBannerViewPager bannerViewPager;
     @BindView(R.id.circle_indicator) CircleIndicator circleIndicator;
-
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.ll_main_container) LinearLayout llMainContainer;
@@ -175,6 +179,14 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         }
     }
 
+    @OnClick(R.id.ll_see_all) void seeAll(){
+        if (product != null && product.getCategories() != null && product.getCategories().size() > 0 && NYHelper.isStringNotEmpty(product.getCategories().get(0).getId())){
+            Intent intent = new Intent(this, DoShopCategoryActivity.class);
+            intent.putExtra(NYHelper.CATEGORY, product.getCategories().get(0).getId().toString());
+            startActivity(intent);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,10 +204,10 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             dialogItemNotAvailable();
         }
 
-        initVariations();
+        //initTestVariations();
     }
 
-    private void initVariations() {
+    private void initTestVariations() {
         try {
             JSONObject obj = new JSONObject(NYHelper.getJSONFromResource(this, "variations.json"));
             Map<String, List<Variation>> vars = VariationsUtility.jsonToMap(obj);
@@ -298,7 +310,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                     initRelatedItem(product.getCategories().get(0).getId());
                 }
 
-                if (product == null || product.getVariations() == null || ((product.getVariations().getSizes() == null || product.getVariations().getSizes().size() <= 0) && (product.getVariations().getColors() == null || product.getVariations().getColors().size() <= 0)) ){
+                if (product == null || product.getVariations() == null || product.getVariations().size() <= 0){
                     // TODO: hide add to cart
                     tvAddToBasket.setVisibility(View.GONE);
                     dialogItemNotAvailable();
@@ -375,6 +387,15 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             @Override
             public void onRequestSuccess(DoShopCartReturn cart) {
                 pDialog.dismiss();
+
+                if (cart != null && cart.getCart() != null && cart.getCart().getMerchants() != null && cart.getCart().getMerchants().size() > 0){
+                    //Toast.makeText(context, "save to cache", Toast.LENGTH_SHORT).show();
+                    DoShopMerchantList merchantList = new DoShopMerchantList();
+                    merchantList.setList(cart.getCart().getMerchants());
+                    CartStorage storage = new CartStorage(context);
+                    storage.setMerchants(merchantList);
+                    storage.save();
+                }
 
                 NYDialogAddToCart dialog = new NYDialogAddToCart();
                 dialog.showAddToCartDialog(DoShopDetailItemActivity.this, product);
@@ -545,14 +566,106 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             }
 
 
-            //input data data
+            // TODO: init image gallery
+            bannerViewPager = new NYBannerViewPager(context);
             bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
+            bannerViewPagerAdapter.setGallery(true);
             bannerViewPager.setAdapter(bannerViewPagerAdapter);
             circleIndicator.setViewPager(bannerViewPager);
             bannerViewPagerAdapter.setBannerList(bannerList);
             bannerViewPagerAdapter.notifyDataSetChanged();
             bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
             circleIndicator.setViewPager(bannerViewPager);
+
+            bannerViewPager.setOnItemClickListener(new NYBannerViewPager.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+
+
+                    if (product != null && NYHelper.isStringNotEmpty(product.getFeaturedImage())){
+                        ArrayList<String> images = new ArrayList<>();
+                        images.add(product.getFeaturedImage());
+
+                        if (product.getImages() != null && product.getImages().size() > 0){
+                            for (String im : product.getImages()){
+                                if (NYHelper.isStringNotEmpty(im))images.add(im);
+                            }
+
+                            Intent intent = new Intent(DoShopDetailItemActivity.this, DoShopDetailItemImagesActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putStringArrayList(DoShopDetailItemImagesActivity.KEY_IMAGES, images);
+                            bundle.putInt(NYHelper.POSITION, position);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    }
+
+                    Toast.makeText(context, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+            // TODO: init VARIATIONS
+            try {
+
+                // TODO: init TEMP selected variations
+                selectedMapVariations = new HashMap<>();
+
+                llContainerSpinner.removeAllViews();
+
+                if (product.getVariations() != null && product.getVariations().size() > 0){
+
+                    // TODO: reverse order
+                    Map<String, List<Variation>> sortedMap = new TreeMap<String, List<Variation>>();
+                    sortedMap.putAll(product.getVariations());
+                    product.setVariations(sortedMap);
+
+
+                    for (final Map.Entry<String, List<Variation>> entry : product.getVariations().entrySet()) {
+
+                        // TODO: CHECK AND PROSES DATA
+                        if (entry != null && NYHelper.isStringNotEmpty(entry.getKey()) && entry.getValue() != null && entry.getValue().size() > 0){
+
+                            // TODO: tampung data + default selected
+                            List<Variation> variations = new ArrayList<>();
+                            variations.add(new Variation(null, "Select "+entry.getKey()));
+                            variations.addAll(entry.getValue());
+
+                            // TODO: init selected variations, sesuai jumlah data  dari API
+                            selectedMapVariations.put(entry.getKey(), null);
+
+                            // TODO: init view spinner
+                            LayoutInflater inflaterAddons = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            View spinnerView = inflaterAddons.inflate(R.layout.spinner_variation, null);
+                            LinearLayout llContainer = (LinearLayout) spinnerView.findViewById(R.id.ll_container);
+                            TextView tvTitle = (TextView) spinnerView.findViewById(R.id.tv_title);
+                            NYSpinner spinner = (NYSpinner) spinnerView.findViewById(R.id.spinner);
+
+                            if (NYHelper.isStringNotEmpty(entry.getKey())) tvTitle.setText(entry.getKey());
+
+                            // TODO: init data spinner
+                            final SizeSpinAdapter spinAdapter = new SizeSpinAdapter(this, variations);
+                            spinner.setAdapter(spinAdapter);
+                            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view,
+                                                           int position, long id) {
+
+                                    selectedMapVariations.put(entry.getKey(), spinAdapter.getVariationId(position));
+                                }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapter) {  }
+                            });
+
+
+                            llContainerSpinner.addView(spinnerView);
+                        }
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -625,17 +738,16 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Detail");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Detail");
+        this.setTitle("Detail");
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

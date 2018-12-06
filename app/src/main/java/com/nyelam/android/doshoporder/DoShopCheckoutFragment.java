@@ -48,6 +48,7 @@ import com.nyelam.android.data.DoShopAddress;
 import com.nyelam.android.data.DoShopAddressList;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopMerchant;
+import com.nyelam.android.data.DoShopMerchantList;
 import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.NTransactionResult;
@@ -64,6 +65,7 @@ import com.nyelam.android.http.NYDoShopAddressListRequest;
 import com.nyelam.android.http.NYDoShopCheckPaymentMethodRequest;
 import com.nyelam.android.http.NYDoShopReSubmitOrderRequest;
 import com.nyelam.android.http.NYDoShopSubmitOrderRequest;
+import com.nyelam.android.storage.CartStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
 import com.nyelam.android.view.NYCustomDialog;
@@ -354,6 +356,11 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 }
 
 
+                // TODO: hapus cart di cache
+                CartStorage storage = new CartStorage(getActivity());
+                storage.setMerchants(null);
+                storage.save();
+
             }
         };
     }
@@ -608,6 +615,11 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
                 }
 
+
+                // TODO: hapus cart di cache
+                CartStorage storage = new CartStorage(getActivity());
+                storage.setMerchants(null);
+                storage.save();
 
             }
         };

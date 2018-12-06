@@ -12,6 +12,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +26,8 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.CategoryList;
+import com.nyelam.android.data.DoShopBanner;
+import com.nyelam.android.data.DoShopBannerList;
 import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopCategoryList;
 import com.nyelam.android.data.DoShopList;
@@ -30,10 +35,14 @@ import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.doshoporderhistory.DoShopOrderHistoryActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.BannerViewPagerAdapter;
+import com.nyelam.android.http.NYDoShopBannerRequest;
 import com.nyelam.android.http.NYDoShopHomepageRequest;
 import com.nyelam.android.http.NYDoShopMasterCategoryRequest;
+import com.nyelam.android.http.NYGetBannerRequest;
+import com.nyelam.android.storage.CartStorage;
 import com.nyelam.android.storage.DoShopCategoryStorage;
 import com.nyelam.android.storage.LoginStorage;
+import com.nyelam.android.view.CircularTextView;
 import com.nyelam.android.view.NYBannerViewPager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -54,7 +63,7 @@ public class DoShopActivity extends AppCompatActivity {
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
 
-    private BannerViewPagerAdapter bannerViewPagerAdapter;
+    private DoShopBannerViewPagerAdapter bannerViewPagerAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -64,6 +73,9 @@ public class DoShopActivity extends AppCompatActivity {
 
     private DoShopMenuCategoryAdapter menuCategoryAdapter;
     private String tempState = null;
+
+    @BindView(R.id.tv_cart_count)
+    CircularTextView tvCartCount;
 
     @BindView(R.id.banner_view_pager)
     NYBannerViewPager bannerViewPager;
@@ -95,6 +107,9 @@ public class DoShopActivity extends AppCompatActivity {
 //        intent.putExtra(NYHelper.CATEGORY, cat.toString());
         startActivity(intent);
     }
+
+    @BindView(R.id.iv_cart)
+    ImageView ivCart;
 
     @OnClick(R.id.iv_cart) void intentToCart(){
         LoginStorage storage = new LoginStorage(this);
@@ -178,22 +193,25 @@ public class DoShopActivity extends AppCompatActivity {
     }
 
     private void initBanner() {
-        bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
+        bannerViewPagerAdapter = new DoShopBannerViewPagerAdapter(getSupportFragmentManager());
         bannerViewPager.setAdapter(bannerViewPagerAdapter);
         circleIndicator.setViewPager(bannerViewPager);
 
         //craete TEMP data banner
         progressBar.setVisibility(View.VISIBLE);
-        BannerList bannerList = new BannerList();
-        List<Banner> banners = new ArrayList<>();
-        banners.add(new Banner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "captio", null));
-        banners.add(new Banner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "captio", null));
-        banners.add(new Banner("3", "drawable://" + String.valueOf(R.drawable.banner_3), "captio", null));
-        bannerList.setList(banners);
-        bannerViewPagerAdapter.setBannerList(bannerList);
-        bannerViewPagerAdapter.notifyDataSetChanged();
-        bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+//        DoShopBannerList bannerList = new DoShopBannerList();
+//        List<DoShopBanner> banners = new ArrayList<>();
+//        banners.add(new DoShopBanner("1", "drawable://" + String.valueOf(R.drawable.banner_1), "1", "captio", null));
+//        banners.add(new DoShopBanner("2", "drawable://" + String.valueOf(R.drawable.banner_2), "2","captio", null));
+//        banners.add(new DoShopBanner("3", "drawable://" + String.valueOf(R.drawable.banner_3), "3","captio", null));
+//        bannerList.setList(banners);
+        //bannerViewPagerAdapter.setBannerList(bannerList);
+        //bannerViewPagerAdapter.notifyDataSetChanged();
+        //bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
         circleIndicator.setViewPager(bannerViewPager);
+
+        loadBanners();
+
         progressBar.setVisibility(View.GONE);
     }
 
@@ -215,6 +233,11 @@ public class DoShopActivity extends AppCompatActivity {
             public void onRequestSuccess(DoShopList doShopList) {
                 progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
+
+                if (doShopList.getCategories().size() > 3){
+                    doShopList.getCategories().subList(3, doShopList.getCategories().size()).clear();
+                    doShopList.getCategories().add(3, new DoShopCategory("0","View All", null));
+                }
 
                 objects.add(doShopList.getCategories());
                 objects.add(doShopList.getRecommended());
@@ -252,11 +275,9 @@ public class DoShopActivity extends AppCompatActivity {
 
     private RequestListener<DoShopCategoryList> onCategoryRequest() {
         return new RequestListener<DoShopCategoryList>() {
-
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 NYHelper.handleAPIException(context, spiceException, null);
-
             }
 
             @Override
@@ -268,7 +289,6 @@ public class DoShopActivity extends AppCompatActivity {
             }
         };
     }
-
 
     private void setMenuCategories(DoShopCategoryList categoryList){
         if (categoryList != null && categoryList.getList() !=null){
@@ -310,8 +330,6 @@ public class DoShopActivity extends AppCompatActivity {
             }
         });
 
-
-
         Section<String, DoShopCategory> section = new Section<>();
         //defaut is false
         section.expanded = true;
@@ -321,6 +339,52 @@ public class DoShopActivity extends AppCompatActivity {
         }
 
         expandableLayout.addSection(section);
+    }
+
+
+    public void loadBanners() {
+
+        //Toast.makeText(context, "init banner", Toast.LENGTH_SHORT).show();
+
+        NYDoShopBannerRequest req = null;
+        try {
+            req = new NYDoShopBannerRequest(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spcMgr.execute(req, onGetBannersRequest());
+    }
+
+    private RequestListener<DoShopBannerList> onGetBannersRequest() {
+        return new RequestListener<DoShopBannerList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                /*if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }*/
+
+                //Toast.makeText(context, "banner gagal", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRequestSuccess(DoShopBannerList results) {
+
+                //Toast.makeText(context, "banner sukses", Toast.LENGTH_SHORT).show();
+
+                if (results != null && results.getList() != null && !results.getList().isEmpty()){
+
+                    //Toast.makeText(context, "banner size : "+String.valueOf(results.getList().size()), Toast.LENGTH_SHORT).show();
+
+                    //DoShopBannerList bannerList = filterBanners(results);
+                    DoShopBannerList bannerList = results;
+                    bannerViewPagerAdapter.clear();
+                    bannerViewPagerAdapter.setBannerList(bannerList);
+                    bannerViewPagerAdapter.notifyDataSetChanged();
+                    bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
+                    circleIndicator.setViewPager(bannerViewPager);
+                }
+            }
+        };
     }
 
 
@@ -339,6 +403,24 @@ public class DoShopActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!spcMgr.isStarted()) spcMgr.start(this);
+
+        // TODO: check cart di cache
+        CartStorage storage = new CartStorage(context);
+        if (storage.getSize() > 0){
+            tvCartCount.setText(String.valueOf(storage.getSize()));
+            tvCartCount.setVisibility(View.VISIBLE);
+            int margin = (int)getResources().getDimension(R.dimen.padding);
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ivCart.getLayoutParams();
+            params.setMargins(0, 0, margin, 0);
+            ivCart.setLayoutParams(params);
+        } else {
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ivCart.getLayoutParams();
+            params.setMargins(0, 0, 0, 0);
+            ivCart.setLayoutParams(params);
+            tvCartCount.setVisibility(View.GONE);
+        }
+
+        //Toast.makeText(context, String.valueOf(storage.getSize()), Toast.LENGTH_SHORT).show();
     }
 
     @Override

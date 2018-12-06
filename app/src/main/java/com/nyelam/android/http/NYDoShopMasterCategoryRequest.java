@@ -32,7 +32,7 @@ public class NYDoShopMasterCategoryRequest extends NYBasicRequest<DoShopCategory
 
     @Override
     public String getHTTPType() {
-        return DHTTPConnectionHelper.HTTP_POST;
+        return DHTTPConnectionHelper.HTTP_GET;
     }
 
     @Override

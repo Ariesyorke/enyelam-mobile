@@ -231,7 +231,13 @@
         <!-- android:screenOrientation="portrait" -->
         <!-- /> -->
 
-        <activity android:name=".doshop.DoShopDetailItemImagesActivity"
+        <activity
+            android:name=".doshop.DoShopDetailItemImagesActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".doshop.DoShopCategoryListActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".doshop.DoShopBrandActivity"
             android:screenOrientation="portrait"
             />
     </application>

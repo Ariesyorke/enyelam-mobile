@@ -23,15 +23,30 @@
         app:contentInsetRight="0dp"
         app:contentInsetEnd="0dp"
         android:paddingLeft="0dp"
+        app:title="Brand"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
         >
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
+            <com.nyelam.android.view.font.NYTextView
+                android:visibility="gone"
+                android:id="@+id/tv_title"
+                android:layout_centerHorizontal="true"
+                app:fontTextStyle="medium"
+                android:text="Title"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
+                android:visibility="gone"
                 android:id="@+id/et_search"
                 android:clickable="false"
                 android:cursorVisible="false"
@@ -56,7 +71,9 @@
                 android:textColorHint="@color/ny_grey2" />
 
             <FrameLayout
+                android:layout_gravity="right"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
@@ -82,7 +99,8 @@
                     android:layout_height="wrap_content" />
 
             </FrameLayout>
-        </LinearLayout>
+
+        </FrameLayout>
 
     </android.support.v7.widget.Toolbar>
 

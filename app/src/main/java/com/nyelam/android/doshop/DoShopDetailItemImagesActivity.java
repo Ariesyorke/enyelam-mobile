@@ -29,10 +29,9 @@ import java.util.List;
 
 public class DoShopDetailItemImagesActivity extends FragmentActivity {
 
-    //private static final String movieUrl = "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4";
-
     private ArrayList<String> images = new ArrayList<>();
     public static final String KEY_IMAGES = "images";
+    private int pos = 0;
 
     private ScrollGalleryView scrollGalleryView;
 
@@ -47,6 +46,10 @@ public class DoShopDetailItemImagesActivity extends FragmentActivity {
             if (intent.hasExtra(KEY_IMAGES) && intent.getStringArrayListExtra(KEY_IMAGES).size() > 0) {
                 images = intent.getStringArrayListExtra(KEY_IMAGES);
             }
+
+            if (intent.hasExtra(NYHelper.POSITION)) {
+                pos = intent.getIntExtra(NYHelper.POSITION, 0);
+            }
         }
 
         List<MediaInfo> infos = new ArrayList<>(images.size());
@@ -57,31 +60,9 @@ public class DoShopDetailItemImagesActivity extends FragmentActivity {
                 .setThumbnailSize(100)
                 .setZoom(true)
                 .setFragmentManager(getSupportFragmentManager())
-                //.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.logo_nyelam)))
-                //.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(toBitmap(R.drawable.logo_nyelam))))
-//                .addMedia(MediaInfo.mediaLoader(new MediaLoader() {
-//                    @Override public boolean isImage() {
-//                        return true;
-//                    }
-//
-//                    @Override public void loadMedia(Context context, ImageView imageView,
-//                                                    MediaLoader.SuccessCallback callback) {
-//                        imageView.setImageBitmap(toBitmap(R.drawable.logo_nyelam));
-//                        callback.onSuccess();
-//                    }
-//
-//                    @Override public void loadThumbnail(Context context, ImageView thumbnailView,
-//                                                        MediaLoader.SuccessCallback callback) {
-//                        thumbnailView.setImageBitmap(toBitmap(R.drawable.logo_nyelam));
-//                        callback.onSuccess();
-//                    }
-//                }))
-                //.addMedia(MediaInfo.mediaLoader(new DefaultVideoLoader(movieUrl, R.drawable.logo_nyelam)))
                 .addMedia(infos);
-    }
 
-    private Bitmap toBitmap(int image) {
-        return ((BitmapDrawable) getResources().getDrawable(image)).getBitmap();
+        scrollGalleryView.setCurrentItem(pos);
     }
 
 }

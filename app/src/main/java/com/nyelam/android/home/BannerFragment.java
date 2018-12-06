@@ -24,6 +24,7 @@ import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.SearchService;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
+import com.nyelam.android.doshop.DoShopDetailItemActivity;
 import com.nyelam.android.dotrip.DoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYBannerViewPager;
@@ -38,6 +39,7 @@ public class BannerFragment extends Fragment {
     private static final String ARG_BANNER = "arg_banner";
     private NYImageRatioImageView imageView;
     private Banner banner;
+    private boolean isGallery;
 
     public BannerFragment(){}
 
@@ -48,6 +50,12 @@ public class BannerFragment extends Fragment {
 //        args.putInt(ARG_POS, position);
 //        if (banner != null)args.putString(ARG_BANNER, banner.toString());
 //        this.setArguments(args);
+    }
+
+    @SuppressLint("ValidFragment")
+    public BannerFragment(int position, Banner retBanner, boolean isGallery) {
+        this.banner = retBanner;
+        this.isGallery = isGallery;
     }
 
     public  BannerFragment newInstance(int position, Banner banner) {
@@ -69,25 +77,13 @@ public class BannerFragment extends Fragment {
             setDrawable(banner);
         }
 
-        /*if(getArguments() != null) {
-            if(getArguments().containsKey(ARG_POS) && getArguments().containsKey(ARG_BANNER)) {
-                int position = getArguments().getInt(ARG_POS);
-                try {
-                    JSONObject obj = new JSONObject(getArguments().getString(ARG_BANNER));
-                    banner.parse(obj);
-                    if(banner != null){
-                        setDrawable(banner);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }*/
-
         imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Open browser on click if not null
-                if (banner != null){
+                if (isGallery){
+                    Intent intent = new Intent(getActivity(), DoShopDetailItemActivity.class);
+                    startActivity(intent);
+                } else if (banner != null){
 //                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
                     if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId())){
 
@@ -180,6 +176,9 @@ public class BannerFragment extends Fragment {
                 } else {
                     NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
                 }
+
+
+
             }
         });
 

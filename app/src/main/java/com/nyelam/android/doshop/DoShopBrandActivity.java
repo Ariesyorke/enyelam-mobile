@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -29,11 +28,10 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.data.Brand;
 import com.nyelam.android.data.DoShopCategory;
-import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
 import com.nyelam.android.dev.NYLog;
-import com.nyelam.android.docourse.DoCourseActivity;
 import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYDoShopProductListRequest;
@@ -41,7 +39,6 @@ import com.nyelam.android.http.result.NYPaginationResult;
 import com.nyelam.android.storage.CartStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.CircularTextView;
-import com.nyelam.android.view.NYCustomDialog;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -53,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DoShopCategoryActivity extends BasicActivity {
+public class DoShopBrandActivity extends BasicActivity {
 
     private boolean isRefresh = false;
     private Context context;
@@ -63,11 +60,17 @@ public class DoShopCategoryActivity extends BasicActivity {
     private LinearLayoutManager layoutManager;
 
     private int page = 1;
-    private String categoryId;
-    private DoShopCategory category;
+    private String brandId = null;
+    private Brand brand;
     private String sortBy = "1";
     private String minPrice = "0";
     private String maxPrice = "10000000";
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
     @BindView(R.id.et_search)
     EditText etSearch;
@@ -131,19 +134,19 @@ public class DoShopCategoryActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_do_shop_category);
+        setContentView(R.layout.activity_do_shop_brand);
         ButterKnife.bind(this);
         context = this;
-        initToolbar();
         initExtra();
+        initToolbar();
 
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
         rvItemList.setLayoutManager(layoutManager);
         adapter = new DoShopRecommendedAdapter(context);
         rvItemList.setAdapter(adapter);
 
-        if (category != null && NYHelper.isStringNotEmpty(category.getId())){
-            initListItem(category.getId(), null);
+        if (brand != null && NYHelper.isStringNotEmpty(brand.getId())){
+            initListItem(null, null);
         } else {
             //dialogCategoryNotAvailable();
             initListItem(null, null);
@@ -169,7 +172,7 @@ public class DoShopCategoryActivity extends BasicActivity {
                 // TODO Auto-generated method stub
                 adapter.clear();
                 adapter.notifyDataSetChanged();
-                initListItem(categoryId, s.toString());
+                initListItem(brandId, s.toString());
             }
         });
 
@@ -181,7 +184,7 @@ public class DoShopCategoryActivity extends BasicActivity {
                 swipeRefreshLayout.setRefreshing(true);
                 adapter.clear();
                 adapter.notifyDataSetChanged();
-                initListItem(categoryId, etSearch.getText().toString());
+                initListItem(brandId, etSearch.getText().toString());
             }
         });
 
@@ -194,7 +197,7 @@ public class DoShopCategoryActivity extends BasicActivity {
                 if (lastVisiblePosition == recyclerView.getChildCount()) {
                     if (loadmore) {
                         loadmore = false;
-                        initListItem(categoryId, etSearch.getText().toString());
+                        initListItem(brandId, etSearch.getText().toString());
                     }
                 }
             }
@@ -254,11 +257,11 @@ public class DoShopCategoryActivity extends BasicActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            if(intent.hasExtra(NYHelper.CATEGORY)) {
+            if(intent.hasExtra(NYHelper.BRAND)) {
                 try {
-                    JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.CATEGORY));
-                    category = new DoShopCategory();
-                    category.parse(obj);
+                    JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.BRAND));
+                    brand = new Brand();
+                    brand.parse(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -317,11 +320,19 @@ public class DoShopCategoryActivity extends BasicActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
+
+        Toast.makeText(context, "init name", Toast.LENGTH_SHORT).show();
+        if (brand != null && NYHelper.isStringNotEmpty(brand.getName())){
+            Toast.makeText(context, "name found", Toast.LENGTH_SHORT).show();
+            tvTitle.setText(brand.getName());
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(brand.getName());
+            this.setTitle(brand.getName());
+        }
     }
 
     @Override
@@ -350,8 +361,8 @@ public class DoShopCategoryActivity extends BasicActivity {
             adapter.clear();
             adapter.notifyDataSetChanged();
 
-            if (category != null && NYHelper.isStringNotEmpty(category.getId())){
-                initListItem(category.getId(), null);
+            if (brand != null && NYHelper.isStringNotEmpty(brand.getId())){
+                initListItem(brand.getId(), null);
             } else {
                 //dialogCategoryNotAvailable();
                 initListItem(null, null);
@@ -359,7 +370,6 @@ public class DoShopCategoryActivity extends BasicActivity {
         }
 
     }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

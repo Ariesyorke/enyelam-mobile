@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DoShopCategory;
+import com.nyelam.android.data.DoShopCategoryList;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.DoTripRecyclerViewAdapter;
 
@@ -44,12 +45,16 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public int getItemCount() {
+        return data.size();
+    }
 
-//        if (holder instanceof MyViewHolder) {
-//            MyViewHolder vh = (MyViewHolder) holder;
-//            vh.setModel(data.get(position));
-//        }
+    public void clear() {
+        data = new ArrayList<>();
+    }
+
+    @Override
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         final DoShopCategory cat = data.get(position);
 
@@ -85,7 +90,10 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cat != null && NYHelper.isStringNotEmpty(cat.getId())){
+                if (cat != null && NYHelper.isStringNotEmpty(cat.getId()) && cat.getId().equals("0")){
+                    Intent intent = new Intent(context, DoShopCategoryListActivity.class);
+                    context.startActivity(intent);
+                } else if (cat != null && NYHelper.isStringNotEmpty(cat.getId())){
                     Intent intent = new Intent(context, DoShopCategoryActivity.class);
                     intent.putExtra(NYHelper.CATEGORY, cat.toString());
                     context.startActivity(intent);
@@ -94,15 +102,6 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
                 }
             }
         });
-
-        //holder.image.setImageResource(data.get(position).getImage());
-        //holder.title.setText(data.get(position).getHeader());
-        //holder.description.setText(data.get(position).getSubHeader());
-    }
-
-    @Override
-    public int getItemCount() {
-        return data.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -116,9 +115,5 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
             name = (TextView) itemView.findViewById(R.id.name_textView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.loadingView);
         }
-
-//        public void setModel(DoShopCategory model) {
-//            this.model = model;
-//        }
     }
 }
