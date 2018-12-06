@@ -29,8 +29,9 @@ import java.util.List;
 
 public class DoShopDetailItemImagesActivity extends FragmentActivity {
 
-    private ArrayList<String> images = new ArrayList<>();
     public static final String KEY_IMAGES = "images";
+    public static final String POSITION = "position";
+    private ArrayList<String> images = new ArrayList<>();
     private int pos = 0;
 
     private ScrollGalleryView scrollGalleryView;
@@ -47,7 +48,7 @@ public class DoShopDetailItemImagesActivity extends FragmentActivity {
                 images = intent.getStringArrayListExtra(KEY_IMAGES);
             }
 
-            if (intent.hasExtra(NYHelper.POSITION)) {
+            if (intent.hasExtra(POSITION)) {
                 pos = intent.getIntExtra(NYHelper.POSITION, 0);
             }
         }

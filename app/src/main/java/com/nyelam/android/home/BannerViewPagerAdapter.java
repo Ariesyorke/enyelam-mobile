@@ -19,21 +19,29 @@ import java.util.List;
 public class BannerViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private BannerList bannerList;
+    private ArrayList<String> imageList;
     private int count = 0;
     private boolean isGallery = false;
+    private boolean isOnlick = false;
 
     public BannerViewPagerAdapter(FragmentManager fm) {
         super(fm);
         bannerList = new BannerList();
     }
 
+    public BannerViewPagerAdapter(FragmentManager fm, boolean isOnlick) {
+        super(fm);
+        this.bannerList = new BannerList();
+        this.isOnlick = isOnlick;
+    }
+
     @Override
     public Fragment getItem(int position) {
         Banner retBanner = bannerList.getList().get(position);
 //        return BannerFragment.newInstance(position, retBanner);
-        return new BannerFragment(position, retBanner, isGallery);
+        //return new BannerFragment(position, retBanner, isGallery);
+        return new BannerFragment(position, retBanner, isGallery, imageList, isOnlick);
     }
-
 
     @Override
     public int getItemPosition(Object object) {
@@ -45,6 +53,13 @@ public class BannerViewPagerAdapter extends FragmentStatePagerAdapter {
         this.bannerList = bannerList;
         this.count = bannerList.getList().size();
         this.notifyDataSetChanged();
+
+        imageList = new ArrayList<>();
+        if (bannerList != null && bannerList.getList() != null){
+            for (Banner banner : bannerList.getList()){
+                imageList.add(banner.getImageUrl());
+            }
+        }
     }
 
     public void setCount(int count) {
@@ -55,7 +70,6 @@ public class BannerViewPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return count;
     }
-
 
     public void clear() {
         bannerList = new BannerList();

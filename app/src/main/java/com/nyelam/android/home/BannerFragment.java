@@ -25,6 +25,7 @@ import com.nyelam.android.data.SearchService;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.doshop.DoShopDetailItemActivity;
+import com.nyelam.android.doshop.DoShopDetailItemImagesActivity;
 import com.nyelam.android.dotrip.DoTripActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYBannerViewPager;
@@ -33,6 +34,9 @@ import com.nyelam.android.view.NYImageRatioImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BannerFragment extends Fragment {
 
     private static final String ARG_POS = "arg_pos";
@@ -40,6 +44,10 @@ public class BannerFragment extends Fragment {
     private NYImageRatioImageView imageView;
     private Banner banner;
     private boolean isGallery;
+
+    private int position;
+    private ArrayList<String> imageList;
+    private boolean isOnclick;
 
     public BannerFragment(){}
 
@@ -56,6 +64,15 @@ public class BannerFragment extends Fragment {
     public BannerFragment(int position, Banner retBanner, boolean isGallery) {
         this.banner = retBanner;
         this.isGallery = isGallery;
+    }
+
+    @SuppressLint("ValidFragment")
+    public BannerFragment(int position, Banner retBanner, boolean isGallery, ArrayList<String> imageList, boolean isOnlick) {
+        this.position = position;
+        this.banner = retBanner;
+        this.isGallery = isGallery;
+        this.imageList = imageList;
+        this.isOnclick = isOnlick;
     }
 
     public  BannerFragment newInstance(int position, Banner banner) {
@@ -80,10 +97,17 @@ public class BannerFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Open browser on click if not null
-                if (isGallery){
-                    Intent intent = new Intent(getActivity(), DoShopDetailItemActivity.class);
+                if (isGallery && isOnclick && imageList.size() > 0){
+                    Intent intent = new Intent(getActivity(), DoShopDetailItemImagesActivity.class);
+                    intent.putStringArrayListExtra(DoShopDetailItemImagesActivity.KEY_IMAGES,imageList);
+                    intent.putExtra(DoShopDetailItemImagesActivity.POSITION, position);
                     startActivity(intent);
-                } else if (banner != null){
+                }
+//                else if (isGallery){
+//                    Intent intent = new Intent(getActivity(), DoShopDetailItemActivity.class);
+//                    startActivity(intent);
+//                }
+                else if (banner != null){
 //                    if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId()) && NYHelper.isStringNotEmpty(banner.getServiceName())){
                     if (banner.getType() == 1 && NYHelper.isStringNotEmpty(banner.getServiceId())){
 

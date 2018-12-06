@@ -15,18 +15,18 @@ import com.nyelam.android.R;
 
 public class NYBannerViewPager extends ViewPager {
 
-    private OnItemClickListener mOnItemClickListener;
+    //private OnItemClickListener mOnItemClickListener;
 
     private int[] RATIO;
     public NYBannerViewPager(Context context) {
         super(context);
-        setup();
+        //setup();
         init(context, null, 0);
     }
 
     public NYBannerViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setup();
+        //setup();
         init(context, attrs, 0);
     }
 
@@ -52,38 +52,35 @@ public class NYBannerViewPager extends ViewPager {
 
 
     // TODO: tambahkan untuk setOnclick Listener POSITION
-    private void setup() {
-        final GestureDetector tapGestureDetector = new GestureDetector(getContext(), new TapGestureListener());
-
-        setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                tapGestureDetector.onTouchEvent(event);
-                return false;
-            }
-        });
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    private class TapGestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            if(mOnItemClickListener != null) {
-                mOnItemClickListener.onItemClick(getCurrentItem());
-            }
-            return true;
-        }
-    }
-
-
-
+//    private void setup() {
+//        final GestureDetector tapGestureDetector = new GestureDetector(getContext(), new TapGestureListener());
+//
+//        setOnTouchListener(new OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                tapGestureDetector.onTouchEvent(event);
+//                return false;
+//            }
+//        });
+//    }
+//
+//    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+//        mOnItemClickListener = onItemClickListener;
+//    }
+//
+//    public interface OnItemClickListener {
+//        void onItemClick(int position);
+//    }
+//
+//    private class TapGestureListener extends GestureDetector.SimpleOnGestureListener {
+//
+//        @Override
+//        public boolean onSingleTapConfirmed(MotionEvent e) {
+//            if(mOnItemClickListener != null) {
+//                mOnItemClickListener.onItemClick(getCurrentItem());
+//            }
+//            return true;
+//        }
+//    }
 
 }

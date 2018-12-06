@@ -92,7 +92,6 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     private DoShopProduct product;
     private Map<String, String> selectedMapVariations;
 
-
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     @BindView(R.id.banner_view_pager) NYBannerViewPager bannerViewPager;
     @BindView(R.id.circle_indicator) CircleIndicator circleIndicator;
@@ -567,8 +566,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
 
             // TODO: init image gallery
-            bannerViewPager = new NYBannerViewPager(context);
-            bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager());
+            //bannerViewPager = new NYBannerViewPager(context);
+            bannerViewPagerAdapter = new BannerViewPagerAdapter(getSupportFragmentManager(), true);
             bannerViewPagerAdapter.setGallery(true);
             bannerViewPager.setAdapter(bannerViewPagerAdapter);
             circleIndicator.setViewPager(bannerViewPager);
@@ -577,32 +576,32 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
             bannerViewPager.setOffscreenPageLimit(bannerList.getList().size());
             circleIndicator.setViewPager(bannerViewPager);
 
-            bannerViewPager.setOnItemClickListener(new NYBannerViewPager.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-
-
-                    if (product != null && NYHelper.isStringNotEmpty(product.getFeaturedImage())){
-                        ArrayList<String> images = new ArrayList<>();
-                        images.add(product.getFeaturedImage());
-
-                        if (product.getImages() != null && product.getImages().size() > 0){
-                            for (String im : product.getImages()){
-                                if (NYHelper.isStringNotEmpty(im))images.add(im);
-                            }
-
-                            Intent intent = new Intent(DoShopDetailItemActivity.this, DoShopDetailItemImagesActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putStringArrayList(DoShopDetailItemImagesActivity.KEY_IMAGES, images);
-                            bundle.putInt(NYHelper.POSITION, position);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }
-                    }
-
-                    Toast.makeText(context, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                }
-            });
+//            bannerViewPager.setOnItemClickListener(new NYBannerViewPager.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(int position) {
+//
+//
+//                    if (product != null && NYHelper.isStringNotEmpty(product.getFeaturedImage())){
+//                        ArrayList<String> images = new ArrayList<>();
+//                        images.add(product.getFeaturedImage());
+//
+//                        if (product.getImages() != null && product.getImages().size() > 0){
+//                            for (String im : product.getImages()){
+//                                if (NYHelper.isStringNotEmpty(im))images.add(im);
+//                            }
+//
+//                            Intent intent = new Intent(DoShopDetailItemActivity.this, DoShopDetailItemImagesActivity.class);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putStringArrayList(DoShopDetailItemImagesActivity.KEY_IMAGES, images);
+//                            bundle.putInt(NYHelper.POSITION, position);
+//                            intent.putExtras(bundle);
+//                            startActivity(intent);
+//                        }
+//                    }
+//
+//                    Toast.makeText(context, String.valueOf(position), Toast.LENGTH_SHORT).show();
+//                }
+//            });
 
 
             // TODO: init VARIATIONS
