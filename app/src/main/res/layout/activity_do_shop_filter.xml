@@ -73,13 +73,13 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:id="@+id/payment_bank_transfer_linearLayout"
+                        android:id="@+id/ll_latest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/lowerPriceRadioButton"
+                            android:id="@+id/rb_latest"
                             android:checked="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -92,7 +92,42 @@
                             android:layout_marginLeft="@dimen/padding"
                             android:orientation="horizontal">
                             <com.nyelam.android.view.font.NYTextView
-                                android:id="@+id/bank_transfer_label"
+                                android:id="@+id/tv_latest"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding"
+                                android:layout_toRightOf="@+id/bank_transfer"
+                                android:layout_centerVertical="true"
+                                android:text="Latest"
+                                android:textColor="@color/ny_black1"
+                                android:textSize="16sp"
+                                app:fontTextStyle="medium"
+                                android:layout_alignParentTop="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_lowest"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_lowest"
+                            android:checked="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:orientation="horizontal">
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/tv_lowest"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding"
@@ -108,14 +143,14 @@
 
 
                     <LinearLayout
-                        android:id="@+id/payment_virtual_account_linearLayout"
+                        android:id="@+id/ll_highest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/padding"
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/highestPriceRadioButton"
+                            android:id="@+id/rb_highest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center" />
@@ -127,7 +162,7 @@
                             android:layout_gravity="center"
                             android:orientation="horizontal">
                             <com.nyelam.android.view.font.NYTextView
-                                android:id="@+id/highest_price_label"
+                                android:id="@+id/tv_highest"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
@@ -276,20 +311,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.nyelam.android.view.font.NYTextView
-            android:id="@+id/apply_textView"
-            android:text="Apply"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:background="@drawable/ny_rectangle_blue"
-            android:padding="@dimen/padding"
-            android:gravity="center"
-            android:layout_marginRight="@dimen/padding_half"
-            android:layout_marginEnd="@dimen/padding_half"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-
-        <com.nyelam.android.view.font.NYTextView
             android:id="@+id/clear_textView"
             android:text="Clear"
             android:textSize="16sp"
@@ -297,14 +318,25 @@
             android:background="@drawable/ny_rectangle_white_border_grey"
             android:padding="@dimen/padding"
             android:gravity="center"
-            android:layout_marginLeft="@dimen/padding_half"
-            android:layout_marginStart="@dimen/padding_half"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginEnd="@dimen/padding_half"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
-
+        <com.nyelam.android.view.font.NYTextView
+            android:id="@+id/apply_textView"
+            android:text="Apply"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/ny_rectangle_blue"
+            android:padding="@dimen/padding"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:layout_marginStart="@dimen/padding_half"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
     </LinearLayout>
-
 
 
 </LinearLayout>

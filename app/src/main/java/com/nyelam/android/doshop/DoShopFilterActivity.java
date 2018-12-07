@@ -25,7 +25,6 @@ import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
 public class DoShopFilterActivity extends BasicActivity {
 
-
     private String sortBy;
     private double minPrice;
     private double maxPrice;
@@ -41,11 +40,14 @@ public class DoShopFilterActivity extends BasicActivity {
     @BindView(R.id.price_range_seekBar)
     CrystalRangeSeekbar rangeSeekbar;
 
-    @BindView(R.id.lowerPriceRadioButton)
-    RadioButton lowerPriceRadioButton;
+    @BindView(R.id.rb_latest)
+    RadioButton rbLatest;
 
-    @BindView(R.id.highestPriceRadioButton)
-    RadioButton highestPriceRadioButton;
+    @BindView(R.id.rb_lowest)
+    RadioButton rbLowest;
+
+    @BindView(R.id.rb_highest)
+    RadioButton rbHighest;
 
     @OnClick(R.id.iv_close) void close(){
         finish();
@@ -56,8 +58,12 @@ public class DoShopFilterActivity extends BasicActivity {
     }
 
     @OnClick(R.id.apply_textView) void applyFilter(){
-        String sortBy = "1";
-        if (highestPriceRadioButton.isChecked())sortBy="2";
+        String sortBy = "0";
+        if (rbLowest.isChecked()){
+            sortBy="1";
+        } else if (rbHighest.isChecked()){
+            sortBy="2";
+        }
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(NYHelper.SORT_BY, sortBy);
@@ -84,35 +90,33 @@ public class DoShopFilterActivity extends BasicActivity {
         if (extras != null){
             if (intent.hasExtra(NYHelper.SORT_BY)){
                 sortBy = intent.getStringExtra(NYHelper.SORT_BY);
-                if (sortBy.equals("1")){
-                    lowerPriceRadioButton.setChecked(true);
-                    highestPriceRadioButton.setChecked(false);
+                if (sortBy.equals("0")){
+                    rbLatest.setChecked(true);
+                    rbLowest.setChecked(false);
+                    rbHighest.setChecked(false);
+                } else if (sortBy.equals("1")){
+                    rbLatest.setChecked(false);
+                    rbLowest.setChecked(true);
+                    rbHighest.setChecked(false);
                 } else {
-                    lowerPriceRadioButton.setChecked(false);
-                    highestPriceRadioButton.setChecked(true);
+                    rbLatest.setChecked(false);
+                    rbLowest.setChecked(false);
+                    rbHighest.setChecked(true);
                 }
-                //Toast.makeText(this, "sort - "+sortBy, Toast.LENGTH_SHORT).show();
+            }
+            if (intent.hasExtra(NYHelper.MIN_PRICE_DEAFULT)){
+                minPriceDefault = intent.getDoubleExtra(NYHelper.MIN_PRICE_DEAFULT, 0);
             }
             if (intent.hasExtra(NYHelper.MIN_PRICE)){
                 minPrice = intent.getDoubleExtra(NYHelper.MIN_PRICE, minPriceDefault);
-                //Toast.makeText(this, "min - "+String.valueOf(minPrice), Toast.LENGTH_SHORT).show();
+            }
+            if (intent.hasExtra(NYHelper.MAX_PRICE_DEFAULT)){
+                maxPriceDefault = intent.getDoubleExtra(NYHelper.MAX_PRICE_DEFAULT, 10000000);
             }
             if (intent.hasExtra(NYHelper.MAX_PRICE)){
                 maxPrice = intent.getDoubleExtra(NYHelper.MAX_PRICE, maxPriceDefault);
-                //Toast.makeText(this, "max - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
             }
         }
-
-        //reset price range
-//        minPrice = minPriceDefault;
-//        maxPrice = maxPriceDefault;
-//        tvMinPrice.setText(NYHelper.priceFormatter(minPriceDefault));
-//        tvMaxPrice.setText(NYHelper.priceFormatter(maxPriceDefault));
-//        rangeSeekbar.setMinStartValue((float)minPriceDefault);
-//        rangeSeekbar.setMaxStartValue((float)maxPriceDefault);
-//        rangeSeekbar.apply();
-
-
 
         tvMinPrice.setText(NYHelper.priceFormatter(minPrice));
         tvMaxPrice.setText(NYHelper.priceFormatter(maxPrice));
@@ -128,32 +132,43 @@ public class DoShopFilterActivity extends BasicActivity {
         }
 
         if (maxPrice < 0){
-            //Toast.makeText(this, "max price 1 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
             rangeSeekbar.setMaxStartValue((float)maxPriceDefault);
         } else {
-            //Toast.makeText(this, "max price 2 - "+String.valueOf(maxPrice), Toast.LENGTH_SHORT).show();
             rangeSeekbar.setMaxStartValue((float)maxPrice);
         }
         rangeSeekbar.apply();
     }
 
     private void initControl() {
-        lowerPriceRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        rbLatest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    sortBy = "1";
-                    highestPriceRadioButton.setChecked(false);
+                    sortBy = "0";
+                    rbLowest.setChecked(false);
+                    rbHighest.setChecked(false);
                 }
             }
         });
 
-        highestPriceRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        rbLowest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    sortBy = "1";
+                    rbLatest.setChecked(false);
+                    rbHighest.setChecked(false);
+                }
+            }
+        });
+
+        rbHighest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     sortBy = "2";
-                    lowerPriceRadioButton.setChecked(false);
+                    rbLatest.setChecked(false);
+                    rbLowest.setChecked(false);
                 }
             }
         });
@@ -175,9 +190,10 @@ public class DoShopFilterActivity extends BasicActivity {
     public  void resetFilter(){
 
         //reset radio button
-        sortBy = "1";
-        lowerPriceRadioButton.setChecked(true);
-        highestPriceRadioButton.setChecked(false);
+        sortBy = "0";
+        rbLatest.setChecked(true);
+        rbLowest.setChecked(false);
+        rbHighest.setChecked(false);
 
         //reset price range
         minPrice = minPriceDefault;
@@ -188,7 +204,6 @@ public class DoShopFilterActivity extends BasicActivity {
         rangeSeekbar.setMaxStartValue((float)maxPriceDefault);
         rangeSeekbar.apply();
     }
-
 
 
 }

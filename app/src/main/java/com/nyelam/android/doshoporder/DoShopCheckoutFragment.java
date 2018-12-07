@@ -512,6 +512,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     public void setViewShippingAddress(DoShopAddress shippingAddress) {
         if (shippingAddress != null){
+
             // TODO: bind data shipping address
             if (NYHelper.isStringNotEmpty(shippingAddress.getFullName()))tvShippingAddressName.setText(shippingAddress.getFullName());
             if (NYHelper.isStringNotEmpty(shippingAddress.getPhoneNumber()))tvShippingAddressPhone.setText(shippingAddress.getPhoneNumber());
@@ -723,6 +724,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             }
         } else if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("shipping")){
             try {
+                resetDeliveryService(); //reset delivery service
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
                 shippingAddress = new DoShopAddress();
                 shippingAddress.parse(obj);
@@ -732,6 +734,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             }
         } else if (data != null && data.hasExtra(NYHelper.ADDRESS)){
             try {
+                resetDeliveryService(); //reset delivery service
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
                 billingAddress = new DoShopAddress();
                 billingAddress.parse(obj);
@@ -769,6 +772,22 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             }
         }
 
+    }
+
+    private void resetDeliveryService(){
+        // TODO: reset delivery service
+        List<DoShopMerchant> merchants = new ArrayList<>();
+        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
+            for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()){
+                if (merchant != null){
+                    DoShopMerchant m = merchant;
+                    m.setDeliveryService(null);
+                    merchants.add(m);
+                }
+            }
+        }
+        cartReturn.getCart().setMerchants(merchants);
+        initCartReturn(cartReturn);
     }
 
     @Override

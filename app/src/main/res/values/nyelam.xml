@@ -140,6 +140,7 @@
     <string name="api_path_doshop_order_list">api/doshop/order_list</string>
     <string name="api_path_doshop_order_detail">api/doshop/order_detail</string>
     <string name="api_path_doshop_get_location">api/doshop/get_location</string>
+    <string name="api_path_doshop_min_max_price">api/doshop/product_filter</string>
 
 
 

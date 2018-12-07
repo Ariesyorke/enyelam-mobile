@@ -1,8 +1,10 @@
 package com.nyelam.android.doshoporder;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +24,14 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Courier;
 import com.nyelam.android.data.DoShopProduct;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.view.NYSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.nyelam.android.helper.NYHelper.TAG;
 
 
 public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAdapter.MyViewHolder> {
@@ -64,6 +69,16 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
         if (product != null){
             if (NYHelper.isStringNotEmpty(product.getProductName())) holder.name.setText(product.getProductName());
             holder.qty.setText(String.valueOf(product.getQty()));
+
+            if (product.getSpecialPrice() < product.getNormalPrice()){
+                holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
+                holder.priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                holder.priceStrike.setVisibility(View.VISIBLE);
+            } else {
+                holder.price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                holder.priceStrike.setVisibility(View.GONE);
+            }
+
 
             int maxQty = 10;
             if (maxQty < product.getQty()){
@@ -131,10 +146,40 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context, "Remove item", Toast.LENGTH_SHORT).show();
-                if (fragment instanceof DoShopCartFragment && product != null && NYHelper.isStringNotEmpty(product.getProductCartId())) ((DoShopCartFragment)fragment).onRemoveItem(product.getProductCartId());
+                if (fragment instanceof DoShopCartFragment && product != null && NYHelper.isStringNotEmpty(product.getProductCartId())){
+                    showConfirmationDialog(product);
+                }
             }
         });
     }
+
+    private void showConfirmationDialog(final DoShopProduct product) {
+        try {
+            AlertDialog dialog = new AlertDialog.Builder(context, R.style.AlertDialogCustom)
+                    .setPositiveButton(R.string.text_yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (fragment instanceof DoShopCartFragment && product != null && NYHelper.isStringNotEmpty(product.getProductCartId())){
+                                dialog.dismiss();
+                                ((DoShopCartFragment)fragment).onRemoveItem(product.getProductCartId());
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.text_no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setTitle(R.string.remove_item)
+                    .setMessage(R.string.warn_remove_item)
+                    .create();
+            dialog.show();
+        } catch (Exception e) {
+            NYLog.e("showDialog:" + e.getMessage());
+        }
+    }
+
 
     public List<DoShopProduct> getData() {
         if (data == null) data = new ArrayList<>();
@@ -160,6 +205,8 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
         ImageView image;
         TextView name;
         TextView estimate;
+        TextView price;
+        TextView priceStrike;
         TextView qty;
         TextView remove;
         NYSpinner spinnerQuantity;
@@ -169,6 +216,8 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
             image = (ImageView) itemView.findViewById(R.id.iv_item_image);
             name = (TextView) itemView.findViewById(R.id.tv_item_name);
             estimate = (TextView) itemView.findViewById(R.id.tv_estimate_delivery);
+            priceStrike = (TextView) itemView.findViewById(R.id.tv_price_strikethrough);
+            price = (TextView) itemView.findViewById(R.id.tv_price);
             qty = (TextView) itemView.findViewById(R.id.tv_item_qty);
             remove = (TextView) itemView.findViewById(R.id.tv_remove_item);
             spinnerQuantity = (NYSpinner) itemView.findViewById(R.id.spinner_quantity);

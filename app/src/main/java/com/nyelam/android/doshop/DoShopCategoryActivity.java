@@ -32,10 +32,12 @@ import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
+import com.nyelam.android.data.Price;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.docourse.DoCourseActivity;
 import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.http.NYDoShopMinMaxPriceRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
 import com.nyelam.android.storage.CartStorage;
@@ -48,6 +50,9 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,12 +67,16 @@ public class DoShopCategoryActivity extends BasicActivity {
     private boolean loadmore=true;
     private LinearLayoutManager layoutManager;
 
+    private String keyword;
     private int page = 1;
     private String categoryId;
     private DoShopCategory category;
-    private String sortBy = "1";
+    private String sortBy = "0";
     private String minPrice = "0";
     private String maxPrice = "10000000";
+
+    private String minPriceDefault = "0";
+    private String maxPriceDefault = "10000000";
 
     @BindView(R.id.et_search)
     EditText etSearch;
@@ -91,7 +100,9 @@ public class DoShopCategoryActivity extends BasicActivity {
         Intent intent = new Intent(this, DoShopFilterActivity.class);
         intent.putExtra(NYHelper.SORT_BY, sortBy);
         intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
+        intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, Double.valueOf(minPriceDefault));
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
+        intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, Double.valueOf(maxPriceDefault));
         startActivityForResult(intent, 1);
     }
 
@@ -99,7 +110,9 @@ public class DoShopCategoryActivity extends BasicActivity {
         Intent intent = new Intent(this, DoShopFilterActivity.class);
         intent.putExtra(NYHelper.SORT_BY, sortBy);
         intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
+        intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, Double.valueOf(minPriceDefault));
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
+        intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, Double.valueOf(maxPriceDefault));
         startActivityForResult(intent, 1);
     }
 
@@ -107,7 +120,9 @@ public class DoShopCategoryActivity extends BasicActivity {
         Intent intent = new Intent(this, DoShopFilterActivity.class);
         intent.putExtra(NYHelper.SORT_BY, sortBy);
         intent.putExtra(NYHelper.MIN_PRICE, Double.valueOf(minPrice));
+        intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, Double.valueOf(minPriceDefault));
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
+        intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, Double.valueOf(maxPriceDefault));
         startActivityForResult(intent, 1);
     }
 
@@ -136,20 +151,16 @@ public class DoShopCategoryActivity extends BasicActivity {
         context = this;
         initToolbar();
         initExtra();
+        initList();
+        initMinMaxPrice(categoryId, keyword);
+        initControl();
+    }
 
+    private void initList() {
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
         rvItemList.setLayoutManager(layoutManager);
         adapter = new DoShopRecommendedAdapter(context);
         rvItemList.setAdapter(adapter);
-
-        if (category != null && NYHelper.isStringNotEmpty(category.getId())){
-            initListItem(category.getId(), null);
-        } else {
-            //dialogCategoryNotAvailable();
-            initListItem(null, null);
-        }
-
-        initControl();
     }
 
     private void initControl() {
@@ -176,12 +187,18 @@ public class DoShopCategoryActivity extends BasicActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //Toast.makeText(context, "refresh : "+category.getId(), Toast.LENGTH_SHORT).show();
                 page = 1;
                 loadmore = true;
                 swipeRefreshLayout.setRefreshing(true);
                 adapter.clear();
                 adapter.notifyDataSetChanged();
-                initListItem(categoryId, etSearch.getText().toString());
+
+                if (category != null && NYHelper.isStringNotEmpty(category.getId())){
+                    initListItem(category.getId(), etSearch.getText().toString());
+                } else {
+                    initListItem(null, etSearch.getText().toString());
+                }
             }
         });
 
@@ -203,7 +220,7 @@ public class DoShopCategoryActivity extends BasicActivity {
 
     private void initListItem(String categoryId, String keyword){
         progressBar.setVisibility(View.VISIBLE);
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, String.valueOf(page), keyword, categoryId, minPrice,  maxPrice, sortBy);
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, String.valueOf(page), keyword, categoryId, minPrice,  maxPrice, sortBy, null, null, null);
         spcMgr.execute(req, onRealtedItemRequest());
     }
 
@@ -250,6 +267,52 @@ public class DoShopCategoryActivity extends BasicActivity {
         };
     }
 
+
+    private void initMinMaxPrice(String categoryId, String keyword){
+        progressBar.setVisibility(View.VISIBLE);
+        NYDoShopMinMaxPriceRequest req = new NYDoShopMinMaxPriceRequest(context, null, keyword, null, null);
+        if (category != null && NYHelper.isStringNotEmpty(category.getId())){
+            List<String> cats = new ArrayList<>();
+            cats.add(category.getId());
+            req = new NYDoShopMinMaxPriceRequest(context, cats, keyword, null, null);
+        }
+
+        spcMgr.execute(req, onGetMinMaxPriceRequest());
+    }
+
+    private RequestListener<Price> onGetMinMaxPriceRequest() {
+        return new RequestListener<Price>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                pDialog.dismiss();
+                loadmore = false;
+                swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onRequestSuccess(Price price) {
+                pDialog.dismiss();
+                loadmore = false;
+                swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.GONE);
+
+                minPrice = String.valueOf(price.getLowestPrice());
+                minPriceDefault = String.valueOf(price.getLowestPrice());
+                maxPrice = String.valueOf(price.getHighestPrice());
+                maxPriceDefault = String.valueOf(price.getHighestPrice());
+
+                //initList();
+                if (category != null && NYHelper.isStringNotEmpty(category.getId())){
+                    initListItem(category.getId(), etSearch.getText().toString());
+                } else {
+                    initListItem(null, etSearch.getText().toString());
+                }
+            }
+        };
+    }
+
     private void initExtra() {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -259,6 +322,7 @@ public class DoShopCategoryActivity extends BasicActivity {
                     JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.CATEGORY));
                     category = new DoShopCategory();
                     category.parse(obj);
+                    if (category != null)categoryId = category.getId();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

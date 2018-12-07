@@ -41,6 +41,7 @@ import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopCategory;
+import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopMerchantList;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.DoShopProductList;
@@ -186,6 +187,22 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
         }
     }
 
+    @OnClick(R.id.ll_merchant) void showMerchant(){
+        if (product != null && product.getMerchant() != null && NYHelper.isStringNotEmpty(product.getMerchant().getId())){
+            Intent intent = new Intent(this, DoShopMerchantActivity.class);
+            intent.putExtra(NYHelper.MERCHANT, product.getMerchant().toString());
+            startActivity(intent);
+        }
+    }
+
+    @OnClick(R.id.tv_brand_name) void showBrandName(){
+        if (product != null && product.getBrand() != null && NYHelper.isStringNotEmpty(product.getBrand().getId())){
+            Intent intent = new Intent(this, DoShopBrandActivity.class);
+            intent.putExtra(NYHelper.BRAND, product.getBrand().toString());
+            startActivity(intent);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -307,6 +324,9 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
                 if (product != null && product.getCategories() != null && product.getCategories().size() > 0 && NYHelper.isStringNotEmpty(product.getCategories().get(0).getId())){
                     initRelatedItem(product.getCategories().get(0).getId());
+                } else {
+                    // TODO: jika tidak ada kategori, kategori ID = null
+                    initRelatedItem(null);
                 }
 
                 if (product == null || product.getVariations() == null || product.getVariations().size() <= 0){
@@ -321,7 +341,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     private void initRelatedItem(String categoryId){
         NYLog.e("cek related 1");
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, "40000",  "500000", "1");
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, "40000",  "500000", "1", null, null, "1");
         spcMgr.execute(req, onRealtedItemRequest());
     }
 

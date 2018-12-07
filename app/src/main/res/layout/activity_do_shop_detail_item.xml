@@ -181,7 +181,7 @@
                             tools:text="PlanetSurf" />
 
                         <LinearLayout
-                            android:id="@+id/dive_center_linearLayout"
+                            android:id="@+id/ll_merchant"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/padding"
@@ -377,6 +377,7 @@
 
                         <EditText
                             android:id="@+id/et_quantity"
+                            android:text="1"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginEnd="@dimen/padding_half"

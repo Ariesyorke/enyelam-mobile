@@ -151,6 +151,7 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
         final List<Courier> couriers = new ArrayList<Courier>();
         couriers.add(new Courier("jne", "JNE"));
         couriers.add(new Courier("tiki", "TIKI"));
+        couriers.add(new Courier("jnt", "JNT"));
 
         this.couriers = couriers;
         courierAdapter = new CourierAdapter(this);

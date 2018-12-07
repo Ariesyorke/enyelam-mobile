@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -31,27 +31,55 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.nyelam.android.view.font.NYTextView
-                android:id="@+id/tv_item_name"
-                android:text="Cressi Gloves 5 mm Ultrastrecht"
-                android:textStyle="bold"
-                android:textColor="@color/ny_black2"
-                android:layout_gravity="top"
-                android:layout_margin="@dimen/padding_half"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_item_name"
+                    android:text="Cressi Gloves 5 mm Ultrastrecht"
+                    android:textStyle="bold"
+                    android:textColor="@color/ny_black2"
+                    android:layout_gravity="top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.nyelam.android.view.font.NYStrikethroughTextView
+                    android:id="@+id/tv_price_strikethrough"
+                    android:text="Rp 25.500"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:textColor="@color/ny_black2"
+                    android:layout_marginTop="@dimen/padding_half"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_price"
+                    app:fontTextStyle="bold"
+                    android:text="Rp 18.500"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF642E"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
             <com.nyelam.android.view.font.NYTextView
                 android:id="@+id/tv_estimate_delivery"
                 android:text="Estimate delivery time takes up to 2-8 workdays"
                 android:textStyle="bold"
                 android:textColor="@color/ny_black1"
                 android:layout_gravity="top"
-                android:layout_margin="@dimen/padding_half"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginStart="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_marginEnd="@dimen/padding_half"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+
 
 
 
