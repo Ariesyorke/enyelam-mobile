@@ -158,8 +158,6 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
     }
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -395,6 +393,14 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
                 Bitmap bitmap = null;
                 int targetW = getResources().getDimensionPixelSize(R.dimen.create_place_photo_thumb_width);
 
+                try {
+                    InputStream is = getContentResolver().openInputStream(android.net.Uri.parse(realFile.toURI().toString()));
+                    bitmap = BitmapFactory.decodeStream(is);
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 // Get the dimensions of the bitmap
                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                 bmOptions.inJustDecodeBounds = true;
@@ -457,7 +463,15 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
                 bmOptions.inSampleSize = scaleFactor;
                 bmOptions.inPurgeable = true;
 
-                Bitmap bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                //Bitmap bitmap = BitmapFactory.decodeFile(realFile.getPath(), bmOptions);
+                Bitmap bitmap = null;
+                try {
+                    InputStream is = getContentResolver().openInputStream(android.net.Uri.parse(realFile.toURI().toString()));
+                    bitmap = BitmapFactory.decodeStream(is);
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 80, imageStream);

@@ -61,8 +61,6 @@ public class DoShopCheckoutAdapter extends RecyclerView.Adapter<DoShopCheckoutAd
 
             //holder.tvSubTotal.setText(NYHelper.priceFormatter(merchant.));
 
-
-
             holder.llContainer.removeAllViews();
             for (DoShopProduct product : merchant.getDoShopProducts()){
 
@@ -73,18 +71,19 @@ public class DoShopCheckoutAdapter extends RecyclerView.Adapter<DoShopCheckoutAd
                 TextView tvItemName = (TextView) productView.findViewById(R.id.tv_item_name);
                 TextView tvItemQty = (TextView) productView.findViewById(R.id.tv_item_qty);
                 TextView tvItemPrice = (TextView) productView.findViewById(R.id.tv_item_price);
+                TextView tvItemPriceStrike = (TextView) productView.findViewById(R.id.tv_item_price_strikethrough);
 
                 if (product != null) {
                     tvItemQty.setText(String.valueOf(product.getQty()));
                     if (NYHelper.isStringNotEmpty(product.getProductName())) tvItemName.setText(product.getProductName());
                     if (product.getSpecialPrice() < product.getNormalPrice()){
-//                        holder.priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-//                        holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
-//                        holder.priceStrike.setVisibility(View.VISIBLE);
+                        tvItemPriceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                        tvItemPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
+                        tvItemPriceStrike.setVisibility(View.VISIBLE);
                         tvItemPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                     } else {
-//                        holder.price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-//                        holder.priceStrike.setVisibility(View.GONE);
+                        tvItemPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                        tvItemPriceStrike.setVisibility(View.GONE);
                         tvItemPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
                     }
 

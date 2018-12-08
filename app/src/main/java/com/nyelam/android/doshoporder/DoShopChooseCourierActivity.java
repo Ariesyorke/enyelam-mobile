@@ -76,14 +76,11 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
 
         String note = "";
 
-        if (currentCourier != null && currentCourierType != null && merchant != null){
+        if (currentCourier != null && currentCourierType != null && merchant != null && currentCourierType.getCourierCosts() != null && currentCourierType.getCourierCosts().size() > 0){
             DeliveryService deliveryService = new DeliveryService();
             deliveryService.setName(currentCourier.getName()+" "+currentCourierType.getService());
             deliveryService.setPrice(currentCourierType.getCourierCosts().get(0).getValue());
             merchant.setDeliveryService(deliveryService);
-
-
-            //NYLog.e("cek merchant asal"+merchant.toString());
 
             Intent intent=new Intent();
             intent.putExtra(NYHelper.MERCHANT, merchant.toString());
@@ -93,7 +90,7 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
             activity.setResult(2,intent);
             activity.finish();
         } else {
-            Toast.makeText(activity, "Please, choose courier dan delivery service", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Please, select courier and delivery service", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -149,6 +146,7 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
 
         //final CourierList courierList = new CourierList();
         final List<Courier> couriers = new ArrayList<Courier>();
+        couriers.add(new Courier(null, "Select Courier"));
         couriers.add(new Courier("jne", "JNE"));
         couriers.add(new Courier("tiki", "TIKI"));
         couriers.add(new Courier("jnt", "JNT"));
@@ -177,17 +175,30 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
                 public void onSpinnerClosed(Spinner spinner) {
 
                     int position = spinner.getSelectedItemPosition();
+                    courierAdapter.setSelectedPosition(position);
                     Courier courier = courierAdapter.getItem(position);
                     //Toast.makeText(this, courier.getName(), Toast.LENGTH_SHORT).show();
 
-                    if (courier != null && NYHelper.isStringNotEmpty(courier.getCode()))
-                        etCourier.setText(courier.getCode().toUpperCase());
-                    if (currentCourier != courier){
+                    if (courier != null && NYHelper.isStringNotEmpty(courier.getName()))
+                        etCourier.setText(courier.getName());
+                    if (courier.getCode() != null && currentCourier != courier){
                         currentCourier = courier;
                         currentCourierType = null;
                         // TODO: load courierTypes
                         //loadCourierTypes(currentCourier);
                         loadOngkir(originId, destinationId, weight, currentCourier.getCode());
+                    } else {
+                        currentCourier = courier;
+                        currentCourierType = null;
+
+                        List<CourierType> courierTypes = new ArrayList<>();
+                        courierTypes.add(new CourierType("Select Service", null));
+                        List<Courier>couriers = new ArrayList<>();
+                        couriers.add(new Courier(null, "Select Courier", courierTypes));
+
+                        CourierList courierList = new CourierList();
+                        courierList.setList(couriers);
+                        loadCourierTypes(courierList.getList().get(0));
                     }
 
                 }
@@ -205,7 +216,7 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
     }
 
 
-    private void loadOngkir(String originId, String destinationId, String weight, String courier) {
+    private void loadOngkir(String originId, String destinationId, String weight, final String courier) {
 
         OkHttpClient client = new OkHttpClient();
         // GET request
@@ -231,25 +242,38 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
                     String jsonData = response.body().string();
                     JSONObject Jobject = null;
 
-                    NYLog.e("CEK RAJA ONGKIR : "+jsonData);
+                    //NYLog.e("CEK RAJA ONGKIR : "+jsonData);
 
                     try {
                         Jobject = new JSONObject(jsonData);
                         JSONArray Jarray = Jobject.getJSONObject("rajaongkir").getJSONArray("results");
-//
+
                         final CourierList courierList = new CourierList();
                         courierList.parse(Jarray);
 
                         if (courierList != null && courierList.getList() != null && courierList.getList().size() > 0){
-
-                            //courierAdapter = new CourierAdapter(this);
-                            //courierAdapter.addCouriers(courierList.getList());
 
                             // TODO: masukkan ke spinner
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     //Log.d("UI thread", "I am the UI thread");
                                     //Toast.makeText(this, "ONGKIR ADA "+String.valueOf(courierList.getList().size()), Toast.LENGTH_SHORT).show();
+
+                                    CourierType ct = new CourierType("Select Service", null);
+                                    List<CourierType> courierTypes = new ArrayList<>();
+                                    courierTypes.add(ct);
+                                    Courier defaultCourier = new Courier(null, "Select Courier", courierTypes);
+
+                                    // TODO: add selected service
+                                    if (courierList != null && courierList.getList() != null && courierList.getList().size() > 0 &&
+                                            courierList.getList().get(0).getCourierTypes() != null && courierList.getList().get(0).getCourierTypes().size() > 0){
+                                        courierList.getList().get(0).getCourierTypes().add(0, ct);
+                                    } else {
+                                        List<Courier>couriers = new ArrayList<>();
+                                        couriers.add(defaultCourier);
+                                        courierList.setList(couriers);
+                                    }
+
                                     loadCourierTypes(courierList.getList().get(0));
                                 }
                             });
@@ -273,8 +297,8 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
 
     private void loadCourierTypes(Courier currentCourier) {
         if (currentCourier != null && currentCourier.getCourierTypes() != null){
-            // TODO: masukkan ke spinner
 
+            // TODO: masukkan ke spinner
             final List<CourierType> courierTypes = currentCourier.getCourierTypes();
 
             courierTypeAdapter = new CourierTypeAdapter(this);
@@ -297,19 +321,13 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
                         public void onSpinnerClosed(Spinner spinner) {
 
                             int position = spinner.getSelectedItemPosition();
+                            courierTypeAdapter.setSelectedPosition(position);
                             CourierType courierType = courierTypeAdapter.getItem(position);
                             currentCourierType = courierType;
-                            //Toast.makeText(this, courierType.getName(), Toast.LENGTH_SHORT).show();
 
-                            if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService()))
-                                etCourierType.setText(courierType.getService().toUpperCase());
-
-                            if (currentCourierType != null && currentCourierType.getCourierCosts() != null && currentCourierType.getCourierCosts().size() > 0 ){
-//                                tvShippingTotal.setText(NYHelper.priceFormatter(currentCourierType.getCourierCosts().get(0).getValue()));
-//                                if (cartReturn != null && cartReturn.getCart() != null){
-//                                    double total = cartReturn.getCart().getTotal()+currentCourierType.getCourierCosts().get(0).getValue();
-//                                    tvTotal.setText(NYHelper.priceFormatter(total));
-//                                }
+                            if (courierType != null && NYHelper.isStringNotEmpty(courierType.getService())){
+                                //etCourierType.setText(courierType.getService().toUpperCase());
+                                etCourierType.setText(courierType.getService());
                             }
                         }
                     });
@@ -317,16 +335,6 @@ public class DoShopChooseCourierActivity extends BasicActivity implements Adapte
                     if (couriers.size() > 0){
                         currentCourierType = courierTypes.get(0);
                         etCourierType.setText(currentCourierType.getService());
-//                        if (currentCourierType != null && currentCourierType.getCourierCosts() != null && currentCourierType.getCourierCosts().size() > 0 ){
-//                            tvShippingTotal.setText(NYHelper.priceFormatter(currentCourierType.getCourierCosts().get(0).getValue()));
-//                            if (cartReturn != null && cartReturn.getCart() != null){
-//                                double total = cartReturn.getCart().getTotal()+currentCourierType.getCourierCosts().get(0).getValue();
-//                                tvTotal.setText(NYHelper.priceFormatter(total));
-//                            }
-//                            llShippingTotalContainer.setVisibility(View.VISIBLE);
-//                        } else {
-//                            llShippingTotalContainer.setVisibility(View.GONE);
-//                        }
                     }
 
                 }

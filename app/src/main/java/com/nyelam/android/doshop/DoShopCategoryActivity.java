@@ -298,10 +298,17 @@ public class DoShopCategoryActivity extends BasicActivity {
                 swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
 
-                minPrice = String.valueOf(price.getLowestPrice());
-                minPriceDefault = String.valueOf(price.getLowestPrice());
-                maxPrice = String.valueOf(price.getHighestPrice());
-                maxPriceDefault = String.valueOf(price.getHighestPrice());
+                if (price != null){
+                    minPrice = String.valueOf(price.getLowestPrice());
+                    minPriceDefault = String.valueOf(price.getLowestPrice());
+                    maxPrice = String.valueOf(price.getHighestPrice());
+                    maxPriceDefault = String.valueOf(price.getHighestPrice());
+                } else {
+                    minPrice = "0";
+                    minPriceDefault = "0";
+                    maxPrice = "50000000";
+                    maxPriceDefault = "50000000";
+                }
 
                 //initList();
                 if (category != null && NYHelper.isStringNotEmpty(category.getId())){

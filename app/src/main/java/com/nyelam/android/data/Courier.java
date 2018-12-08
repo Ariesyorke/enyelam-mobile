@@ -31,6 +31,12 @@ public class Courier implements Parseable {
         this.name = name;
     }
 
+    public Courier (String code, String name, List<CourierType> courierTypes){
+        this.code = code;
+        this.name = name;
+        this.courierTypes = courierTypes;
+    }
+
     public String getCode() {
         return code;
     }

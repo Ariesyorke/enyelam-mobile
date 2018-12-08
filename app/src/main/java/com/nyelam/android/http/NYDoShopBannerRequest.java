@@ -24,23 +24,23 @@ public class NYDoShopBannerRequest extends NYBasicRequest<DoShopBannerList> {
         super(String.class, context, context.getResources().getString(R.string.api_path_doshop_banner));
     }
 
-    @Override
-    public DoShopBannerList loadDataFromNetwork() throws Exception {
-        String json = null;
-        try {
-            InputStream is = getContext().getAssets().open("do_shop_banners.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-            JSONObject obj = new JSONObject(json);
-            return  onProcessSuccessData(obj);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
+//    @Override
+//    public DoShopBannerList loadDataFromNetwork() throws Exception {
+//        String json = null;
+//        try {
+//            InputStream is = getContext().getAssets().open("do_shop_banners.json");
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//            json = new String(buffer, "UTF-8");
+//            JSONObject obj = new JSONObject(json);
+//            return  onProcessSuccessData(obj);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//    }
 
     @Override
     protected DoShopBannerList onProcessSuccessData(JSONObject obj) throws Exception {

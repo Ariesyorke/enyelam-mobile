@@ -63,7 +63,10 @@
     <string name="choose_province">Select Province</string>
     <string name="province">Province</string>
     <string name="courier">Courier</string>
+    <string name="select_courier">Select Courier</string>
     <string name="service_types">Service Types</string>
+    <string name="service">Service</string>
+    <string name="select_service">Select Service</string>
     <string name="city">City</string>
     <string name="choose_city">Select City</string>
     <string name="district">District</string>

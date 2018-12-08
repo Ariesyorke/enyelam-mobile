@@ -341,7 +341,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     private void initRelatedItem(String categoryId){
         NYLog.e("cek related 1");
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, "40000",  "500000", "1", null, null, "1");
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, null,  null, "1", null, null, "1");
         spcMgr.execute(req, onRealtedItemRequest());
     }
 
@@ -361,9 +361,23 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                 //progressBar.setVisibility(View.GONE);
                 //swipeRefreshLayout.setRefreshing(false);
                 NYLog.e("cek related success");
+
+                if (listNYPaginationResult != null && listNYPaginationResult.item != null && listNYPaginationResult.item.getList() != null && listNYPaginationResult.item.getList().size() > 0){
+                    List<DoShopProduct> products = new ArrayList<>();
+                    for (DoShopProduct p : listNYPaginationResult.item.getList()){
+                        if (p != null && NYHelper.isStringNotEmpty(p.getId()) && !p.getId().equals(productId)){
+                            products.add(p);
+                        }
+                    }
+                    listNYPaginationResult.item.setList(products);
+                }
+
+
                 if (listNYPaginationResult != null && listNYPaginationResult.item != null && listNYPaginationResult.item.getList() != null &&
                         listNYPaginationResult.item.getList().size() > 0){
                     NYLog.e("cek related data : "+listNYPaginationResult.item.getList().toString());
+
+
 
                     LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                     //GridLayoutManager layoutManager = new GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false);
@@ -431,6 +445,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
                     JSONObject obj = new JSONObject(intent.getStringExtra(NYHelper.PRODUCT));
                     product = new DoShopProduct();
                     product.parse(obj);
+                    if (product != null)productId = product.getId();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -515,7 +530,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
                 double value = product.getNormalPrice()-product.getSpecialPrice();
                 double percent = value/product.getNormalPrice();
-                tvYouSave.setText("You Save : "+String.format("%.0f", percent));
+                tvYouSave.setText("You Save : "+String.format("%.0f", percent*100)+"%");
+                //Toast.makeText(context, "percent : "+String.valueOf(percent), Toast.LENGTH_SHORT).show();
 
                 llPriceContainer.setVisibility(View.VISIBLE);
             } else {

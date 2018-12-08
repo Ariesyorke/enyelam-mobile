@@ -176,6 +176,8 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
                     adapter.notifyDataSetChanged();
                     page++;
                     loadmore = true;
+                } else {
+                    tvNotFound.setVisibility(View.VISIBLE);
                 }
             }
         };

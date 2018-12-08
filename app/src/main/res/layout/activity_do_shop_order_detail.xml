@@ -153,10 +153,9 @@
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/recyclerView"
+                            android:nestedScrollingEnabled="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
-
-
 
                     </LinearLayout>
 
@@ -466,6 +465,7 @@
 
 
                         <LinearLayout
+                            android:visibility="gone"
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">

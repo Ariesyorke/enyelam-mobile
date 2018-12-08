@@ -367,9 +367,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
 
     @OnClick(R.id.tv_choose_billing_address) void chooseBillingAddress(){
-//        listener.proceedToChoosePayment();
-//        NYDialogChooseAddress dialog = new NYDialogChooseAddress();
-//        dialog.showChooseAddressDialog(getActivity(), null);
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
         intent.putExtra(NYHelper.TAG, "billing");
         startActivityForResult(intent, 100);
@@ -460,6 +457,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             tvShippingTotal.setText(NYHelper.priceFormatter(totalShipping));
             llShippingTotalContainer.setVisibility(View.VISIBLE);
 
+            double additionalsFee = 0;
             llAdditionalContainer.removeAllViews();
             if (cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0){
                 for (Additional additional : cartReturn.getAdditionals()){
@@ -470,6 +468,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                     TextView tvValue = (TextView) additionalView.findViewById(R.id.additional_value_textView);
 
                     if (additional != null) {
+                        additionalsFee+=additional.getValue();
                         if (NYHelper.isStringNotEmpty(additional.getTitle())) tvLabel.setText(additional.getTitle());
                         tvValue.setText(NYHelper.priceFormatter(additional.getValue()));
                         llAdditionalContainer.addView(additionalView);
@@ -479,7 +478,8 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
 
             tvSubTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getSubTotal()));
-            tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()+totalShipping));
+            // TODO: total price + shipping + payment fee
+            tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()+totalShipping+additionalsFee));
 
             if (cartReturn.getCart().getVoucher() != null){
                 if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))tvVoucherCode.setText("Voucher ("+cartReturn.getCart().getVoucher().getCode()+")");
@@ -523,7 +523,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getCity().getName())) addressString+=", "+shippingAddress.getCity().getName();
             if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getProvince().getName())) addressString+=", "+shippingAddress.getProvince().getName();
             if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getZipCode())) addressString+=", "+shippingAddress.getZipCode();
-            if (NYHelper.isStringNotEmpty(addressString)) tvAddress.setText(addressString);
+            if (NYHelper.isStringNotEmpty(addressString)) tvShippingAddress.setText(addressString);
 
             llContainerShippingAddress.setVisibility(View.VISIBLE);
             tvChooseShippingAddress.setVisibility(View.GONE);
@@ -714,6 +714,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("billing")){
+
+            //Toast.makeText(getActivity(), data.getStringExtra(NYHelper.TAG), Toast.LENGTH_SHORT).show();
+
             try {
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
                 billingAddress = new DoShopAddress();
@@ -723,6 +726,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 e.printStackTrace();
             }
         } else if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("shipping")){
+
+            //Toast.makeText(getActivity(), data.getStringExtra(NYHelper.TAG), Toast.LENGTH_SHORT).show();
+
             try {
                 resetDeliveryService(); //reset delivery service
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));
@@ -733,6 +739,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 e.printStackTrace();
             }
         } else if (data != null && data.hasExtra(NYHelper.ADDRESS)){
+
+            //Toast.makeText(getActivity(), data.getStringExtra(NYHelper.TAG), Toast.LENGTH_SHORT).show();
+
             try {
                 resetDeliveryService(); //reset delivery service
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.ADDRESS));

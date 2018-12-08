@@ -23,6 +23,15 @@ public class CourierType implements Parseable {
     private String description;
     private List<CourierCost> courierCosts;
 
+    public CourierType(){
+
+    }
+
+    public CourierType(String service, String description){
+        this.service = service;
+        this.description = description;
+    }
+
     public String getService() {
         return service;
     }

@@ -115,15 +115,17 @@ public class CourierAdapter extends BaseAdapter implements SpinnerAdapter {
 
         Courier courier = couriers.get(position);
         if (courier != null){
-            if (NYHelper.isStringNotEmpty(courier.getCode())){
-                tvName.setText(courier.getCode().toUpperCase());
+            if (NYHelper.isStringNotEmpty(courier.getName())){
+                tvName.setText(courier.getName());
             }
         }
 
         if (position == selectedPosition){
             mainLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.ny_grey1));
+            tvName.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
         } else {
             mainLinearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
+            tvName.setTextColor(ContextCompat.getColor(context, R.color.ny_black2));
         }
 
         return view;
