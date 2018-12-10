@@ -42,6 +42,7 @@
         android:id="@+id/refresh_swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -123,15 +124,6 @@
                     </RelativeLayout>
 
 
-
-
-
-
-
-
-
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -155,7 +147,7 @@
                             android:id="@+id/recyclerView"
                             android:nestedScrollingEnabled="false"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
@@ -185,14 +177,14 @@
                             android:orientation="horizontal">
 
                             <com.nyelam.android.view.font.NYTextView
-                                app:fontTextStyle="mediumItalic"
                                 android:id="@+id/tv_billing_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="@string/customer_name"
                                 android:textColor="@color/ny_black1"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                app:fontTextStyle="mediumItalic" />
 
                             <!--<com.nyelam.android.view.font.NYTextView-->
                             <!--android:id="@+id/change_contact_textView"-->
@@ -212,22 +204,22 @@
                             android:orientation="horizontal">
 
                             <com.nyelam.android.view.font.NYTextView
-                                app:fontTextStyle="reguler"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="@string/phone_number"
                                 android:textColor="@color/ny_grey4"
-                                android:textSize="14sp" />
+                                android:textSize="14sp"
+                                app:fontTextStyle="reguler" />
 
                             <com.nyelam.android.view.font.NYTextView
-                                app:fontTextStyle="reguler"
                                 android:id="@+id/tv_billing_phone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="081727727"
                                 android:textColor="@color/ny_black1"
-                                android:textSize="14sp" />
+                                android:textSize="14sp"
+                                app:fontTextStyle="reguler"
+                                tools:text="081727727" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -237,24 +229,23 @@
                             android:orientation="horizontal">
 
                             <com.nyelam.android.view.font.NYTextView
-                                app:fontTextStyle="reguler"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="@string/email"
                                 android:textColor="@color/ny_grey4"
-                                android:textSize="14sp" />
+                                android:textSize="14sp"
+                                app:fontTextStyle="reguler" />
 
                             <com.nyelam.android.view.font.NYTextView
-                                app:fontTextStyle="reguler"
                                 android:id="@+id/tv_billing_email"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="example@mail.com"
                                 android:textColor="@color/ny_black1"
-                                android:textSize="14sp" />
+                                android:textSize="14sp"
+                                app:fontTextStyle="reguler"
+                                tools:text="example@mail.com" />
                         </LinearLayout>
-
 
 
                         <LinearLayout
@@ -264,32 +255,26 @@
                             android:orientation="horizontal">
 
                             <com.nyelam.android.view.font.NYTextView
-                                app:fontTextStyle="reguler"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="@string/address"
                                 android:textColor="@color/ny_grey4"
-                                android:textSize="14sp" />
+                                android:textSize="14sp"
+                                app:fontTextStyle="reguler" />
 
                             <com.nyelam.android.view.font.NYTextView
-                                app:fontTextStyle="reguler"
                                 android:id="@+id/tv_billing_address"
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                tools:text="Jalan Pjajaran Bogor"
+                                android:layout_weight="1"
                                 android:textColor="@color/ny_black1"
-                                android:textSize="14sp" />
+                                android:textSize="14sp"
+                                app:fontTextStyle="reguler"
+                                tools:text="Jalan Pjajaran Bogor" />
                         </LinearLayout>
 
                     </LinearLayout>
-
-
-
-
-
-
 
 
                     <com.nyelam.android.view.font.NYTextView
@@ -417,7 +402,6 @@
                     </LinearLayout>
 
 
-
                     <com.nyelam.android.view.font.NYTextView
                         app:fontTextStyle="medium"
                         android:layout_width="match_parent"
@@ -436,10 +420,12 @@
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="light"
                                 android:layout_width="wrap_content"
@@ -448,6 +434,7 @@
                                 android:text="@string/sub_total"
                                 android:textSize="14sp"
                                 android:textColor="@color/ny_grey4" />
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="bold"
                                 android:id="@+id/tv_sub_total"
@@ -469,6 +456,7 @@
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="light"
                                 android:layout_width="wrap_content"
@@ -477,6 +465,7 @@
                                 android:text="@string/shipping_cost"
                                 android:textSize="14sp"
                                 android:textColor="@color/ny_grey4" />
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="bold"
                                 android:id="@+id/tv_shipping_cost"
@@ -493,13 +482,13 @@
                         </LinearLayout>
 
 
-
                         <LinearLayout
                             android:id="@+id/ll_voucher_container"
                             android:visibility="gone"
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="light"
                                 android:layout_width="wrap_content"
@@ -508,6 +497,7 @@
                                 android:layout_marginTop="@dimen/padding"
                                 android:text="@string/voucher"
                                 android:textColor="@color/ny_grey4" />
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="bold"
                                 android:id="@+id/tv_voucher_total"
@@ -527,12 +517,13 @@
                             android:id="@+id/ll_additional_container"
                             android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="reguler"
                                 android:layout_width="wrap_content"
@@ -541,6 +532,7 @@
                                 android:layout_marginTop="@dimen/padding"
                                 android:text="@string/total_price"
                                 android:textColor="@color/ny_grey4" />
+
                             <com.nyelam.android.view.font.NYTextView
                                 app:fontTextStyle="bold"
                                 android:id="@+id/tv_total"
@@ -557,23 +549,6 @@
                         </LinearLayout>
 
                     </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                     <LinearLayout
@@ -622,7 +597,7 @@
                                 android:textSize="18sp"
                                 android:visibility="gone"
                                 android:text="@string/bank_branch"
-                                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TableLayout
                                 android:id="@+id/tabla_cuerpo"
@@ -647,7 +622,7 @@
                                         android:gravity="left"
                                         android:textSize="14sp"
                                         android:text="@string/account_number_label"
-                                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                     <com.nyelam.android.view.font.NYTextView
                                         app:fontTextStyle="reguler"
@@ -659,7 +634,7 @@
                                         android:gravity="center"
                                         android:textSize="14sp"
                                         android:text="@string/account_number"
-                                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 </TableRow>
 
@@ -676,7 +651,7 @@
                                         android:gravity="left"
                                         android:textSize="14sp"
                                         android:text="@string/account_name_label"
-                                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                     <com.nyelam.android.view.font.NYTextView
                                         app:fontTextStyle="reguler"
@@ -687,11 +662,10 @@
                                         android:gravity="center"
                                         android:textSize="14sp"
                                         android:text="@string/account_name"
-                                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 </TableRow>
                             </TableLayout>
-
 
 
                             <LinearLayout
@@ -729,20 +703,16 @@
                             </LinearLayout>
 
 
-
-
-
-
-
-
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="wrap_content" />
+
                                 <LinearLayout
                                     android:id="@+id/confirm_linearLayout"
                                     android:background="@drawable/ny_rectangle_blue_soft"
@@ -756,6 +726,7 @@
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content">
+
                                     <TextView
                                         android:text="@string/confirm"
                                         android:textSize="17sp"
@@ -768,19 +739,6 @@
                                         android:layout_height="wrap_content" />
                                 </LinearLayout>
                             </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                         </LinearLayout>

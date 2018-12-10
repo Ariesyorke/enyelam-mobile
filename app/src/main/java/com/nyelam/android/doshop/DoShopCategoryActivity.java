@@ -68,6 +68,7 @@ public class DoShopCategoryActivity extends BasicActivity {
     private LinearLayoutManager layoutManager;
 
     private String keyword;
+    private String recommendation;
     private int page = 1;
     private String categoryId;
     private DoShopCategory category;
@@ -220,7 +221,7 @@ public class DoShopCategoryActivity extends BasicActivity {
 
     private void initListItem(String categoryId, String keyword){
         progressBar.setVisibility(View.VISIBLE);
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, String.valueOf(page), keyword, categoryId, minPrice,  maxPrice, sortBy, null, null, null);
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, String.valueOf(page), keyword, categoryId, minPrice,  maxPrice, sortBy, null, null, recommendation);
         spcMgr.execute(req, onRealtedItemRequest());
     }
 
@@ -255,12 +256,12 @@ public class DoShopCategoryActivity extends BasicActivity {
 
                     page++;
                 }
+                llFilter.setVisibility(View.VISIBLE);
 
                 if (adapter.getItemCount() == 0){
                     tvNotFound.setVisibility(View.VISIBLE);
                 } else {
                     tvNotFound.setVisibility(View.GONE);
-                    llFilter.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -303,19 +304,18 @@ public class DoShopCategoryActivity extends BasicActivity {
                     minPriceDefault = String.valueOf(price.getLowestPrice());
                     maxPrice = String.valueOf(price.getHighestPrice());
                     maxPriceDefault = String.valueOf(price.getHighestPrice());
+                    //initList();
+                    if (category != null && NYHelper.isStringNotEmpty(category.getId())){
+                        initListItem(category.getId(), etSearch.getText().toString());
+                    } else {
+                        initListItem(null, etSearch.getText().toString());
+                    }
                 } else {
-                    minPrice = "0";
-                    minPriceDefault = "0";
-                    maxPrice = "50000000";
-                    maxPriceDefault = "50000000";
-                }
+                    tvNotFound.setVisibility(View.VISIBLE);
+                    llFilter.setVisibility(View.GONE);
+               }
 
-                //initList();
-                if (category != null && NYHelper.isStringNotEmpty(category.getId())){
-                    initListItem(category.getId(), etSearch.getText().toString());
-                } else {
-                    initListItem(null, etSearch.getText().toString());
-                }
+
             }
         };
     }
@@ -333,6 +333,9 @@ public class DoShopCategoryActivity extends BasicActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+            if(intent.hasExtra(NYHelper.RECOMMENDED)) {
+                recommendation = intent.getStringExtra(NYHelper.RECOMMENDED);
             }
         }
     }

@@ -210,6 +210,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/padding"
+                            android:visibility="gone"
                             android:orientation="horizontal">
 
                             <RatingBar
@@ -392,6 +393,7 @@
                             android:paddingStart="@dimen/padding_double"
                             android:popupBackground="@android:color/transparent"
                             android:textColor="@color/ny_black2"
+                            android:imeOptions="actionDone"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -506,13 +508,22 @@
                         android:textSize="@dimen/eightteen_sp"
                         app:fontTextStyle="bold" />
 
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_related_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:nestedScrollingEnabled="false"
+                        android:scrollbars="none" />
+
                     <LinearLayout
                         android:id="@+id/ll_see_all"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/padding_half"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="@dimen/padding">
 
                         <com.nyelam.android.view.font.NYTextView
                             android:layout_width="wrap_content"
@@ -527,15 +538,6 @@
                             android:layout_marginLeft="@dimen/padding_half"
                             android:src="@drawable/ic_arrow_right_grey" />
                     </LinearLayout>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_related_item"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:nestedScrollingEnabled="false"
-                        android:scrollbars="none" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

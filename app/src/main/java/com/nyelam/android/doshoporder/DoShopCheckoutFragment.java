@@ -37,10 +37,8 @@ import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
 import com.nyelam.android.VeritransNotificationActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
-import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.Additional;
 import com.nyelam.android.data.Cart;
-import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.Contact;
 import com.nyelam.android.data.DeliveryService;
 import com.nyelam.android.data.DiveService;
@@ -48,19 +46,15 @@ import com.nyelam.android.data.DoShopAddress;
 import com.nyelam.android.data.DoShopAddressList;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopMerchant;
-import com.nyelam.android.data.DoShopMerchantList;
 import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.NTransactionResult;
 import com.nyelam.android.data.Order;
-import com.nyelam.android.data.OrderReturn;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYCartExpiredException;
-import com.nyelam.android.http.NYChangePaymentMethodRequest;
-import com.nyelam.android.http.NYDoDiveServiceOrderResubmitRequest;
 import com.nyelam.android.http.NYDoShopAddressListRequest;
 import com.nyelam.android.http.NYDoShopCheckPaymentMethodRequest;
 import com.nyelam.android.http.NYDoShopReSubmitOrderRequest;
@@ -68,8 +62,9 @@ import com.nyelam.android.http.NYDoShopSubmitOrderRequest;
 import com.nyelam.android.storage.CartStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.VeritransStorage;
-import com.nyelam.android.view.NYCustomDialog;
 import com.nyelam.android.view.NYDialogChooseAddress;
+import com.nyelam.android.view.NYProductCheckoutItemView;
+import com.nyelam.android.view.ProductCheckoutItemListener;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -107,7 +102,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     private int paypalRequestCode = 999;
     private boolean isTranssactionFailed = false;
     private boolean isTranssactionCanceled = false;
-
+    private List<NYProductCheckoutItemView> productViews;
 
     //DATA YANG AKAN DIKIRIM
     private DoShopOrder orderReturn;
@@ -120,7 +115,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopCheckoutFragment thisFragment;
     private CheckoutListener listener;
-    private DoShopCheckoutAdapter adapter;
+//    private DoShopCheckoutAdapter adapter;
 
     @BindView(R.id.ll_voucher_container)
     LinearLayout llVoucherContainer;
@@ -146,9 +141,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     @BindView(R.id.tv_shipping_total)
     TextView tvShippingTotal;
 
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-
     @BindView(R.id.ll_container_input_personal_information)
     LinearLayout llContainerInputPersonal;
 
@@ -163,6 +155,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     @BindView(R.id.tv_address_name)
     TextView tvAddressName;
+
+    @BindView(R.id.product_item_container)
+    LinearLayout llProductItemContainer;
 
     @BindView(R.id.tv_address)
     TextView tvAddress;
@@ -219,21 +214,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         } else if (!checkBox.isChecked()){
             Toast.makeText(getActivity(), "Please, checklist agreements", Toast.LENGTH_SHORT).show();
         } else {
-
-            //getSubmitOrder(paymentMethod, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
-
             if (isTranssactionCanceled){
-                // TODO: resubmit order
                 onResubmitOrder();
-                //getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
             } else if (orderReturn == null && isTranssactionFailed){
                 // TODO: request ulang cart token atau cart return
-                //new NYCustomDialog().showAgreementDialog(getActivity());
-                //getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
                 getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
             } else if (orderReturn == null){
-                //new NYCustomDialog().showAgreementDialog(getActivity());
-                //getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
                 getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
             } else {
                 payUsingVeritrans();
@@ -292,15 +278,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 orderReturn = result;
 
                 if (orderReturn != null){
-
-                    NYLog.e("re-submit order : "+orderReturn.toString());
-                    NYLog.e("payment Type : " + paymentType);
-
                     if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null && NYHelper.isStringNotEmpty(result.getVeritransToken().getTokenId())){
-
-                        //Toast.makeText(BookingServiceSummaryActivity.this, "success veritrans", Toast.LENGTH_SHORT).show();
-
-                        //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
                         VeritransStorage veritransStorage = new VeritransStorage(getActivity());
                         veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
 
@@ -416,7 +394,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         super.onViewCreated(view, savedInstanceState);
         listener = (CheckoutListener) getActivity();
         thisFragment = this;
-        initAdapter();
+//        initAdapter();
         loadAddress();
     }
 
@@ -426,23 +404,45 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         return R.layout.fragment_do_shop_checkout;
     }
 
-    private void initAdapter() {
-        adapter = new DoShopCheckoutAdapter(getActivity(), thisFragment);
-
-        //ADAPTER SERVICE LIST
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
-        recyclerView.setAdapter(adapter);
+    private void initProductViews(List<DoShopMerchant> merchants) {
+        llProductItemContainer.removeAllViews();
+        productViews = new ArrayList<>();
+        for (int i = 0; i < merchants.size(); i++) {
+            NYProductCheckoutItemView view = new NYProductCheckoutItemView(getActivity());
+            llProductItemContainer.addView(view);
+            view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            if(i == 0) {
+                view.setPadding(0, 0, 0, 8);
+            } else {
+                view.setPadding(0, 8, 0, 8);
+            }
+            view.initMerchant(getActivity(), merchants.get(i), new ProductCheckoutItemListener(merchants.get(i), i){
+                @Override
+                public void onItemClicked(View view, DoShopMerchant merchant, int index) {
+                    chooseCourrier(merchant);
+                }
+            });
+            productViews.add(view);
+        }
     }
+
+//    private void initAdapter() {
+//        adapter = new DoShopCheckoutAdapter(getActivity(), thisFragment);
+//
+//        //ADAPTER SERVICE LIST
+//        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+//        LinearLayoutManager layoutManager
+//                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
+//        recyclerView.setAdapter(adapter);
+//    }
 
     private void initCartReturn(DoShopCartReturn cartReturn){
 
-
-        adapter.setData(cartReturn.getCart().getMerchants());
-        adapter.notifyDataSetChanged();
+        initProductViews(cartReturn.getCart().getMerchants());
+//        adapter.setData(cartReturn.getCart().getMerchants());
+//        adapter.notifyDataSetChanged();
 
 
         if (cartReturn != null && cartReturn.getCart() != null){

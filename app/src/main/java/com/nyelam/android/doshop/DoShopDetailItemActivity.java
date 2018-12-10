@@ -182,7 +182,8 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
     @OnClick(R.id.ll_see_all) void seeAll(){
         if (product != null && product.getCategories() != null && product.getCategories().size() > 0 && NYHelper.isStringNotEmpty(product.getCategories().get(0).getId())){
             Intent intent = new Intent(this, DoShopCategoryActivity.class);
-            intent.putExtra(NYHelper.CATEGORY, product.getCategories().get(0).getId().toString());
+            intent.putExtra(NYHelper.RECOMMENDED, "1");
+            intent.putExtra(NYHelper.CATEGORY, product.getCategories().get(0).toString());
             startActivity(intent);
         }
     }
@@ -341,7 +342,7 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     private void initRelatedItem(String categoryId){
         NYLog.e("cek related 1");
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, null,  null, "1", null, null, "1");
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, "1", null, categoryId, null,  null, "0", null, null, "1");
         spcMgr.execute(req, onRealtedItemRequest());
     }
 

@@ -244,15 +244,14 @@
                     app:fontTextStyle="bold" />
 
                 <!--<include layout="@layout/view_item_cart" />-->
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:nestedScrollingEnabled="false"
+                <LinearLayout
+                    android:id="@+id/product_item_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
-
-
 
             <com.nyelam.android.view.font.NYTextView
                 android:layout_width="match_parent"

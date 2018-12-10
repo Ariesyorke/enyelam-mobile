@@ -29,6 +29,7 @@ import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopCategoryList;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.SearchService;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.diveservice.DetailServiceActivity;
 import com.nyelam.android.dodive.DoDiveActivity;
 import com.nyelam.android.helper.NYHelper;
@@ -81,7 +82,7 @@ public class DoShopBannerFragment extends BasicFragment {
             public void onClick(View v) {
                 // Open browser on click if not null
                 if (banner != null){
-                    if (banner.getType().equals("detail")  && NYHelper.isStringNotEmpty(banner.getTarget())){
+                    if (banner.getType().equalsIgnoreCase("product")  && NYHelper.isStringNotEmpty(banner.getTarget())){
 
                         // TODO: intent ke detail product
                         DoShopProduct product = new DoShopProduct();
@@ -92,7 +93,7 @@ public class DoShopBannerFragment extends BasicFragment {
                         intent.putExtra(NYHelper.PRODUCT, product.toString());
                         startActivity(intent);
 
-                    } else if (banner.getType().equals("category") && NYHelper.isStringNotEmpty(banner.getTarget())){
+                    } else if (banner.getType().equalsIgnoreCase("category") && NYHelper.isStringNotEmpty(banner.getTarget())){
 
                         // TODO: intent ke detail category
                         DoShopCategory category = new DoShopCategory();
@@ -103,7 +104,7 @@ public class DoShopBannerFragment extends BasicFragment {
                         intent.putExtra(NYHelper.CATEGORY, category.toString());
                         startActivity(intent);
 
-                    } else if (banner.getType().equals("brand") && NYHelper.isStringNotEmpty(banner.getTarget())){
+                    } else if (banner.getType().equalsIgnoreCase("brand") && NYHelper.isStringNotEmpty(banner.getTarget())){
 
                         // TODO: intent ke detail brand
                         Brand brand = new Brand();
@@ -114,7 +115,7 @@ public class DoShopBannerFragment extends BasicFragment {
                         intent.putExtra(NYHelper.BRAND, brand.toString());
                         startActivity(intent);
 
-                    } else if (banner.getType().equals("url") && NYHelper.isStringNotEmpty(banner.getTarget())){
+                    } else if (banner.getType().equalsIgnoreCase("url") && NYHelper.isStringNotEmpty(banner.getTarget())){
 
                         // TODO: intent ke website
                         String url = banner.getTarget();

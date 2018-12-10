@@ -169,7 +169,6 @@ public class DoShopOrderHistoryFragment extends BasicFragment {
                 swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
                 tvNotFound.setVisibility(View.GONE);
-                //swipeRefreshLayout.setRefreshing(false);
                 if (orderList!=null && orderList.item != null && orderList.item.getList() != null && orderList.item.getList().size() > 0){
                     if (page == 1) adapter.setData(orderList.item.getList());
                     else adapter.addData(orderList.item.getList());

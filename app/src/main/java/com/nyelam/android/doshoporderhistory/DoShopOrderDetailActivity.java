@@ -53,6 +53,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -259,14 +260,16 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
             if (NYHelper.isStringNotEmpty(order.getOrderId()))tvOrderId.setText(order.getOrderId());
             if (NYHelper.isStringNotEmpty(order.getOrderStatus())){
                 tvOrderStatus.setText(order.getOrderStatus());
-                if (order.getOrderStatus().equalsIgnoreCase("pending") && order.getVeritransToken() == null) {
+                if ((order.getOrderStatus().equalsIgnoreCase("pending") || order.getOrderStatus().equalsIgnoreCase("waiting for payment")) && order.getVeritransToken() == null && order.getPaypalCurrency() == null) {
                     paymentLinearLayout.setVisibility(View.VISIBLE);
                 } else {
                     paymentLinearLayout.setVisibility(View.GONE);
                 }
             }
-
-            //if (NYHelper.isStringNotEmpty(order.()))tvOrderDate.setText(order.getOrderId());
+            if(order.getOrderDate() != null) {
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                tvOrderDate.setText("Order Date: " + format.format(order.getOrderDate()));
+            }
 
             if (order.getCart() != null){
                 adapter.setData(order.getCart().getMerchants());

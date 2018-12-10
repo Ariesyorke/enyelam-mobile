@@ -273,13 +273,13 @@ public class InboxFragment extends Fragment {
                                         }
                                     }, 2000);
                                 } else {
-                                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
                     });
                 }else{
-                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
                 }
             }
         };

@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class DoShopOrder implements Parseable {
 
 
     private static String KEY_ORDER_ID = "order_id";
+    private static String KEY_ORDER_DATE = "order_date";
     private static String KEY_ORDER_STATUS = "order_status";
     private static String KEY_PAYPAL_CURRENCY = "paypal_currency";
     private static String KEY_VERITRANS_TOKEN = "veritrans_token";
@@ -28,6 +30,7 @@ public class DoShopOrder implements Parseable {
 
     private String orderId;
     private String orderStatus;
+    private Date orderDate;
     private DoShopAddress billingAddress;
     private DoShopAddress shippingAddress;
     private List<Additional> additionals;
@@ -106,6 +109,14 @@ public class DoShopOrder implements Parseable {
 
     public void setPaypalCurrency(PaypalCurrency paypalCurrency) {
         this.paypalCurrency = paypalCurrency;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
     @Override
@@ -212,7 +223,14 @@ public class DoShopOrder implements Parseable {
                 e.printStackTrace();
             }
         }
-
+        if(!obj.isNull(KEY_ORDER_DATE)) {
+            try {
+                long timestamp = obj.getLong(KEY_ORDER_DATE);
+                orderDate = new Date(timestamp * 1000);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -316,6 +334,15 @@ public class DoShopOrder implements Parseable {
             e.printStackTrace();
         }
 
+        try {
+            if(orderDate != null) {
+                obj.put(KEY_ORDER_DATE, orderDate.getTime()/1000);
+            } else {
+                obj.put(KEY_ORDER_DATE, JSONObject.NULL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             return obj.toString(3);
         } catch (JSONException e) {e.printStackTrace();}

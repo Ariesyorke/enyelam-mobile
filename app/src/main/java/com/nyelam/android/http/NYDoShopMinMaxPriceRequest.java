@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.nyelam.android.R;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.Price;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONObject;
@@ -47,8 +48,11 @@ public class NYDoShopMinMaxPriceRequest extends NYBasicRequest<Price> {
 
     @Override
     protected Price onProcessSuccessData(JSONObject obj) throws Exception {
-        Price price = new Price();
-        price.parse(obj.getJSONObject(KEY_PRICE));
-        return price;
+        if(!obj.isNull(KEY_PRICE)) {
+            Price price = new Price();
+            price.parse(obj.getJSONObject(KEY_PRICE));
+            return price;
+        }
+        return null;
     }
 }

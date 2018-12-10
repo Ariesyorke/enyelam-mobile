@@ -335,7 +335,7 @@ public class InboxActivity extends AppCompatActivity implements
                                     }
                                 }, 2000);
                             } else {
-                                Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -464,7 +464,7 @@ public class InboxActivity extends AppCompatActivity implements
                                     }
                                 }, 2000);
                             } else {
-                                Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -473,7 +473,7 @@ public class InboxActivity extends AppCompatActivity implements
                         recyclerView.smoothScrollToPosition(listMessageNext.size() -2);
                     }*/
                 }else {
-                    Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
                 }
 
                 recyclerView.setVisibility(View.VISIBLE);

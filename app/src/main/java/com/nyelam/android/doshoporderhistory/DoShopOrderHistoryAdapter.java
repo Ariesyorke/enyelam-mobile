@@ -22,6 +22,7 @@ import com.nyelam.android.doshop.DoShopDetailItemActivity;
 import com.nyelam.android.doshop.DoShopRecommendedAdapter;
 import com.nyelam.android.helper.NYHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,9 +53,12 @@ public class DoShopOrderHistoryAdapter extends RecyclerView.Adapter<DoShopOrderH
         final DoShopOrder order = data.get(position);
 
         if (order != null){
+            if(order.getOrderDate() != null) {
+                SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
+                holder.date.setText(format.format(order.getOrderDate()));
+            }
             if (order.getShippingAddress() != null && NYHelper.isStringNotEmpty(order.getShippingAddress().getFullName())) holder.name.setText(order.getShippingAddress().getFullName());
             if (order.getShippingAddress() != null && NYHelper.isStringNotEmpty(order.getShippingAddress().getAddress())) holder.address.setText(order.getShippingAddress().getAddress());
-            //if (order.getCart(). != null && NYHelper.isStringNotEmpty(order.getShippingAddress().getAddress())) holder.date.setText(order.getShippingAddress().getAddress());
             if (order.getCart() != null) holder.totalPrice.setText(NYHelper.priceFormatter(order.getCart().getTotal()));
 
 //            if (NYHelper.isStringNotEmpty(order.getFeaturedImage())){

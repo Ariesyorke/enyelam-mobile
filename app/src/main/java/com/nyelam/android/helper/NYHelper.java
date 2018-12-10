@@ -158,6 +158,7 @@ public class NYHelper {
     public static final String PRODUCT = "product";
     public static final String CATEGORY = "category";
     public static final String BRAND = "brand";
+    public static final String RECOMMENDED = "recommended";
     public static final String ADDRESS = "address";
     public static final String MERCHANT = "merchant";
     public static final String COURIER = "courier";
