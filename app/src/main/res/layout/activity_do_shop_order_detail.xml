@@ -141,6 +141,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/date"
+                            android:layout_marginLeft="@dimen/padding"
                             android:textColor="@color/ny_black1" />
 
                         <android.support.v7.widget.RecyclerView

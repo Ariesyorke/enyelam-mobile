@@ -23,7 +23,6 @@ public class NYDoShopOrderListRequest extends NYBasicAuthRequest<NYPaginationRes
 
     public NYDoShopOrderListRequest(Context context, String type, String page) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_order_list));
-
         if(!TextUtils.isEmpty(type)) {
             addQuery(POST_TYPE, type);
         }
@@ -31,7 +30,6 @@ public class NYDoShopOrderListRequest extends NYBasicAuthRequest<NYPaginationRes
         if(!TextUtils.isEmpty(page)) {
             addQuery(POST_PAGE, page);
         }
-
     }
 
     @Override

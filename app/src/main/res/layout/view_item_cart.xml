@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/iv_item_image"
             android:layout_gravity="top"
-            android:src="@drawable/banner_1"
+            android:src="@drawable/placeholder_image"
             android:layout_width="match_parent"
             android:layout_height="100dp" />
     </LinearLayout>
@@ -45,27 +45,10 @@
                     android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-                <com.nyelam.android.view.font.NYStrikethroughTextView
-                    android:id="@+id/tv_price_strikethrough"
-                    tools:text="Rp 25.500"
-                    android:textSize="14sp"
-                    android:gravity="center"
-                    android:textColor="@color/ny_black2"
-                    android:layout_marginTop="@dimen/padding_half"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <com.nyelam.android.view.font.NYTextView
-                    android:id="@+id/tv_price"
-                    app:fontTextStyle="bold"
-                    tools:text="Rp 18.500"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#FF642E"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+
             </LinearLayout>
             <com.nyelam.android.view.font.NYTextView
+                android:visibility="gone"
                 android:id="@+id/tv_estimate_delivery"
                 android:text="Estimate delivery time takes up to 2-8 workdays"
                 android:textStyle="bold"
@@ -75,6 +58,28 @@
                 android:layout_marginStart="@dimen/padding_half"
                 android:layout_marginRight="@dimen/padding_half"
                 android:layout_marginEnd="@dimen/padding_half"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <com.nyelam.android.view.font.NYStrikethroughTextView
+                android:id="@+id/tv_price_strikethrough"
+                tools:text="Rp 25.500"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textColor="@color/ny_black2"
+                android:layout_marginTop="@dimen/padding_half"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <com.nyelam.android.view.font.NYTextView
+                android:id="@+id/tv_price"
+                app:fontTextStyle="bold"
+                tools:text="Rp 18.500"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#FF642E"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />

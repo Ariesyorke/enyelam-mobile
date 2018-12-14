@@ -27,6 +27,8 @@ import com.nyelam.android.http.NYDoShopChangeQuantityRequest;
 import com.nyelam.android.http.NYDoShopListCartRequest;
 import com.nyelam.android.http.NYDoShopRemoveProductCartRequest;
 import com.nyelam.android.storage.CartStorage;
+import com.nyelam.android.view.NYCartItemView;
+import com.nyelam.android.view.NYCartItemViewListener;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -60,11 +62,14 @@ public class DoShopCartFragment extends BasicFragment {
     @BindView(R.id.tv_sub_total)
     TextView tvSubTotal;
 
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+//    @BindView(R.id.recyclerView)
+//    RecyclerView recyclerView;
 
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.ll_cart_item_container)
+    LinearLayout cartItemContainer;
 
     @OnClick(R.id.tv_checkout) void checkOut(){
         if (cartReturn != null)listener.proceedToCheckOut(cartReturn);
@@ -101,19 +106,45 @@ public class DoShopCartFragment extends BasicFragment {
         super.onViewCreated(view, savedInstanceState);
         listener = (CheckoutListener) getActivity();
         thisFragment = this;
-        initAdapter();
+        initView();
     }
 
-    private void initAdapter() {
-        adapter = new DoShopCartListAdapter(getActivity(), thisFragment);
+    private void initCartItems(List<DoShopProduct> products) {
+        cartItemContainer.removeAllViews();
 
-        //ADAPTER SERVICE LIST
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
-        recyclerView.setAdapter(adapter);
+        for(int i = 0; i < products.size(); i++) {
+            NYCartItemView view = new NYCartItemView(getActivity());
+            cartItemContainer.addView(view);
+            view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            if(i == 0) {
+                view.setPadding(0, 0, 0, 8);
+            } else {
+                view.setPadding(0, 8, 0, 8);
+            }
+            view.initData(products.get(i), getActivity(), new NYCartItemViewListener() {
+                @Override
+                public void onQuantityChange(String productCartId, String quantity) {
+                    DoShopCartFragment.this.onQuantityChange(productCartId, quantity);
+                }
+
+                @Override
+                public void onRemoveItem(String productCartId) {
+                    DoShopCartFragment.this.onRemoveItem(productCartId);
+                }
+            });
+        }
+    }
+
+    private void initView() {
+//        adapter = new DoShopCartListAdapter(getActivity(), thisFragment);
+//
+//        //ADAPTER SERVICE LIST
+//        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding);
+//        LinearLayoutManager layoutManager
+//                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.addItemDecoration(new NYSpacesItemDecoration(0,spacingInPixels,0,spacingInPixels));
+//        recyclerView.setAdapter(adapter);
 
         getCartList(false);
 
@@ -123,7 +154,6 @@ public class DoShopCartFragment extends BasicFragment {
                 getCartList(true);
             }
         });
-
     }
 
 
@@ -284,8 +314,9 @@ public class DoShopCartFragment extends BasicFragment {
                 }
             }
         }
-        adapter.setData(products);
-        adapter.notifyDataSetChanged();
+        initCartItems(products);
+//        adapter.setData(products);
+//        adapter.notifyDataSetChanged();
 
 
         if (cartReturn != null && cartReturn.getCart() != null){

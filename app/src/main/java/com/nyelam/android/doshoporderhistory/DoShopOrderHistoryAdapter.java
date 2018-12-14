@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
+import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.doshop.DoShopDetailItemActivity;
@@ -61,32 +62,33 @@ public class DoShopOrderHistoryAdapter extends RecyclerView.Adapter<DoShopOrderH
             if (order.getShippingAddress() != null && NYHelper.isStringNotEmpty(order.getShippingAddress().getAddress())) holder.address.setText(order.getShippingAddress().getAddress());
             if (order.getCart() != null) holder.totalPrice.setText(NYHelper.priceFormatter(order.getCart().getTotal()));
 
-//            if (NYHelper.isStringNotEmpty(order.getFeaturedImage())){
-//                ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
-//                ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
-//                    @Override
-//                    public void onLoadingStarted(String imageUri, View view) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//                        holder.image.setImageResource(R.drawable.example_pic);
-//                    }
-//
-//                    @Override
-//                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onLoadingCancelled(String imageUri, View view) {
-//                        holder.image.setImageResource(R.drawable.example_pic);
-//                    }
-//                });
-//
-//                ImageLoader.getInstance().displayImage(product.getFeaturedImage(), holder.image, NYHelper.getOption());
-//            }
+            if (order.getCart() != null && order.getCart().getMerchants() != null && !order.getCart().getMerchants().isEmpty()){
+                DoShopMerchant merchant = order.getCart().getMerchants().get(0);
+                ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+                ImageLoader.getInstance().loadImage(merchant.getDoShopProducts().get(0).getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        holder.image.setImageResource(R.drawable.example_pic);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        holder.image.setImageResource(R.drawable.example_pic);
+                    }
+                });
+
+                ImageLoader.getInstance().displayImage(merchant.getDoShopProducts().get(0).getFeaturedImage(), holder.image, NYHelper.getOption());
+            }
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

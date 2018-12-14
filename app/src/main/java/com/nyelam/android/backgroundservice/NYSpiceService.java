@@ -32,6 +32,7 @@ public class NYSpiceService extends SpiceService {
         return 3;
     }
 
+
     @Override
     public Notification createDefaultNotification() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

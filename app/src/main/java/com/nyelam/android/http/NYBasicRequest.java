@@ -8,6 +8,8 @@ import com.danzoye.lib.http.DBaseRequest;
 import com.nyelam.android.R;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
+import com.octo.android.robospice.retry.DefaultRetryPolicy;
+import com.octo.android.robospice.retry.RetryPolicy;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -45,6 +47,7 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
 
         super(clazz, new StringBuffer(context.getResources().getString(R.string.host_url))
                 .append(apiPath).toString());
+        setRetryPolicy(new NYBasicRetryPolicy());
 
         this.context = context;
         this.apiPath = apiPath;
@@ -57,6 +60,11 @@ public abstract class NYBasicRequest <DATA> extends DBaseRequest<DATA> {
         addQuery(KEY_PLATFORM, "1");
         gaStartTiming = System.currentTimeMillis();
 
+    }
+
+    @Override
+    public RetryPolicy getRetryPolicy() {
+        return super.getRetryPolicy();
     }
 
     protected boolean isAPITesting() {

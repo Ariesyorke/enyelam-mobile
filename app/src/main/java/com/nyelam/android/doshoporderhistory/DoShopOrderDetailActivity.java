@@ -267,7 +267,7 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
                 }
             }
             if(order.getOrderDate() != null) {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
                 tvOrderDate.setText("Order Date: " + format.format(order.getOrderDate()));
             }
 

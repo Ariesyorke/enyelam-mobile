@@ -8,8 +8,10 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled = true
-        versionCode 107
-        versionName '0.9.9'
+        versionCode 113
+        versionName '0.9.15'
+        resConfigs "en"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -68,7 +70,9 @@ dependencies {
     //        exclude group: 'io.card'
 
     //    }
-    implementation 'com.paypal.sdk:paypal-android-sdk:2.15.1'
+    implementation ('com.paypal.sdk:paypal-android-sdk:2.15.1') {
+        exclude group: 'io.card'
+    }
 
     //implementation 'com.stepstone.apprating:app-rating:2.2.0'
 

@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.R;
 import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopProduct;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.doshoporder.DoShopCheckoutFragment;
 import com.nyelam.android.helper.NYHelper;
 
@@ -77,6 +78,7 @@ public class DoShopMerchantItemAdapter extends RecyclerView.Adapter<DoShopMercha
                     }
 
                     ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+                    NYLog.e("PRODUCT FEATURED IMAGE " + product.getFeaturedImage());
                     if (NYHelper.isStringNotEmpty(product.getFeaturedImage())) {
 
                         ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
