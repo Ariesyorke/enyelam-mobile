@@ -75,7 +75,7 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
                 holder.priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
                 holder.priceStrike.setVisibility(View.VISIBLE);
             } else {
-                holder.price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                 holder.priceStrike.setVisibility(View.GONE);
             }
 
