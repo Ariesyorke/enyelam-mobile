@@ -69,11 +69,10 @@ public class DoShopCartListAdapter extends RecyclerView.Adapter<DoShopCartListAd
         if (product != null){
             if (NYHelper.isStringNotEmpty(product.getProductName())) holder.name.setText(product.getProductName());
             holder.qty.setText(String.valueOf(product.getQty()));
-
             if (product.getSpecialPrice() < product.getNormalPrice()){
                 holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                 holder.priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-                holder.priceStrike.setVisibility(View.VISIBLE);
+                holder.priceStrike.setVisibility(View.GONE);
             } else {
                 holder.price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                 holder.priceStrike.setVisibility(View.GONE);

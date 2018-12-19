@@ -78,9 +78,9 @@ public class NYCartItemView extends FrameLayout {
             if (product.getSpecialPrice() < product.getNormalPrice()){
                 price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                 priceStrike.setText(NYHelper.priceFormatter(product.getNormalPrice()));
-                priceStrike.setVisibility(View.VISIBLE);
+                priceStrike.setVisibility(View.GONE);
             } else {
-                price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                price.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                 priceStrike.setVisibility(View.GONE);
             }
 

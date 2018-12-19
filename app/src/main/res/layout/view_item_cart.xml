@@ -78,17 +78,13 @@
                 tools:text="Rp 18.500"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:gravity="right"
                 android:textColor="#FF642E"
-                android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
+                android:layout_marginRight="@dimen/fab_margin"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-
-
-
-
-
 
         <LinearLayout
             android:gravity="center"

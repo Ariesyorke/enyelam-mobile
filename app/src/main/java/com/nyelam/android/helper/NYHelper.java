@@ -166,6 +166,7 @@ public class NYHelper {
     public static final String DISTRICT_ID = "district_id";
     public static final String WEIGHT = "weight";
     public static final String STATUS = "status";
+    public static final String DISABLED_PAYMENT = "disabled_payment";
 
 
     public static boolean isStringNotEmpty(String string) {

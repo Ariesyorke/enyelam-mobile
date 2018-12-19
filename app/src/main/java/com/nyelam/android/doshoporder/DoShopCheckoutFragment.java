@@ -117,6 +117,8 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     private CheckoutListener listener;
 //    private DoShopCheckoutAdapter adapter;
 
+    private boolean disabledPayment = false;
+
     @BindView(R.id.ll_voucher_container)
     LinearLayout llVoucherContainer;
 
@@ -186,40 +188,44 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     @BindView(R.id.checkBox)
     CheckBox checkBox;
 
-    @OnClick(R.id.tv_checkout) void choosePayment(){
+    @OnClick(R.id.tv_checkout)
+    void choosePayment() {
         //listener.proceedToChoosePayment();
         //req = new NYDoShopSubmitOrderRequest(getActivity(), paymentMethod, cartToken, billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
 
         // TODO: check delivery service
         List<DeliveryService> deliveryServices = new ArrayList<>();
         int merchantSize = 0;
-        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-            for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()){
-                if (merchant.getDeliveryService() != null)deliveryServices.add(merchant.getDeliveryService());
+        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null) {
+            for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()) {
+                if (merchant.getDeliveryService() != null)
+                    deliveryServices.add(merchant.getDeliveryService());
                 merchantSize++;
             }
         }
 
         // TODO: check parameter yang akan dikirim
-        if (cartReturn == null || !NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
+        if (cartReturn == null || !NYHelper.isStringNotEmpty(cartReturn.getCartToken())) {
             Toast.makeText(getActivity(), "Please, choose billing address first", Toast.LENGTH_SHORT).show();
-        } else if (billingAddress == null || !NYHelper.isStringNotEmpty(billingAddress.getAddressId())){
+        } else if (billingAddress == null || !NYHelper.isStringNotEmpty(billingAddress.getAddressId())) {
             Toast.makeText(getActivity(), "Please, choose billing address first", Toast.LENGTH_SHORT).show();
-        } else if (shippingAddress == null || !NYHelper.isStringNotEmpty(shippingAddress.getAddressId())){
+        } else if (shippingAddress == null || !NYHelper.isStringNotEmpty(shippingAddress.getAddressId())) {
             Toast.makeText(getActivity(), "Please, choose shipping address first", Toast.LENGTH_SHORT).show();
-        } else if(deliveryServices == null || deliveryServices.size() < merchantSize){
+        } else if (deliveryServices == null || deliveryServices.size() < merchantSize) {
             Toast.makeText(getActivity(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
-        } else if (!NYHelper.isStringNotEmpty(paymentType)){
+        } else if (!NYHelper.isStringNotEmpty(paymentType)) {
             Toast.makeText(getActivity(), "Please, choose payment method first", Toast.LENGTH_SHORT).show();
-        } else if (!checkBox.isChecked()){
+        } else if (!checkBox.isChecked()) {
             Toast.makeText(getActivity(), "Please, checklist agreements", Toast.LENGTH_SHORT).show();
+        } else if (!disabledPayment){
+            Toast.makeText(getActivity(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
         } else {
-            if (isTranssactionCanceled){
+            if (isTranssactionCanceled) {
                 onResubmitOrder();
-            } else if (orderReturn == null && isTranssactionFailed){
+            } else if (orderReturn == null && isTranssactionFailed) {
                 // TODO: request ulang cart token atau cart return
                 getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
-            } else if (orderReturn == null){
+            } else if (orderReturn == null) {
                 getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
             } else {
                 payUsingVeritrans();
@@ -232,7 +238,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     private void onResubmitOrder() {
         pDialog.show();
         try {
-            NYDoShopReSubmitOrderRequest req = new NYDoShopReSubmitOrderRequest(getActivity(), orderReturn.getOrderId(),  paymentType);
+            NYDoShopReSubmitOrderRequest req = new NYDoShopReSubmitOrderRequest(getActivity(), orderReturn.getOrderId(), paymentType);
             spcMgr.execute(req, onResubmitOrderRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,7 +253,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                     pDialog.dismiss();
                 }
 
-                if(spiceException != null) {
+                if (spiceException != null) {
                     if (spiceException.getCause() instanceof NYCartExpiredException) {
                         NYHelper.handlePopupMessage(getActivity(), "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
                             @Override
@@ -277,8 +283,8 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
                 orderReturn = result;
 
-                if (orderReturn != null){
-                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null && NYHelper.isStringNotEmpty(result.getVeritransToken().getTokenId())){
+                if (orderReturn != null) {
+                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null && NYHelper.isStringNotEmpty(result.getVeritransToken().getTokenId())) {
                         VeritransStorage veritransStorage = new VeritransStorage(getActivity());
                         veritransStorage.veritransToken = result.getVeritransToken().getTokenId();
 
@@ -307,7 +313,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
                         payUsingVeritrans();
 
-                    } else if (paymentType.equals("1")){
+                    } else if (paymentType.equals("1")) {
 
                         //Toast.makeText(BookingServiceSummaryActivity.this, "success bank transfer", Toast.LENGTH_SHORT).show();
                         //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
@@ -322,7 +328,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                                         startActivity(intent);
                                     }
                                 }, getResources().getString(R.string.check_order));
-                    } else if (paymentType.equals("4")){
+                    } else if (paymentType.equals("4")) {
 
                         //Toast.makeText(BookingServiceSummaryActivity.this, "success paypal", Toast.LENGTH_SHORT).show();
                         //TODO DISINI HANDLE KALO TRANSAKSI DI PAYPAL SUKSES
@@ -343,26 +349,50 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         };
     }
 
+    @OnClick(R.id.checkBox)
+    void setCheckBox(){
+        if (billingAddress == null || !NYHelper.isStringNotEmpty(billingAddress.getAddressId())) {
+            checkBox.setChecked(false);
+            Toast.makeText(getActivity(), "Please, choose billing address first", Toast.LENGTH_SHORT).show();
+        } else if (shippingAddress == null || !NYHelper.isStringNotEmpty(shippingAddress.getAddressId())) {
+            checkBox.setChecked(false);
+            Toast.makeText(getActivity(), "Please, choose shipping address first", Toast.LENGTH_SHORT).show();
+        } else {
+            if (disabledPayment){
+                if (checkBox.isChecked()){
+                    checkBox.setChecked(true);
+                }
+            } else {
+                checkBox.setChecked(false);
+                Toast.makeText(getActivity(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
-    @OnClick(R.id.tv_choose_billing_address) void chooseBillingAddress(){
+
+    @OnClick(R.id.tv_choose_billing_address)
+    void chooseBillingAddress() {
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
         intent.putExtra(NYHelper.TAG, "billing");
         startActivityForResult(intent, 100);
     }
 
-    @OnClick(R.id.tv_edit_billing_address) void editBillingAddress(){
+    @OnClick(R.id.tv_edit_billing_address)
+    void editBillingAddress() {
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
         intent.putExtra(NYHelper.TAG, "billing");
         startActivityForResult(intent, 100);
     }
 
-    @OnClick(R.id.tv_choose_shipping_address) void chooseShippingAddress(){
+    @OnClick(R.id.tv_choose_shipping_address)
+    void chooseShippingAddress() {
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
         intent.putExtra(NYHelper.TAG, "shipping");
         startActivityForResult(intent, 101);
     }
 
-    @OnClick(R.id.tv_edit_shipping_address) void editShippingAddress(){
+    @OnClick(R.id.tv_edit_shipping_address)
+    void editShippingAddress() {
         Intent intent = new Intent(getActivity(), DoShopChooseAddressActivity.class);
         intent.putExtra(NYHelper.TAG, "shipping");
         startActivityForResult(intent, 101);
@@ -376,7 +406,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (getArguments() != null && getArguments().get(NYHelper.CART_RETURN) != null){
+        if (getArguments() != null && getArguments().get(NYHelper.CART_RETURN) != null) {
             try {
                 JSONObject obj = new JSONObject(getArguments().getString(NYHelper.CART_RETURN));
                 cartReturn = new DoShopCartReturn();
@@ -411,12 +441,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             NYProductCheckoutItemView view = new NYProductCheckoutItemView(getActivity());
             llProductItemContainer.addView(view);
             view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            if(i == 0) {
+            if (i == 0) {
                 view.setPadding(0, 0, 0, 8);
             } else {
                 view.setPadding(0, 8, 0, 8);
             }
-            view.initMerchant(getActivity(), merchants.get(i), new ProductCheckoutItemListener(merchants.get(i), i){
+            view.initMerchant(getActivity(), merchants.get(i), new ProductCheckoutItemListener(merchants.get(i), i) {
                 @Override
                 public void onItemClicked(View view, DoShopMerchant merchant, int index) {
                     chooseCourrier(merchant);
@@ -438,29 +468,30 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 //        recyclerView.setAdapter(adapter);
 //    }
 
-    private void initCartReturn(DoShopCartReturn cartReturn){
+    private void initCartReturn(DoShopCartReturn cartReturn) {
 
         initProductViews(cartReturn.getCart().getMerchants());
 //        adapter.setData(cartReturn.getCart().getMerchants());
 //        adapter.notifyDataSetChanged();
 
 
-        if (cartReturn != null && cartReturn.getCart() != null){
+        if (cartReturn != null && cartReturn.getCart() != null) {
 
             double totalShipping = 0;
-            if (cartReturn.getCart().getMerchants() != null){
-                for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()){
-                    if (merchant != null && merchant.getDeliveryService() != null)totalShipping += merchant.getDeliveryService().getPrice();
+            if (cartReturn.getCart().getMerchants() != null) {
+                for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()) {
+                    if (merchant != null && merchant.getDeliveryService() != null)
+                        totalShipping += merchant.getDeliveryService().getPrice();
                 }
             }
 
             tvShippingTotal.setText(NYHelper.priceFormatter(totalShipping));
-            llShippingTotalContainer.setVisibility(View.VISIBLE);
+            llShippingTotalContainer.setVisibility(View.GONE);
 
             double additionalsFee = 0;
             llAdditionalContainer.removeAllViews();
-            if (cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0){
-                for (Additional additional : cartReturn.getAdditionals()){
+            if (cartReturn.getAdditionals() != null && cartReturn.getAdditionals().size() > 0) {
+                for (Additional additional : cartReturn.getAdditionals()) {
                     LayoutInflater inflaterAddons = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View additionalView = inflaterAddons.inflate(R.layout.view_item_additional_doshop, null);
 
@@ -468,8 +499,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                     TextView tvValue = (TextView) additionalView.findViewById(R.id.additional_value_textView);
 
                     if (additional != null) {
-                        additionalsFee+=additional.getValue();
-                        if (NYHelper.isStringNotEmpty(additional.getTitle())) tvLabel.setText(additional.getTitle());
+                        additionalsFee += additional.getValue();
+                        if (NYHelper.isStringNotEmpty(additional.getTitle()))
+                            tvLabel.setText(additional.getTitle());
                         tvValue.setText(NYHelper.priceFormatter(additional.getValue()));
                         llAdditionalContainer.addView(additionalView);
                     }
@@ -479,11 +511,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
             tvSubTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getSubTotal()));
             // TODO: total price + shipping + payment fee
-            tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal()+totalShipping+additionalsFee));
+            tvTotal.setText(NYHelper.priceFormatter(cartReturn.getCart().getTotal() + additionalsFee));
 
-            if (cartReturn.getCart().getVoucher() != null){
-                if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))tvVoucherCode.setText("Voucher ("+cartReturn.getCart().getVoucher().getCode()+")");
-                tvVoucherTotal.setText(" - "+NYHelper.priceFormatter(cartReturn.getCart().getVoucher().getValue()));
+            if (cartReturn.getCart().getVoucher() != null) {
+                if (NYHelper.isStringNotEmpty(cartReturn.getCart().getVoucher().getCode()))
+                    tvVoucherCode.setText("Voucher (" + cartReturn.getCart().getVoucher().getCode() + ")");
+                tvVoucherTotal.setText(" - " + NYHelper.priceFormatter(cartReturn.getCart().getVoucher().getValue()));
                 llVoucherContainer.setVisibility(View.VISIBLE);
             } else {
                 llVoucherContainer.setVisibility(View.GONE);
@@ -492,16 +525,23 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     }
 
     public void setViewBillingAddress(DoShopAddress billingAddress) {
-        if (billingAddress != null){
+        if (billingAddress != null) {
             // TODO: bind data billing address
-            if (NYHelper.isStringNotEmpty(billingAddress.getFullName()))tvAddressName.setText(billingAddress.getFullName());
-            if (NYHelper.isStringNotEmpty(billingAddress.getPhoneNumber()))tvAddressPhone.setText(billingAddress.getPhoneNumber());
+            if (NYHelper.isStringNotEmpty(billingAddress.getFullName()))
+                tvAddressName.setText(billingAddress.getFullName());
+            if (NYHelper.isStringNotEmpty(billingAddress.getPhoneNumber()))
+                tvAddressPhone.setText(billingAddress.getPhoneNumber());
             String addressString = "";
-            if (NYHelper.isStringNotEmpty(billingAddress.getAddress())) addressString+=billingAddress.getAddress();
-            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getDistrict().getName())) addressString+=", "+billingAddress.getDistrict().getName();
-            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getCity().getName())) addressString+=", "+billingAddress.getCity().getName();
-            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getProvince().getName())) addressString+=", "+billingAddress.getProvince().getName();
-            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getZipCode())) addressString+=", "+billingAddress.getZipCode();
+            if (NYHelper.isStringNotEmpty(billingAddress.getAddress()))
+                addressString += billingAddress.getAddress();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getDistrict().getName()))
+                addressString += ", " + billingAddress.getDistrict().getName();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getCity().getName()))
+                addressString += ", " + billingAddress.getCity().getName();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getProvince().getName()))
+                addressString += ", " + billingAddress.getProvince().getName();
+            if (billingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(billingAddress.getZipCode()))
+                addressString += ", " + billingAddress.getZipCode();
             if (NYHelper.isStringNotEmpty(addressString)) tvAddress.setText(addressString);
 
             llContainerBillingAddress.setVisibility(View.VISIBLE);
@@ -511,18 +551,25 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     }
 
     public void setViewShippingAddress(DoShopAddress shippingAddress) {
-        if (shippingAddress != null){
+        if (shippingAddress != null) {
 
             // TODO: bind data shipping address
-            if (NYHelper.isStringNotEmpty(shippingAddress.getFullName()))tvShippingAddressName.setText(shippingAddress.getFullName());
-            if (NYHelper.isStringNotEmpty(shippingAddress.getPhoneNumber()))tvShippingAddressPhone.setText(shippingAddress.getPhoneNumber());
+            if (NYHelper.isStringNotEmpty(shippingAddress.getFullName()))
+                tvShippingAddressName.setText(shippingAddress.getFullName());
+            if (NYHelper.isStringNotEmpty(shippingAddress.getPhoneNumber()))
+                tvShippingAddressPhone.setText(shippingAddress.getPhoneNumber());
 
             String addressString = "";
-            if (NYHelper.isStringNotEmpty(shippingAddress.getAddress())) addressString+=shippingAddress.getAddress();
-            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getName())) addressString+=", "+shippingAddress.getDistrict().getName();
-            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getCity().getName())) addressString+=", "+shippingAddress.getCity().getName();
-            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getProvince().getName())) addressString+=", "+shippingAddress.getProvince().getName();
-            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getZipCode())) addressString+=", "+shippingAddress.getZipCode();
+            if (NYHelper.isStringNotEmpty(shippingAddress.getAddress()))
+                addressString += shippingAddress.getAddress();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getName()))
+                addressString += ", " + shippingAddress.getDistrict().getName();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getCity().getName()))
+                addressString += ", " + shippingAddress.getCity().getName();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getProvince().getName()))
+                addressString += ", " + shippingAddress.getProvince().getName();
+            if (shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getZipCode()))
+                addressString += ", " + shippingAddress.getZipCode();
             if (NYHelper.isStringNotEmpty(addressString)) tvShippingAddress.setText(addressString);
 
             llContainerShippingAddress.setVisibility(View.VISIBLE);
@@ -532,7 +579,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     }
 
     //private void getSubmitOrder(String paymentMethod, String cartToken, String billingAddressId, String shippingAddressId, List<DeliveryService> deliveryServices, String typeId, String voucher){
-    private void getSubmitOrder(String paymentMethod, String cartToken, String billingAddressId, String shippingAddressId, List<DoShopMerchant> merchants, String typeId, String voucher){
+    private void getSubmitOrder(String paymentMethod, String cartToken, String billingAddressId, String shippingAddressId, List<DoShopMerchant> merchants, String typeId, String voucher) {
         pDialog.show();
         NYDoShopSubmitOrderRequest req = null;
         try {
@@ -563,9 +610,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
                 orderReturn = result;
 
-                if (orderReturn != null){
+                if (orderReturn != null) {
 
-                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null){
+                    if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null) {
 
                         //TODO KALO TYPE PEMBAYARANNYA MIDTRANS
                         VeritransStorage veritransStorage = new VeritransStorage(getActivity());
@@ -596,7 +643,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
                         payUsingVeritrans();
 
-                    } else if (paymentType.equals("1")){
+                    } else if (paymentType.equals("1")) {
                         //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
                         NYHelper.handlePopupMessage(getActivity(), getString(R.string.transaction_success), false,
                                 new DialogInterface.OnClickListener() {
@@ -609,13 +656,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                                         startActivity(intent);
                                     }
                                 }, getResources().getString(R.string.check_order));
-                    } else if (paymentType.equals("4")){
+                    } else if (paymentType.equals("4")) {
                         //TODO DISINI HANDLE KALO TRANSAKSI DI PAYPAL SUKSES
                         payUsingPaypal();
                     }
 
                 }
-
 
                 // TODO: hapus cart di cache
                 CartStorage storage = new CartStorage(getActivity());
@@ -627,7 +673,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     }
 
 
-    private void loadAddress(){
+    private void loadAddress() {
         pDialog.show();
         NYDoShopAddressListRequest req = null;
         try {
@@ -651,14 +697,14 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             @Override
             public void onRequestSuccess(DoShopAddressList addressList) {
                 pDialog.dismiss();
-                if (addressList != null && addressList.getList() != null){
-                    for (DoShopAddress address : addressList.getList()){
-                        if (address != null && address.getDefaultBilling() == 1){
+                if (addressList != null && addressList.getList() != null) {
+                    for (DoShopAddress address : addressList.getList()) {
+                        if (address != null && address.getDefaultBilling() == 1) {
                             billingAddress = address;
                             setViewBillingAddress(billingAddress);
                         }
 
-                        if (address != null && address.getDefaultShipping() == 1){
+                        if (address != null && address.getDefaultShipping() == 1) {
                             shippingAddress = address;
                             setViewShippingAddress(shippingAddress);
                         }
@@ -691,18 +737,18 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     }
 
-    public void chooseCourrier(DoShopMerchant merchant){
+    public void chooseCourrier(DoShopMerchant merchant) {
 
-        if (merchant != null && merchant.getDoShopProducts() != null && merchant.getDoShopProducts().size() > 0 && shippingAddress != null && shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getId())){
+        if (merchant != null && merchant.getDoShopProducts() != null && merchant.getDoShopProducts().size() > 0 && shippingAddress != null && shippingAddress.getDistrict() != null && NYHelper.isStringNotEmpty(shippingAddress.getDistrict().getId())) {
 
             double totalWeight = 0;
-            for (DoShopProduct product : merchant.getDoShopProducts()){
-                totalWeight += product.getWeight()*1000;
+            for (DoShopProduct product : merchant.getDoShopProducts()) {
+                totalWeight += product.getWeight() * 1000;
             }
 
             Intent intent = new Intent(getActivity(), DoShopChooseCourierActivity.class);
             intent.putExtra(NYHelper.MERCHANT, merchant.toString());
-            intent.putExtra(NYHelper.WEIGHT, (int)totalWeight);
+            intent.putExtra(NYHelper.WEIGHT, (int) totalWeight);
             intent.putExtra(NYHelper.DISTRICT_ID, shippingAddress.getDistrict().getId());
 
             startActivityForResult(intent, 101);
@@ -713,7 +759,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("billing")){
+        if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("billing")) {
 
             //Toast.makeText(getActivity(), data.getStringExtra(NYHelper.TAG), Toast.LENGTH_SHORT).show();
 
@@ -725,7 +771,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("shipping")){
+        } else if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("shipping")) {
 
             //Toast.makeText(getActivity(), data.getStringExtra(NYHelper.TAG), Toast.LENGTH_SHORT).show();
 
@@ -738,7 +784,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else if (data != null && data.hasExtra(NYHelper.ADDRESS)){
+        } else if (data != null && data.hasExtra(NYHelper.ADDRESS)) {
 
             //Toast.makeText(getActivity(), data.getStringExtra(NYHelper.TAG), Toast.LENGTH_SHORT).show();
 
@@ -756,15 +802,16 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             }
         }
 
-        if (cartReturn != null && data != null && data.hasExtra(NYHelper.MERCHANT)){
+        if (cartReturn != null && data != null && data.hasExtra(NYHelper.MERCHANT)) {
+            disabledPayment = true;
             try {
                 JSONObject obj = new JSONObject(data.getStringExtra(NYHelper.MERCHANT));
                 DoShopMerchant newMerchant = new DoShopMerchant();
                 newMerchant.parse(obj);
 
                 List<DoShopMerchant> merchantList = new ArrayList<DoShopMerchant>();
-                for (DoShopMerchant mer : cartReturn.getCart().getMerchants()){
-                    if (mer.getId().equals(newMerchant.getId())){
+                for (DoShopMerchant mer : cartReturn.getCart().getMerchants()) {
+                    if (mer.getId().equals(newMerchant.getId())) {
                         merchantList.add(newMerchant);
                     } else {
                         merchantList.add(mer);
@@ -775,6 +822,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
                 // TODO: refresh cart
                 initCartReturn(cartReturn);
+                requestChangePaymentMethod();
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -783,12 +831,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     }
 
-    private void resetDeliveryService(){
+    private void resetDeliveryService() {
         // TODO: reset delivery service
         List<DoShopMerchant> merchants = new ArrayList<>();
-        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null){
-            for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()){
-                if (merchant != null){
+        if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getMerchants() != null) {
+            for (DoShopMerchant merchant : cartReturn.getCart().getMerchants()) {
+                if (merchant != null) {
                     DoShopMerchant m = merchant;
                     m.setDeliveryService(null);
                     merchants.add(m);
@@ -796,6 +844,8 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             }
         }
         cartReturn.getCart().setMerchants(merchants);
+        cartReturn.setAdditionals(null);
+        disabledPayment = false;
         initCartReturn(cartReturn);
     }
 
@@ -806,41 +856,63 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     }
 
 
-    @BindView(R.id.radioGroup) RadioGroup radioGroup;
-    @BindView(R.id.bankTransferRadioButton) RadioButton bankTransferRadioButton;
-    @BindView(R.id.virtualAccountRadioButton) RadioButton virtualAccountRadioButton;
-    @BindView(R.id.creditCardRadioButton) RadioButton creditCardRadioButton;
-    @BindView(R.id.paypalRadioButton) RadioButton paypalRadioButton;
+    @BindView(R.id.radioGroup)
+    RadioGroup radioGroup;
+    @BindView(R.id.bankTransferRadioButton)
+    RadioButton bankTransferRadioButton;
+    @BindView(R.id.virtualAccountRadioButton)
+    RadioButton virtualAccountRadioButton;
+    @BindView(R.id.creditCardRadioButton)
+    RadioButton creditCardRadioButton;
+    @BindView(R.id.paypalRadioButton)
+    RadioButton paypalRadioButton;
 
-    @BindView(R.id.payment_bank_transfer_linearLayout) LinearLayout bankTransferLinearLayout;
-    @BindView(R.id.payment_virtual_account_linearLayout) LinearLayout virtualAccountLinearLayout;
-    @BindView(R.id.payment_credit_card_linearLayout) LinearLayout creditCardLinearLayout;
-    @BindView(R.id.payment_paypal_linearLayout) LinearLayout paypalLinearLayout;
+    @BindView(R.id.payment_bank_transfer_linearLayout)
+    LinearLayout bankTransferLinearLayout;
+    @BindView(R.id.payment_virtual_account_linearLayout)
+    LinearLayout virtualAccountLinearLayout;
+    @BindView(R.id.payment_credit_card_linearLayout)
+    LinearLayout creditCardLinearLayout;
+    @BindView(R.id.payment_paypal_linearLayout)
+    LinearLayout paypalLinearLayout;
 
-    @OnClick(R.id.virtualAccountRadioButton) void setPayVA(){
-        if (virtualAccountRadioButton.isChecked()){
-            creditCardRadioButton.setChecked(false);
-            bankTransferRadioButton.setChecked(false);
-            paypalRadioButton.setChecked(false);
-            paymentType = "3";
-            paymentMethod = "1";
-            requestChangePaymentMethod();
-        }
-    }
-
-    @OnClick(R.id.creditCardRadioButton) void setPayCC(){
-        if (creditCardRadioButton.isChecked()){
+    @OnClick(R.id.virtualAccountRadioButton)
+    void setPayVA() {
+        if (disabledPayment) {
+            if (virtualAccountRadioButton.isChecked()) {
+                creditCardRadioButton.setChecked(false);
+                bankTransferRadioButton.setChecked(false);
+                paypalRadioButton.setChecked(false);
+                paymentType = "3";
+                paymentMethod = "1";
+                requestChangePaymentMethod();
+            }
+        } else {
             virtualAccountRadioButton.setChecked(false);
-            bankTransferRadioButton.setChecked(false);
-            paypalRadioButton.setChecked(false);
-            paymentType = "2";
-            paymentMethod = "2";
-            requestChangePaymentMethod();
+            Toast.makeText(getContext(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @OnClick(R.id.bankTransferRadioButton) void setPayBT(){
-        if (bankTransferRadioButton.isChecked()){
+    @OnClick(R.id.creditCardRadioButton)
+    void setPayCC() {
+        if (disabledPayment) {
+            if (creditCardRadioButton.isChecked()) {
+                virtualAccountRadioButton.setChecked(false);
+                bankTransferRadioButton.setChecked(false);
+                paypalRadioButton.setChecked(false);
+                paymentType = "2";
+                paymentMethod = "2";
+                requestChangePaymentMethod();
+            }
+        } else {
+            creditCardRadioButton.setChecked(false);
+            Toast.makeText(getContext(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.bankTransferRadioButton)
+    void setPayBT() {
+        if (bankTransferRadioButton.isChecked()) {
             virtualAccountRadioButton.setChecked(false);
             creditCardRadioButton.setChecked(false);
             paypalRadioButton.setChecked(false);
@@ -850,27 +922,40 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         }
     }
 
-    @OnClick(R.id.payment_virtual_account_linearLayout) void setPayVA2(){
-        virtualAccountRadioButton.setChecked(true);
-        creditCardRadioButton.setChecked(false);
-        bankTransferRadioButton.setChecked(false);
-        paypalRadioButton.setChecked(false);
-        paymentType = "3";
-        paymentMethod = "1";
-        requestChangePaymentMethod();
+    @OnClick(R.id.payment_virtual_account_linearLayout)
+    void setPayVA2() {
+        if (disabledPayment) {
+            virtualAccountRadioButton.setChecked(true);
+            creditCardRadioButton.setChecked(false);
+            bankTransferRadioButton.setChecked(false);
+            paypalRadioButton.setChecked(false);
+            paymentType = "3";
+            paymentMethod = "1";
+            requestChangePaymentMethod();
+        } else {
+            virtualAccountRadioButton.setChecked(false);
+            Toast.makeText(getContext(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    @OnClick(R.id.payment_credit_card_linearLayout) void setPayCC2(){
-        creditCardRadioButton.setChecked(true);
-        virtualAccountRadioButton.setChecked(false);
-        bankTransferRadioButton.setChecked(false);
-        paypalRadioButton.setChecked(false);
-        paymentType = "2";
-        paymentMethod = "2";
-        requestChangePaymentMethod();
+    @OnClick(R.id.payment_credit_card_linearLayout)
+    void setPayCC2() {
+        if (disabledPayment) {
+            creditCardRadioButton.setChecked(true);
+            virtualAccountRadioButton.setChecked(false);
+            bankTransferRadioButton.setChecked(false);
+            paypalRadioButton.setChecked(false);
+            paymentType = "2";
+            paymentMethod = "2";
+            requestChangePaymentMethod();
+        } else {
+            creditCardRadioButton.setChecked(false);
+            Toast.makeText(getContext(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    @OnClick(R.id.payment_bank_transfer_linearLayout) void setPayBT2(){
+    @OnClick(R.id.payment_bank_transfer_linearLayout)
+    void setPayBT2() {
         bankTransferRadioButton.setChecked(true);
         virtualAccountRadioButton.setChecked(false);
         creditCardRadioButton.setChecked(false);
@@ -880,8 +965,27 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         requestChangePaymentMethod();
     }
 
-    @OnClick(R.id.paypalRadioButton) void setPayPal(){
-        if (paypalRadioButton.isChecked()){
+    @OnClick(R.id.paypalRadioButton)
+    void setPayPal() {
+        if (disabledPayment) {
+            if (paypalRadioButton.isChecked()) {
+                paypalRadioButton.setChecked(true);
+                bankTransferRadioButton.setChecked(false);
+                virtualAccountRadioButton.setChecked(false);
+                creditCardRadioButton.setChecked(false);
+                paymentType = "4";
+                paymentMethod = null;
+                requestChangePaymentMethod();
+            }
+        } else {
+            paypalRadioButton.setChecked(false);
+            Toast.makeText(getContext(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.payment_paypal_linearLayout)
+    void setPayPal2() {
+        if (disabledPayment) {
             paypalRadioButton.setChecked(true);
             bankTransferRadioButton.setChecked(false);
             virtualAccountRadioButton.setChecked(false);
@@ -889,30 +993,23 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             paymentType = "4";
             paymentMethod = null;
             requestChangePaymentMethod();
+        } else {
+            paypalRadioButton.setChecked(false);
+            Toast.makeText(getContext(), "Please, choose delivery services first", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @OnClick(R.id.payment_paypal_linearLayout) void setPayPal2(){
-        paypalRadioButton.setChecked(true);
-        bankTransferRadioButton.setChecked(false);
-        virtualAccountRadioButton.setChecked(false);
-        creditCardRadioButton.setChecked(false);
-        paymentType = "4";
-        paymentMethod = null;
-        requestChangePaymentMethod();
-    }
-
-    public void requestChangePaymentMethod(){
+    public void requestChangePaymentMethod() {
         pDialog.show();
         try {
             String voucherCode = null;
-            if(cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+            if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
                 voucherCode = cartReturn.getCart().getVoucher().getCode();
             }
 
             NYDoShopCheckPaymentMethodRequest req = null;
-            if (cartReturn != null && NYHelper.isStringNotEmpty(cartReturn.getCartToken())){
-                req = new NYDoShopCheckPaymentMethodRequest(getActivity(), cartReturn.getCartToken(), paymentType, voucherCode);
+            if (cartReturn != null && NYHelper.isStringNotEmpty(cartReturn.getCartToken())) {
+                req = new NYDoShopCheckPaymentMethodRequest(getActivity(), cartReturn.getCartToken(), paymentType, voucherCode, cartReturn.getCart().getMerchants());
             }
             spcMgr.execute(req, onChangePaymentMethodRequest());
         } catch (Exception e) {
@@ -941,7 +1038,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 // TODO: ambil additionalsnya aja
                 cartReturn.setAdditionals(result.getAdditionals());
 
-                if (cartReturn != null && cartReturn.getCart() != null){
+                if (cartReturn != null && cartReturn.getCart() != null) {
                     // TODO: init cart, tes lagi apakah ongkir ilang atau tidak
                     initCartReturn(cartReturn);
                 }
@@ -972,7 +1069,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 .setTransactionFinishedCallback(thisFragment)// set transaction finish callback (sdk callback)
                 .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
-                .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
+                .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE", "#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
 
         PaymentMethodStorage paymentMethodStorage = new PaymentMethodStorage(getActivity());
@@ -987,12 +1084,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         DiveService service = veritransStorage.service;
         Integer totalParticipants = veritransStorage.totalParticipants;
 
-        if (veritransStorage != null){
+        if (veritransStorage != null) {
             UserDetail userDetail = null;
 
             if (userDetail == null) {
                 userDetail = new UserDetail();
-                if (contact != null){
+                if (contact != null) {
                     userDetail.setUserFullName(contact.getName());
                     userDetail.setEmail(contact.getEmailAddress());
                     userDetail.setPhoneNumber(contact.getPhoneNumber());
@@ -1008,15 +1105,17 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             MidtransSDK.getInstance().setUIKitCustomSetting(setting);
 
             TransactionRequest transactionRequest;
-            if (cart != null){
-                transactionRequest = new TransactionRequest(order.getOrderId(), cart.getTotal());
+            if (cart != null) {
+                NYLog.e("cek total = " + order.getCart().getTotal());
+                transactionRequest = new TransactionRequest(order.getOrderId(), order.getCart().getTotal());
             } else {
                 transactionRequest = new TransactionRequest(order.getOrderId(), 0);
             }
 
             // Create array list and add above item details in it and then set it to transaction request.
             ArrayList<ItemDetails> itemDetailsList = new ArrayList<>();
-            if (service != null)itemDetailsList.add(new ItemDetails(service.getId(), (int)service.getNormalPrice(), totalParticipants, service.getName()));
+            if (service != null)
+                itemDetailsList.add(new ItemDetails(service.getId(), (int) service.getNormalPrice(), totalParticipants, service.getName()));
             transactionRequest.setItemDetails(itemDetailsList);
 
 
@@ -1026,7 +1125,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         }
 
     }
-
 
 
     public void payUsingPaypal() {
@@ -1043,9 +1141,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 && NYHelper.isStringNotEmpty(orderReturn.getPaypalCurrency().getCurrency())
                 && orderReturn.getPaypalCurrency().getAmount() != null
                 && NYHelper.isStringNotEmpty(orderReturn.getOrderId())
-                && orderReturn.getCart() != null){
+                && orderReturn.getCart() != null) {
 
-            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), "#"+orderReturn.getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
+            PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), "#" + orderReturn.getOrderId(), PayPalPayment.PAYMENT_INTENT_SALE);
 //            PayPalItem item = new PayPalItem(diveService.getName(), 1, new BigDecimal(orderReturn.getPaypalCurrency().getAmount()), orderReturn.getPaypalCurrency().getCurrency(), PayPalPayment.PAYMENT_INTENT_SALE);
 //            payPalPayment.items(new PayPalItem[]{item});
             Intent intent = new Intent(getActivity(), PaymentActivity.class);
@@ -1069,14 +1167,17 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     public void onTransactionFinished(final TransactionResult transactionResult) {
         //TODO DISINI HANDLE KALO TRANSAKSI DI MIDTRANS SUKSES
 
-        if (transactionResult != null){
-            if (transactionResult.getResponse() != null) NYLog.e("CEK TRANSACTION 1: "+transactionResult.getResponse().getTransactionStatus());
-            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))NYLog.e("CEK TRANSACTION 2 : "+transactionResult.getResponse().getFraudStatus());
-            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))NYLog.e("CEK TRANSACTION 3 : "+transactionResult.getResponse().getTransactionStatus());
+        if (transactionResult != null) {
+            if (transactionResult.getResponse() != null)
+                NYLog.e("CEK TRANSACTION 1: " + transactionResult.getResponse().getTransactionStatus());
+            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))
+                NYLog.e("CEK TRANSACTION 2 : " + transactionResult.getResponse().getFraudStatus());
+            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))
+                NYLog.e("CEK TRANSACTION 3 : " + transactionResult.getResponse().getTransactionStatus());
         } else {
         }
 
-        if (transactionResult != null && transactionResult.getResponse() != null && (transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) || transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING)) ){
+        if (transactionResult != null && transactionResult.getResponse() != null && (transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) || transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING))) {
             NYHelper.handlePopupMessage(getActivity(), getString(R.string.transaction_success), false,
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -1084,13 +1185,13 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                             Intent intent = new Intent(getActivity(), VeritransNotificationActivity.class);
                             //if (gooLocation != null)intent.putExtra(MainActivity.ARG_ADDRESS, gooLocation.toString());
                             if (transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS)) {
-                                if(transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
+                                if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.NY_TRANSACTION_STATUS_CAPTURE)) {
                                     NTransactionResult result = new NTransactionResult();
                                     result.setData(transactionResult.getResponse());
                                     intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
                                     intent.putExtra(NYHelper.ID_ORDER_DO_SHOP, transactionResult.getResponse().getOrderId());
                                     intent.putExtra(NYHelper.TRANSACTION_RESPONSE, result.toString());
-                                } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)){
+                                } else if (transactionResult.getResponse().getTransactionStatus().equals(NYHelper.TRANSACTION_PENDING)) {
                                     NTransactionResult result = new NTransactionResult();
                                     result.setData(transactionResult.getResponse());
                                     intent.putExtra(NYHelper.TRANSACTION_COMPLETED, false);
@@ -1103,7 +1204,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                             startActivity(intent);
                         }
                     }, "Check Order");
-        } else if (transactionResult != null && transactionResult.getResponse() != null && transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_CHALLENGE_FRAUD_STATUS)){
+        } else if (transactionResult != null && transactionResult.getResponse() != null && transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_CHALLENGE_FRAUD_STATUS)) {
 
             // TODO: jika transaksi gagal
             orderReturn = null;

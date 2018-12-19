@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/iv_item_image"
             android:layout_gravity="top"
-            android:src="@drawable/banner_1"
+            android:src="@drawable/example_pic"
             android:layout_width="match_parent"
             android:layout_height="100dp" />
     </LinearLayout>
@@ -127,7 +127,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
-
 
             <com.nyelam.android.view.font.NYTextView
                 android:visibility="invisible"

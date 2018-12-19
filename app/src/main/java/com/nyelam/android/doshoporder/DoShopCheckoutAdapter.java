@@ -82,9 +82,9 @@ public class DoShopCheckoutAdapter extends RecyclerView.Adapter<DoShopCheckoutAd
                         tvItemPriceStrike.setVisibility(View.VISIBLE);
                         tvItemPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                     } else {
-                        tvItemPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                        tvItemPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                         tvItemPriceStrike.setVisibility(View.GONE);
-                        tvItemPrice.setText(NYHelper.priceFormatter(product.getNormalPrice()));
+                        tvItemPrice.setText(NYHelper.priceFormatter(product.getSpecialPrice()));
                     }
 
                     ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
