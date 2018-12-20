@@ -218,6 +218,7 @@ public class NYHelper {
     }
 
     public static String priceFormatter(double price) {
+        NYLog.e("PRICE " + price);
         DecimalFormat formatter = new DecimalFormat("#,###");
         return "Rp "+String.valueOf(formatter.format(price).replaceAll(",",".")+",-");
     }

@@ -9,6 +9,7 @@ import com.nyelam.android.data.AuthReturn;
 import com.nyelam.android.data.CartReturn;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopMerchant;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONObject;
@@ -28,7 +29,6 @@ public class NYDoShopCheckPaymentMethodRequest extends NYBasicAuthRequest<DoShop
 
     public NYDoShopCheckPaymentMethodRequest(Context context, String cartToken, String paymentMethodId, String voucherCode, List<DoShopMerchant> merchants) throws Exception {
         super(AuthReturn.class, context, context.getResources().getString(R.string.api_path_doshop_check_payment_method));
-
         if(!TextUtils.isEmpty(cartToken)) {
             addQuery(POST_CART_TOKEN, cartToken);
         }

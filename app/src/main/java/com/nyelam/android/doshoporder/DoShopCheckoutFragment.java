@@ -224,9 +224,17 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 onResubmitOrder();
             } else if (orderReturn == null && isTranssactionFailed) {
                 // TODO: request ulang cart token atau cart return
-                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
+                String voucherCode = null;
+                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                    voucherCode = cartReturn.getCart().getVoucher().getCode();
+                }
+                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, voucherCode);
             } else if (orderReturn == null) {
-                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, null);
+                String voucherCode = null;
+                if (cartReturn != null && cartReturn.getCart() != null && cartReturn.getCart().getVoucher() != null) {
+                    voucherCode = cartReturn.getCart().getVoucher().getCode();
+                }
+                getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, voucherCode);
             } else {
                 payUsingVeritrans();
             }

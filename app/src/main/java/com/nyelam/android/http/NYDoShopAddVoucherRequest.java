@@ -31,7 +31,7 @@ public class NYDoShopAddVoucherRequest extends NYBasicAuthRequest<DoShopCartRetu
             addQuery(POST_VOUCHER_CODE, voucherCode);
         }
 
-        addQuery(POST_PLATFORM, "0");
+        addQuery(POST_PLATFORM, "1");
 
     }
 

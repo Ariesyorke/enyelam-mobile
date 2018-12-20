@@ -11,6 +11,7 @@ import com.nyelam.android.data.DoShopMerchant;
 import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopProduct;
 import com.nyelam.android.data.Variation;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ public class NYDoShopSubmitOrderRequest extends NYBasicAuthRequest<DoShopOrder> 
     //public NYDoShopSubmitOrderRequest(Context context, String paymentMethodId, String cartToken, String billingAddressId, String shippingAddressId, List<DeliveryService> deliveryServices, String typeId, String voucherCode) throws Exception {
     public NYDoShopSubmitOrderRequest(Context context, String paymentMethodId, String cartToken, String billingAddressId, String shippingAddressId, List<DoShopMerchant> merchants, String typeId, String voucherCode) throws Exception {
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_submit_order));
+        NYLog.e("VOUCHER CODE " + voucherCode);
 
         if(!TextUtils.isEmpty(paymentMethodId)) {
             addQuery(POST_PAYMENT_METHOD_ID, paymentMethodId);

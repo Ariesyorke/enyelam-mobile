@@ -33,6 +33,7 @@ import com.nyelam.android.data.DoShopOrder;
 import com.nyelam.android.data.DoShopOrderList;
 import com.nyelam.android.data.Order;
 import com.nyelam.android.data.Summary;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.doshop.DoShopDetailItemActivity;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
@@ -149,6 +150,8 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
         isPickingPhoto = false;
         onChangePhoto();
     }
+
+    @BindView(R.id.confirm_linearLayout) View confirmLinearLayout;
 
     @OnClick(R.id.confirm_linearLayout) void uploadPayment(){
         if (paymentFile != null && order != null && NYHelper.isStringNotEmpty(order.getOrderId())){
@@ -278,7 +281,8 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
                 tvSubTotal.setText(NYHelper.priceFormatter(order.getCart().getSubTotal()));
                 tvTotal.setText(NYHelper.priceFormatter(order.getCart().getTotal()));
                 if (order.getCart().getVoucher() != null){
-                    tvTotal.setText(NYHelper.priceFormatter(order.getCart().getVoucher().getValue()));
+
+                    tvVoucherTotal.setText("-" + NYHelper.priceFormatter(order.getCart().getVoucher().getValue()));
                     llVoucherContainer.setVisibility(View.VISIBLE);
                 } else {
                     llVoucherContainer.setVisibility(View.GONE);

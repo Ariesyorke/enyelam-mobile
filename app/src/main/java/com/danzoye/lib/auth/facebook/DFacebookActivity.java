@@ -50,8 +50,8 @@ public class DFacebookActivity extends Activity {
 
     protected List<String> getPermissions() {
         List<String> list = Collections.synchronizedList(new ArrayList<String>());
-        list.addAll(Arrays.asList("public_profile",
-                "email","user_birthday","user_location"));
+        list.addAll(Arrays.asList(
+                "email"));
         return list;
     }
 
@@ -116,7 +116,7 @@ public class DFacebookActivity extends Activity {
                 }
             });
             Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,first_name, last_name, email,birthday,location");
+            parameters.putString("fields", "id,name,first_name, last_name, email,birthday");
             request.setParameters(parameters);
             request.executeAsync();
         } else {
