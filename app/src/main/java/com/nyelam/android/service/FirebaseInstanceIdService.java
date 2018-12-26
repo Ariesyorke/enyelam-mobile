@@ -77,7 +77,7 @@ public class FirebaseInstanceIdService extends FirebaseMessagingService {
                         i.setAction("com.nyelam.android.CHAT_SERVICE");
                         i.putExtra(NYHelper.TITLE, title);
                         i.putExtra(NYHelper.BODY, body);
-                        i.putExtra(NYHelper.TICKET_ID, inboxData.getTicketId());
+                        i.putExtra(NYHelper.TICKET_ID, String.valueOf(inboxData.getTicketId()));
                         sendBroadcast(i);
                     }
                 }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -124,10 +125,12 @@ public abstract class BasicActivity extends AppCompatActivity implements NYBroad
                         public void onClick(View view) {
 //                            LoginStorage storage = new LoginStorage(BasicActivity.this);
 //                            User user = storage.user;
-                            Intent i = new Intent(BasicActivity.this, InboxActivity.class);
-                            i.putExtra(NYHelper.TITLE, title);
-                            i.putExtra(NYHelper.TICKET_ID, ticketId);
-                            startActivity(i);
+                            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(ticketId)) {
+                                Intent i = new Intent(BasicActivity.this, InboxActivity.class);
+                                i.putExtra(NYHelper.TITLE, NYHelper.getSplit(title));
+                                i.putExtra(NYHelper.TICKET_ID, ticketId);
+                                startActivity(i);
+                            }
                         }
                     }).show();
         } catch (Exception e) {

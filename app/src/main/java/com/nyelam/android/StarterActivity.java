@@ -371,7 +371,7 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
 
                         if (inboxData != null){
                             intent.putExtra(NYHelper.TITLE, title);
-                            intent.putExtra(NYHelper.TICKET_ID, inboxData.getTicketId());
+                            intent.putExtra(NYHelper.TICKET_ID, String.valueOf(inboxData.getTicketId()));
                             intent.putExtra(NYHelper.STATUS, inboxData.getStatus());
                         }
                     }

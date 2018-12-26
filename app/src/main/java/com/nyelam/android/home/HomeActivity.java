@@ -545,13 +545,13 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         if (getIntent() != null) {
             if (getIntent().hasExtra(NYHelper.TITLE) && getIntent().hasExtra(NYHelper.TICKET_ID) && getIntent().hasExtra(NYHelper.STATUS)) {
                 String title = getIntent().getStringExtra(NYHelper.TITLE);
-                int ticketId = getIntent().getIntExtra(NYHelper.TICKET_ID, 0);
+                String ticketId = getIntent().getStringExtra(NYHelper.TICKET_ID);
                 String status = getIntent().getStringExtra(NYHelper.STATUS);
                 movePagerToTabItemPosition(2);
                 if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(status)){
                     Intent intent = new Intent(this, InboxActivity.class);
-                    intent.putExtra(NYHelper.TITLE, title);
-                    intent.putExtra(NYHelper.TICKET_ID, String.valueOf(ticketId));
+                    intent.putExtra(NYHelper.TITLE, NYHelper.getSplit(title));
+                    intent.putExtra(NYHelper.TICKET_ID, ticketId);
                     intent.putExtra(NYHelper.STATUS, status);
                     startActivity(intent);
                 }

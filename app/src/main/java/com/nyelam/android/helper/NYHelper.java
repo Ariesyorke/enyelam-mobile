@@ -746,4 +746,9 @@ public class NYHelper {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    public static String getSplit(String string){
+        String[] typeInstitution = string.split("@");
+        return typeInstitution[0];
+    }
 }
