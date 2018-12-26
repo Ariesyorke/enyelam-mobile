@@ -369,14 +369,22 @@ public class DoShopCategoryActivity extends BasicActivity {
         if (!spcMgr.isStarted()) spcMgr.start(this);
 
         // TODO: check cart di cache
-        CartStorage storage = new CartStorage(context);
-        if (storage.getSize() > 0){
-            tvCartCount.setText(String.valueOf(storage.getSize()));
-            tvCartCount.setVisibility(View.VISIBLE);
-            int margin = (int)getResources().getDimension(R.dimen.padding);
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ivCart.getLayoutParams();
-            params.setMargins(0, 0, margin, 0);
-            ivCart.setLayoutParams(params);
+        LoginStorage loginStorage = new LoginStorage(this);
+        if (loginStorage.isUserLogin()) {
+            CartStorage storage = new CartStorage(context);
+            if (storage.getSize() > 0) {
+                tvCartCount.setText(String.valueOf(storage.getSize()));
+                tvCartCount.setVisibility(View.VISIBLE);
+                int margin = (int) getResources().getDimension(R.dimen.padding);
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ivCart.getLayoutParams();
+                params.setMargins(0, 0, margin, 0);
+                ivCart.setLayoutParams(params);
+            } else {
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ivCart.getLayoutParams();
+                params.setMargins(0, 0, 0, 0);
+                ivCart.setLayoutParams(params);
+                tvCartCount.setVisibility(View.GONE);
+            }
         } else {
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ivCart.getLayoutParams();
             params.setMargins(0, 0, 0, 0);
