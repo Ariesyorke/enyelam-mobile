@@ -44,6 +44,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -78,6 +84,25 @@
             android:name=".backgroundservice.NYSpiceService"
             android:enabled="true"
             android:exported="true" />
+
+        <service
+            android:name=".service.FirebaseTokenRequestService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".service.FirebaseInstanceIdService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".receiver.NYBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.nyelam.android.CHAT" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".dodive.DoDiveActivity"

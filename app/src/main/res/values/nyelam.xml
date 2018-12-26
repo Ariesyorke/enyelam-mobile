@@ -22,6 +22,7 @@
 
     <!-- STAGING -->
     <string name="host_url">https://nyelam.dantech.id/</string>
+    <string name="root_url_firebase">staging/</string>
 
     <!-- API STAGING AND DEVELOPMENT -->
     <string name="api_path_login">api/user/login</string>
@@ -37,6 +38,7 @@
     <string name="api_path_master_organization">api/master/organization</string>
     <string name="api_path_master_license_type">api/master/lisence</string>
     <string name="api_path_get_eco_trip_date">api/service/ecotripCalender</string>
+    <string name="api_path_send_firebase_token">api/user/firebase</string>
 
     <string name="api_path_dodive_search_by_spot">api/dodive/service/divespot</string>
     <string name="api_path_dodive_search_by_dive_center">api/dodive/service/divecenter</string>

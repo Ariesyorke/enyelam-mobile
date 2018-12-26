@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +31,19 @@ import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryCompletedFragment;
 import com.nyelam.android.bookinghistory.BookingHistoryDetailActivity;
 import com.nyelam.android.bookinghistory.BookingHistoryInprogressFragment;
+import com.nyelam.android.data.InboxData;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.doshoporderhistory.DoShopOrderDetailActivity;
 import com.nyelam.android.helper.NYHelper;
+import com.nyelam.android.inbox.InboxActivity;
 import com.nyelam.android.profile.ProfileActivity;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYCustomViewPager;
 import com.nyelam.android.view.NYHomepageTabItemView;
 import com.nyelam.android.view.NYMenuDrawerFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,6 +91,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
         initTab();
         initControl();
         initPermission();
+        initIntent();
 
         Intent intent = getIntent();
         if (intent.hasExtra(NYHelper.TRANSACTION_COMPLETED)) {
@@ -531,6 +538,24 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
 
             // other 'case' lines to check for other
             // permissions this app might request
+        }
+    }
+
+    private void initIntent() {
+        if (getIntent() != null) {
+            if (getIntent().hasExtra(NYHelper.TITLE) && getIntent().hasExtra(NYHelper.TICKET_ID) && getIntent().hasExtra(NYHelper.STATUS)) {
+                String title = getIntent().getStringExtra(NYHelper.TITLE);
+                int ticketId = getIntent().getIntExtra(NYHelper.TICKET_ID, 0);
+                String status = getIntent().getStringExtra(NYHelper.STATUS);
+                movePagerToTabItemPosition(2);
+                if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(status)){
+                    Intent intent = new Intent(this, InboxActivity.class);
+                    intent.putExtra(NYHelper.TITLE, title);
+                    intent.putExtra(NYHelper.TICKET_ID, String.valueOf(ticketId));
+                    intent.putExtra(NYHelper.STATUS, status);
+                    startActivity(intent);
+                }
+            }
         }
     }
 

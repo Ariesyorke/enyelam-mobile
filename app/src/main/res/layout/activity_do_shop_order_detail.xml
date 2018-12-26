@@ -671,6 +671,7 @@
 
 
                             <LinearLayout
+                                android:id="@+id/layout_transfer_evidence"
                                 android:orientation="horizontal"
                                 android:background="@drawable/ny_rectangle_white_border_black"
                                 android:padding="@dimen/padding"

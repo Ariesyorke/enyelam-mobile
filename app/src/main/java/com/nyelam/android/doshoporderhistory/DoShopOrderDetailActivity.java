@@ -146,6 +146,9 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
     @BindView(R.id.transfer_evidence_textView)
     TextView tvTransferEvidence;
 
+    @BindView(R.id.layout_transfer_evidence)
+    LinearLayout layoutTransferEvidence;
+
     @OnClick(R.id.choose_file_textView) void chooseFile() {
         isPickingPhoto = false;
         onChangePhoto();
@@ -310,6 +313,10 @@ public class DoShopOrderDetailActivity extends BasicActivity implements GalleryC
                             if (NYHelper.isStringNotEmpty(additional.getTitle())) tvLabel.setText(additional.getTitle());
                             tvValue.setText(NYHelper.priceFormatter(additional.getValue()));
                             llAdditionalContainer.addView(productView);
+
+                            if (additional.getTitle().equalsIgnoreCase(getResources().getString(R.string.virtual_account)) || additional.getTitle().equalsIgnoreCase(getResources().getString(R.string.paypal))){
+                                paymentLinearLayout.setVisibility(View.GONE);
+                            }
                         }
                     }
                 }

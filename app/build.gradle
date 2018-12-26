@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled = true
-        versionCode 116
-        versionName '1.0.1'
+        versionCode 118
+        versionName '1.0.3'
         resConfigs "en"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -135,6 +135,14 @@ dependencies {
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.veinhorn.scrollgalleryview:library:1.0.8'
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.0'
+    implementation 'com.google.firebase:firebase-storage:16.0.2'
+
+    implementation 'com.tapadoo.android:alerter:3.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.41'
 
     //implementation 'com.squareup.picasso:picasso:2.5.2'
 

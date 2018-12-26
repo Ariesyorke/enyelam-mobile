@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,13 +28,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.danzoye.lib.util.GalleryCameraInvoker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.midtrans.sdk.uikit.utilities.SdkUIFlowUtil;
+import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
+import com.nyelam.android.StarterActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.InboxData;
 import com.nyelam.android.data.InboxDetail;
 import com.nyelam.android.data.InboxDetailDataItem;
 import com.nyelam.android.data.InboxList;
+import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.InboxRecyclerViewAdapter;
@@ -55,10 +65,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-public class InboxActivity extends AppCompatActivity implements
-        GalleryCameraInvoker.CallbackWithProcessing{
+public class InboxActivity extends BasicActivity implements
+        GalleryCameraInvoker.CallbackWithProcessing {
 
     private static final int REQ_CODE_CAMERA = 100;
     private static final int REQ_CODE_GALLERY = 101;
@@ -95,6 +106,44 @@ public class InboxActivity extends AppCompatActivity implements
     private String status = "";
     private boolean triggered = false;
 
+    private DatabaseReference databaseReference;
+    private String newMessage;
+    private User user;
+
+    public String getNewMessage() {
+        return newMessage;
+    }
+
+    public void setNewMessage(String newMessage) {
+        this.newMessage = newMessage;
+    }
+
+    public String getTicketId() {
+        return ticketId;
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        databaseReference = FirebaseDatabase.getInstance().getReference();
+//        databaseReference.child(NYHelper.ARGS_THREAD(this)).child(user.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                HashMap mapThread = (HashMap) dataSnapshot.getValue();
+//                if (mapThread != null) {
+//                    if (dataSnapshot.hasChild(ticketId)) {
+//                        databaseReference.child(NYHelper.ARGS_THREAD(InboxActivity.this)).child(user.getUserId()).child(ticketId).getRef().child("new_message").setValue("0");
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//        super.onBackPressed();
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +171,9 @@ public class InboxActivity extends AppCompatActivity implements
         textEt = (EditText) findViewById(R.id.text_et);
         tvTitle = (TextView) findViewById(R.id.title_textView);
 
+        LoginStorage storage = new LoginStorage(this);
+        user = storage.user;
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(false);
@@ -138,13 +190,13 @@ public class InboxActivity extends AppCompatActivity implements
     private void initCheckExtras() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if(extras.getString("ticketid") != null){
+            if (extras.getString("ticketid") != null) {
                 ticketId = extras.getString("ticketid");
             }
-            if(extras.getString("title") != null){
+            if (extras.getString("title") != null) {
                 title = extras.getString("title");
             }
-            if(extras.getString("status") != null){
+            if (extras.getString("status") != null) {
                 status = extras.getString("status");
             }
         }
@@ -153,16 +205,16 @@ public class InboxActivity extends AppCompatActivity implements
     private void initControl() {
         String titleCut = "";
         int lenght = title.length();
-        if(lenght > 20){
-            titleCut = title.substring(0,20) + "...";
-        }else{
+        if (lenght > 20) {
+            titleCut = title.substring(0, 20) + "...";
+        } else {
             titleCut = title;
         }
         tvTitle.setText(titleCut);
         tvTitle.setSingleLine();
         tvTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
 
-        if(!status.equalsIgnoreCase("open")){
+        if (!status.equalsIgnoreCase("open")) {
             llBottomChat.setVisibility(View.GONE);
         }
 
@@ -170,11 +222,9 @@ public class InboxActivity extends AppCompatActivity implements
         mAdapter = new ChatMessageAdapter(recyclerView, context);
         recyclerView.setAdapter(mAdapter);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
                 // do something
                 listDataInbox.clear();
                 listMessage.clear();
@@ -183,7 +233,7 @@ public class InboxActivity extends AppCompatActivity implements
                 mAdapter.removeScroll();
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
-				progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 initChat(Integer.parseInt(ticketId), 1);
 
                 // after refresh is done, remember to call the following code
@@ -211,7 +261,9 @@ public class InboxActivity extends AppCompatActivity implements
                 }
                 textEt.setText("");
                 SdkUIFlowUtil.hideKeyboard(InboxActivity.this);
-                sendMessage(ticketId, message, file);
+                sendMessage(ticketId, message, file);//TODO send chat
+
+//                sendThreadChatFirebase();//TODO test send thread
             }
         });
 
@@ -223,7 +275,7 @@ public class InboxActivity extends AppCompatActivity implements
         });
     }
 
-    private void initChat(int ticketId, int page){
+    private void initChat(int ticketId, int page) {
         try {
             //progressDialog.show();
             NYInboxDetailRequest req = new NYInboxDetailRequest(context, ticketId, page);
@@ -233,8 +285,8 @@ public class InboxActivity extends AppCompatActivity implements
         }
     }
 
-    private void initNext(int ticketId, int page){
-        if(triggered){
+    private void initNext(int ticketId, int page) {
+        if (triggered) {
             try {
                 triggered = false;
                 //progressDialog.show();
@@ -255,7 +307,7 @@ public class InboxActivity extends AppCompatActivity implements
                 /*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }*/
-				progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -263,14 +315,14 @@ public class InboxActivity extends AppCompatActivity implements
                 /*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }*/
-				progressBar.setVisibility(View.GONE);
-                if(listMessage != null) {
+                progressBar.setVisibility(View.GONE);
+                if (listMessage != null) {
                     listMessage.clear();
                 }
-                if(inboxDetail.getDataInboxDetail().getDataInboxDetailItem() != null){
+                if (inboxDetail.getDataInboxDetail().getDataInboxDetailItem() != null) {
                     listDataInbox = inboxDetail.getDataInboxDetail().getDataInboxDetailItem();
-                    for(int i=0; i < listDataInbox.size(); i++){
-                        if(listDataInbox.get(i) != null){
+                    for (int i = 0; i < listDataInbox.size(); i++) {
+                        if (listDataInbox.get(i) != null) {
 
                             String userName = null;
                             String userId = null;
@@ -283,31 +335,32 @@ public class InboxActivity extends AppCompatActivity implements
 
                             LoginStorage loginStorage = new LoginStorage(context);
 
-                            if(loginStorage.isUserLogin()) {
+                            if (loginStorage.isUserLogin()) {
                                 userId = loginStorage.user.getUserId();
                             }
-                            if(listDataInbox.get(i).getId() != 0 ){
+                            if (listDataInbox.get(i).getId() != 0) {
                                 ids = listDataInbox.get(i).getId();
                             }
-                            if(listDataInbox.get(i).getSubjectDetail() != null ){
+                            if (listDataInbox.get(i).getSubjectDetail() != null) {
                                 subjectDetail = listDataInbox.get(i).getSubjectDetail();
                             }
-                            if(listDataInbox.get(i).getUserId().equalsIgnoreCase(userId)){
+                            if (listDataInbox.get(i).getUserId().equalsIgnoreCase(userId)) {
                                 mine = true;
                             }
-                            if(listDataInbox.get(i).getUserNameDetail() != null ){
+                            if (listDataInbox.get(i).getUserNameDetail() != null) {
                                 userName = listDataInbox.get(i).getUserNameDetail();
                             }
-                            if(listDataInbox.get(i).getAttachment() != null ){
+                            if (listDataInbox.get(i).getAttachment() != null) {
                                 image = true;
                                 attachment = listDataInbox.get(i).getAttachment();
                             }
-                            if(listDataInbox.get(i).getDateDetail() != null ){
+                            if (listDataInbox.get(i).getDateDetail() != null) {
                                 dateInbox = listDataInbox.get(i).getDateDetail();
                             }
 
                             ChatMessage cm = new ChatMessage(ids, userName, subjectDetail, mine, image, attachment, dateInbox);
                             listMessage.add(cm);
+//                            sendThreadChatFirebase();//TODO send to firebase
                         }
                     }
                     Collections.reverse(listMessage);
@@ -330,7 +383,7 @@ public class InboxActivity extends AppCompatActivity implements
                                         mAdapter.removeScroll();
                                         triggered = true;
                                         recyclerView.setVisibility(View.GONE);
-										progressBar.setVisibility(View.VISIBLE);
+                                        progressBar.setVisibility(View.VISIBLE);
                                         initNext(Integer.parseInt(ticketId), Integer.parseInt(inboxDetail.getDataInboxDetail().getNext()));
                                     }
                                 }, 2000);
@@ -359,27 +412,27 @@ public class InboxActivity extends AppCompatActivity implements
                 /*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }*/
-				progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onRequestSuccess(final InboxDetail inboxDetail) {
 
-                if(!listMessage.isEmpty()){
+                if (!listMessage.isEmpty()) {
                     Collections.reverse(listMessage);
                     listMessageNext.addAll(listMessage);
-                }else{
+                } else {
                     Collections.reverse(listMessageNext);
                 }
 
-                if(listMessage != null) {
+                if (listMessage != null) {
                     listMessage.clear();
                 }
 
-                if(inboxDetail.getDataInboxDetail().getDataInboxDetailItem() != null){
+                if (inboxDetail.getDataInboxDetail().getDataInboxDetailItem() != null) {
                     listDataInbox = inboxDetail.getDataInboxDetail().getDataInboxDetailItem();
-                    for(int i=0; i < listDataInbox.size(); i++){
-                        if(listDataInbox.get(i) != null){
+                    for (int i = 0; i < listDataInbox.size(); i++) {
+                        if (listDataInbox.get(i) != null) {
 
                             String userName = null;
                             String userId = null;
@@ -392,26 +445,26 @@ public class InboxActivity extends AppCompatActivity implements
 
                             LoginStorage loginStorage = new LoginStorage(context);
 
-                            if(loginStorage.isUserLogin()) {
+                            if (loginStorage.isUserLogin()) {
                                 userId = loginStorage.user.getUserId();
                             }
-                            if(listDataInbox.get(i).getSubjectDetail() != null ){
+                            if (listDataInbox.get(i).getSubjectDetail() != null) {
                                 subjectDetail = listDataInbox.get(i).getSubjectDetail();
                             }
-                            if(listDataInbox.get(i).getUserId().equalsIgnoreCase(userId)){
+                            if (listDataInbox.get(i).getUserId().equalsIgnoreCase(userId)) {
                                 mine = true;
                             }
-                            if(listDataInbox.get(i).getId() != 0 ){
+                            if (listDataInbox.get(i).getId() != 0) {
                                 ids = listDataInbox.get(i).getId();
                             }
-                            if(listDataInbox.get(i).getUserNameDetail() != null ){
+                            if (listDataInbox.get(i).getUserNameDetail() != null) {
                                 userName = listDataInbox.get(i).getUserNameDetail();
                             }
-                            if(listDataInbox.get(i).getAttachment() != null ){
+                            if (listDataInbox.get(i).getAttachment() != null) {
                                 image = true;
                                 attachment = listDataInbox.get(i).getAttachment();
                             }
-                            if(listDataInbox.get(i).getDateDetail() != null ){
+                            if (listDataInbox.get(i).getDateDetail() != null) {
                                 dateInbox = listDataInbox.get(i).getDateDetail();
                             }
 
@@ -420,16 +473,16 @@ public class InboxActivity extends AppCompatActivity implements
                         }
                     }
 
-                    for(int j = 0; j < listMessage.size(); j++){
+                    for (int j = 0; j < listMessage.size(); j++) {
                         boolean duplicateItem = false;
                         ChatMessage chatMessage = listMessage.get(j);
-                        if(listMessageNext.size() != 0){
-                            for(int k =0; k < listMessageNext.size(); k++){
-                                if(listMessageNext.get(j).getId() == chatMessage.getId()){
+                        if (listMessageNext.size() != 0) {
+                            for (int k = 0; k < listMessageNext.size(); k++) {
+                                if (listMessageNext.get(j).getId() == chatMessage.getId()) {
                                     duplicateItem = true;
                                 }
                             }
-                            if(!duplicateItem){
+                            if (!duplicateItem) {
                                 listMessageNext.add(chatMessage);
                             }
                         }
@@ -458,8 +511,8 @@ public class InboxActivity extends AppCompatActivity implements
                                         }
                                         mAdapter.removeScroll();
                                         triggered = true;
-										recyclerView.setVisibility(View.GONE);
-										progressBar.setVisibility(View.VISIBLE);
+                                        recyclerView.setVisibility(View.GONE);
+                                        progressBar.setVisibility(View.VISIBLE);
                                         initNext(Integer.parseInt(ticketId), Integer.parseInt(inboxDetail.getDataInboxDetail().getNext()));
                                     }
                                 }, 2000);
@@ -472,7 +525,7 @@ public class InboxActivity extends AppCompatActivity implements
                     /*if (listMessageNext.size() > 2){
                         recyclerView.smoothScrollToPosition(listMessageNext.size() -2);
                     }*/
-                }else {
+                } else {
 //                    Toast.makeText(context, "Loading data completed", Toast.LENGTH_SHORT).show();
                 }
 
@@ -481,17 +534,17 @@ public class InboxActivity extends AppCompatActivity implements
 				/*if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }*/
-				progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
             }
         };
     }
 
     private void deleteAttachment() {
-        if (file != null){
+        if (file != null) {
             file.delete();
             file = null;
             llAttachment.setVisibility(View.GONE);
-        }else{
+        } else {
             llAttachment.setVisibility(View.GONE);
         }
     }
@@ -522,7 +575,7 @@ public class InboxActivity extends AppCompatActivity implements
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                if(success){
+                if (success) {
                     deleteAttachment();
                     listDataInbox.clear();
                     listMessage.clear();
@@ -532,11 +585,89 @@ public class InboxActivity extends AppCompatActivity implements
                     recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                     initChat(Integer.parseInt(ticketId), 1);
-                }else{
+                } else {
                     SdkUIFlowUtil.showToast(InboxActivity.this, "Gagal Mengirim Pesan");
                 }
             }
         };
+    }
+
+    //KIRIM JUMLAH READ UNREAD CHAT KE FIREBASE
+    private void sendThreadChatFirebase() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(NYHelper.ARGS_THREAD(this)).child(user.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String senderId = user.getUserId();
+                String receiverId = ticketId;
+                String count = getNewMessage();
+                HashMap mapThread = new HashMap();
+                if (dataSnapshot.hasChild(senderId)) {
+                    mapThread.put("new_message", "0");
+                    databaseReference.child(NYHelper.ARGS_THREAD(InboxActivity.this)).child(senderId).child(receiverId).setValue(mapThread);
+                } else {
+//                        mapThread.put("receiver", chat.getReceiver());
+//                        mapThread.put("receiverUid", chat.getReceiverUid());
+//                        mapThread.put("receiverImage", chat.getReceiverImage());
+                    mapThread.put("new_message", "0");
+                    databaseReference.child(NYHelper.ARGS_THREAD(InboxActivity.this)).child(senderId).child(receiverId).setValue(mapThread);
+                }
+
+                if (dataSnapshot.hasChild(receiverId)) {
+//                        mapThread.put("receiver", chat.getSender());
+//                        mapThread.put("receiverUid", chat.getSenderUid());
+//                        mapThread.put("receiverImage", chat.getSenderImage());
+                    if (!TextUtils.isEmpty(count)) {
+                        int val = Integer.parseInt(count);
+                        mapThread.put("new_message", String.valueOf(val + 1));
+                    } else {
+                        mapThread.put("new_message", String.valueOf(1));
+                    }
+                    databaseReference.child(NYHelper.ARGS_THREAD(InboxActivity.this)).child(receiverId).child(senderId).setValue(mapThread);
+                    loadMessageThread();
+                } else {
+//                        mapThread.put("receiver", chat.getSender());
+//                        mapThread.put("receiverUid", chat.getSenderUid());
+//                        mapThread.put("receiverImage", chat.getSenderImage());
+                    if (!TextUtils.isEmpty(count)) {
+                        int val = Integer.parseInt(count);
+                        mapThread.put("new_message", String.valueOf(val + 1));
+                    } else {
+                        mapThread.put("new_message", String.valueOf(1));
+                    }
+                    databaseReference.child(NYHelper.ARGS_THREAD(InboxActivity.this)).child(receiverId).child(senderId).setValue(mapThread);
+                    loadMessageThread();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void loadMessageThread() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(NYHelper.ARGS_THREAD(this)).child(ticketId).child(user.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    String count = dataSnapshot.child("new_message").getValue(String.class);
+                    NYLog.e("cek count new Message = " + count);
+                    setNewMessage(count);
+//                        InboxData inboxData = dataSnapshot.getValue(InboxData.class);
+//                        if (inboxData != null) {
+//                            setNewMessage(inboxData.getNewMessage());
+//                        }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     protected void onChangePhoto() {
@@ -670,8 +801,8 @@ public class InboxActivity extends AppCompatActivity implements
             this.file = file;
             if (NYHelper.isStringNotEmpty(file.getName()))
                 tvAttachment.setText(file.getName());
-                llAttachment.setVisibility(View.VISIBLE);
-        }else{
+            llAttachment.setVisibility(View.VISIBLE);
+        } else {
             llAttachment.setVisibility(View.GONE);
         }
     }
@@ -707,6 +838,19 @@ public class InboxActivity extends AppCompatActivity implements
     public void onStop() {
         super.onStop();
         if (spcMgr.isStarted()) spcMgr.shouldStop();
+        currentTicket("none");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        currentTicket(ticketId);
+    }
+
+    private void currentTicket(String ticketId){
+        SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+        editor.putString(NYHelper.TICKET_ID, ticketId);
+        editor.apply();
     }
 
 }

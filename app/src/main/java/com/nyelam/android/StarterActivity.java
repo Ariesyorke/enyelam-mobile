@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,13 +23,17 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Category;
 import com.nyelam.android.data.CountryCode;
+import com.nyelam.android.data.InboxData;
 import com.nyelam.android.data.Update;
 import com.nyelam.android.data.dao.DaoSession;
 import com.nyelam.android.data.dao.NYCountryCode;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
 import com.nyelam.android.http.NYUpdateVersionRequest;
+import com.nyelam.android.inbox.InboxActivity;
 import com.nyelam.android.onboarding.IntroActivity;
+import com.nyelam.android.service.FirebaseTokenRequestService;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.storage.NYMasterDataStorage;
 import com.nyelam.android.view.NYCustomDialog;
@@ -36,10 +41,13 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
-public class StarterActivity extends AppCompatActivity  implements NYMasterDataStorage.LoadDataListener<CountryCode>
-    , NYCustomDialog.OnDialogFragmentClickListener{
+public class StarterActivity extends AppCompatActivity implements NYMasterDataStorage.LoadDataListener<CountryCode>
+        , NYCustomDialog.OnDialogFragmentClickListener {
 
     private int[] backgroundDrawables = {
             R.drawable.eco_trip_1_bg,
@@ -52,7 +60,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     };
 
 
-//    private final int SPLASH_TIME = 3000;
+    //    private final int SPLASH_TIME = 3000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS = 1;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private NYMasterDataStorage masterDataStorage;
@@ -64,7 +72,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        NYApplication application = (NYApplication)getApplication();
+        NYApplication application = (NYApplication) getApplication();
         application.setFirebaseAnalyticsEvent("starter_activity");
 
         setContentView(R.layout.activity_starter);
@@ -81,7 +89,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0) {
                     boolean isGranted = true;
-                    for (int i = 0; i < grantResults.length;i++) {
+                    for (int i = 0; i < grantResults.length; i++) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             isGranted = false;
                             break;
@@ -108,7 +116,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
         }
     }
 
-    public void initiatePermission(){
+    public void initiatePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             int permissionCamera = ContextCompat.checkSelfPermission(this,
                     Manifest.permission.CAMERA);
@@ -169,8 +177,8 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                NYApplication application = (NYApplication)getApplication();
-      //          application.addCache(imageUri, loadedImage);
+                NYApplication application = (NYApplication) getApplication();
+                //          application.addCache(imageUri, loadedImage);
                 int nextIndex = index;
                 nextIndex += 1;
                 if (nextIndex < backgroundDrawables.length) {
@@ -201,7 +209,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (NYHelper.checkConnection(StarterActivity.this)){
+                            if (NYHelper.checkConnection(StarterActivity.this)) {
                                 dialog.dismiss();
                                 // TODO: change start splash time after getUpdate
                                 //startSplashTimer();
@@ -215,7 +223,6 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                     });
         }
     }
-
 
 
     private void getUpdateVersion() {
@@ -253,21 +260,23 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                     e.printStackTrace();
                 }
 
-                if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == true){
+                if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == true) {
 
                     //Toast.makeText(StarterActivity.this, "1", Toast.LENGTH_SHORT).show();
 
                     String wording = "";
-                    if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
+                    if (NYHelper.isStringNotEmpty(update.getWording()))
+                        wording = update.getWording();
 
                     new NYCustomDialog().showUpdateDialog(StarterActivity.this, update.isMust(), update.getWording(), update.getLink(), update.getLatestVersion());
 
-                } else if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == false){
+                } else if (update != null && yourVersion < update.getLatestVersion() && update.isMust() == false) {
 
                     //Toast.makeText(StarterActivity.this, "2", Toast.LENGTH_SHORT).show();
 
                     String wording = "";
-                    if (NYHelper.isStringNotEmpty(update.getWording())) wording = update.getWording();
+                    if (NYHelper.isStringNotEmpty(update.getWording()))
+                        wording = update.getWording();
 
                     new NYCustomDialog().showUpdateDialog(StarterActivity.this, update.isMust(), update.getWording(), update.getLink(), update.getLatestVersion());
 
@@ -283,14 +292,11 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     }
 
 
-
-
     public void startSplashTimer() {
-
         DaoSession session = ((NYApplication) getApplicationContext()).getDaoSession();
         List<NYCountryCode> rawProducts = session.getNYCountryCodeDao().queryBuilder().list();
         List<CountryCode> countryCodes = NYHelper.generateList(rawProducts, CountryCode.class);
-        if (countryCodes != null && countryCodes.size() > 0){
+        if (countryCodes != null && countryCodes.size() > 0) {
 
         } else {
             //countCartTextView.setVisibility(View.GONE);
@@ -298,14 +304,13 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
         if (countryCodes != null && countryCodes.size() > 0) {
             onLoadCategories();
-        } else  {
+        } else {
             onLoadCountryCodes();
         }
-
     }
 
     private void onLoadCountryCodes() {
-        if (masterDataStorage == null)masterDataStorage = new NYMasterDataStorage(this);
+        if (masterDataStorage == null) masterDataStorage = new NYMasterDataStorage(this);
 
         masterDataStorage.loadCountries(new NYMasterDataStorage.LoadDataListener<CountryCode>() {
             @Override
@@ -326,12 +331,12 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                 finish();*/
                 onLoadCategories();
             }
-        },true);
+        }, true);
     }
 
 
     private void onLoadCategories() {
-        if (masterDataStorage == null)masterDataStorage = new NYMasterDataStorage(this);
+        if (masterDataStorage == null) masterDataStorage = new NYMasterDataStorage(this);
 
         masterDataStorage.loadCategories(new NYMasterDataStorage.LoadDataListener<Category>() {
             @Override
@@ -347,11 +352,36 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             @Override
             public void onDataLoaded(List<Category> items) {
                 LoginStorage storage = new LoginStorage(StarterActivity.this);
-                if(storage.isUserLogin()) {
+                if (storage.isUserLogin()) {
+                    startService(new Intent(StarterActivity.this, FirebaseTokenRequestService.class));
                     Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    //SEND INTEN TO HOME ACTIVITY
+                    if (getIntent().hasExtra(NYHelper.TITLE) && getIntent().hasExtra(NYHelper.INBOX)) {
+                        String title = getIntent().getStringExtra(NYHelper.TITLE);
+                        String inbox = getIntent().getStringExtra(NYHelper.INBOX);
+
+                        InboxData inboxData = null;
+                        try {
+                            JSONObject obj = new JSONObject(inbox);
+                            inboxData = new InboxData();
+                            inboxData.parse(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (inboxData != null){
+                            intent.putExtra(NYHelper.TITLE, title);
+                            intent.putExtra(NYHelper.TICKET_ID, inboxData.getTicketId());
+                            intent.putExtra(NYHelper.STATUS, inboxData.getStatus());
+                        }
+                    }
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
+//                    Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                    startActivity(intent);
+//                    finish();
                 } else {
                     Intent intent = new Intent(StarterActivity.this, IntroActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -360,7 +390,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
                 }
 
             }
-        },true);
+        }, true);
     }
 
     @Override
@@ -383,7 +413,8 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     @Override
     public void onDataLoaded(List<CountryCode> items) {
         LoginStorage storage = new LoginStorage(StarterActivity.this);
-        if(storage.isUserLogin()) {
+        if (storage.isUserLogin()) {
+            startService(new Intent(StarterActivity.this, FirebaseTokenRequestService.class));
             Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
@@ -400,8 +431,6 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
-
 
 
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nyelam.android"));
@@ -423,7 +452,7 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
 
     @Override
     public void doUpdateVersion(String link) {
-        if (NYHelper.isStringNotEmpty(link)){
+        if (NYHelper.isStringNotEmpty(link)) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
             startActivity(browserIntent);
         } else {
@@ -431,7 +460,5 @@ public class StarterActivity extends AppCompatActivity  implements NYMasterDataS
             startActivity(intent);
         }
     }
-
-
 
 }

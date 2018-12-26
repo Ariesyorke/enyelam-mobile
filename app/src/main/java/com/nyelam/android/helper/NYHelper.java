@@ -17,6 +17,7 @@ import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -38,6 +39,7 @@ import com.nyelam.android.data.DAODataBridge;
 import com.nyelam.android.data.User;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.http.NYSendFirebaseTokenRequest;
 import com.nyelam.android.http.NYStatusInvalidTokenException;
 import com.nyelam.android.storage.EmailLoginStorage;
 import com.nyelam.android.storage.LoginStorage;
@@ -167,6 +169,16 @@ public class NYHelper {
     public static final String WEIGHT = "weight";
     public static final String STATUS = "status";
     public static final String DISABLED_PAYMENT = "disabled_payment";
+
+    public static final String INBOX = "inbox";
+    public static final String TICKET_ID = "ticketid";
+    public static final String TITLE = "title";
+    public static final String BODY = "body";
+    public static boolean isAppInForeground = false;
+
+    public static String ARGS_THREAD(Context context) {
+        return context.getResources().getString(R.string.root_url_firebase) + "thread";
+    }
 
 
     public static boolean isStringNotEmpty(String string) {
@@ -572,14 +584,34 @@ public class NYHelper {
         return  builder.toString();
     }
 
-    public static void logout(Activity activity) {
-        LoginStorage storage = new LoginStorage(activity);
-        storage.clear();
-        Intent intent = new Intent(activity, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
+    public static void logout(final Activity activity) {
+        AsyncTask<Activity, Void, Activity> asyncTask = new AsyncTask<Activity, Void, Activity>() {
+            @Override
+            protected Activity doInBackground(Activity... activities) {
+                try {
+                    NYSendFirebaseTokenRequest req = new NYSendFirebaseTokenRequest(activities[0], "logout");
+                    req.loadDataFromNetwork();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return activities[0];
+                }
+                return activities[0];
+            }
+
+            @Override
+            protected void onPostExecute(Activity activity1) {
+                super.onPostExecute(activity);
+                LoginStorage storage = new LoginStorage(activity);
+                storage.clear();
+                Intent intent = new Intent(activity, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+            }
+        };
+        asyncTask.execute(activity);
+
     }
 
     /** CHECK WHETHER INTERNET CONNECTION IS AVAILABLE OR NOT */

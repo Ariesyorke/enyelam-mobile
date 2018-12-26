@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
@@ -58,7 +59,7 @@ import iammert.com.expandablelib.ExpandableLayout;
 import iammert.com.expandablelib.Section;
 import me.relex.circleindicator.CircleIndicator;
 
-public class DoShopActivity extends AppCompatActivity {
+public class DoShopActivity extends BasicActivity {
 
     private Context context;
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);

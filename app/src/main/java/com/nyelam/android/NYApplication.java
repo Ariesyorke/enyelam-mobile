@@ -1,5 +1,11 @@
 package com.nyelam.android;
 
+import android.app.NotificationManager;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.ProcessLifecycleOwner;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -44,7 +50,7 @@ import java.util.TimeZone;
  * Created by Aprilian Nur Wakhid Daini on 1/10/2018.
  */
 
-public class NYApplication extends MultiDexApplication implements TransactionFinishedCallback {
+public class NYApplication extends MultiDexApplication implements TransactionFinishedCallback, LifecycleObserver {
 
     private FirebaseAnalytics firebaseAnalytics;
     private Tracker mTracker;
@@ -58,6 +64,7 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
     @Override
     public void onCreate() {
         super.onCreate();
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         FirebaseApp.initializeApp(this);
         // Obtain the Firebase Analytics instance.
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -152,5 +159,22 @@ public class NYApplication extends MultiDexApplication implements TransactionFin
         Bundle bundle = new Bundle();
         //bundle.putString("some_key", "some_value");
         firebaseAnalytics.logEvent(event, bundle);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    public void onAppBackrounded(){
+        NYHelper.isAppInForeground = false;
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void onAppForegrounded(){
+        // App in foreground
+        NYHelper.isAppInForeground = true;
+        try {
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

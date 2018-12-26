@@ -3,9 +3,11 @@ package com.nyelam.android.home;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,17 +16,30 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.InboxData;
 import com.nyelam.android.data.InboxList;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.http.NYInboxRequest;
+import com.nyelam.android.inbox.ChatMessage;
+import com.nyelam.android.storage.LoginStorage;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -35,6 +50,7 @@ public class InboxFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private String countMsg;
 
     private InboxRecyclerViewAdapter inboxAdapter;
     private List<InboxData> inboxDataList = new ArrayList<InboxData>();
@@ -128,6 +144,35 @@ public class InboxFragment extends Fragment {
         });
     }
 
+//    private void initLoadDataFirebase(){
+//        LoginStorage loginStorage = new LoginStorage(getContext());
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//        databaseReference.child(NYHelper.ARGS_THREAD(getContext())).child(loginStorage.user.getUserId()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.getValue() != null) {
+//                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+////                        for (InboxData inboxData : inboxDataList) {
+//                            NYLog.e("Cek child = " + dataSnapshot1.getKey());
+//                                String count = dataSnapshot1.child("new_message").getValue(String.class);
+//                                NYLog.e("cek count new Message = " + count);
+//                                for (InboxData inboxData : inboxDataList){
+//                                    if (String.valueOf(dataSnapshot1.getKey()).equals(String.valueOf(inboxData.getTicketId()))) {
+//                                        inboxData.setNewMessage(count);
+//                                    }
+//                                }
+////                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
+
     private RequestListener<InboxList> onCategoryRequest() {
         return new RequestListener<InboxList>() {
 
@@ -171,9 +216,8 @@ public class InboxFragment extends Fragment {
                             }
                         }
                     }
-
                     inboxDataList.addAll(inboxList.getInboxData());
-
+//                    initLoadDataFirebase();//TODO load firebase
                     inboxAdapter.clear();
                     inboxAdapter.addResults(inboxDataList);
                     inboxAdapter.notifyDataSetChanged();

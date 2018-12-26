@@ -13,6 +13,7 @@ import com.nyelam.android.R;
 import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.home.HomeActivity;
+import com.nyelam.android.service.FirebaseTokenRequestService;
 import com.nyelam.android.storage.LoginStorage;
 
 import static android.app.Activity.RESULT_OK;
@@ -49,7 +50,7 @@ public class AuthActivity extends BasicActivity implements
     public void isLoginSuccess(boolean success) {
 
         NYLog.e("LOGIN SOCMED SUCCES INTENT");
-
+        startService(new Intent(this, FirebaseTokenRequestService.class));
         if(progressDialog != null) progressDialog.dismiss();
         if (success) {
 //            if(getIntent().hasExtra(NYHelper.IS_MAIN_ACTIVITY)) {

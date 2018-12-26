@@ -14,6 +14,7 @@ public class InboxData implements Parseable {
     private static String KEY_STATUS = "status";
     private static String KEY_DATE = "date";
     private static String KEY_INBOX_TYPE = "inbox_type";
+    private static String KEY_NEW_MESSAGE = "new_message";
 
     private int ticketId;
     private String subject;
@@ -22,6 +23,7 @@ public class InboxData implements Parseable {
     private String status;
     private Date date;
     private String inboxType;
+//    private String newMessage;
 
     public InboxData(){
 
@@ -94,6 +96,14 @@ public class InboxData implements Parseable {
         this.inboxType = inboxType;
     }
 
+//    public String getNewMessage() {
+//        return newMessage;
+//    }
+//
+//    public void setNewMessage(String newMessage) {
+//        this.newMessage = newMessage;
+//    }
+
     @Override
     public void parse(JSONObject obj) {
         if (obj == null) return;
@@ -143,5 +153,10 @@ public class InboxData implements Parseable {
                 setInboxType(obj.getString(KEY_INBOX_TYPE));
             }
         } catch (JSONException e) {e.printStackTrace();}
+//        try {
+//            if (!obj.isNull(KEY_NEW_MESSAGE)) {
+//                setNewMessage(obj.getString(KEY_NEW_MESSAGE));
+//            }
+//        } catch (JSONException e) {e.printStackTrace();}
     }
 }
