@@ -14,7 +14,6 @@
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.CardView
-                android:layout_margin="@dimen/padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -46,17 +45,24 @@
                         android:layout_height="wrap_content" />
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
-
-            <TextView
-                android:text="e-Nyelam Profile"
-                android:textSize="14sp"
-                android:textColor="@color/ny_black1"
-                android:textStyle="bold"
-                android:gravity="left"
-                android:layout_marginTop="@dimen/padding"
-                android:layout_marginLeft="@dimen/padding"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding"
+                android:paddingLeft="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
+                android:background="@color/colorPrimary">
+                <TextView
+                    android:text="e-Nyelam Profile"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:gravity="left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
 
             <android.support.v7.widget.CardView
                 android:background="@color/colorWhite"

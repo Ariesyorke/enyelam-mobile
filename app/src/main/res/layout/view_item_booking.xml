@@ -7,7 +7,6 @@
     card_view:cardElevation="4dp"
     card_view:cardMaxElevation="4dp"
     app:cardCornerRadius="3dp"
-    android:layout_margin="@dimen/padding"
     android:layout_height="wrap_content"
     app:ignore="NamespaceTypo">
 
@@ -64,7 +63,7 @@
         </LinearLayout>
 
         <View
-            android:layout_marginTop="@dimen/padding_half"
+            android:layout_marginTop="@dimen/padding"
             android:background="@color/ny_grey1"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
@@ -99,6 +98,7 @@
                 android:src="@drawable/ic_money"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -113,7 +113,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
-
+        <View
+            android:layout_marginTop="@dimen/padding"
+            android:background="@color/gray.primary_dark"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
     </LinearLayout>
 
 

@@ -133,13 +133,10 @@ public class BookingHistoryListAdapter extends RecyclerView.Adapter<RecyclerView
                         Location loc = new Location();
                         loc = diveService.getDiveCenter().getContact().getLocation();
                         locationTextView.setText(loc.getCity()+", "+loc.getProvince()+", "+loc.getCountry());
-                    } else{
+                    } else {
                         locationTextView.setText("");
                     }
                 }
-
-
-
 
                 //SET IMAGE
                 final NYApplication application = (NYApplication) context.getApplicationContext();

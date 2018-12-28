@@ -3,6 +3,10 @@ package com.nyelam.android.inbox;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -103,10 +107,10 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == MY_MESSAGE) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_mine_message, parent, false);
-            return new MessageHolder(view);
+            return new MessageHolder(view, Color.WHITE, Color.LTGRAY);
         } else if(viewType == OTHER_MESSAGE){
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_other_message, parent, false);
-            return new MessageHolder(view);
+            return new MessageHolder(view, ContextCompat.getColor(mContext, R.color.ny_grey1), Color.LTGRAY);
         } else if(viewType == ISLOADING){
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_loading, parent, false);
             return new LoadingViewHolder(view);
@@ -251,6 +255,34 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tvMessage = (TextView) itemView.findViewById(R.id.tv_message);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time);
             ivImage = (ImageView) itemView.findViewById(R.id.iv_image);
+            GradientDrawable border = new GradientDrawable();
+            border.setCornerRadius(5);
+            border.setColor(Color.TRANSPARENT);
+            border.setStroke(1, 0xFF000000); //black border with full opacity
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                chatMessageView.setBackgroundDrawable(border);
+            } else {
+                chatMessageView.setBackground(border);
+            }
+        }
+
+        MessageHolder(View itemView, int backgroundColor, int borderColor) {
+            super(itemView);
+
+            chatMessageView = (ChatMessageView) itemView.findViewById(R.id.chatMessageView);
+            tvUser = (TextView) itemView.findViewById(R.id.tv_user);
+            tvMessage = (TextView) itemView.findViewById(R.id.tv_message);
+            tvTime = (TextView) itemView.findViewById(R.id.tv_time);
+            ivImage = (ImageView) itemView.findViewById(R.id.iv_image);
+            GradientDrawable border = new GradientDrawable();
+            border.setCornerRadius(5);
+            border.setColor(backgroundColor);
+            border.setStroke(1, borderColor);
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                chatMessageView.setBackgroundDrawable(border);
+            } else {
+                chatMessageView.setBackground(border);
+            }
         }
     }
 

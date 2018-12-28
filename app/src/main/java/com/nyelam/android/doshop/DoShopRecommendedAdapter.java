@@ -78,7 +78,6 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
 
             if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
 
-                NYLog.e("CEK IMAGE : "+product.getFeaturedImage());
 
                 ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
                 ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {

@@ -62,9 +62,9 @@
                     <com.nyelam.android.view.font.NYTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
+                        android:padding="@dimen/padding"
                         app:textAllCaps="true"
-                        android:textStyle="bold"
+                        app:fontTextStyle="semiBold"
                         android:text="Order Details"
                         android:textColor="#808080"
                         android:background="#EDEDED"
@@ -72,7 +72,6 @@
 
 
                     <View
-                        android:layout_marginTop="@dimen/padding"
                         android:background="@color/ny_grey1"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
@@ -86,8 +85,8 @@
                             android:text="Product"
                             android:textAllCaps="true"
                             android:textColor="#808080"
-                            android:textStyle="bold"
-                            android:gravity="center"
+                            android:textStyle="normal"
+                            android:gravity="left"
                             android:padding="@dimen/padding"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -97,8 +96,8 @@
                             android:text="Description"
                             android:textAllCaps="true"
                             android:textColor="#808080"
-                            android:textStyle="bold"
-                            android:gravity="center"
+                            android:textStyle="normal"
+                            android:gravity="left"
                             android:padding="@dimen/padding"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -108,8 +107,8 @@
                             android:text="Details"
                             android:textAllCaps="true"
                             android:textColor="#808080"
-                            android:textStyle="bold"
-                            android:gravity="center"
+                            android:textStyle="normal"
+                            android:gravity="left"
                             android:padding="@dimen/padding"
                             android:layout_weight="1"
                             android:layout_width="0dp"

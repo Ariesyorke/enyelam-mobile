@@ -13,7 +13,6 @@
         android:background="@drawable/ny_gradient_right_left"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:elevation="5dp"
         app:tabIndicatorColor="@color/colorGradationSoftLeft"
         app:tabIndicatorHeight="3dp"/>
 

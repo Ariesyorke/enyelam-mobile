@@ -5,11 +5,12 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="start"
+    android:background="@color/white"
     android:fitsSystemWindows="true">
 
         <LinearLayout
             android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
-                android:layout_width="match_parent"
+            android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:orientation="vertical">
@@ -46,11 +47,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding"
                     android:layout_marginBottom="@dimen/padding"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:padding="@dimen/padding"
+                    android:textStyle="bold"
                     android:text="Order History"
                     android:textColor="@color/ny_black2"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <View
                     android:background="@color/ny_grey3"
@@ -63,11 +65,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_double"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:padding="@dimen/padding"
                     android:text="Categories"
+                    android:textStyle="bold"
                     android:textColor="@color/ny_black2"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <ListView
                     android:visibility="gone"

@@ -18,14 +18,7 @@
         android:contentInsetRight="0dp"
         android:contentInsetStart="0dp"
         android:paddingLeft="0dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        app:title="Detail"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:contentInsetEnd="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetRight="0dp"
-        app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -48,10 +41,10 @@
                 android:layout_centerInParent="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Detail"
+                android:text="Do Shop"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:fontTextStyle="reguler" />
 
             <ImageView
@@ -166,7 +159,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/ny_black2"
-                            android:textSize="@dimen/eightteen_sp"
+                            android:textSize="@dimen/jumbo_text"
                             app:fontTextStyle="bold"
                             tools:text="Cressi Gloves 5 mm Ultrastrecht" />
 
@@ -268,24 +261,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/padding"
-                            android:orientation="horizontal">
-
-                            <com.nyelam.android.view.font.NYTextView
-                                android:id="@+id/tv_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="fill_parent"
-                                android:gravity="center"
-                                android:textColor="@color/ny_black2"
-                                android:textSize="@dimen/jumbo_text"
-                                app:fontTextStyle="bold"
-                                tools:text="Rp 257098" />
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:id="@+id/ll_price_container"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_half"
-                                android:orientation="vertical">
+                                android:orientation="horizontal">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -315,10 +298,25 @@
                                     android:id="@+id/tv_you_save"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/ny_black2"
+                                    android:textColor="@color/ny_green3"
                                     android:textSize="@dimen/tertiary_text_size"
                                     tools:text="You Save : 19.3 %" />
                             </LinearLayout>
+                            <com.nyelam.android.view.font.NYTextView
+                                android:id="@+id/tv_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:gravity="center"
+                                android:textColor="@color/ny_black2"
+                                android:textSize="@dimen/eighteen_sp"
+                                app:fontTextStyle="bold"
+                                tools:text="Rp 257098" />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_marginBottom="@dimen/padding_half"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="@dimen/padding"
+                                android:background="@color/dark_gray"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -472,21 +470,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/padding_double"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textColor="@color/ny_black2"
-                        android:textSize="@dimen/eightteen_sp"
-                        app:fontTextStyle="bold"
-                        tools:text="Product Description Cressi Gloves 5 mm Ultrastrecht" />
+                        android:textSize="14sp"
+                        app:fontTextStyle="reguler"
+                        tools:text="Product Description" />
 
                     <com.nyelam.android.view.font.NYTextView
                         android:id="@+id/tv_product_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_double"
-                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginTop="@dimen/padding_half"
                         android:textColor="@color/ny_black2"
                         android:textSize="@dimen/tertiary_text_size"
                         tools:text="At Scubastore, we show all the characteristics of the cressi Gloves 5 mm Ultrastrecht. Secure payment and guaranteed shipment! in addition, discover more similiar producs of cress " />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginBottom="@dimen/padding_half"
+                        android:background="@color/dark_gray"/>
                 </LinearLayout>
 
                 <LinearLayout

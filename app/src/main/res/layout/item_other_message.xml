@@ -15,14 +15,13 @@
         <me.himanshusoni.chatmessageview.ChatMessageView
             android:id="@+id/chatMessageView"
             android:layout_width="wrap_content"
+            android:background="@color/ny_grey1"
             android:layout_height="wrap_content"
             app:cmv_arrowGravity="center"
             app:cmv_arrowPosition="left"
-            app:cmv_backgroundColor="#88BABABA"
-            app:cmv_backgroundColorPressed="#FFBABABA"
             app:cmv_contentPadding="0dp"
             app:cmv_cornerRadius="3dp"
-            app:cmv_showArrow="true">
+            app:cmv_showArrow="false">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -46,7 +45,7 @@
                     android:id="@+id/iv_image"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:layout_marginTop="@dimen/eight_dp"
                     android:visibility="gone"
                     android:layout_alignParentTop="true"
@@ -61,6 +60,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/tertiary_text_size"
                     android:textColor="@color/ny_black1"
+                    android:minWidth="100dp"
                     android:textStyle="normal"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

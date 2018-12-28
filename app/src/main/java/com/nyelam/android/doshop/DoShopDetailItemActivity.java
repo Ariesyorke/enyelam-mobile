@@ -776,11 +776,12 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Detail");
+        toolbar.setTitle("Do Shop");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Detail");
-        this.setTitle("Detail");
+        getSupportActionBar().setTitle("Do Shop");
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        this.setTitle("Do Shop");
         int contentInsetStartWithNavigation = toolbar.getContentInsetStartWithNavigation();
         toolbar.setContentInsetsRelative(0, contentInsetStartWithNavigation);
     }

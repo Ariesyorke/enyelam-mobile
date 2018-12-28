@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#F2F2F2"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <com.nyelam.android.view.font.NYTextView
@@ -14,7 +14,7 @@
         android:gravity="center"
         android:paddingBottom="10dp"
         android:textSize="16sp"
-        android:layout_marginTop="@dimen/padding_half"
+        android:layout_marginTop="@dimen/padding"
         android:text="@string/recommended_for_you"
         android:textColor="@color/ny_black1" />
 
@@ -22,6 +22,6 @@
         android:id="@+id/inner_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F2F2F2"/>
+        android:background="@color/white"/>
 
 </LinearLayout>

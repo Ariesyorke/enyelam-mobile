@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -309,12 +310,18 @@ public class DoShopActivity extends BasicActivity {
         expandableLayout.setRenderer(new ExpandableLayout.Renderer<String, DoShopCategory>() {
             @Override
             public void renderParent(View view, String model, boolean isExpanded, int parentPosition) {
-                ((TextView) view.findViewById(R.id.tv_category)).setText(model);
+                TextView tvCategory = ((TextView) view.findViewById(R.id.tv_category));
+                tvCategory.setText(model);
+                tvCategory.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                tvCategory.setGravity(Gravity.LEFT);
             }
 
             @Override
             public void renderChild(View view, final DoShopCategory cat, int parentPosition, int childPosition) {
-                ((TextView) view.findViewById(R.id.tv_category)).setText(cat.getName());
+                TextView tvCategory = ((TextView) view.findViewById(R.id.tv_category));
+                tvCategory.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                tvCategory.setText(cat.getName());
+                tvCategory.setGravity(Gravity.LEFT);
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
