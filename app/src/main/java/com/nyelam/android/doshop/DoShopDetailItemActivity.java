@@ -39,6 +39,7 @@ import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Banner;
 import com.nyelam.android.data.BannerList;
+import com.nyelam.android.data.DiveService;
 import com.nyelam.android.data.DoShopCartReturn;
 import com.nyelam.android.data.DoShopCategory;
 import com.nyelam.android.data.DoShopMerchant;
@@ -56,6 +57,7 @@ import com.nyelam.android.http.NYDoShopAddToCartRequest;
 import com.nyelam.android.http.NYDoShopProductDetailRequest;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
+import com.nyelam.android.inbox.NewMessageActivity;
 import com.nyelam.android.storage.CartStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.NYBannerViewPager;
@@ -82,6 +84,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.relex.circleindicator.CircleIndicator;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DoShopDetailItemActivity extends BasicActivity implements NYDialogAddToCart.Listener {
 
@@ -125,7 +129,24 @@ public class DoShopDetailItemActivity extends BasicActivity implements NYDialogA
 
     @BindView(R.id.ll_container_spinner) LinearLayout llContainerSpinner;
     @BindView(R.id.et_quantity) EditText etQuantity;
+    @BindView(R.id.inbox_linearLayout) LinearLayout llInbox;
 
+    @OnClick(R.id.inbox_linearLayout)
+    void chatInbox() {
+        LoginStorage storage = new LoginStorage(getApplicationContext());
+        if (storage.isUserLogin()) {
+            if (product != null){
+                Intent intent = new Intent(this, NewMessageActivity.class);
+                intent.putExtra("title", product.getProductName().toString());
+                intent.putExtra("refId", product.getId().toString());
+                intent.putExtra("type", "6");
+                startActivity(intent);
+            }
+        }  else {
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivityForResult(intent, NYHelper.LOGIN_REQ);
+        }
+    }
     @OnClick(R.id.tv_add_to_basket)void addToBasket(){
 //        NYDialogAddToCart dialog = new NYDialogAddToCart();
 //        dialog.showAddToCartDialog(this, product);

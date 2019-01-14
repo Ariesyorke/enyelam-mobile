@@ -57,6 +57,21 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin">
 
             <com.nyelam.android.view.font.NYTextView
+                card_view:fontTextStyle="reguler"
+                android:id="@+id/merchant_name_textView"
+                android:text="-"
+                android:textSize="14dp"
+                android:layout_marginTop="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:textColor="@color/ny_black3"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.nyelam.android.view.font.NYTextView
                 card_view:fontTextStyle="semiBold"
                 android:id="@+id/item_name_textView"
                 android:text="Salvimar One Free Diving"

@@ -277,6 +277,7 @@
 
     <!--DOSHOP ORDER DETAIL-->
     <string name="total_summary">Total Summary</string>
-
+    <!--DOSHOP CHECKOUT -->
+    <string name="doshop_nyelam_privacy_policy">I have read and agreed to the &lt;a href="http://e-nyelam.com/privacy-policy.html">terms and conditions.&lt;/a></string>
 
 </resources>

@@ -73,6 +73,11 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
                 holder.price.setText(NYHelper.priceFormatter(product.getNormalPrice()));
                 holder.priceStrike.setVisibility(View.GONE);
             }
+            if(product.getMerchant() != null && product.getMerchant().getName() != null) {
+                holder.merchantName.setText(product.getMerchant().getName());
+            } else {
+                holder.merchantName.setText("-");
+            }
 
             //product.setFeaturedImage("https://www.zamzar.com/images/filetypes/jpg.png");
 
@@ -150,6 +155,7 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
         TextView name;
         TextView priceStrike;
         TextView price;
+        TextView merchantName;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -157,6 +163,7 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
             name = (TextView) itemView.findViewById(R.id.item_name_textView);
             priceStrike = (TextView) itemView.findViewById(R.id.price_strikethrough_textView);
             price = (TextView) itemView.findViewById(R.id.price_textView);
+            merchantName = (TextView) itemView.findViewById(R.id.merchant_name_textView);
         }
     }
 }

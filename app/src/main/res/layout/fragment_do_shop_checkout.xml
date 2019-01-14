@@ -666,17 +666,19 @@
                 <CheckBox
                     android:id="@+id/checkBox"
                     android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_height="52dp"
                     android:layout_gravity="center"
                     android:gravity="center" />
 
                 <com.nyelam.android.view.font.NYTextView
+                    android:id="@+id/tv_privacy"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="I have read and agreed to the terms and conditions" />
+                    android:clickable="true"
+                    android:linksClickable="true"
+                    android:text="@string/doshop_nyelam_privacy_policy"/>
             </LinearLayout>
-
 
             <com.nyelam.android.view.font.NYTextView
                 android:id="@+id/tv_checkout"

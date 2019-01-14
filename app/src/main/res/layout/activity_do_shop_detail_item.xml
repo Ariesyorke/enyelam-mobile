@@ -425,6 +425,37 @@
                         android:textSize="@dimen/secondary_text_size"
                         android:textStyle="bold" />
 
+                    <LinearLayout
+                        android:id="@+id/inbox_linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/padding_half"
+                        android:layout_marginRight="@dimen/padding_half"
+                        android:layout_weight="1"
+                        android:background="@drawable/ny_book"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:paddingBottom="@dimen/padding"
+                        android:paddingLeft="@dimen/padding_half"
+                        android:paddingRight="@dimen/padding_half"
+                        android:paddingTop="@dimen/padding">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/tab_chat" />
+
+                        <com.nyelam.android.view.font.NYTextView
+                            android:id="@+id/inbox_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:text="Chat Merchant"
+                            android:textColor="@color/colorWhite"
+                            app:fontTextStyle="bold" />
+                    </LinearLayout>
+
                     <com.nyelam.android.view.font.NYTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

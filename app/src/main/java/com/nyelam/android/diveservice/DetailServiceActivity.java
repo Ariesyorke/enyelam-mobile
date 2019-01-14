@@ -444,11 +444,7 @@ public class DetailServiceActivity extends AppCompatActivity implements
                 intent.putExtra(NYHelper.DIVE_CENTER, newDiveService.getDiveCenter().toString());
                 intent.putExtra(NYHelper.IS_DO_COURSE, isDoCourse);
                 if (equipmentRentList != null && !equipmentRentList.isEmpty()){
-                    NYLog.e("EQUIPMENT SERVICE EXIST!");
                     intent.putExtra(NYHelper.EQUIPMENT_RENT, equipmentRentList.toString());
-                } else {
-                    NYLog.e("EQUIPMENT SERVICE NOT EXIST!");
-
                 }
                 startActivity(intent);
             }

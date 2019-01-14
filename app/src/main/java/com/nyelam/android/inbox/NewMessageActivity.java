@@ -114,6 +114,9 @@ public class NewMessageActivity extends AppCompatActivity implements
             } else {
                 if(extras.getString("refId") != null){
                     refId = extras.getString("refId");
+                    if(refId.equalsIgnoreCase("6")) {
+                        tvTitle.setText("Contact Merchant");
+                    }
                 }
             }
 
@@ -154,7 +157,7 @@ public class NewMessageActivity extends AppCompatActivity implements
                     type = "3";
                 }else if (category.equals("Issue App")){
                     type = "4";
-                }else{
+                } else {
                     type = "5";
                 }
             }

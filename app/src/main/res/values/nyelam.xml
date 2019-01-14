@@ -147,7 +147,7 @@
 
 
 
-    <!--&lt;!&ndash; PRODUCTION &ndash;&gt;-->
+    <!-- PRODUCTION -->
     <!--<string name="host_url">https://api.e-nyelam.com/</string>-->
 
     <!--API PRODUCTION-->
@@ -169,6 +169,7 @@
     <!--<string name="api_path_dodive_search_by_province">dodive/service/province</string>-->
     <!--<string name="api_path_dodive_search_by_city">dodive/service/city</string>-->
     <!--<string name="api_path_get_eco_trip_date">service/ecotripCalender</string>-->
+    <!--<string name="api_path_send_firebase_token">user/firebase</string>-->
 
     <!--<string name="api_path_dodive_search_dive_center_by_category">dodive/center/category</string>-->
     <!--<string name="api_path_dodive_search_dive_center_by_spot">dodive/center/divespot</string>-->
@@ -247,11 +248,27 @@
     <!--<string name="api_inbox_add">inbox/add</string>-->
 
     <!--&lt;!&ndash;DO SHOP&ndash;&gt;-->
+    <!--<string name="api_path_doshop_banner">doshop/banner</string>-->
     <!--<string name="api_path_doshop_homepage">doshop/homepage</string>-->
-    <!--<string name="api_path_doshop_master_category">doshop/masterCategory</string>-->
-    <!--<string name="api_path_doshop_product_list">doshop/listProduct</string>-->
-    <!--<string name="api_path_doshop_product_detail">doshop/detailProduct</string>-->
-    <!--<string name="api_path_doshop_add_cart">doshop/addCart</string>-->
-    <!--<string name="api_path_doshop_cart_list">doshop/cartList</string>-->
+    <!--<string name="api_path_doshop_master_category">doshop/category</string>-->
+    <!--<string name="api_path_doshop_product_list">doshop/product_list</string>-->
+    <!--<string name="api_path_doshop_product_detail">doshop/product_detail</string>-->
+    <!--<string name="api_path_doshop_add_to_cart">doshop/cart_add</string>-->
+    <!--<string name="api_path_doshop_change_quantity">doshop/cart_edit</string>-->
+    <!--<string name="api_path_doshop_remove_product_cart">doshop/cart_remove</string>-->
+    <!--<string name="api_path_doshop_cart_list">doshop/cart_list</string>-->
+    <!--<string name="api_path_doshop_add_voucher">doshop/add_voucher</string>-->
+    <!--<string name="api_path_doshop_address_list">doshop/get_address</string>-->
+    <!--<string name="api_path_doshop_add_address">doshop/add_address</string>-->
+    <!--<string name="api_path_doshop_checkout_product">doshop/addCart</string>-->
+    <!--<string name="api_path_doshop_get_list_delivery">doshop/addCart</string>-->
+    <!--<string name="api_path_doshop_check_payment_method">doshop/payment_fee</string>-->
+    <!--<string name="api_path_doshop_submit_order">doshop/submit_order</string>-->
+    <!--<string name="api_path_doshop_re_submit_order">doshop/resubmit_order</string>-->
+    <!--<string name="api_path_doshop_order_list">doshop/order_list</string>-->
+    <!--<string name="api_path_doshop_order_detail">doshop/order_detail</string>-->
+    <!--<string name="api_path_doshop_get_location">doshop/get_location</string>-->
+    <!--<string name="api_path_doshop_min_max_price">doshop/product_filter</string>-->
+
 
 </resources>

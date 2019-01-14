@@ -5,10 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,9 +97,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     //Client ID Paypal
     //development
-    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
+//    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
     //production
-//    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
+    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
 
     private PayPalConfiguration payPalConfiguration;
     private Intent paypalIntent;
@@ -187,6 +191,8 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     @BindView(R.id.checkBox)
     CheckBox checkBox;
+    @BindView(R.id.tv_privacy)
+    TextView tvPrivacy;
 
     @OnClick(R.id.tv_checkout)
     void choosePayment() {
@@ -432,8 +438,15 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         super.onViewCreated(view, savedInstanceState);
         listener = (CheckoutListener) getActivity();
         thisFragment = this;
+        initPrivacyLink();
 //        initAdapter();
         loadAddress();
+    }
+
+    private void initPrivacyLink() {
+        Spanned policy = Html.fromHtml(getString(R.string.doshop_nyelam_privacy_policy));
+        tvPrivacy.setText(policy);
+        tvPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 
@@ -1072,10 +1085,10 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     public void payUsingVeritrans() {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
                 .setContext(getActivity()) // context is mandatory
                 .setTransactionFinishedCallback(thisFragment)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE", "#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -1139,7 +1152,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
         //CONFIGURASI PAYPAL
         payPalConfiguration = new PayPalConfiguration()
-                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+                .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
                 .clientId(paypalClientId);
         paypalIntent = new Intent(getActivity(), PayPalService.class);
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);
@@ -1174,16 +1187,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     @Override
     public void onTransactionFinished(final TransactionResult transactionResult) {
         //TODO DISINI HANDLE KALO TRANSAKSI DI MIDTRANS SUKSES
-
-        if (transactionResult != null) {
-            if (transactionResult.getResponse() != null)
-                NYLog.e("CEK TRANSACTION 1: " + transactionResult.getResponse().getTransactionStatus());
-            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getFraudStatus()))
-                NYLog.e("CEK TRANSACTION 2 : " + transactionResult.getResponse().getFraudStatus());
-            if (transactionResult.getResponse() != null && NYHelper.isStringNotEmpty(transactionResult.getResponse().getTransactionStatus()))
-                NYLog.e("CEK TRANSACTION 3 : " + transactionResult.getResponse().getTransactionStatus());
-        } else {
-        }
 
         if (transactionResult != null && transactionResult.getResponse() != null && (transactionResult.getResponse().getFraudStatus() != null && transactionResult.getResponse().getFraudStatus().equals(NYHelper.NY_ACCEPT_FRAUD_STATUS) || transactionResult.getResponse().getFraudStatus().equals(NYHelper.TRANSACTION_PENDING))) {
             NYHelper.handlePopupMessage(getActivity(), getString(R.string.transaction_success), false,

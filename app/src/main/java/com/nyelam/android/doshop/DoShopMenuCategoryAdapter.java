@@ -89,9 +89,7 @@ public class DoShopMenuCategoryAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     ((DoShopActivity)activity).drawerLayout.closeDrawer(GravityCompat.START);
-
                     Intent intent = new Intent(activity, DoShopCategoryActivity.class);
                     intent.putExtra(NYHelper.CATEGORY, cat.toString());
                     activity.startActivity(intent);

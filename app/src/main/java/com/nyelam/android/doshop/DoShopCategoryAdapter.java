@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +63,7 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
         if (cat == null) return;
         if (NYHelper.isStringNotEmpty(cat.getName())) holder.name.setText(cat.getName());
         if (NYHelper.isStringNotEmpty(cat.getImageUri())){
+            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
             ImageLoader.getInstance().loadImage(cat.getImageUri(), NYHelper.getOption(), new ImageLoadingListener() {
                 @Override
@@ -85,6 +88,11 @@ public class DoShopCategoryAdapter extends RecyclerView.Adapter<DoShopCategoryAd
             });
 
             ImageLoader.getInstance().displayImage(cat.getImageUri(), holder.image, NYHelper.getOption());
+        } else  {
+            holder.image.setImageResource(android.R.color.transparent);
+            holder.image.setImageBitmap(null);
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
+            holder.image.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

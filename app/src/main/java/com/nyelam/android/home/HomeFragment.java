@@ -185,7 +185,7 @@ public class HomeFragment extends Fragment {
         doShopRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
+//                NYHelper.handlePopupMessage(getActivity(), getString(R.string.coming_soon), null);
                 Intent intent = new Intent(getActivity(), DoShopActivity.class);
                 startActivity(intent);
             }
