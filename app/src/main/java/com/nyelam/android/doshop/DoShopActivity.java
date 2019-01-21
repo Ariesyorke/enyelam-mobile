@@ -126,6 +126,10 @@ public class DoShopActivity extends BasicActivity {
         }
     }
 
+    @OnClick(R.id.back_button) void backButtonClicked() {
+        finish();
+    }
+
     @OnClick(R.id.tv_menu_order_history) void intentToOrderHistory(){
         LoginStorage storage = new LoginStorage(this);
         if (storage.isUserLogin()){

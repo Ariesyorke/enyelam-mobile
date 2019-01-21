@@ -16,7 +16,6 @@ import java.util.List;
 
 public class DoShopOrder implements Parseable {
 
-
     private static String KEY_ORDER_ID = "order_id";
     private static String KEY_ORDER_DATE = "order_date";
     private static String KEY_ORDER_STATUS = "order_status";
@@ -214,7 +213,7 @@ public class DoShopOrder implements Parseable {
 
         if(!obj.isNull(KEY_PAYPAL_CURRENCY)) {
             try {
-                JSONObject o = obj.getJSONObject(KEY_VERITRANS_TOKEN);
+                JSONObject o = obj.getJSONObject(KEY_PAYPAL_CURRENCY);
                 if(o != null && o.length() > 0) {
                     paypalCurrency = new PaypalCurrency();
                     paypalCurrency.parse(o);

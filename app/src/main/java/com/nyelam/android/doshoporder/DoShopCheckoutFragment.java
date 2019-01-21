@@ -41,6 +41,7 @@ import com.nyelam.android.BasicFragment;
 import com.nyelam.android.R;
 import com.nyelam.android.VeritransNotificationActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
+import com.nyelam.android.booking.BookingServiceSummaryActivity;
 import com.nyelam.android.data.Additional;
 import com.nyelam.android.data.Cart;
 import com.nyelam.android.data.Contact;
@@ -87,6 +88,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -97,9 +100,9 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     //Client ID Paypal
     //development
-//    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
+    private String paypalClientId = "AesXhJkhDyCXfFEiuR31DCeLPH4UqHB6nNTrjpvOmgh2VfRYzJTX-Cfq8X4h2GVvyyBoc81rXm8D8-1Z";
     //production
-    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
+//    private String paypalClientId = "AZpSKWx_d3bY8qO23Rr7hUbd5uUappmzGliQ1A2W5VWz4DVP011eNGN9k5NKu_sLhKFFQPvp5qgF4ptJ";
 
     private PayPalConfiguration payPalConfiguration;
     private Intent paypalIntent;
@@ -272,7 +275,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                         NYHelper.handlePopupMessage(getActivity(), "Sorry, Your Cart Session has Expired. Please Re-Order.", false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                getActivity().setResult(Activity.RESULT_OK);
+                                getActivity().setResult(RESULT_OK);
                                 getActivity().finish();
                             }
                         });
@@ -780,6 +783,23 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == paypalRequestCode) {
+            if (resultCode == RESULT_OK) {
+
+                NYHelper.handlePopupMessage(getActivity(), getString(R.string.transaction_success), false,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                intent.putExtra(NYHelper.TRANSACTION_COMPLETED, true);
+                                intent.putExtra(NYHelper.ID_ORDER_DO_SHOP, orderReturn.getOrderId());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        }, getResources().getString(R.string.check_order));
+            }
+            return;
+        }
         if (data != null && data.hasExtra(NYHelper.ADDRESS) && data.hasExtra(NYHelper.TAG) && data.getStringExtra(NYHelper.TAG).equals("billing")) {
 
             //Toast.makeText(getActivity(), data.getStringExtra(NYHelper.TAG), Toast.LENGTH_SHORT).show();
@@ -1085,10 +1105,10 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     public void payUsingVeritrans() {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(getActivity()) // context is mandatory
                 .setTransactionFinishedCallback(thisFragment)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE", "#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -1114,7 +1134,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                     userDetail.setUserFullName(contact.getName());
                     userDetail.setEmail(contact.getEmailAddress());
                     userDetail.setPhoneNumber(contact.getPhoneNumber());
-
                     LoginStorage loginStorage = new LoginStorage(getActivity());
                     userDetail.setUserId(loginStorage.user.getUserId());
                     LocalDataHandler.saveObject("user_details", userDetail);
@@ -1152,7 +1171,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
         //CONFIGURASI PAYPAL
         payPalConfiguration = new PayPalConfiguration()
-                .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .clientId(paypalClientId);
         paypalIntent = new Intent(getActivity(), PayPalService.class);
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration);

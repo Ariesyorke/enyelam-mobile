@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@color/white"
+    android:orientation="vertical"
     android:fitsSystemWindows="true">
 
         <LinearLayout
-            android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
             android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -35,7 +35,30 @@
                     android:text="Cart"
                     android:textColor="@color/ny_black2"
                     android:textSize="16sp" />
-
+                <LinearLayout
+                    android:id="@+id/back_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_half">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_left_arrow_white"
+                            android:layout_gravity="center"/>
+                        <com.nyelam.android.view.font.NYTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding"
+                            android:layout_marginBottom="@dimen/padding"
+                            android:gravity="left"
+                            android:padding="@dimen/padding_half"
+                            android:textStyle="bold"
+                            android:text="Back To e-Nyelam"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                </LinearLayout>
                 <View
                     android:background="@color/ny_grey3"
                     android:layout_width="match_parent"
@@ -48,7 +71,7 @@
                     android:layout_marginTop="@dimen/padding"
                     android:layout_marginBottom="@dimen/padding"
                     android:gravity="left"
-                    android:padding="@dimen/padding"
+                    android:padding="@dimen/padding_half"
                     android:textStyle="bold"
                     android:text="Order History"
                     android:textColor="@color/ny_black2"
@@ -66,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_double"
                     android:gravity="left"
-                    android:padding="@dimen/padding"
+                    android:padding="@dimen/padding_half"
                     android:text="Categories"
                     android:textStyle="bold"
                     android:textColor="@color/ny_black2"
@@ -87,7 +110,7 @@
                     app:childLayout="@layout/item_category_child"/>
 
         </LinearLayout>
-</android.support.design.widget.NavigationView>
+</LinearLayout>
 
 
 
