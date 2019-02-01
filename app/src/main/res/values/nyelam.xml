@@ -148,9 +148,9 @@
 
 
     <!-- PRODUCTION -->
-    <!--<string name="host_url">https://api.e-nyelam.com/</string>-->
+    <string name="host_url">https://api.e-nyelam.com/</string>
     <!-- MIGRATION -->
-    <string name="host_url">https://migrasi-api.e-nyelam.com/</string>
+    <!--<string name="host_url">https://migrasi-api.e-nyelam.com/</string>-->
 
     <!--API PRODUCTION-->
     <string name="api_path_login">user/login</string>

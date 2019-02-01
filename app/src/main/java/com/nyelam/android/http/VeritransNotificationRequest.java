@@ -15,8 +15,8 @@ import org.json.JSONObject;
 public class VeritransNotificationRequest extends DJSONRequest<Boolean> {
 //    public static final String HOST_URL = "https://nyelam-adam.dantech.id/api/notification/veritrans";
 //    public static final String HOST_URL = "https://nyelam.dantech.id/api/notification/veritrans";
-//    public static final String HOST_URL = "https://api.e-nyelam.com/notification/veritrans";
-    public static final String HOST_URL = "https://migrasi-api.e-nyelam.com/notification/veritrans";
+    public static final String HOST_URL = "https://api.e-nyelam.com/notification/veritrans";
+//    public static final String HOST_URL = "https://migrasi-api.e-nyelam.com/notification/veritrans";
 
     public VeritransNotificationRequest(Context context, JSONObject transactionResponse) {
         super(Boolean.class, HOST_URL);
