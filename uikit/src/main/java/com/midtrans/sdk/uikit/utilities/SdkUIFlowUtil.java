@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,9 +25,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.midtrans.sdk.corekit.BuildConfig;
 import com.midtrans.sdk.corekit.core.Constants;
+import com.midtrans.sdk.corekit.core.Currency;
 import com.midtrans.sdk.corekit.core.LocalDataHandler;
 import com.midtrans.sdk.corekit.core.Logger;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
+import com.midtrans.sdk.corekit.core.PaymentType;
 import com.midtrans.sdk.corekit.models.BankTransferModel;
 import com.midtrans.sdk.corekit.models.SaveCardRequest;
 import com.midtrans.sdk.corekit.models.UserDetail;
@@ -36,6 +37,7 @@ import com.midtrans.sdk.corekit.models.snap.BankBinsResponse;
 import com.midtrans.sdk.corekit.models.snap.EnabledPayment;
 import com.midtrans.sdk.corekit.models.snap.PromoResponse;
 import com.midtrans.sdk.corekit.models.snap.SavedToken;
+import com.midtrans.sdk.corekit.utilities.Utils;
 import com.midtrans.sdk.uikit.R;
 import com.midtrans.sdk.uikit.models.BankTransfer;
 import com.midtrans.sdk.uikit.models.CreditCardType;
@@ -118,7 +120,7 @@ public class SdkUIFlowUtil {
             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
 
         } catch (RuntimeException e) {
-            Log.e("showToast", "message:" + e.getMessage());
+            Logger.e("showToast", "message:" + e.getMessage());
         }
     }
 
@@ -138,7 +140,7 @@ public class SdkUIFlowUtil {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         } catch (RuntimeException e) {
-            Log.d(TAG, "hideKeyboard():" + e.getMessage());
+            Logger.d(TAG, "hideKeyboard():" + e.getMessage());
         }
     }
 
@@ -471,10 +473,10 @@ public class SdkUIFlowUtil {
     public static boolean isBankTransferMethodEnabled(Context context, List<EnabledPayment> enabledPayments) {
         if (enabledPayments != null) {
             for (EnabledPayment enabledPayment : enabledPayments) {
-                if (enabledPayment.getType().equalsIgnoreCase(context.getString(R.string.payment_bca_va))
-                        || enabledPayment.getType().equalsIgnoreCase(context.getString(R.string.payment_permata_va))
-                        || enabledPayment.getType().equalsIgnoreCase(context.getString(R.string.payment_mandiri_bill_payment))
-                        || enabledPayment.getType().equalsIgnoreCase(context.getString(R.string.payment_all_va))) {
+                if (enabledPayment.getType().equalsIgnoreCase(PaymentType.BCA_VA)
+                        || enabledPayment.getType().equalsIgnoreCase(PaymentType.PERMATA_VA)
+                        || enabledPayment.getType().equalsIgnoreCase(PaymentType.E_CHANNEL)
+                        || enabledPayment.getType().equalsIgnoreCase(PaymentType.ALL_VA)) {
                     return true;
                 }
             }
@@ -672,8 +674,8 @@ public class SdkUIFlowUtil {
         activity.startActivity(webIntent);
     }
 
-    public static UserDetail getSavedUserDetails(Context context) throws RuntimeException {
-        return LocalDataHandler.readObject(context.getString(R.string.user_details), UserDetail.class);
+    public static UserDetail getSavedUserDetails() throws RuntimeException {
+        return LocalDataHandler.readObject(UiKitConstants.KEY_USER_DETAILS, UserDetail.class);
     }
 
     public static void saveUserDetails() throws RuntimeException {
@@ -691,5 +693,43 @@ public class SdkUIFlowUtil {
         }
 
         LocalDataHandler.saveObject(UiKitConstants.KEY_USER_DETAILS, userDetail);
+    }
+
+    public static String getImagePath(Activity activity) {
+        return "android.resource://" + activity.getPackageName() + "/";
+    }
+
+    public static String getFormattedAmount(Context context, double amount, String currency) {
+        String formattedAmount = context.getString(R.string.prefix_money, Utils.getFormattedAmount(amount));
+        if (!TextUtils.isEmpty(currency)) {
+            switch (currency) {
+                case Currency.SGD:
+                    formattedAmount = context.getString(R.string.prefix_money_sgd, Utils.getFormattedAmount(amount));
+                    break;
+
+                case Currency.IDR:
+                    formattedAmount = context.getString(R.string.prefix_money, Utils.getFormattedAmount(amount));
+                    break;
+            }
+        }
+
+        return formattedAmount;
+    }
+
+    public static String getFormattedNegativeAmount(Context context, double amount, String currency) {
+        String formattedAmount = context.getString(R.string.prefix_money_negative, Utils.getFormattedAmount(amount));
+        if (!TextUtils.isEmpty(currency)) {
+            switch (currency) {
+                case Currency.SGD:
+                    formattedAmount = context.getString(R.string.prefix_money_negative_sgd, Utils.getFormattedAmount(amount));
+                    break;
+
+                case Currency.IDR:
+                    formattedAmount = context.getString(R.string.prefix_money_negative, Utils.getFormattedAmount(amount));
+                    break;
+            }
+        }
+
+        return formattedAmount;
     }
 }

@@ -122,15 +122,14 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
                     Manifest.permission.CAMERA);
             int permissionCheckStorage = ContextCompat.checkSelfPermission(this,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int permissionCheckPhoneState = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
-            if (permissionCamera != PackageManager.PERMISSION_GRANTED || permissionCheckStorage != PackageManager.PERMISSION_GRANTED || permissionCheckPhoneState != PackageManager.PERMISSION_GRANTED) {
+            if (permissionCamera != PackageManager.PERMISSION_GRANTED || permissionCheckStorage != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                     dialog.setMessage("We need to access your camera and storage to continue using e-Nyelam");
                     dialog.setPositiveButton("OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     ActivityCompat.requestPermissions(StarterActivity.this,
-                                            new String[]{Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE},
+                                            new String[]{Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                             MY_PERMISSIONS_REQUEST_ACCESS);
                                 }
                             });
@@ -144,7 +143,7 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
                     dialog.create().show();
                 } else {
                     ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE},
+                            new String[]{Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             MY_PERMISSIONS_REQUEST_ACCESS);
                 }
             } else {
@@ -240,19 +239,11 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
         return new RequestListener<Update>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                /*if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }*/
-
-                //Toast.makeText(StarterActivity.this, "fail", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onRequestSuccess(final Update update) {
-
-                //NYLog.e("CEK UPDATE "+update.toString());
-
                 Integer yourVersion = 0;
                 try {
                     yourVersion = Integer.valueOf(String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionCode));
@@ -315,20 +306,11 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
         masterDataStorage.loadCountries(new NYMasterDataStorage.LoadDataListener<CountryCode>() {
             @Override
             public void onLoadFailed(Exception e) {
-                /*NYHelper.handleAPIException(StarterActivity.this, e, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });*/
+
             }
 
             @Override
             public void onDataLoaded(List<CountryCode> items) {
-                /*Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                finish();*/
                 onLoadCategories();
             }
         }, true);
@@ -341,12 +323,7 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
         masterDataStorage.loadCategories(new NYMasterDataStorage.LoadDataListener<Category>() {
             @Override
             public void onLoadFailed(Exception e) {
-                /*NYHelper.handleAPIException(StarterActivity.this, e, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });*/
+
             }
 
             @Override
@@ -378,10 +355,6 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
-//                    Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                    startActivity(intent);
-//                    finish();
                 } else {
                     Intent intent = new Intent(StarterActivity.this, IntroActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -433,7 +406,6 @@ public class StarterActivity extends AppCompatActivity implements NYMasterDataSt
     }
 
 
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nyelam.android"));
 
     @Override
     public void onChooseListener(Object position) {

@@ -136,10 +136,7 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.READ_CONTACTS,
-                Manifest.permission.SEND_SMS
+                Manifest.permission.READ_EXTERNAL_STORAGE
         }, 1);
     }
 

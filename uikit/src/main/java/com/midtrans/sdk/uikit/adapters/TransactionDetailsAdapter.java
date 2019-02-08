@@ -1,14 +1,17 @@
 package com.midtrans.sdk.uikit.adapters;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.midtrans.sdk.corekit.models.ItemDetails;
-import com.midtrans.sdk.corekit.utilities.Utils;
+import com.midtrans.sdk.corekit.models.snap.ItemDetails;
 import com.midtrans.sdk.uikit.R;
+import com.midtrans.sdk.uikit.utilities.SdkUIFlowUtil;
+import com.midtrans.sdk.uikit.utilities.UiKitConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +26,18 @@ public class TransactionDetailsAdapter extends RecyclerView.Adapter<RecyclerView
     private static final int TYPE_ITEM = 1003;
 
     private List<ItemDetails> itemDetails;
+    private String currency;
 
     public TransactionDetailsAdapter(List<ItemDetails> itemDetails) {
+        init(itemDetails);
+    }
+
+    public TransactionDetailsAdapter(List<ItemDetails> itemDetails, String currency) {
+        this.currency = currency;
+        init(itemDetails);
+    }
+
+    private void init(List<ItemDetails> itemDetails) {
         this.itemDetails = new ArrayList<>();
         if (itemDetails != null) {
             this.itemDetails.addAll(itemDetails);
@@ -41,20 +54,21 @@ public class TransactionDetailsAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         if (newItem != null) {
-            ItemDetails currentItem = findItemDetailByName(newItem.getName());
+            ItemDetails currentItem = findItemDetailById(newItem.getId());
             if (currentItem == null) {
                 itemDetails.add(newItem);
             } else {
                 currentItem.setPrice(newItem.getPrice());
+                currentItem.setName(newItem.getName());
             }
 
             notifyDataSetChanged();
         }
     }
 
-    private ItemDetails findItemDetailByName(String name) {
+    private ItemDetails findItemDetailById(String id) {
         for (ItemDetails item : itemDetails) {
-            if (item != null && item.getName().equals(name)) {
+            if (item != null && item.getId().equals(id)) {
                 return item;
             }
         }
@@ -85,10 +99,27 @@ public class TransactionDetailsAdapter extends RecyclerView.Adapter<RecyclerView
                 ItemDetails item = itemDetails.get(position);
                 itemDetailsViewHolder.item.setText(item.getName());
                 itemDetailsViewHolder.quantity.setText(item.getQuantity() == 0 ? "" : String.valueOf(item.getQuantity()));
-                itemDetailsViewHolder.price.setText("Rp " + Utils.getFormattedAmount(item.getPrice() * item.getQuantity()));
+                itemDetailsViewHolder.price.setText(SdkUIFlowUtil.getFormattedAmount(
+                        holder.itemView.getContext(),
+                        item.getPrice(),
+                        currency)
+                );
+
                 if (position % 2 != 0) {
                     itemDetailsViewHolder.itemView.setBackgroundResource(R.color.light_gray);
                 }
+
+                int amountColor;
+                if (!TextUtils.isEmpty(item.getId()) && (item.getId().equals(UiKitConstants.PROMO_ID)
+                        || item.getId().equals(UiKitConstants.BNI_POINT_ID)
+                        || item.getId().equals(UiKitConstants.MANDIRI_POIN_ID))) {
+
+                    amountColor = ContextCompat.getColor(itemDetailsViewHolder.itemView.getContext(), R.color.promoAmount);
+                } else {
+                    amountColor = ContextCompat.getColor(itemDetailsViewHolder.itemView.getContext(), R.color.dark_gray);
+                }
+                itemDetailsViewHolder.price.setTextColor(amountColor);
+
                 break;
             default:
                 break;
@@ -107,6 +138,29 @@ public class TransactionDetailsAdapter extends RecyclerView.Adapter<RecyclerView
         } else {
             return TYPE_ITEM;
         }
+    }
+
+    public void removeItemDetails(String itemDetailsId) {
+        ItemDetails item = findItemDetailById(itemDetailsId);
+        if (item != null) {
+            itemDetails.remove(item);
+            notifyDataSetChanged();
+        }
+    }
+
+    public double getItemTotalAmount() {
+        double totalAmount = 0d;
+        for (ItemDetails item : itemDetails) {
+            if (item != null) {
+                totalAmount += item.getPrice();
+            }
+        }
+
+        return totalAmount;
+    }
+
+    public List<ItemDetails> getItemDetails() {
+        return itemDetails;
     }
 
     private class ItemDetailsViewHolder extends RecyclerView.ViewHolder {
@@ -129,6 +183,14 @@ public class TransactionDetailsAdapter extends RecyclerView.Adapter<RecyclerView
         ItemHeaderViewHolder(final View itemView) {
             super(itemView);
         }
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }
 

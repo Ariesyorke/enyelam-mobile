@@ -434,7 +434,7 @@ public class FancyButton extends LinearLayout {
             states.addState(new int[]{}, defaultDrawable);
 
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                 this.setBackgroundDrawable(states);
             } else {
                 this.setBackground(states);

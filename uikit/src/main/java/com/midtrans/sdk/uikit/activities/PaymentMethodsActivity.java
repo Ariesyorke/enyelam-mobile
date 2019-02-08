@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -14,53 +13,40 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
+import com.koushikdutta.ion.Ion;
 import com.midtrans.raygun.RaygunClient;
-import com.midtrans.raygun.RaygunOnBeforeSend;
-import com.midtrans.raygun.messages.RaygunMessage;
-import com.midtrans.raygun.messages.RaygunMessageDetails;
+import com.midtrans.sdk.analytics.MixpanelAnalyticsManager;
 import com.midtrans.sdk.corekit.callback.CheckoutCallback;
 import com.midtrans.sdk.corekit.callback.TransactionOptionsCallback;
-import com.midtrans.sdk.corekit.core.Constants;
-import com.midtrans.sdk.corekit.core.LocalDataHandler;
-import com.midtrans.sdk.corekit.core.Logger;
-import com.midtrans.sdk.corekit.core.MidtransSDK;
-import com.midtrans.sdk.corekit.core.SdkUtil;
-import com.midtrans.sdk.corekit.core.TransactionRequest;
+import com.midtrans.sdk.corekit.core.*;
 import com.midtrans.sdk.corekit.core.themes.ColorTheme;
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
 import com.midtrans.sdk.corekit.models.CustomerDetails;
-import com.midtrans.sdk.corekit.models.ItemDetails;
-import com.midtrans.sdk.corekit.models.MerchantPreferences;
-import com.midtrans.sdk.corekit.models.PaymentMethodsModel;
-import com.midtrans.sdk.corekit.models.TransactionResponse;
-import com.midtrans.sdk.corekit.models.UserDetail;
-import com.midtrans.sdk.corekit.models.snap.EnabledPayment;
-import com.midtrans.sdk.corekit.models.snap.Token;
-import com.midtrans.sdk.corekit.models.snap.Transaction;
-import com.midtrans.sdk.corekit.models.snap.TransactionResult;
-import com.midtrans.sdk.corekit.utilities.Utils;
+import com.midtrans.sdk.corekit.models.*;
+import com.midtrans.sdk.corekit.models.promo.Promo;
+import com.midtrans.sdk.corekit.models.promo.PromoDetails;
+import com.midtrans.sdk.corekit.models.snap.*;
+import com.midtrans.sdk.corekit.models.snap.ItemDetails;
+import com.midtrans.sdk.corekit.models.snap.TransactionDetails;
 import com.midtrans.sdk.uikit.BuildConfig;
 import com.midtrans.sdk.uikit.PaymentMethods;
 import com.midtrans.sdk.uikit.R;
+import com.midtrans.sdk.uikit.UiKitOnBeforeSend;
 import com.midtrans.sdk.uikit.adapters.ItemDetailsAdapter;
 import com.midtrans.sdk.uikit.adapters.PaymentMethodsAdapter;
 import com.midtrans.sdk.uikit.models.EnabledPayments;
 import com.midtrans.sdk.uikit.models.ItemViewDetails;
 import com.midtrans.sdk.uikit.models.MessageInfo;
-import com.midtrans.sdk.uikit.storage.PaymentMethodStorage;
-import com.midtrans.sdk.uikit.utilities.DeviceUtils;
 import com.midtrans.sdk.uikit.utilities.MessageUtil;
 import com.midtrans.sdk.uikit.utilities.SdkUIFlowUtil;
 import com.midtrans.sdk.uikit.utilities.UiKitConstants;
+import com.midtrans.sdk.uikit.views.akulaku.AkulakuActivity;
 import com.midtrans.sdk.uikit.views.banktransfer.list.BankTransferListActivity;
 import com.midtrans.sdk.uikit.views.bca_klikbca.payment.KlikBcaPaymentActivity;
 import com.midtrans.sdk.uikit.views.bca_klikpay.BcaKlikPayPaymentActivity;
@@ -82,10 +68,7 @@ import com.midtrans.sdk.uikit.widgets.DefaultTextView;
 import com.midtrans.sdk.uikit.widgets.FancyButton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -113,6 +96,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
     private boolean isGci = false;
     private boolean isGopay = false;
     private boolean isDanamonOnline = false;
+    private boolean isAkulaku = false;
     private boolean backButtonEnabled;
     private boolean isDeepLink;
 
@@ -145,18 +129,6 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         setContentView(R.layout.activity_payments_method);
         isCreditCardOnly = getIntent().getBooleanExtra(UserDetailsActivity.CREDIT_CARD_ONLY, false);
         isBankTransferOnly = getIntent().getBooleanExtra(UserDetailsActivity.BANK_TRANSFER_ONLY, false);
-
-        // TODO: cek storage is payment method
-        PaymentMethodStorage paymentMethodStorage = new PaymentMethodStorage(this);
-        if (paymentMethodStorage != null && !TextUtils.isEmpty(paymentMethodStorage.paymentMethod)){
-            if ( paymentMethodStorage.paymentMethod.equals("1")){
-                isBankTransferOnly = true;
-            } else if (paymentMethodStorage.paymentMethod.equals("2")){
-                isCreditCardOnly = true;
-            }
-        }
-
-
         isGopay = getIntent().getBooleanExtra(UserDetailsActivity.GO_PAY, false);
         isBCAKlikpay = getIntent().getBooleanExtra(UserDetailsActivity.BCA_KLIKPAY, false);
         isKlikBCA = getIntent().getBooleanExtra(UserDetailsActivity.KLIK_BCA, false);
@@ -170,6 +142,8 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         isIndomaret = getIntent().getBooleanExtra(UserDetailsActivity.INDOMARET, false);
         isKioson = getIntent().getBooleanExtra(UserDetailsActivity.KIOSON, false);
         isGci = getIntent().getBooleanExtra(UserDetailsActivity.GIFT_CARD, false);
+        isDanamonOnline = getIntent().getBooleanExtra(UserDetailsActivity.DANAMON_ONLINE, false);
+        isAkulaku = getIntent().getBooleanExtra(UserDetailsActivity.AKULAKU, false);
 
         midtransSDK = MidtransSDK.getInstance();
         initializeTheme();
@@ -186,12 +160,9 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                     SdkUIFlowUtil.saveUserDetails();
                 }
 
-                setUpPaymentMethods();
-                setupRecyclerView();
-
-            } else {
-                showErrorAlertDialog(getString(R.string.error_transaction_empty));
             }
+            setUpPaymentMethods();
+            setupRecyclerView();
 
         } else {
             Logger.e("Veritrans SDK is not started.");
@@ -210,7 +181,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         UserDetail userDetail = null;
 
         try {
-            userDetail = SdkUIFlowUtil.getSavedUserDetails(this);
+            userDetail = SdkUIFlowUtil.getSavedUserDetails();
 
             if (userDetail == null) {
                 userDetail = new UserDetail();
@@ -239,8 +210,6 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         initRetryButton();
 
         setSupportActionBar(toolbar);
-
-        bindDataToView();
         getPaymentPages();
     }
 
@@ -263,31 +232,51 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
     /**
      * set data to view.
      */
-    private void bindDataToView() {
+    private void bindDataToView(Transaction transaction) {
 
-        MidtransSDK midtransSDK = MidtransSDK.getInstance();
 
-        if (midtransSDK != null) {
+        if (transaction != null) {
             List<ItemViewDetails> itemViewDetails = new ArrayList<>();
+            int itemDetailsSize = transaction.getItemDetails() != null ? transaction.getItemDetails().size() : 0;
+
             // Add amount
-            String amount = getString(R.string.prefix_money, Utils.getFormattedAmount(midtransSDK.getTransactionRequest().getAmount()));
+            double amount = transaction.getTransactionDetails().getAmount();
+            String currency = transaction.getTransactionDetails().getCurrency();
+            String formattedAmount = formatAmount(amount, currency);
+            setTotalAmount(formattedAmount);
+
             // Add header
             itemViewDetails.add(new ItemViewDetails(
                     null,
-                    amount,
+                    formattedAmount,
                     ItemViewDetails.TYPE_ITEM_HEADER,
-                    midtransSDK.getTransactionRequest().getItemDetails().size() > 0));
+                    itemDetailsSize > 0));
+
             // Add item
-            for (ItemDetails itemDetails : midtransSDK.getTransactionRequest().getItemDetails()) {
-                String price = getString(R.string.prefix_money, Utils.getFormattedAmount(itemDetails.getQuantity() * itemDetails.getPrice()));
-                String itemName = itemDetails.getName();
-                if (itemDetails.getQuantity() > 1) {
-                    itemName = getString(R.string.text_item_name_format, itemDetails.getName(), itemDetails.getQuantity());
+            if (itemDetailsSize > 0) {
+                for (ItemDetails itemDetails : transaction.getItemDetails()) {
+                    String price = formatAmount(itemDetails.getPrice(), currency);
+                    String itemName = itemDetails.getName();
+
+                    if (itemDetails.getQuantity() > 1) {
+                        itemName = getString(
+                                R.string.text_item_name_format,
+                                itemDetails.getName(),
+                                itemDetails.getQuantity());
+                    }
+
+                    itemViewDetails.add(new ItemViewDetails(itemName,
+                            price,
+                            ItemViewDetails.TYPE_ITEM,
+                            true));
                 }
-                itemViewDetails.add(new ItemViewDetails(itemName, price, ItemViewDetails.TYPE_ITEM, true));
             }
 
-            ItemDetailsAdapter adapter = new ItemDetailsAdapter(itemViewDetails, this);
+            ItemDetailsAdapter adapter = new ItemDetailsAdapter(
+                    itemViewDetails,
+                    this,
+                    transaction.getTransactionDetails().getOrderId());
+
             itemDetailsView.setLayoutManager(new LinearLayoutManager(this));
             itemDetailsView.setAdapter(adapter);
         }
@@ -315,16 +304,15 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         if (isCreditCardOnly || isBankTransferOnly || isKlikBCA || isBCAKlikpay
                 || isMandiriClickPay || isMandiriECash || isCIMBClicks || isBRIEpay
                 || isTelkomselCash || isIndosatDompetku || isXlTunai
-                || isIndomaret || isKioson || isGci) {
+                || isIndomaret || isKioson || isGci || isDanamonOnline || isAkulaku) {
             progressMessage.setText(R.string.txt_checkout);
+        } else {
+            progressMessage.setText(getString(R.string.txt_loading_payment));
         }
 
-        // Init progress
-        Glide.with(this)
-                .load(R.drawable.midtrans_loader)
-                .asGif()
-                .into(progressImage);
-        progressMessage.setText(R.string.txt_loading_payment);
+        Ion.with(progressImage)
+                .load(SdkUIFlowUtil.getImagePath(this) + R.drawable.midtrans_loader);
+
     }
 
     private void getPaymentPages() {
@@ -334,17 +322,13 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
 
         if (!isAlreadyUtilized()) {
 
-            Log.e("cek User Detail Snap", userDetail.toString());
-
             String snapToken = getIntent().getStringExtra(UiKitConstants.EXTRA_SNAP_TOKEN);
-            //String snapToken = "eb688024-9f81-4254-9236-491d920dcf20";
             if (!TextUtils.isEmpty(snapToken)) {
-                LocalDataHandler.saveString(Constants.AUTH_TOKEN, snapToken);
+                midtransSDK.setAuthenticationToken(snapToken);
                 getPaymentOptions(snapToken);
                 return;
             }
 
-            Log.e("cek User Detail Snap2", userDetail.getUserId());
 
             if (userDetail == null || TextUtils.isEmpty(userDetail.getUserId())) {
                 midtransSDK.notifyTransactionFinished(new TransactionResult(null, null, TransactionResult.STATUS_INVALID));
@@ -352,21 +336,17 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                 return;
             }
 
-
-            Log.e("cek User Detail ", userDetail.toString());
-
-
             midtransSDK.checkout(userDetail.getUserId(), new CheckoutCallback() {
                 @Override
                 public void onSuccess(Token token) {
-                    Log.i(TAG, "checkout token:" + token.getTokenId());
-                    LocalDataHandler.saveString(Constants.AUTH_TOKEN, token.getTokenId());
+                    Logger.i(TAG, "checkout token:" + token.getTokenId());
+                    midtransSDK.setAuthenticationToken(token.getTokenId());
                     getPaymentOptions(token.getTokenId());
                 }
 
                 @Override
                 public void onFailure(Token token, String reason) {
-                    Log.d(TAG, "Failed to registering transaction: " + reason);
+                    Logger.d(TAG, "Failed to registering transaction: " + reason);
                     enableButtonBack(true);
                     String errorMessage = MessageUtil.createMessageWhenCheckoutFailed(PaymentMethodsActivity.this, token.getErrorMessage());
                     showErrorMessage(errorMessage);
@@ -375,7 +355,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                 @Override
                 public void onError(Throwable error) {
                     Logger.e(TAG, "checkout>error:" + error.getMessage());
-                    showFallbackErrorPage(error, getString(R.string.maintenance_message));
+                    showFallbackErrorPage(error);
                 }
             });
         } else {
@@ -383,37 +363,24 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         }
     }
 
-    private void showFallbackErrorPage(Throwable error, String defaultMessage) {
-        MessageInfo messageInfo = MessageUtil.createMessageOnError(this, error, defaultMessage);
+    private void showFallbackErrorPage(Throwable error) {
+        MessageInfo messageInfo = MessageUtil.createMessageOnError(error, this);
 
-        if (messageInfo.statusMessage.equalsIgnoreCase(MessageUtil.TIMEOUT) || messageInfo.statusMessage.equalsIgnoreCase(MessageUtil.RETROFIT_TIMEOUT)) {
-            maintenanceTitleMessage.setText(getString(R.string.failed_title));
-            maintenanceMessage.setText(getString(R.string.timeout_message));
-            buttonRetry.setText(getString(R.string.try_again));
-            buttonRetry.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMaintenanceContainer(false);
-                    if (isAlreadyUtilized()) {
-                        SdkUIFlowUtil.showToast(PaymentMethodsActivity.this, getString(R.string.error_utilized_orderid));
-                    } else {
-                        getPaymentPages();
-                    }
+        maintenanceTitleMessage.setText(messageInfo.titleMessage);
+        maintenanceMessage.setText(messageInfo.detailsMessage);
+        buttonRetry.setText(getString(R.string.try_again));
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMaintenanceContainer(false);
+                if (isAlreadyUtilized()) {
+                    SdkUIFlowUtil.showToast(PaymentMethodsActivity.this, getString(R.string.error_utilized_orderid));
+                } else {
+                    getPaymentPages();
                 }
-            });
-        } else {
-            maintenanceTitleMessage.setText(getString(R.string.failed_title));
-            maintenanceMessage.setText(messageInfo.detailsMessage);
-            buttonRetry.setText(getString(R.string.maintenance_back));
+            }
+        });
 
-            buttonRetry.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMaintenanceContainer(false);
-                    finish();
-                }
-            });
-        }
         showMaintenanceContainer(true);
     }
 
@@ -444,6 +411,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                     midtransSDK.setPromoResponses(transaction.getPromos());
                     midtransSDK.setMerchantLogo(logoUrl);
                     midtransSDK.setMerchantName(merchantName);
+                    midtransSDK.setPaymentDetails(new PaymentDetails(transaction.getTransactionDetails(), transaction.getItemDetails()));
                     // Prioritize custom color themes over Snap preferences
                     if (midtransSDK.getColorTheme() == null
                             || !(midtransSDK.getColorTheme() instanceof CustomColorTheme)) {
@@ -476,9 +444,15 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                             secureBadge.setImageResource(R.drawable.badge_default);
                     }
 
+                    bindDataToView(transaction);
+
+                    // init mixpanel properties
+                    initMixpanelProperties(transaction);
+
                     // Directly start credit card payment if using credit card mode only
                     initPaymentMethods(transaction.getEnabledPayments());
 
+                    // init issue tracker
                     initCustomTrackingProperties();
                 } catch (NullPointerException e) {
                     Logger.e(TAG, e.getMessage());
@@ -494,58 +468,53 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
 
             @Override
             public void onError(Throwable error) {
-                Logger.e(TAG, "error:" + error.getMessage());
+                Logger.e(TAG, "onError:" + error.getMessage());
                 enableButtonBack(true);
                 progressContainer.setVisibility(View.GONE);
-                showFallbackErrorPage(error, getString(R.string.maintenance_message));
+                showFallbackErrorPage(error);
             }
         });
+    }
+
+    private void initMixpanelProperties(Transaction transaction) {
+        MixpanelAnalyticsManager analyticsManager = midtransSDK.getmMixpanelAnalyticsManager();
+        if (transaction != null) {
+
+            analyticsManager.setEnabledPayments(createEnabledMethods(transaction.getEnabledPayments()));
+
+            TransactionDetails transactionDetails = transaction.getTransactionDetails();
+            if (transactionDetails != null) {
+                analyticsManager.setOrderId(transactionDetails.getOrderId());
+            }
+
+            MerchantData merchantData = transaction.getMerchantData();
+
+            if (merchantData != null) {
+                analyticsManager.setMerchantId(merchantData.getMerchantId());
+
+                MerchantPreferences preferences = merchantData.getPreference();
+                if (preferences != null) {
+                    analyticsManager.setMerchantName(preferences.getDisplayName());
+                }
+            }
+        }
+
+    }
+
+    private List<String> createEnabledMethods(List<EnabledPayment> enabledPayments) {
+        List<String> enabledMethods = new ArrayList<>();
+        if (enabledPayments != null && !enabledPayments.isEmpty()) {
+            for (EnabledPayment method : enabledPayments) {
+                enabledMethods.add(method.getType());
+            }
+        }
+        return enabledMethods;
     }
 
     private void initCustomTrackingProperties() {
 
         if (BuildConfig.FLAVOR.equals(UiKitConstants.ENVIRONMENT_PRODUCTION)) {
-            RaygunClient.setOnBeforeSend(new RaygunOnBeforeSend() {
-                @Override
-                public RaygunMessage onBeforeSend(RaygunMessage message) {
-
-                    try {
-                        RaygunMessageDetails details = message.getDetails();
-                        details.setGroupingKey(UiKitConstants.KEY_TRACKING_GROUP);
-
-                        Map<String, String> map = new HashMap<>();
-
-                        MerchantPreferences preferences = MidtransSDK.getInstance().getMerchantData().getPreference();
-
-                        if (preferences != null) {
-                            map.put(UiKitConstants.KEY_TRACKING_MERCHANT_NAME, preferences.getDisplayName());
-                        }
-                        String[] appInfo = DeviceUtils.getApplicationName(PaymentMethodsActivity.this);
-                        map.put(UiKitConstants.KEY_TRACKING_HOST_APP, appInfo[0]);
-                        map.put(UiKitConstants.KEY_TRACKING_HOST_APP_VERSION, appInfo[1]);
-                        map.put(UiKitConstants.KEY_TRACKING_DEVICE_ID, SdkUtil.getDeviceId(PaymentMethodsActivity.this));
-                        map.put(UiKitConstants.KEY_TRACKING_LANGUAGE, Locale.getDefault().getLanguage());
-                        map.put(UiKitConstants.KEY_TRACKING_DEVICE_MODEL, Build.MODEL);
-                        map.put(UiKitConstants.KEY_TRACKING_DEVICE_TYPE, Build.BRAND);
-                        map.put(UiKitConstants.KEY_TRACKING_TIME_STAMP, String.valueOf(System.currentTimeMillis()));
-                        map.put(UiKitConstants.KEY_TRACKING_NETWORK, DeviceUtils.getConnectivityType(PaymentMethodsActivity.this));
-                        map.put(UiKitConstants.KEY_TRACKING_OS_VERSION, String.valueOf(Build.VERSION.SDK_INT));
-                        map.put(UiKitConstants.KEY_TRACKING_PLATFORM, UiKitConstants.VALUE_TRACKING_PLATFORM);
-                        map.put(UiKitConstants.KEY_TRACKING_SCREEN_SIZE, DeviceUtils.getDisplaySize(PaymentMethodsActivity.this));
-                        map.put(UiKitConstants.KEY_TRACKING_SDK_VERSION, BuildConfig.VERSION_NAME);
-                        map.put(UiKitConstants.KEY_TRACKING_CPU_USAGE, DeviceUtils.getTotalCpuUsage());
-                        map.put(UiKitConstants.KEY_TRACKING_MEMORY_USAGE, DeviceUtils.getMemoryUsage());
-                        map.put(UiKitConstants.KEY_TRACKING_ENVIRONMENT, BuildConfig.FLAVOR);
-
-                        details.setUserCustomData(map);
-
-                    } catch (Exception e) {
-                        Log.d(TAG, "raygun:" + e.getMessage());
-                    }
-
-                    return message;
-                }
-            });
+            RaygunClient.setOnBeforeSend(new UiKitOnBeforeSend(this));
         }
     }
 
@@ -567,7 +536,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
             if (SdkUIFlowUtil.isBankTransferMethodEnabled(getApplicationContext(), enabledPayments)) {
                 Intent startBankPayment = new Intent(PaymentMethodsActivity.this, BankTransferListActivity.class);
                 if (getIntent().getBooleanExtra(UserDetailsActivity.BANK_TRANSFER_PERMATA, false)) {
-                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, getString(R.string.payment_permata_va))) {
+                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, PaymentType.PERMATA_VA)) {
                         startBankPayment.putExtra(UserDetailsActivity.BANK_TRANSFER_PERMATA, true);
                     } else {
                         showErrorAlertDialog(getString(R.string.payment_not_enabled_message));
@@ -581,21 +550,21 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                         return;
                     }
                 } else if (getIntent().getBooleanExtra(UserDetailsActivity.BANK_TRANSFER_BCA, false)) {
-                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, getString(R.string.payment_bca_va))) {
+                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, PaymentType.BCA_VA)) {
                         startBankPayment.putExtra(UserDetailsActivity.BANK_TRANSFER_BCA, true);
                     } else {
                         showErrorAlertDialog(getString(R.string.payment_not_enabled_message));
                         return;
                     }
                 } else if (getIntent().getBooleanExtra(UserDetailsActivity.BANK_TRANSFER_BNI, false)) {
-                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, getString(R.string.payment_bni_va))) {
+                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, PaymentType.BNI_VA)) {
                         startBankPayment.putExtra(UserDetailsActivity.BANK_TRANSFER_BNI, true);
                     } else {
                         showErrorAlertDialog(getString(R.string.payment_not_enabled_message));
                         return;
                     }
                 } else if (getIntent().getBooleanExtra(UserDetailsActivity.BANK_TRANSFER_OTHER, false)) {
-                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, getString(R.string.payment_all_va))) {
+                    if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, PaymentType.ALL_VA)) {
                         startBankPayment.putExtra(UserDetailsActivity.BANK_TRANSFER_OTHER, true);
                     } else {
                         showErrorAlertDialog(getString(R.string.payment_not_enabled_message));
@@ -762,6 +731,17 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
             } else {
                 showErrorAlertDialog(getString(R.string.payment_not_enabled_message));
             }
+        } else if (isAkulaku) {
+            if (SdkUIFlowUtil.isPaymentMethodEnabled(enabledPayments, getString(R.string.payment_akulaku))) {
+                Intent akulakuIntent = new Intent(this, AkulakuActivity.class);
+                startActivityForResult(akulakuIntent, Constants.RESULT_CODE_PAYMENT_TRANSFER);
+                if (MidtransSDK.getInstance().getUIKitCustomSetting() != null
+                        && MidtransSDK.getInstance().getUIKitCustomSetting().isEnabledAnimation()) {
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                }
+            } else {
+                showErrorAlertDialog(getString(R.string.payment_not_enabled_message));
+            }
         } else {
             if (data.isEmpty()) {
                 showErrorAlertDialog(getString(R.string.message_payment_method_empty));
@@ -908,6 +888,14 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                     && MidtransSDK.getInstance().getUIKitCustomSetting().isEnabledAnimation()) {
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
+        } else if (name.equalsIgnoreCase(getString(R.string.payment_method_akulaku))) {
+            Intent akulakuIntent = new Intent(this, AkulakuActivity.class);
+            akulakuIntent.putExtra(DanamonOnlineActivity.USE_DEEP_LINK, isDeepLink);
+            startActivityForResult(akulakuIntent, Constants.RESULT_CODE_PAYMENT_TRANSFER);
+            if (MidtransSDK.getInstance().getUIKitCustomSetting() != null
+                    && MidtransSDK.getInstance().getUIKitCustomSetting().isEnabledAnimation()) {
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+            }
         } else {
             Toast.makeText(this.getApplicationContext(),
                     "This feature is not implemented yet.", Toast.LENGTH_SHORT).show();
@@ -928,8 +916,8 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                 bankTransfers.add(enabledPayment);
                 if (!isBankTransferAdded) {
                     PaymentMethodsModel model = PaymentMethods
-                        .getMethods(this, getString(R.string.payment_bank_transfer),
-                            EnabledPayment.STATUS_UP);
+                            .getMethods(this, getString(R.string.payment_bank_transfer),
+                                    EnabledPayment.STATUS_UP);
                     if (model != null) {
                         data.add(model);
                         isBankTransferAdded = true;
@@ -943,13 +931,37 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
             }
         }
 
-        /**
-         * Disable payment sorting, just follow payment list order from MAP
-        if (!bankTransfers.isEmpty()) {
-            data.add(PaymentMethods.getMethods(this, getString(R.string.payment_bank_transfer), EnabledPayment.STATUS_UP));
+        markPaymentMethodHavePromo(data);
+    }
+
+    private void markPaymentMethodHavePromo(List<PaymentMethodsModel> data) {
+        PromoDetails promoDetails = MidtransSDK.getInstance().getTransaction().getPromoDetails();
+        if (promoDetails != null) {
+            List<Promo> promos = promoDetails.getPromos();
+            if (promos != null && !promos.isEmpty()) {
+                if (data != null && !data.isEmpty()) {
+                    for (PaymentMethodsModel model : data) {
+                        Promo promo = findPromoByPymentMethod(model, promos);
+                        if (promo != null) {
+                            model.setHavePromo(true);
+                        }
+                    }
+                }
+            }
         }
-        SdkUtil.sortPaymentMethodsByPriority(data);
-         */
+    }
+
+    private Promo findPromoByPymentMethod(PaymentMethodsModel model, List<Promo> promos) {
+        for (Promo promo : promos) {
+            List<String> paymentTypes = promo.getPaymentTypes();
+            if (paymentTypes != null && !paymentTypes.isEmpty()) {
+                if (paymentTypes.contains(model.getPaymentType())) {
+                    return promo;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -965,6 +977,10 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
         if (resultCode == UiKitConstants.RESULT_SDK_NOT_AVAILABLE) {
             finish();
             return;
+        }
+
+        if (midtransSDK != null) {
+            midtransSDK.resetPaymentDetails();
         }
 
         if (requestCode == Constants.RESULT_CODE_PAYMENT_TRANSFER) {
@@ -989,7 +1005,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                         midtransSDK.notifyTransactionFinished(new TransactionResult(response, null, TransactionResult.STATUS_PENDING));
                         setAlreadyUtilized(true);
                     } else {
-                        midtransSDK.notifyTransactionFinished(new TransactionResult(null, null, TransactionResult.STATUS_INVALID));
+                        midtransSDK.notifyTransactionFinished(new TransactionResult(response, null, TransactionResult.STATUS_FAILED));
                     }
                 } else {
                     midtransSDK.notifyTransactionFinished(new TransactionResult(null, null, TransactionResult.STATUS_INVALID));
@@ -1002,7 +1018,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                     if (this.data.size() == 1 || isCreditCardOnly || isBankTransferOnly || isBCAKlikpay || isKlikBCA
                             || isMandiriClickPay || isMandiriECash || isCIMBClicks || isBRIEpay
                             || isTelkomselCash || isIndosatDompetku || isXlTunai
-                            || isIndomaret || isKioson || isGci) {
+                            || isIndomaret || isKioson || isGci || isDanamonOnline || isGopay) {
 
                         midtransSDK.notifyTransactionFinished(new TransactionResult(true));
                         finish();
@@ -1034,7 +1050,7 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
                         if (this.data.size() == 1 || isCreditCardOnly || isBankTransferOnly || isBCAKlikpay || isKlikBCA
                                 || isMandiriClickPay || isMandiriECash || isCIMBClicks || isBRIEpay
                                 || isTelkomselCash || isIndosatDompetku || isXlTunai
-                                || isIndomaret || isKioson || isGci) {
+                                || isIndomaret || isKioson || isGci || isGopay || isDanamonOnline) {
 
                             midtransSDK.notifyTransactionFinished(new TransactionResult(true));
                             finish();
@@ -1053,10 +1069,11 @@ public class PaymentMethodsActivity extends BaseActivity implements PaymentMetho
 
     private void showLogo(String url) {
         if (!TextUtils.isEmpty(url)) {
-            Glide.with(this)
-                    .load(url)
-                    .into(logo);
             merchantName.setVisibility(View.GONE);
+
+            Ion.with(logo)
+                    .load(url);
+
         } else {
             logo.setVisibility(View.INVISIBLE);
         }

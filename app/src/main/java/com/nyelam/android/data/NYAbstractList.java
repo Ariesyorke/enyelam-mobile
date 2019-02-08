@@ -52,4 +52,14 @@ public abstract class NYAbstractList <T extends Parseable> {
         }
         return array;
     }
+
+    @Override
+    public String toString() {
+        try {
+            return toJSONArray().toString(3);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return super.toString();
+    }
 }

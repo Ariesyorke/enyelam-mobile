@@ -14,13 +14,15 @@ import com.nyelam.android.http.result.NYPaginationResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class NYDoShopProductListRequest extends NYBasicRequest<NYPaginationResult<DoShopProductList>> {
 
     private final static String KEY_PRODUCTS = "products";
     private final static String POST_PAGE = "page";
     private final static String POST_KEYWORD = "keyword";
     private final static String POST_CATEGORY_ID = "category_id";
-    private final static String POST_BRAND_ID = "brand_id";
+    private final static String POST_BRAND_ID = "brand_id[]";
     private final static String POST_MERCHANT_ID = "merchant_id";
     private final static String POST_PRICE_MIN = "price_min";
     private final static String POST_PRICE_MAX = "price_max";
@@ -28,7 +30,7 @@ public class NYDoShopProductListRequest extends NYBasicRequest<NYPaginationResul
     private final static String POST_RECOMMENDED = "recommended";
 
 
-    public NYDoShopProductListRequest(Context context, String page, String keyword, String categoryId, String priceMin, String priceMax, String sortBy, String brandId, String merchantId, String recommended){
+    public NYDoShopProductListRequest(Context context, String page, String keyword, String categoryId, String priceMin, String priceMax, String sortBy, List<String> brandIds, String merchantId, String recommended){
         super(DoShopList.class, context, context.getResources().getString(R.string.api_path_doshop_product_list));
 
         if(!TextUtils.isEmpty(page)) {
@@ -43,8 +45,10 @@ public class NYDoShopProductListRequest extends NYBasicRequest<NYPaginationResul
             addQuery(POST_CATEGORY_ID, categoryId);
         }
 
-        if(!TextUtils.isEmpty(brandId)) {
-            addQuery(POST_BRAND_ID, brandId);
+        if(brandIds != null && !brandIds.isEmpty()) {
+            for(String id: brandIds) {
+                addQuery(POST_BRAND_ID, id);
+            }
         }
 
         if(!TextUtils.isEmpty(merchantId)) {

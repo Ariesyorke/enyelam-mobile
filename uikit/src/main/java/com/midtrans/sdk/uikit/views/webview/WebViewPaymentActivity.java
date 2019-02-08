@@ -13,11 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.webkit.*;
 import android.widget.ImageView;
 import com.midtrans.sdk.corekit.core.Logger;
 import com.midtrans.sdk.corekit.core.PaymentType;
@@ -125,6 +121,9 @@ public class WebViewPaymentActivity extends BasePaymentActivity {
                 case PaymentType.CIMB_CLICKS:
                     textTitle.setText(getString(R.string.payment_method_cimb_clicks));
                     break;
+                case PaymentType.AKULAKU:
+                    textTitle.setText(getString(R.string.payment_method_akulaku));
+                    break;
             }
         }
     }
@@ -142,6 +141,7 @@ public class WebViewPaymentActivity extends BasePaymentActivity {
     private void initWebViewContainer() {
         webviewContainer.getSettings().setAllowFileAccess(false);
         webviewContainer.getSettings().setJavaScriptEnabled(true);
+        webviewContainer.getSettings().setDomStorageEnabled(true);
         webviewContainer.setInitialScale(1);
         webviewContainer.getSettings().setLoadWithOverviewMode(true);
         webviewContainer.getSettings().setUseWideViewPort(true);
@@ -151,18 +151,24 @@ public class WebViewPaymentActivity extends BasePaymentActivity {
             webviewContainer.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         webviewContainer.setWebViewClient(new MidtransWebViewClient(this, paymentType));
-        webviewContainer.setWebChromeClient(new WebChromeClient());
+        webviewContainer.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                Logger.d(TAG, consoleMessage.message());
+                return true;
+            }
+        });
         webviewContainer.loadUrl(webUrl);
     }
 
     @Override
     public void bindViews() {
-        webviewContainer = (WebView) findViewById(R.id.webview_container);
-        imageMerchantLogo = (ImageView) findViewById(R.id.merchant_logo);
+        webviewContainer = findViewById(R.id.webview_container);
+        imageMerchantLogo = findViewById(R.id.merchant_logo);
 
-        textTitle = (SemiBoldTextView) findViewById(R.id.text_page_title);
-        textMerchantName = (DefaultTextView) findViewById(R.id.text_page_merchant_name);
-        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        textTitle = findViewById(R.id.text_page_title);
+        textMerchantName = findViewById(R.id.text_page_merchant_name);
+        toolbar = findViewById(R.id.main_toolbar);
     }
 
     @Override
@@ -194,7 +200,7 @@ public class WebViewPaymentActivity extends BasePaymentActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.d(TAG, "shouldOverrideUrlLoading()>url:" + url);
+            Logger.d(TAG, "shouldOverrideUrlLoading()>url:" + url);
             view.loadUrl(url);
             return true;
         }
@@ -202,7 +208,7 @@ public class WebViewPaymentActivity extends BasePaymentActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            Log.d(TAG, "onPageFinished()>url:" + url);
+            Logger.d(TAG, "onPageFinished()>url:" + url);
             if (activity != null && activity.isActivityRunning()) {
                 if (url.contains(UiKitConstants.CALLBACK_PATTERN_3DS) || url.contains(UiKitConstants.CALLBACK_PATTERN_RBA)) {
                     finishWebViewPayment(activity, RESULT_OK);
@@ -212,7 +218,7 @@ public class WebViewPaymentActivity extends BasePaymentActivity {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Log.d(TAG, "onPageStarted()>url:" + url);
+            Logger.d(TAG, "onPageStarted()>url:" + url);
             super.onPageStarted(view, url, favicon);
 
             if (activity != null && activity.isActivityRunning()) {
@@ -234,6 +240,10 @@ public class WebViewPaymentActivity extends BasePaymentActivity {
                     }
                 } else if (!TextUtils.isEmpty(paymentType) && paymentType.equals(PaymentType.DANAMON_ONLINE)) {
                     if (url.contains(UiKitConstants.CALLBACK_DANAMON_ONLINE)) {
+                        finishWebViewPayment(activity, RESULT_OK);
+                    }
+                } else if (!TextUtils.isEmpty(paymentType) && paymentType.equals(PaymentType.AKULAKU)) {
+                    if (url.contains(UiKitConstants.CALLBACK_AKULAKU)) {
                         finishWebViewPayment(activity, RESULT_OK);
                     }
                 }

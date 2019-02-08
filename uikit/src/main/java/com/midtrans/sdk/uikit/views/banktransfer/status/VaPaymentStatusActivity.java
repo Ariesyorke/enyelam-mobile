@@ -38,14 +38,14 @@ public class VaPaymentStatusActivity extends BaseVaPaymentStatusActivity {
     }
 
     private void initActionButton() {
-        buttonCopyVa.setOnClickListener(new OnClickListener() {
+        buttonCopyVa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 copyVaNumber();
             }
         });
 
-        buttonInstruction.setOnClickListener(new OnClickListener() {
+        buttonInstruction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String instructionUrl = presenter.getInstructionUrl();

@@ -138,7 +138,6 @@ public class DiveCenterDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (label.equals("Email") && NYHelper.isStringNotEmpty(text)) {
-
                     Intent i = new Intent(Intent.ACTION_SEND);
                     i.setType("message/rfc822");
                     i.putExtra(Intent.EXTRA_EMAIL, new String[]{text});
@@ -149,24 +148,25 @@ public class DiveCenterDetailFragment extends Fragment {
                     } catch (android.content.ActivityNotFoundException ex) {
                         Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                     }
-
-                } else if (label.equals("Phone Number") && NYHelper.isStringNotEmpty(text)) {
-
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:" + text));
-                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    getActivity().startActivity(intent);
-
                 }
+
+//                else if (label.equals("Phone Number") && NYHelper.isStringNotEmpty(text)) {
+//
+//                    Intent intent = new Intent(Intent.ACTION_CALL);
+//                    intent.setData(Uri.parse("tel:" + text));
+//                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                        // TODO: Consider calling
+//                        //    ActivityCompat#requestPermissions
+//                        // here to request the missing permissions, and then overriding
+//                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                        //                                          int[] grantResults)
+//                        // to handle the case where the user grants the permission. See the documentation
+//                        // for ActivityCompat#requestPermissions for more details.
+//                        return;
+//                    }
+//                    getActivity().startActivity(intent);
+//
+//                }
 
             }
         });

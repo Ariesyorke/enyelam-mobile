@@ -80,7 +80,7 @@ public class MandiriBillStatusActivity extends BaseVaPaymentStatusActivity {
     }
 
     private void initActionButton() {
-        buttonCopyBillPayCode.setOnClickListener(new OnClickListener() {
+        buttonCopyBillPayCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean copyBillCodeSuccess = copyToClipboard(LABEL_BILL_CODE, textBillPayCode.getText().toString());
@@ -88,7 +88,7 @@ public class MandiriBillStatusActivity extends BaseVaPaymentStatusActivity {
             }
         });
 
-        buttonCopyCompanyCode.setOnClickListener(new OnClickListener() {
+        buttonCopyCompanyCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean copyCompanyCodeSuccess = copyToClipboard(LABEL_COMPANY_CODE, textCompanyCode.getText().toString());
@@ -96,7 +96,7 @@ public class MandiriBillStatusActivity extends BaseVaPaymentStatusActivity {
             }
         });
 
-        buttonInstruction.setOnClickListener(new OnClickListener() {
+        buttonInstruction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String instructionUrl = presenter.getInstructionUrl();

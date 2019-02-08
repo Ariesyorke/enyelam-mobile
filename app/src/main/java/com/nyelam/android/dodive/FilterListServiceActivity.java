@@ -87,10 +87,7 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         initView();
         initState();
         initControl();
-        //initToolbar(false);
         getCategories();
-
-        //Toast.makeText(this, "A", Toast.LENGTH_SHORT).show();
     }
 
     private void initState() {
@@ -273,11 +270,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             if (intent.hasExtra(NYHelper.MIN_PRICE_DEAFULT))minPriceDefault = extras.getDouble(NYHelper.MIN_PRICE_DEAFULT);
             if (intent.hasExtra(NYHelper.MAX_PRICE))maxPrice = extras.getDouble(NYHelper.MAX_PRICE);
             if (intent.hasExtra(NYHelper.MAX_PRICE_DEFAULT))maxPriceDefault = extras.getDouble(NYHelper.MAX_PRICE_DEFAULT);
-
-            NYLog.e("filterextras sortBy : "+sortBy);
-            NYLog.e("filterextras minPrice : "+minPrice);
-            NYLog.e("filterextras maxPrice : "+maxPrice);
-
             totalDives = new ArrayList<>();
             if (intent.hasExtra(NYHelper.TOTAL_DIVES)){
                 try {
@@ -285,7 +277,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     for (int i=0; i<arrayTotalDives.length(); i++) {
                         totalDives.add(arrayTotalDives.getString(i));
                     }
-                    NYLog.e("filterextras totalDives : "+totalDives.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -293,8 +284,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
 
             if (totalDives != null && totalDives.size() > 0) NYLog.e("cek total dives INTENT : "+totalDives.toString());
 
-            NYLog.e("filterextras categories : "+extras.getString(NYHelper.CATEGORIES));
-            NYLog.e("filterextras facilities : "+extras.getString(NYHelper.FACILITIES));
 
             if (intent.hasExtra(NYHelper.CATEGORIES)){
                 try {
@@ -302,7 +291,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     CategoryList categoryList = new CategoryList();
                     categoryList.parse(arrayCat);
                     categoryChooseList = categoryList.getList();
-                    NYLog.e("filterextras categories final : "+categoryList.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -315,7 +303,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                     StateFacilityList stateFacilityList = new StateFacilityList();
                     stateFacilityList.parse(arrayFac);
                     facilitiesChooseList = stateFacilityList.getList();
-                    NYLog.e("filterextras facilities final : "+stateFacilityList.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -362,9 +349,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
         while(myOwnIterator.hasNext()) {
             String key=(String)myOwnIterator.next();
             Boolean value=(Boolean)idCatMap.get(key);
-            NYLog.e("cek button new init : "+key+" - "+value);
-            //buildLabelCategory(key);
-            //Toast.makeText(this, "Key: "+key+" Value: "+value, Toast.LENGTH_LONG).show();
         }
 
         refreshData();
@@ -379,11 +363,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             for (Category cat :  items) {
                 buildLabelCategory(cat);
             }
-
-//            categoryFlowLayout.setChildSpacing(FlowLayout.SPACING_AUTO);
-//            categoryFlowLayout.setChildSpacingForLastRow(FlowLayout.SPACING_ALIGN);
-            //categoryFlowLayout.setRowSpacing(R.dimen.row_spacing);
-
         }
 
         if (facilitiesItems == null) facilitiesItems = new ArrayList<>();
@@ -457,12 +436,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
                             idCatMap.put("0", true);
                         }
 
-//                        NYLog.e("cek cat map : "+idCatMap.toString());
-//                        NYLog.e("cek cat map-i : "+String.valueOf(i));
-//                        NYLog.e("cek cat items : "+items.toString());
-//                        NYLog.e("cek cat items-size : "+String.valueOf(items.size()));
-
-                        //setViewCategory(ct, fbCategory);
                     }
 
                     //refresh category
@@ -520,7 +493,6 @@ public class FilterListServiceActivity extends BasicActivity implements NYMaster
             final FancyButton fbFacility = (FancyButton) facilityView.findViewById(R.id.btn_category);
 
             fbFacility.setText(facility.getName());
-            //fbFacility.setTag(facility);
 
             // TODO: init state facilities yang sudah dipilih
             setViewFacility(true, facility, fbFacility);

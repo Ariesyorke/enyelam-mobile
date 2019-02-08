@@ -76,9 +76,12 @@ public class IntroFragment extends Fragment {
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                NYApplication application = (NYApplication)getActivity().getApplication();
-//                application.addCache(imageUri, loadedImage);
-                imageView.setImageBitmap(loadedImage);
+                try {
+                    NYApplication application = (NYApplication) getActivity().getApplication();
+                    imageView.setImageBitmap(loadedImage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
 

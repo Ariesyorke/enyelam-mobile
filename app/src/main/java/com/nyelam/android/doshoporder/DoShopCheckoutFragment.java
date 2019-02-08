@@ -24,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.midtrans.sdk.corekit.core.PaymentMethod;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 import com.midtrans.sdk.uikit.storage.PaymentMethodStorage;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
@@ -245,7 +246,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 }
                 getSubmitOrder(paymentType, cartReturn.getCartToken(), billingAddress.getAddressId(), shippingAddress.getAddressId(), cartReturn.getCart().getMerchants(), null, voucherCode);
             } else {
-                payUsingVeritrans();
+                payUsingVeritrans(paymentType.equals("2") ? "credit_card" : "bank_transfer");
             }
 
         }
@@ -328,7 +329,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                         veritransStorage.totalParticipants = 1;
                         veritransStorage.save();
 
-                        payUsingVeritrans();
+                        payUsingVeritrans(paymentType.equals("2") ? "credit_card" : "bank_transfer");
 
                     } else if (paymentType.equals("1")) {
 
@@ -665,7 +666,7 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                         veritransStorage.totalParticipants = 1;
                         veritransStorage.save();
 
-                        payUsingVeritrans();
+                        payUsingVeritrans(paymentType.equals("2") ? "credit_card" : "bank_transfer");
 
                     } else if (paymentType.equals("1")) {
                         //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
@@ -1102,13 +1103,13 @@ public class DoShopCheckoutFragment extends BasicFragment implements
         if (!spcMgr.isStarted()) spcMgr.start(getActivity());
     }
 
-    public void payUsingVeritrans() {
+    public void payUsingVeritrans(String enabledPayment) {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(getActivity()) // context is mandatory
                 .setTransactionFinishedCallback(thisFragment)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE", "#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -1160,8 +1161,10 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
 
             MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
-            MidtransSDK.getInstance().startPaymentUiFlow(getActivity(), token);
-            //MidtransSDK.getInstance().startPaymentUiFlow(this, "eba5b676-abea-4b6d-8f88-3ad1517f2e2e");
+            MidtransSDK.getInstance().startPaymentUiFlow(getActivity(),
+                    enabledPayment.equalsIgnoreCase("bank_transfer")?
+                            PaymentMethod.BANK_TRANSFER:
+                            PaymentMethod.CREDIT_CARD, token);            //MidtransSDK.getInstance().startPaymentUiFlow(this, "eba5b676-abea-4b6d-8f88-3ad1517f2e2e");
         }
 
     }

@@ -33,11 +33,6 @@
 
             <EditText
                 android:id="@+id/et_search"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:editable="false"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -151,15 +146,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:visibility="gone"
-                android:layout_margin="@dimen/padding_triple"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                />
 
             <com.nyelam.android.view.font.NYTextView
                 android:layout_below="@+id/progress_bar"

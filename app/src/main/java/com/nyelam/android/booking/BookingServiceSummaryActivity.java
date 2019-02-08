@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.LocalDataHandler;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
+import com.midtrans.sdk.corekit.core.PaymentMethod;
 import com.midtrans.sdk.corekit.core.TransactionRequest;
 import com.midtrans.sdk.corekit.core.UIKitCustomSetting;
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
@@ -220,7 +221,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                     } else if (orderReturn == null){
                         new NYCustomDialog().showAgreementDialog(BookingServiceSummaryActivity.this);
                     } else {
-                        payUsingVeritrans();
+                        payUsingVeritrans(paymentType.equals("2") ? "credit_card" : "bank_transfer");
                     }
                 }
             }
@@ -948,8 +949,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         veritransStorage.order = result.getSummary().getOrder();
                         veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
                         veritransStorage.save();
-
-                        payUsingVeritrans();
+                        payUsingVeritrans(paymentType.equals(2) ? "credit_card": "bank_transfer");
 
                     } else if (paymentType.equals("1")){
                         //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
@@ -1036,7 +1036,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
                         veritransStorage.save();
 
-                        payUsingVeritrans();
+                        payUsingVeritrans(paymentType.equals("2") ? "credit_card": "bank_transfer");
 
                     } else if (paymentType.equals("1")){
 
@@ -1166,13 +1166,13 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     }
 
 
-    public void payUsingVeritrans() {
+    public void payUsingVeritrans(String enabledPayment) {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
                 .setContext(this) // context is mandatory
                 .setTransactionFinishedCallback(this)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -1216,17 +1216,15 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 transactionRequest = new TransactionRequest(order.getOrderId(), 0);
             }
 
-            // Create array list and add above item details in it and then set it to transaction request.
             ArrayList<ItemDetails> itemDetailsList = new ArrayList<>();
             if (service != null)itemDetailsList.add(new ItemDetails(service.getId(), (int)service.getNormalPrice(), totalParticipants, service.getName()));
             transactionRequest.setItemDetails(itemDetailsList);
-
-
             MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
-            MidtransSDK.getInstance().startPaymentUiFlow(this, token);
-            //MidtransSDK.getInstance().startPaymentUiFlow(this, "eba5b676-abea-4b6d-8f88-3ad1517f2e2e");
+            MidtransSDK.getInstance().startPaymentUiFlow(this,
+                                                        enabledPayment.equalsIgnoreCase("bank_transfer")?
+                                                                PaymentMethod.BANK_TRANSFER:
+                                                         PaymentMethod.CREDIT_CARD, token);
         }
-
     }
 
 
@@ -1318,15 +1316,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        // Save UI state changes to the savedInstanceState.
-        // This bundle will be passed to onCreate if the process is
-        // killed and restarted.
-        /*savedInstanceState.putBoolean("MyBoolean", true);
-        savedInstanceState.putDouble("myDouble", 1.9);
-        savedInstanceState.putInt("MyInt", 1);
-        savedInstanceState.putString("MyString", "Welcome back to Android");
-        savedInstanceState.putString("MyString", "Welcome back to Android");*/
-        // etc.
     }
 
 
@@ -1631,12 +1620,6 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                 serviceFeeLinearLayout.addView(additionalView);
             }
         }
-
-
-
-
-
-
     }
 
 

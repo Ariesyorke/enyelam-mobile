@@ -283,38 +283,10 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/padding"
                 android:layout_marginBottom="@dimen/padding"
-                app:flChildSpacing="auto"
+                app:flChildSpacing="8dp"
                 app:flChildSpacingForLastRow="auto"
                 app:flRowSpacing="8dp"/>
 
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SUN"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MON"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SUN"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SUN"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SUN"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SUN"/>-->
-
-            <!--</com.nex3z.flowlayout.FlowLayout>-->
 
             <com.nyelam.android.view.font.NYTextView
                 app:fontTextStyle="light"
@@ -326,19 +298,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <!--<com.nex3z.flowlayout.FlowLayout
-                android:id="@+id/facilities_flowLayout"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_double"
-                android:paddingRight="@dimen/padding_double"
-                android:paddingTop="@dimen/padding"
-                android:paddingBottom="@dimen/padding"
-                app:flChildSpacing="auto"
-                app:flChildSpacingForLastRow="align"
-                app:flMinChildSpacing="@dimen/padding_half"
-                app:flRowSpacing="@dimen/padding">-->
 
 
             <com.nex3z.flowlayout.FlowLayout
@@ -350,36 +309,10 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/padding"
                 android:layout_marginBottom="@dimen/padding"
-                app:flChildSpacing="auto"
+                app:flChildSpacing="8dp"
                 app:flChildSpacingForLastRow="auto"
                 app:flRowSpacing="8dp">
 
-                <!--<TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SUN"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MON"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SUN"/>-->
-                <!--<TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SUN"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SUN"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SUN"/>-->
 
             </com.nex3z.flowlayout.FlowLayout>
 

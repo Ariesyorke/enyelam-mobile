@@ -146,31 +146,31 @@ public class DiveCenterDetailActivity extends AppCompatActivity implements
 
         // TODO: call  dan map - deskripsi dan visited dan gambar belum
 
-        phoneNumberLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (diveCenter != null && diveCenter.getContact() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getPhoneNumber())){
-
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:" + diveCenter.getContact().getPhoneNumber()));
-                    if (ActivityCompat.checkSelfPermission(DiveCenterDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    startActivity(intent);
-
-                }
-
-
-            }
-        });
+//        phoneNumberLinearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                if (diveCenter != null && diveCenter.getContact() != null && NYHelper.isStringNotEmpty(diveCenter.getContact().getPhoneNumber())){
+//
+//                    Intent intent = new Intent(Intent.ACTION_CALL);
+//                    intent.setData(Uri.parse("tel:" + diveCenter.getContact().getPhoneNumber()));
+//                    if (ActivityCompat.checkSelfPermission(DiveCenterDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                        // TODO: Consider calling
+//                        //    ActivityCompat#requestPermissions
+//                        // here to request the missing permissions, and then overriding
+//                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                        //                                          int[] grantResults)
+//                        // to handle the case where the user grants the permission. See the documentation
+//                        // for ActivityCompat#requestPermissions for more details.
+//                        return;
+//                    }
+//                    startActivity(intent);
+//
+//                }
+//
+//
+//            }
+//        });
 
 
 

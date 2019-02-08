@@ -56,10 +56,6 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        //holder.image.setImageResource(data.get(position).getImage());
-        //holder.title.setText(data.get(position).getHeader());
-        //holder.description.setText(data.get(position).getSubHeader());
-
         final DoShopProduct product = data.get(position);
 
         if (product != null){
@@ -81,11 +77,8 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
 
             //product.setFeaturedImage("https://www.zamzar.com/images/filetypes/jpg.png");
 
-            if (NYHelper.isStringNotEmpty(product.getFeaturedImage())){
-
-
-                ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
-                ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getOption(), new ImageLoadingListener() {
+            if (NYHelper.isStringNotEmpty(product.getFeaturedImage())) {
+                ImageLoader.getInstance().loadImage(product.getFeaturedImage(), NYHelper.getCompressedOption(context), new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
 

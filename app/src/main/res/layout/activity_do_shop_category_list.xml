@@ -56,14 +56,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ProgressBar
-                    android:visibility="gone"
-                    android:id="@+id/progress_bar"
-                    android:layout_margin="@dimen/padding_double"
-                    android:layout_gravity="center"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp" />
-
                 <com.nyelam.android.view.font.NYTextView
                     android:visibility="gone"
                     app:fontTextStyle="reguler"
@@ -77,7 +69,6 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerView"
-                    android:nestedScrollingEnabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

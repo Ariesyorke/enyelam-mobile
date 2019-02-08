@@ -28,7 +28,6 @@ import com.midtrans.sdk.uikit.abstracts.BasePaymentActivity;
 import com.midtrans.sdk.uikit.abstracts.VaInstructionFragment.OnInstructionShownListener;
 import com.midtrans.sdk.uikit.adapters.InstructionPagerAdapter;
 import com.midtrans.sdk.uikit.adapters.ListBankAdapter;
-import com.midtrans.sdk.uikit.fragments.BankTransferFragment;
 import com.midtrans.sdk.uikit.models.MessageInfo;
 import com.midtrans.sdk.uikit.utilities.MessageUtil;
 import com.midtrans.sdk.uikit.utilities.SdkUIFlowUtil;
@@ -82,7 +81,7 @@ public class BankTransferPaymentActivity extends BasePaymentActivity implements 
     }
 
     private void initPaymentButton() {
-        buttonPay.setOnClickListener(new OnClickListener() {
+        buttonPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SdkUIFlowUtil.hideKeyboard(BankTransferPaymentActivity.this);
@@ -99,6 +98,8 @@ public class BankTransferPaymentActivity extends BasePaymentActivity implements 
                 }
             }
         });
+
+        buttonPay.setText(getString(R.string.pay_now));
     }
 
     private boolean checkEmailValidity(String email) {
@@ -222,10 +223,8 @@ public class BankTransferPaymentActivity extends BasePaymentActivity implements 
                 Fragment fragment = adapter.getItem(position);
                 if (fragment instanceof InstructionOtherBankFragment && flags != null) {
                     showOtherAtmGuidance(((InstructionOtherBankFragment) fragment).getFragmentCode());
-                    setButtonPayText(adapter.getPayButtonText(((InstructionOtherBankFragment) fragment).getFragmentCode()));
                 } else {
                     hideOtherAtmGuidance();
-                    setButtonPayText(adapter.getPayButtonText(-1));
                 }
             }
 
@@ -323,7 +322,7 @@ public class BankTransferPaymentActivity extends BasePaymentActivity implements 
                 } else {
                     showTokenNotification(false);
                 }
-            } else if (paymentType.equals(BankTransferFragment.TYPE_BNI)) {
+            } else if (paymentType.equals(PaymentType.BNI_VA)) {
                 if (position == 1) {
                     showOtpNotification(true);
                 } else {
@@ -384,7 +383,7 @@ public class BankTransferPaymentActivity extends BasePaymentActivity implements 
     public void onPaymentFailure(TransactionResponse response) {
         hideProgressLayout();
         if (!isFinishing()) {
-            MessageInfo messageInfo = MessageUtil.createpaymentFailedMessage(this, response, null);
+            MessageInfo messageInfo = MessageUtil.createPaymentFailedMessage(this, response);
             SdkUIFlowUtil.showToast(this, messageInfo.detailsMessage);
 
             initPaymentStatus(response);

@@ -22,6 +22,7 @@ public class TitleSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
             "Mrs.",
             "Ms."
     };
+
     private Activity context;
     private int selectedPosition;
 

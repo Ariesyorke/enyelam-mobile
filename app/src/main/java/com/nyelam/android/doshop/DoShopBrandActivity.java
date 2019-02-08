@@ -1,11 +1,8 @@
 package com.nyelam.android.doshop;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,28 +18,25 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.auth.AuthActivity;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.Brand;
-import com.nyelam.android.data.DoShopCategory;
+import com.nyelam.android.data.BrandList;
 import com.nyelam.android.data.DoShopProductList;
+import com.nyelam.android.data.Filter;
 import com.nyelam.android.data.Price;
-import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.doshoporder.DoShopCheckoutActivity;
 import com.nyelam.android.helper.NYHelper;
-import com.nyelam.android.http.NYDoShopMinMaxPriceRequest;
+import com.nyelam.android.http.NYDoShopProductFilter;
 import com.nyelam.android.http.NYDoShopProductListRequest;
 import com.nyelam.android.http.result.NYPaginationResult;
 import com.nyelam.android.storage.CartStorage;
 import com.nyelam.android.storage.LoginStorage;
 import com.nyelam.android.view.CircularTextView;
-import com.nyelam.android.view.NYUnswipableViewPager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -50,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,14 +62,14 @@ public class DoShopBrandActivity extends BasicActivity {
     private LinearLayoutManager layoutManager;
 
     private int page = 1;
-    private String brandId = null;
     private Brand brand;
     private String sortBy = "0";
     private String minPrice = "0";
     private String maxPrice = "10000000";
     private String minPriceDefault = "0";
     private String maxPriceDefault = "10000000";
-
+    private BrandList brandList;
+    private List<String> selectedBrands;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -82,9 +78,6 @@ public class DoShopBrandActivity extends BasicActivity {
 
     @BindView(R.id.et_search)
     EditText etSearch;
-
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
 
     @BindView(R.id.tv_not_found)
     TextView tvNotFound;
@@ -106,6 +99,12 @@ public class DoShopBrandActivity extends BasicActivity {
         intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, Double.valueOf(minPriceDefault));
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
         intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, Double.valueOf(maxPriceDefault));
+        if(selectedBrands != null && !selectedBrands.isEmpty()) {
+            intent.putExtra(NYHelper.SELECTED_BRANDS, selectedBrands.toArray());
+        }
+        if(brandList != null) {
+            intent.putExtra(NYHelper.FILTER_BRANDS, brandList.toString());
+        }
         startActivityForResult(intent, 1);
     }
 
@@ -116,6 +115,12 @@ public class DoShopBrandActivity extends BasicActivity {
         intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, Double.valueOf(minPriceDefault));
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
         intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, Double.valueOf(maxPriceDefault));
+        if(selectedBrands != null && !selectedBrands.isEmpty()) {
+            intent.putExtra(NYHelper.SELECTED_BRANDS, selectedBrands.toArray());
+        }
+        if(brandList != null) {
+            intent.putExtra(NYHelper.FILTER_BRANDS, brandList.toString());
+        }
         startActivityForResult(intent, 1);
     }
 
@@ -126,6 +131,12 @@ public class DoShopBrandActivity extends BasicActivity {
         intent.putExtra(NYHelper.MIN_PRICE_DEAFULT, Double.valueOf(minPriceDefault));
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
         intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, Double.valueOf(maxPriceDefault));
+        if(selectedBrands != null && !selectedBrands.isEmpty()) {
+            intent.putExtra(NYHelper.SELECTED_BRANDS, selectedBrands.toArray());
+        }
+        if(brandList != null) {
+            intent.putExtra(NYHelper.FILTER_BRANDS, brandList.toString());
+        }
         startActivityForResult(intent, 1);
     }
 
@@ -155,7 +166,7 @@ public class DoShopBrandActivity extends BasicActivity {
         initExtra();
         initToolbar();
         initList();
-        initMinMaxPrice(brandId, null);
+        initProductFilter(brand.getId(), null);
         initControl();
     }
 
@@ -183,7 +194,7 @@ public class DoShopBrandActivity extends BasicActivity {
                 // TODO Auto-generated method stub
                 adapter.clear();
                 adapter.notifyDataSetChanged();
-                initListItem(brandId, s.toString());
+                initListItem(brand.getId(), s.toString());
             }
         });
 
@@ -195,7 +206,7 @@ public class DoShopBrandActivity extends BasicActivity {
                 swipeRefreshLayout.setRefreshing(true);
                 adapter.clear();
                 adapter.notifyDataSetChanged();
-                initListItem(brandId, etSearch.getText().toString());
+                initListItem(brand.getId(), etSearch.getText().toString());
             }
         });
 
@@ -205,19 +216,23 @@ public class DoShopBrandActivity extends BasicActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 // super.onScrolled(recyclerView, dx, dy);
                 int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
-                if (lastVisiblePosition == recyclerView.getChildCount()) {
+                if (lastVisiblePosition >= recyclerView.getAdapter().getItemCount() - 1) {
                     if (loadmore) {
                         loadmore = false;
-                        initListItem(brandId, etSearch.getText().toString());
+                        initListItem(brand.getId(), null);
                     }
                 }
             }
         });
     }
 
-    private void initListItem(String brandId, String keyword){
-        progressBar.setVisibility(View.VISIBLE);
-        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, String.valueOf(page), keyword, null, minPrice,  maxPrice, sortBy, brandId, null, "0");
+    private void initListItem(String brandId, String keyword) {
+        if(page == 1) swipeRefreshLayout.setRefreshing(true);
+        List<String> brands = new ArrayList<>();
+        if(!TextUtils.isEmpty(brandId)) {
+            brands.add(brandId);
+        }
+        NYDoShopProductListRequest req = new NYDoShopProductListRequest(context, String.valueOf(page), keyword, null, minPrice,  maxPrice, sortBy, brands, null, "0");
         spcMgr.execute(req, onRealtedItemRequest());
     }
 
@@ -229,8 +244,6 @@ public class DoShopBrandActivity extends BasicActivity {
                 //NYHelper.handleAPIException(context, spiceException, null);
                 loadmore = false;
                 swipeRefreshLayout.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
-                NYLog.e("cek related error");
                 if (adapter.getItemCount() == 0) tvNotFound.setVisibility(View.VISIBLE);
             }
 
@@ -238,11 +251,8 @@ public class DoShopBrandActivity extends BasicActivity {
             public void onRequestSuccess(NYPaginationResult<DoShopProductList> listNYPaginationResult) {
                 loadmore = true;
                 swipeRefreshLayout.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
-                NYLog.e("cek related success");
                 if (listNYPaginationResult != null && listNYPaginationResult.item != null && listNYPaginationResult.item.getList() != null &&
                         listNYPaginationResult.item.getList().size() > 0){
-                    NYLog.e("cek related data : "+listNYPaginationResult.item.getList().toString());
 
                     if (isRefresh)
                         adapter.setData(listNYPaginationResult.item.getList());
@@ -254,48 +264,51 @@ public class DoShopBrandActivity extends BasicActivity {
                 }
 
                 if (adapter.getItemCount() == 0){
+                    llFilter.setVisibility(View.GONE);
                     tvNotFound.setVisibility(View.VISIBLE);
                 } else {
-                    tvNotFound.setVisibility(View.GONE);
                     llFilter.setVisibility(View.VISIBLE);
+                    tvNotFound.setVisibility(View.GONE);
                 }
 
             }
         };
     }
 
-    private void initMinMaxPrice(String brandId, String keyword){
-        progressBar.setVisibility(View.VISIBLE);
-        NYDoShopMinMaxPriceRequest req = new NYDoShopMinMaxPriceRequest(context, null, keyword, null, null);
-        req = new NYDoShopMinMaxPriceRequest(context, null, keyword, brandId, null);
-        spcMgr.execute(req, onGetMinMaxPriceRequest());
+    private void initProductFilter(String brandId, String keyword){
+        NYDoShopProductFilter req = new NYDoShopProductFilter(context, null, keyword, null, null);
+        req = new NYDoShopProductFilter(context, null, keyword, brandId, null);
+        spcMgr.execute(req, onGetProductFilter());
     }
 
-    private RequestListener<Price> onGetMinMaxPriceRequest() {
-        return new RequestListener<Price>() {
+    private RequestListener<Filter> onGetProductFilter() {
+        return new RequestListener<Filter>() {
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                pDialog.dismiss();
                 loadmore = false;
                 swipeRefreshLayout.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onRequestSuccess(Price price) {
-                pDialog.dismiss();
+            public void onRequestSuccess(Filter filter) {
                 loadmore = false;
-                swipeRefreshLayout.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
+                if(filter.getBrandList() != null) {
+                    brandList = filter.getBrandList();
+                }
+                if(filter.getPrice() != null) {
+                    Price price = filter.getPrice();
+                    minPrice = String.valueOf(price.getLowestPrice());
+                    minPriceDefault = String.valueOf(price.getLowestPrice());
+                    maxPrice = String.valueOf(price.getHighestPrice());
+                    maxPriceDefault = String.valueOf(price.getHighestPrice());
+                    initListItem(brand.getId(), null);
+                } else {
+                    swipeRefreshLayout.setRefreshing(true);
+                    llFilter.setVisibility(View.GONE);
+                    tvNotFound.setVisibility(View.VISIBLE);
+                }
 
-                minPrice = String.valueOf(price.getLowestPrice());
-                minPriceDefault = String.valueOf(price.getLowestPrice());
-                maxPrice = String.valueOf(price.getHighestPrice());
-                maxPriceDefault = String.valueOf(price.getHighestPrice());
-
-                //initList();
-                initListItem(brandId, etSearch.getText().toString());
             }
         };
     }
@@ -316,23 +329,6 @@ public class DoShopBrandActivity extends BasicActivity {
             }
         }
     }
-
-
-    private void dialogCategoryNotAvailable(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(getString(R.string.logout));
-        builder.setMessage(getString(R.string.warn_item_not_available));
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing but close the dialog
-                finish();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
 
     @Override
     protected void onStop() {
@@ -404,31 +400,17 @@ public class DoShopBrandActivity extends BasicActivity {
             if (data.hasExtra(NYHelper.SORT_BY)) sortBy = b.getString(NYHelper.SORT_BY);
             if (data.hasExtra(NYHelper.MIN_PRICE)) minPrice =   String.valueOf(b.getDouble(NYHelper.MIN_PRICE, 0));
             if (data.hasExtra(NYHelper.MAX_PRICE)) maxPrice = String.valueOf(b.getDouble(NYHelper.MAX_PRICE, 1000000));
-
+            if (data.hasExtra(NYHelper.SELECTED_BRANDS)) {
+                String[] brands = data.getStringArrayExtra(NYHelper.SELECTED_BRANDS);
+                selectedBrands = Arrays.asList(brands);
+            } else {
+                selectedBrands = null;
+            }
+            page = 1;
 
             adapter.clear();
             adapter.notifyDataSetChanged();
-
-            if (brand != null && NYHelper.isStringNotEmpty(brand.getId())){
-                initListItem(brand.getId(), null);
-            } else {
-                //dialogCategoryNotAvailable();
-                initListItem(null, null);
-            }
         }
 
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Checks whether a hardware keyboard is available
-        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-            //Toast.makeText(this, "keyboard visible", Toast.LENGTH_SHORT).show();
-            llFilter.setVisibility(View.GONE);
-        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-            //Toast.makeText(this, "keyboard hidden", Toast.LENGTH_SHORT).show();
-            llFilter.setVisibility(View.VISIBLE);
-        }
     }
 }

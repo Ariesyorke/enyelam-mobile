@@ -306,7 +306,6 @@
 
             </LinearLayout>
 
-
             <com.nyelam.android.view.font.NYTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -402,6 +401,7 @@
                         app:fontTextStyle="reguler" />
                 </LinearLayout>
             </LinearLayout>
+
 
 
             <com.nyelam.android.view.font.NYTextView

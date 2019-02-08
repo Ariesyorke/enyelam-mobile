@@ -61,14 +61,14 @@ public class XlTunaiStatusActivity extends BasePaymentActivity {
             }
         });
 
-        buttonFinish.setOnClickListener(new OnClickListener() {
+        buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        buttonInstruction.setOnClickListener(new OnClickListener() {
+        buttonInstruction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isActivityRunning()) {

@@ -11,8 +11,9 @@ import org.json.JSONObject;
 public class Brand implements Parseable {
 
     private static String KEY_ID = "id";
-    private static String KEY_NAME = "brand_name";
+    private static String KEY_BRAND_NAME = "brand_name";
     private static String KEY_LOGO = "brand_logo";
+    private static String KEY_NAME = "name";
 
     private String id;
     private String name;
@@ -53,11 +54,15 @@ public class Brand implements Parseable {
         } catch (JSONException e) {e.printStackTrace();}
 
         try {
+            if (!obj.isNull(KEY_BRAND_NAME)) {
+                setName(obj.getString(KEY_BRAND_NAME));
+            }
+        } catch (JSONException e) {e.printStackTrace();}
+        try {
             if (!obj.isNull(KEY_NAME)) {
                 setName(obj.getString(KEY_NAME));
             }
         } catch (JSONException e) {e.printStackTrace();}
-
         try {
             if (!obj.isNull(KEY_LOGO)) {
                 setLogo(obj.getString(KEY_LOGO));
@@ -81,9 +86,9 @@ public class Brand implements Parseable {
 
         try {
             if (!TextUtils.isEmpty(getName())) {
-                obj.put(KEY_NAME, getName());
+                obj.put(KEY_BRAND_NAME, getName());
             } else {
-                obj.put(KEY_NAME, JSONObject.NULL);
+                obj.put(KEY_BRAND_NAME, JSONObject.NULL);
             }
         } catch (JSONException e) {e.printStackTrace();}
 

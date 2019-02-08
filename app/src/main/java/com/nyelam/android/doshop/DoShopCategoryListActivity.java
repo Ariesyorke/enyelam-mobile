@@ -17,6 +17,7 @@ import com.nyelam.android.BasicActivity;
 import com.nyelam.android.R;
 import com.nyelam.android.backgroundservice.NYSpiceService;
 import com.nyelam.android.data.DoShopCategoryList;
+import com.nyelam.android.dev.NYLog;
 import com.nyelam.android.divecenter.DoDiveSearchServiceAdapter;
 import com.nyelam.android.helper.NYHelper;
 import com.nyelam.android.helper.NYSpacesItemDecoration;
@@ -37,9 +38,6 @@ public class DoShopCategoryListActivity extends BasicActivity {
     private SpiceManager spcMgr = new SpiceManager(NYSpiceService.class);
     private DoShopCategoryAdapter adapter;
 
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-
     @BindView(R.id.tv_not_found)
     TextView tvNotFound;
 
@@ -55,6 +53,7 @@ public class DoShopCategoryListActivity extends BasicActivity {
         setContentView(R.layout.activity_do_shop_category_list);
         ButterKnife.bind(this);
         context = this;
+        initView();
         initToolbar();
         initControl();
         loadCategories(false);
@@ -71,8 +70,8 @@ public class DoShopCategoryListActivity extends BasicActivity {
         });
     }
 
-    private void loadCategories(boolean isRefresh){
-        if (!isRefresh)progressBar.setVisibility(View.VISIBLE);
+    private void loadCategories(boolean isRefresh) {
+        swipeRefreshLayout.setRefreshing(true);
         NYDoShopMasterCategoryRequest req = new NYDoShopMasterCategoryRequest(context);
         spcMgr.execute(req, onCategoryRequest());
     }
@@ -81,33 +80,30 @@ public class DoShopCategoryListActivity extends BasicActivity {
         return new RequestListener<DoShopCategoryList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
                 if (adapter != null)adapter.clear();
                 tvNotFound.setVisibility(View.VISIBLE);
-                //NYHelper.handleAPIException(context, spiceException, null);
             }
 
             @Override
             public void onRequestSuccess(DoShopCategoryList categoryList) {
-                progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
-                if (categoryList != null && categoryList.getList() != null && categoryList.getList().size() > 0){
+                if (categoryList != null && categoryList.getList() != null && !categoryList.getList().isEmpty()) {
+                    adapter = new DoShopCategoryAdapter(context, categoryList.getList());
+                    recyclerView.setAdapter(adapter);
                     tvNotFound.setVisibility(View.GONE);
                 } else {
                     tvNotFound.setVisibility(View.VISIBLE);
                 }
-
-                //ADAPTER LAYOUT MANAGER
-                int spacing_left = 10; // 50px
-                int spacing_top=10;
-                recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-                recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacing_left, spacing_top));
-
-                adapter = new DoShopCategoryAdapter(context, categoryList.getList());
-                recyclerView.setAdapter(adapter);
             }
         };
+    }
+
+    private void initView() {
+        int spacing_left = 10;
+        int spacing_top=10;
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacing_left, spacing_top));
     }
 
     private void initToolbar() {
@@ -138,6 +134,4 @@ public class DoShopCategoryListActivity extends BasicActivity {
         super.onResume();
         if (!spcMgr.isStarted()) spcMgr.start(this);
     }
-
-
 }

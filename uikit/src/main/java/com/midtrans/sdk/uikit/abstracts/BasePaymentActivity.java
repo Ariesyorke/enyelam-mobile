@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -19,14 +20,17 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
+
+import com.koushikdutta.ion.Ion;
+import com.midtrans.sdk.corekit.core.Currency;
 import com.midtrans.sdk.corekit.core.Logger;
-import com.midtrans.sdk.corekit.core.MidtransSDK;
-import com.midtrans.sdk.corekit.models.ItemDetails;
 import com.midtrans.sdk.corekit.models.MerchantPreferences;
+import com.midtrans.sdk.corekit.models.PaymentDetails;
 import com.midtrans.sdk.corekit.models.TransactionResponse;
+import com.midtrans.sdk.corekit.models.snap.ItemDetails;
 import com.midtrans.sdk.corekit.models.snap.MerchantData;
 import com.midtrans.sdk.corekit.models.snap.Transaction;
+import com.midtrans.sdk.corekit.models.snap.TransactionDetails;
 import com.midtrans.sdk.corekit.utilities.Utils;
 import com.midtrans.sdk.uikit.R;
 import com.midtrans.sdk.uikit.adapters.TransactionDetailsAdapter;
@@ -39,6 +43,7 @@ import com.midtrans.sdk.uikit.views.webview.WebViewPaymentActivity;
 import com.midtrans.sdk.uikit.widgets.BoldTextView;
 import com.midtrans.sdk.uikit.widgets.DefaultTextView;
 import com.midtrans.sdk.uikit.widgets.SemiBoldTextView;
+
 import java.util.List;
 
 /**
@@ -60,8 +65,14 @@ public abstract class BasePaymentActivity extends BaseActivity {
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
         try {
-            initMerchantLogo();
-            initToolbarBackButton();
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    initMerchantLogo();
+                    initToolbarBackButton();
+                }
+            });
+
             initItemDetails();
         } catch (Exception e) {
             Logger.e(TAG, "appbar:" + e.getMessage());
@@ -79,16 +90,31 @@ public abstract class BasePaymentActivity extends BaseActivity {
     private void initTotalAmount() {
         final Transaction transaction = getMidtransSdk().getTransaction();
         if (transaction.getTransactionDetails() != null) {
-            textTotalAmount = (BoldTextView) findViewById(R.id.text_amount);
+            String currency = transaction.getTransactionDetails().getCurrency();
+            textTotalAmount = findViewById(R.id.text_amount);
+
             if (textTotalAmount != null) {
-                String totalAmount = getString(R.string.prefix_money, Utils.getFormattedAmount(transaction.getTransactionDetails().getAmount()));
-                textTotalAmount.setText(totalAmount);
-                if (getPrimaryDarkColor() != 0) {
-                    textTotalAmount.setTextColor(getPrimaryDarkColor());
+                PaymentDetails paymentDetails = getMidtransSdk().getPaymentDetails();
+                if (paymentDetails != null) {
+                    double totalAmount = paymentDetails.getTotalAmount();
+                    double defaultTotalAmount = transaction.getTransactionDetails().getAmount();
+
+                    setTotalAmount(formatTotalAmount(totalAmount, currency));
+                    changeTotalAmountColor(defaultTotalAmount, totalAmount);
+
+                    // init item details
+                    List<ItemDetails> itemDetails = paymentDetails.getItemDetailsList();
+                    initTransactionDetail(itemDetails, currency);
+                }
+
+                TextView textOrderId = findViewById(R.id.text_order_id);
+                if (textOrderId != null) {
+                    textOrderId.setText(transaction.getTransactionDetails().getOrderId());
                 }
             }
+
         }
-        initTransactionDetail(getMidtransSdk().getTransactionRequest().getItemDetails());
+
         //init dim
         findViewById(R.id.background_dim).setOnClickListener(new OnClickListener() {
             @Override
@@ -106,12 +132,12 @@ public abstract class BasePaymentActivity extends BaseActivity {
         });
     }
 
-    private void initTransactionDetail(List<ItemDetails> details) {
+    private void initTransactionDetail(List<ItemDetails> details, String currency) {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_transaction_detail);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-             transactionDetailAdapter = new TransactionDetailsAdapter(details);
+            transactionDetailAdapter = new TransactionDetailsAdapter(details, currency);
             recyclerView.setAdapter(transactionDetailAdapter);
         }
     }
@@ -133,6 +159,58 @@ public abstract class BasePaymentActivity extends BaseActivity {
         }
     }
 
+    protected void addNewItemDetails(final ItemDetails newItem) {
+        if (transactionDetailAdapter != null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    transactionDetailAdapter.addItemDetails(newItem);
+                    changeTotalAmount();
+                }
+            }, 200);
+        }
+    }
+
+    protected void removeItemDetails(final String itemId) {
+        if (transactionDetailAdapter != null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    transactionDetailAdapter.removeItemDetails(itemId);
+                    changeTotalAmount();
+                }
+            }, 200);
+        }
+    }
+
+    protected void changeTotalAmount() {
+        if (textTotalAmount != null) {
+            final double newTotalAmount = transactionDetailAdapter.getItemTotalAmount();
+            String currency = Currency.IDR;
+
+            TransactionDetails transactionDetails = getMidtransSdk().getTransaction().getTransactionDetails();
+            if (transactionDetails != null) {
+                changeTotalAmountColor(transactionDetails.getAmount(), newTotalAmount);
+                currency = transactionDetails.getCurrency();
+                PaymentDetails paymentDetails = getMidtransSdk().getPaymentDetails();
+
+                if (paymentDetails != null) {
+                    paymentDetails.changePaymentDetails(transactionDetailAdapter.getItemDetails(), newTotalAmount);
+                }
+            }
+
+            setTotalAmount(formatTotalAmount(newTotalAmount, currency));
+        }
+    }
+
+    private void changeTotalAmountColor(double totalAmount, double newTotalAmount) {
+        int primaryColor = getPrimaryColor() != 0 ? getPrimaryColor() : ContextCompat.getColor(BasePaymentActivity.this, R.color.dark_gray);
+        int amountColor = newTotalAmount == totalAmount
+                ? primaryColor : ContextCompat.getColor(BasePaymentActivity.this, R.color.promoAmount);
+
+        textTotalAmount.setTextColor(amountColor);
+    }
+
     protected void initMerchantLogo() {
         ImageView merchantLogo = (ImageView) findViewById(R.id.merchant_logo);
         DefaultTextView merchantNameText = (DefaultTextView) findViewById(R.id.text_page_merchant_name);
@@ -147,9 +225,7 @@ public abstract class BasePaymentActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(merchantLogoUrl)) {
                     if (merchantLogo != null) {
                         hasMerchantLogo = true;
-                        Glide.with(this)
-                                .load(merchantLogoUrl)
-                                .into(merchantLogo);
+                        Ion.with(merchantLogo).load(merchantLogoUrl);
                         merchantLogo.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -177,7 +253,7 @@ public abstract class BasePaymentActivity extends BaseActivity {
                 backIcon.setColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP);
             }
             toolbar.setNavigationIcon(backIcon);
-            toolbar.setNavigationOnClickListener(new OnClickListener() {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onBackPressed();
@@ -236,7 +312,7 @@ public abstract class BasePaymentActivity extends BaseActivity {
 
     protected void showOnErrorPaymentStatusmessage(Throwable error, String defaultmessage) {
         if (isActivityRunning()) {
-            MessageInfo messageInfo = MessageUtil.createMessageOnError(this, error, defaultmessage);
+            MessageInfo messageInfo = MessageUtil.createMessageOnError(error, this);
             SdkUIFlowUtil.showToast(this, messageInfo.detailsMessage);
         }
     }
@@ -258,6 +334,32 @@ public abstract class BasePaymentActivity extends BaseActivity {
             displayOrHideItemDetails();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    public String formatTotalAmount(double totalAmount, String currency) {
+        String formattedAmount;
+
+        if (TextUtils.isEmpty(currency)) {
+            formattedAmount = getString(R.string.prefix_money, Utils.getFormattedAmount(totalAmount));
+        } else {
+            switch (currency) {
+                case Currency.SGD:
+                    formattedAmount = getString(R.string.prefix_money_sgd, Utils.getFormattedAmount(totalAmount));
+                    break;
+
+                default:
+                    formattedAmount = getString(R.string.prefix_money, Utils.getFormattedAmount(totalAmount));
+                    break;
+            }
+        }
+
+        return formattedAmount;
+    }
+
+    protected void setTotalAmount(String formattedAmount) {
+        if (textTotalAmount != null) {
+            textTotalAmount.setText(formattedAmount);
         }
     }
 }

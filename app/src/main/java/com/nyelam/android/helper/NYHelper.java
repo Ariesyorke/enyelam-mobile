@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Base64;
@@ -152,6 +153,8 @@ public class NYHelper {
     public static final String MAX_PRICE = "max_price";
     public static final String MAX_PRICE_DEFAULT = "max_price_deafult";
     public static final String TOTAL_DIVES = "total_dives";
+    public static final String SELECTED_BRANDS = "selected_brands";
+    public static final String FILTER_BRANDS = "filter_brands";
 
     public static final String PAYMENT_TYPE = "payment_type";
     public static final String PAYMENT_METHOD = "payment_method";
@@ -636,8 +639,8 @@ public class NYHelper {
 
     public static DisplayImageOptions getCompressedOption(Context context) {
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .resetViewBeforeLoading(false)  // default
-                .cacheInMemory(false) // default
+                .resetViewBeforeLoading(true)  // default
+                .cacheInMemory(true) // default
                 .cacheOnDisk(true) // default
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
                 .bitmapConfig(Bitmap.Config.RGB_565) // default

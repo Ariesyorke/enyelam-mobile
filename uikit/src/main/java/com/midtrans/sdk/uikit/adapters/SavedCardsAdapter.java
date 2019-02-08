@@ -93,14 +93,14 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<SavedCardsAdapter.Sa
     }
 
     @Override
-    public SavedCardsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SavedCardsAdapter.SavedCardsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_row_saved_cards, parent, false);
-        return new SavedCardsViewHolder(view);
+        return new SavedCardsAdapter.SavedCardsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(SavedCardsViewHolder holder, int position) {
+    public void onBindViewHolder(SavedCardsAdapter.SavedCardsViewHolder holder, int position) {
         SaveCardRequest card = mData.get(position);
         String maskedCard = card.getMaskedCard();
         String cardType = Utils.getCardType(maskedCard);

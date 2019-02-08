@@ -63,7 +63,7 @@ public class KiosonStatusActivity extends BasePaymentActivity {
             }
         });
 
-        buttonFinish.setOnClickListener(new OnClickListener() {
+        buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.trackButtonClick(BUTTON_CONFIRM_NAME, PAGE_NAME);
@@ -71,7 +71,7 @@ public class KiosonStatusActivity extends BasePaymentActivity {
             }
         });
 
-        buttonInstruction.setOnClickListener(new OnClickListener() {
+        buttonInstruction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeToggleInstructionVisibility();
