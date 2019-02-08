@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled = true
-        versionCode 137
-        versionName '1.1.1'
+        versionCode 140
+        versionName '1.1.4'
         resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -49,11 +49,10 @@ dependencies {
 
     // For using the Veritrans Production
 
-//        implementation 'com.midtrans:corekit:1.21.2'
+        implementation 'com.midtrans:corekit:1.21.2'
 
     // For using the Veritrans Sandbox
-//    implementation 'com.midtrans:corekit:1.21.2-SANDBOX'    // For using the Veritrans Production
-    implementation 'com.midtrans:corekit:1.21.2-SANDBOX'
+//    implementation 'com.midtrans:corekit:1.21.2-SANDBOX'
     //      implementation 'com.midtrans:uikit:1.0.1'
 
     //    implementation ('com.midtrans:scancard:1.0.1'){

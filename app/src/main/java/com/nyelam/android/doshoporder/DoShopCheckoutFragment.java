@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.midtrans.sdk.corekit.core.PaymentMethod;
+import com.midtrans.sdk.corekit.models.snap.CreditCard;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 import com.midtrans.sdk.uikit.storage.PaymentMethodStorage;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
@@ -1106,10 +1107,10 @@ public class DoShopCheckoutFragment extends BasicFragment implements
     public void payUsingVeritrans(String enabledPayment) {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
                 .setContext(getActivity()) // context is mandatory
                 .setTransactionFinishedCallback(thisFragment)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE", "#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();
@@ -1159,7 +1160,12 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 itemDetailsList.add(new ItemDetails(service.getId(), (int) service.getNormalPrice(), totalParticipants, service.getName()));
             transactionRequest.setItemDetails(itemDetailsList);
 
-
+            if(!enabledPayment.equalsIgnoreCase("bank_transfer")) {
+                NYLog.e("PANGGIl credit card");
+                CreditCard creditCardOptions = new CreditCard();
+                creditCardOptions.setAuthentication(CreditCard.AUTHENTICATION_TYPE_3DS);
+                transactionRequest.setCreditCard(creditCardOptions);
+            }
             MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
             MidtransSDK.getInstance().startPaymentUiFlow(getActivity(),
                     enabledPayment.equalsIgnoreCase("bank_transfer")?

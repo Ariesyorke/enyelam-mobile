@@ -169,7 +169,8 @@ public class CreditCardDetailsPresenter extends BaseCreditCardPresenter<CreditCa
                 getMidtransSDK().getClientKey());
 
         cardTokenRequest.setIsSaved(saveCard);
-        cardTokenRequest.setSecure(isSecurePayment());
+
+        cardTokenRequest.setSecure(true);
         cardTokenRequest.setGrossAmount(getGrossAmount());
 
         //apply installment, acquiring bank and bank point

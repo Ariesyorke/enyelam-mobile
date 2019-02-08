@@ -259,12 +259,8 @@ public class DoShopCategoryActivity extends BasicActivity {
                 swipeRefreshLayout.setRefreshing(false);
                 if (listNYPaginationResult != null && listNYPaginationResult.item != null && listNYPaginationResult.item.getList() != null &&
                         listNYPaginationResult.item.getList().size() > 0) {
-                    NYLog.e("SERVER SIZE " + listNYPaginationResult.item.getList().size());
-                    if (adapter.getItemCount() == 0) {
-                        adapter.setData(listNYPaginationResult.item.getList());
-                    } else {
-                        adapter.addData(listNYPaginationResult.item.getList());
-                    }
+                    adapter.addData(listNYPaginationResult.item.getList());
+
                     adapter.notifyDataSetChanged();
                     page++;
                 }

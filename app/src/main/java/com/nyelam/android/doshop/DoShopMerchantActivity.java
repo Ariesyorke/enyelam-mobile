@@ -241,7 +241,6 @@ public class DoShopMerchantActivity extends BasicActivity {
                 //NYHelper.handleAPIException(context, spiceException, null);
                 loadmore = false;
                 swipeRefreshLayout.setRefreshing(false);
-                NYLog.e("cek related error");
                 if (adapter.getItemCount() == 0) tvNotFound.setVisibility(View.VISIBLE);
             }
 
@@ -251,11 +250,7 @@ public class DoShopMerchantActivity extends BasicActivity {
                 swipeRefreshLayout.setRefreshing(false);
                 if (listNYPaginationResult != null && listNYPaginationResult.item != null && listNYPaginationResult.item.getList() != null &&
                         listNYPaginationResult.item.getList().size() > 0){
-
-                    if (isRefresh)
-                        adapter.setData(listNYPaginationResult.item.getList());
-                    else
-                        adapter.addData(listNYPaginationResult.item.getList());
+                    adapter.addData(listNYPaginationResult.item.getList());
                     adapter.notifyDataSetChanged();
 
                     page++;

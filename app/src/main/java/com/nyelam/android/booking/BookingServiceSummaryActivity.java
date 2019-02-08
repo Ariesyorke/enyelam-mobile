@@ -949,7 +949,7 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
                         veritransStorage.order = result.getSummary().getOrder();
                         veritransStorage.totalParticipants = result.getSummary().getParticipants().size();
                         veritransStorage.save();
-                        payUsingVeritrans(paymentType.equals(2) ? "credit_card": "bank_transfer");
+                        payUsingVeritrans(paymentType.equals("2") ? "credit_card": "bank_transfer");
 
                     } else if (paymentType.equals("1")){
                         //TODO DISINI HANDLE KALO TRANSAKSI DI BANK TRANSFER SUKSES
@@ -1017,11 +1017,8 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
 
                 orderReturn = result;
 
-                NYLog.e("re-submit order : "+orderReturn.toString());
-
                 if (orderReturn != null){
 
-                    NYLog.e("payment Type : " + paymentType);
 
                     if ((paymentType.equals("2") || paymentType.equals("3")) && result != null && result.getVeritransToken() != null && NYHelper.isStringNotEmpty(result.getVeritransToken().getTokenId())){
 
@@ -1169,10 +1166,10 @@ public class BookingServiceSummaryActivity extends BasicActivity implements NYCu
     public void payUsingVeritrans(String enabledPayment) {
 
         SdkUIFlowBuilder.init()
-                .setClientKey(getResources().getString(R.string.client_key_development)) // client_key is mandatory
+                .setClientKey(getResources().getString(R.string.client_key)) // client_key is mandatory
                 .setContext(this) // context is mandatory
                 .setTransactionFinishedCallback(this)// set transaction finish callback (sdk callback)
-                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_development)) //set merchant url (required)
+                .setMerchantBaseUrl(getResources().getString(R.string.api_veritrans_production)) //set merchant url (required)
                 .enableLog(true) // enable sdk log (optional)
                 .setColorTheme(new CustomColorTheme("#0099EE", "#0099EE","#0099EE")) // set theme. it will replace theme on snap theme on MAP ( optional)
                 .buildSDK();

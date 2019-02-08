@@ -129,7 +129,25 @@ public class DoShopRecommendedAdapter extends RecyclerView.Adapter<DoShopRecomme
 
     public void addData(List<DoShopProduct> data) {
         if (this.data == null) this.data = new ArrayList<>();
-        this.data.addAll(data);
+        List<DoShopProduct> products = removeSameData(data);
+        if(products != null && !products.isEmpty()) {
+            this.data.addAll(products);
+        }
+    }
+
+    public List<DoShopProduct> removeSameData(List<DoShopProduct> products) {
+        List<DoShopProduct> temps = products;
+        if(this.data != null && !this.data.isEmpty()) {
+            for(int j = temps.size() - 1; j >= 0; j--) {
+                for(int i = 0; i < this.data.size(); i++) {
+                    if(temps.get(j).getId().equalsIgnoreCase(this.data.get(i).getId())){
+                        temps.remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+        return temps;
     }
 
     public void clear() {
