@@ -46,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -101,7 +102,8 @@ public class DoShopMerchantActivity extends BasicActivity {
         intent.putExtra(NYHelper.MAX_PRICE, Double.valueOf(maxPrice));
         intent.putExtra(NYHelper.MAX_PRICE_DEFAULT, Double.valueOf(maxPriceDefault));
         if(selectedBrands != null && !selectedBrands.isEmpty()) {
-            intent.putExtra(NYHelper.SELECTED_BRANDS, selectedBrands.toArray());
+            String[] brands = selectedBrands.toArray(new String[selectedBrands.size()]);
+            intent.putExtra(NYHelper.SELECTED_BRANDS, brands);
         }
         if(brandList != null) {
             intent.putExtra(NYHelper.FILTER_BRANDS, brandList.toString());
@@ -404,7 +406,7 @@ public class DoShopMerchantActivity extends BasicActivity {
             if (data.hasExtra(NYHelper.MAX_PRICE)) maxPrice = String.valueOf(b.getDouble(NYHelper.MAX_PRICE, 1000000));
             if (data.hasExtra(NYHelper.SELECTED_BRANDS)) {
                 String[] brands = data.getStringArrayExtra(NYHelper.SELECTED_BRANDS);
-                selectedBrands = Arrays.asList(brands);
+                selectedBrands = new LinkedList<String>(Arrays.asList(brands));
             } else {
                 selectedBrands = null;
             }

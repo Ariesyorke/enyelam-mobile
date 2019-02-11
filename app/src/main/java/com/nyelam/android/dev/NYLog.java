@@ -11,7 +11,7 @@ public class NYLog {
         if(obj == null){
             obj = "null";
         }
-//        Log.e("Nyelam", obj.toString());
+        Log.e("Nyelam", obj.toString());
     }
 
     public static void d(Object obj){

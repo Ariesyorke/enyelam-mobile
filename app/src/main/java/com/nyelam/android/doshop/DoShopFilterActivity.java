@@ -38,6 +38,7 @@ import org.json.JSONException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DoShopFilterActivity extends BasicActivity {
@@ -118,7 +119,7 @@ public class DoShopFilterActivity extends BasicActivity {
         if (extras != null){
             if (intent.hasExtra(NYHelper.SELECTED_BRANDS)) {
                 String[] brans = intent.getStringArrayExtra(NYHelper.SELECTED_BRANDS);
-                selectedBrands = Arrays.asList(brans);
+                selectedBrands = new LinkedList<>(Arrays.asList(brans));
             }
             if(intent.hasExtra(NYHelper.FILTER_BRANDS)) {
                 String arrayString = intent.getStringExtra(NYHelper.FILTER_BRANDS);
@@ -218,6 +219,7 @@ public class DoShopFilterActivity extends BasicActivity {
                 isExist = true;
             }
         }
+
         if(isInit) {
             if (!isExist) {
                 fancyButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ny_grey2));
@@ -244,14 +246,16 @@ public class DoShopFilterActivity extends BasicActivity {
             }
         }
 
-        if(!isInit && isExist) {
-            selectedBrands.remove(brand.getId());
-        } else if (!isInit && !isExist){
-            if(selectedBrands == null) selectedBrands = new ArrayList<>();
-            selectedBrands.add(brand.getId());
+        if(isExist) {
+            if(!isInit) {
+                selectedBrands.remove(brand.getId());
+            }
+        } else {
+            if(!isInit) {
+                if(selectedBrands == null) selectedBrands = new ArrayList<>();
+                selectedBrands.add(brand.getId());
+            }
         }
-
-
     }
 
     private void initControl() {
