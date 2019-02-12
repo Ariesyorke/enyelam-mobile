@@ -201,8 +201,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
     @OnClick(R.id.tv_checkout)
     void choosePayment() {
-        //listener.proceedToChoosePayment();
-        //req = new NYDoShopSubmitOrderRequest(getActivity(), paymentMethod, cartToken, billingAddress.getAddressId(), shippingAddress.getAddressId(), deliveryServices, null, null);
 
         // TODO: check delivery service
         List<DeliveryService> deliveryServices = new ArrayList<>();
@@ -631,7 +629,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
                 //thisFragment.cartReturn = cartReturn;
                 //initCartReturn(cartReturn);
 
-                //kasih flag jika nanti setelah masuk payment dibatalkan
                 isTranssactionCanceled = true;
 
                 orderReturn = result;
@@ -1148,7 +1145,6 @@ public class DoShopCheckoutFragment extends BasicFragment implements
 
             TransactionRequest transactionRequest;
             if (cart != null) {
-                NYLog.e("cek total = " + order.getCart().getTotal());
                 transactionRequest = new TransactionRequest(order.getOrderId(), order.getCart().getTotal());
             } else {
                 transactionRequest = new TransactionRequest(order.getOrderId(), 0);
@@ -1161,16 +1157,16 @@ public class DoShopCheckoutFragment extends BasicFragment implements
             transactionRequest.setItemDetails(itemDetailsList);
 
             if(!enabledPayment.equalsIgnoreCase("bank_transfer")) {
-                NYLog.e("PANGGIl credit card");
                 CreditCard creditCardOptions = new CreditCard();
                 creditCardOptions.setAuthentication(CreditCard.AUTHENTICATION_TYPE_3DS);
                 transactionRequest.setCreditCard(creditCardOptions);
             }
+
             MidtransSDK.getInstance().setTransactionRequest(transactionRequest);
             MidtransSDK.getInstance().startPaymentUiFlow(getActivity(),
                     enabledPayment.equalsIgnoreCase("bank_transfer")?
                             PaymentMethod.BANK_TRANSFER:
-                            PaymentMethod.CREDIT_CARD, token);            //MidtransSDK.getInstance().startPaymentUiFlow(this, "eba5b676-abea-4b6d-8f88-3ad1517f2e2e");
+                            PaymentMethod.CREDIT_CARD, token);
         }
 
     }
