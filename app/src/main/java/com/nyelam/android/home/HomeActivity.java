@@ -474,7 +474,6 @@ public class HomeActivity extends BasicActivity implements HomeFragment.OnFragme
                 ((NYHomepageTabItemView) child).setMainActivity(this);
             }
         }
-
     }
 
     public void openMenuDrawer() {

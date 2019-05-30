@@ -8,8 +8,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled = true
-        versionCode 141
-        versionName '1.1.5'
+        versionCode 142
+        versionName '1.1.6'
         resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -39,40 +39,21 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-io'
     }
 
-    /*compile 'com.github.sharish:ShimmerRecyclerView:v1.2'*/
-
-    // For u sing the Veritrans Sandbox
-
-    /*implementation ('com.midtrans:scancard:1.15.0'){
-                                                                                                                                                                                                                                                                                    exclude module: 'uikit'
-                                                                                                                                                                                                                                                                                }*/
-
     // For using the Veritrans Production
 
         implementation 'com.midtrans:corekit:1.21.2'
 
     // For using the Veritrans Sandbox
 //    implementation 'com.midtrans:corekit:1.21.2-SANDBOX'
-    //      implementation 'com.midtrans:uikit:1.0.1'
 
-    //    implementation ('com.midtrans:scancard:1.0.1'){
     implementation project(':uikit')
 
-    //implementation 'com.wdullaer:materialdatetimepicker:3.5.1'
     implementation project(':materialdatetimepicker')
-
-    //    implementation('com.paypal.sdk:paypal-android-sdk:2.16.0') {
-
-    //        exclude group: 'io.card'
-
-    //    }
     implementation ('com.paypal.sdk:paypal-android-sdk:2.15.1') {
         exclude group: 'io.card'
     }
 
-    //implementation 'com.stepstone.apprating:app-rating:2.2.0'
 
-    //implementation 'me.zhanghai.android.materialratingbar:library:1.3.1'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:animated-vector-drawable:28.0.0'
     implementation 'com.android.support:mediarouter-v7:28.0.0'
@@ -88,7 +69,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
 
-    //    implementation 'com.google.android.gms:play-services:15.0.1'
     implementation 'com.google.android.gms:play-services-analytics:16.0.1'
     implementation 'org.apache.httpcomponents:httpcore:4.4.4'
     implementation 'com.facebook.android:facebook-android-sdk:4.27.0'
@@ -102,7 +82,6 @@ dependencies {
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    //    implementation 'com.iarcuschin:simpleratingbar:0.1.5'
     implementation 'org.sufficientlysecure:html-textview:3.5'
     implementation 'org.lucasr.twowayview:twowayview:0.1.4'
     implementation 'com.nex3z:flow-layout:1.2.4'
@@ -112,7 +91,6 @@ dependencies {
     implementation 'com.github.ome450901:SimpleRatingBar:1.4.2'
     implementation 'ru.rambler.android:swipe-layout:1.0.15'
 
-    //implementation 'com.biao:pulltorefresh:1.0.0-beta3'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'me.biubiubiu.justifytext:library:1.1'
     implementation 'com.github.stfalcon:frescoimageviewer:0.1.0'
@@ -140,14 +118,6 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.41'
     implementation 'com.github.markomilos:paginate:0.5.1'
-
-    //implementation 'com.squareup.picasso:picasso:2.5.2'
-
-    //implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
-
-    //implementation 'com.android.support:mediarouter-v7:27.1.1'
-
-    //implementation 'com.github.lawloretienne:imagegallery:0.1.0'
     testImplementation 'junit:junit:4.12'
 }
 

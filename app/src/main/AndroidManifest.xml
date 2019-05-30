@@ -69,6 +69,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".home.HomeActivity"
             android:screenOrientation="portrait" />
@@ -174,7 +175,6 @@
         <activity
             android:name=".dotrip.DoTripActivity"
             android:screenOrientation="portrait" />
-        />
         <activity
             android:name=".dotrip.DoTripKeywordActivity"
             android:screenOrientation="portrait" />
